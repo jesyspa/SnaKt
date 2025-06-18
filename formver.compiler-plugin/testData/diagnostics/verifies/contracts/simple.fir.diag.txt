@@ -1,0 +1,16 @@
+/simple.kt:(84,100): info: Generated Viper text for without_contract:
+method f$without_contract$TF$() returns (ret$0: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+{
+  label lbl$ret$0
+  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+}
+
+/simple.kt:(148,161): info: Generated Viper text for with_contract:
+method f$with_contract$TF$() returns (ret$0: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  ensures true
+{
+  label lbl$ret$0
+  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+}

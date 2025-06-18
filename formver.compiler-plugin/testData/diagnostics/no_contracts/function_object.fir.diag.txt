@@ -1,0 +1,39 @@
+/function_object.kt:(23,35): info: Generated Viper text for unitFunction:
+method f$unitFunction$TF$TF$(p$f: Ref) returns (ret$0: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+{
+  inhale df$rt$isSubtype(df$rt$typeOf(p$f), df$rt$functionType())
+  label lbl$ret$0
+  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+}
+
+/function_object.kt:(90,108): info: Generated Viper text for functionObjectCall:
+method f$functionObjectCall$TF$TF$T$Boolean$T$Int(p$g: Ref)
+  returns (ret$0: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
+{
+  var anon$0: Ref
+  inhale df$rt$isSubtype(df$rt$typeOf(p$g), df$rt$functionType())
+  inhale df$rt$isSubtype(df$rt$typeOf(anon$0), df$rt$intType())
+  ret$0 := anon$0
+  goto lbl$ret$0
+  label lbl$ret$0
+}
+
+/function_object.kt:(171,195): info: Generated Viper text for functionObjectNestedCall:
+method f$functionObjectNestedCall$TF$TF$T$Int$TF$T$Boolean(p$f: Ref, p$g: Ref)
+  returns (ret$0: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
+{
+  var anon$0: Ref
+  var anon$1: Ref
+  var anon$2: Ref
+  inhale df$rt$isSubtype(df$rt$typeOf(p$f), df$rt$functionType())
+  inhale df$rt$isSubtype(df$rt$typeOf(p$g), df$rt$functionType())
+  inhale df$rt$isSubtype(df$rt$typeOf(anon$2), df$rt$intType())
+  inhale df$rt$isSubtype(df$rt$typeOf(anon$1), df$rt$intType())
+  inhale df$rt$isSubtype(df$rt$typeOf(anon$0), df$rt$intType())
+  ret$0 := anon$0
+  goto lbl$ret$0
+  label lbl$ret$0
+}

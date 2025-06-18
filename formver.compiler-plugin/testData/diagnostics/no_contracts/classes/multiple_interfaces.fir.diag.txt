@@ -1,0 +1,65 @@
+/multiple_interfaces.kt:(162,173): info: Generated Viper text for testDiamond:
+method con$c$D$() returns (ret: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$D())
+  ensures acc(p$c$D$shared(ret), wildcard)
+  ensures acc(p$c$D$unique(ret), write)
+
+
+method f$testDiamond$TF$() returns (ret$0: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
+{
+  var anon$0: Ref
+  var anon$1: Ref
+  anon$1 := con$c$D$()
+  anon$0 := pg$public$field(anon$1)
+  ret$0 := anon$0
+  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
+  goto lbl$ret$0
+  label lbl$ret$0
+}
+
+method pg$public$field(this$dispatch: Ref) returns (ret: Ref)
+
+
+/multiple_interfaces.kt:(405,415): info: Generated Viper text for testVarVal:
+method con$c$G$() returns (ret: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$G())
+  ensures acc(p$c$G$shared(ret), wildcard)
+  ensures acc(p$c$G$unique(ret), write)
+
+
+method con$c$I$() returns (ret: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$I())
+  ensures acc(p$c$I$shared(ret), wildcard)
+  ensures acc(p$c$I$unique(ret), write)
+
+
+method f$testVarVal$TF$() returns (ret$0: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+{
+  var l0$g: Ref
+  var anon$0: Ref
+  var anon$1: Ref
+  var anon$2: Ref
+  var l0$i: Ref
+  var anon$3: Ref
+  var anon$4: Ref
+  var anon$5: Ref
+  l0$g := con$c$G$()
+  anon$1 := pg$public$field(l0$g)
+  anon$0 := anon$1
+  inhale df$rt$isSubtype(df$rt$typeOf(anon$0), df$rt$intType())
+  anon$2 := ps$public$field(l0$g, df$rt$intToRef(1))
+  l0$i := con$c$I$()
+  anon$4 := pg$public$field(l0$i)
+  anon$3 := anon$4
+  inhale df$rt$isSubtype(df$rt$typeOf(anon$3), df$rt$intType())
+  anon$5 := ps$public$field(l0$i, df$rt$intToRef(1))
+  label lbl$ret$0
+  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+}
+
+method pg$public$field(this$dispatch: Ref) returns (ret: Ref)
+
+
+method ps$public$field(this$dispatch: Ref, anon$0: Ref) returns (ret: Ref)

@@ -1,0 +1,9 @@
+/do_not_verify.kt:(245,256): info: Generated Viper text for bad_returns:
+method f$bad_returns$TF$() returns (ret$0: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
+  ensures df$rt$boolFromRef(ret$0) == true
+{
+  ret$0 := df$rt$boolToRef(false)
+  goto lbl$ret$0
+  label lbl$ret$0
+}

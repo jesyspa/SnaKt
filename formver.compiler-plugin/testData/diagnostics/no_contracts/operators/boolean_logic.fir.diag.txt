@@ -1,0 +1,60 @@
+/boolean_logic.kt:(23,31): info: Generated Viper text for negation:
+method f$negation$TF$T$Boolean(p$x: Ref) returns (ret$0: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
+{
+  inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$boolType())
+  ret$0 := sp$notBool(p$x)
+  goto lbl$ret$0
+  label lbl$ret$0
+}
+
+/boolean_logic.kt:(75,86): info: Generated Viper text for conjunction:
+method f$conjunction$TF$T$Boolean$T$Boolean(p$x: Ref, p$y: Ref)
+  returns (ret$0: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
+{
+  inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$boolType())
+  inhale df$rt$isSubtype(df$rt$typeOf(p$y), df$rt$boolType())
+  if (df$rt$boolFromRef(p$x)) {
+    ret$0 := p$y
+  } else {
+    ret$0 := df$rt$boolToRef(false)}
+  goto lbl$ret$0
+  label lbl$ret$0
+}
+
+/boolean_logic.kt:(146,168): info: Generated Viper text for conjunctionSideEffects:
+method f$conjunctionSideEffects$TF$T$Boolean$T$Boolean(p$x: Ref, p$y: Ref)
+  returns (ret$0: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
+{
+  var anon$0: Ref
+  inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$boolType())
+  inhale df$rt$isSubtype(df$rt$typeOf(p$y), df$rt$boolType())
+  anon$0 := f$negation$TF$T$Boolean(p$x)
+  if (df$rt$boolFromRef(anon$0)) {
+    ret$0 := f$negation$TF$T$Boolean(p$y)
+  } else {
+    ret$0 := df$rt$boolToRef(false)}
+  goto lbl$ret$0
+  label lbl$ret$0
+}
+
+method f$negation$TF$T$Boolean(p$x: Ref) returns (ret: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$boolType())
+
+
+/boolean_logic.kt:(341,352): info: Generated Viper text for disjunction:
+method f$disjunction$TF$T$Boolean$T$Boolean(p$x: Ref, p$y: Ref)
+  returns (ret$0: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
+{
+  inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$boolType())
+  inhale df$rt$isSubtype(df$rt$typeOf(p$y), df$rt$boolType())
+  if (df$rt$boolFromRef(p$x)) {
+    ret$0 := df$rt$boolToRef(true)
+  } else {
+    ret$0 := p$y}
+  goto lbl$ret$0
+  label lbl$ret$0
+}

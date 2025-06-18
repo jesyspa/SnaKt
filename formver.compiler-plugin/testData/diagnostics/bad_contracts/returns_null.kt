@@ -1,0 +1,18 @@
+import kotlin.contracts.contract
+import kotlin.contracts.ExperimentalContracts
+
+@OptIn(ExperimentalContracts::class)
+fun <!VIPER_TEXT!>returns_null_unverifiable<!>(x: Int?): Int? {
+    contract {
+        <!CONDITIONAL_EFFECT_ERROR!>returns() implies false<!>
+    }
+    return null
+}
+
+@OptIn(ExperimentalContracts::class)
+fun <!VIPER_TEXT!>non_nullable_returns_null<!>(x: Int): Int {
+    contract {
+        <!UNEXPECTED_RETURNED_VALUE!>returns(null)<!>
+    }
+    return x
+}

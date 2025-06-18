@@ -1,0 +1,11 @@
+/returns_not_null.kt:(121,133): info: Generated Viper text for returns_null:
+method f$returns_null$TF$() returns (ret$0: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$nullable(df$rt$intType()))
+  ensures ret$0 != df$rt$nullValue()
+{
+  ret$0 := df$rt$nullValue()
+  goto lbl$ret$0
+  label lbl$ret$0
+}
+
+/returns_not_null.kt:(167,183): warning: Function may return a null value.

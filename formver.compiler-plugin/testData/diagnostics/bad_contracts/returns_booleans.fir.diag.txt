@@ -1,0 +1,23 @@
+/returns_booleans.kt:(121,146): info: Generated Viper text for incorrectly_returns_false:
+method f$incorrectly_returns_false$TF$() returns (ret$0: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
+  ensures df$rt$boolFromRef(ret$0) == true
+{
+  ret$0 := df$rt$boolToRef(false)
+  goto lbl$ret$0
+  label lbl$ret$0
+}
+
+/returns_booleans.kt:(183,196): warning: Function may return a false value.
+
+/returns_booleans.kt:(264,288): info: Generated Viper text for incorrectly_returns_true:
+method f$incorrectly_returns_true$TF$() returns (ret$0: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
+  ensures df$rt$boolFromRef(ret$0) == false
+{
+  ret$0 := df$rt$boolToRef(true)
+  goto lbl$ret$0
+  label lbl$ret$0
+}
+
+/returns_booleans.kt:(325,339): warning: Function may return a true value.

@@ -1,0 +1,37 @@
+/increment.kt:(23,34): info: Generated Viper text for test_simple:
+method f$test_simple$TF$() returns (ret$0: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+{
+  var l0$x: Ref
+  l0$x := df$rt$intToRef(10)
+  l0$x := sp$plusInts(l0$x, df$rt$intToRef(5))
+  l0$x := sp$minusInts(l0$x, df$rt$intToRef(1))
+  l0$x := sp$minusInts(l0$x, df$rt$intToRef(3))
+  l0$x := sp$plusInts(l0$x, df$rt$intToRef(1))
+  l0$x := sp$timesInts(l0$x, df$rt$intToRef(2))
+  l0$x := sp$divInts(l0$x, df$rt$intToRef(4))
+  label lbl$ret$0
+  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+}
+
+/increment.kt:(121,140): info: Generated Viper text for test_postincvrement:
+method f$test_postincvrement$TF$() returns (ret$0: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+{
+  var l0$x: Ref
+  var l0$first: Ref
+  var anon$0: Ref
+  var l0$second: Ref
+  var anon$1: Ref
+  var l0$unary: Ref
+  l0$x := df$rt$intToRef(10)
+  anon$0 := l0$x
+  l0$x := sp$plusInts(anon$0, df$rt$intToRef(1))
+  l0$first := anon$0
+  anon$1 := l0$x
+  l0$x := sp$minusInts(anon$1, df$rt$intToRef(1))
+  l0$second := anon$1
+  l0$unary := l0$x
+  label lbl$ret$0
+  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+}

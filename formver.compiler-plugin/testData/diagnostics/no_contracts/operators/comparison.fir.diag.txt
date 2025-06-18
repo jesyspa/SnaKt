@@ -1,0 +1,44 @@
+/comparison.kt:(23,27): info: Generated Viper text for less:
+method f$less$TF$T$Int$T$Int(p$x: Ref, p$y: Ref) returns (ret$0: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
+{
+  inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$intType())
+  inhale df$rt$isSubtype(df$rt$typeOf(p$y), df$rt$intType())
+  ret$0 := sp$ltInts(p$x, p$y)
+  goto lbl$ret$0
+  label lbl$ret$0
+}
+
+/comparison.kt:(79,88): info: Generated Viper text for lessEqual:
+method f$lessEqual$TF$T$Int$T$Int(p$x: Ref, p$y: Ref) returns (ret$0: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
+{
+  inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$intType())
+  inhale df$rt$isSubtype(df$rt$typeOf(p$y), df$rt$intType())
+  ret$0 := sp$leInts(p$x, p$y)
+  goto lbl$ret$0
+  label lbl$ret$0
+}
+
+/comparison.kt:(141,148): info: Generated Viper text for greater:
+method f$greater$TF$T$Int$T$Int(p$x: Ref, p$y: Ref) returns (ret$0: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
+{
+  inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$intType())
+  inhale df$rt$isSubtype(df$rt$typeOf(p$y), df$rt$intType())
+  ret$0 := sp$gtInts(p$x, p$y)
+  goto lbl$ret$0
+  label lbl$ret$0
+}
+
+/comparison.kt:(200,212): info: Generated Viper text for greaterEqual:
+method f$greaterEqual$TF$T$Int$T$Int(p$x: Ref, p$y: Ref)
+  returns (ret$0: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
+{
+  inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$intType())
+  inhale df$rt$isSubtype(df$rt$typeOf(p$y), df$rt$intType())
+  ret$0 := sp$geInts(p$x, p$y)
+  goto lbl$ret$0
+  label lbl$ret$0
+}

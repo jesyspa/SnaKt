@@ -1,0 +1,31 @@
+public abstract interface annotation class org/jetbrains/kotlin/formver/plugin/AlwaysVerify : java/lang/annotation/Annotation {
+}
+
+public abstract interface annotation class org/jetbrains/kotlin/formver/plugin/Borrowed : java/lang/annotation/Annotation {
+}
+
+public final class org/jetbrains/kotlin/formver/plugin/BuiltinsKt {
+	public static final fun implies (ZZ)Z
+	public static final fun loopInvariants (Lkotlin/jvm/functions/Function1;)V
+	public static final fun postconditions (Lkotlin/jvm/functions/Function2;)V
+	public static final fun preconditions (Lkotlin/jvm/functions/Function1;)V
+	public static final fun verify ([Z)V
+}
+
+public abstract interface annotation class org/jetbrains/kotlin/formver/plugin/DumpExpEmbeddings : java/lang/annotation/Annotation {
+}
+
+public final class org/jetbrains/kotlin/formver/plugin/InvariantBuilder {
+	public fun <init> ()V
+	public final fun forAll (Lkotlin/jvm/functions/Function1;)Z
+}
+
+public abstract interface annotation class org/jetbrains/kotlin/formver/plugin/NeverConvert : java/lang/annotation/Annotation {
+}
+
+public abstract interface annotation class org/jetbrains/kotlin/formver/plugin/NeverVerify : java/lang/annotation/Annotation {
+}
+
+public abstract interface annotation class org/jetbrains/kotlin/formver/plugin/Unique : java/lang/annotation/Annotation {
+}
+

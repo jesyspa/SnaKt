@@ -1,0 +1,47 @@
+/and_or_then.kt:(64,75): info: Generated Viper text for resultOrArg:
+method f$resultOrArg$TF$T$Boolean(p$arg: Ref) returns (ret$0: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
+  ensures df$rt$boolFromRef(ret$0) || df$rt$boolFromRef(p$arg)
+{
+  inhale df$rt$isSubtype(df$rt$typeOf(p$arg), df$rt$boolType())
+  ret$0 := sp$notBool(p$arg)
+  goto lbl$ret$0
+  label lbl$ret$0
+}
+
+/and_or_then.kt:(200,211): info: Generated Viper text for testImplies:
+method f$testImplies$TF$T$Boolean(p$arg: Ref) returns (ret$0: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
+  ensures df$rt$boolFromRef(p$arg) ==> !df$rt$boolFromRef(ret$0)
+  ensures df$rt$boolFromRef(ret$0) ==> !df$rt$boolFromRef(p$arg)
+  ensures !df$rt$boolFromRef(p$arg) ==> df$rt$boolFromRef(ret$0)
+  ensures !df$rt$boolFromRef(ret$0) ==> df$rt$boolFromRef(p$arg)
+{
+  inhale df$rt$isSubtype(df$rt$typeOf(p$arg), df$rt$boolType())
+  ret$0 := sp$notBool(p$arg)
+  goto lbl$ret$0
+  label lbl$ret$0
+}
+
+/and_or_then.kt:(417,424): info: Generated Viper text for testAnd:
+method f$testAnd$TF$T$Boolean$T$Boolean(p$arg1: Ref, p$arg2: Ref)
+  returns (ret$0: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
+  ensures df$rt$boolFromRef(ret$0) ==>
+    df$rt$boolFromRef(p$arg1) && df$rt$boolFromRef(p$arg2)
+  ensures !df$rt$boolFromRef(ret$0) ==>
+    !df$rt$boolFromRef(p$arg1) || !df$rt$boolFromRef(p$arg2)
+  ensures df$rt$boolFromRef(p$arg1) && df$rt$boolFromRef(p$arg2) ==>
+    df$rt$boolFromRef(ret$0)
+  ensures !df$rt$boolFromRef(p$arg1) ==> !df$rt$boolFromRef(ret$0)
+  ensures !df$rt$boolFromRef(p$arg2) ==> !df$rt$boolFromRef(ret$0)
+{
+  inhale df$rt$isSubtype(df$rt$typeOf(p$arg1), df$rt$boolType())
+  inhale df$rt$isSubtype(df$rt$typeOf(p$arg2), df$rt$boolType())
+  if (df$rt$boolFromRef(p$arg1)) {
+    ret$0 := p$arg2
+  } else {
+    ret$0 := df$rt$boolToRef(false)}
+  goto lbl$ret$0
+  label lbl$ret$0
+}
