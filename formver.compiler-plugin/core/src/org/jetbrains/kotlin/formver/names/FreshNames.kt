@@ -23,6 +23,13 @@ data class AnonymousName(val n: Int) : MangledName {
         get() = n.toString()
 }
 
+data class AnonymousBuiltinName(val n: Int) : MangledName {
+    override val mangledType: String
+        get() = $$"anon$builtin"
+    override val mangledBaseName: String
+        get() = n.toString()
+}
+
 /**
  * Name for return variable that should *only* be used in signatures of methods without a body.
  */
@@ -40,12 +47,12 @@ data class ReturnVariableName(val n: Int) : MangledName {
 
 data object DispatchReceiverName : MangledName {
     override val mangledBaseName: String
-        get() = "this\$dispatch"
+        get() = $$"this$dispatch"
 }
 
 data object ExtensionReceiverName : MangledName {
     override val mangledBaseName: String
-        get() = "this\$extension"
+        get() = $$"this$extension"
 }
 
 data class SpecialName(override val mangledBaseName: String) : MangledName {

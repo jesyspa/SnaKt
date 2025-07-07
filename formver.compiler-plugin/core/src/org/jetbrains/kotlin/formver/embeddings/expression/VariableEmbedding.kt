@@ -10,6 +10,8 @@ import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
 import org.jetbrains.kotlin.formver.asPosition
 import org.jetbrains.kotlin.formver.asSourceRole
 import org.jetbrains.kotlin.formver.conversion.StmtConversionContext
+import org.jetbrains.kotlin.formver.domains.Injection
+import org.jetbrains.kotlin.formver.domains.viperType
 import org.jetbrains.kotlin.formver.embeddings.*
 import org.jetbrains.kotlin.formver.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.embeddings.expression.debug.NamedBranchingNode
@@ -17,6 +19,8 @@ import org.jetbrains.kotlin.formver.embeddings.expression.debug.PlaintextLeaf
 import org.jetbrains.kotlin.formver.embeddings.expression.debug.TreeView
 import org.jetbrains.kotlin.formver.embeddings.properties.PropertyAccessEmbedding
 import org.jetbrains.kotlin.formver.embeddings.types.fillHoles
+import org.jetbrains.kotlin.formver.embeddings.types.injectionOrNull
+import org.jetbrains.kotlin.formver.names.AnonymousBuiltinName
 import org.jetbrains.kotlin.formver.names.AnonymousName
 import org.jetbrains.kotlin.formver.viper.MangledName
 import org.jetbrains.kotlin.formver.viper.ast.*
@@ -42,7 +46,10 @@ sealed interface VariableEmbedding : PureExpEmbedding, PropertyAccessEmbedding {
         trafos: Trafos = Trafos.NoTrafos,
     ): Exp.LocalVar = Exp.LocalVar(name, Type.Ref, pos, info, trafos)
 
-    override fun toViper(source: KtSourceElement?): Exp.LocalVar = Exp.LocalVar(name, Type.Ref, source.asPosition, sourceRole.asInfo)
+    override fun toViper(source: KtSourceElement?): Exp = Exp.LocalVar(name, Type.Ref, source.asPosition, sourceRole.asInfo)
+
+    val isOriginallyRef: Boolean
+        get() = true
 
     override fun getValue(ctx: StmtConversionContext): ExpEmbedding = this
     override fun setValue(value: ExpEmbedding, ctx: StmtConversionContext): ExpEmbedding = Assign(this, value)
@@ -75,6 +82,24 @@ class PlaceholderVariableEmbedding(
  */
 class AnonymousVariableEmbedding(n: Int, override val type: TypeEmbedding) : VariableEmbedding {
     override val name: MangledName = AnonymousName(n)
+}
+
+class AnonymousBuiltinVariableEmbedding(n: Int, override val type: TypeEmbedding) : VariableEmbedding {
+    override val name: MangledName = AnonymousBuiltinName(n)
+    private val injection: Injection? = type.injectionOrNull
+    override fun toViper(source: KtSourceElement?): Exp {
+        val inner = Exp.LocalVar(name, injection.viperType, source.asPosition, sourceRole.asInfo)
+        return injection?.let { it.toRef(inner) } ?: inner
+    }
+
+    override fun toLocalVarDecl(pos: Position, info: Info, trafos: Trafos) =
+        Declaration.LocalVarDecl(name, injection.viperType, pos, info, trafos)
+
+    override fun toLocalVarUse(pos: Position, info: Info, trafos: Trafos): Exp.LocalVar =
+        Exp.LocalVar(name, injection.viperType, pos, info, trafos)
+
+    override val isOriginallyRef: Boolean
+        get() = injection == null
 }
 
 /**

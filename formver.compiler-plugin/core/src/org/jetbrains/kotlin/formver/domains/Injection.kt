@@ -65,6 +65,9 @@ class Injection(
     }
 }
 
+val Injection?.viperType: Type
+    get() = this?.viperType ?: Type.Ref
+
 
 /**
  * Viper function that operates on the images of an injection.

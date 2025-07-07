@@ -46,12 +46,12 @@ method f$sumOfIntegersUpToN$TF$T$Int(p$n: Ref) returns (ret$0: Ref)
     goto lbl$continue$0
   }
   label lbl$break$0
-    invariant df$rt$isSubtype(df$rt$typeOf(l0$sum), df$rt$intType())
-    invariant df$rt$isSubtype(df$rt$typeOf(l0$i), df$rt$intType())
-    invariant df$rt$isSubtype(df$rt$typeOf(p$n), df$rt$intType())
-    invariant df$rt$intFromRef(l0$i) <= df$rt$intFromRef(p$n)
-    invariant df$rt$intFromRef(l0$sum) ==
-      df$rt$intFromRef(l0$i) * (df$rt$intFromRef(l0$i) + 1) / 2
+  assert df$rt$isSubtype(df$rt$typeOf(l0$sum), df$rt$intType())
+  assert df$rt$isSubtype(df$rt$typeOf(l0$i), df$rt$intType())
+  assert df$rt$isSubtype(df$rt$typeOf(p$n), df$rt$intType())
+  assert df$rt$intFromRef(l0$i) <= df$rt$intFromRef(p$n)
+  assert df$rt$intFromRef(l0$sum) ==
+    df$rt$intFromRef(l0$i) * (df$rt$intFromRef(l0$i) + 1) / 2
   ret$0 := l0$sum
   goto lbl$ret$0
   label lbl$ret$0

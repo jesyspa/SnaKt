@@ -15,7 +15,7 @@ method f$whileLoop$TF$T$Boolean(p$b: Ref) returns (ret$0: Ref)
     goto lbl$continue$0
   }
   label lbl$break$0
-    invariant df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
+  assert df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
   ret$0 := df$rt$boolToRef(false)
   goto lbl$ret$0
   label lbl$ret$0

@@ -63,6 +63,7 @@ class ProgramConverter(val session: FirSession, override val config: PluginConfi
 
     // The type annotation is necessary for the code to compile.
     override val anonVarProducer = FreshEntityProducer(::AnonymousVariableEmbedding)
+    override val anonBuiltinVarProducer = FreshEntityProducer(::AnonymousBuiltinVariableEmbedding)
     override val returnTargetProducer = FreshEntityProducer(::ReturnTarget)
 
     val program: Program

@@ -94,7 +94,7 @@ data class Shared(val inner: ExpEmbedding) : StoredResultExpEmbedding, DefaultTo
     override fun toViper(ctx: LinearizationContext): Exp = context.tryInitShared { inner.toViper(ctx) }
 
     override fun toViperStoringIn(result: VariableEmbedding, ctx: LinearizationContext) {
-        context.tryInitShared { inner.toViperStoringIn(result, ctx); result.toLocalVarUse() }
+        context.tryInitShared { inner.toViperStoringIn(result, ctx); result.toViper(ctx) }
     }
 
     override fun toViperUnusedResult(ctx: LinearizationContext) {

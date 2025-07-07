@@ -36,7 +36,8 @@ data class StmtConverter(
     override fun convert(stmt: FirStatement): ExpEmbedding =
         stmt.accept(StmtConversionVisitorExceptionWrapper, this).withPosition(stmt.source)
 
-    override fun <R> withNewScope(action: StmtConversionContext.() -> R): R = withNewScopeImpl(action)
+    override fun <R> withNewScope(action: StmtConversionContext.() -> R): R = withNewScopeImpl { action() }
+    override fun <R> withNoScope(action: StmtConversionContext.() -> R): R = withNewScopeImpl(needsScope = false, action)
 
     override fun <R> withMethodCtx(factory: MethodContextFactory, action: StmtConversionContext.() -> R): R {
         return copy(methodCtx = factory.create(this, scopeIndex)).run {
@@ -93,8 +94,8 @@ data class StmtConverter(
         return Pair(catchBlockListData, result)
     }
 
-    private fun <R> withNewScopeImpl(action: StmtConverter.() -> R): R {
-        val newScopeIndex = scopeIndexProducer.getFresh()
+    private fun <R> withNewScopeImpl(needsScope: Boolean = true, action: StmtConverter.() -> R): R {
+        val newScopeIndex = if (needsScope) scopeIndexProducer.getFresh() else ScopeIndex.NoScope
         val inner = copy(scopeIndex = newScopeIndex)
         var result: R? = null
         inner.withScopeImpl(newScopeIndex) { result = inner.action() }

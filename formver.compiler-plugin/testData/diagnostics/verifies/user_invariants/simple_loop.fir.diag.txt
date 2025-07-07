@@ -22,11 +22,11 @@ method f$test$TF$T$Int(p$n: Ref) returns (ret$0: Ref)
     goto lbl$continue$0
   }
   label lbl$break$0
-    invariant df$rt$isSubtype(df$rt$typeOf(l0$it), df$rt$intType())
-    invariant df$rt$isSubtype(df$rt$typeOf(l0$holds), df$rt$boolType())
-    invariant df$rt$isSubtype(df$rt$typeOf(p$n), df$rt$intType())
-    invariant df$rt$intFromRef(l0$it) <= 10
-    invariant df$rt$boolFromRef(l0$holds)
+  assert df$rt$isSubtype(df$rt$typeOf(l0$it), df$rt$intType())
+  assert df$rt$isSubtype(df$rt$typeOf(l0$holds), df$rt$boolType())
+  assert df$rt$isSubtype(df$rt$typeOf(p$n), df$rt$intType())
+  assert df$rt$intFromRef(l0$it) <= 10
+  assert df$rt$boolFromRef(l0$holds)
   assert df$rt$intFromRef(l0$it) == 10
   if (df$rt$intFromRef(l0$it) <= df$rt$intFromRef(p$n)) {
     var anon$1: Ref
@@ -42,11 +42,11 @@ method f$test$TF$T$Int(p$n: Ref) returns (ret$0: Ref)
       goto lbl$continue$1
     }
     label lbl$break$1
-      invariant df$rt$isSubtype(df$rt$typeOf(l0$it), df$rt$intType())
-      invariant df$rt$isSubtype(df$rt$typeOf(l0$holds), df$rt$boolType())
-      invariant df$rt$isSubtype(df$rt$typeOf(p$n), df$rt$intType())
-      invariant df$rt$intFromRef(l0$it) <= df$rt$intFromRef(p$n)
-      invariant df$rt$boolFromRef(l0$holds)
+    assert df$rt$isSubtype(df$rt$typeOf(l0$it), df$rt$intType())
+    assert df$rt$isSubtype(df$rt$typeOf(l0$holds), df$rt$boolType())
+    assert df$rt$isSubtype(df$rt$typeOf(p$n), df$rt$intType())
+    assert df$rt$intFromRef(l0$it) <= df$rt$intFromRef(p$n)
+    assert df$rt$boolFromRef(l0$holds)
     assert df$rt$intFromRef(l0$it) == df$rt$intFromRef(p$n)
   }
   label lbl$ret$0
@@ -79,16 +79,16 @@ method f$loopInsideLoop$TF$() returns (ret$0: Ref)
       goto lbl$continue$1
     }
     label lbl$break$1
-      invariant df$rt$isSubtype(df$rt$typeOf(l1$j), df$rt$intType())
-      invariant df$rt$isSubtype(df$rt$typeOf(l0$i), df$rt$intType())
-      invariant df$rt$intFromRef(l0$i) < df$rt$intFromRef(l1$j)
-      invariant df$rt$intFromRef(l1$j) <= 10
+    assert df$rt$isSubtype(df$rt$typeOf(l1$j), df$rt$intType())
+    assert df$rt$isSubtype(df$rt$typeOf(l0$i), df$rt$intType())
+    assert df$rt$intFromRef(l0$i) < df$rt$intFromRef(l1$j)
+    assert df$rt$intFromRef(l1$j) <= 10
     l0$i := sp$plusInts(l0$i, df$rt$intToRef(1))
     goto lbl$continue$0
   }
   label lbl$break$0
-    invariant df$rt$isSubtype(df$rt$typeOf(l0$i), df$rt$intType())
-    invariant df$rt$intFromRef(l0$i) <= 10
+  assert df$rt$isSubtype(df$rt$typeOf(l0$i), df$rt$intType())
+  assert df$rt$intFromRef(l0$i) <= 10
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }
@@ -113,8 +113,8 @@ method f$withBreak$TF$() returns (ret$0: Ref)
     goto lbl$continue$0
   }
   label lbl$break$0
-    invariant df$rt$isSubtype(df$rt$typeOf(l0$i), df$rt$intType())
-    invariant df$rt$intFromRef(l0$i) <= 10
+  assert df$rt$isSubtype(df$rt$typeOf(l0$i), df$rt$intType())
+  assert df$rt$intFromRef(l0$i) <= 10
   assert df$rt$intFromRef(l0$i) == 10
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
@@ -154,9 +154,9 @@ method f$test_boolean_postcondition$TF$() returns (ret$0: Ref)
     goto lbl$continue$0
   }
   label lbl$break$0
-    invariant acc(p$c$WithVar$shared(l0$withVar), wildcard)
-    invariant df$rt$isSubtype(df$rt$typeOf(l0$withVar), df$rt$c$WithVar())
-    invariant df$rt$isSubtype(df$rt$typeOf(l0$boolean), df$rt$boolType())
+  assert acc(p$c$WithVar$shared(l0$withVar), wildcard)
+  assert df$rt$isSubtype(df$rt$typeOf(l0$withVar), df$rt$c$WithVar())
+  assert df$rt$isSubtype(df$rt$typeOf(l0$boolean), df$rt$boolType())
   assert !df$rt$boolFromRef(l0$boolean)
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())

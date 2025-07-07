@@ -45,8 +45,8 @@ method f$whileBreak$TF$T$Boolean(p$b: Ref) returns (ret$0: Ref)
     goto lbl$continue$0
   }
   label lbl$break$0
-    invariant df$rt$isSubtype(df$rt$typeOf(l0$i), df$rt$intType())
-    invariant df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
+  assert df$rt$isSubtype(df$rt$typeOf(l0$i), df$rt$intType())
+  assert df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
   ret$0 := l0$i
   goto lbl$ret$0
   label lbl$ret$0
@@ -68,7 +68,7 @@ method f$whileContinue$TF$() returns (ret$0: Ref)
     goto lbl$continue$0
   }
   label lbl$break$0
-    invariant df$rt$isSubtype(df$rt$typeOf(l0$b), df$rt$boolType())
+  assert df$rt$isSubtype(df$rt$typeOf(l0$b), df$rt$boolType())
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }
@@ -93,7 +93,7 @@ method f$whileNested$TF$T$Boolean(p$b: Ref) returns (ret$0: Ref)
       goto lbl$continue$1
     }
     label lbl$break$1
-      invariant df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
+    assert df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
     goto lbl$continue$0
     label lbl$continue$2
       invariant df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
@@ -103,12 +103,12 @@ method f$whileNested$TF$T$Boolean(p$b: Ref) returns (ret$0: Ref)
       goto lbl$continue$2
     }
     label lbl$break$2
-      invariant df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
+    assert df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
     goto lbl$break$0
     goto lbl$continue$0
   }
   label lbl$break$0
-    invariant df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
+  assert df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }
@@ -134,13 +134,13 @@ method f$labelledBreak$TF$T$Boolean(p$b: Ref) returns (ret$0: Ref)
       goto lbl$continue$1
     }
     label lbl$break$1
-      invariant df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
+    assert df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
     goto lbl$break$0
     goto lbl$break$0
     goto lbl$continue$0
   }
   label lbl$break$0
-    invariant df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
+  assert df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }
@@ -166,13 +166,13 @@ method f$labelledContinue$TF$T$Boolean(p$b: Ref) returns (ret$0: Ref)
       goto lbl$continue$1
     }
     label lbl$break$1
-      invariant df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
+    assert df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
     goto lbl$continue$0
     goto lbl$continue$0
     goto lbl$continue$0
   }
   label lbl$break$0
-    invariant df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
+  assert df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }
@@ -198,7 +198,7 @@ method f$labelledWhileShadowing$TF$T$Boolean(p$b: Ref) returns (ret$0: Ref)
       goto lbl$continue$1
     }
     label lbl$break$1
-      invariant df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
+    assert df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
     label lbl$continue$2
       invariant df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
     anon$2 := p$b
@@ -208,13 +208,13 @@ method f$labelledWhileShadowing$TF$T$Boolean(p$b: Ref) returns (ret$0: Ref)
       goto lbl$continue$2
     }
     label lbl$break$2
-      invariant df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
+    assert df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
     goto lbl$break$0
     goto lbl$continue$0
     goto lbl$continue$0
   }
   label lbl$break$0
-    invariant df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
+  assert df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }

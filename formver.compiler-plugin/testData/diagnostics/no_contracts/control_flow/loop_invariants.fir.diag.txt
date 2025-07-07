@@ -13,7 +13,7 @@ method f$dynamicLambdaInvariant$TF$TF$(p$f: Ref) returns (ret$0: Ref)
     goto lbl$continue$0
   }
   label lbl$break$0
-    invariant df$rt$isSubtype(df$rt$typeOf(p$f), df$rt$functionType())
+  assert df$rt$isSubtype(df$rt$typeOf(p$f), df$rt$functionType())
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }
@@ -40,8 +40,8 @@ method f$functionAssignment$TF$TF$(p$f: Ref) returns (ret$0: Ref)
     goto lbl$continue$0
   }
   label lbl$break$0
-    invariant df$rt$isSubtype(df$rt$typeOf(l0$g), df$rt$functionType())
-    invariant df$rt$isSubtype(df$rt$typeOf(p$f), df$rt$functionType())
+  assert df$rt$isSubtype(df$rt$typeOf(l0$g), df$rt$functionType())
+  assert df$rt$isSubtype(df$rt$typeOf(p$f), df$rt$functionType())
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }
@@ -77,10 +77,10 @@ method f$conditionalFunctionAssignment$TF$T$Boolean$TF$$TF$(p$b: Ref, p$f: Ref,
     goto lbl$continue$0
   }
   label lbl$break$0
-    invariant df$rt$isSubtype(df$rt$typeOf(l0$g), df$rt$functionType())
-    invariant df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
-    invariant df$rt$isSubtype(df$rt$typeOf(p$f), df$rt$functionType())
-    invariant df$rt$isSubtype(df$rt$typeOf(p$h), df$rt$functionType())
+  assert df$rt$isSubtype(df$rt$typeOf(l0$g), df$rt$functionType())
+  assert df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
+  assert df$rt$isSubtype(df$rt$typeOf(p$f), df$rt$functionType())
+  assert df$rt$isSubtype(df$rt$typeOf(p$h), df$rt$functionType())
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }

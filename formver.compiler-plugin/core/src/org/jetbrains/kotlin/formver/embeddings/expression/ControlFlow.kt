@@ -84,7 +84,7 @@ data class While(
     override val type: TypeEmbedding = buildType { unit() }
 
     val continueLabel = LabelEmbedding(continueLabelName, invariants)
-    val breakLabel = LabelEmbedding(breakLabelName, invariants)
+    val breakLabel = LabelEmbedding(breakLabelName)
 
     override fun toViperSideEffects(ctx: LinearizationContext) {
         ctx.addLabel(continueLabel.toViper(ctx))
@@ -98,6 +98,13 @@ data class While(
             Stmt.If(condVar.toViperBuiltinType(ctx), bodyBlock, els = Stmt.Seqn(), ctx.source.asPosition)
         }
         ctx.addLabel(breakLabel.toViper(ctx))
+
+        // TODO: this logic can be rewritten back to invariants once the version of Viper is updated
+        invariants.forEach {
+            ctx.addStatement {
+                Stmt.Assert(it.pureToViper(toBuiltin = true))
+            }
+        }
     }
 
     // TODO: add invariants

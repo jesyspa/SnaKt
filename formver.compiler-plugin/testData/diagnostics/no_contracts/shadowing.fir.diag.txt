@@ -65,10 +65,10 @@ method f$shadowNested$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
       goto lbl$continue$0
     }
     label lbl$break$0
-      invariant df$rt$isSubtype(df$rt$typeOf(l2$x), df$rt$intType())
-      invariant df$rt$isSubtype(df$rt$typeOf(l0$foo), df$rt$intType())
-      invariant df$rt$isSubtype(df$rt$typeOf(l0$x), df$rt$intType())
-      invariant df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$intType())
+    assert df$rt$isSubtype(df$rt$typeOf(l2$x), df$rt$intType())
+    assert df$rt$isSubtype(df$rt$typeOf(l0$foo), df$rt$intType())
+    assert df$rt$isSubtype(df$rt$typeOf(l0$x), df$rt$intType())
+    assert df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$intType())
     l0$foo := l2$x
   }
   l0$foo := l0$x

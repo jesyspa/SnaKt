@@ -1,0 +1,257 @@
+/merge_sort_of_string.kt:(72,76): info: Generated Viper text for subs:
+method f$pkg$kotlin$c$String$plus$TF$T$String$NT$Any(this$dispatch: Ref, p$other: Ref)
+  returns (ret: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$stringType())
+
+
+method f$subs$TF$T$String$T$Int$T$Int(this$extension: Ref, p$lo: Ref, p$hi: Ref)
+  returns (ret$0: Ref)
+  requires 0 <= df$rt$intFromRef(p$lo) &&
+    df$rt$intFromRef(p$lo) <= df$rt$intFromRef(p$hi) &&
+    df$rt$intFromRef(p$hi) <= |df$rt$stringFromRef(this$extension)|
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$stringType())
+  ensures |df$rt$stringFromRef(ret$0)| ==
+    df$rt$intFromRef(p$hi) - df$rt$intFromRef(p$lo)
+  ensures (forall anon$builtin$2: Int ::0 <= anon$builtin$2 &&
+      anon$builtin$2 < |df$rt$stringFromRef(ret$0)| ==>
+      df$rt$stringFromRef(ret$0)[anon$builtin$2] ==
+      df$rt$stringFromRef(this$extension)[anon$builtin$2 +
+      df$rt$intFromRef(p$lo)])
+{
+  var l0$res: Ref
+  var l0$i: Ref
+  var anon$1: Ref
+  inhale df$rt$isSubtype(df$rt$typeOf(this$extension), df$rt$stringType())
+  inhale df$rt$isSubtype(df$rt$typeOf(p$lo), df$rt$intType())
+  inhale df$rt$isSubtype(df$rt$typeOf(p$hi), df$rt$intType())
+  l0$res := df$rt$stringToRef(Seq[Int]())
+  l0$i := p$lo
+  label lbl$continue$0
+    invariant df$rt$isSubtype(df$rt$typeOf(l0$res), df$rt$stringType())
+    invariant df$rt$isSubtype(df$rt$typeOf(l0$i), df$rt$intType())
+    invariant df$rt$isSubtype(df$rt$typeOf(p$lo), df$rt$intType())
+    invariant df$rt$isSubtype(df$rt$typeOf(p$hi), df$rt$intType())
+    invariant 0 <= df$rt$intFromRef(l0$i) &&
+      df$rt$intFromRef(l0$i) <= df$rt$intFromRef(p$hi)
+    invariant |df$rt$stringFromRef(l0$res)| ==
+      df$rt$intFromRef(l0$i) - df$rt$intFromRef(p$lo)
+    invariant (forall anon$builtin$1: Int ::0 <= anon$builtin$1 &&
+        anon$builtin$1 < |df$rt$stringFromRef(l0$res)| ==>
+        df$rt$stringFromRef(l0$res)[anon$builtin$1] ==
+        df$rt$stringFromRef(this$extension)[anon$builtin$1 +
+        df$rt$intFromRef(p$lo)])
+  anon$1 := sp$ltInts(l0$i, p$hi)
+  if (df$rt$boolFromRef(anon$1)) {
+    var anon$2: Ref
+    var anon$0: Ref
+    anon$0 := l0$i
+    l0$i := sp$plusInts(anon$0, df$rt$intToRef(1))
+    anon$2 := anon$0
+    l0$res := sp$addStringChar(l0$res, sp$stringGet(this$extension, anon$2))
+    goto lbl$continue$0
+  }
+  label lbl$break$0
+  assert df$rt$isSubtype(df$rt$typeOf(l0$res), df$rt$stringType())
+  assert df$rt$isSubtype(df$rt$typeOf(l0$i), df$rt$intType())
+  assert df$rt$isSubtype(df$rt$typeOf(p$lo), df$rt$intType())
+  assert df$rt$isSubtype(df$rt$typeOf(p$hi), df$rt$intType())
+  assert 0 <= df$rt$intFromRef(l0$i) &&
+    df$rt$intFromRef(l0$i) <= df$rt$intFromRef(p$hi)
+  assert |df$rt$stringFromRef(l0$res)| ==
+    df$rt$intFromRef(l0$i) - df$rt$intFromRef(p$lo)
+  assert (forall anon$builtin$1: Int ::0 <= anon$builtin$1 &&
+      anon$builtin$1 < |df$rt$stringFromRef(l0$res)| ==>
+      df$rt$stringFromRef(l0$res)[anon$builtin$1] ==
+      df$rt$stringFromRef(this$extension)[anon$builtin$1 +
+      df$rt$intFromRef(p$lo)])
+  ret$0 := l0$res
+  goto lbl$ret$0
+  label lbl$ret$0
+}
+
+/merge_sort_of_string.kt:(705,717): info: Generated Viper text for mergeStrings:
+method f$mergeStrings$TF$T$String$T$String(p$a: Ref, p$b: Ref)
+  returns (ret$0: Ref)
+  requires (forall anon$builtin$3: Int ::(1 <= anon$builtin$3 &&
+      anon$builtin$3 < |df$rt$stringFromRef(p$a)| ==>
+      df$rt$stringFromRef(p$a)[anon$builtin$3 - 1] <=
+      df$rt$stringFromRef(p$a)[anon$builtin$3]) &&
+      (1 <= anon$builtin$3 && anon$builtin$3 < |df$rt$stringFromRef(p$b)| ==>
+      df$rt$stringFromRef(p$b)[anon$builtin$3 - 1] <=
+      df$rt$stringFromRef(p$b)[anon$builtin$3]))
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$stringType())
+  ensures |df$rt$stringFromRef(ret$0)| ==
+    |df$rt$stringFromRef(p$a)| + |df$rt$stringFromRef(p$b)|
+  ensures (forall anon$builtin$4: Int ::1 <= anon$builtin$4 &&
+      anon$builtin$4 < |df$rt$stringFromRef(ret$0)| ==>
+      df$rt$stringFromRef(ret$0)[anon$builtin$4 - 1] <=
+      df$rt$stringFromRef(ret$0)[anon$builtin$4])
+{
+  var l0$pa: Ref
+  var l0$pb: Ref
+  var l0$res: Ref
+  var l0$n: Ref
+  var anon$4: Ref
+  inhale df$rt$isSubtype(df$rt$typeOf(p$a), df$rt$stringType())
+  inhale df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$stringType())
+  l0$pa := df$rt$intToRef(0)
+  l0$pb := df$rt$intToRef(0)
+  l0$res := df$rt$stringToRef(Seq[Int]())
+  l0$n := sp$plusInts(sp$stringLength(p$a), sp$stringLength(p$b))
+  label lbl$continue$0
+    invariant df$rt$isSubtype(df$rt$typeOf(l0$pa), df$rt$intType())
+    invariant df$rt$isSubtype(df$rt$typeOf(l0$pb), df$rt$intType())
+    invariant df$rt$isSubtype(df$rt$typeOf(l0$res), df$rt$stringType())
+    invariant df$rt$isSubtype(df$rt$typeOf(l0$n), df$rt$intType())
+    invariant df$rt$isSubtype(df$rt$typeOf(p$a), df$rt$stringType())
+    invariant df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$stringType())
+    invariant 0 <= df$rt$intFromRef(l0$pa) &&
+      df$rt$intFromRef(l0$pa) <= |df$rt$stringFromRef(p$a)|
+    invariant 0 <= df$rt$intFromRef(l0$pb) &&
+      df$rt$intFromRef(l0$pb) <= |df$rt$stringFromRef(p$b)|
+    invariant |df$rt$stringFromRef(l0$res)| ==
+      df$rt$intFromRef(l0$pa) + df$rt$intFromRef(l0$pb)
+    invariant (forall anon$builtin$2: Int ::1 <= anon$builtin$2 &&
+        anon$builtin$2 < |df$rt$stringFromRef(l0$res)| ==>
+        df$rt$stringFromRef(l0$res)[anon$builtin$2 - 1] <=
+        df$rt$stringFromRef(l0$res)[anon$builtin$2])
+    invariant |df$rt$stringFromRef(l0$res)| == 0 ||
+      df$rt$intFromRef(l0$pa) == |df$rt$stringFromRef(p$a)| ||
+      df$rt$stringFromRef(l0$res)[|df$rt$stringFromRef(l0$res)| - 1] <=
+      df$rt$stringFromRef(p$a)[df$rt$intFromRef(l0$pa)]
+    invariant |df$rt$stringFromRef(l0$res)| == 0 ||
+      df$rt$intFromRef(l0$pb) == |df$rt$stringFromRef(p$b)| ||
+      df$rt$stringFromRef(l0$res)[|df$rt$stringFromRef(l0$res)| - 1] <=
+      df$rt$stringFromRef(p$b)[df$rt$intFromRef(l0$pb)]
+  anon$4 := sp$ltInts(sp$plusInts(l0$pa, l0$pb), l0$n)
+  if (df$rt$boolFromRef(anon$4)) {
+    var anon$5: Ref
+    if (df$rt$intFromRef(l0$pa) == |df$rt$stringFromRef(p$a)|) {
+      var anon$6: Ref
+      var anon$0: Ref
+      anon$0 := l0$pb
+      l0$pb := sp$plusInts(anon$0, df$rt$intToRef(1))
+      anon$6 := anon$0
+      anon$5 := sp$stringGet(p$b, anon$6)
+    } elseif (df$rt$intFromRef(l0$pb) == |df$rt$stringFromRef(p$b)|) {
+      var anon$7: Ref
+      var anon$1: Ref
+      anon$1 := l0$pa
+      l0$pa := sp$plusInts(anon$1, df$rt$intToRef(1))
+      anon$7 := anon$1
+      anon$5 := sp$stringGet(p$a, anon$7)
+    } elseif (df$rt$stringFromRef(p$a)[df$rt$intFromRef(l0$pa)] <
+    df$rt$stringFromRef(p$b)[df$rt$intFromRef(l0$pb)]) {
+      var anon$8: Ref
+      var anon$2: Ref
+      anon$2 := l0$pa
+      l0$pa := sp$plusInts(anon$2, df$rt$intToRef(1))
+      anon$8 := anon$2
+      anon$5 := sp$stringGet(p$a, anon$8)
+    } else {
+      var anon$9: Ref
+      var anon$3: Ref
+      anon$3 := l0$pb
+      l0$pb := sp$plusInts(anon$3, df$rt$intToRef(1))
+      anon$9 := anon$3
+      anon$5 := sp$stringGet(p$b, anon$9)
+    }
+    l0$res := sp$addStringChar(l0$res, anon$5)
+    goto lbl$continue$0
+  }
+  label lbl$break$0
+  assert df$rt$isSubtype(df$rt$typeOf(l0$pa), df$rt$intType())
+  assert df$rt$isSubtype(df$rt$typeOf(l0$pb), df$rt$intType())
+  assert df$rt$isSubtype(df$rt$typeOf(l0$res), df$rt$stringType())
+  assert df$rt$isSubtype(df$rt$typeOf(l0$n), df$rt$intType())
+  assert df$rt$isSubtype(df$rt$typeOf(p$a), df$rt$stringType())
+  assert df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$stringType())
+  assert 0 <= df$rt$intFromRef(l0$pa) &&
+    df$rt$intFromRef(l0$pa) <= |df$rt$stringFromRef(p$a)|
+  assert 0 <= df$rt$intFromRef(l0$pb) &&
+    df$rt$intFromRef(l0$pb) <= |df$rt$stringFromRef(p$b)|
+  assert |df$rt$stringFromRef(l0$res)| ==
+    df$rt$intFromRef(l0$pa) + df$rt$intFromRef(l0$pb)
+  assert (forall anon$builtin$2: Int ::1 <= anon$builtin$2 &&
+      anon$builtin$2 < |df$rt$stringFromRef(l0$res)| ==>
+      df$rt$stringFromRef(l0$res)[anon$builtin$2 - 1] <=
+      df$rt$stringFromRef(l0$res)[anon$builtin$2])
+  assert |df$rt$stringFromRef(l0$res)| == 0 ||
+    df$rt$intFromRef(l0$pa) == |df$rt$stringFromRef(p$a)| ||
+    df$rt$stringFromRef(l0$res)[|df$rt$stringFromRef(l0$res)| - 1] <=
+    df$rt$stringFromRef(p$a)[df$rt$intFromRef(l0$pa)]
+  assert |df$rt$stringFromRef(l0$res)| == 0 ||
+    df$rt$intFromRef(l0$pb) == |df$rt$stringFromRef(p$b)| ||
+    df$rt$stringFromRef(l0$res)[|df$rt$stringFromRef(l0$res)| - 1] <=
+    df$rt$stringFromRef(p$b)[df$rt$intFromRef(l0$pb)]
+  ret$0 := l0$res
+  goto lbl$ret$0
+  label lbl$ret$0
+}
+
+method f$pkg$kotlin$c$String$plus$TF$T$String$NT$Any(this$dispatch: Ref, p$other: Ref)
+  returns (ret: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$stringType())
+
+
+/merge_sort_of_string.kt:(1883,1894): info: Generated Viper text for mergeSorted:
+method f$mergeSorted$TF$T$String(this$extension: Ref) returns (ret$0: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$stringType())
+  ensures |df$rt$stringFromRef(ret$0)| ==
+    |df$rt$stringFromRef(this$extension)|
+  ensures (forall anon$builtin$4: Int ::1 <= anon$builtin$4 &&
+      anon$builtin$4 < |df$rt$stringFromRef(ret$0)| ==>
+      df$rt$stringFromRef(ret$0)[anon$builtin$4 - 1] <=
+      df$rt$stringFromRef(ret$0)[anon$builtin$4])
+{
+  inhale df$rt$isSubtype(df$rt$typeOf(this$extension), df$rt$stringType())
+  if (|df$rt$stringFromRef(this$extension)| <= 1) {
+    ret$0 := this$extension
+  } else {
+    var anon$0: Ref
+    var anon$1: Ref
+    var anon$2: Ref
+    var anon$3: Ref
+    anon$1 := f$subs$TF$T$String$T$Int$T$Int(this$extension, df$rt$intToRef(0),
+      sp$divInts(sp$stringLength(this$extension), df$rt$intToRef(2)))
+    anon$0 := f$mergeSorted$TF$T$String(anon$1)
+    anon$3 := f$subs$TF$T$String$T$Int$T$Int(this$extension, sp$divInts(sp$stringLength(this$extension),
+      df$rt$intToRef(2)), sp$stringLength(this$extension))
+    anon$2 := f$mergeSorted$TF$T$String(anon$3)
+    ret$0 := f$mergeStrings$TF$T$String$T$String(anon$0, anon$2)
+  }
+  goto lbl$ret$0
+  label lbl$ret$0
+}
+
+method f$mergeStrings$TF$T$String$T$String(p$a: Ref, p$b: Ref)
+  returns (ret: Ref)
+  requires (forall anon$builtin$5: Int ::(1 <= anon$builtin$5 &&
+      anon$builtin$5 < |df$rt$stringFromRef(p$a)| ==>
+      df$rt$stringFromRef(p$a)[anon$builtin$5 - 1] <=
+      df$rt$stringFromRef(p$a)[anon$builtin$5]) &&
+      (1 <= anon$builtin$5 && anon$builtin$5 < |df$rt$stringFromRef(p$b)| ==>
+      df$rt$stringFromRef(p$b)[anon$builtin$5 - 1] <=
+      df$rt$stringFromRef(p$b)[anon$builtin$5]))
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$stringType())
+  ensures |df$rt$stringFromRef(ret)| ==
+    |df$rt$stringFromRef(p$a)| + |df$rt$stringFromRef(p$b)|
+  ensures (forall anon$builtin$6: Int ::1 <= anon$builtin$6 &&
+      anon$builtin$6 < |df$rt$stringFromRef(ret)| ==>
+      df$rt$stringFromRef(ret)[anon$builtin$6 - 1] <=
+      df$rt$stringFromRef(ret)[anon$builtin$6])
+
+
+method f$subs$TF$T$String$T$Int$T$Int(this$extension: Ref, p$lo: Ref, p$hi: Ref)
+  returns (ret: Ref)
+  requires 0 <= df$rt$intFromRef(p$lo) &&
+    df$rt$intFromRef(p$lo) <= df$rt$intFromRef(p$hi) &&
+    df$rt$intFromRef(p$hi) <= |df$rt$stringFromRef(this$extension)|
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$stringType())
+  ensures |df$rt$stringFromRef(ret)| ==
+    df$rt$intFromRef(p$hi) - df$rt$intFromRef(p$lo)
+  ensures (forall anon$builtin$7: Int ::0 <= anon$builtin$7 &&
+      anon$builtin$7 < |df$rt$stringFromRef(ret)| ==>
+      df$rt$stringFromRef(ret)[anon$builtin$7] ==
+      df$rt$stringFromRef(this$extension)[anon$builtin$7 +
+      df$rt$intFromRef(p$lo)])

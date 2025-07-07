@@ -7,7 +7,6 @@ package org.jetbrains.kotlin.formver.embeddings.types
 
 import org.jetbrains.kotlin.formver.domains.Injection
 import org.jetbrains.kotlin.formver.domains.RuntimeTypeDomain
-import org.jetbrains.kotlin.formver.domains.RuntimeTypeDomain.Companion.stringType
 import org.jetbrains.kotlin.formver.embeddings.expression.debug.PlaintextLeaf
 import org.jetbrains.kotlin.formver.embeddings.expression.debug.TreeView
 import org.jetbrains.kotlin.formver.names.*
@@ -78,19 +77,22 @@ data class TypeEmbeddingFlags(val nullable: Boolean) {
         invariant?.let { adjustInvariant(it) }
 }
 
-inline fun TypeEmbedding.injectionOr(default: (TypeEmbedding) -> Injection): Injection {
-    if (flags.nullable) return default(this)
-    return when (this.pretype) {
-        StringTypeEmbedding -> RuntimeTypeDomain.stringInjection
-        CharTypeEmbedding -> RuntimeTypeDomain.charInjection
-        IntTypeEmbedding -> RuntimeTypeDomain.intInjection
-        BooleanTypeEmbedding -> RuntimeTypeDomain.boolInjection
-        else -> default(this)
-    }
-}
+inline fun TypeEmbedding.injectionOr(default: (TypeEmbedding) -> Injection) = injectionOrNull ?: default(this)
 
 val TypeEmbedding.injection
     get() = injectionOr {
         error("Type ${it.name} has no injection specified.")
     }
+
+val TypeEmbedding.injectionOrNull: Injection?
+    get() =
+        if (flags.nullable) null
+        else when (this.pretype) {
+            StringTypeEmbedding -> RuntimeTypeDomain.stringInjection
+            CharTypeEmbedding -> RuntimeTypeDomain.charInjection
+            IntTypeEmbedding -> RuntimeTypeDomain.intInjection
+            BooleanTypeEmbedding -> RuntimeTypeDomain.boolInjection
+            else -> null
+        }
+
 

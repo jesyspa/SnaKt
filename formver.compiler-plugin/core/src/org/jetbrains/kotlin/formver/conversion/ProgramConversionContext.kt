@@ -16,6 +16,7 @@ import org.jetbrains.kotlin.formver.embeddings.properties.PropertyEmbedding
 import org.jetbrains.kotlin.formver.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.embeddings.callables.FunctionEmbedding
 import org.jetbrains.kotlin.formver.embeddings.callables.FunctionSignature
+import org.jetbrains.kotlin.formver.embeddings.expression.AnonymousBuiltinVariableEmbedding
 import org.jetbrains.kotlin.formver.embeddings.expression.AnonymousVariableEmbedding
 import org.jetbrains.kotlin.formver.embeddings.expression.VariableEmbedding
 import org.jetbrains.kotlin.formver.embeddings.types.FunctionTypeEmbedding
@@ -32,6 +33,7 @@ interface ProgramConversionContext {
     val scopeIndexProducer: SimpleFreshEntityProducer<ScopeIndex.Indexed>
 
     val anonVarProducer: FreshEntityProducer<AnonymousVariableEmbedding, TypeEmbedding>
+    val anonBuiltinVarProducer: FreshEntityProducer<AnonymousBuiltinVariableEmbedding, TypeEmbedding>
     val returnTargetProducer: FreshEntityProducer<ReturnTarget, TypeEmbedding>
 
     fun embedFunction(symbol: FirFunctionSymbol<*>): FunctionEmbedding
@@ -43,3 +45,4 @@ interface ProgramConversionContext {
 }
 
 fun ProgramConversionContext.freshAnonVar(type: TypeEmbedding): VariableEmbedding = anonVarProducer.getFresh(type)
+fun ProgramConversionContext.freshAnonBuiltinVar(type: TypeEmbedding): VariableEmbedding = anonBuiltinVarProducer.getFresh(type)
