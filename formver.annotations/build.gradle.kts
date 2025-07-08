@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm")
     id("org.jetbrains.kotlinx.binary-compatibility-validator")
+    id("maven-publish")
 }
 
 sourceSets {
@@ -11,5 +12,13 @@ sourceSets {
     test {
         java.setSrcDirs(emptyList<String>())
         resources.setSrcDirs(emptyList<String>())
+    }
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["java"])
+        }
     }
 }

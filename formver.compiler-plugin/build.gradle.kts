@@ -4,6 +4,7 @@ plugins {
     id("com.github.gmazzo.buildconfig")
     idea
     id("maven-publish")
+    id("com.gradleup.shadow") version "9.0.0-rc1"
 }
 
 sourceSets {
@@ -63,7 +64,7 @@ buildConfig {
     }
 
     packageName(group.toString())
-    buildConfigField("String", "KOTLIN_PLUGIN_ID", "\"${rootProject.group}\"")
+    buildConfigField("String", "COMPILER_PLUGIN_ID", "\"${rootProject.group}\"")
 }
 
 tasks.test {
@@ -121,10 +122,14 @@ fun Test.setLibraryProperty(propName: String, jarName: String) {
     systemProperty(propName, path)
 }
 
+tasks.shadowJar {
+    archiveClassifier.set("")
+}
+
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            from(components["java"])
+            artifact(tasks.shadowJar)
         }
     }
 }
