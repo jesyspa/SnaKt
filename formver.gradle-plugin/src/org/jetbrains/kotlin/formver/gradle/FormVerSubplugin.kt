@@ -7,7 +7,9 @@ package org.jetbrains.kotlin.formver.gradle
 
 import org.gradle.api.Project
 import org.gradle.api.provider.Provider
+import org.gradle.internal.impldep.kotlinx.coroutines.channels.BroadcastChannel
 import org.gradle.tooling.provider.model.ToolingModelBuilderRegistry
+import org.jetbrains.kotlin.formver.BuildConfig
 import org.jetbrains.kotlin.formver.gradle.model.builder.FormVerModelBuilder
 import org.jetbrains.kotlin.formver.FormalVerificationPluginNames
 import org.jetbrains.kotlin.gradle.plugin.*
@@ -17,10 +19,6 @@ class FormVerGradleSubplugin
 @Inject internal constructor(
     private val registry: ToolingModelBuilderRegistry,
 ) : KotlinCompilerPluginSupportPlugin {
-    companion object {
-        private const val FORMVER_ARTIFACT_NAME = "kotlin-formver-compiler-plugin-embeddable"
-    }
-
     override fun apply(target: Project) {
         target.extensions.create("formver", FormVerExtension::class.java)
         registry.register(FormVerModelBuilder())
@@ -60,8 +58,8 @@ class FormVerGradleSubplugin
         }
     }
 
-    override fun getCompilerPluginId(): String = "org.jetbrains.kotlin.formver"
+    override fun getCompilerPluginId(): String = "${BuildConfig.COMPILER_PLUGIN_GROUP}.${BuildConfig.COMPILER_PLUGIN_NAME}"
 
     override fun getPluginArtifact(): SubpluginArtifact =
-        JetBrainsSubpluginArtifact(artifactId = FORMVER_ARTIFACT_NAME)
+        SubpluginArtifact(BuildConfig.COMPILER_PLUGIN_GROUP, BuildConfig.COMPILER_PLUGIN_NAME, BuildConfig.COMPILER_PLUGIN_VERSION)
 }

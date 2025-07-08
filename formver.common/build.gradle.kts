@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm")
+    id("maven-publish")
 }
 
 dependencies {
@@ -14,5 +15,13 @@ sourceSets {
     test {
         java.setSrcDirs(emptyList<String>())
         resources.setSrcDirs(emptyList<String>())
+    }
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["java"])
+        }
     }
 }

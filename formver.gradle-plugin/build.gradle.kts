@@ -2,6 +2,8 @@ plugins {
     kotlin("jvm")
     id("com.github.gmazzo.buildconfig")
     id("java-gradle-plugin")
+    id("com.gradle.plugin-publish")
+    id("maven-publish")
 }
 
 sourceSets {
@@ -23,12 +25,12 @@ dependencies {
 buildConfig {
     packageName(project.group.toString())
 
-    buildConfigField("String", "KOTLIN_PLUGIN_ID", "\"${rootProject.group}\"")
+    buildConfigField("String", "GRADLE_PLUGIN_ID", "\"${rootProject.group}\"")
 
     val pluginProject = project(":formver.compiler-plugin")
-    buildConfigField("String", "KOTLIN_PLUGIN_GROUP", "\"${pluginProject.group}\"")
-    buildConfigField("String", "KOTLIN_PLUGIN_NAME", "\"${pluginProject.name}\"")
-    buildConfigField("String", "KOTLIN_PLUGIN_VERSION", "\"${pluginProject.version}\"")
+    buildConfigField("String", "COMPILER_PLUGIN_GROUP", "\"${pluginProject.group}\"")
+    buildConfigField("String", "COMPILER_PLUGIN_NAME", "\"${pluginProject.name}\"")
+    buildConfigField("String", "COMPILER_PLUGIN_VERSION", "\"${pluginProject.version}\"")
 
     val annotationsProject = project(":formver.annotations")
     buildConfigField(
@@ -39,12 +41,26 @@ buildConfig {
 }
 
 gradlePlugin {
+    website = "https://github.com/jesyspa/SnaKt"
+    vcsUrl = "https://github.com/jesyspa/SnaKt.git"
     plugins {
         create("SnaKtFormverPlugin") {
             id = rootProject.group.toString()
-            displayName = "SnaKt compiler plugin"
-            description = "Kotlin plugin with formal verification support"
+            displayName = "SnaKt"
+            description = "Kotlin plugin adding formal verification support"
             implementationClass = "org.jetbrains.kotlin.formver.gradle.FormVerGradleSubplugin"
+            tags = listOf("kotlin", "formal-verification")
+        }
+    }
+}
+
+publishing {
+    publications {
+        withType<MavenPublication> {
+            pom {
+                name = rootProject.group.toString()
+                description = "FormVer Gradle Plugin for SnaKt"
+            }
         }
     }
 }
