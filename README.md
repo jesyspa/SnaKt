@@ -7,31 +7,46 @@ that performs formal verification of Kotlin code by translating it to
 The plugin is still in early development and large parts of Kotlin
 syntax are not supported.
 
+## Structure
+
+This repository consists of three published parts:
+- `formver.compiler-plugin`: a K2 compiler plugin that performs formal verification.
+- `formver.gradle-plugin`: a Gradle plugin that loads the compiler plugin.
+- `formver.annotations`: definitions that are used for adding specifications
+  to your code.
+  
+Additionally, `formver.common` contains some code shared between these parts.
+
+At present, we do not distribute any part of the plugin through a central repository.
+If you would like to use the plugin, clone it and use the `publishToMavenLocal`
+task to put it in your local repository.
+
 ## Running the plugin 
 
-**NOTE:** This information is taken from the previous readme and is likely out of date.
+Once you've published to your local Maven repository, you can use the Gradle
+plugin to enable verification of your project.
+You can see an example setup at [jesyspa/snakt-usage-example](https://github.com/jesyspa/snakt-usage-example).
 
-To execute the plugin in another project, make sure you've installed the plugin to your local
-Maven repository (`./gradlew install`) and then use the Gradle plugin in your project.
+### Setup
 
-In `settings.gradle.kts`, configure your Gradle plugin repositories to allow local plugins:
+In your `settings.gradle.kts`, configure your Gradle plugin repositories to allow local plugins:
 
 ```kotlin
 pluginManagement {
     repositories {
-        mavenLocal()
         mavenCentral()
+        mavenLocal()
     }
 }
 ```
 
 Then in `build.gradle.kts`, enable the plugin.  Make sure that you also enable the Maven
-local repository here: it's necessary to find the standard library for the plugin.
+local repository here: it's necessary to find the compiler plugin for the plugin.
 
 ```kotlin
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "2.0.255-SNAPSHOT"
-    id("org.jetbrains.kotlin.plugin.formver") version "2.0.255-SNAPSHOT"
+    kotlin("jvm") version "2.2.0"
+    id("org.jetbrains.kotlin.formver") version "0.1.0-SNAPSHOT"
 }
 
 repositories {
@@ -52,7 +67,7 @@ kotlin {
 }
 ```
 
-#### Plugin configuration
+### Plugin configuration
 
 Plugin options can be enabled using the `formver` configuration block:
 
@@ -65,14 +80,14 @@ formver {
 However, keep in mind that the Viper is dump is provided as an info message: this message will not be shown
 unless you run `gradle` with the `--info` flag.
 
-#### Annotations
+### Annotations
 
-The plugin provides a number of annotations.
-To access these, add a dependency to `kotlin-formver-compiler-plugin.annotations`:
+The plugin provides a number of annotations to add specifications to your code.
+To access these, add a dependency to `formver.annotations`:
 
 ```kotlin
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-formver-compiler-plugin.annotations:2.0.255-SNAPSHOT")
+    implementation("org.jetbrains.kotlin.formver:formver.annotations:0.1.0-SNAPSHOT")
 }
 ```
 
