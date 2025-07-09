@@ -90,7 +90,12 @@ class ClassEmbeddingDetails(
     fun findField(name: SimpleKotlinName): FieldEmbedding? = fields[name]
 
     fun <R> flatMapFields(action: (SimpleKotlinName, FieldEmbedding) -> List<R>): List<R> =
-        classSuperTypes.flatMap { it.details.flatMapFields(action) } + fields.flatMap { (name, field) -> action(name, field) }
+        classSuperTypes.flatMap { it.details.flatMapFields(action) } + fields.flatMap { (name, field) ->
+            action(
+                name,
+                field
+            )
+        }
 
     // We can't easily implement this by recursion on the supertype structure since some supertypes may be seen multiple times.
     // TODO: figure out a nicer way to handle this.

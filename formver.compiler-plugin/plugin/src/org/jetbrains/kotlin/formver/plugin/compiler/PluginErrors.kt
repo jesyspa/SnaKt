@@ -6,8 +6,11 @@
 package org.jetbrains.kotlin.formver.plugin.compiler
 
 import com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.diagnostics.*
+import org.jetbrains.kotlin.diagnostics.SourceElementPositioningStrategies
+import org.jetbrains.kotlin.diagnostics.error1
 import org.jetbrains.kotlin.diagnostics.rendering.RootDiagnosticRendererFactory
+import org.jetbrains.kotlin.diagnostics.warning1
+import org.jetbrains.kotlin.diagnostics.warning2
 
 object PluginErrors {
     val VIPER_VERIFICATION_ERROR by warning1<PsiElement, String>()

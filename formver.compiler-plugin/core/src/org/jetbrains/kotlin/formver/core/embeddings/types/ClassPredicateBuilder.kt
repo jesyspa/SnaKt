@@ -6,11 +6,7 @@
 package org.jetbrains.kotlin.formver.core.embeddings.types
 
 import org.jetbrains.kotlin.formver.core.conversion.AccessPolicy
-import org.jetbrains.kotlin.formver.core.embeddings.expression.ExpEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.expression.PlaceholderVariableEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.expression.PrimitiveFieldAccess
-import org.jetbrains.kotlin.formver.core.embeddings.expression.VariableEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.expression.toConjunction
+import org.jetbrains.kotlin.formver.core.embeddings.expression.*
 import org.jetbrains.kotlin.formver.core.embeddings.properties.UserFieldEmbedding
 import org.jetbrains.kotlin.formver.core.linearization.pureToViper
 import org.jetbrains.kotlin.formver.core.names.DispatchReceiverName
@@ -33,7 +29,9 @@ internal class ClassPredicateBuilder private constructor(private val details: Cl
             val builder = ClassPredicateBuilder(classType)
             builder.action()
             return Predicate(
-                predicateName, listOf(builder.subject.toLocalVarDecl()), builder.body.toConjunction().pureToViper(toBuiltin = true)
+                predicateName,
+                listOf(builder.subject.toLocalVarDecl()),
+                builder.body.toConjunction().pureToViper(toBuiltin = true)
             )
         }
     }

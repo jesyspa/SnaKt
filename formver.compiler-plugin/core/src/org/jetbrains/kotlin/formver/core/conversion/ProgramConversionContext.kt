@@ -12,14 +12,14 @@ import org.jetbrains.kotlin.fir.types.ConeKotlinType
 import org.jetbrains.kotlin.fir.types.resolvedType
 import org.jetbrains.kotlin.formver.common.ErrorCollector
 import org.jetbrains.kotlin.formver.common.PluginConfiguration
-import org.jetbrains.kotlin.formver.core.embeddings.properties.PropertyEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.callables.FunctionEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.callables.FunctionSignature
 import org.jetbrains.kotlin.formver.core.embeddings.expression.AnonymousBuiltinVariableEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.expression.AnonymousVariableEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.expression.VariableEmbedding
+import org.jetbrains.kotlin.formver.core.embeddings.properties.PropertyEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.FunctionTypeEmbedding
+import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.names.CatchLabelName
 import org.jetbrains.kotlin.formver.core.names.TryExitLabelName
 
@@ -45,4 +45,5 @@ interface ProgramConversionContext {
 }
 
 fun ProgramConversionContext.freshAnonVar(type: TypeEmbedding): VariableEmbedding = anonVarProducer.getFresh(type)
-fun ProgramConversionContext.freshAnonBuiltinVar(type: TypeEmbedding): VariableEmbedding = anonBuiltinVarProducer.getFresh(type)
+fun ProgramConversionContext.freshAnonBuiltinVar(type: TypeEmbedding): VariableEmbedding =
+    anonBuiltinVarProducer.getFresh(type)

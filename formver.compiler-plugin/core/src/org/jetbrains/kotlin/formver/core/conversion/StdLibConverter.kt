@@ -7,13 +7,7 @@ package org.jetbrains.kotlin.formver.core.conversion
 
 import org.jetbrains.kotlin.formver.core.embeddings.SourceRole
 import org.jetbrains.kotlin.formver.core.embeddings.callables.NamedFunctionSignature
-import org.jetbrains.kotlin.formver.core.embeddings.expression.EqCmp
-import org.jetbrains.kotlin.formver.core.embeddings.expression.ExpEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.expression.FieldAccess
-import org.jetbrains.kotlin.formver.core.embeddings.expression.IntLit
-import org.jetbrains.kotlin.formver.core.embeddings.expression.Old
-import org.jetbrains.kotlin.formver.core.embeddings.expression.OperatorExpEmbeddings
-import org.jetbrains.kotlin.formver.core.embeddings.expression.VariableEmbedding
+import org.jetbrains.kotlin.formver.core.embeddings.expression.*
 import org.jetbrains.kotlin.formver.core.embeddings.expression.OperatorExpEmbeddings.GeIntInt
 import org.jetbrains.kotlin.formver.core.embeddings.expression.OperatorExpEmbeddings.GtIntInt
 import org.jetbrains.kotlin.formver.core.embeddings.expression.OperatorExpEmbeddings.Implies
@@ -91,7 +85,13 @@ sealed interface StdLibPrecondition : StdLibCondition {
 
 sealed interface StdLibPostcondition : StdLibCondition {
     companion object {
-        val all = listOf(EmptyListPostcondition, IsEmptyPostcondition, GetPostcondition, SubListPostcondition, AddPostcondition)
+        val all = listOf(
+            EmptyListPostcondition,
+            IsEmptyPostcondition,
+            GetPostcondition,
+            SubListPostcondition,
+            AddPostcondition
+        )
     }
 
     fun getEmbeddings(returnVariable: VariableEmbedding, function: NamedFunctionSignature): List<ExpEmbedding>
@@ -136,7 +136,10 @@ data object SubListPrecondition : StdLibPrecondition {
 }
 
 data object EmptyListPostcondition : StdLibPostcondition {
-    override fun getEmbeddings(returnVariable: VariableEmbedding, function: NamedFunctionSignature): List<ExpEmbedding> {
+    override fun getEmbeddings(
+        returnVariable: VariableEmbedding,
+        function: NamedFunctionSignature
+    ): List<ExpEmbedding> {
         return listOf(
             EqCmp(FieldAccess(returnVariable, ListSizeFieldEmbedding), IntLit(0))
         )
@@ -147,7 +150,10 @@ data object EmptyListPostcondition : StdLibPostcondition {
 }
 
 data object IsEmptyPostcondition : StdLibPostcondition {
-    override fun getEmbeddings(returnVariable: VariableEmbedding, function: NamedFunctionSignature): List<ExpEmbedding> {
+    override fun getEmbeddings(
+        returnVariable: VariableEmbedding,
+        function: NamedFunctionSignature
+    ): List<ExpEmbedding> {
         val receiver = function.dispatchReceiver!!
         return listOf(
             receiver.sameSize(),
@@ -161,7 +167,10 @@ data object IsEmptyPostcondition : StdLibPostcondition {
 }
 
 data object GetPostcondition : StdLibPostcondition {
-    override fun getEmbeddings(returnVariable: VariableEmbedding, function: NamedFunctionSignature): List<ExpEmbedding> {
+    override fun getEmbeddings(
+        returnVariable: VariableEmbedding,
+        function: NamedFunctionSignature
+    ): List<ExpEmbedding> {
         return listOf(function.dispatchReceiver!!.sameSize())
     }
 
@@ -170,7 +179,10 @@ data object GetPostcondition : StdLibPostcondition {
 }
 
 data object SubListPostcondition : StdLibPostcondition {
-    override fun getEmbeddings(returnVariable: VariableEmbedding, function: NamedFunctionSignature): List<ExpEmbedding> {
+    override fun getEmbeddings(
+        returnVariable: VariableEmbedding,
+        function: NamedFunctionSignature
+    ): List<ExpEmbedding> {
         val fromIndexArg = function.formalArgs[1]
         val toIndexArg = function.formalArgs[2]
         return listOf(
@@ -184,7 +196,10 @@ data object SubListPostcondition : StdLibPostcondition {
 }
 
 data object AddPostcondition : StdLibPostcondition {
-    override fun getEmbeddings(returnVariable: VariableEmbedding, function: NamedFunctionSignature): List<ExpEmbedding> {
+    override fun getEmbeddings(
+        returnVariable: VariableEmbedding,
+        function: NamedFunctionSignature
+    ): List<ExpEmbedding> {
         return listOf(function.dispatchReceiver!!.increasedSize(1))
     }
 

@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.formver.viper.ast.Exp
  * In pure contexts these operators can be written as simple binary operators.
  * However, regularly their semantics is different: evaluate the first argument and then maybe the second one (not necessarily)
  */
-sealed class SequentialLogicOperatorEmbedding: BinaryDirectResultExpEmbedding {
+sealed class SequentialLogicOperatorEmbedding : BinaryDirectResultExpEmbedding {
     override val type
         get() = buildType { boolean() }
 
@@ -38,7 +38,8 @@ sealed class SequentialLogicOperatorEmbedding: BinaryDirectResultExpEmbedding {
     }
 }
 
-class SequentialAnd(override val left: ExpEmbedding, override val right: ExpEmbedding) : SequentialLogicOperatorEmbedding() {
+class SequentialAnd(override val left: ExpEmbedding, override val right: ExpEmbedding) :
+    SequentialLogicOperatorEmbedding() {
     override val ifReplacement
         get() = If(left, right, BooleanLit(false), buildType { boolean() })
     override val expressionReplacement
@@ -47,7 +48,8 @@ class SequentialAnd(override val left: ExpEmbedding, override val right: ExpEmbe
     override fun <R> accept(v: ExpVisitor<R>): R = v.visitSequentialAnd(this)
 }
 
-class SequentialOr(override val left: ExpEmbedding, override val right: ExpEmbedding) : SequentialLogicOperatorEmbedding() {
+class SequentialOr(override val left: ExpEmbedding, override val right: ExpEmbedding) :
+    SequentialLogicOperatorEmbedding() {
     override val ifReplacement
         get() = If(left, BooleanLit(true), right, buildType { boolean() })
     override val expressionReplacement

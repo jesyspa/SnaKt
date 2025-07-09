@@ -17,13 +17,14 @@ import org.jetbrains.kotlin.formver.core.exhaustiveAll
  *
  * @return a preordered sequence of pairs, each containing the `ExpEmbedding` and its FIR source as a `KtSourceElement`
  */
-fun ExpEmbedding.preorder(currentSource: KtSourceElement? = null): Sequence<Pair<ExpEmbedding, KtSourceElement?>> = sequence {
-    val nextSource = (this@preorder as? WithPosition)?.source ?: currentSource
+fun ExpEmbedding.preorder(currentSource: KtSourceElement? = null): Sequence<Pair<ExpEmbedding, KtSourceElement?>> =
+    sequence {
+        val nextSource = (this@preorder as? WithPosition)?.source ?: currentSource
 
-    if (this@preorder !is WithPosition) yield(Pair(this@preorder, nextSource))
+        if (this@preorder !is WithPosition) yield(Pair(this@preorder, nextSource))
 
-    yieldAll(this@preorder.children().flatMap { it.preorder(currentSource = nextSource) })
-}
+        yieldAll(this@preorder.children().flatMap { it.preorder(currentSource = nextSource) })
+    }
 
 /**
  * Validates all nodes using the isValid function.

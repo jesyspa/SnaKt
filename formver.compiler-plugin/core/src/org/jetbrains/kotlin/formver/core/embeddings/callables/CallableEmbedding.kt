@@ -19,7 +19,11 @@ interface CallableEmbedding {
     fun insertCall(args: List<ExpEmbedding>, ctx: StmtConversionContext): ExpEmbedding
 }
 
-fun CallableEmbedding.insertCall(args: List<ExpEmbedding>, ctx: StmtConversionContext, actualReturnType: TypeEmbedding) =
+fun CallableEmbedding.insertCall(
+    args: List<ExpEmbedding>,
+    ctx: StmtConversionContext,
+    actualReturnType: TypeEmbedding
+) =
     insertCall(args, ctx).withNewTypeInvariants(actualReturnType) {
         access = true
         proven = true

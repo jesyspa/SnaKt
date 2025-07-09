@@ -11,7 +11,10 @@ import org.jetbrains.kotlin.descriptors.isInterface
 import org.jetbrains.kotlin.fir.FirSession
 import org.jetbrains.kotlin.fir.declarations.FirSimpleFunction
 import org.jetbrains.kotlin.fir.declarations.processAllDeclarations
-import org.jetbrains.kotlin.fir.declarations.utils.*
+import org.jetbrains.kotlin.fir.declarations.utils.correspondingValueParameterFromPrimaryConstructor
+import org.jetbrains.kotlin.fir.declarations.utils.hasBackingField
+import org.jetbrains.kotlin.fir.declarations.utils.isFinal
+import org.jetbrains.kotlin.fir.declarations.utils.visibility
 import org.jetbrains.kotlin.fir.resolve.toClassSymbol
 import org.jetbrains.kotlin.fir.resolve.toRegularClassSymbol
 import org.jetbrains.kotlin.fir.symbols.SymbolInternals
@@ -21,65 +24,14 @@ import org.jetbrains.kotlin.formver.common.ErrorCollector
 import org.jetbrains.kotlin.formver.common.PluginConfiguration
 import org.jetbrains.kotlin.formver.common.UnsupportedFeatureBehaviour
 import org.jetbrains.kotlin.formver.core.domains.RuntimeTypeDomain
-import org.jetbrains.kotlin.formver.core.embeddings.callables.FullNamedFunctionSignature
-import org.jetbrains.kotlin.formver.core.embeddings.callables.FunctionEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.callables.FunctionSignature
-import org.jetbrains.kotlin.formver.core.embeddings.callables.GetterFunctionSignature
-import org.jetbrains.kotlin.formver.core.embeddings.callables.InlineNamedFunction
-import org.jetbrains.kotlin.formver.core.embeddings.callables.NamedFunctionSignature
-import org.jetbrains.kotlin.formver.core.embeddings.callables.NonInlineNamedFunction
-import org.jetbrains.kotlin.formver.core.embeddings.callables.PartiallySpecialKotlinFunction
-import org.jetbrains.kotlin.formver.core.embeddings.callables.PartiallySpecialKotlinFunctions
-import org.jetbrains.kotlin.formver.core.embeddings.callables.RichCallableEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.callables.SetterFunctionSignature
-import org.jetbrains.kotlin.formver.core.embeddings.callables.SpecialFunctions
-import org.jetbrains.kotlin.formver.core.embeddings.callables.SpecialKotlinFunctions
-import org.jetbrains.kotlin.formver.core.embeddings.callables.SpecialMethods
-import org.jetbrains.kotlin.formver.core.embeddings.callables.UserFunctionEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.expression.AnonymousBuiltinVariableEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.expression.AnonymousVariableEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.expression.EqCmp
-import org.jetbrains.kotlin.formver.core.embeddings.expression.ExpEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.expression.FieldAccess
-import org.jetbrains.kotlin.formver.core.embeddings.expression.FirVariableEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.expression.PlaceholderVariableEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.expression.VariableEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.expression.toConjunction
-import org.jetbrains.kotlin.formver.core.embeddings.properties.BackingFieldGetter
-import org.jetbrains.kotlin.formver.core.embeddings.properties.BackingFieldSetter
-import org.jetbrains.kotlin.formver.core.embeddings.properties.CustomGetter
-import org.jetbrains.kotlin.formver.core.embeddings.properties.CustomSetter
-import org.jetbrains.kotlin.formver.core.embeddings.properties.FieldEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.properties.GetterEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.properties.PropertyEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.properties.SetterEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.properties.SpecialProperties
-import org.jetbrains.kotlin.formver.core.embeddings.properties.UserFieldEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.properties.specialEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.types.ClassEmbeddingDetails
-import org.jetbrains.kotlin.formver.core.embeddings.types.ClassTypeEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.types.FunctionPretypeBuilder
-import org.jetbrains.kotlin.formver.core.embeddings.types.FunctionTypeEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.types.PretypeBuilder
-import org.jetbrains.kotlin.formver.core.embeddings.types.TypeBuilder
-import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.types.buildClassPretype
-import org.jetbrains.kotlin.formver.core.embeddings.types.buildFunctionPretype
-import org.jetbrains.kotlin.formver.core.embeddings.types.buildType
+import org.jetbrains.kotlin.formver.core.embeddings.callables.*
+import org.jetbrains.kotlin.formver.core.embeddings.expression.*
+import org.jetbrains.kotlin.formver.core.embeddings.properties.*
+import org.jetbrains.kotlin.formver.core.embeddings.types.*
 import org.jetbrains.kotlin.formver.core.isBorrowed
 import org.jetbrains.kotlin.formver.core.isCustom
 import org.jetbrains.kotlin.formver.core.isUnique
-import org.jetbrains.kotlin.formver.core.names.CatchLabelName
-import org.jetbrains.kotlin.formver.core.names.DispatchReceiverName
-import org.jetbrains.kotlin.formver.core.names.ExtensionReceiverName
-import org.jetbrains.kotlin.formver.core.names.SimpleKotlinName
-import org.jetbrains.kotlin.formver.core.names.TryExitLabelName
-import org.jetbrains.kotlin.formver.core.names.embedGetterName
-import org.jetbrains.kotlin.formver.core.names.embedMemberBackingFieldName
-import org.jetbrains.kotlin.formver.core.names.embedMemberPropertyName
-import org.jetbrains.kotlin.formver.core.names.embedName
-import org.jetbrains.kotlin.formver.core.names.embedSetterName
-import org.jetbrains.kotlin.formver.core.names.embedUnscopedPropertyName
+import org.jetbrains.kotlin.formver.core.names.*
 import org.jetbrains.kotlin.formver.core.shouldBeInlined
 import org.jetbrains.kotlin.formver.viper.MangledName
 import org.jetbrains.kotlin.formver.viper.ast.Program
@@ -87,7 +39,6 @@ import org.jetbrains.kotlin.formver.viper.mangled
 import org.jetbrains.kotlin.utils.addIfNotNull
 import org.jetbrains.kotlin.utils.addToStdlib.ifFalse
 import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
-import kotlin.collections.get
 
 /**
  * Tracks the top-level information about the program.
@@ -95,7 +46,11 @@ import kotlin.collections.get
  * performed via this context to ensure they can be deduplicated.
  * We need the FirSession to get access to the TypeContext.
  */
-class ProgramConverter(val session: FirSession, override val config: PluginConfiguration, override val errorCollector: ErrorCollector) :
+class ProgramConverter(
+    val session: FirSession,
+    override val config: PluginConfiguration,
+    override val errorCollector: ErrorCollector
+) :
     ProgramConversionContext {
     private val methods: MutableMap<MangledName, FunctionEmbedding> =
         buildMap {
@@ -199,6 +154,7 @@ class ProgramConverter(val session: FirSession, override val config: PluginConfi
                     methods[lookupName] = it
                 }
             }
+
             is PartiallySpecialKotlinFunction -> {
                 if (existing.baseEmbedding != null)
                     return existing
@@ -209,6 +165,7 @@ class ProgramConverter(val session: FirSession, override val config: PluginConfi
                     it.initBaseEmbedding(userFunction)
                 }
             }
+
             else -> existing
         }
     }
@@ -503,11 +460,12 @@ class ProgramConverter(val session: FirSession, override val config: PluginConfi
      */
     private fun processProperty(symbol: FirPropertySymbol, embedding: ClassEmbeddingDetails?) {
         val unscopedName = symbol.callableId.embedUnscopedPropertyName()
-        properties[symbol.embedMemberPropertyName()] = SpecialProperties.byCallableId[symbol.callableId] ?: embedding.run {
-            val backingField = embedding?.findField(unscopedName)
-            backingField?.let { fields.add(it) }
-            embedProperty(symbol, backingField)
-        }
+        properties[symbol.embedMemberPropertyName()] =
+            SpecialProperties.byCallableId[symbol.callableId] ?: embedding.run {
+                val backingField = embedding?.findField(unscopedName)
+                backingField?.let { fields.add(it) }
+                embedProperty(symbol, backingField)
+            }
     }
 
     private fun embedCustomProperty(symbol: FirPropertySymbol) = embedProperty(symbol, null)
@@ -533,7 +491,10 @@ class ProgramConverter(val session: FirSession, override val config: PluginConfi
         }
 
     @OptIn(SymbolInternals::class)
-    private fun processCallable(symbol: FirFunctionSymbol<*>, signature: FullNamedFunctionSignature): RichCallableEmbedding {
+    private fun processCallable(
+        symbol: FirFunctionSymbol<*>,
+        signature: FullNamedFunctionSignature
+    ): RichCallableEmbedding {
         return if (symbol.shouldBeInlined) {
             InlineNamedFunction(signature, symbol.fir.body!!)
         } else {
@@ -549,6 +510,7 @@ class ProgramConverter(val session: FirSession, override val config: PluginConfi
         type is ConeTypeParameterType -> {
             isNullable = true; any()
         }
+
         type.isString -> {
             val stringClassSymbol = type.toClassSymbol(session) as FirRegularClassSymbol
             stringClassSymbol.propertySymbols.forEach {
@@ -556,6 +518,7 @@ class ProgramConverter(val session: FirSession, override val config: PluginConfi
             }
             string()
         }
+
         type.isUnit -> unit()
         type.isChar -> char()
         type.isInt -> int()
@@ -569,10 +532,12 @@ class ProgramConverter(val session: FirSession, override val config: PluginConfi
             }
             withReturnType { embedTypeWithBuilder(type.returnType(session)) }
         }
+
         type.canBeNull(session) -> {
             isNullable = true
             embedTypeWithBuilder(type.withNullability(false, session.typeContext))
         }
+
         type.isAny -> any()
         type is ConeClassLikeType -> {
             val classLikeSymbol = type.toClassSymbol(session)
@@ -582,6 +547,7 @@ class ProgramConverter(val session: FirSession, override val config: PluginConfi
                 unimplementedTypeEmbedding(type)
             }
         }
+
         else -> unimplementedTypeEmbedding(type)
     }
 
@@ -605,6 +571,7 @@ class ProgramConverter(val session: FirSession, override val config: PluginConfi
         when (config.behaviour) {
             UnsupportedFeatureBehaviour.THROW_EXCEPTION ->
                 throw NotImplementedError("The embedding for type $type is not yet implemented.")
+
             UnsupportedFeatureBehaviour.ASSUME_UNREACHABLE -> {
                 errorCollector.addMinorError("Requested type $type, for which we do not yet have an embedding.")
                 unit()

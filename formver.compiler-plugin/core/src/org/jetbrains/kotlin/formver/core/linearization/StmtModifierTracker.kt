@@ -17,10 +17,14 @@ class StmtModifierTracker {
     }
 
     fun applyOnEntry(ctx: AddStatementContext) {
-        for (mod in modifiers) { mod.onEntry(ctx) }
+        for (mod in modifiers) {
+            mod.onEntry(ctx)
+        }
     }
 
     fun applyOnExit(ctx: AddStatementContext) {
-        for (mod in modifiers.reversed()) { mod.onExit(ctx) }
+        for (mod in modifiers.reversed()) {
+            mod.onExit(ctx)
+        }
     }
 }

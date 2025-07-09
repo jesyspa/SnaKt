@@ -8,11 +8,7 @@ package org.jetbrains.kotlin.formver.plugin.services
 import org.jetbrains.kotlin.compiler.plugin.CompilerPluginRegistrar.ExtensionStorage
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.fir.extensions.FirExtensionRegistrarAdapter
-import org.jetbrains.kotlin.formver.common.ErrorStyle
-import org.jetbrains.kotlin.formver.common.LogLevel
-import org.jetbrains.kotlin.formver.common.PluginConfiguration
-import org.jetbrains.kotlin.formver.common.TargetsSelection
-import org.jetbrains.kotlin.formver.common.UnsupportedFeatureBehaviour
+import org.jetbrains.kotlin.formver.common.*
 import org.jetbrains.kotlin.formver.plugin.compiler.FormalVerificationPluginExtensionRegistrar
 import org.jetbrains.kotlin.formver.plugin.services.FormVerDirectives.ALWAYS_VALIDATE
 import org.jetbrains.kotlin.formver.plugin.services.FormVerDirectives.FULL_VIPER_DUMP
@@ -94,7 +90,8 @@ object FormVerDirectives : SimpleDirectivesContainer() {
     )
 }
 
-class StdlibReplacementsProvider(testServices: TestServices, baseDir: String = ".") : AdditionalSourceProvider(testServices) {
+class StdlibReplacementsProvider(testServices: TestServices, baseDir: String = ".") :
+    AdditionalSourceProvider(testServices) {
     private val libraryPath = "$baseDir/formver.compiler-plugin/testData/stdlibReplacements.kt"
 
     override fun produceAdditionalFiles(

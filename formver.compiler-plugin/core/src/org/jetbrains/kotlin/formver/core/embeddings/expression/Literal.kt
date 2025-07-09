@@ -6,9 +6,9 @@
 package org.jetbrains.kotlin.formver.core.embeddings.expression
 
 import org.jetbrains.kotlin.KtSourceElement
-import org.jetbrains.kotlin.formver.core.embeddings.ExpVisitor
 import org.jetbrains.kotlin.formver.core.asPosition
 import org.jetbrains.kotlin.formver.core.domains.RuntimeTypeDomain
+import org.jetbrains.kotlin.formver.core.embeddings.ExpVisitor
 import org.jetbrains.kotlin.formver.core.embeddings.SourceRole
 import org.jetbrains.kotlin.formver.core.embeddings.asInfo
 import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.PlaintextLeaf

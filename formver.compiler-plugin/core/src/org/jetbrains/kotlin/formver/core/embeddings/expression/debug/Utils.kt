@@ -7,8 +7,8 @@ package org.jetbrains.kotlin.formver.core.embeddings.expression.debug
 
 import org.jetbrains.kotlin.formver.core.embeddings.LabelEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.LabelLink
-import org.jetbrains.kotlin.formver.core.embeddings.properties.FieldEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.callables.NamedFunctionSignature
+import org.jetbrains.kotlin.formver.core.embeddings.properties.FieldEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.toLink
 import org.jetbrains.kotlin.formver.viper.ast.PermExp
 import org.jetbrains.kotlin.formver.viper.mangled

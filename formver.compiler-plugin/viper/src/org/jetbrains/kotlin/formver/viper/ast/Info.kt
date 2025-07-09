@@ -45,6 +45,7 @@ inline fun <reified I> Info.unwrap(): I = when (this) {
         check(info is I) { "The wrapped info is not of type ${I::class}." }
         info
     }
+
     else -> error("The metadata does not contain an information of type ${I::class}.")
 }
 

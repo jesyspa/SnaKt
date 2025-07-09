@@ -5,28 +5,20 @@
 
 package org.jetbrains.kotlin.formver.cli
 
-import org.jetbrains.kotlin.compiler.plugin.AbstractCliOption
-import org.jetbrains.kotlin.compiler.plugin.CliOption
-import org.jetbrains.kotlin.compiler.plugin.CliOptionProcessingException
-import org.jetbrains.kotlin.compiler.plugin.CommandLineProcessor
-import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
+import org.jetbrains.kotlin.compiler.plugin.*
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.CompilerConfigurationKey
-import org.jetbrains.kotlin.formver.common.ErrorStyle
-import org.jetbrains.kotlin.formver.common.FormalVerificationPluginNames
 import org.jetbrains.kotlin.formver.cli.FormalVerificationConfigurationKeys.CONVERSION_TARGETS_SELECTION
 import org.jetbrains.kotlin.formver.cli.FormalVerificationConfigurationKeys.ERROR_STYLE
 import org.jetbrains.kotlin.formver.cli.FormalVerificationConfigurationKeys.LOG_LEVEL
 import org.jetbrains.kotlin.formver.cli.FormalVerificationConfigurationKeys.UNSUPPORTED_FEATURE_BEHAVIOUR
 import org.jetbrains.kotlin.formver.cli.FormalVerificationConfigurationKeys.VERIFICATION_TARGETS_SELECTION
+import org.jetbrains.kotlin.formver.common.*
 import org.jetbrains.kotlin.formver.common.FormalVerificationPluginNames.CONVERSION_TARGETS_SELECTION_OPTION_NAME
 import org.jetbrains.kotlin.formver.common.FormalVerificationPluginNames.ERROR_STYLE_NAME
 import org.jetbrains.kotlin.formver.common.FormalVerificationPluginNames.LOG_LEVEL_OPTION_NAME
 import org.jetbrains.kotlin.formver.common.FormalVerificationPluginNames.UNSUPPORTED_FEATURE_BEHAVIOUR_OPTION_NAME
 import org.jetbrains.kotlin.formver.common.FormalVerificationPluginNames.VERIFICATION_TARGETS_SELECTION_OPTION_NAME
-import org.jetbrains.kotlin.formver.common.LogLevel
-import org.jetbrains.kotlin.formver.common.TargetsSelection
-import org.jetbrains.kotlin.formver.common.UnsupportedFeatureBehaviour
 import org.jetbrains.kotlin.util.capitalizeDecapitalize.toUpperCaseAsciiOnly
 
 object FormalVerificationConfigurationKeys {
@@ -89,15 +81,31 @@ class FormalVerificationCommandLineProcessor : CommandLineProcessor {
                 LOG_LEVEL_OPTION -> configuration.put(LOG_LEVEL, LogLevel.valueOf(value.toUpperCaseAsciiOnly()))
                 ERROR_STYLE_OPTION ->
                     configuration.put(ERROR_STYLE, ErrorStyle.valueOf(value.toUpperCaseAsciiOnly()))
+
                 UNSUPPORTED_FEATURE_BEHAVIOUR_OPTION ->
-                    configuration.put(UNSUPPORTED_FEATURE_BEHAVIOUR, UnsupportedFeatureBehaviour.valueOf(value.toUpperCaseAsciiOnly()))
+                    configuration.put(
+                        UNSUPPORTED_FEATURE_BEHAVIOUR,
+                        UnsupportedFeatureBehaviour.valueOf(value.toUpperCaseAsciiOnly())
+                    )
+
                 CONVERSION_TARGETS_SELECTION_OPTION ->
-                    configuration.put(CONVERSION_TARGETS_SELECTION, TargetsSelection.valueOf(value.toUpperCaseAsciiOnly()))
+                    configuration.put(
+                        CONVERSION_TARGETS_SELECTION,
+                        TargetsSelection.valueOf(value.toUpperCaseAsciiOnly())
+                    )
+
                 VERIFICATION_TARGETS_SELECTION_OPTION ->
-                    configuration.put(VERIFICATION_TARGETS_SELECTION, TargetsSelection.valueOf(value.toUpperCaseAsciiOnly()))
+                    configuration.put(
+                        VERIFICATION_TARGETS_SELECTION,
+                        TargetsSelection.valueOf(value.toUpperCaseAsciiOnly())
+                    )
+
                 else -> throw CliOptionProcessingException("Unknown option: ${option.optionName}")
             }
         } catch (e: IllegalArgumentException) {
-            throw CliOptionProcessingException("Value $value is not a valid argument for option ${option.optionName}.", e)
+            throw CliOptionProcessingException(
+                "Value $value is not a valid argument for option ${option.optionName}.",
+                e
+            )
         }
 }

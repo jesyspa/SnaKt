@@ -5,21 +5,14 @@
 
 package org.jetbrains.kotlin.formver.core.embeddings.expression
 
-import org.jetbrains.kotlin.formver.core.embeddings.ExpVisitor
 import org.jetbrains.kotlin.formver.core.asPosition
 import org.jetbrains.kotlin.formver.core.domains.RuntimeTypeDomain
+import org.jetbrains.kotlin.formver.core.embeddings.ExpVisitor
 import org.jetbrains.kotlin.formver.core.embeddings.SourceRole
 import org.jetbrains.kotlin.formver.core.embeddings.asInfo
 import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.TreeView
 import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.withDesignation
-import org.jetbrains.kotlin.formver.core.embeddings.types.PretypeBuilder
-import org.jetbrains.kotlin.formver.core.embeddings.types.RuntimeTypeHolder
-import org.jetbrains.kotlin.formver.core.embeddings.types.TypeBuilder
-import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.types.TypeInvariantEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.types.buildType
-import org.jetbrains.kotlin.formver.core.embeddings.types.equalToType
-import org.jetbrains.kotlin.formver.core.embeddings.types.fillHoles
+import org.jetbrains.kotlin.formver.core.embeddings.types.*
 import org.jetbrains.kotlin.formver.core.linearization.LinearizationContext
 import org.jetbrains.kotlin.formver.core.linearization.pureToViper
 import org.jetbrains.kotlin.formver.viper.ast.Exp
@@ -78,7 +71,8 @@ fun ExpEmbedding.withType(init: TypeBuilder.() -> PretypeBuilder): ExpEmbedding 
  * We do some special-purpose logic here depending on whether the receiver is nullable or not, hence we cannot use `InhaleProven` directly.
  * This is also why we insist the result is stored; this is a little stronger than necessary, but that does not harm correctness.
  */
-data class SafeCast(val exp: ExpEmbedding, val targetType: TypeEmbedding) : StoredResultExpEmbedding, DefaultDebugTreeViewImplementation {
+data class SafeCast(val exp: ExpEmbedding, val targetType: TypeEmbedding) : StoredResultExpEmbedding,
+    DefaultDebugTreeViewImplementation {
     override val type: TypeEmbedding
         get() = targetType.getNullable()
 
@@ -125,7 +119,10 @@ interface InhaleInvariants : ExpEmbedding, DefaultDebugTreeViewImplementation {
  * This may require storing the result in a variable, if it is not already a variable. The `simplified` property allows
  * unwrapping this type when this can be avoided.
  */
-private data class InhaleInvariantsForExp(override val exp: ExpEmbedding, override val invariants: List<TypeInvariantEmbedding>) :
+private data class InhaleInvariantsForExp(
+    override val exp: ExpEmbedding,
+    override val invariants: List<TypeInvariantEmbedding>
+) :
     StoredResultExpEmbedding, InhaleInvariants {
 
     override fun toViperStoringIn(result: VariableEmbedding, ctx: LinearizationContext) {

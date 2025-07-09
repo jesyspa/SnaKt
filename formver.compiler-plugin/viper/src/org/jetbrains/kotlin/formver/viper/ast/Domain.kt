@@ -86,6 +86,7 @@ class DomainAxiom(
                 name.domainName.mangled,
                 trafos.toSilver()
             )
+
             is AnonymousDomainAxiomLabel -> AnonymousDomainAxiom(
                 exp.toSilver(),
                 pos.toSilver(),

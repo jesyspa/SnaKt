@@ -23,14 +23,13 @@ import org.jetbrains.kotlin.formver.core.conversion.ProgramConverter
 import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.print
 import org.jetbrains.kotlin.formver.plugin.compiler.reporting.reportVerifierError
 import org.jetbrains.kotlin.formver.viper.Verifier
-import org.jetbrains.kotlin.formver.viper.mangled
 import org.jetbrains.kotlin.formver.viper.ast.Program
 import org.jetbrains.kotlin.formver.viper.ast.unwrapOr
 import org.jetbrains.kotlin.formver.viper.errors.VerifierError
+import org.jetbrains.kotlin.formver.viper.mangled
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
-import kotlin.collections.iterator
 
 private val FirContractDescriptionOwner.hasContract: Boolean
     get() = when (val description = contractDescription) {
@@ -56,7 +55,12 @@ class ViperPoweredDeclarationChecker(private val session: FirSession, private va
             val program = programConversionContext.program
 
             getProgramForLogging(program)?.let {
-                reporter.reportOn(declaration.source, PluginErrors.VIPER_TEXT, declaration.name.asString(), it.toDebugOutput())
+                reporter.reportOn(
+                    declaration.source,
+                    PluginErrors.VIPER_TEXT,
+                    declaration.name.asString(),
+                    it.toDebugOutput()
+                )
             }
 
             if (shouldDumpExpEmbeddings(declaration)) {

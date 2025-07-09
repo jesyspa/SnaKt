@@ -14,15 +14,7 @@ import org.jetbrains.kotlin.fir.types.ConeKotlinType
 import org.jetbrains.kotlin.formver.core.effects
 import org.jetbrains.kotlin.formver.core.embeddings.SourceRole
 import org.jetbrains.kotlin.formver.core.embeddings.callables.NamedFunctionSignature
-import org.jetbrains.kotlin.formver.core.embeddings.expression.BooleanLit
-import org.jetbrains.kotlin.formver.core.embeddings.expression.EqCmp
-import org.jetbrains.kotlin.formver.core.embeddings.expression.ExpEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.expression.Is
-import org.jetbrains.kotlin.formver.core.embeddings.expression.NeCmp
-import org.jetbrains.kotlin.formver.core.embeddings.expression.NullLit
-import org.jetbrains.kotlin.formver.core.embeddings.expression.VariableEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.expression.withPosition
-import org.jetbrains.kotlin.formver.core.embeddings.expression.OperatorExpEmbeddings
+import org.jetbrains.kotlin.formver.core.embeddings.expression.*
 
 data class ContractVisitorContext(
     val returnVariable: VariableEmbedding,
@@ -40,9 +32,10 @@ class ContractDescriptionConversionVisitor(
     private val ctx: ProgramConversionContext,
     private val signature: NamedFunctionSignature,
 ) : KtContractDescriptionVisitor<ExpEmbedding, ContractVisitorContext, ConeKotlinType, ConeDiagnostic>() {
-    fun getPostconditions(context: ContractVisitorContext): List<ExpEmbedding> = context.functionContractOwner.effects.map {
-        it.effect.accept(this, context).withPosition(it.source)
-    }.filter { it != BooleanLit(true) }
+    fun getPostconditions(context: ContractVisitorContext): List<ExpEmbedding> =
+        context.functionContractOwner.effects.map {
+            it.effect.accept(this, context).withPosition(it.source)
+        }.filter { it != BooleanLit(true) }
 
     override fun visitBooleanConstantDescriptor(
         booleanConstantDescriptor: KtBooleanConstantReference<ConeKotlinType, ConeDiagnostic>,
@@ -64,18 +57,28 @@ class ContractDescriptionConversionVisitor(
              * values and null. In a function that has a non-nullable return type, returnsNotNull() is mapped to true and returns(null)
              * is mapped to false
              */
-            ConeContractConstantValues.NULL -> data.returnVariable.nullCmp(false, SourceRole.ReturnsEffect.Null(negated = false))
-            ConeContractConstantValues.NOT_NULL -> data.returnVariable.nullCmp(true, SourceRole.ReturnsEffect.Null(negated = true))
+            ConeContractConstantValues.NULL -> data.returnVariable.nullCmp(
+                false,
+                SourceRole.ReturnsEffect.Null(negated = false)
+            )
+
+            ConeContractConstantValues.NOT_NULL -> data.returnVariable.nullCmp(
+                true,
+                SourceRole.ReturnsEffect.Null(negated = true)
+            )
+
             ConeContractConstantValues.TRUE -> EqCmp(
                 data.returnVariable,
                 BooleanLit(true),
                 SourceRole.ReturnsEffect.Bool(true)
             )
+
             ConeContractConstantValues.FALSE -> EqCmp(
                 data.returnVariable,
                 BooleanLit(false),
                 SourceRole.ReturnsEffect.Bool(false)
             )
+
             else -> throw IllegalArgumentException("Unexpected constant: ${returnsEffect.value}")
         }
     }
@@ -109,6 +112,7 @@ class ContractDescriptionConversionVisitor(
         return when (binaryLogicExpression.kind) {
             LogicOperationKind.AND ->
                 OperatorExpEmbeddings.And(left, right, SourceRole.Condition.Conjunction(lhsRole, rhsRole))
+
             LogicOperationKind.OR ->
                 OperatorExpEmbeddings.Or(left, right, SourceRole.Condition.Disjunction(lhsRole, rhsRole))
         }
@@ -129,7 +133,10 @@ class ContractDescriptionConversionVisitor(
         val effect = conditionalEffect.effect.accept(this, data)
         val cond = conditionalEffect.condition.accept(this, data)
         // The effect's source role it is guaranteed to be not null. The same goes for the condition's source role.
-        val role = SourceRole.ConditionalEffect(effect.sourceRole as SourceRole.ReturnsEffect, cond.sourceRole as SourceRole.Condition)
+        val role = SourceRole.ConditionalEffect(
+            effect.sourceRole as SourceRole.ReturnsEffect,
+            cond.sourceRole as SourceRole.Condition
+        )
         return OperatorExpEmbeddings.Implies(effect, cond, role)
     }
 

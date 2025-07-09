@@ -19,7 +19,8 @@ data class LabelEmbedding(val name: MangledName, val invariants: List<ExpEmbeddi
 
 fun LabelEmbedding.toLink() = LabelLink(name)
 
-fun LabelLink.toViperGoto(ctx: LinearizationContext): Stmt.Goto = Label(name, emptyList()).toGoto(pos = ctx.source.asPosition)
+fun LabelLink.toViperGoto(ctx: LinearizationContext): Stmt.Goto =
+    Label(name, emptyList()).toGoto(pos = ctx.source.asPosition)
 
 fun LabelEmbedding.toViper(ctx: LinearizationContext): Label {
     return Label(name, invariants.pureToViper(toBuiltin = true, ctx.source))

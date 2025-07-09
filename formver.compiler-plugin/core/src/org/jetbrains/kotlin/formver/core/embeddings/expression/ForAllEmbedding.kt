@@ -5,9 +5,9 @@
 
 package org.jetbrains.kotlin.formver.core.embeddings.expression
 
-import org.jetbrains.kotlin.formver.core.embeddings.ExpVisitor
 import org.jetbrains.kotlin.formver.core.asPosition
 import org.jetbrains.kotlin.formver.core.domains.RuntimeTypeDomain.Companion.isOf
+import org.jetbrains.kotlin.formver.core.embeddings.ExpVisitor
 import org.jetbrains.kotlin.formver.core.embeddings.asInfo
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.buildType
@@ -28,7 +28,10 @@ class ForAllEmbedding(
             // TODO: right now we hope that Viper will infer triggers successfully, later we might enable user triggers here
             triggers = emptyList(),
             exp =
-                if (variable.isOriginallyRef) Exp.Implies(variable.toViper(ctx).isOf(variable.type.runtimeType), conjunction)
+                if (variable.isOriginallyRef) Exp.Implies(
+                    variable.toViper(ctx).isOf(variable.type.runtimeType),
+                    conjunction
+                )
                 else conjunction,
             pos = ctx.source.asPosition,
             info = sourceRole.asInfo,

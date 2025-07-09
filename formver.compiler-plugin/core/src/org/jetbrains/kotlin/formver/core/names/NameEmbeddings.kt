@@ -48,7 +48,10 @@ fun CallableId.embedExtensionSetterName(type: FunctionTypeEmbedding): ScopedKotl
     ExtensionSetterKotlinName(callableName, type)
 }
 
-private fun CallableId.embedMemberPropertyNameBase(scopePolicy: MemberEmbeddingPolicy, withAction: (Name) -> KotlinName): ScopedKotlinName {
+private fun CallableId.embedMemberPropertyNameBase(
+    scopePolicy: MemberEmbeddingPolicy,
+    withAction: (Name) -> KotlinName
+): ScopedKotlinName {
     val id = classId ?: error("Embedding non-member property $callableName as a member.")
     return buildName {
         if (scopePolicy.isScoped) {
@@ -66,8 +69,12 @@ private fun CallableId.embedMemberPropertyNameBase(scopePolicy: MemberEmbeddingP
 fun CallableId.embedMemberPropertyName(isPrivate: Boolean) =
     embedMemberPropertyNameBase(alwaysScopedPolicy(isPrivate), ::PropertyKotlinName)
 
-fun CallableId.embedMemberGetterName(isPrivate: Boolean) = embedMemberPropertyNameBase(alwaysScopedPolicy(isPrivate), ::GetterKotlinName)
-fun CallableId.embedMemberSetterName(isPrivate: Boolean) = embedMemberPropertyNameBase(alwaysScopedPolicy(isPrivate), ::SetterKotlinName)
+fun CallableId.embedMemberGetterName(isPrivate: Boolean) =
+    embedMemberPropertyNameBase(alwaysScopedPolicy(isPrivate), ::GetterKotlinName)
+
+fun CallableId.embedMemberSetterName(isPrivate: Boolean) =
+    embedMemberPropertyNameBase(alwaysScopedPolicy(isPrivate), ::SetterKotlinName)
+
 fun CallableId.embedMemberBackingFieldName(isPrivate: Boolean) =
     embedMemberPropertyNameBase(onlyPrivateScopedPolicy(isPrivate), ::BackingFieldKotlinName)
 
@@ -108,6 +115,7 @@ fun FirPropertySymbol.embedSetterName(ctx: ProgramConversionContext): ScopedKotl
             setterSymbol ?: error("Embedding setter of read-only extension property.")
         )
     )
+
     false -> callableId.embedMemberSetterName(Visibilities.isPrivate(visibility))
 }
 
@@ -121,7 +129,10 @@ fun FirConstructorSymbol.embedName(ctx: ProgramConversionContext): ScopedKotlinN
 }
 
 fun FirFunctionSymbol<*>.embedName(ctx: ProgramConversionContext): ScopedKotlinName = when (this) {
-    is FirPropertyAccessorSymbol -> if (isGetter) propertySymbol.embedGetterName(ctx) else propertySymbol.embedSetterName(ctx)
+    is FirPropertyAccessorSymbol -> if (isGetter) propertySymbol.embedGetterName(ctx) else propertySymbol.embedSetterName(
+        ctx
+    )
+
     is FirConstructorSymbol -> embedName(ctx)
     else -> callableId.embedFunctionName(ctx.embedFunctionPretype(this))
 }

@@ -11,12 +11,7 @@ import org.jetbrains.kotlin.formver.core.embeddings.expression.ExpEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.expression.FieldAccess
 import org.jetbrains.kotlin.formver.core.embeddings.expression.IntLit
 import org.jetbrains.kotlin.formver.core.embeddings.expression.OperatorExpEmbeddings
-import org.jetbrains.kotlin.formver.core.embeddings.types.ClassTypeEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.types.FieldAccessTypeInvariantEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.types.TypeInvariantEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.types.buildType
-import org.jetbrains.kotlin.formver.core.embeddings.types.isCollectionInheritor
+import org.jetbrains.kotlin.formver.core.embeddings.types.*
 import org.jetbrains.kotlin.formver.core.names.NameMatcher
 import org.jetbrains.kotlin.formver.core.names.ScopedKotlinName
 import org.jetbrains.kotlin.formver.core.names.SpecialName
@@ -71,7 +66,8 @@ class UserFieldEmbedding(
     override val containingClass: ClassTypeEmbedding,
 ) : FieldEmbedding {
     override val viperType = Type.Ref
-    override val accessPolicy: AccessPolicy = if (symbol.isVal) AccessPolicy.ALWAYS_READABLE else AccessPolicy.ALWAYS_INHALE_EXHALE
+    override val accessPolicy: AccessPolicy =
+        if (symbol.isVal) AccessPolicy.ALWAYS_READABLE else AccessPolicy.ALWAYS_INHALE_EXHALE
     override val unfoldToAccess: Boolean
         get() = accessPolicy == AccessPolicy.ALWAYS_READABLE
     override val includeInShortDump: Boolean = true
@@ -84,7 +80,8 @@ object ListSizeFieldEmbedding : FieldEmbedding {
     override val viperType = Type.Ref
     override val accessPolicy = AccessPolicy.ALWAYS_WRITEABLE
     override val includeInShortDump: Boolean = true
-    override fun extraAccessInvariantsForParameter(): List<TypeInvariantEmbedding> = listOf(NonNegativeSizeTypeInvariantEmbedding)
+    override fun extraAccessInvariantsForParameter(): List<TypeInvariantEmbedding> =
+        listOf(NonNegativeSizeTypeInvariantEmbedding)
 
     object NonNegativeSizeTypeInvariantEmbedding : TypeInvariantEmbedding {
         override fun fillHole(exp: ExpEmbedding): ExpEmbedding =

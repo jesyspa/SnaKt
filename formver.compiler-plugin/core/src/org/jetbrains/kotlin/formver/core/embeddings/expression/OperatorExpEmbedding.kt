@@ -5,9 +5,9 @@
 
 package org.jetbrains.kotlin.formver.core.embeddings.expression
 
-import org.jetbrains.kotlin.formver.core.embeddings.ExpVisitor
 import org.jetbrains.kotlin.formver.core.asPosition
 import org.jetbrains.kotlin.formver.core.domains.InjectionImageFunction
+import org.jetbrains.kotlin.formver.core.embeddings.ExpVisitor
 import org.jetbrains.kotlin.formver.core.embeddings.SourceRole
 import org.jetbrains.kotlin.formver.core.embeddings.asInfo
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
@@ -22,7 +22,12 @@ interface InjectionBasedExpEmbedding : DirectResultExpEmbedding {
 
 interface BinaryOperatorExpEmbedding : BinaryDirectResultExpEmbedding, InjectionBasedExpEmbedding {
     override fun toViper(ctx: LinearizationContext): Exp {
-        return refsOperation(left.toViper(ctx), right.toViper(ctx), pos = ctx.source.asPosition, info = sourceRole.asInfo)
+        return refsOperation(
+            left.toViper(ctx),
+            right.toViper(ctx),
+            pos = ctx.source.asPosition,
+            info = sourceRole.asInfo
+        )
     }
 
     override fun toViperBuiltinType(ctx: LinearizationContext): Exp {
@@ -63,9 +68,16 @@ sealed interface OperatorExpEmbeddingTemplate {
     }
 }
 
-class BinaryOperatorExpEmbeddingTemplate(override val type: TypeEmbedding, override val refsOperation: InjectionImageFunction) :
+class BinaryOperatorExpEmbeddingTemplate(
+    override val type: TypeEmbedding,
+    override val refsOperation: InjectionImageFunction
+) :
     OperatorExpEmbeddingTemplate {
-    operator fun invoke(left: ExpEmbedding, right: ExpEmbedding, sourceRole: SourceRole? = null): BinaryOperatorExpEmbedding =
+    operator fun invoke(
+        left: ExpEmbedding,
+        right: ExpEmbedding,
+        sourceRole: SourceRole? = null
+    ): BinaryOperatorExpEmbedding =
         object : BinaryOperatorExpEmbedding {
             override val refsOperation: InjectionImageFunction = this@BinaryOperatorExpEmbeddingTemplate.refsOperation
             override val type = this@BinaryOperatorExpEmbeddingTemplate.type
@@ -75,7 +87,10 @@ class BinaryOperatorExpEmbeddingTemplate(override val type: TypeEmbedding, overr
         }
 }
 
-class UnaryOperatorExpEmbeddingTemplate(override val type: TypeEmbedding, override val refsOperation: InjectionImageFunction) :
+class UnaryOperatorExpEmbeddingTemplate(
+    override val type: TypeEmbedding,
+    override val refsOperation: InjectionImageFunction
+) :
     OperatorExpEmbeddingTemplate {
     operator fun invoke(inner: ExpEmbedding, sourceRole: SourceRole? = null): UnaryOperatorExpEmbedding =
         object : UnaryOperatorExpEmbedding {

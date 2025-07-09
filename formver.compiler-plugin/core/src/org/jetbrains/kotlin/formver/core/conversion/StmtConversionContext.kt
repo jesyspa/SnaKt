@@ -18,22 +18,13 @@ import org.jetbrains.kotlin.fir.types.isBoolean
 import org.jetbrains.kotlin.fir.types.resolvedType
 import org.jetbrains.kotlin.formver.core.embeddings.FunctionBodyEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.LabelEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.expression.VariableEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.expression.underlyingVariable
 import org.jetbrains.kotlin.formver.core.embeddings.callables.FullNamedFunctionSignature
-import org.jetbrains.kotlin.formver.core.embeddings.expression.Block
-import org.jetbrains.kotlin.formver.core.embeddings.expression.Declare
-import org.jetbrains.kotlin.formver.core.embeddings.expression.ExpEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.expression.ForAllEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.expression.FunctionExp
-import org.jetbrains.kotlin.formver.core.embeddings.expression.LambdaExp
-import org.jetbrains.kotlin.formver.core.embeddings.expression.withIsUnitInvariantIfUnit
-import org.jetbrains.kotlin.formver.core.embeddings.expression.withNewTypeInvariants
-import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.callables.FunctionSignature
+import org.jetbrains.kotlin.formver.core.embeddings.expression.*
 import org.jetbrains.kotlin.formver.core.embeddings.properties.ClassPropertyAccess
 import org.jetbrains.kotlin.formver.core.embeddings.properties.PropertyAccessEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.properties.asPropertyAccess
+import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.isCustom
 import org.jetbrains.kotlin.formver.core.linearization.Linearizer
 import org.jetbrains.kotlin.formver.core.linearization.SeqnBuilder
@@ -140,19 +131,25 @@ fun StmtConversionContext.embedPropertyAccess(accessExpression: FirPropertyAcces
                     } ?: embedProperty(calleeSymbol)
                     ClassPropertyAccess(convert(accessExpression.dispatchReceiver!!), property, type)
                 }
+
                 accessExpression.extensionReceiver != null -> {
                     val property = embedProperty(calleeSymbol)
                     ClassPropertyAccess(convert(accessExpression.extensionReceiver!!), property, type)
                 }
+
                 else -> embedLocalProperty(calleeSymbol)
             }
         }
+
         else ->
             error("Property access symbol $calleeSymbol has unsupported type.")
     }
 
 
-fun StmtConversionContext.argumentDeclaration(arg: ExpEmbedding, callType: TypeEmbedding): Pair<Declare?, ExpEmbedding> =
+fun StmtConversionContext.argumentDeclaration(
+    arg: ExpEmbedding,
+    callType: TypeEmbedding
+): Pair<Declare?, ExpEmbedding> =
     when (arg.ignoringMetaNodes()) {
         is LambdaExp -> null to arg
         else -> {

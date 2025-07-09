@@ -10,8 +10,8 @@ import org.jetbrains.kotlin.diagnostics.DiagnosticReporter
 import org.jetbrains.kotlin.diagnostics.reportOn
 import org.jetbrains.kotlin.fir.analysis.checkers.context.CheckerContext
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirDiagnosticRenderers
-import org.jetbrains.kotlin.formver.plugin.compiler.PluginErrors
 import org.jetbrains.kotlin.formver.core.embeddings.SourceRole
+import org.jetbrains.kotlin.formver.plugin.compiler.PluginErrors
 import org.jetbrains.kotlin.formver.viper.ast.info
 import org.jetbrains.kotlin.formver.viper.ast.unwrapOr
 import org.jetbrains.kotlin.formver.viper.errors.VerificationError
@@ -60,7 +60,10 @@ class DefaultError(private val error: VerificationError) : FormattedError {
     }
 }
 
-class IndexOutOfBoundError(private val error: VerificationError, private val sourceRole: SourceRole.ListElementAccessCheck) :
+class IndexOutOfBoundError(
+    private val error: VerificationError,
+    private val sourceRole: SourceRole.ListElementAccessCheck
+) :
     FormattedError {
 
     private val SourceRole.ListElementAccessCheck.AccessCheckType.asUserFriendlyMessage: String
@@ -86,7 +89,10 @@ class IndexOutOfBoundError(private val error: VerificationError, private val sou
     }
 }
 
-class InvalidSubListRangeError(private val error: VerificationError, private val sourceRole: SourceRole.SubListCreation) : FormattedError {
+class InvalidSubListRangeError(
+    private val error: VerificationError,
+    private val sourceRole: SourceRole.SubListCreation
+) : FormattedError {
     private val SourceRole.SubListCreation.asUserFriendlyMessage: String
         get() = when (this) {
             is SourceRole.SubListCreation.CheckNegativeIndices -> "including negative indices"

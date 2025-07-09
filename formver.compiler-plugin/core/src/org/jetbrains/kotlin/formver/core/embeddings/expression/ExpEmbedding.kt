@@ -6,20 +6,12 @@
 package org.jetbrains.kotlin.formver.core.embeddings.expression
 
 import org.jetbrains.kotlin.KtSourceElement
-import org.jetbrains.kotlin.formver.core.embeddings.ExpVisitor
 import org.jetbrains.kotlin.formver.core.asPosition
 import org.jetbrains.kotlin.formver.core.domains.RuntimeTypeDomain
+import org.jetbrains.kotlin.formver.core.embeddings.ExpVisitor
 import org.jetbrains.kotlin.formver.core.embeddings.SourceRole
 import org.jetbrains.kotlin.formver.core.embeddings.asInfo
-import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.DebugPrintable
-import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.NamedBranchingNode
-import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.OperatorNode
-import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.PlaintextLeaf
-import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.TreeView
-import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.debugTreeView
-import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.designatedNode
-import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.print
-import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.withDesignation
+import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.*
 import org.jetbrains.kotlin.formver.core.embeddings.properties.FieldEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.ClassTypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
@@ -146,7 +138,8 @@ sealed interface DefaultUnusedResultExpEmbedding : ExpEmbedding {
     }
 }
 
-sealed interface OnlyToViperExpEmbedding : DefaultStoringInExpEmbedding, DefaultMaybeStoringInExpEmbedding, DefaultUnusedResultExpEmbedding,
+sealed interface OnlyToViperExpEmbedding : DefaultStoringInExpEmbedding, DefaultMaybeStoringInExpEmbedding,
+    DefaultUnusedResultExpEmbedding,
     DefaultToBuiltinExpEmbedding
 
 
@@ -248,7 +241,8 @@ sealed interface BaseStoredResultExpEmbedding : ExpEmbedding, DefaultToBuiltinEx
 /**
  * `ExpEmbedding` that always produces and stores a result, even if that result is unused.
  */
-sealed interface StoredResultExpEmbedding : BaseStoredResultExpEmbedding, DefaultMaybeStoringInExpEmbedding, DefaultUnusedResultExpEmbedding
+sealed interface StoredResultExpEmbedding : BaseStoredResultExpEmbedding, DefaultMaybeStoringInExpEmbedding,
+    DefaultUnusedResultExpEmbedding
 
 /**
  * `ExpEmbedding` that does not evaluate to a value, i.e. does not produce any result (not even `Unit`).
@@ -358,12 +352,14 @@ fun List<ExpEmbedding>.toViper(ctx: LinearizationContext): List<Exp> = map { it.
  *
  * This is convenient to have for implementing the other operations.
  */
-data class PrimitiveFieldAccess(override val inner: ExpEmbedding, val field: FieldEmbedding) : UnaryDirectResultExpEmbedding,
+data class PrimitiveFieldAccess(override val inner: ExpEmbedding, val field: FieldEmbedding) :
+    UnaryDirectResultExpEmbedding,
     DefaultToBuiltinExpEmbedding {
     override val type: TypeEmbedding
         get() = this.field.type
 
-    override fun toViper(ctx: LinearizationContext): Exp = Exp.FieldAccess(inner.toViper(ctx), field.toViper(), ctx.source.asPosition)
+    override fun toViper(ctx: LinearizationContext): Exp =
+        Exp.FieldAccess(inner.toViper(ctx), field.toViper(), ctx.source.asPosition)
 
     override val debugTreeView: TreeView
         get() = OperatorNode(inner.debugTreeView, ".", this.field.debugTreeView)
@@ -379,7 +375,11 @@ data class FieldAccess(val receiver: ExpEmbedding, val field: FieldEmbedding) : 
         get() = accessInvariant == null
 
     override fun toViper(ctx: LinearizationContext): Exp {
-        if (noInvariants && !field.unfoldToAccess) return Exp.FieldAccess(receiver.toViper(ctx), field.toViper(), ctx.source.asPosition)
+        if (noInvariants && !field.unfoldToAccess) return Exp.FieldAccess(
+            receiver.toViper(ctx),
+            field.toViper(),
+            ctx.source.asPosition
+        )
 
         if (field.unfoldToAccess && ctx.unfoldPolicy == UnfoldPolicy.UNFOLDING_IN) return unfoldingInImpl(ctx)
         val variable = ctx.freshAnonVar(type)
@@ -397,7 +397,11 @@ data class FieldAccess(val receiver: ExpEmbedding, val field: FieldEmbedding) : 
         val invariant = accessInvariant?.fillHole(receiverWrapper)?.pureToViper(toBuiltin = true, ctx.source)
         ctx.addStatement {
             invariant?.let { addModifier(InhaleExhaleStmtModifier(it)) }
-            Stmt.assign(result.toViper(ctx), fieldAccess.pureToViper(toBuiltin = false, ctx.source), ctx.source.asPosition)
+            Stmt.assign(
+                result.toViper(ctx),
+                fieldAccess.pureToViper(toBuiltin = false, ctx.source),
+                ctx.source.asPosition
+            )
         }
     }
 
@@ -411,8 +415,12 @@ data class FieldAccess(val receiver: ExpEmbedding, val field: FieldEmbedding) : 
         }
     }
 
-    private fun ClassTypeEmbedding.predicateAccess(receiver: ExpEmbedding, ctx: LinearizationContext): Exp.PredicateAccess =
-        sharedPredicateAccessInvariant().fillHole(receiver).pureToViper(toBuiltin = true, ctx.source) as? Exp.PredicateAccess
+    private fun ClassTypeEmbedding.predicateAccess(
+        receiver: ExpEmbedding,
+        ctx: LinearizationContext
+    ): Exp.PredicateAccess =
+        sharedPredicateAccessInvariant().fillHole(receiver)
+            .pureToViper(toBuiltin = true, ctx.source) as? Exp.PredicateAccess
             ?: error("Attempt to unfold a predicate of ${name.mangled}.")
 
     private fun unfoldHierarchy(receiverWrapper: ExpEmbedding, ctx: LinearizationContext) {
@@ -436,12 +444,14 @@ data class FieldAccess(val receiver: ExpEmbedding, val field: FieldEmbedding) : 
 /**
  * Represents a combination of `Assign` + `FieldAccess`.
  */
-data class FieldModification(val receiver: ExpEmbedding, val field: FieldEmbedding, val newValue: ExpEmbedding) : UnitResultExpEmbedding {
+data class FieldModification(val receiver: ExpEmbedding, val field: FieldEmbedding, val newValue: ExpEmbedding) :
+    UnitResultExpEmbedding {
     override fun toViperSideEffects(ctx: LinearizationContext) {
         val receiverViper = receiver.toViper(ctx)
         val newValueViper = newValue.withType(field.type).toViper(ctx)
         val invariant =
-            field.accessInvariantForAccess()?.fillHole(ExpWrapper(receiverViper, receiver.type))?.pureToViper(toBuiltin = true, ctx.source)
+            field.accessInvariantForAccess()?.fillHole(ExpWrapper(receiverViper, receiver.type))
+                ?.pureToViper(toBuiltin = true, ctx.source)
 
         ctx.addStatement {
             invariant?.let { addModifier(InhaleExhaleStmtModifier(it)) }

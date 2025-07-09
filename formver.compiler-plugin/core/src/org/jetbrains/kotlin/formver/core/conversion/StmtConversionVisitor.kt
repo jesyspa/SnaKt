@@ -13,50 +13,17 @@ import org.jetbrains.kotlin.fir.expressions.impl.FirElseIfTrueCondition
 import org.jetbrains.kotlin.fir.expressions.impl.FirUnitExpression
 import org.jetbrains.kotlin.fir.references.toResolvedSymbol
 import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
-import org.jetbrains.kotlin.fir.symbols.impl.FirAnonymousFunctionSymbol
-import org.jetbrains.kotlin.fir.symbols.impl.FirClassSymbol
-import org.jetbrains.kotlin.fir.symbols.impl.FirFunctionSymbol
-import org.jetbrains.kotlin.fir.symbols.impl.FirReceiverParameterSymbol
-import org.jetbrains.kotlin.fir.symbols.impl.FirValueParameterSymbol
+import org.jetbrains.kotlin.fir.symbols.impl.*
 import org.jetbrains.kotlin.fir.types.coneType
 import org.jetbrains.kotlin.fir.types.isUnit
 import org.jetbrains.kotlin.fir.types.resolvedType
 import org.jetbrains.kotlin.fir.visitors.FirVisitor
 import org.jetbrains.kotlin.formver.common.UnsupportedFeatureBehaviour
-import org.jetbrains.kotlin.formver.core.embeddings.expression.BinaryOperatorExpEmbeddingTemplate
-import org.jetbrains.kotlin.formver.core.embeddings.expression.BooleanLit
-import org.jetbrains.kotlin.formver.core.embeddings.expression.CharLit
-import org.jetbrains.kotlin.formver.core.embeddings.expression.ErrorExp
-import org.jetbrains.kotlin.formver.core.embeddings.expression.IntLit
-import org.jetbrains.kotlin.formver.core.embeddings.expression.NullLit
-import org.jetbrains.kotlin.formver.core.embeddings.expression.SequentialAnd
-import org.jetbrains.kotlin.formver.core.embeddings.expression.SequentialOr
-import org.jetbrains.kotlin.formver.core.embeddings.expression.StringLit
-import org.jetbrains.kotlin.formver.core.embeddings.expression.UnitLit
 import org.jetbrains.kotlin.formver.core.embeddings.LabelLink
 import org.jetbrains.kotlin.formver.core.embeddings.callables.FunctionEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.callables.insertCall
 import org.jetbrains.kotlin.formver.core.embeddings.callables.isVerifyFunction
-import org.jetbrains.kotlin.formver.core.embeddings.expression.Assign
-import org.jetbrains.kotlin.formver.core.embeddings.expression.Block
-import org.jetbrains.kotlin.formver.core.embeddings.expression.Cast
-import org.jetbrains.kotlin.formver.core.embeddings.expression.Declare
-import org.jetbrains.kotlin.formver.core.embeddings.expression.Elvis
-import org.jetbrains.kotlin.formver.core.embeddings.expression.EqCmp
-import org.jetbrains.kotlin.formver.core.embeddings.expression.ExpEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.expression.Goto
-import org.jetbrains.kotlin.formver.core.embeddings.expression.GotoChainNode
-import org.jetbrains.kotlin.formver.core.embeddings.expression.If
-import org.jetbrains.kotlin.formver.core.embeddings.expression.InvokeFunctionObject
-import org.jetbrains.kotlin.formver.core.embeddings.expression.Is
-import org.jetbrains.kotlin.formver.core.embeddings.expression.LabelExp
-import org.jetbrains.kotlin.formver.core.embeddings.expression.LambdaExp
-import org.jetbrains.kotlin.formver.core.embeddings.expression.NonDeterministically
-import org.jetbrains.kotlin.formver.core.embeddings.expression.While
-import org.jetbrains.kotlin.formver.core.embeddings.expression.blockOf
-import org.jetbrains.kotlin.formver.core.embeddings.expression.share
-import org.jetbrains.kotlin.formver.core.embeddings.expression.toBlock
-import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
+import org.jetbrains.kotlin.formver.core.embeddings.expression.*
 import org.jetbrains.kotlin.formver.core.embeddings.expression.OperatorExpEmbeddings.GeCharChar
 import org.jetbrains.kotlin.formver.core.embeddings.expression.OperatorExpEmbeddings.GeIntInt
 import org.jetbrains.kotlin.formver.core.embeddings.expression.OperatorExpEmbeddings.GtCharChar
@@ -66,12 +33,8 @@ import org.jetbrains.kotlin.formver.core.embeddings.expression.OperatorExpEmbedd
 import org.jetbrains.kotlin.formver.core.embeddings.expression.OperatorExpEmbeddings.LtCharChar
 import org.jetbrains.kotlin.formver.core.embeddings.expression.OperatorExpEmbeddings.LtIntInt
 import org.jetbrains.kotlin.formver.core.embeddings.expression.OperatorExpEmbeddings.Not
-import org.jetbrains.kotlin.formver.core.embeddings.expression.SafeCast
-import org.jetbrains.kotlin.formver.core.embeddings.expression.notNullCmp
-import org.jetbrains.kotlin.formver.core.embeddings.expression.withInvariants
-import org.jetbrains.kotlin.formver.core.embeddings.expression.withNewTypeInvariants
-import org.jetbrains.kotlin.formver.core.embeddings.expression.withType
 import org.jetbrains.kotlin.formver.core.embeddings.toLink
+import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.equalToType
 import org.jetbrains.kotlin.formver.core.functionCallArguments
 import org.jetbrains.kotlin.formver.core.isInvariantBuilderFunctionNamed
@@ -115,7 +78,10 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         )
     }
 
-    override fun visitResolvedQualifier(resolvedQualifier: FirResolvedQualifier, data: StmtConversionContext): ExpEmbedding {
+    override fun visitResolvedQualifier(
+        resolvedQualifier: FirResolvedQualifier,
+        data: StmtConversionContext
+    ): ExpEmbedding {
         check(resolvedQualifier.resolvedType.isUnit) {
             "Only `Unit` is supported among resolved qualifiers currently."
         }
@@ -135,7 +101,10 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
             ConstantValueKind.Char -> CharLit(literalExpression.value as Char)
             ConstantValueKind.String -> StringLit(literalExpression.value as String)
             ConstantValueKind.Null -> NullLit
-            else -> handleUnimplementedElement("Constant Expression of type ${literalExpression.kind} is not yet implemented.", data)
+            else -> handleUnimplementedElement(
+                "Constant Expression of type ${literalExpression.kind} is not yet implemented.",
+                data
+            )
         }
 
     private val FirLiteralExpression.stringValue: String
@@ -223,7 +192,10 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         return when (equalityOperatorCall.operation) {
             FirOperation.EQ -> convertEqCmp(left, right)
             FirOperation.NOT_EQ -> Not(convertEqCmp(left, right))
-            else -> handleUnimplementedElement("Equality comparison operation ${equalityOperatorCall.operation} not yet implemented.", data)
+            else -> handleUnimplementedElement(
+                "Equality comparison operation ${equalityOperatorCall.operation} not yet implemented.",
+                data
+            )
         }
     }
 
@@ -293,6 +265,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
                     }
                     arg.arguments.map(data::convert)
                 }
+
                 else -> listOf(data.convert(arg))
             }
         }
@@ -310,6 +283,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
                     data.embedType(functionCall.resolvedType),
                 )
             }
+
             else -> {
                 if (!data.isValidForForAllBlock)
                     error("`forAll` scope is only allowed inside one of the `loopInvariants`, `preconditions` or `postconditions`.")
@@ -336,6 +310,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
                 // TODO: do this more uniformly: convert the receiver, see it is a lambda, use insertCall on it.
                 exp.insertCall(args, data, returnType)
             }
+
             else -> {
                 InvokeFunctionObject(data.convert(receiver), args, returnType)
             }
@@ -401,9 +376,11 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
             is FirPropertyAccessExpression -> {
                 data.embedPropertyAccess(lValue)
             }
+
             is FirDesugaredAssignmentValueReferenceExpression -> {
                 data.embedPropertyAccess(lValue.expressionRef.value as FirPropertyAccessExpression)
             }
+
             else -> error("Lvalue must be either property access or desugared assignment.")
         }
         val convertedRValue = data.convert(variableAssignment.rValue)
@@ -457,7 +434,8 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
                 else -> return null
             }
 
-            return resolved ?: throw IllegalArgumentException("Can't resolve the 'this' receiver since the function does not have one.")
+            return resolved
+                ?: throw IllegalArgumentException("Can't resolve the 'this' receiver since the function does not have one.")
         }
 
         val symbol = thisReceiverExpression.calleeReference.boundSymbol
@@ -485,10 +463,12 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
                 proven = true
                 access = true
             }
+
             FirOperation.SAFE_AS -> SafeCast(argument, conversionType).withInvariants {
                 proven = true
                 access = true
             }
+
             else -> handleUnimplementedElement("Can't embed type operator ${typeOperatorCall.operation}.", data)
         }
     }
@@ -504,7 +484,8 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
     override fun visitTryExpression(tryExpression: FirTryExpression, data: StmtConversionContext): ExpEmbedding {
         val (catchData, tryBody) = data.withCatches(tryExpression.catches) { catchData ->
             withNewScope {
-                val jumps = catchData.blocks.map { catchBlock -> NonDeterministically(Goto(catchBlock.entryLabel.toLink())) }
+                val jumps =
+                    catchData.blocks.map { catchBlock -> NonDeterministically(Goto(catchBlock.entryLabel.toLink())) }
                 val body = convert(tryExpression.tryBlock)
                 GotoChainNode(
                     null,
@@ -578,6 +559,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         when (data.config.behaviour) {
             UnsupportedFeatureBehaviour.THROW_EXCEPTION ->
                 TODO(msg)
+
             UnsupportedFeatureBehaviour.ASSUME_UNREACHABLE -> {
                 data.errorCollector.addMinorError(msg)
                 ErrorExp

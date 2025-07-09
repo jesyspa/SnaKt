@@ -5,47 +5,7 @@
 
 package org.jetbrains.kotlin.formver.core.embeddings
 
-import org.jetbrains.kotlin.formver.core.embeddings.expression.Assert
-import org.jetbrains.kotlin.formver.core.embeddings.expression.Assign
-import org.jetbrains.kotlin.formver.core.embeddings.expression.BinaryOperatorExpEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.expression.Block
-import org.jetbrains.kotlin.formver.core.embeddings.expression.Cast
-import org.jetbrains.kotlin.formver.core.embeddings.expression.Declare
-import org.jetbrains.kotlin.formver.core.embeddings.expression.Elvis
-import org.jetbrains.kotlin.formver.core.embeddings.expression.EqCmp
-import org.jetbrains.kotlin.formver.core.embeddings.expression.ErrorExp
-import org.jetbrains.kotlin.formver.core.embeddings.expression.ExpEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.expression.FieldAccess
-import org.jetbrains.kotlin.formver.core.embeddings.expression.FieldAccessPermissions
-import org.jetbrains.kotlin.formver.core.embeddings.expression.FieldModification
-import org.jetbrains.kotlin.formver.core.embeddings.expression.ForAllEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.expression.FunctionExp
-import org.jetbrains.kotlin.formver.core.embeddings.expression.Goto
-import org.jetbrains.kotlin.formver.core.embeddings.expression.GotoChainNode
-import org.jetbrains.kotlin.formver.core.embeddings.expression.If
-import org.jetbrains.kotlin.formver.core.embeddings.expression.InhaleDirect
-import org.jetbrains.kotlin.formver.core.embeddings.expression.InhaleInvariants
-import org.jetbrains.kotlin.formver.core.embeddings.expression.InjectionBasedExpEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.expression.InvokeFunctionObject
-import org.jetbrains.kotlin.formver.core.embeddings.expression.Is
-import org.jetbrains.kotlin.formver.core.embeddings.expression.LabelExp
-import org.jetbrains.kotlin.formver.core.embeddings.expression.LambdaExp
-import org.jetbrains.kotlin.formver.core.embeddings.expression.MethodCall
-import org.jetbrains.kotlin.formver.core.embeddings.expression.NeCmp
-import org.jetbrains.kotlin.formver.core.embeddings.expression.NonDeterministically
-import org.jetbrains.kotlin.formver.core.embeddings.expression.Old
-import org.jetbrains.kotlin.formver.core.embeddings.expression.PredicateAccessPermissions
-import org.jetbrains.kotlin.formver.core.embeddings.expression.PrimitiveFieldAccess
-import org.jetbrains.kotlin.formver.core.embeddings.expression.PureExpEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.expression.SafeCast
-import org.jetbrains.kotlin.formver.core.embeddings.expression.SequentialAnd
-import org.jetbrains.kotlin.formver.core.embeddings.expression.SequentialOr
-import org.jetbrains.kotlin.formver.core.embeddings.expression.Shared
-import org.jetbrains.kotlin.formver.core.embeddings.expression.SharingContext
-import org.jetbrains.kotlin.formver.core.embeddings.expression.UnaryOperatorExpEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.expression.UnitLit
-import org.jetbrains.kotlin.formver.core.embeddings.expression.While
-import org.jetbrains.kotlin.formver.core.embeddings.expression.WithPosition
+import org.jetbrains.kotlin.formver.core.embeddings.expression.*
 
 interface ExpVisitor<R> {
     fun visitPureExpEmbedding(e: PureExpEmbedding): R

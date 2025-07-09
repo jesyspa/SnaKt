@@ -8,8 +8,8 @@ package org.jetbrains.kotlin.formver.gradle.model.builder
 import org.gradle.api.Project
 import org.gradle.tooling.provider.model.ToolingModelBuilder
 import org.jetbrains.kotlin.formver.gradle.FormVerExtension
-import org.jetbrains.kotlin.formver.gradle.model.impl.FormVerImpl
 import org.jetbrains.kotlin.formver.gradle.model.FormVer
+import org.jetbrains.kotlin.formver.gradle.model.impl.FormVerImpl
 
 class FormVerModelBuilder : ToolingModelBuilder {
     override fun canBuild(modelName: String): Boolean =

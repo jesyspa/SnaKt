@@ -12,9 +12,19 @@ import org.jetbrains.kotlin.formver.viper.*
  * We want to deal with Viper's binary operators, functions and domain functions in a similar manner, hence introducing this common interface.
  */
 interface Applicable {
-    fun toFuncApp(args: List<Exp>, pos: Position = Position.NoPosition, info: Info = Info.NoInfo, trafos: Trafos = Trafos.NoTrafos): Exp
+    fun toFuncApp(
+        args: List<Exp>,
+        pos: Position = Position.NoPosition,
+        info: Info = Info.NoInfo,
+        trafos: Trafos = Trafos.NoTrafos
+    ): Exp
 
-    operator fun invoke(vararg args: Exp, pos: Position = Position.NoPosition, info: Info = Info.NoInfo, trafos: Trafos = Trafos.NoTrafos) =
+    operator fun invoke(
+        vararg args: Exp,
+        pos: Position = Position.NoPosition,
+        info: Info = Info.NoInfo,
+        trafos: Trafos = Trafos.NoTrafos
+    ) =
         toFuncApp(args.toList(), pos, info, trafos)
 }
 
@@ -37,9 +47,15 @@ interface Function : IntoSilver<viper.silver.ast.Function>, Applicable {
         get() = null
 
     override fun toSilver(): viper.silver.ast.Function = viper.silver.ast.Function(
-        name.mangled, formalArgs.map { it.toSilver() }.toScalaSeq(),
-        retType.toSilver(), pres.toSilver().toScalaSeq(), posts.toSilver().toScalaSeq(), body.toScalaOption().toSilver(),
-        pos.toSilver(), info.toSilver(), trafos.toSilver()
+        name.mangled,
+        formalArgs.map { it.toSilver() }.toScalaSeq(),
+        retType.toSilver(),
+        pres.toSilver().toScalaSeq(),
+        posts.toSilver().toScalaSeq(),
+        body.toScalaOption().toSilver(),
+        pos.toSilver(),
+        info.toSilver(),
+        trafos.toSilver()
     )
 
     override fun toFuncApp(

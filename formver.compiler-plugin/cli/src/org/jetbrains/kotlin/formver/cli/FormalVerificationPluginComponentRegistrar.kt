@@ -9,12 +9,8 @@ import org.jetbrains.kotlin.compiler.plugin.CompilerPluginRegistrar
 import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.fir.extensions.FirExtensionRegistrarAdapter
-import org.jetbrains.kotlin.formver.common.ErrorStyle
+import org.jetbrains.kotlin.formver.common.*
 import org.jetbrains.kotlin.formver.plugin.compiler.FormalVerificationPluginExtensionRegistrar
-import org.jetbrains.kotlin.formver.common.LogLevel
-import org.jetbrains.kotlin.formver.common.PluginConfiguration
-import org.jetbrains.kotlin.formver.common.TargetsSelection
-import org.jetbrains.kotlin.formver.common.UnsupportedFeatureBehaviour
 
 @OptIn(ExperimentalCompilerApi::class)
 class FormalVerificationPluginComponentRegistrar : CompilerPluginRegistrar() {
@@ -22,7 +18,8 @@ class FormalVerificationPluginComponentRegistrar : CompilerPluginRegistrar() {
         get() = true
 
     override fun ExtensionStorage.registerExtensions(configuration: CompilerConfiguration) {
-        val logLevel = configuration.get(FormalVerificationConfigurationKeys.LOG_LEVEL, LogLevel.Companion.defaultLogLevel())
+        val logLevel =
+            configuration.get(FormalVerificationConfigurationKeys.LOG_LEVEL, LogLevel.Companion.defaultLogLevel())
         val behaviour = configuration.get(
             FormalVerificationConfigurationKeys.UNSUPPORTED_FEATURE_BEHAVIOUR,
             UnsupportedFeatureBehaviour.Companion.defaultBehaviour()

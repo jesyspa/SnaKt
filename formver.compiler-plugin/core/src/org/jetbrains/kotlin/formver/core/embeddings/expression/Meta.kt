@@ -102,7 +102,6 @@ data class Shared(val inner: ExpEmbedding) : StoredResultExpEmbedding, DefaultTo
     }
 
 
-
     override fun ignoringMetaNodes() = inner
     override fun ignoringCastsAndMetaNodes() = inner
     override fun <R> accept(v: ExpVisitor<R>): R = v.visitShared(this)

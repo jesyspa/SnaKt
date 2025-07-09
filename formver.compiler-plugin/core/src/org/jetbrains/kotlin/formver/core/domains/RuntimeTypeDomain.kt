@@ -10,7 +10,6 @@ import org.jetbrains.kotlin.formver.core.embeddings.types.embedClassTypeFunc
 import org.jetbrains.kotlin.formver.viper.MangledName
 import org.jetbrains.kotlin.formver.viper.ast.*
 import org.jetbrains.kotlin.formver.viper.mangled
-import kotlin.collections.get
 
 
 const val RUNTIME_TYPE_DOMAIN_NAME = "rt"
@@ -216,7 +215,12 @@ class RuntimeTypeDomain(classes: List<ClassTypeEmbedding>) : BuiltinDomain(RUNTI
         val RuntimeType = Type.Domain(DomainName(RUNTIME_TYPE_DOMAIN_NAME).mangled, emptyList())
         val Ref = Type.Ref
 
-        fun createDomainFunc(funcName: String, args: List<Declaration.LocalVarDecl>, type: Type, unique: Boolean = false) =
+        fun createDomainFunc(
+            funcName: String,
+            args: List<Declaration.LocalVarDecl>,
+            type: Type,
+            unique: Boolean = false
+        ) =
             DomainFunc(DomainFuncName(DomainName(RUNTIME_TYPE_DOMAIN_NAME), funcName), args, emptyList(), type, unique)
 
         private fun createNewTypeDomainFunc(funcName: String) = createDomainFunc(
@@ -284,8 +288,9 @@ class RuntimeTypeDomain(classes: List<ClassTypeEmbedding>) : BuiltinDomain(RUNTI
     }.distinctBy { it.name }
 
 
-    override val functions: List<DomainFunc> = nonNullableTypes + listOf(nullValue, unitValue, isSubtype, typeOf, nullable) +
-            allInjections.flatMap { listOf(it.toRef, it.fromRef) }
+    override val functions: List<DomainFunc> =
+        nonNullableTypes + listOf(nullValue, unitValue, isSubtype, typeOf, nullable) +
+                allInjections.flatMap { listOf(it.toRef, it.fromRef) }
 
     override val axioms = AxiomListBuilder.build(this) {
         axiom("subtype_reflexive") {
@@ -304,8 +309,8 @@ class RuntimeTypeDomain(classes: List<ClassTypeEmbedding>) : BuiltinDomain(RUNTI
                     subTrigger { t1 subtype t3 }
                 }
                 compoundTrigger {
-                    subTrigger { t2 subtype t3}
-                    subTrigger { t1 subtype t3}
+                    subTrigger { t2 subtype t3 }
+                    subTrigger { t1 subtype t3 }
                 }
                 t1 subtype t3
             }

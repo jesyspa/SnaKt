@@ -5,23 +5,13 @@
 
 package org.jetbrains.kotlin.formver.core.embeddings.expression
 
-import org.jetbrains.kotlin.formver.core.embeddings.ExpVisitor
 import org.jetbrains.kotlin.formver.core.asPosition
-import org.jetbrains.kotlin.formver.core.embeddings.LabelEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.LabelLink
+import org.jetbrains.kotlin.formver.core.embeddings.*
 import org.jetbrains.kotlin.formver.core.embeddings.callables.FullNamedFunctionSignature
-import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.callables.NamedFunctionSignature
 import org.jetbrains.kotlin.formver.core.embeddings.callables.toMethodCall
-import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.BlockNode
-import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.NamedBranchingNode
-import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.TreeView
-import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.debugTreeView
-import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.nameAsDebugTreeView
-import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.withDesignation
-import org.jetbrains.kotlin.formver.core.embeddings.toLink
-import org.jetbrains.kotlin.formver.core.embeddings.toViper
-import org.jetbrains.kotlin.formver.core.embeddings.toViperGoto
+import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.*
+import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.buildType
 import org.jetbrains.kotlin.formver.core.linearization.LinearizationContext
 import org.jetbrains.kotlin.formver.core.linearization.addLabel
@@ -63,7 +53,12 @@ sealed interface Block : OptionalResultExpEmbedding {
 }
 
 
-data class If(val condition: ExpEmbedding, val thenBranch: ExpEmbedding, val elseBranch: ExpEmbedding, override val type: TypeEmbedding) :
+data class If(
+    val condition: ExpEmbedding,
+    val thenBranch: ExpEmbedding,
+    val elseBranch: ExpEmbedding,
+    override val type: TypeEmbedding
+) :
     OptionalResultExpEmbedding, DefaultDebugTreeViewImplementation {
     override fun toViperMaybeStoringIn(result: VariableEmbedding?, ctx: LinearizationContext) {
         ctx.addStatement {
@@ -160,7 +155,8 @@ data class LabelExp(val label: LabelEmbedding) : UnitResultExpEmbedding {
  *
  * The result of the intermediate expression is stored.
  */
-data class GotoChainNode(val label: LabelEmbedding?, val exp: ExpEmbedding, val next: LabelLink) : OptionalResultExpEmbedding {
+data class GotoChainNode(val label: LabelEmbedding?, val exp: ExpEmbedding, val next: LabelLink) :
+    OptionalResultExpEmbedding {
     override val type: TypeEmbedding = exp.type
 
     override fun toViperMaybeStoringIn(result: VariableEmbedding?, ctx: LinearizationContext) {
@@ -224,7 +220,11 @@ data class MethodCall(val method: NamedFunctionSignature, val args: List<ExpEmbe
  *
  * TODO: do this with an explicit havoc in `toViperMaybeStoringIn`.
  */
-data class InvokeFunctionObject(val receiver: ExpEmbedding, val args: List<ExpEmbedding>, override val type: TypeEmbedding) :
+data class InvokeFunctionObject(
+    val receiver: ExpEmbedding,
+    val args: List<ExpEmbedding>,
+    override val type: TypeEmbedding
+) :
     OnlyToViperExpEmbedding {
     override fun toViper(ctx: LinearizationContext): Exp {
         val variable = ctx.freshAnonVar(type)
@@ -248,7 +248,11 @@ data class InvokeFunctionObject(val receiver: ExpEmbedding, val args: List<ExpEm
     override fun <R> accept(v: ExpVisitor<R>): R = v.visitInvokeFunctionObject(this)
 }
 
-data class FunctionExp(val signature: FullNamedFunctionSignature?, val body: ExpEmbedding, val returnLabel: LabelEmbedding) :
+data class FunctionExp(
+    val signature: FullNamedFunctionSignature?,
+    val body: ExpEmbedding,
+    val returnLabel: LabelEmbedding
+) :
     OptionalResultExpEmbedding {
     override val type: TypeEmbedding = body.type
 
@@ -280,7 +284,8 @@ data class FunctionExp(val signature: FullNamedFunctionSignature?, val body: Exp
     override fun <R> accept(v: ExpVisitor<R>): R = v.visitFunctionExp(this)
 }
 
-data class Elvis(val left: ExpEmbedding, val right: ExpEmbedding, override val type: TypeEmbedding) : StoredResultExpEmbedding,
+data class Elvis(val left: ExpEmbedding, val right: ExpEmbedding, override val type: TypeEmbedding) :
+    StoredResultExpEmbedding,
     DefaultDebugTreeViewImplementation {
     override fun toViperStoringIn(result: VariableEmbedding, ctx: LinearizationContext) {
         val leftViper = left.toViper(ctx)

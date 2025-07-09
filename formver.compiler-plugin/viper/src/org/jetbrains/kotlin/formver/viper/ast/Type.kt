@@ -41,17 +41,20 @@ sealed interface Type : IntoSilver<viper.silver.ast.Type> {
 
     data class Seq(val elemType: Type) : Type {
         override fun toSilver(): viper.silver.ast.Type = SeqType.apply(elemType.toSilver())
-        override fun substitute(typeVarMap: kotlin.collections.Map<TypeVar, Type>): Seq = Seq(elemType.substitute(typeVarMap))
+        override fun substitute(typeVarMap: kotlin.collections.Map<TypeVar, Type>): Seq =
+            Seq(elemType.substitute(typeVarMap))
     }
 
     data class Set(val elemType: Type) : Type {
         override fun toSilver(): viper.silver.ast.Type = SetType.apply(elemType.toSilver())
-        override fun substitute(typeVarMap: kotlin.collections.Map<TypeVar, Type>): Set = Set(elemType.substitute(typeVarMap))
+        override fun substitute(typeVarMap: kotlin.collections.Map<TypeVar, Type>): Set =
+            Set(elemType.substitute(typeVarMap))
     }
 
     data class Multiset(val elemType: Type) : Type {
         override fun toSilver(): viper.silver.ast.Type = MultisetType.apply(elemType.toSilver())
-        override fun substitute(typeVarMap: kotlin.collections.Map<TypeVar, Type>): Multiset = Multiset(elemType.substitute(typeVarMap))
+        override fun substitute(typeVarMap: kotlin.collections.Map<TypeVar, Type>): Multiset =
+            Multiset(elemType.substitute(typeVarMap))
     }
 
     data class Map(val keyType: Type, val valueType: Type) : Type {
@@ -81,7 +84,10 @@ sealed interface Type : IntoSilver<viper.silver.ast.Type> {
             )
 
         override fun substitute(typeVarMap: kotlin.collections.Map<TypeVar, Type>): Domain =
-            Domain(domainName, typeParams, typeParams.associateWith { typeSubstitutions.getOrDefault(it, it).substitute(typeVarMap) })
+            Domain(
+                domainName,
+                typeParams,
+                typeParams.associateWith { typeSubstitutions.getOrDefault(it, it).substitute(typeVarMap) })
 
     }
 

@@ -258,7 +258,8 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
         val trafos: Trafos = Trafos.NoTrafos,
     ) : Exp {
         override val type = Type.Int
-        override fun toSilver(): viper.silver.ast.IntLit = IntLit(value.toScalaBigInt(), pos.toSilver(), info.toSilver(), trafos.toSilver())
+        override fun toSilver(): viper.silver.ast.IntLit =
+            IntLit(value.toScalaBigInt(), pos.toSilver(), info.toSilver(), trafos.toSilver())
     }
 
     data class NullLit(
@@ -311,7 +312,8 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
         val info: Info = Info.NoInfo,
         val trafos: Trafos = Trafos.NoTrafos,
     ) : Exp {
-        override fun toSilver(): viper.silver.ast.Result = Result(type.toSilver(), pos.toSilver(), info.toSilver(), trafos.toSilver())
+        override fun toSilver(): viper.silver.ast.Result =
+            Result(type.toSilver(), pos.toSilver(), info.toSilver(), trafos.toSilver())
     }
 
     data class FuncApp(
@@ -347,7 +349,8 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
         val info: Info = Info.NoInfo,
         val trafos: Trafos = Trafos.NoTrafos,
     ) : Exp {
-        private val scalaTypeVarMap = typeVarMap.mapKeys { it.key.toSilver() }.mapValues { it.value.toSilver() }.toScalaMap()
+        private val scalaTypeVarMap =
+            typeVarMap.mapKeys { it.key.toSilver() }.mapValues { it.value.toSilver() }.toScalaMap()
         override val type = function.returnType.substitute(typeVarMap)
         override fun toSilver(): viper.silver.ast.Exp =
             viper.silver.ast.DomainFuncApp.apply(
@@ -475,7 +478,8 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
         val trafos: Trafos = Trafos.NoTrafos,
     ) : Exp {
         override val type = exp.type
-        override fun toSilver(): viper.silver.ast.Old = Old(exp.toSilver(), pos.toSilver(), info.toSilver(), trafos.toSilver())
+        override fun toSilver(): viper.silver.ast.Old =
+            Old(exp.toSilver(), pos.toSilver(), info.toSilver(), trafos.toSilver())
     }
 
     data class PredicateAccess(
@@ -552,7 +556,8 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
         /**
          * Create an Exp.Forall node, passing the local variables as local variable access expressions into the action.
          */
-        fun forall(v1: Var, action: ForallBuilder.(LocalVar) -> Exp): Exp = forallImpl(listOf(v1.decl())) { action(v1.use()) }
+        fun forall(v1: Var, action: ForallBuilder.(LocalVar) -> Exp): Exp =
+            forallImpl(listOf(v1.decl())) { action(v1.use()) }
 
         fun forall(v1: Var, v2: Var, action: ForallBuilder.(LocalVar, LocalVar) -> Exp): Exp =
             forallImpl(listOf(v1.decl(), v2.decl())) { action(v1.use(), v2.use()) }
@@ -676,5 +681,6 @@ fun Any?.viperLiteral(
     is String ->
         if (isEmpty()) Exp.EmptySeq(Type.Int, pos, info, trafos)
         else Exp.ExplicitSeq(map { it.viperLiteral(pos, info, trafos) }, pos, info, trafos)
+
     else -> error("Literal type not known.")
 }

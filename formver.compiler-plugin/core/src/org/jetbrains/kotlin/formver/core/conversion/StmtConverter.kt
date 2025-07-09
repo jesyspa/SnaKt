@@ -37,7 +37,8 @@ data class StmtConverter(
         stmt.accept(StmtConversionVisitorExceptionWrapper, this).withPosition(stmt.source)
 
     override fun <R> withNewScope(action: StmtConversionContext.() -> R): R = withNewScopeImpl { action() }
-    override fun <R> withNoScope(action: StmtConversionContext.() -> R): R = withNewScopeImpl(needsScope = false, action)
+    override fun <R> withNoScope(action: StmtConversionContext.() -> R): R =
+        withNewScopeImpl(needsScope = false, action)
 
     override fun <R> withMethodCtx(factory: MethodContextFactory, action: StmtConversionContext.() -> R): R {
         return copy(methodCtx = factory.create(this, scopeIndex)).run {
@@ -89,7 +90,9 @@ data class StmtConverter(
         val exitLabel = LabelEmbedding(tryExitLabelNameProducer.getFresh())
         val ctx = copy(activeCatchLabels = activeCatchLabels + newCatchLabels)
         val catchBlockListData =
-            CatchBlockListData(exitLabel, newCatchLabels.zip(catches).map { (label, firCatch) -> CatchBlockData(label, firCatch) })
+            CatchBlockListData(
+                exitLabel,
+                newCatchLabels.zip(catches).map { (label, firCatch) -> CatchBlockData(label, firCatch) })
         val result = ctx.action(catchBlockListData)
         return Pair(catchBlockListData, result)
     }

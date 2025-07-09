@@ -47,7 +47,8 @@ sealed interface VariableEmbedding : PureExpEmbedding, PropertyAccessEmbedding {
         trafos: Trafos = Trafos.NoTrafos,
     ): Exp.LocalVar = Exp.LocalVar(name, Type.Ref, pos, info, trafos)
 
-    override fun toViper(source: KtSourceElement?): Exp = Exp.LocalVar(name, Type.Ref, source.asPosition, sourceRole.asInfo)
+    override fun toViper(source: KtSourceElement?): Exp =
+        Exp.LocalVar(name, Type.Ref, source.asPosition, sourceRole.asInfo)
 
     val isOriginallyRef: Boolean
         get() = true
@@ -122,7 +123,8 @@ class FirVariableEmbedding(
  *
  * This can still correspond to an earlier variable, but it no longer carries any interesting information.
  */
-class LinearizationVariableEmbedding(override val name: MangledName, override val type: TypeEmbedding) : VariableEmbedding
+class LinearizationVariableEmbedding(override val name: MangledName, override val type: TypeEmbedding) :
+    VariableEmbedding
 
 val ExpEmbedding.underlyingVariable
     get() = this.ignoringCastsAndMetaNodes() as? VariableEmbedding

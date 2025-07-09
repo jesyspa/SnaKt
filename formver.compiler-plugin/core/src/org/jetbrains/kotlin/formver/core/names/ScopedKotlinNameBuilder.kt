@@ -11,22 +11,22 @@ class ScopedKotlinNameBuilder {
     private var scope: NameScope? = null
 
     fun complete(name: KotlinName): ScopedKotlinName {
-        require(scope != null) { "No scope specified "}
+        require(scope != null) { "No scope specified " }
         return ScopedKotlinName(scope!!, name)
     }
 
     fun packageScope(packageName: FqName) {
-        require (scope == null) { "Invalid scope combination: package after $scope" }
+        require(scope == null) { "Invalid scope combination: package after $scope" }
         scope = PackageScope(packageName)
     }
 
     fun packageScope(packageName: List<String>) {
-        require (scope == null) { "Invalid scope combination: package after $scope" }
+        require(scope == null) { "Invalid scope combination: package after $scope" }
         scope = PackageScope(FqName.fromSegments(packageName))
     }
 
     fun classScope(className: ClassKotlinName) {
-        require (scope != null) { "Class scope cannot be top-level" }
+        require(scope != null) { "Class scope cannot be top-level" }
         scope = ClassScope(scope!!, className)
     }
 

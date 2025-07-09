@@ -64,7 +64,9 @@ private fun callableId(packageName: List<String>, className: String?, name: Stri
         Name.identifier(name)
     )
 
-fun formverCallableId(className: String?, name: String): CallableId = callableId(SpecialPackages.formver, className, name)
+fun formverCallableId(className: String?, name: String): CallableId =
+    callableId(SpecialPackages.formver, className, name)
+
 fun kotlinCallableId(className: String?, name: String): CallableId = callableId(SpecialPackages.kotlin, className, name)
 
 fun FirBasedSymbol<*>.isUnique(session: FirSession) = hasAnnotation(annotationId("Unique"), session)

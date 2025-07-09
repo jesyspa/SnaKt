@@ -6,12 +6,12 @@
 package org.jetbrains.kotlin.formver.core.embeddings.expression
 
 import org.jetbrains.kotlin.KtSourceElement
-import org.jetbrains.kotlin.formver.core.embeddings.ExpVisitor
-import org.jetbrains.kotlin.formver.core.purity.ExprPurityVisitor
 import org.jetbrains.kotlin.formver.core.asPosition
+import org.jetbrains.kotlin.formver.core.embeddings.ExpVisitor
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.buildType
 import org.jetbrains.kotlin.formver.core.linearization.LinearizationContext
+import org.jetbrains.kotlin.formver.core.purity.ExprPurityVisitor
 import org.jetbrains.kotlin.formver.core.purity.PurityContext
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 import org.jetbrains.kotlin.formver.viper.ast.Stmt

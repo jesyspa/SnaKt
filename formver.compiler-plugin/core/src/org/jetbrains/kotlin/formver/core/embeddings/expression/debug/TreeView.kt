@@ -93,7 +93,11 @@ interface SeparationScheme {
     fun trim(): SeparationScheme
 }
 
-private class SeparationSchemeImpl(override val begin: String, override val separator: String, override val end: String) :
+private class SeparationSchemeImpl(
+    override val begin: String,
+    override val separator: String,
+    override val end: String
+) :
     SeparationScheme {
     val trimmed = object : SeparationScheme {
         override val begin: String = this@SeparationSchemeImpl.begin.trim()
@@ -107,7 +111,8 @@ private class SeparationSchemeImpl(override val begin: String, override val sepa
 
     fun guessWidth(args: List<TreeView>): Int =
         if (args.isEmpty()) trimmed.begin.length + trimmed.end.length
-        else begin.length + end.length + args.mapWithIsLast { arg, isLast -> arg.widthGuess + if (!isLast) separator.length else 0 }.sum()
+        else begin.length + end.length + args.mapWithIsLast { arg, isLast -> arg.widthGuess + if (!isLast) separator.length else 0 }
+            .sum()
 }
 
 private fun Printer.printList(args: List<TreeView>, scheme: SeparationScheme, singleLine: Boolean) {

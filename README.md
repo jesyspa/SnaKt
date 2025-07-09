@@ -10,18 +10,19 @@ syntax are not supported.
 ## Structure
 
 This repository consists of three published parts:
+
 - `formver.compiler-plugin`: a K2 compiler plugin that performs formal verification.
 - `formver.gradle-plugin`: a Gradle plugin that loads the compiler plugin.
 - `formver.annotations`: definitions that are used for adding specifications
   to your code.
-  
+
 Additionally, `formver.common` contains some code shared between these parts.
 
 At present, we do not distribute any part of the plugin through a central repository.
 If you would like to use the plugin, clone it and use the `publishToMavenLocal`
 task to put it in your local repository.
 
-## Running the plugin 
+## Running the plugin
 
 Once you've published to your local Maven repository, you can use the Gradle
 plugin to enable verification of your project.
@@ -40,7 +41,7 @@ pluginManagement {
 }
 ```
 
-Then in `build.gradle.kts`, enable the plugin.  Make sure that you also enable the Maven
+Then in `build.gradle.kts`, enable the plugin. Make sure that you also enable the Maven
 local repository here: it's necessary to find the compiler plugin for the plugin.
 
 ```kotlin
@@ -100,11 +101,16 @@ specify the plugin `.jar` with `-Xplugin=`:
 kotlinc -language-version 2.0 -Xplugin=path-to-plugin.jar myfile.kt
 ```
 
-The plugin accepts a number of command line options which can be passed via `-P plugin:org.jetbrains.kotlin.formver:OPTION=SETTING`:
-- Option `log_level`: permitted values `only_warnings`, `short_viper_dump`, `full_viper_dump` (default: `only_warnings`).
+The plugin accepts a number of command line options which can be passed via
+`-P plugin:org.jetbrains.kotlin.formver:OPTION=SETTING`:
+
+- Option `log_level`: permitted values `only_warnings`, `short_viper_dump`, `full_viper_dump` (default:
+  `only_warnings`).
 - Option `error_style`: permitted values `user_friendly`, `original_viper` and `both` (default: `user_friendly`).
-- Options `conversion_targets_selection` and `verification_targets_selection`: permitted values `no_targets`, `targets_with_contract`, `all_targets` (default: `targets_with_contract`).
-- Option `unsupported_feature_behaviour`: permitted values `throw_exception`, `assume_unreachable` (default: `throw_exception`).
+- Options `conversion_targets_selection` and `verification_targets_selection`: permitted values `no_targets`,
+  `targets_with_contract`, `all_targets` (default: `targets_with_contract`).
+- Option `unsupported_feature_behaviour`: permitted values `throw_exception`, `assume_unreachable` (default:
+  `throw_exception`).
 
 ### Z3
 
@@ -114,10 +120,12 @@ To do so, download v4.8.7 from the [Releases page](https://github.com/Z3Prover/z
 Viper gives two ways of interfacing with Z3: text-based (using the `z3` binary)
 or via the API (using a `.jar`).
 At the moment we use the text-based interface, meaning you need to:
+
 - Install the `z3` binary in your path
 - Set the `Z3_EXE` environment variable correctly.
 
 One way to do this is as follows:
+
 ```bash
 export Z3_EXE=/usr/bin/z3 # or a different directory in $PATH
 sudo cp z3-4.8.7-*/bin/z3 $Z3_EXE

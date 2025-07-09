@@ -17,6 +17,12 @@ sealed interface AccessPredicate : Exp {
     ) : AccessPredicate {
         override val type: Type.Bool = Type.Bool
         override fun toSilver(): viper.silver.ast.AccessPredicate =
-            viper.silver.ast.FieldAccessPredicate(access.toSilver(), perm.toSilver(), pos.toSilver(), info.toSilver(), trafos.toSilver())
+            viper.silver.ast.FieldAccessPredicate(
+                access.toSilver(),
+                perm.toSilver(),
+                pos.toSilver(),
+                info.toSilver(),
+                trafos.toSilver()
+            )
     }
 }

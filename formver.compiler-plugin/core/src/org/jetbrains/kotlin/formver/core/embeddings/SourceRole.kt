@@ -41,7 +41,12 @@ sealed interface SourceRole {
     }
 
     sealed interface Condition : SourceRole {
-        data class IsType(val targetVariable: FirBasedSymbol<*>, val expectedType: ConeKotlinType, val negated: Boolean = false) : Condition
+        data class IsType(
+            val targetVariable: FirBasedSymbol<*>,
+            val expectedType: ConeKotlinType,
+            val negated: Boolean = false
+        ) : Condition
+
         data class IsNull(val targetVariable: FirBasedSymbol<*>, val negated: Boolean = false) : Condition
         data class Constant(val literal: Boolean) : Condition
         data class Conjunction(val lhs: Condition, val rhs: Condition) : Condition

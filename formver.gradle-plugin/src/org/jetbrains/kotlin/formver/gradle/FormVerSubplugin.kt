@@ -9,9 +9,12 @@ import org.gradle.api.Project
 import org.gradle.api.provider.Provider
 import org.gradle.tooling.provider.model.ToolingModelBuilderRegistry
 import org.jetbrains.kotlin.formver.BuildConfig
-import org.jetbrains.kotlin.formver.gradle.model.builder.FormVerModelBuilder
 import org.jetbrains.kotlin.formver.common.FormalVerificationPluginNames
-import org.jetbrains.kotlin.gradle.plugin.*
+import org.jetbrains.kotlin.formver.gradle.model.builder.FormVerModelBuilder
+import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
+import org.jetbrains.kotlin.gradle.plugin.KotlinCompilerPluginSupportPlugin
+import org.jetbrains.kotlin.gradle.plugin.SubpluginArtifact
+import org.jetbrains.kotlin.gradle.plugin.SubpluginOption
 import javax.inject.Inject
 
 class FormVerGradleSubplugin
@@ -57,8 +60,13 @@ class FormVerGradleSubplugin
         }
     }
 
-    override fun getCompilerPluginId(): String = "${BuildConfig.COMPILER_PLUGIN_GROUP}.${BuildConfig.COMPILER_PLUGIN_NAME}"
+    override fun getCompilerPluginId(): String =
+        "${BuildConfig.COMPILER_PLUGIN_GROUP}.${BuildConfig.COMPILER_PLUGIN_NAME}"
 
     override fun getPluginArtifact(): SubpluginArtifact =
-        SubpluginArtifact(BuildConfig.COMPILER_PLUGIN_GROUP, BuildConfig.COMPILER_PLUGIN_NAME, BuildConfig.COMPILER_PLUGIN_VERSION)
+        SubpluginArtifact(
+            BuildConfig.COMPILER_PLUGIN_GROUP,
+            BuildConfig.COMPILER_PLUGIN_NAME,
+            BuildConfig.COMPILER_PLUGIN_VERSION
+        )
 }

@@ -47,7 +47,8 @@ fun extractFirSpecification(parentBlock: FirBlock, returnType: ConeKotlinType): 
 
     val precond = firstStmt.extractFormverFirBlock { isFormverFunctionNamed("preconditions") }
         ?: return FirSpecification()
-    val postcond = parentBlock.statements.getOrNull(1)?.extractFormverFirBlock { isFormverFunctionNamed("postconditions") }
+    val postcond =
+        parentBlock.statements.getOrNull(1)?.extractFormverFirBlock { isFormverFunctionNamed("postconditions") }
     return FirSpecification(precond.body, postcond?.body, postcond?.extractFormverReturnVar(returnType))
 }
 

@@ -80,5 +80,9 @@ data class TypeName(val pretype: PretypeEmbedding, val nullable: Boolean) : Kotl
     override val mangledBaseName: String
         get() = pretype.name.mangledBaseName
     override val mangledType: String
-        get() = listOfNotNull(if (nullable) "N" else null, "T", if (pretype is FunctionTypeEmbedding) "F" else null).joinToString("")
+        get() = listOfNotNull(
+            if (nullable) "N" else null,
+            "T",
+            if (pretype is FunctionTypeEmbedding) "F" else null
+        ).joinToString("")
 }

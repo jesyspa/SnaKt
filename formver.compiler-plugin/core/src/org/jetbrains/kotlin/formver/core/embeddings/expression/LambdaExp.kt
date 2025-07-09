@@ -6,11 +6,11 @@
 package org.jetbrains.kotlin.formver.core.embeddings.expression
 
 import org.jetbrains.kotlin.fir.declarations.FirAnonymousFunction
-import org.jetbrains.kotlin.formver.core.embeddings.ExpVisitor
 import org.jetbrains.kotlin.formver.core.conversion.MethodConversionContext
 import org.jetbrains.kotlin.formver.core.conversion.StmtConversionContext
 import org.jetbrains.kotlin.formver.core.conversion.SubstitutedArgument
 import org.jetbrains.kotlin.formver.core.conversion.insertInlineFunctionCall
+import org.jetbrains.kotlin.formver.core.embeddings.ExpVisitor
 import org.jetbrains.kotlin.formver.core.embeddings.callables.CallableEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.callables.FunctionSignature
 import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.PlaintextLeaf
@@ -40,7 +40,8 @@ class LambdaExp(
         val inlineBody = function.body ?: throw IllegalArgumentException("Lambda $function has a null body.")
         val nonReceiverParamNames = function.valueParameters.map { SubstitutedArgument.ValueParameter(it.symbol) }
         //TODO: can lambdas have dispatch receiver?
-        val receiverParamNames = if (function.receiverParameter != null) listOf(SubstitutedArgument.ExtensionThis) else emptyList()
+        val receiverParamNames =
+            if (function.receiverParameter != null) listOf(SubstitutedArgument.ExtensionThis) else emptyList()
         return ctx.insertInlineFunctionCall(
             signature,
             receiverParamNames + nonReceiverParamNames,

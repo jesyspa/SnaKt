@@ -19,7 +19,8 @@ import org.jetbrains.kotlin.formver.viper.mangled
  *
  * Due to name mangling, the mapping between Kotlin types and TypeEmbeddings must be 1:1.
  */
-data class TypeEmbedding(val pretype: PretypeEmbedding, val flags: TypeEmbeddingFlags) : RuntimeTypeHolder, TypeInvariantHolder {
+data class TypeEmbedding(val pretype: PretypeEmbedding, val flags: TypeEmbeddingFlags) : RuntimeTypeHolder,
+    TypeInvariantHolder {
     /**
      * Name representing the type, used for distinguishing overloads.
      *
@@ -46,7 +47,9 @@ data class TypeEmbedding(val pretype: PretypeEmbedding, val flags: TypeEmbedding
 
     override val runtimeType: Exp = flags.adjustRuntimeType(pretype.runtimeType)
 
-    override fun accessInvariants(): List<TypeInvariantEmbedding> = flags.adjustManyInvariants(pretype.accessInvariants())
+    override fun accessInvariants(): List<TypeInvariantEmbedding> =
+        flags.adjustManyInvariants(pretype.accessInvariants())
+
     override fun pureInvariants(): List<TypeInvariantEmbedding> = flags.adjustManyInvariants(pretype.pureInvariants())
 
     override fun sharedPredicateAccessInvariant(): TypeInvariantEmbedding? =

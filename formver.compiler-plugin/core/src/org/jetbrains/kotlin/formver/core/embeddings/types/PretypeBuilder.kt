@@ -76,7 +76,13 @@ class FunctionPretypeBuilder : PretypeBuilder {
 
     override fun complete(): FunctionTypeEmbedding {
         require(returnType != null) { "Return type not set" }
-        return FunctionTypeEmbedding(dispatchReceiverType, extensionReceiverType, paramTypes, returnType!!, returnsUnique)
+        return FunctionTypeEmbedding(
+            dispatchReceiverType,
+            extensionReceiverType,
+            paramTypes,
+            returnType!!,
+            returnsUnique
+        )
     }
 }
 

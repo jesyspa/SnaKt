@@ -54,7 +54,8 @@ interface ReturnVarSubstitutionContext {
     fun resolve(symbol: FirValueParameterSymbol): VariableEmbedding?
 }
 
-class ReturnVarSubstitutor(val substitutionSymbol: FirValueParameterSymbol, val variable: VariableEmbedding) : ReturnVarSubstitutionContext {
+class ReturnVarSubstitutor(val substitutionSymbol: FirValueParameterSymbol, val variable: VariableEmbedding) :
+    ReturnVarSubstitutionContext {
     override fun resolve(symbol: FirValueParameterSymbol) = (symbol == substitutionSymbol).ifTrue { variable }
 }
 

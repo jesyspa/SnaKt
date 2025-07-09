@@ -1,5 +1,3 @@
-import org.gradle.kotlin.dsl.maven
-
 pluginManagement {
     repositories {
         mavenCentral()

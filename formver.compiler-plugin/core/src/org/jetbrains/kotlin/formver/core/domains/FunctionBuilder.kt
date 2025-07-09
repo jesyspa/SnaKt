@@ -6,7 +6,10 @@
 package org.jetbrains.kotlin.formver.core.domains
 
 import org.jetbrains.kotlin.formver.core.names.SpecialName
-import org.jetbrains.kotlin.formver.viper.ast.*
+import org.jetbrains.kotlin.formver.viper.ast.BuiltinFunction
+import org.jetbrains.kotlin.formver.viper.ast.Exp
+import org.jetbrains.kotlin.formver.viper.ast.Type
+import org.jetbrains.kotlin.formver.viper.ast.Var
 
 /**
  * DSL language for construction of Viper functions.

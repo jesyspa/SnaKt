@@ -54,7 +54,13 @@ class FullySpecialKotlinFunctionBuilder {
             name: String,
             body: (List<ExpEmbedding>, StmtConversionContext) -> ExpEmbedding,
         ) {
-            FullySpecialKotlinFunctionImpl(packageName, className, name, callableType, body).apply { byName[embedName()] = this }
+            FullySpecialKotlinFunctionImpl(
+                packageName,
+                className,
+                name,
+                callableType,
+                body
+            ).apply { byName[embedName()] = this }
         }
 
         fun addNoOpFunction(

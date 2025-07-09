@@ -10,11 +10,11 @@ import org.jetbrains.kotlin.fir.symbols.impl.FirPropertySymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirValueParameterSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirVariableSymbol
 import org.jetbrains.kotlin.formver.core.embeddings.LabelEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.callables.FunctionSignature
 import org.jetbrains.kotlin.formver.core.embeddings.expression.ExpEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.expression.PlaceholderVariableEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.expression.VariableEmbedding
+import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.names.ReturnLabelName
 import org.jetbrains.kotlin.formver.core.names.ReturnVariableName
 
@@ -52,7 +52,8 @@ interface MethodConversionContext : ProgramConversionContext {
 
 fun MethodConversionContext.resolveReturnTarget(targetSourceName: String?): ReturnTarget =
     if (targetSourceName == null) defaultResolvedReturnTarget
-    else resolveNamedReturnTarget(targetSourceName) ?: throw IllegalArgumentException("Cannot resolve returnTarget of $targetSourceName")
+    else resolveNamedReturnTarget(targetSourceName)
+        ?: throw IllegalArgumentException("Cannot resolve returnTarget of $targetSourceName")
 
 fun MethodConversionContext.embedLocalProperty(symbol: FirPropertySymbol): VariableEmbedding = resolveLocal(symbol)
 fun MethodConversionContext.embedParameter(symbol: FirValueParameterSymbol): ExpEmbedding = resolveParameter(symbol)
@@ -66,4 +67,4 @@ fun MethodConversionContext.embedLocalSymbol(symbol: FirBasedSymbol<*>): ExpEmbe
         else -> throw IllegalArgumentException("Symbol $symbol cannot be embedded as a local symbol.")
     }
 
-fun MethodConversionContext.statementCtxt() : StmtConversionContext = StmtConverter(this)
+fun MethodConversionContext.statementCtxt(): StmtConversionContext = StmtConverter(this)

@@ -7,16 +7,6 @@ package org.jetbrains.kotlin.formver.core.embeddings.callables
 
 import org.jetbrains.kotlin.formver.core.embeddings.expression.Assert
 import org.jetbrains.kotlin.formver.core.embeddings.expression.IntLit
-import org.jetbrains.kotlin.formver.core.embeddings.expression.UnitLit
-import org.jetbrains.kotlin.formver.core.embeddings.expression.toBlock
-import org.jetbrains.kotlin.formver.core.embeddings.types.buildFunctionPretype
-import org.jetbrains.kotlin.formver.core.embeddings.types.nullableAny
-import org.jetbrains.kotlin.formver.core.names.ClassKotlinName
-import org.jetbrains.kotlin.formver.core.names.NameMatcher
-import org.jetbrains.kotlin.formver.core.names.ScopedKotlinName
-import org.jetbrains.kotlin.formver.core.names.SpecialPackages
-import org.jetbrains.kotlin.formver.core.names.buildName
-import org.jetbrains.kotlin.formver.core.names.embedFunctionName
 import org.jetbrains.kotlin.formver.core.embeddings.expression.OperatorExpEmbeddings.AddCharInt
 import org.jetbrains.kotlin.formver.core.embeddings.expression.OperatorExpEmbeddings.AddIntInt
 import org.jetbrains.kotlin.formver.core.embeddings.expression.OperatorExpEmbeddings.DivIntInt
@@ -27,6 +17,11 @@ import org.jetbrains.kotlin.formver.core.embeddings.expression.OperatorExpEmbedd
 import org.jetbrains.kotlin.formver.core.embeddings.expression.OperatorExpEmbeddings.SubCharChar
 import org.jetbrains.kotlin.formver.core.embeddings.expression.OperatorExpEmbeddings.SubCharInt
 import org.jetbrains.kotlin.formver.core.embeddings.expression.OperatorExpEmbeddings.SubIntInt
+import org.jetbrains.kotlin.formver.core.embeddings.expression.UnitLit
+import org.jetbrains.kotlin.formver.core.embeddings.expression.toBlock
+import org.jetbrains.kotlin.formver.core.embeddings.types.buildFunctionPretype
+import org.jetbrains.kotlin.formver.core.embeddings.types.nullableAny
+import org.jetbrains.kotlin.formver.core.names.*
 import org.jetbrains.kotlin.formver.viper.MangledName
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.FqName

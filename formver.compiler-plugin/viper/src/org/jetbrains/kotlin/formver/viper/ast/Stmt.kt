@@ -17,7 +17,13 @@ sealed interface Stmt : IntoSilver<viper.silver.ast.Stmt> {
         val trafos: Trafos = Trafos.NoTrafos,
     ) : Stmt {
         override fun toSilver(): viper.silver.ast.LocalVarAssign =
-            viper.silver.ast.LocalVarAssign(lhs.toSilver(), rhs.toSilver(), position.toSilver(), info.toSilver(), trafos.toSilver())
+            viper.silver.ast.LocalVarAssign(
+                lhs.toSilver(),
+                rhs.toSilver(),
+                position.toSilver(),
+                info.toSilver(),
+                trafos.toSilver()
+            )
     }
 
     data class FieldAssign(
@@ -28,7 +34,13 @@ sealed interface Stmt : IntoSilver<viper.silver.ast.Stmt> {
         val trafos: Trafos = Trafos.NoTrafos,
     ) : Stmt {
         override fun toSilver(): viper.silver.ast.FieldAssign =
-            viper.silver.ast.FieldAssign(lhs.toSilver(), rhs.toSilver(), position.toSilver(), info.toSilver(), trafos.toSilver())
+            viper.silver.ast.FieldAssign(
+                lhs.toSilver(),
+                rhs.toSilver(),
+                position.toSilver(),
+                info.toSilver(),
+                trafos.toSilver()
+            )
     }
 
     companion object {
@@ -41,8 +53,10 @@ sealed interface Stmt : IntoSilver<viper.silver.ast.Stmt> {
         ): Stmt = when (lhs) {
             is Exp.LocalVar ->
                 LocalVarAssign(lhs, rhs, position, info, trafos)
+
             is Exp.FieldAccess ->
                 FieldAssign(lhs, rhs, position, info, trafos)
+
             else -> throw IllegalArgumentException("Expected an lvalue on the left-hand side of an assignment, but lhs was ${lhs.toSilver()}.")
         }
     }

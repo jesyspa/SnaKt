@@ -7,9 +7,9 @@ package org.jetbrains.kotlin.formver.core.conversion
 
 import org.jetbrains.kotlin.fir.symbols.impl.FirPropertySymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirVariableSymbol
-import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.expression.FirVariableEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.expression.VariableEmbedding
+import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.names.embedScopedLocalName
 import org.jetbrains.kotlin.name.Name
 
@@ -53,7 +53,8 @@ class PropertyResolver(
 
     fun innerScope(innerScopeIndex: ScopeIndex) = PropertyResolver(innerScopeIndex, this)
 
-    fun addLoopIdentifier(labelName: String, index: Int) = PropertyResolver(scopeIndex, parent, LoopIdentifier(labelName, index))
+    fun addLoopIdentifier(labelName: String, index: Int) =
+        PropertyResolver(scopeIndex, parent, LoopIdentifier(labelName, index))
 
     fun tryResolveLoopName(name: String): Int? =
         if (loopName?.targetName == name) loopName.index
