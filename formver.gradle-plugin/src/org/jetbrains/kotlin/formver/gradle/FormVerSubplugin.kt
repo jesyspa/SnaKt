@@ -7,11 +7,10 @@ package org.jetbrains.kotlin.formver.gradle
 
 import org.gradle.api.Project
 import org.gradle.api.provider.Provider
-import org.gradle.internal.impldep.kotlinx.coroutines.channels.BroadcastChannel
 import org.gradle.tooling.provider.model.ToolingModelBuilderRegistry
 import org.jetbrains.kotlin.formver.BuildConfig
 import org.jetbrains.kotlin.formver.gradle.model.builder.FormVerModelBuilder
-import org.jetbrains.kotlin.formver.FormalVerificationPluginNames
+import org.jetbrains.kotlin.formver.common.FormalVerificationPluginNames
 import org.jetbrains.kotlin.gradle.plugin.*
 import javax.inject.Inject
 
