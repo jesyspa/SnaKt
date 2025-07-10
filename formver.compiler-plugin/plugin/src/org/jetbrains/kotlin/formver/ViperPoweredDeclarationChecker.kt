@@ -21,6 +21,7 @@ import org.jetbrains.kotlin.formver.reporting.reportVerifierError
 import org.jetbrains.kotlin.formver.viper.Verifier
 import org.jetbrains.kotlin.formver.viper.mangled
 import org.jetbrains.kotlin.formver.viper.ast.Program
+import org.jetbrains.kotlin.formver.viper.ast.registerAllNames
 import org.jetbrains.kotlin.formver.viper.ast.unwrapOr
 import org.jetbrains.kotlin.formver.viper.errors.VerifierError
 import org.jetbrains.kotlin.name.ClassId
@@ -49,7 +50,7 @@ class ViperPoweredDeclarationChecker(private val session: FirSession, private va
             val programConversionContext = ProgramConverter(session, config, errorCollector)
             programConversionContext.registerForVerification(declaration)
             val program = programConversionContext.program
-
+            program.registerAllNames()
             getProgramForLogging(program)?.let {
                 reporter.reportOn(declaration.source, PluginErrors.VIPER_TEXT, declaration.name.asString(), it.toDebugOutput())
             }

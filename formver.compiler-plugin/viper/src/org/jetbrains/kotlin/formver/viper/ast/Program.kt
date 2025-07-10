@@ -48,3 +48,11 @@ data class Program(
 
     fun toDebugOutput(): String = toSilver().toString()
 }
+fun Program.registerAllNames() {
+    val prog = this
+    domains.forEach    { MangledName.register( it.name) }
+    fields.forEach     { MangledName.register( it.name) }
+    functions.forEach  { MangledName.register( it.name) }
+    predicates.forEach { MangledName.register( it.name) }
+    methods.forEach    { MangledName.register( it.name) }
+}
