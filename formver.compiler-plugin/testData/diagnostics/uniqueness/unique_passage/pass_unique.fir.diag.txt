@@ -1,0 +1,6 @@
+/pass_unique.kt:(184,238): error: attempting to assign an inaccessible property val z = x
+... while checking uniqueness level for fun f(@Unique x: Int) {
+    val y = x
+
+    val z = x
+}

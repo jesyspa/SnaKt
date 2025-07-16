@@ -483,6 +483,22 @@ public class FirLightTreeFormVerPluginDiagnosticsTestGenerated extends AbstractF
         runTest("formver.compiler-plugin/testData/diagnostics/uniqueness/good_unique/shared_to_shared.kt");
       }
     }
+
+    @Nested
+    @TestMetadata("formver.compiler-plugin/testData/diagnostics/uniqueness/unique_passage")
+    @TestDataPath("$PROJECT_ROOT")
+    public class Unique_passage {
+      @Test
+      public void testAllFilesPresentInUnique_passage() {
+        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/uniqueness/unique_passage"), Pattern.compile("^(.+)\\.kt$"), null, true);
+      }
+
+      @Test
+      @TestMetadata("pass_unique.kt")
+      public void testPass_unique() {
+        runTest("formver.compiler-plugin/testData/diagnostics/uniqueness/unique_passage/pass_unique.kt");
+      }
+    }
   }
 
   @Nested
