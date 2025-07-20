@@ -466,6 +466,12 @@ public class FirLightTreeFormVerPluginDiagnosticsTestGenerated extends AbstractF
       public void testDirect_pass_shared_to_unique() {
         runTest("formver.compiler-plugin/testData/diagnostics/uniqueness/bad_unique/direct_pass_shared_to_unique.kt");
       }
+
+      @Test
+      @TestMetadata("linked_list.kt")
+      public void testLinked_list() {
+        runTest("formver.compiler-plugin/testData/diagnostics/uniqueness/bad_unique/linked_list.kt");
+      }
     }
 
     @Nested
