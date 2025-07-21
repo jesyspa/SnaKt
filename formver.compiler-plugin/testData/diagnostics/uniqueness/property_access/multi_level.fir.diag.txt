@@ -1,0 +1,4 @@
+/multi_level.kt:(361,401): error: uniqueness level not match z.y.x
+... while checking uniqueness level for fun use_g(@Unique z: B) {
+    g(z.y.x)
+}

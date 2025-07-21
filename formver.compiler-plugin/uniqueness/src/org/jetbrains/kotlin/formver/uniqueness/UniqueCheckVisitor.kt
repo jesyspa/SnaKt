@@ -20,7 +20,6 @@ import org.jetbrains.kotlin.fir.symbols.SymbolInternals
 import org.jetbrains.kotlin.fir.symbols.impl.FirFunctionSymbol
 import org.jetbrains.kotlin.fir.visitors.FirVisitor
 import org.jetbrains.kotlin.text
-import kotlin.collections.maxOf
 import kotlin.collections.plus
 
 object UniqueCheckVisitor : FirVisitor<UniqueLevel, UniqueCheckerContext>() {
@@ -57,17 +56,13 @@ object UniqueCheckVisitor : FirVisitor<UniqueLevel, UniqueCheckerContext>() {
         val previousLevels = propertyAccessExpression.allReceiverExpressions.map {
             it.accept(this, data)
         }
-        val lubOrdinal = (previousLevels + currentAnnotation).maxOf { it.ordinal }
 
-        return UniqueLevel.entries[lubOrdinal]
+        return (previousLevels + currentAnnotation).max()
     }
 
     override fun visitBlock(block: FirBlock, data: UniqueCheckerContext): UniqueLevel {
         block.statements.forEach { statement ->
             when (statement) {
-                is FirPropertyAccessExpression -> {
-                    println("${statement.source.text} -> ${statement.accept(this, data)}")
-                }
                 is FirFunctionCall -> {
                     statement.accept(this, data)
                 }
