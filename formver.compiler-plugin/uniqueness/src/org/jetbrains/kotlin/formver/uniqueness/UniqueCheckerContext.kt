@@ -7,15 +7,34 @@ package org.jetbrains.kotlin.formver.uniqueness
 
 import org.jetbrains.kotlin.fir.FirAnnotationContainer
 import org.jetbrains.kotlin.fir.FirSession
+import org.jetbrains.kotlin.fir.declarations.hasAnnotation
 import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
 import org.jetbrains.kotlin.formver.common.ErrorCollector
 import org.jetbrains.kotlin.formver.common.PluginConfiguration
+import org.jetbrains.kotlin.name.ClassId
+
+sealed class HasAnnotation {
+    class Symbol(val symbol: FirBasedSymbol<*>) : HasAnnotation()
+    class AnnotationContainer(val container: FirAnnotationContainer) : HasAnnotation()
+
+    fun hasAnnotation(id: ClassId, session: FirSession): Boolean {
+        return when (this) {
+            is Symbol -> symbol.hasAnnotation(id, session)
+            is AnnotationContainer -> container.hasAnnotation(id, session)
+        }
+    }
+}
 
 interface UniqueCheckerContext {
     val config: PluginConfiguration
     val errorCollector: ErrorCollector
     val session: FirSession
 
-    fun resolveUniqueAnnotation(declaration: FirBasedSymbol<*>): UniqueLevel
-    fun resolveUniqueAnnotation(declaration: FirAnnotationContainer): UniqueLevel
+    fun resolveUniqueAnnotation(declaration: HasAnnotation): UniqueLevel
+
+    fun resolveUniqueAnnotation(declaration: FirBasedSymbol<*>): UniqueLevel =
+        resolveUniqueAnnotation(HasAnnotation.Symbol(declaration))
+
+    fun resolveUniqueAnnotation(declaration: FirAnnotationContainer): UniqueLevel =
+        resolveUniqueAnnotation(HasAnnotation.AnnotationContainer(declaration))
 }

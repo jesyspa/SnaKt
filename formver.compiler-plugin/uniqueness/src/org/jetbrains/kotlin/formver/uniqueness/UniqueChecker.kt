@@ -5,10 +5,7 @@
 
 package org.jetbrains.kotlin.formver.uniqueness
 
-import org.jetbrains.kotlin.fir.FirAnnotationContainer
 import org.jetbrains.kotlin.fir.FirSession
-import org.jetbrains.kotlin.fir.declarations.hasAnnotation
-import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
 import org.jetbrains.kotlin.formver.common.ErrorCollector
 import org.jetbrains.kotlin.formver.common.PluginConfiguration
 import org.jetbrains.kotlin.name.ClassId
@@ -27,14 +24,7 @@ class UniqueChecker(
     private val uniqueId: ClassId
         get() = getAnnotationId("Unique")
 
-    override fun resolveUniqueAnnotation(declaration: FirBasedSymbol<*>): UniqueLevel {
-        if (declaration.hasAnnotation(uniqueId, session)) {
-            return UniqueLevel.Unique
-        }
-        return UniqueLevel.Shared
-    }
-
-    override fun resolveUniqueAnnotation(declaration: FirAnnotationContainer): UniqueLevel {
+    override fun resolveUniqueAnnotation(declaration: HasAnnotation): UniqueLevel {
         if (declaration.hasAnnotation(uniqueId, session)) {
             return UniqueLevel.Unique
         }
