@@ -21,3 +21,11 @@ fun f(@Unique z: B) {
 fun g() {
     3.f
 }
+
+fun g(@Unique x: Int) {
+
+}
+
+<!UNIQUENESS_VIOLATION!>fun use_g(@Unique z: B) {
+    g(z.y.x)
+}<!>
