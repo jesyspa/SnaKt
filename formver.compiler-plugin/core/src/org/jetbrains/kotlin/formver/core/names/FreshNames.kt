@@ -72,3 +72,10 @@ data class ContinueLabelName(val n: Int) : NumberedLabelName("continue", n)
 data class CatchLabelName(val n: Int) : NumberedLabelName("catch", n)
 data class TryExitLabelName(val n: Int) : NumberedLabelName("try_exit", n)
 
+data class PlaceholderArgumentName(val n: Int) : MangledName {
+    override val mangledBaseName: String
+        get() = "arg$n"
+
+}
+
+data class DomainFuncParameterName(override val mangledBaseName: String) : MangledName

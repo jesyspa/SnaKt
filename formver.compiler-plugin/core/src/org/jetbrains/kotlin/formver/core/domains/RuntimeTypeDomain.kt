@@ -231,11 +231,11 @@ class RuntimeTypeDomain(classes: List<ClassTypeEmbedding>) : BuiltinDomain(RUNTI
         )
 
         // variables for readability improving
-        private val t = Var("t", RuntimeType)
-        private val t1 = Var("t1", RuntimeType)
-        private val t2 = Var("t2", RuntimeType)
-        private val t3 = Var("t3", RuntimeType)
-        private val r = Var("r", Ref)
+        private val t = domainVar("t", RuntimeType)
+        private val t1 = domainVar("t1", RuntimeType)
+        private val t2 = domainVar("t2", RuntimeType)
+        private val t3 = domainVar("t3", RuntimeType)
+        private val r = domainVar("r", Ref)
 
         // three basic functions
         /** `isSubtype: (Type, Type) -> Bool` */
