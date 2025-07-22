@@ -22,761 +22,751 @@ public class FirLightTreeFormVerPluginDiagnosticsTestGenerated extends AbstractF
   }
 
   @Nested
-  @TestMetadata("formver.compiler-plugin/testData/diagnostics/bad_contracts")
+  @TestMetadata("formver.compiler-plugin/testData/diagnostics/conversion")
   @TestDataPath("$PROJECT_ROOT")
-  public class Bad_contracts {
+  public class Conversion {
     @Test
-    public void testAllFilesPresentInBad_contracts() {
-      KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/bad_contracts"), Pattern.compile("^(.+)\\.kt$"), null, true);
-    }
-
-    @Test
-    @TestMetadata("as_type_contract.kt")
-    public void testAs_type_contract() {
-      runTest("formver.compiler-plugin/testData/diagnostics/bad_contracts/as_type_contract.kt");
-    }
-
-    @Test
-    @TestMetadata("binary_search.kt")
-    public void testBinary_search() {
-      runTest("formver.compiler-plugin/testData/diagnostics/bad_contracts/binary_search.kt");
-    }
-
-    @Test
-    @TestMetadata("cond_effects.kt")
-    public void testCond_effects() {
-      runTest("formver.compiler-plugin/testData/diagnostics/bad_contracts/cond_effects.kt");
-    }
-
-    @Test
-    @TestMetadata("contracts_with_receivers.kt")
-    public void testContracts_with_receivers() {
-      runTest("formver.compiler-plugin/testData/diagnostics/bad_contracts/contracts_with_receivers.kt");
-    }
-
-    @Test
-    @TestMetadata("do_not_verify.kt")
-    public void testDo_not_verify() {
-      runTest("formver.compiler-plugin/testData/diagnostics/bad_contracts/do_not_verify.kt");
-    }
-
-    @Test
-    @TestMetadata("is_type_contract.kt")
-    public void testIs_type_contract() {
-      runTest("formver.compiler-plugin/testData/diagnostics/bad_contracts/is_type_contract.kt");
-    }
-
-    @Test
-    @TestMetadata("list.kt")
-    public void testList() {
-      runTest("formver.compiler-plugin/testData/diagnostics/bad_contracts/list.kt");
-    }
-
-    @Test
-    @TestMetadata("returns_booleans.kt")
-    public void testReturns_booleans() {
-      runTest("formver.compiler-plugin/testData/diagnostics/bad_contracts/returns_booleans.kt");
-    }
-
-    @Test
-    @TestMetadata("returns_not_null.kt")
-    public void testReturns_not_null() {
-      runTest("formver.compiler-plugin/testData/diagnostics/bad_contracts/returns_not_null.kt");
-    }
-
-    @Test
-    @TestMetadata("returns_null.kt")
-    public void testReturns_null() {
-      runTest("formver.compiler-plugin/testData/diagnostics/bad_contracts/returns_null.kt");
-    }
-
-    @Test
-    @TestMetadata("viper_verify.kt")
-    public void testViper_verify() {
-      runTest("formver.compiler-plugin/testData/diagnostics/bad_contracts/viper_verify.kt");
-    }
-  }
-
-  @Nested
-  @TestMetadata("formver.compiler-plugin/testData/diagnostics/no_contracts")
-  @TestDataPath("$PROJECT_ROOT")
-  public class No_contracts {
-    @Test
-    public void testAllFilesPresentInNo_contracts() {
-      KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/no_contracts"), Pattern.compile("^(.+)\\.kt$"), null, true);
+    public void testAllFilesPresentInConversion() {
+      KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/conversion"), Pattern.compile("^(.+)\\.kt$"), null, true);
     }
 
     @Test
     @TestMetadata("basic.kt")
     public void testBasic() {
-      runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/basic.kt");
+      runTest("formver.compiler-plugin/testData/diagnostics/conversion/basic.kt");
+    }
+
+    @Test
+    @TestMetadata("do_not_verify.kt")
+    public void testDo_not_verify() {
+      runTest("formver.compiler-plugin/testData/diagnostics/conversion/do_not_verify.kt");
     }
 
     @Test
     @TestMetadata("extension_properties.kt")
     public void testExtension_properties() {
-      runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/extension_properties.kt");
+      runTest("formver.compiler-plugin/testData/diagnostics/conversion/extension_properties.kt");
     }
 
     @Test
     @TestMetadata("full_viper_dump.kt")
     public void testFull_viper_dump() {
-      runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/full_viper_dump.kt");
+      runTest("formver.compiler-plugin/testData/diagnostics/conversion/full_viper_dump.kt");
     }
 
     @Test
     @TestMetadata("function_object.kt")
     public void testFunction_object() {
-      runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/function_object.kt");
+      runTest("formver.compiler-plugin/testData/diagnostics/conversion/function_object.kt");
     }
 
     @Test
     @TestMetadata("function_overloading.kt")
     public void testFunction_overloading() {
-      runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/function_overloading.kt");
+      runTest("formver.compiler-plugin/testData/diagnostics/conversion/function_overloading.kt");
     }
 
     @Test
     @TestMetadata("shadowing.kt")
     public void testShadowing() {
-      runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/shadowing.kt");
+      runTest("formver.compiler-plugin/testData/diagnostics/conversion/shadowing.kt");
     }
 
     @Nested
-    @TestMetadata("formver.compiler-plugin/testData/diagnostics/no_contracts/classes")
+    @TestMetadata("formver.compiler-plugin/testData/diagnostics/conversion/classes")
     @TestDataPath("$PROJECT_ROOT")
     public class Classes {
       @Test
       public void testAllFilesPresentInClasses() {
-        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/no_contracts/classes"), Pattern.compile("^(.+)\\.kt$"), null, true);
+        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/conversion/classes"), Pattern.compile("^(.+)\\.kt$"), null, true);
       }
 
       @Test
       @TestMetadata("field_getters.kt")
       public void testField_getters() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/classes/field_getters.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/classes/field_getters.kt");
       }
 
       @Test
       @TestMetadata("inheritance.kt")
       public void testInheritance() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/classes/inheritance.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/classes/inheritance.kt");
       }
 
       @Test
       @TestMetadata("inheritance_fields.kt")
       public void testInheritance_fields() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/classes/inheritance_fields.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/classes/inheritance_fields.kt");
       }
 
       @Test
       @TestMetadata("interface.kt")
       public void testInterface() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/classes/interface.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/classes/interface.kt");
       }
 
       @Test
       @TestMetadata("member_functions.kt")
       public void testMember_functions() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/classes/member_functions.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/classes/member_functions.kt");
       }
 
       @Test
       @TestMetadata("multiple_interfaces.kt")
       public void testMultiple_interfaces() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/classes/multiple_interfaces.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/classes/multiple_interfaces.kt");
       }
 
       @Test
       @TestMetadata("predicates.kt")
       public void testPredicates() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/classes/predicates.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/classes/predicates.kt");
       }
 
       @Test
       @TestMetadata("predicates_access.kt")
       public void testPredicates_access() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/classes/predicates_access.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/classes/predicates_access.kt");
       }
 
       @Test
       @TestMetadata("primary_constructors.kt")
       public void testPrimary_constructors() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/classes/primary_constructors.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/classes/primary_constructors.kt");
       }
 
       @Test
       @TestMetadata("property_getters.kt")
       public void testProperty_getters() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/classes/property_getters.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/classes/property_getters.kt");
       }
 
       @Test
       @TestMetadata("secondary_constructors.kt")
       public void testSecondary_constructors() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/classes/secondary_constructors.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/classes/secondary_constructors.kt");
       }
 
       @Test
       @TestMetadata("setters.kt")
       public void testSetters() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/classes/setters.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/classes/setters.kt");
       }
 
       @Test
       @TestMetadata("subtyping.kt")
       public void testSubtyping() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/classes/subtyping.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/classes/subtyping.kt");
       }
 
       @Test
       @TestMetadata("unique_predicates.kt")
       public void testUnique_predicates() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/classes/unique_predicates.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/classes/unique_predicates.kt");
       }
     }
 
     @Nested
-    @TestMetadata("formver.compiler-plugin/testData/diagnostics/no_contracts/control_flow")
+    @TestMetadata("formver.compiler-plugin/testData/diagnostics/conversion/control_flow")
     @TestDataPath("$PROJECT_ROOT")
     public class Control_flow {
       @Test
       public void testAllFilesPresentInControl_flow() {
-        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/no_contracts/control_flow"), Pattern.compile("^(.+)\\.kt$"), null, true);
+        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/conversion/control_flow"), Pattern.compile("^(.+)\\.kt$"), null, true);
       }
 
       @Test
       @TestMetadata("exp_side_effects.kt")
       public void testExp_side_effects() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/control_flow/exp_side_effects.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/control_flow/exp_side_effects.kt");
       }
 
       @Test
       @TestMetadata("function_call.kt")
       public void testFunction_call() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/control_flow/function_call.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/control_flow/function_call.kt");
       }
 
       @Test
       @TestMetadata("if.kt")
       public void testIf() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/control_flow/if.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/control_flow/if.kt");
       }
 
       @Test
       @TestMetadata("loop.kt")
       public void testLoop() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/control_flow/loop.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/control_flow/loop.kt");
       }
 
       @Test
       @TestMetadata("loop_invariants.kt")
       public void testLoop_invariants() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/control_flow/loop_invariants.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/control_flow/loop_invariants.kt");
       }
 
       @Test
       @TestMetadata("non-local-returns.kt")
       public void testNon_local_returns() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/control_flow/non-local-returns.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/control_flow/non-local-returns.kt");
       }
 
       @Test
       @TestMetadata("recursion.kt")
       public void testRecursion() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/control_flow/recursion.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/control_flow/recursion.kt");
       }
 
       @Test
       @TestMetadata("return_break_continue.kt")
       public void testReturn_break_continue() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/control_flow/return_break_continue.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/control_flow/return_break_continue.kt");
       }
 
       @Test
       @TestMetadata("try_catch.kt")
       public void testTry_catch() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/control_flow/try_catch.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/control_flow/try_catch.kt");
       }
 
       @Test
       @TestMetadata("when.kt")
       public void testWhen() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/control_flow/when.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/control_flow/when.kt");
       }
     }
 
     @Nested
-    @TestMetadata("formver.compiler-plugin/testData/diagnostics/no_contracts/inlining")
+    @TestMetadata("formver.compiler-plugin/testData/diagnostics/conversion/inlining")
     @TestDataPath("$PROJECT_ROOT")
     public class Inlining {
       @Test
       public void testAllFilesPresentInInlining() {
-        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/no_contracts/inlining"), Pattern.compile("^(.+)\\.kt$"), null, true);
+        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/conversion/inlining"), Pattern.compile("^(.+)\\.kt$"), null, true);
       }
 
       @Test
       @TestMetadata("captured.kt")
       public void testCaptured() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/inlining/captured.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/inlining/captured.kt");
       }
 
       @Test
       @TestMetadata("inline.kt")
       public void testInline() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/inlining/inline.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/inlining/inline.kt");
       }
 
       @Test
       @TestMetadata("lambdas.kt")
       public void testLambdas() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/inlining/lambdas.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/inlining/lambdas.kt");
       }
     }
 
     @Nested
-    @TestMetadata("formver.compiler-plugin/testData/diagnostics/no_contracts/operators")
+    @TestMetadata("formver.compiler-plugin/testData/diagnostics/conversion/operators")
     @TestDataPath("$PROJECT_ROOT")
     public class Operators {
       @Test
       public void testAllFilesPresentInOperators() {
-        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/no_contracts/operators"), Pattern.compile("^(.+)\\.kt$"), null, true);
+        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/conversion/operators"), Pattern.compile("^(.+)\\.kt$"), null, true);
       }
 
       @Test
       @TestMetadata("arithmetic.kt")
       public void testArithmetic() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/operators/arithmetic.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/operators/arithmetic.kt");
       }
 
       @Test
       @TestMetadata("as_operator.kt")
       public void testAs_operator() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/operators/as_operator.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/operators/as_operator.kt");
       }
 
       @Test
       @TestMetadata("boolean_logic.kt")
       public void testBoolean_logic() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/operators/boolean_logic.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/operators/boolean_logic.kt");
       }
 
       @Test
       @TestMetadata("comparison.kt")
       public void testComparison() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/operators/comparison.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/operators/comparison.kt");
       }
 
       @Test
       @TestMetadata("elvis.kt")
       public void testElvis() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/operators/elvis.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/operators/elvis.kt");
       }
 
       @Test
       @TestMetadata("increment.kt")
       public void testIncrement() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/operators/increment.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/operators/increment.kt");
       }
 
       @Test
       @TestMetadata("is_operator.kt")
       public void testIs_operator() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/operators/is_operator.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/operators/is_operator.kt");
       }
 
       @Test
       @TestMetadata("safe_call.kt")
       public void testSafe_call() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/operators/safe_call.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/operators/safe_call.kt");
       }
     }
 
     @Nested
-    @TestMetadata("formver.compiler-plugin/testData/diagnostics/no_contracts/types")
+    @TestMetadata("formver.compiler-plugin/testData/diagnostics/conversion/types")
     @TestDataPath("$PROJECT_ROOT")
     public class Types {
       @Test
       public void testAllFilesPresentInTypes() {
-        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/no_contracts/types"), Pattern.compile("^(.+)\\.kt$"), null, true);
+        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/conversion/types"), Pattern.compile("^(.+)\\.kt$"), null, true);
       }
 
       @Test
       @TestMetadata("any.kt")
       public void testAny() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/types/any.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/types/any.kt");
       }
 
       @Test
       @TestMetadata("generics.kt")
       public void testGenerics() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/types/generics.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/types/generics.kt");
       }
 
       @Test
       @TestMetadata("nullable.kt")
       public void testNullable() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/types/nullable.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/types/nullable.kt");
       }
 
       @Test
       @TestMetadata("smartcast.kt")
       public void testSmartcast() {
-        runTest("formver.compiler-plugin/testData/diagnostics/no_contracts/types/smartcast.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/types/smartcast.kt");
       }
     }
   }
 
   @Nested
-  @TestMetadata("formver.compiler-plugin/testData/diagnostics/purity")
+  @TestMetadata("formver.compiler-plugin/testData/diagnostics/purity_checker")
   @TestDataPath("$PROJECT_ROOT")
-  public class Purity {
+  public class Purity_checker {
     @Test
-    public void testAllFilesPresentInPurity() {
-      KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/purity"), Pattern.compile("^(.+)\\.kt$"), null, true);
+    public void testAllFilesPresentInPurity_checker() {
+      KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/purity_checker"), Pattern.compile("^(.+)\\.kt$"), null, true);
     }
 
     @Test
     @TestMetadata("assert_statements.kt")
     public void testAssert_statements() {
-      runTest("formver.compiler-plugin/testData/diagnostics/purity/assert_statements.kt");
+      runTest("formver.compiler-plugin/testData/diagnostics/purity_checker/assert_statements.kt");
     }
   }
 
   @Nested
-  @TestMetadata("formver.compiler-plugin/testData/diagnostics/uniqueness")
+  @TestMetadata("formver.compiler-plugin/testData/diagnostics/uniqueness_checker")
   @TestDataPath("$PROJECT_ROOT")
-  public class Uniqueness {
+  public class Uniqueness_checker {
     @Test
-    public void testAllFilesPresentInUniqueness() {
-      KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/uniqueness"), Pattern.compile("^(.+)\\.kt$"), null, true);
+    public void testAllFilesPresentInUniqueness_checker() {
+      KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/uniqueness_checker"), Pattern.compile("^(.+)\\.kt$"), null, true);
     }
 
-    @Nested
-    @TestMetadata("formver.compiler-plugin/testData/diagnostics/uniqueness/bad_unique")
-    @TestDataPath("$PROJECT_ROOT")
-    public class Bad_unique {
-      @Test
-      public void testAllFilesPresentInBad_unique() {
-        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/uniqueness/bad_unique"), Pattern.compile("^(.+)\\.kt$"), null, true);
-      }
-
-      @Test
-      @TestMetadata("direct_pass_shared_to_unique.kt")
-      public void testDirect_pass_shared_to_unique() {
-        runTest("formver.compiler-plugin/testData/diagnostics/uniqueness/bad_unique/direct_pass_shared_to_unique.kt");
-      }
-
-      @Test
-      @TestMetadata("linked_list.kt")
-      public void testLinked_list() {
-        runTest("formver.compiler-plugin/testData/diagnostics/uniqueness/bad_unique/linked_list.kt");
-      }
+    @Test
+    @TestMetadata("annotations.kt")
+    public void testAnnotations() {
+      runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/annotations.kt");
     }
 
-    @Nested
-    @TestMetadata("formver.compiler-plugin/testData/diagnostics/uniqueness/good_unique")
-    @TestDataPath("$PROJECT_ROOT")
-    public class Good_unique {
-      @Test
-      public void testAllFilesPresentInGood_unique() {
-        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/uniqueness/good_unique"), Pattern.compile("^(.+)\\.kt$"), null, true);
-      }
+    @Test
+    @TestMetadata("direct_pass_shared_to_unique.kt")
+    public void testDirect_pass_shared_to_unique() {
+      runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/direct_pass_shared_to_unique.kt");
+    }
 
-      @Test
-      @TestMetadata("shared_to_shared.kt")
-      public void testShared_to_shared() {
-        runTest("formver.compiler-plugin/testData/diagnostics/uniqueness/good_unique/shared_to_shared.kt");
-      }
+    @Test
+    @TestMetadata("shared_to_shared.kt")
+    public void testShared_to_shared() {
+      runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/shared_to_shared.kt");
     }
   }
 
   @Nested
-  @TestMetadata("formver.compiler-plugin/testData/diagnostics/verifies")
+  @TestMetadata("formver.compiler-plugin/testData/diagnostics/verification")
   @TestDataPath("$PROJECT_ROOT")
-  public class Verifies {
+  public class Verification {
     @Test
-    public void testAllFilesPresentInVerifies() {
-      KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/verifies"), Pattern.compile("^(.+)\\.kt$"), null, true);
+    public void testAllFilesPresentInVerification() {
+      KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/verification"), Pattern.compile("^(.+)\\.kt$"), null, true);
     }
 
     @Test
     @TestMetadata("multiple_receivers.kt")
     public void testMultiple_receivers() {
-      runTest("formver.compiler-plugin/testData/diagnostics/verifies/multiple_receivers.kt");
+      runTest("formver.compiler-plugin/testData/diagnostics/verification/multiple_receivers.kt");
     }
 
     @Test
     @TestMetadata("nullability.kt")
     public void testNullability() {
-      runTest("formver.compiler-plugin/testData/diagnostics/verifies/nullability.kt");
+      runTest("formver.compiler-plugin/testData/diagnostics/verification/nullability.kt");
     }
 
     @Test
     @TestMetadata("stdlib_replacement_tests.kt")
     public void testStdlib_replacement_tests() {
-      runTest("formver.compiler-plugin/testData/diagnostics/verifies/stdlib_replacement_tests.kt");
+      runTest("formver.compiler-plugin/testData/diagnostics/verification/stdlib_replacement_tests.kt");
     }
 
     @Test
     @TestMetadata("unit_return_type.kt")
     public void testUnit_return_type() {
-      runTest("formver.compiler-plugin/testData/diagnostics/verifies/unit_return_type.kt");
+      runTest("formver.compiler-plugin/testData/diagnostics/verification/unit_return_type.kt");
     }
 
     @Test
     @TestMetadata("while.kt")
     public void testWhile() {
-      runTest("formver.compiler-plugin/testData/diagnostics/verifies/while.kt");
+      runTest("formver.compiler-plugin/testData/diagnostics/verification/while.kt");
     }
 
     @Nested
-    @TestMetadata("formver.compiler-plugin/testData/diagnostics/verifies/contracts")
+    @TestMetadata("formver.compiler-plugin/testData/diagnostics/verification/contracts")
     @TestDataPath("$PROJECT_ROOT")
     public class Contracts {
       @Test
       public void testAllFilesPresentInContracts() {
-        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/verifies/contracts"), Pattern.compile("^(.+)\\.kt$"), null, true);
+        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/verification/contracts"), Pattern.compile("^(.+)\\.kt$"), null, true);
       }
 
-      @Test
-      @TestMetadata("as_type_contract.kt")
-      public void testAs_type_contract() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verifies/contracts/as_type_contract.kt");
+      @Nested
+      @TestMetadata("formver.compiler-plugin/testData/diagnostics/verification/contracts/negative")
+      @TestDataPath("$PROJECT_ROOT")
+      public class Negative {
+        @Test
+        public void testAllFilesPresentInNegative() {
+          KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/verification/contracts/negative"), Pattern.compile("^(.+)\\.kt$"), null, true);
+        }
+
+        @Test
+        @TestMetadata("as_type_contract.kt")
+        public void testAs_type_contract() {
+          runTest("formver.compiler-plugin/testData/diagnostics/verification/contracts/negative/as_type_contract.kt");
+        }
+
+        @Test
+        @TestMetadata("binary_search.kt")
+        public void testBinary_search() {
+          runTest("formver.compiler-plugin/testData/diagnostics/verification/contracts/negative/binary_search.kt");
+        }
+
+        @Test
+        @TestMetadata("cond_effects.kt")
+        public void testCond_effects() {
+          runTest("formver.compiler-plugin/testData/diagnostics/verification/contracts/negative/cond_effects.kt");
+        }
+
+        @Test
+        @TestMetadata("contracts_with_receivers.kt")
+        public void testContracts_with_receivers() {
+          runTest("formver.compiler-plugin/testData/diagnostics/verification/contracts/negative/contracts_with_receivers.kt");
+        }
+
+        @Test
+        @TestMetadata("is_type_contract.kt")
+        public void testIs_type_contract() {
+          runTest("formver.compiler-plugin/testData/diagnostics/verification/contracts/negative/is_type_contract.kt");
+        }
+
+        @Test
+        @TestMetadata("list.kt")
+        public void testList() {
+          runTest("formver.compiler-plugin/testData/diagnostics/verification/contracts/negative/list.kt");
+        }
+
+        @Test
+        @TestMetadata("returns_booleans.kt")
+        public void testReturns_booleans() {
+          runTest("formver.compiler-plugin/testData/diagnostics/verification/contracts/negative/returns_booleans.kt");
+        }
+
+        @Test
+        @TestMetadata("returns_not_null.kt")
+        public void testReturns_not_null() {
+          runTest("formver.compiler-plugin/testData/diagnostics/verification/contracts/negative/returns_not_null.kt");
+        }
+
+        @Test
+        @TestMetadata("returns_null.kt")
+        public void testReturns_null() {
+          runTest("formver.compiler-plugin/testData/diagnostics/verification/contracts/negative/returns_null.kt");
+        }
+
+        @Test
+        @TestMetadata("viper_verify.kt")
+        public void testViper_verify() {
+          runTest("formver.compiler-plugin/testData/diagnostics/verification/contracts/negative/viper_verify.kt");
+        }
       }
 
-      @Test
-      @TestMetadata("contracts_with_receivers.kt")
-      public void testContracts_with_receivers() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verifies/contracts/contracts_with_receivers.kt");
-      }
+      @Nested
+      @TestMetadata("formver.compiler-plugin/testData/diagnostics/verification/contracts/positive")
+      @TestDataPath("$PROJECT_ROOT")
+      public class Positive {
+        @Test
+        public void testAllFilesPresentInPositive() {
+          KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/verification/contracts/positive"), Pattern.compile("^(.+)\\.kt$"), null, true);
+        }
 
-      @Test
-      @TestMetadata("is_type_contract.kt")
-      public void testIs_type_contract() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verifies/contracts/is_type_contract.kt");
-      }
+        @Test
+        @TestMetadata("as_type_contract.kt")
+        public void testAs_type_contract() {
+          runTest("formver.compiler-plugin/testData/diagnostics/verification/contracts/positive/as_type_contract.kt");
+        }
 
-      @Test
-      @TestMetadata("returns_booleans.kt")
-      public void testReturns_booleans() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verifies/contracts/returns_booleans.kt");
-      }
+        @Test
+        @TestMetadata("contracts_with_receivers.kt")
+        public void testContracts_with_receivers() {
+          runTest("formver.compiler-plugin/testData/diagnostics/verification/contracts/positive/contracts_with_receivers.kt");
+        }
 
-      @Test
-      @TestMetadata("returns_null.kt")
-      public void testReturns_null() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verifies/contracts/returns_null.kt");
-      }
+        @Test
+        @TestMetadata("is_type_contract.kt")
+        public void testIs_type_contract() {
+          runTest("formver.compiler-plugin/testData/diagnostics/verification/contracts/positive/is_type_contract.kt");
+        }
 
-      @Test
-      @TestMetadata("simple.kt")
-      public void testSimple() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verifies/contracts/simple.kt");
+        @Test
+        @TestMetadata("returns_booleans.kt")
+        public void testReturns_booleans() {
+          runTest("formver.compiler-plugin/testData/diagnostics/verification/contracts/positive/returns_booleans.kt");
+        }
+
+        @Test
+        @TestMetadata("returns_null.kt")
+        public void testReturns_null() {
+          runTest("formver.compiler-plugin/testData/diagnostics/verification/contracts/positive/returns_null.kt");
+        }
+
+        @Test
+        @TestMetadata("simple.kt")
+        public void testSimple() {
+          runTest("formver.compiler-plugin/testData/diagnostics/verification/contracts/positive/simple.kt");
+        }
       }
     }
 
     @Nested
-    @TestMetadata("formver.compiler-plugin/testData/diagnostics/verifies/expensive_diagnostics")
+    @TestMetadata("formver.compiler-plugin/testData/diagnostics/verification/expensive_diagnostics")
     @TestDataPath("$PROJECT_ROOT")
     public class Expensive_diagnostics {
       @Test
       public void testAllFilesPresentInExpensive_diagnostics() {
-        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/verifies/expensive_diagnostics"), Pattern.compile("^(.+)\\.kt$"), null, true);
+        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/verification/expensive_diagnostics"), Pattern.compile("^(.+)\\.kt$"), null, true);
       }
 
       @Test
       @TestMetadata("merge_sort_of_string.kt")
       public void testMerge_sort_of_string() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verifies/expensive_diagnostics/merge_sort_of_string.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/expensive_diagnostics/merge_sort_of_string.kt");
       }
 
       @Test
       @TestMetadata("quick_sort_of_string.kt")
       public void testQuick_sort_of_string() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verifies/expensive_diagnostics/quick_sort_of_string.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/expensive_diagnostics/quick_sort_of_string.kt");
       }
 
       @Test
       @TestMetadata("z_function.kt")
       public void testZ_function() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verifies/expensive_diagnostics/z_function.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/expensive_diagnostics/z_function.kt");
       }
     }
 
     @Nested
-    @TestMetadata("formver.compiler-plugin/testData/diagnostics/verifies/inlining")
+    @TestMetadata("formver.compiler-plugin/testData/diagnostics/verification/inlining")
     @TestDataPath("$PROJECT_ROOT")
     public class Inlining {
       @Test
       public void testAllFilesPresentInInlining() {
-        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/verifies/inlining"), Pattern.compile("^(.+)\\.kt$"), null, true);
+        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/verification/inlining"), Pattern.compile("^(.+)\\.kt$"), null, true);
       }
 
       @Test
       @TestMetadata("custom_run_functions.kt")
       public void testCustom_run_functions() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verifies/inlining/custom_run_functions.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/inlining/custom_run_functions.kt");
       }
 
       @Test
       @TestMetadata("inline_returns.kt")
       public void testInline_returns() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verifies/inlining/inline_returns.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/inlining/inline_returns.kt");
       }
 
       @Test
       @TestMetadata("scoped_receivers.kt")
       public void testScoped_receivers() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verifies/inlining/scoped_receivers.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/inlining/scoped_receivers.kt");
       }
 
       @Test
       @TestMetadata("viper_casts_while_inlining.kt")
       public void testViper_casts_while_inlining() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verifies/inlining/viper_casts_while_inlining.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/inlining/viper_casts_while_inlining.kt");
       }
     }
 
     @Nested
-    @TestMetadata("formver.compiler-plugin/testData/diagnostics/verifies/list")
+    @TestMetadata("formver.compiler-plugin/testData/diagnostics/verification/list")
     @TestDataPath("$PROJECT_ROOT")
     public class List {
       @Test
       public void testAllFilesPresentInList() {
-        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/verifies/list"), Pattern.compile("^(.+)\\.kt$"), null, true);
+        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/verification/list"), Pattern.compile("^(.+)\\.kt$"), null, true);
       }
 
       @Test
       @TestMetadata("binary_search.kt")
       public void testBinary_search() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verifies/list/binary_search.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/list/binary_search.kt");
       }
 
       @Test
       @TestMetadata("custom_list.kt")
       public void testCustom_list() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verifies/list/custom_list.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/list/custom_list.kt");
       }
 
       @Test
       @TestMetadata("list.kt")
       public void testList() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verifies/list/list.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/list/list.kt");
       }
     }
 
     @Nested
-    @TestMetadata("formver.compiler-plugin/testData/diagnostics/verifies/properties_and_fields")
+    @TestMetadata("formver.compiler-plugin/testData/diagnostics/verification/properties_and_fields")
     @TestDataPath("$PROJECT_ROOT")
     public class Properties_and_fields {
       @Test
       public void testAllFilesPresentInProperties_and_fields() {
-        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/verifies/properties_and_fields"), Pattern.compile("^(.+)\\.kt$"), null, true);
+        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/verification/properties_and_fields"), Pattern.compile("^(.+)\\.kt$"), null, true);
       }
 
       @Test
       @TestMetadata("backing_field_getters.kt")
       public void testBacking_field_getters() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verifies/properties_and_fields/backing_field_getters.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/properties_and_fields/backing_field_getters.kt");
       }
 
       @Test
       @TestMetadata("multiple_interfaces.kt")
       public void testMultiple_interfaces() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verifies/properties_and_fields/multiple_interfaces.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/properties_and_fields/multiple_interfaces.kt");
       }
 
       @Test
       @TestMetadata("override_properties_types.kt")
       public void testOverride_properties_types() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verifies/properties_and_fields/override_properties_types.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/properties_and_fields/override_properties_types.kt");
       }
 
       @Test
       @TestMetadata("private_properties.kt")
       public void testPrivate_properties() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verifies/properties_and_fields/private_properties.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/properties_and_fields/private_properties.kt");
       }
     }
 
     @Nested
-    @TestMetadata("formver.compiler-plugin/testData/diagnostics/verifies/string")
+    @TestMetadata("formver.compiler-plugin/testData/diagnostics/verification/string")
     @TestDataPath("$PROJECT_ROOT")
     public class String {
       @Test
       public void testAllFilesPresentInString() {
-        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/verifies/string"), Pattern.compile("^(.+)\\.kt$"), null, true);
+        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/verification/string"), Pattern.compile("^(.+)\\.kt$"), null, true);
       }
 
       @Test
       @TestMetadata("chars.kt")
       public void testChars() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verifies/string/chars.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/string/chars.kt");
       }
 
       @Test
       @TestMetadata("strings.kt")
       public void testStrings() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verifies/string/strings.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/string/strings.kt");
       }
     }
 
     @Nested
-    @TestMetadata("formver.compiler-plugin/testData/diagnostics/verifies/user_invariants")
+    @TestMetadata("formver.compiler-plugin/testData/diagnostics/verification/user_invariants")
     @TestDataPath("$PROJECT_ROOT")
     public class User_invariants {
       @Test
       public void testAllFilesPresentInUser_invariants() {
-        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/verifies/user_invariants"), Pattern.compile("^(.+)\\.kt$"), null, true);
+        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/verification/user_invariants"), Pattern.compile("^(.+)\\.kt$"), null, true);
       }
 
       @Test
       @TestMetadata("and_or_then.kt")
       public void testAnd_or_then() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verifies/user_invariants/and_or_then.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/and_or_then.kt");
       }
 
       @Test
       @TestMetadata("simple_forall.kt")
       public void testSimple_forall() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verifies/user_invariants/simple_forall.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/simple_forall.kt");
       }
 
       @Test
       @TestMetadata("simple_loop.kt")
       public void testSimple_loop() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verifies/user_invariants/simple_loop.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/simple_loop.kt");
       }
 
       @Test
       @TestMetadata("simple_postcondition.kt")
       public void testSimple_postcondition() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verifies/user_invariants/simple_postcondition.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/simple_postcondition.kt");
       }
 
       @Test
       @TestMetadata("simple_precondition.kt")
       public void testSimple_precondition() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verifies/user_invariants/simple_precondition.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/simple_precondition.kt");
       }
 
       @Test
       @TestMetadata("string_iterations.kt")
       public void testString_iterations() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verifies/user_invariants/string_iterations.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/string_iterations.kt");
       }
 
       @Test
       @TestMetadata("strings_in_conditions.kt")
       public void testStrings_in_conditions() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verifies/user_invariants/strings_in_conditions.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/strings_in_conditions.kt");
       }
 
       @Test
       @TestMetadata("sum_of_1_to_n.kt")
       public void testSum_of_1_to_n() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verifies/user_invariants/sum_of_1_to_n.kt");
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/sum_of_1_to_n.kt");
       }
     }
   }
