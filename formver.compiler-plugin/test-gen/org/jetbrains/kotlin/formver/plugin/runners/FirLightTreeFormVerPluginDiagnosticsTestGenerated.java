@@ -383,6 +383,12 @@ public class FirLightTreeFormVerPluginDiagnosticsTestGenerated extends AbstractF
     }
 
     @Test
+    @TestMetadata("annotations.kt")
+    public void testAnnotations() {
+      runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/annotations.kt");
+    }
+
+    @Test
     @TestMetadata("direct_pass_shared_to_unique.kt")
     public void testDirect_pass_shared_to_unique() {
       runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/direct_pass_shared_to_unique.kt");
