@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.formver.embeddings.types.injectionOrNull
 import org.jetbrains.kotlin.formver.names.AnonymousBuiltinName
 import org.jetbrains.kotlin.formver.names.AnonymousName
 import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.*
 import org.jetbrains.kotlin.formver.viper.mangled
 
@@ -33,35 +34,39 @@ sealed interface VariableEmbedding : PureExpEmbedding, PropertyAccessEmbedding {
         get() = false
     val isBorrowed: Boolean
         get() = false
-
+    context(nameResolver: NameResolver)
     fun toLocalVarDecl(
         pos: Position = Position.NoPosition,
         info: Info = Info.NoInfo,
         trafos: Trafos = Trafos.NoTrafos,
     ): Declaration.LocalVarDecl = Declaration.LocalVarDecl(name, Type.Ref, pos, info, trafos)
-
+    context(nameResolver: NameResolver)
     fun toLocalVarUse(
         pos: Position = Position.NoPosition,
         info: Info = Info.NoInfo,
         trafos: Trafos = Trafos.NoTrafos,
     ): Exp.LocalVar = Exp.LocalVar(name, Type.Ref, pos, info, trafos)
-
+    context(nameResolver: NameResolver)
     override fun toViper(source: KtSourceElement?): Exp = Exp.LocalVar(name, Type.Ref, source.asPosition, sourceRole.asInfo)
-
+    context(nameResolver: NameResolver)
     val isOriginallyRef: Boolean
         get() = true
 
     override fun getValue(ctx: StmtConversionContext): ExpEmbedding = this
     override fun setValue(value: ExpEmbedding, ctx: StmtConversionContext): ExpEmbedding = Assign(this, value)
-
+    context(nameResolver: NameResolver)
     fun pureInvariants(): List<ExpEmbedding> = type.pureInvariants().fillHoles(this)
+    context(nameResolver: NameResolver)
     fun provenInvariants(): List<ExpEmbedding> = listOf(type.subTypeInvariant().fillHole(this))
+    context(nameResolver: NameResolver)
     fun accessInvariants(): List<ExpEmbedding> = type.accessInvariants().fillHoles(this)
+    context(nameResolver: NameResolver)
     fun sharedPredicateAccessInvariant() = type.sharedPredicateAccessInvariant()?.fillHole(this)
+    context(nameResolver: NameResolver)
     fun uniquePredicateAccessInvariant() = type.uniquePredicateAccessInvariant()?.fillHole(this)
-
+    context(nameResolver: NameResolver)
     fun allAccessInvariants() = accessInvariants() + listOfNotNull(sharedPredicateAccessInvariant())
-
+    context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = NamedBranchingNode("Var", PlaintextLeaf(name.mangled))
 }
@@ -86,18 +91,22 @@ class AnonymousVariableEmbedding(n: Int, override val type: TypeEmbedding) : Var
 
 class AnonymousBuiltinVariableEmbedding(n: Int, override val type: TypeEmbedding) : VariableEmbedding {
     override val name: MangledName = AnonymousBuiltinName(n)
-    private val injection: Injection? = type.injectionOrNull
+    context(nameResolver: NameResolver)
+    private val injection: Injection?
+        get() = type.injectionOrNull
+
+    context(nameResolver: NameResolver)
     override fun toViper(source: KtSourceElement?): Exp {
         val inner = Exp.LocalVar(name, injection.viperType, source.asPosition, sourceRole.asInfo)
         return injection?.let { it.toRef(inner) } ?: inner
     }
-
+    context(nameResolver: NameResolver)
     override fun toLocalVarDecl(pos: Position, info: Info, trafos: Trafos) =
         Declaration.LocalVarDecl(name, injection.viperType, pos, info, trafos)
-
+    context(nameResolver: NameResolver)
     override fun toLocalVarUse(pos: Position, info: Info, trafos: Trafos): Exp.LocalVar =
         Exp.LocalVar(name, injection.viperType, pos, info, trafos)
-
+    context(nameResolver: NameResolver)
     override val isOriginallyRef: Boolean
         get() = injection == null
 }

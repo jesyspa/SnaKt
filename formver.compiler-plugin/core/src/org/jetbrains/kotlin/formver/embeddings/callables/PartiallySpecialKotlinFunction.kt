@@ -13,6 +13,7 @@ import org.jetbrains.kotlin.formver.embeddings.types.buildFunctionPretype
 import org.jetbrains.kotlin.formver.embeddings.types.equalToType
 import org.jetbrains.kotlin.formver.embeddings.types.nullableAny
 import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.NameResolver
 
 /**
  * Base class for implementations of `PartiallySpecialKotlinFunction`s.
@@ -27,7 +28,7 @@ abstract class AbstractPartiallySpecialKotlinFunction(
         get() = _baseEmbedding
 
     override val packageName = packageName.toList()
-
+    context(nameResolver: NameResolver)
     override fun initBaseEmbedding(embedding: FunctionEmbedding) {
         check(_baseEmbedding == null) { "Base embedding for partially special function $name already initialized." }
         _baseEmbedding = embedding
@@ -38,8 +39,8 @@ class StringPlusAnyFunction : AbstractPartiallySpecialKotlinFunction("kotlin", c
     override fun tryInsertCall(args: List<ExpEmbedding>, ctx: StmtConversionContext): ExpEmbedding? {
         val argType = args[1].type
         return when {
-            argType.equalToType { string() } -> AddStringString(args[0], args[1])
-            argType.equalToType { char() } -> AddStringChar(args[0], args[1])
+            argType.equalToType { string() } -> with(ctx.nameResolver) {AddStringString(args[0], args[1])}
+            argType.equalToType { char() } -> with(ctx.nameResolver) {AddStringChar(args[0], args[1])}
             else -> null
         }
     }

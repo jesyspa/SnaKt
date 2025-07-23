@@ -15,6 +15,7 @@ sealed interface Declaration : IntoSilver<viper.silver.ast.Declaration> {
         val info: Info = Info.NoInfo,
         val trafos: Trafos = Trafos.NoTrafos,
     ) : Declaration {
+        context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.LocalVarDecl =
             viper.silver.ast.LocalVarDecl(name.mangled, type.toSilver(), pos.toSilver(), info.toSilver(), trafos.toSilver())
     }
@@ -26,6 +27,7 @@ sealed interface Declaration : IntoSilver<viper.silver.ast.Declaration> {
         val info: Info = Info.NoInfo,
         val trafos: Trafos = Trafos.NoTrafos,
     ) : Declaration {
+        context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.Label = viper.silver.ast.Label(
             name.mangled,
             invariants.toSilver().toScalaSeq(),

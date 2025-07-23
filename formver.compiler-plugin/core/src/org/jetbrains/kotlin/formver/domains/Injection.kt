@@ -6,6 +6,8 @@
 package org.jetbrains.kotlin.formver.domains
 
 import org.jetbrains.kotlin.formver.domains.RuntimeTypeDomain.Companion.isOf
+import org.jetbrains.kotlin.formver.names.SimpleNameResolver
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.*
 import org.jetbrains.kotlin.formver.viper.ast.Function
 
@@ -46,7 +48,7 @@ class Injection(
     private val r = Var("r", Type.Ref)
     val toRef = RuntimeTypeDomain.createDomainFunc("${injectionName}ToRef", listOf(v.decl()), Type.Ref)
     val fromRef = RuntimeTypeDomain.createDomainFunc("${injectionName}FromRef", listOf(r.decl()), viperType)
-
+    context(nameResolver: NameResolver)
     internal fun AxiomListBuilder.injectionAxioms() {
         axiom {
             Exp.forall(v) { v -> simpleTrigger { toRef(v) isOf typeFunction() } }
@@ -96,8 +98,11 @@ class InjectionImageFunction(
     additionalConditions: FunctionBuilder.() -> Unit = { }
 ) : Function by FunctionBuilder.build(name, {
     val viperResult = original.toFuncApp(argsInjections.map { it.fromRef(argument(Type.Ref)) })
-    returns(Type.Ref)
-    postcondition { result isOf resultInjection.typeFunction() }
-    postcondition { resultInjection.fromRef(result) eq viperResult }
-    additionalConditions()
+    val nameResolver = SimpleNameResolver()
+    with(nameResolver) {
+        returns(Type.Ref)
+        postcondition { result isOf resultInjection.typeFunction() }
+        postcondition { resultInjection.fromRef(result) eq viperResult }
+        additionalConditions()
+    }
 })

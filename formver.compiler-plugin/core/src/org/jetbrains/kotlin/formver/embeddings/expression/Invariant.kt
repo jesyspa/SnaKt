@@ -9,11 +9,14 @@ import org.jetbrains.kotlin.formver.embeddings.ExpVisitor
 import org.jetbrains.kotlin.formver.asPosition
 import org.jetbrains.kotlin.formver.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.linearization.LinearizationContext
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 
 data class Old(override val inner: ExpEmbedding) : UnaryDirectResultExpEmbedding {
     override val type: TypeEmbedding = inner.type
+    context(nameResolver: NameResolver)
     override fun toViper(ctx: LinearizationContext): Exp = Exp.Old(inner.toViper(ctx), ctx.source.asPosition)
+    context(nameResolver: NameResolver)
     override fun toViperBuiltinType(ctx: LinearizationContext): Exp = Exp.Old(inner.toViperBuiltinType(ctx), ctx.source.asPosition)
     override fun <R> accept(v: ExpVisitor<R>): R = v.visitOld(this)
 }

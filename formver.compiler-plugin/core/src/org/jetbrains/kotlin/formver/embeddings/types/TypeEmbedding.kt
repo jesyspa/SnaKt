@@ -11,6 +11,7 @@ import org.jetbrains.kotlin.formver.embeddings.expression.debug.PlaintextLeaf
 import org.jetbrains.kotlin.formver.embeddings.expression.debug.TreeView
 import org.jetbrains.kotlin.formver.names.*
 import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 import org.jetbrains.kotlin.formver.viper.mangled
 
@@ -43,25 +44,27 @@ data class TypeEmbedding(val pretype: PretypeEmbedding, val flags: TypeEmbedding
 
     val isNullable: Boolean
         get() = flags.nullable
-
-    override val runtimeType: Exp = flags.adjustRuntimeType(pretype.runtimeType)
-
+    context(nameResolver: NameResolver)
+    override val runtimeType: Exp
+        get() = flags.adjustRuntimeType(pretype.runtimeType)
+    context(nameResolver: NameResolver)
     override fun accessInvariants(): List<TypeInvariantEmbedding> = flags.adjustManyInvariants(pretype.accessInvariants())
     override fun pureInvariants(): List<TypeInvariantEmbedding> = flags.adjustManyInvariants(pretype.pureInvariants())
-
+    context(nameResolver: NameResolver)
     override fun sharedPredicateAccessInvariant(): TypeInvariantEmbedding? =
         flags.adjustOptionalInvariant(pretype.sharedPredicateAccessInvariant())
-
+    context(nameResolver: NameResolver)
     override fun uniquePredicateAccessInvariant(): TypeInvariantEmbedding? =
         flags.adjustOptionalInvariant(pretype.uniquePredicateAccessInvariant())
 
     override fun subTypeInvariant(): TypeInvariantEmbedding = SubTypeInvariantEmbedding(this)
-
+    context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = PlaintextLeaf(name.mangled)
 }
 
 data class TypeEmbeddingFlags(val nullable: Boolean) {
+    context(nameResolver: NameResolver)
     fun adjustRuntimeType(runtimeType: Exp): Exp =
         if (nullable) RuntimeTypeDomain.nullable(runtimeType)
         else runtimeType
@@ -76,14 +79,14 @@ data class TypeEmbeddingFlags(val nullable: Boolean) {
     fun adjustOptionalInvariant(invariant: TypeInvariantEmbedding?): TypeInvariantEmbedding? =
         invariant?.let { adjustInvariant(it) }
 }
-
+context(nameResolver: NameResolver)
 inline fun TypeEmbedding.injectionOr(default: (TypeEmbedding) -> Injection) = injectionOrNull ?: default(this)
-
+context(nameResolver: NameResolver)
 val TypeEmbedding.injection
     get() = injectionOr {
         error("Type ${it.name} has no injection specified.")
     }
-
+context(nameResolver: NameResolver)
 val TypeEmbedding.injectionOrNull: Injection?
     get() =
         if (flags.nullable) null

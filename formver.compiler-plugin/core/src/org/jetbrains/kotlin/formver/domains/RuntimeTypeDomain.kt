@@ -8,6 +8,7 @@ package org.jetbrains.kotlin.formver.domains
 import org.jetbrains.kotlin.formver.embeddings.types.ClassTypeEmbedding
 import org.jetbrains.kotlin.formver.embeddings.types.embedClassTypeFunc
 import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.*
 import org.jetbrains.kotlin.formver.viper.mangled
 
@@ -206,18 +207,20 @@ const val RUNTIME_TYPE_DOMAIN_NAME = "rt"
  * // same for subtraction, multiplication and so on
  * ```
  */
-class RuntimeTypeDomain(classes: List<ClassTypeEmbedding>) : BuiltinDomain(RUNTIME_TYPE_DOMAIN_NAME) {
+class RuntimeTypeDomain(private val classes: List<ClassTypeEmbedding>) : BuiltinDomain(RUNTIME_TYPE_DOMAIN_NAME) {
     override val typeVars: List<Type.TypeVar> = emptyList()
 
     // Define types that are not dependent on the user defined classes in a companion object.
     // That way other classes can refer to them without having an explicit reference to the concrete TypeDomain.
     companion object {
-        val RuntimeType = Type.Domain(DomainName(RUNTIME_TYPE_DOMAIN_NAME).mangled, emptyList())
+        context(nameResolver: NameResolver)
+        val RuntimeType: Type.Domain
+            get() = Type.Domain(DomainName(RUNTIME_TYPE_DOMAIN_NAME).mangled, emptyList())
         val Ref = Type.Ref
 
         fun createDomainFunc(funcName: String, args: List<Declaration.LocalVarDecl>, type: Type, unique: Boolean = false) =
             DomainFunc(DomainFuncName(DomainName(RUNTIME_TYPE_DOMAIN_NAME), funcName), args, emptyList(), type, unique)
-
+        context(nameResolver: NameResolver)
         private fun createNewTypeDomainFunc(funcName: String) = createDomainFunc(
             funcName,
             emptyList(),
@@ -226,186 +229,249 @@ class RuntimeTypeDomain(classes: List<ClassTypeEmbedding>) : BuiltinDomain(RUNTI
         )
 
         // variables for readability improving
-        private val t = Var("t", RuntimeType)
-        private val t1 = Var("t1", RuntimeType)
-        private val t2 = Var("t2", RuntimeType)
-        private val t3 = Var("t3", RuntimeType)
+        context(nameResolver: NameResolver)
+        private val t: Var
+            get() = Var("t", RuntimeType)
+        context(nameResolver: NameResolver)
+        private val t1: Var
+            get() = Var("t1", RuntimeType)
+
+        context(nameResolver: NameResolver)
+        private val t2: Var
+            get() = Var("t2", RuntimeType)
+
+        context(nameResolver: NameResolver)
+        private val t3: Var
+            get() = Var("t3", RuntimeType)
         private val r = Var("r", Ref)
 
         // three basic functions
         /** `isSubtype: (Type, Type) -> Bool` */
-        val isSubtype = createDomainFunc("isSubtype", listOf(t1.decl(), t2.decl()), Type.Bool)
+        context(nameResolver: NameResolver)
+        val isSubtype: DomainFunc
+            get() = createDomainFunc("isSubtype", listOf(t1.decl(), t2.decl()), Type.Bool)
+
+        context(nameResolver: NameResolver)
         infix fun Exp.subtype(otherType: Exp) = isSubtype(this, otherType)
 
         /** `typeOf: Ref -> Type` */
-        val typeOf = createDomainFunc("typeOf", listOf(r.decl()), RuntimeType)
+        context(nameResolver: NameResolver)
+        val typeOf: DomainFunc
+            get() = createDomainFunc("typeOf", listOf(r.decl()), RuntimeType)
 
         /** `nullable: Type -> Type` */
-        val nullable = createDomainFunc("nullable", listOf(t.decl()), RuntimeType)
+        context(nameResolver: NameResolver)
+        val nullable: DomainFunc
+            get() = createDomainFunc("nullable", listOf(t.decl()), RuntimeType)
 
         // many axioms will use `is` which can be represented as composition of `isSubtype` and `typeOf`
         /** `is: (Ref, Type) -> Bool` */
+        context(nameResolver: NameResolver)
         infix fun Exp.isOf(elemType: Exp) = isSubtype(typeOf(this), elemType)
 
         // built-in types function
-        val charType = createNewTypeDomainFunc("charType")
-        val intType = createNewTypeDomainFunc("intType")
-        val boolType = createNewTypeDomainFunc("boolType")
-        val unitType = createNewTypeDomainFunc("unitType")
-        val stringType = createNewTypeDomainFunc("stringType")
-        val nothingType = createNewTypeDomainFunc("nothingType")
-        val anyType = createNewTypeDomainFunc("anyType")
-        val functionType = createNewTypeDomainFunc("functionType")
+        context(nameResolver: NameResolver)
+        val charType: DomainFunc
+            get() = createNewTypeDomainFunc("charType")
+
+        context(nameResolver: NameResolver)
+        val intType: DomainFunc
+            get() = createNewTypeDomainFunc("intType")
+
+        context(nameResolver: NameResolver)
+        val boolType: DomainFunc
+            get() = createNewTypeDomainFunc("boolType")
+
+        context(nameResolver: NameResolver)
+        val unitType: DomainFunc
+            get() = createNewTypeDomainFunc("unitType")
+
+        context(nameResolver: NameResolver)
+        val stringType: DomainFunc
+            get() = createNewTypeDomainFunc("stringType")
+
+        context(nameResolver: NameResolver)
+        val nothingType: DomainFunc
+            get() = createNewTypeDomainFunc("nothingType")
+
+        context(nameResolver: NameResolver)
+        val anyType: DomainFunc
+            get() = createNewTypeDomainFunc("anyType")
+
+        context(nameResolver: NameResolver)
+        val functionType: DomainFunc
+            get() = createNewTypeDomainFunc("functionType")
 
         // for creation of user types
+        context(nameResolver: NameResolver)
         fun classTypeFunc(name: MangledName) = createDomainFunc(name.mangled, emptyList(), RuntimeType, true)
 
         // bijections to primitive types
-        val intInjection = Injection("int", Type.Int, intType)
-        val boolInjection = Injection("bool", Type.Bool, boolType)
-        val charInjection = Injection("char", Type.Int, charType)
-        val stringInjection = Injection("string", Type.Seq(Type.Int), stringType)
+        context(nameResolver: NameResolver)
+        val intInjection: Injection
+            get() = Injection("int", Type.Int, intType)
 
-        val allInjections = listOf(intInjection, boolInjection, charInjection, stringInjection)
+        context(nameResolver: NameResolver)
+        val boolInjection: Injection
+            get() = Injection("bool", Type.Bool, boolType)
+
+        context(nameResolver: NameResolver)
+        val charInjection: Injection
+            get() = Injection("char", Type.Int, charType)
+
+        context(nameResolver: NameResolver)
+        val stringInjection: Injection
+            get() = Injection("string", Type.Seq(Type.Int), stringType)
+
+        context(nameResolver: NameResolver)
+        val allInjections: List<Injection>
+            get() = listOf(intInjection, boolInjection, charInjection, stringInjection)
 
         // special values
         val nullValue = createDomainFunc("nullValue", emptyList(), Ref)
         val unitValue = createDomainFunc("unitValue", emptyList(), Ref)
 
     }
+    context(nameResolver: NameResolver)
+    val classTypes:Map<ClassTypeEmbedding, DomainFunc>
+        get() = classes.associateWith { it.embedClassTypeFunc() }
+    context(nameResolver: NameResolver)
+    val builtinTypes: List<DomainFunc>
+        get() = listOf(intType, boolType, charType, unitType, nothingType, anyType, functionType, stringType)
 
-    val classTypes = classes.associateWith { type -> type.embedClassTypeFunc() }
-    val builtinTypes = listOf(intType, boolType, charType, unitType, nothingType, anyType, functionType, stringType)
+    context(nameResolver: NameResolver)
+    val nonNullableTypes: List<DomainFunc>
+        get() = buildList {
+            addAll(builtinTypes)
+            addAll(classTypes.values)
+        }.distinctBy { it.name }
 
-    val nonNullableTypes = buildList {
-        addAll(builtinTypes)
-        addAll(classTypes.values)
-    }.distinctBy { it.name }
-
-
-    override val functions: List<DomainFunc> = nonNullableTypes + listOf(nullValue, unitValue, isSubtype, typeOf, nullable) +
-            allInjections.flatMap { listOf(it.toRef, it.fromRef) }
-
-    override val axioms = AxiomListBuilder.build(this) {
-        axiom("subtype_reflexive") {
-            Exp.forall(t) { t -> t subtype t }
-        }
-        axiom("subtype_transitive") {
-            Exp.forall(t1, t2, t3) { t1, t2, t3 ->
-                assumption {
+    context(nameResolver: NameResolver)
+    override val functions: List<DomainFunc>
+        get() = nonNullableTypes + listOf(nullValue, unitValue, isSubtype, typeOf, nullable) +
+                allInjections.flatMap { listOf(it.toRef, it.fromRef) }
+    context(nameResolver: NameResolver)
+    override val axioms: List<DomainAxiom>
+        get() = AxiomListBuilder.build(this) {
+            axiom("subtype_reflexive") {
+                Exp.forall(t) { t -> t subtype t }
+            }
+            axiom("subtype_transitive") {
+                Exp.forall(t1, t2, t3) { t1, t2, t3 ->
+                    assumption {
+                        compoundTrigger {
+                            subTrigger { t1 subtype t2 }
+                            subTrigger { t2 subtype t3 }
+                        }
+                    }
                     compoundTrigger {
                         subTrigger { t1 subtype t2 }
-                        subTrigger { t2 subtype t3 }
+                        subTrigger { t1 subtype t3 }
                     }
-                }
-                compoundTrigger {
-                    subTrigger { t1 subtype t2 }
-                    subTrigger { t1 subtype t3 }
-                }
-                compoundTrigger {
-                    subTrigger { t2 subtype t3}
-                    subTrigger { t1 subtype t3}
-                }
-                t1 subtype t3
-            }
-        }
-        axiom("subtype_antisymmetric") {
-            Exp.forall(t1, t2) { t1, t2 ->
-                assumption {
                     compoundTrigger {
-                        subTrigger { t1 subtype t2 }
-                        subTrigger { t2 subtype t1 }
+                        subTrigger { t2 subtype t3}
+                        subTrigger { t1 subtype t3}
+                    }
+                    t1 subtype t3
+                }
+            }
+            axiom("subtype_antisymmetric") {
+                Exp.forall(t1, t2) { t1, t2 ->
+                    assumption {
+                        compoundTrigger {
+                            subTrigger { t1 subtype t2 }
+                            subTrigger { t2 subtype t1 }
+                        }
+                    }
+                    t1 eq t2
+                }
+            }
+            axiom("nullable_idempotent") {
+                Exp.forall(t) { t ->
+                    simpleTrigger { nullable(nullable(t)) } eq nullable(t)
+                }
+            }
+            axiom("nullable_supertype") {
+                Exp.forall(t) { t ->
+                    t subtype simpleTrigger { nullable(t) }
+                }
+            }
+            axiom("nullable_preserves_subtype") {
+                Exp.forall(t1, t2) { t1, t2 ->
+                    assumption { t1 subtype t2 }
+                    simpleTrigger { nullable(t1) subtype nullable(t2) }
+                }
+            }
+            axiom("nullable_any_supertype") {
+                Exp.forall(t) { t ->
+                    t subtype nullable(anyType())
+                }
+            }
+            nonNullableTypes.forEach {
+                axiom { it() subtype anyType() }
+            }
+            axiom("supertype_of_nothing") {
+                Exp.forall(t) { t ->
+                    nothingType() subtype t
+                }
+            }
+            axiom("any_not_nullable_type_level") {
+                Exp.forall(t) { t ->
+                    !isSubtype(nullable(t), anyType())
+                }
+            }
+            axiom("null_smartcast_value_level") {
+                Exp.forall(r, t) { r, t ->
+                    assumption {
+                        simpleTrigger { r isOf nullable(t) }
+                    }
+                    (r eq nullValue()) or (r isOf t)
+                }
+            }
+            axiom("nothing_empty") {
+                Exp.forall(r) { r ->
+                    !(r isOf nothingType())
+                }
+            }
+            axiom("null_smartcast_type_level") {
+                Exp.forall(t1, t2) { t1, t2 ->
+                    assumption {
+                        compoundTrigger {
+                            subTrigger { t1 subtype anyType() }
+                            subTrigger { t1 subtype nullable(t2) }
+                        }
+                    }
+                    t1 subtype t2
+                }
+            }
+            axiom("type_of_null") {
+                nullValue() isOf nullable(nothingType())
+            }
+            axiom("any_not_nullable_value_level") {
+                !(nullValue() isOf anyType())
+            }
+            axiom("type_of_unit") {
+                unitValue() isOf unitType()
+            }
+            axiom("uniqueness_of_unit") {
+                Exp.forall(r) { r ->
+                    assumption {
+                        simpleTrigger { r isOf unitType() }
+                    }
+                    r eq unitValue()
+                }
+            }
+            allInjections.forEach {
+                it.apply { injectionAxioms() }
+            }
+            classTypes.forEach { (typeEmbedding, typeFunction) ->
+                typeEmbedding.details.superTypes.forEach {
+                    classTypes[it]?.let { supertypeFunction ->
+                        axiom {
+                            typeFunction() subtype supertypeFunction()
+                        }
                     }
                 }
-                t1 eq t2
             }
         }
-        axiom("nullable_idempotent") {
-            Exp.forall(t) { t ->
-                simpleTrigger { nullable(nullable(t)) } eq nullable(t)
-            }
-        }
-        axiom("nullable_supertype") {
-            Exp.forall(t) { t ->
-                t subtype simpleTrigger { nullable(t) }
-            }
-        }
-        axiom("nullable_preserves_subtype") {
-            Exp.forall(t1, t2) { t1, t2 ->
-                assumption { t1 subtype t2 }
-                simpleTrigger { nullable(t1) subtype nullable(t2) }
-            }
-        }
-        axiom("nullable_any_supertype") {
-            Exp.forall(t) { t ->
-                t subtype nullable(anyType())
-            }
-        }
-        nonNullableTypes.forEach {
-            axiom { it() subtype anyType() }
-        }
-        axiom("supertype_of_nothing") {
-            Exp.forall(t) { t ->
-                nothingType() subtype t
-            }
-        }
-        axiom("any_not_nullable_type_level") {
-            Exp.forall(t) { t ->
-                !isSubtype(nullable(t), anyType())
-            }
-        }
-        axiom("null_smartcast_value_level") {
-            Exp.forall(r, t) { r, t ->
-                assumption {
-                    simpleTrigger { r isOf nullable(t) }
-                }
-                (r eq nullValue()) or (r isOf t)
-            }
-        }
-        axiom("nothing_empty") {
-            Exp.forall(r) { r ->
-                !(r isOf nothingType())
-            }
-        }
-        axiom("null_smartcast_type_level") {
-            Exp.forall(t1, t2) { t1, t2 ->
-                assumption {
-                    compoundTrigger {
-                        subTrigger { t1 subtype anyType() }
-                        subTrigger { t1 subtype nullable(t2) }
-                    }
-                }
-                t1 subtype t2
-            }
-        }
-        axiom("type_of_null") {
-            nullValue() isOf nullable(nothingType())
-        }
-        axiom("any_not_nullable_value_level") {
-            !(nullValue() isOf anyType())
-        }
-        axiom("type_of_unit") {
-            unitValue() isOf unitType()
-        }
-        axiom("uniqueness_of_unit") {
-            Exp.forall(r) { r ->
-                assumption {
-                    simpleTrigger { r isOf unitType() }
-                }
-                r eq unitValue()
-            }
-        }
-        allInjections.forEach {
-            it.apply { injectionAxioms() }
-        }
-        classTypes.forEach { (typeEmbedding, typeFunction) ->
-            typeEmbedding.details.superTypes.forEach {
-                classTypes[it]?.let { supertypeFunction ->
-                    axiom {
-                        typeFunction() subtype supertypeFunction()
-                    }
-                }
-            }
-        }
-    }
 }

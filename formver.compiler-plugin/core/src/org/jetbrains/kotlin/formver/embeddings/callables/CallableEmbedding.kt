@@ -10,15 +10,17 @@ import org.jetbrains.kotlin.formver.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.embeddings.expression.ExpEmbedding
 import org.jetbrains.kotlin.formver.embeddings.expression.withNewTypeInvariants
 import org.jetbrains.kotlin.formver.embeddings.types.FunctionTypeEmbedding
+import org.jetbrains.kotlin.formver.viper.NameResolver
 
 /**
  * Kotlin entity that can be called.
  */
 interface CallableEmbedding {
     val callableType: FunctionTypeEmbedding
+
     fun insertCall(args: List<ExpEmbedding>, ctx: StmtConversionContext): ExpEmbedding
 }
-
+context(nameResolver: NameResolver)
 fun CallableEmbedding.insertCall(args: List<ExpEmbedding>, ctx: StmtConversionContext, actualReturnType: TypeEmbedding) =
     insertCall(args, ctx).withNewTypeInvariants(actualReturnType) {
         access = true

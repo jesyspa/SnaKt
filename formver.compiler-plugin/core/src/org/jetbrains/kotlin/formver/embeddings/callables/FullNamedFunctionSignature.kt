@@ -19,6 +19,7 @@ import org.jetbrains.kotlin.formver.embeddings.types.nullableAny
 import org.jetbrains.kotlin.formver.linearization.pureToViper
 import org.jetbrains.kotlin.formver.names.DispatchReceiverName
 import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.Stmt
 import org.jetbrains.kotlin.formver.viper.ast.UserMethod
 
@@ -79,7 +80,7 @@ class SetterFunctionSignature(name: MangledName, symbol: FirPropertySymbol) :
         withReturnType { unit() }
     }
 }
-
+context(nameResolver: NameResolver)
 fun FullNamedFunctionSignature.toViperMethod(
     body: Stmt.Seqn?,
     returnVariable: VariableEmbedding,

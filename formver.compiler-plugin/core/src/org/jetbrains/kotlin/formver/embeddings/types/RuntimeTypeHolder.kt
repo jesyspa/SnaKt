@@ -6,6 +6,7 @@
 package org.jetbrains.kotlin.formver.embeddings.types
 
 import org.jetbrains.kotlin.formver.embeddings.expression.debug.DebugPrintable
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 
 interface RuntimeTypeHolder : DebugPrintable {
@@ -14,5 +15,6 @@ interface RuntimeTypeHolder : DebugPrintable {
      *
      * The Viper values are defined in RuntimeTypeDomain and are used for casting, subtyping and the `is` operator.
      */
+    context(nameResolver: NameResolver)
     val runtimeType: Exp
 }

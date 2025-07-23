@@ -18,12 +18,13 @@ data class Program(
     val info: Info = Info.NoInfo,
     val trafos: Trafos = Trafos.NoTrafos,
 ) : IntoSilver<viper.silver.ast.Program> {
+    context(nameResolver: NameResolver)
     override fun toSilver(): viper.silver.ast.Program = viper.silver.ast.Program(
-        domains.sortedBy { it.name.mangled }.toSilver().toScalaSeq(),
-        fields.sortedBy { it.name.mangled }.toSilver().toScalaSeq(),
-        functions.sortedBy { it.name.mangled }.toSilver().toScalaSeq(),
-        predicates.sortedBy { it.name.mangled }.toSilver().toScalaSeq(),
-        methods.sortedBy { it.name.mangled }.toSilver().toScalaSeq(),
+        with(nameResolver) {domains.sortedBy { it.name.mangled }.toSilver().toScalaSeq()},
+        with(nameResolver) {fields.sortedBy { it.name.mangled }.toSilver().toScalaSeq()},
+        with(nameResolver) {functions.sortedBy { it.name.mangled }.toSilver().toScalaSeq()},
+        with(nameResolver) {predicates.sortedBy { it.name.mangled }.toSilver().toScalaSeq()},
+        with(nameResolver) {methods.sortedBy { it.name.mangled }.toSilver().toScalaSeq()},
         emptySeq(), /* extensions */
         pos.toSilver(),
         info.toSilver(),
@@ -46,13 +47,6 @@ data class Program(
         functions = functions.filter { it.includeInDumpPolicy == IncludeInDumpPolicy.ALWAYS }
     )
 
+    context(nameResolver: NameResolver)
     fun toDebugOutput(): String = toSilver().toString()
-}
-fun Program.registerAllNames() {
-    val prog = this
-    domains.forEach    { MangledName.register( it.name) }
-    fields.forEach     { MangledName.register( it.name) }
-    functions.forEach  { MangledName.register( it.name) }
-    predicates.forEach { MangledName.register( it.name) }
-    methods.forEach    { MangledName.register( it.name) }
 }

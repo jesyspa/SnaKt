@@ -8,6 +8,7 @@ package org.jetbrains.kotlin.formver.embeddings.expression
 import org.jetbrains.kotlin.formver.domains.FunctionBuilder
 import org.jetbrains.kotlin.formver.domains.InjectionImageFunction
 import org.jetbrains.kotlin.formver.embeddings.types.*
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.*
 
 /**
@@ -21,7 +22,7 @@ class OperatorExpEmbeddingBuilder {
     private var viperApplicable: Applicable? = null
     private var callableType: FunctionTypeEmbedding? = null
     private var additionalConditions: (FunctionBuilder.() -> Unit)? = null
-
+    context(nameResolver: NameResolver)
     fun complete(): OperatorExpEmbeddingTemplate? {
         val callableType = callableType ?: error("Signature not specified to buildExpEmbedding.")
         val argumentTypes = callableType.formalArgTypes
@@ -70,15 +71,15 @@ class OperatorExpEmbeddingBuilder {
         additionalConditions = block
     }
 }
-
+context(nameResolver: NameResolver)
 inline fun <reified T : OperatorExpEmbeddingTemplate> buildOperator(block: OperatorExpEmbeddingBuilder.() -> Unit) =
     when (val completed = OperatorExpEmbeddingBuilder().apply(block).complete()) {
         is T -> completed
         else -> error("Attempt to create OperatorExpEmbedding with non-matching number of arguments.")
     }
-
+context(nameResolver: NameResolver)
 fun buildUnaryOperator(block: OperatorExpEmbeddingBuilder.() -> Unit) =
     buildOperator<UnaryOperatorExpEmbeddingTemplate>(block)
-
+context(nameResolver: NameResolver)
 fun buildBinaryOperator(block: OperatorExpEmbeddingBuilder.() -> Unit) =
     buildOperator<BinaryOperatorExpEmbeddingTemplate>(block)

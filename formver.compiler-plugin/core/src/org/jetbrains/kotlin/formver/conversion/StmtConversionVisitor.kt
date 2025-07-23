@@ -40,6 +40,7 @@ import org.jetbrains.kotlin.formver.embeddings.toLink
 import org.jetbrains.kotlin.formver.embeddings.types.equalToType
 import org.jetbrains.kotlin.formver.functionCallArguments
 import org.jetbrains.kotlin.formver.isInvariantBuilderFunctionNamed
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.text
 import org.jetbrains.kotlin.types.ConstantValueKind
 import org.jetbrains.kotlin.utils.addIfNotNull
@@ -187,7 +188,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
 
         return when (equalityOperatorCall.operation) {
             FirOperation.EQ -> convertEqCmp(left, right)
-            FirOperation.NOT_EQ -> Not(convertEqCmp(left, right))
+            FirOperation.NOT_EQ -> with(data.nameResolver) {Not(convertEqCmp(left, right))}
             else -> handleUnimplementedElement("Equality comparison operation ${equalityOperatorCall.operation} not yet implemented.", data)
         }
     }
@@ -219,17 +220,19 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
             functionType.formalArgTypes.all { it.equalToType { char() } } -> CharComparisonExpEmbeddingsTemplate
             else -> {
                 val result = data.convert(comparisonExpression.compareToCall)
-                return IntComparisonExpEmbeddingsTemplate.retrieve(comparisonExpression.operation)(result, IntLit(0))
+                return with(data.nameResolver) {IntComparisonExpEmbeddingsTemplate.retrieve(comparisonExpression.operation)(result, IntLit(0))}
             }
         }
-        return comparisonTemplate.retrieve(comparisonExpression.operation)(left, right)
+        return with(data.nameResolver) {comparisonTemplate.retrieve(comparisonExpression.operation)(left, right)}
     }
 
     private interface ComparisonExpEmbeddingsTemplate {
+        context(nameResolver: NameResolver)
         fun retrieve(operation: FirOperation): BinaryOperatorExpEmbeddingTemplate
     }
 
     private object IntComparisonExpEmbeddingsTemplate : ComparisonExpEmbeddingsTemplate {
+        context(nameResolver: NameResolver)
         override fun retrieve(operation: FirOperation) = when (operation) {
             FirOperation.LT -> LtIntInt
             FirOperation.LT_EQ -> LeIntInt
@@ -240,6 +243,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
     }
 
     private object CharComparisonExpEmbeddingsTemplate : ComparisonExpEmbeddingsTemplate {
+        context(nameResolver: NameResolver)
         override fun retrieve(operation: FirOperation) = when (operation) {
             FirOperation.LT -> LtCharChar
             FirOperation.LT_EQ -> LeCharChar
@@ -269,11 +273,13 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         when (val forAllLambda = functionCall.extractFormverFirBlock { isInvariantBuilderFunctionNamed("forAll") }) {
             null -> {
                 val callee = data.embedFunction(symbol)
-                return callee.insertCall(
-                    functionCall.functionCallArguments.withVarargsHandled(data, callee),
-                    data,
-                    data.embedType(functionCall.resolvedType),
-                )
+                return with(data.nameResolver) {
+                    callee.insertCall(
+                        functionCall.functionCallArguments.withVarargsHandled(data, callee),
+                        data,
+                        data.embedType(functionCall.resolvedType),
+                    )
+                }
             }
             else -> {
                 if (!data.isValidForForAllBlock)
@@ -299,7 +305,9 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
             is LambdaExp -> {
                 // The lambda is already the receiver, so we do not need to convert it.
                 // TODO: do this more uniformly: convert the receiver, see it is a lambda, use insertCall on it.
-                exp.insertCall(args, data, returnType)
+                with(data.nameResolver) {
+                    exp.insertCall(args, data, returnType)
+                }
             }
             else -> {
                 InvokeFunctionObject(data.convert(receiver), args, returnType)
@@ -320,8 +328,8 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         val condition = data.convert(whileLoop.condition).withType { boolean() }
         val invariants = buildList {
             data.retrievePropertiesAndParameters().forEach {
-                addIfNotNull(it.sharedPredicateAccessInvariant())
-                addAll(it.provenInvariants())
+                with(data.nameResolver) {addIfNotNull(it.sharedPredicateAccessInvariant())}
+                with(data.nameResolver) {addAll(it.provenInvariants())}
             }
             extractLoopInvariants(whileLoop.block)?.let {
                 addAll(data.withScopeImpl(ScopeIndex.NoScope) { data.collectInvariants(it) })
@@ -386,8 +394,10 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
             exp.withType(newType)
         } else {
             // TODO: when there is a cast from B to A, only inhale invariants of A - invariants of B
-            exp.withNewTypeInvariants(newType) {
-                access = true
+            with(data.nameResolver) {
+                exp.withNewTypeInvariants(newType) {
+                    access = true
+                }
             }
         }
     }
@@ -445,14 +455,18 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         val conversionType = data.embedType(typeOperatorCall.conversionTypeRef.coneType)
         return when (typeOperatorCall.operation) {
             FirOperation.IS -> Is(argument, conversionType)
-            FirOperation.NOT_IS -> Not(Is(argument, conversionType))
-            FirOperation.AS -> Cast(argument, conversionType).withInvariants {
-                proven = true
-                access = true
+            FirOperation.NOT_IS -> with(data.nameResolver) {Not(Is(argument, conversionType))}
+            FirOperation.AS -> with(data.nameResolver) {
+                Cast(argument, conversionType).withInvariants {
+                    proven = true
+                    access = true
+                }
             }
-            FirOperation.SAFE_AS -> SafeCast(argument, conversionType).withInvariants {
-                proven = true
-                access = true
+            FirOperation.SAFE_AS -> with(data.nameResolver) {
+                SafeCast(argument, conversionType).withInvariants {
+                    proven = true
+                    access = true
+                }
             }
             else -> handleUnimplementedElement("Can't embed type operator ${typeOperatorCall.operation}.", data)
         }

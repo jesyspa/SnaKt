@@ -35,7 +35,7 @@ interface Function : IntoSilver<viper.silver.ast.Function>, Applicable {
         get() = listOf()
     val body: Exp?
         get() = null
-
+    context(nameResolver: NameResolver)
     override fun toSilver(): viper.silver.ast.Function = viper.silver.ast.Function(
         name.mangled, formalArgs.map { it.toSilver() }.toScalaSeq(),
         retType.toSilver(), pres.toSilver().toScalaSeq(), posts.toSilver().toScalaSeq(), body.toScalaOption().toSilver(),

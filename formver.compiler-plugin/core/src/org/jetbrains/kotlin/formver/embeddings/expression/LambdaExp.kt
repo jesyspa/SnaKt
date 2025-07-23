@@ -18,6 +18,7 @@ import org.jetbrains.kotlin.formver.embeddings.expression.debug.PlaintextLeaf
 import org.jetbrains.kotlin.formver.embeddings.expression.debug.TreeView
 import org.jetbrains.kotlin.formver.embeddings.types.asTypeEmbedding
 import org.jetbrains.kotlin.formver.linearization.LinearizationContext
+import org.jetbrains.kotlin.formver.viper.NameResolver
 
 class LambdaExp(
     val signature: FunctionSignature,
@@ -28,7 +29,7 @@ class LambdaExp(
     FunctionSignature by signature {
     override val type: TypeEmbedding
         get() = callableType.asTypeEmbedding()
-
+    context(nameResolver: NameResolver)
     override fun toViperStoringIn(result: VariableEmbedding, ctx: LinearizationContext) {
         TODO("create new function object with counter, duplicable (requires toViper restructuring)")
     }
@@ -50,7 +51,7 @@ class LambdaExp(
             parentCtx,
         )
     }
-
+    context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = PlaintextLeaf("Lambda")
 

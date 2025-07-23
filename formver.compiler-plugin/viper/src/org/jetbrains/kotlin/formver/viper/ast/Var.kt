@@ -6,6 +6,7 @@
 package org.jetbrains.kotlin.formver.viper.ast
 
 import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.NameResolver
 
 /** Utility class to simplify writing domain functions and axioms.
  *
@@ -17,7 +18,9 @@ import org.jetbrains.kotlin.formver.viper.MangledName
  */
 data class Var(val name: String, val type: Type) {
     val mangledName = object : MangledName {
-        override val mangledBaseName: String = name
+        context(nameResolver: NameResolver)
+        override val mangledBaseName: String
+            get() = name
     }
 
     fun use(): Exp.LocalVar = Exp.LocalVar(mangledName, type)

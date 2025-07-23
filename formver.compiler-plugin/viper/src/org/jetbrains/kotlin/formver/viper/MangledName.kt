@@ -12,26 +12,15 @@ package org.jetbrains.kotlin.formver.viper
  * approach makes it easier to see where they came from during debugging.
  */
 interface MangledName {
-    companion object {
-        val registeredNames = mutableSetOf<String>()
-        fun register(name: MangledName) {
-            registeredNames.add(name.mangled)
-        }
-    }
     val mangledType: String?
         get() = null
+    context(nameResolver: NameResolver)
     val mangledScope: String?
         get() = null
+    context(nameResolver: NameResolver)
     val mangledBaseName: String
 }
-
+context(nameResolver: NameResolver)
 val MangledName.mangled: String
     //get() = listOfNotNull(mangledType, mangledScope, mangledBaseName).joinToString("$")
-    get() {
-        var result = (mangledType?.plus("_") ?: "") + mangledBaseName
-        if (result in MangledName.registeredNames) {
-            result = (mangledScope?.plus("_") ?: "") + result
-        }
-
-        return result
-    }
+    get() = nameResolver.resolve(this)

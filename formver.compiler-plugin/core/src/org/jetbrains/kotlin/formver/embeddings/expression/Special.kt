@@ -13,6 +13,7 @@ import org.jetbrains.kotlin.formver.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.embeddings.types.buildType
 import org.jetbrains.kotlin.formver.linearization.LinearizationContext
 import org.jetbrains.kotlin.formver.purity.PurityContext
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 import org.jetbrains.kotlin.formver.viper.ast.Stmt
 
@@ -22,11 +23,13 @@ import org.jetbrains.kotlin.formver.viper.ast.Stmt
  * do the job.
  */
 data class ExpWrapper(val value: Exp, override val type: TypeEmbedding) : PureExpEmbedding {
+    context(nameResolver: NameResolver)
     override fun toViper(source: KtSourceElement?): Exp = value
 }
 
 data object ErrorExp : NoResultExpEmbedding, DefaultDebugTreeViewImplementation {
     override val type: TypeEmbedding = buildType { nothing() }
+    context(nameResolver: NameResolver)
     override fun toViperUnusedResult(ctx: LinearizationContext) {
         ctx.addStatement { Stmt.Inhale(Exp.BoolLit(false, ctx.source.asPosition), ctx.source.asPosition) }
     }
@@ -38,6 +41,7 @@ data object ErrorExp : NoResultExpEmbedding, DefaultDebugTreeViewImplementation 
 }
 
 data class Assert(val exp: ExpEmbedding) : UnitResultExpEmbedding, DefaultDebugTreeViewImplementation {
+    context(nameResolver: NameResolver)
     override fun toViperSideEffects(ctx: LinearizationContext) {
         ctx.addStatement { Stmt.Assert(exp.toViperBuiltinType(ctx), ctx.source.asPosition) }
     }
@@ -60,6 +64,7 @@ data class Assert(val exp: ExpEmbedding) : UnitResultExpEmbedding, DefaultDebugT
  * we should be adding more of going forward.
  */
 data class InhaleDirect(val exp: ExpEmbedding) : UnitResultExpEmbedding, DefaultDebugTreeViewImplementation {
+    context(nameResolver: NameResolver)
     override fun toViperSideEffects(ctx: LinearizationContext) {
         ctx.addStatement { Stmt.Inhale(exp.toViperBuiltinType(ctx), ctx.source.asPosition) }
     }

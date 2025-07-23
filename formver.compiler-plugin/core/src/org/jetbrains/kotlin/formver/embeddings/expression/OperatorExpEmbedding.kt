@@ -12,6 +12,7 @@ import org.jetbrains.kotlin.formver.embeddings.SourceRole
 import org.jetbrains.kotlin.formver.embeddings.asInfo
 import org.jetbrains.kotlin.formver.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.linearization.LinearizationContext
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 
 interface InjectionBasedExpEmbedding : DirectResultExpEmbedding {
@@ -21,10 +22,12 @@ interface InjectionBasedExpEmbedding : DirectResultExpEmbedding {
 }
 
 interface BinaryOperatorExpEmbedding : BinaryDirectResultExpEmbedding, InjectionBasedExpEmbedding {
+    context(nameResolver: NameResolver)
     override fun toViper(ctx: LinearizationContext): Exp {
         return refsOperation(left.toViper(ctx), right.toViper(ctx), pos = ctx.source.asPosition, info = sourceRole.asInfo)
     }
 
+    context(nameResolver: NameResolver)
     override fun toViperBuiltinType(ctx: LinearizationContext): Exp {
         return builtinsOperation(
             left.toViperBuiltinType(ctx),
@@ -38,9 +41,11 @@ interface BinaryOperatorExpEmbedding : BinaryDirectResultExpEmbedding, Injection
 }
 
 interface UnaryOperatorExpEmbedding : UnaryDirectResultExpEmbedding, InjectionBasedExpEmbedding {
+    context(nameResolver: NameResolver)
     override fun toViper(ctx: LinearizationContext) =
         refsOperation(inner.toViper(ctx), pos = ctx.source.asPosition, info = sourceRole.asInfo)
 
+    context(nameResolver: NameResolver)
     override fun toViperBuiltinType(ctx: LinearizationContext) =
         builtinsOperation(inner.toViperBuiltinType(ctx), pos = ctx.source.asPosition, info = sourceRole.asInfo)
 
@@ -85,7 +90,7 @@ class UnaryOperatorExpEmbeddingTemplate(override val type: TypeEmbedding, overri
             override val sourceRole = sourceRole
         }
 }
-
+context(nameResolver: NameResolver)
 fun List<ExpEmbedding>.toConjunction(): ExpEmbedding =
     if (isEmpty()) BooleanLit(true)
     else reduce { l, r -> OperatorExpEmbeddings.And(l, r) }

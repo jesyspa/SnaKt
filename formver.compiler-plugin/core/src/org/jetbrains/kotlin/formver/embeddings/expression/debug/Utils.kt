@@ -10,15 +10,22 @@ import org.jetbrains.kotlin.formver.embeddings.LabelEmbedding
 import org.jetbrains.kotlin.formver.embeddings.LabelLink
 import org.jetbrains.kotlin.formver.embeddings.callables.NamedFunctionSignature
 import org.jetbrains.kotlin.formver.embeddings.toLink
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.PermExp
 import org.jetbrains.kotlin.formver.viper.mangled
-
+context(nameResolver: NameResolver)
 val LabelLink.debugTreeView: TreeView
     get() = PlaintextLeaf(name.mangled)
+
+context(nameResolver: NameResolver)
 val LabelEmbedding.debugTreeView: TreeView
     get() = this.toLink().debugTreeView
+
+context(nameResolver: NameResolver)
 val NamedFunctionSignature.nameAsDebugTreeView: TreeView
     get() = PlaintextLeaf(name.mangled)
+
+context(nameResolver: NameResolver)
 val FieldEmbedding.debugTreeView: TreeView
     get() = NamedBranchingNode("Field", PlaintextLeaf(name.mangled))
 val PermExp.debugTreeView: TreeView

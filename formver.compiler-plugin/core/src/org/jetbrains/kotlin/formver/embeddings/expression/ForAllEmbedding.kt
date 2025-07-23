@@ -12,6 +12,7 @@ import org.jetbrains.kotlin.formver.embeddings.asInfo
 import org.jetbrains.kotlin.formver.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.embeddings.types.buildType
 import org.jetbrains.kotlin.formver.linearization.LinearizationContext
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 import org.jetbrains.kotlin.formver.viper.ast.Exp.Companion.toConjunction
 
@@ -20,7 +21,7 @@ class ForAllEmbedding(
     val variable: VariableEmbedding,
     conditions: List<ExpEmbedding>,
 ) : OnlyToBuiltinTypeExpEmbedding {
-
+    context(nameResolver: NameResolver)
     override fun toViperBuiltinType(ctx: LinearizationContext): Exp {
         val conjunction = subexpressions.map { it.toViperBuiltinType(ctx) }.toConjunction()
         return Exp.Forall(

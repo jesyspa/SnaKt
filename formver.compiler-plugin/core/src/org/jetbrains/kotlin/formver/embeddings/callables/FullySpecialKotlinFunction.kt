@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.formver.embeddings.types.buildFunctionPretype
 import org.jetbrains.kotlin.formver.embeddings.types.nullableAny
 import org.jetbrains.kotlin.formver.names.*
 import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
@@ -48,163 +49,164 @@ object SpecialKotlinFunctions {
         packageScope(SpecialPackages.formver)
         ClassKotlinName(listOf("InvariantBuilder"))
     }
-
-    val byName: Map<MangledName, FunctionEmbedding> = buildFullySpecialFunctions {
-        val intIntToIntType = buildFunctionPretype {
-            withDispatchReceiver { int() }
-            withParam { int() }
-            withReturnType { int() }
-        }
-        withCallableType(intIntToIntType) {
-            addFunction(SpecialPackages.kotlin, className = "Int", name = "plus") { args, _ ->
-                AddIntInt(args[0], args[1])
+    context(nameResolver: NameResolver)
+    val byName: Map<MangledName, FunctionEmbedding>
+        get() = buildFullySpecialFunctions {
+            val intIntToIntType = buildFunctionPretype {
+                withDispatchReceiver { int() }
+                withParam { int() }
+                withReturnType { int() }
             }
-            addFunction(SpecialPackages.kotlin, className = "Int", name = "minus") { args, _ ->
-                SubIntInt(args[0], args[1])
-            }
-            addFunction(SpecialPackages.kotlin, className = "Int", name = "times") { args, _ ->
-                MulIntInt(args[0], args[1])
-            }
-            addFunction(SpecialPackages.kotlin, className = "Int", name = "div") { args, _ ->
-                DivIntInt(args[0], args[1])
-            }
-        }
-
-        val intToIntType = buildFunctionPretype {
-            withDispatchReceiver { int() }
-            withReturnType { int() }
-        }
-
-        withCallableType(intToIntType) {
-            addFunction(SpecialPackages.kotlin, className = "Int", name = "inc") { args, _ ->
-                AddIntInt(args[0], IntLit(1))
-            }
-            addFunction(SpecialPackages.kotlin, className = "Int", name = "dec") { args, _ ->
-                SubIntInt(args[0], IntLit(1))
-            }
-        }
-
-        val booleanToBooleanType = buildFunctionPretype {
-            withDispatchReceiver { boolean() }
-            withReturnType { boolean() }
-        }
-
-        addFunction(booleanToBooleanType, SpecialPackages.kotlin, className = "Boolean", name = "not") { args, _ ->
-            Not(args[0])
-        }
-
-        val extBooleanBooleanToBooleanType = buildFunctionPretype {
-            withExtensionReceiver { boolean() }
-            withParam { boolean() }
-            withReturnType { boolean() }
-        }
-
-        addFunction(extBooleanBooleanToBooleanType, SpecialPackages.formver, name = "implies") { args, _ ->
-            Implies(args[0], args[1])
-        }
-
-        val verifyCallableType = buildFunctionPretype {
-            withParam {
-                klass {
-                    withName(booleanArrayTypeName)
+            withCallableType(intIntToIntType) {
+                addFunction(SpecialPackages.kotlin, className = "Int", name = "plus") { args, _ ->
+                    AddIntInt(args[0], args[1])
+                }
+                addFunction(SpecialPackages.kotlin, className = "Int", name = "minus") { args, _ ->
+                    SubIntInt(args[0], args[1])
+                }
+                addFunction(SpecialPackages.kotlin, className = "Int", name = "times") { args, _ ->
+                    MulIntInt(args[0], args[1])
+                }
+                addFunction(SpecialPackages.kotlin, className = "Int", name = "div") { args, _ ->
+                    DivIntInt(args[0], args[1])
                 }
             }
-            withReturnType { unit() }
-        }
-        addFunction(verifyCallableType, SpecialPackages.formver, name = "verify") { args, _ ->
-            args.map { Assert(it) }.toBlock()
-        }
-
-        val invariantsBuilderCallableType = buildFunctionPretype {
-            withParam {
-                function {
-                    withDispatchReceiver {
-                        klass {
-                            withName(invariantBuilderTypeName)
-                        }
+    
+            val intToIntType = buildFunctionPretype {
+                withDispatchReceiver { int() }
+                withReturnType { int() }
+            }
+    
+            withCallableType(intToIntType) {
+                addFunction(SpecialPackages.kotlin, className = "Int", name = "inc") { args, _ ->
+                    AddIntInt(args[0], IntLit(1))
+                }
+                addFunction(SpecialPackages.kotlin, className = "Int", name = "dec") { args, _ ->
+                    SubIntInt(args[0], IntLit(1))
+                }
+            }
+    
+            val booleanToBooleanType = buildFunctionPretype {
+                withDispatchReceiver { boolean() }
+                withReturnType { boolean() }
+            }
+    
+            addFunction(booleanToBooleanType, SpecialPackages.kotlin, className = "Boolean", name = "not") { args, _ ->
+                Not(args[0])
+            }
+    
+            val extBooleanBooleanToBooleanType = buildFunctionPretype {
+                withExtensionReceiver { boolean() }
+                withParam { boolean() }
+                withReturnType { boolean() }
+            }
+    
+            addFunction(extBooleanBooleanToBooleanType, SpecialPackages.formver, name = "implies") { args, _ ->
+                Implies(args[0], args[1])
+            }
+    
+            val verifyCallableType = buildFunctionPretype {
+                withParam {
+                    klass {
+                        withName(booleanArrayTypeName)
                     }
-                    withReturnType { unit() }
                 }
+                withReturnType { unit() }
             }
-            withReturnType { unit() }
-        }
-        withCallableType(invariantsBuilderCallableType) {
-            addNoOpFunction(SpecialPackages.formver, name = "loopInvariants")
-            addNoOpFunction(SpecialPackages.formver, name = "preconditions")
-        }
-
-        val postconditionsBuilderCallableType = buildFunctionPretype {
-            withParam {
-                function {
-                    withDispatchReceiver {
-                        klass {
-                            withName(invariantBuilderTypeName)
+            addFunction(verifyCallableType, SpecialPackages.formver, name = "verify") { args, _ ->
+                args.map { Assert(it) }.toBlock()
+            }
+    
+            val invariantsBuilderCallableType = buildFunctionPretype {
+                withParam {
+                    function {
+                        withDispatchReceiver {
+                            klass {
+                                withName(invariantBuilderTypeName)
+                            }
                         }
+                        withReturnType { unit() }
                     }
-                    withParam { nullableAny() }
-                    withReturnType { unit() }
                 }
+                withReturnType { unit() }
             }
-            withReturnType { unit() }
-        }
-
-        withCallableType(postconditionsBuilderCallableType) {
-            addNoOpFunction(SpecialPackages.formver, name = "postconditions")
-        }
-
-        val contractCallableType = buildFunctionPretype {
-            withParam {
-                function {
-                    withDispatchReceiver {
-                        klass {
-                            withName(contractBuilderTypeName)
+            withCallableType(invariantsBuilderCallableType) {
+                addNoOpFunction(SpecialPackages.formver, name = "loopInvariants")
+                addNoOpFunction(SpecialPackages.formver, name = "preconditions")
+            }
+    
+            val postconditionsBuilderCallableType = buildFunctionPretype {
+                withParam {
+                    function {
+                        withDispatchReceiver {
+                            klass {
+                                withName(invariantBuilderTypeName)
+                            }
                         }
+                        withParam { nullableAny() }
+                        withReturnType { unit() }
                     }
-                    withReturnType { unit() }
+                }
+                withReturnType { unit() }
+            }
+    
+            withCallableType(postconditionsBuilderCallableType) {
+                addNoOpFunction(SpecialPackages.formver, name = "postconditions")
+            }
+    
+            val contractCallableType = buildFunctionPretype {
+                withParam {
+                    function {
+                        withDispatchReceiver {
+                            klass {
+                                withName(contractBuilderTypeName)
+                            }
+                        }
+                        withReturnType { unit() }
+                    }
+                }
+                withReturnType { unit() }
+            }
+    
+            addFunction(contractCallableType, SpecialPackages.contracts, name = "contract") { _, _ ->
+                UnitLit
+            }
+    
+            val charCharToIntType = buildFunctionPretype {
+                withDispatchReceiver { char() }
+                withParam { char() }
+                withReturnType { int() }
+            }
+    
+            addFunction(charCharToIntType, SpecialPackages.kotlin, className = "Char", name = "minus") { args, _ ->
+                SubCharChar(args[0], args[1])
+            }
+    
+            val charIntToCharType = buildFunctionPretype {
+                withDispatchReceiver { char() }
+                withParam { int() }
+                withReturnType { char() }
+            }
+    
+            withCallableType(charIntToCharType) {
+                addFunction(SpecialPackages.kotlin, className = "Char", name = "plus") { args, _ ->
+                    AddCharInt(args[0], args[1])
+                }
+                addFunction(SpecialPackages.kotlin, className = "Char", name = "minus") { args, _ ->
+                    SubCharInt(args[0], args[1])
                 }
             }
-            withReturnType { unit() }
-        }
-
-        addFunction(contractCallableType, SpecialPackages.contracts, name = "contract") { _, _ ->
-            UnitLit
-        }
-
-        val charCharToIntType = buildFunctionPretype {
-            withDispatchReceiver { char() }
-            withParam { char() }
-            withReturnType { int() }
-        }
-
-        addFunction(charCharToIntType, SpecialPackages.kotlin, className = "Char", name = "minus") { args, _ ->
-            SubCharChar(args[0], args[1])
-        }
-
-        val charIntToCharType = buildFunctionPretype {
-            withDispatchReceiver { char() }
-            withParam { int() }
-            withReturnType { char() }
-        }
-
-        withCallableType(charIntToCharType) {
-            addFunction(SpecialPackages.kotlin, className = "Char", name = "plus") { args, _ ->
-                AddCharInt(args[0], args[1])
+    
+            val stringIntToCharType = buildFunctionPretype {
+                withDispatchReceiver { string() }
+                withParam { int() }
+                withReturnType { char() }
             }
-            addFunction(SpecialPackages.kotlin, className = "Char", name = "minus") { args, _ ->
-                SubCharInt(args[0], args[1])
+    
+            addFunction(stringIntToCharType, SpecialPackages.kotlin, className = "String", name = "get") { args, _ ->
+                StringGet(args[0], args[1])
             }
         }
-
-        val stringIntToCharType = buildFunctionPretype {
-            withDispatchReceiver { string() }
-            withParam { int() }
-            withReturnType { char() }
-        }
-
-        addFunction(stringIntToCharType, SpecialPackages.kotlin, className = "String", name = "get") { args, _ ->
-            StringGet(args[0], args[1])
-        }
-    }
 }
 
 val FunctionEmbedding.isVerifyFunction: Boolean

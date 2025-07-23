@@ -10,6 +10,7 @@ import org.jetbrains.kotlin.formver.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.embeddings.expression.AnonymousVariableEmbedding
 import org.jetbrains.kotlin.formver.embeddings.expression.ExpEmbedding
 import org.jetbrains.kotlin.formver.embeddings.expression.debug.print
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.Declaration
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 import org.jetbrains.kotlin.formver.viper.ast.Stmt
@@ -32,7 +33,7 @@ class PureLinearizer(override val source: KtSourceElement?) : LinearizationConte
 
     override fun <R> withPosition(newSource: KtSourceElement, action: LinearizationContext.() -> R): R =
         PureLinearizer(newSource).action()
-
+    context(nameResolver: NameResolver)
     override fun freshAnonVar(type: TypeEmbedding): AnonymousVariableEmbedding {
         throw PureLinearizerMisuseException("newVar")
     }
@@ -53,7 +54,7 @@ class PureLinearizer(override val source: KtSourceElement?) : LinearizationConte
         throw PureLinearizerMisuseException("addModifier")
     }
 }
-
+context(nameResolver: NameResolver)
 fun ExpEmbedding.pureToViper(toBuiltin: Boolean, source: KtSourceElement? = null): Exp {
     try {
         val linearizer = PureLinearizer(source)
@@ -64,6 +65,6 @@ fun ExpEmbedding.pureToViper(toBuiltin: Boolean, source: KtSourceElement? = null
         throw IllegalStateException(msg)
     }
 }
-
+context(nameResolver: NameResolver)
 fun List<ExpEmbedding>.pureToViper(toBuiltin: Boolean, source: KtSourceElement? = null): List<Exp> =
     map { it.pureToViper(toBuiltin, source) }

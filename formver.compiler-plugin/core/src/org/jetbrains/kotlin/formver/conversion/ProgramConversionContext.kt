@@ -22,6 +22,7 @@ import org.jetbrains.kotlin.formver.embeddings.expression.VariableEmbedding
 import org.jetbrains.kotlin.formver.embeddings.types.FunctionTypeEmbedding
 import org.jetbrains.kotlin.formver.names.CatchLabelName
 import org.jetbrains.kotlin.formver.names.TryExitLabelName
+import org.jetbrains.kotlin.formver.viper.NameResolver
 
 interface ProgramConversionContext {
     val config: PluginConfiguration
@@ -31,10 +32,10 @@ interface ProgramConversionContext {
     val catchLabelNameProducer: SimpleFreshEntityProducer<CatchLabelName>
     val tryExitLabelNameProducer: SimpleFreshEntityProducer<TryExitLabelName>
     val scopeIndexProducer: SimpleFreshEntityProducer<ScopeIndex.Indexed>
-
     val anonVarProducer: FreshEntityProducer<AnonymousVariableEmbedding, TypeEmbedding>
     val anonBuiltinVarProducer: FreshEntityProducer<AnonymousBuiltinVariableEmbedding, TypeEmbedding>
     val returnTargetProducer: FreshEntityProducer<ReturnTarget, TypeEmbedding>
+    val nameResolver: NameResolver
 
     fun embedFunction(symbol: FirFunctionSymbol<*>): FunctionEmbedding
     fun embedFunctionSignature(symbol: FirFunctionSymbol<*>): FunctionSignature

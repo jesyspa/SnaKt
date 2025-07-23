@@ -12,6 +12,7 @@ import org.jetbrains.kotlin.formver.linearization.pureToViper
 import org.jetbrains.kotlin.formver.names.DispatchReceiverName
 import org.jetbrains.kotlin.formver.names.SimpleKotlinName
 import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.PermExp
 import org.jetbrains.kotlin.formver.viper.ast.Predicate
 import org.jetbrains.kotlin.name.Name
@@ -22,6 +23,7 @@ internal class ClassPredicateBuilder private constructor(private val details: Cl
     private val body = mutableListOf<ExpEmbedding>()
 
     companion object {
+        context(nameResolver: NameResolver)
         fun build(
             classType: ClassEmbeddingDetails, predicateName: MangledName,
             action: ClassPredicateBuilder.() -> Unit,
@@ -33,7 +35,7 @@ internal class ClassPredicateBuilder private constructor(private val details: Cl
             )
         }
     }
-
+    context(nameResolver: NameResolver)
     fun forEachField(action: FieldAssertionsBuilder.() -> Unit) =
         details.fields.values
             .filterIsInstance<UserFieldEmbedding>()
@@ -42,7 +44,7 @@ internal class ClassPredicateBuilder private constructor(private val details: Cl
                 builder.action()
                 body.addAll(builder.toAssertionsList())
             }
-
+    context(nameResolver: NameResolver)
     fun forUserFieldNamed(name: String, action: FieldAssertionsBuilder.() -> Unit) {
         when (val field = details.fields[SimpleKotlinName(Name.identifier(name))]) {
             is UserFieldEmbedding -> {
@@ -52,7 +54,7 @@ internal class ClassPredicateBuilder private constructor(private val details: Cl
             }
         }
     }
-
+    context(nameResolver: NameResolver)
     fun forEachSuperType(action: TypeInvariantsBuilder.() -> Unit) =
         details.superTypes.forEach { type ->
             val builder = TypeInvariantsBuilder(type.asTypeEmbedding())
@@ -67,17 +69,20 @@ class FieldAssertionsBuilder(private val subject: VariableEmbedding, private val
 
     val isAlwaysReadable = field.accessPolicy == AccessPolicy.ALWAYS_READABLE
     val isUnique = field.isUnique
-    val nameAsString: String = field.name.name.mangledBaseName
+    context(nameResolver: NameResolver)
+    val nameAsString: String
+        get() = field.name.name.mangledBaseName
 
+    context(nameResolver: NameResolver)
     fun forType(action: TypeInvariantsBuilder.() -> Unit) {
         val builder = TypeInvariantsBuilder(field.type)
         builder.action()
         assertions.addAll(builder.toInvariantsList().fillHoles(PrimitiveFieldAccess(subject, field)))
     }
-
+    context(nameResolver: NameResolver)
     fun addAccessPermissions(perm: PermExp) =
         assertions.add(FieldAccessTypeInvariantEmbedding(field, perm).fillHole(subject))
-
+    context(nameResolver: NameResolver)
     fun addEqualsGuarantee(block: ExpEmbedding.() -> ExpEmbedding) {
         assertions.add(FieldEqualsInvariant(field, subject.block()).fillHole(subject))
     }
@@ -86,11 +91,11 @@ class FieldAssertionsBuilder(private val subject: VariableEmbedding, private val
 class TypeInvariantsBuilder(private val type: TypeEmbedding) {
     private val invariants = mutableListOf<TypeInvariantEmbedding>()
     fun toInvariantsList() = invariants.toList()
-
+    context(nameResolver: NameResolver)
     fun addAccessToSharedPredicate() = invariants.addIfNotNull(
         type.sharedPredicateAccessInvariant()
     )
-
+    context(nameResolver: NameResolver)
     fun addAccessToUniquePredicate() = invariants.addIfNotNull(
         type.uniquePredicateAccessInvariant()
     )

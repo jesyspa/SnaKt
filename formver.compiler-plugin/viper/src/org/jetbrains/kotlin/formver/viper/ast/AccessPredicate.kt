@@ -5,7 +5,10 @@
 
 package org.jetbrains.kotlin.formver.viper.ast
 
+import org.jetbrains.kotlin.formver.viper.NameResolver
+
 sealed interface AccessPredicate : Exp {
+    context(nameResolver: NameResolver)
     override fun toSilver(): viper.silver.ast.AccessPredicate
 
     data class FieldAccessPredicate(
@@ -16,6 +19,7 @@ sealed interface AccessPredicate : Exp {
         val trafos: Trafos = Trafos.NoTrafos,
     ) : AccessPredicate {
         override val type: Type.Bool = Type.Bool
+        context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.AccessPredicate =
             viper.silver.ast.FieldAccessPredicate(access.toSilver(), perm.toSilver(), pos.toSilver(), info.toSilver(), trafos.toSilver())
     }

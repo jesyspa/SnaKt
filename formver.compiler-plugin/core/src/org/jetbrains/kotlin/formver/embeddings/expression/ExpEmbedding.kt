@@ -22,6 +22,7 @@ import org.jetbrains.kotlin.formver.linearization.UnfoldPolicy
 import org.jetbrains.kotlin.formver.linearization.pureToViper
 import org.jetbrains.kotlin.formver.purity.PurityContext
 import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 import org.jetbrains.kotlin.formver.viper.ast.PermExp
 import org.jetbrains.kotlin.formver.viper.ast.Stmt
@@ -42,6 +43,7 @@ sealed interface ExpEmbedding : DebugPrintable {
      *
      * The `Exp` returned contains the result of the expression.
      */
+    context(nameResolver: NameResolver)
     fun toViper(ctx: LinearizationContext): Exp
 
     /**
@@ -51,11 +53,13 @@ sealed interface ExpEmbedding : DebugPrintable {
      *
      * This function is intended for cases when having the variable already provides some benefit, e.g. in an if statement.
      */
+    context(nameResolver: NameResolver)
     fun toViperStoringIn(result: VariableEmbedding, ctx: LinearizationContext)
 
     /**
      * Like `toViperStoringIn`, but allow special handling of the case when the result is unused.
      */
+    context(nameResolver: NameResolver)
     fun toViperMaybeStoringIn(result: VariableEmbedding?, ctx: LinearizationContext)
 
     /**
@@ -65,11 +69,13 @@ sealed interface ExpEmbedding : DebugPrintable {
      * When impossible still returns `Ref`. Note that this function should never fail unlike `toViper` which can't convert some `ExpEmbedding`s
      * e.g. access permissions.
      */
+    context(nameResolver: NameResolver)
     fun toViperBuiltinType(ctx: LinearizationContext): Exp
 
     /**
      * Like `toViper`, but assume the result is unused.
      */
+    context(nameResolver: NameResolver)
     fun toViperUnusedResult(ctx: LinearizationContext)
 
     fun ignoringCasts(): ExpEmbedding = this
@@ -90,14 +96,15 @@ sealed interface ExpEmbedding : DebugPrintable {
 
 sealed class ToViperBuiltinMisuseError(msg: String) : RuntimeException(msg)
 
-class ToViperBuiltinOnlyError(exp: ExpEmbedding) :
-    ToViperBuiltinMisuseError("${exp.debugTreeView.print()} can only be translated to Viper built-in type")
+class ToViperBuiltinOnlyError(exp: ExpEmbedding, nameResolver: NameResolver) :
+    ToViperBuiltinMisuseError(with(nameResolver){"${exp.debugTreeView.print()} can only be translated to Viper built-in type"})
 
 /**
  * `ExpEmbedding` with default translation from Ref to Viper built-in type.
  * Currently `Int` and `Bool` are supported. All other types are left intact.
  */
 sealed interface DefaultToBuiltinExpEmbedding : ExpEmbedding {
+    context(nameResolver: NameResolver)
     override fun toViperBuiltinType(ctx: LinearizationContext): Exp {
         val exp = toViper(ctx)
         val injection = type.injectionOr { return exp }
@@ -113,6 +120,7 @@ sealed interface DefaultToBuiltinExpEmbedding : ExpEmbedding {
  * Default implementation for `toViperStoringIn`, which simply assigns the value to the result variable.
  */
 sealed interface DefaultStoringInExpEmbedding : ExpEmbedding {
+    context(nameResolver: NameResolver)
     override fun toViperStoringIn(result: VariableEmbedding, ctx: LinearizationContext) {
         ctx.addStatement { Stmt.assign(result.toViper(ctx), toViper(ctx)) }
     }
@@ -122,6 +130,7 @@ sealed interface DefaultStoringInExpEmbedding : ExpEmbedding {
  * Default `toViperMaybeStoringIn` implementation, which uses `StoringIn` if there is a result and `UnusedResult` otherwise.
  */
 sealed interface DefaultMaybeStoringInExpEmbedding : ExpEmbedding {
+    context(nameResolver: NameResolver)
     override fun toViperMaybeStoringIn(result: VariableEmbedding?, ctx: LinearizationContext) {
         if (result != null) toViperStoringIn(result, ctx)
         else toViperUnusedResult(ctx)
@@ -132,6 +141,7 @@ sealed interface DefaultMaybeStoringInExpEmbedding : ExpEmbedding {
  * Default `toViperUnusedResult` implementation, that simply uses `toViper`.
  */
 sealed interface DefaultUnusedResultExpEmbedding : ExpEmbedding {
+    context(nameResolver: NameResolver)
     override fun toViperUnusedResult(ctx: LinearizationContext) {
         toViper(ctx)
     }
@@ -154,8 +164,12 @@ sealed interface DefaultDebugTreeViewImplementation : ExpEmbedding {
     val debugAnonymousSubexpressions: List<ExpEmbedding>
     val debugNamedSubexpressions: Map<String, ExpEmbedding>
         get() = mapOf()
+
+    context(nameResolver: NameResolver)
     val debugExtraSubtrees: List<TreeView>
         get() = listOf()
+
+    context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() {
             val anonymousSubtrees = debugAnonymousSubexpressions.map { it.debugTreeView }
@@ -184,6 +198,7 @@ sealed interface DirectResultExpEmbedding : DefaultMaybeStoringInExpEmbedding, D
      * When the result is unused, we don't want to produce any expression, but we still want to evaluate the subexpressions.
      */
     val subexpressions: List<ExpEmbedding>
+    context(nameResolver: NameResolver)
     override fun toViperUnusedResult(ctx: LinearizationContext) {
         for (exp in subexpressions) {
             exp.toViperUnusedResult(ctx)
@@ -200,7 +215,8 @@ sealed interface DirectResultExpEmbedding : DefaultMaybeStoringInExpEmbedding, D
  * `ExpEmbedding`s that can only be a part of a Viper assertion, e.g. field access permissions.
  */
 sealed interface OnlyToBuiltinTypeExpEmbedding : DirectResultExpEmbedding {
-    override fun toViper(ctx: LinearizationContext): Exp = throw ToViperBuiltinOnlyError(this)
+    context(nameResolver: NameResolver)
+    override fun toViper(ctx: LinearizationContext): Exp = throw ToViperBuiltinOnlyError(this, nameResolver)
 }
 
 sealed interface NullaryDirectResultExpEmbedding : DirectResultExpEmbedding {
@@ -229,6 +245,7 @@ sealed interface BinaryDirectResultExpEmbedding : DirectResultExpEmbedding {
  * The best possible implementation of `toViper` is to generate a fresh location and place the result there.
  */
 sealed interface BaseStoredResultExpEmbedding : ExpEmbedding, DefaultToBuiltinExpEmbedding {
+    context(nameResolver: NameResolver)
     override fun toViper(ctx: LinearizationContext): Exp {
         val variable = ctx.freshAnonVar(type)
         toViperStoringIn(variable, ctx)
@@ -251,10 +268,11 @@ sealed interface NoResultExpEmbedding : DefaultMaybeStoringInExpEmbedding, Defau
         get() = buildType { nothing() }
 
     // Result ignored, since it is never used.
+    context(nameResolver: NameResolver)
     override fun toViperStoringIn(result: VariableEmbedding, ctx: LinearizationContext) {
         toViperUnusedResult(ctx)
     }
-
+    context(nameResolver: NameResolver)
     override fun toViper(ctx: LinearizationContext): Exp {
         toViperUnusedResult(ctx)
         return RuntimeTypeDomain.unitValue(pos = ctx.source.asPosition)
@@ -267,7 +285,9 @@ sealed interface NoResultExpEmbedding : DefaultMaybeStoringInExpEmbedding, Defau
  * Note that such an expression of course cannot have (non-pure) subexpressions, since otherwise they would have to be linearized as well.
  */
 sealed interface PureExpEmbedding : NullaryDirectResultExpEmbedding {
+    context(nameResolver: NameResolver)
     fun toViper(source: KtSourceElement? = null): Exp
+    context(nameResolver: NameResolver)
     override fun toViper(ctx: LinearizationContext): Exp = toViper(ctx.source)
 
     override fun <R> accept(v: ExpVisitor<R>): R = v.visitPureExpEmbedding(this)
@@ -279,10 +299,11 @@ sealed interface PureExpEmbedding : NullaryDirectResultExpEmbedding {
  * These are typically control flow structures like `if`.
  */
 sealed interface OptionalResultExpEmbedding : BaseStoredResultExpEmbedding {
+    context(nameResolver: NameResolver)
     override fun toViperUnusedResult(ctx: LinearizationContext) {
         toViperMaybeStoringIn(null, ctx)
     }
-
+    context(nameResolver: NameResolver)
     override fun toViperStoringIn(result: VariableEmbedding, ctx: LinearizationContext) {
         toViperMaybeStoringIn(result, ctx)
     }
@@ -297,25 +318,29 @@ sealed interface PassthroughExpEmbedding : ExpEmbedding {
     val inner: ExpEmbedding
     override val type: TypeEmbedding
         get() = inner.type
-
+    context(nameResolver: NameResolver)
     override fun toViper(ctx: LinearizationContext): Exp = withPassthroughHook(ctx) { inner.toViper(this) }
 
+    context(nameResolver: NameResolver)
     override fun toViperBuiltinType(ctx: LinearizationContext): Exp = withPassthroughHook(ctx) {
         inner.toViperBuiltinType(this)
     }
 
+    context(nameResolver: NameResolver)
     override fun toViperStoringIn(result: VariableEmbedding, ctx: LinearizationContext) {
         withPassthroughHook(ctx) {
             inner.toViperStoringIn(result, this)
         }
     }
 
+    context(nameResolver: NameResolver)
     override fun toViperMaybeStoringIn(result: VariableEmbedding?, ctx: LinearizationContext) {
         withPassthroughHook(ctx) {
             inner.toViperMaybeStoringIn(result, this)
         }
     }
 
+    context(nameResolver: NameResolver)
     override fun toViperUnusedResult(ctx: LinearizationContext) {
         withPassthroughHook(ctx) {
             inner.toViperUnusedResult(this)
@@ -334,14 +359,16 @@ sealed interface UnitResultExpEmbedding : OnlyToViperExpEmbedding {
     override val type: TypeEmbedding
         get() = buildType { unit() }
 
+    context(nameResolver: NameResolver)
     override fun toViper(ctx: LinearizationContext): Exp {
         toViperSideEffects(ctx)
         return RuntimeTypeDomain.unitValue(pos = ctx.source.asPosition)
     }
 
+    context(nameResolver: NameResolver)
     fun toViperSideEffects(ctx: LinearizationContext)
 }
-
+context(nameResolver: NameResolver)
 fun List<ExpEmbedding>.toViper(ctx: LinearizationContext): List<Exp> = map { it.toViper(ctx) }
 
 /**
@@ -354,8 +381,10 @@ data class PrimitiveFieldAccess(override val inner: ExpEmbedding, val field: Fie
     override val type: TypeEmbedding
         get() = this.field.type
 
+    context(nameResolver: NameResolver)
     override fun toViper(ctx: LinearizationContext): Exp = Exp.FieldAccess(inner.toViper(ctx), field.toViper(), ctx.source.asPosition)
 
+    context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = OperatorNode(inner.debugTreeView, ".", this.field.debugTreeView)
 
@@ -369,6 +398,7 @@ data class FieldAccess(val receiver: ExpEmbedding, val field: FieldEmbedding) : 
     private val noInvariants: Boolean
         get() = accessInvariant == null
 
+    context(nameResolver: NameResolver)
     override fun toViper(ctx: LinearizationContext): Exp {
         if (noInvariants && !field.unfoldToAccess) return Exp.FieldAccess(receiver.toViper(ctx), field.toViper(), ctx.source.asPosition)
 
@@ -378,6 +408,7 @@ data class FieldAccess(val receiver: ExpEmbedding, val field: FieldEmbedding) : 
         return variable.toViper(ctx)
     }
 
+    context(nameResolver: NameResolver)
     override fun toViperStoringIn(result: VariableEmbedding, ctx: LinearizationContext) {
         val receiverViper = receiver.toViper(ctx)
         val receiverWrapper = ExpWrapper(receiverViper, receiver.type)
@@ -392,6 +423,7 @@ data class FieldAccess(val receiver: ExpEmbedding, val field: FieldEmbedding) : 
         }
     }
 
+    context(nameResolver: NameResolver)
     private fun unfoldingInImpl(ctx: LinearizationContext): Exp {
         val hierarchyPath = (receiver.type.pretype as? ClassTypeEmbedding)?.details?.hierarchyUnfoldPath(field)
         val primitiveAccess: Exp = Exp.FieldAccess(receiver.toViper(ctx), field.toViper(), ctx.source.asPosition)
@@ -402,10 +434,12 @@ data class FieldAccess(val receiver: ExpEmbedding, val field: FieldEmbedding) : 
         }
     }
 
+    context(nameResolver: NameResolver)
     private fun ClassTypeEmbedding.predicateAccess(receiver: ExpEmbedding, ctx: LinearizationContext): Exp.PredicateAccess =
-        sharedPredicateAccessInvariant().fillHole(receiver).pureToViper(toBuiltin = true, ctx.source) as? Exp.PredicateAccess
+        sharedPredicateAccessInvariant()?.fillHole(receiver)?.pureToViper(toBuiltin = true, ctx.source) as? Exp.PredicateAccess
             ?: error("Attempt to unfold a predicate of ${name.mangled}.")
 
+    context(nameResolver: NameResolver)
     private fun unfoldHierarchy(receiverWrapper: ExpEmbedding, ctx: LinearizationContext) {
         val hierarchyPath = (receiver.type.pretype as? ClassTypeEmbedding)?.details?.hierarchyUnfoldPath(field)
         hierarchyPath?.forEach { classType ->
@@ -414,10 +448,12 @@ data class FieldAccess(val receiver: ExpEmbedding, val field: FieldEmbedding) : 
         }
     }
 
+    context(nameResolver: NameResolver)
     override fun toViperUnusedResult(ctx: LinearizationContext) {
         receiver.toViperUnusedResult(ctx)
     }
 
+    context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = OperatorNode(receiver.debugTreeView, ".", this.field.debugTreeView)
 
@@ -428,6 +464,7 @@ data class FieldAccess(val receiver: ExpEmbedding, val field: FieldEmbedding) : 
  * Represents a combination of `Assign` + `FieldAccess`.
  */
 data class FieldModification(val receiver: ExpEmbedding, val field: FieldEmbedding, val newValue: ExpEmbedding) : UnitResultExpEmbedding {
+    context(nameResolver: NameResolver)
     override fun toViperSideEffects(ctx: LinearizationContext) {
         val receiverViper = receiver.toViper(ctx)
         val newValueViper = newValue.withType(field.type).toViper(ctx)
@@ -439,7 +476,7 @@ data class FieldModification(val receiver: ExpEmbedding, val field: FieldEmbeddi
             Stmt.FieldAssign(Exp.FieldAccess(receiverViper, field.toViper()), newValueViper, ctx.source.asPosition)
         }
     }
-
+    context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = OperatorNode(OperatorNode(receiver.debugTreeView, ".", this.field.debugTreeView), " := ", newValue.debugTreeView)
 
@@ -451,10 +488,12 @@ data class FieldAccessPermissions(override val inner: ExpEmbedding, val field: F
     // We consider access permissions to have type Boolean, though this is a bit questionable.
     override val type: TypeEmbedding = buildType { boolean() }
 
+    context(nameResolver: NameResolver)
     override fun toViperBuiltinType(ctx: LinearizationContext): Exp =
         inner.toViper(ctx).fieldAccessPredicate(field.toViper(), perm, ctx.source.asPosition)
 
     // field collides with the field context-sensitive keyword.
+    context(nameResolver: NameResolver)
     override val debugExtraSubtrees: List<TreeView>
         get() = listOf(this.field.debugTreeView, perm.debugTreeView)
 
@@ -465,12 +504,15 @@ data class FieldAccessPermissions(override val inner: ExpEmbedding, val field: F
 data class PredicateAccessPermissions(val predicateName: MangledName, val args: List<ExpEmbedding>, val perm: PermExp) :
     OnlyToBuiltinTypeExpEmbedding {
     override val type: TypeEmbedding = buildType { boolean() }
+
+    context(nameResolver: NameResolver)
     override fun toViperBuiltinType(ctx: LinearizationContext): Exp =
         Exp.PredicateAccess(predicateName, args.map { it.toViper(ctx) }, perm, ctx.source.asPosition)
 
     override val subexpressions: List<ExpEmbedding>
         get() = args
 
+    context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = NamedBranchingNode("PredicateAccess", buildList {
             add(PlaintextLeaf(predicateName.mangled).withDesignation("name"))
@@ -483,6 +525,7 @@ data class PredicateAccessPermissions(val predicateName: MangledName, val args: 
 data class Assign(val lhs: ExpEmbedding, val rhs: ExpEmbedding) : UnitResultExpEmbedding {
     override val type: TypeEmbedding = lhs.type
 
+    context(nameResolver: NameResolver)
     override fun toViperSideEffects(ctx: LinearizationContext) {
         val lhsViper = lhs.toViper(ctx)
         if (lhsViper is Exp.LocalVar) {
@@ -493,6 +536,7 @@ data class Assign(val lhs: ExpEmbedding, val rhs: ExpEmbedding) : UnitResultExpE
         }
     }
 
+    context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = OperatorNode(lhs.debugTreeView, " := ", rhs.debugTreeView)
 
@@ -504,6 +548,7 @@ data class Declare(val variable: VariableEmbedding, val initializer: ExpEmbeddin
     DefaultDebugTreeViewImplementation {
     override val type: TypeEmbedding = buildType { unit() }
 
+    context(nameResolver: NameResolver)
     override fun toViperSideEffects(ctx: LinearizationContext) {
         ctx.addDeclaration(variable.toLocalVarDecl(ctx.source.asPosition))
         initializer?.toViperStoringIn(variable, ctx)
@@ -511,7 +556,7 @@ data class Declare(val variable: VariableEmbedding, val initializer: ExpEmbeddin
 
     override val debugAnonymousSubexpressions: List<ExpEmbedding>
         get() = listOf()
-
+    context(nameResolver: NameResolver)
     override val debugExtraSubtrees: List<TreeView>
         get() = listOfNotNull(variable.debugTreeView, variable.type.debugTreeView, initializer?.debugTreeView)
 

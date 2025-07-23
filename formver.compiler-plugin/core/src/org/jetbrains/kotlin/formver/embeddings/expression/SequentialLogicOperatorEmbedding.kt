@@ -11,6 +11,7 @@ import org.jetbrains.kotlin.formver.embeddings.expression.OperatorExpEmbeddings.
 import org.jetbrains.kotlin.formver.embeddings.types.buildType
 import org.jetbrains.kotlin.formver.linearization.LinearizationContext
 import org.jetbrains.kotlin.formver.linearization.LogicOperatorPolicy
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 
 /**
@@ -22,19 +23,22 @@ sealed class SequentialLogicOperatorEmbedding: BinaryDirectResultExpEmbedding {
         get() = buildType { boolean() }
 
     protected abstract val ifReplacement: ExpEmbedding
+    context(nameResolver: NameResolver)
     protected abstract val expressionReplacement: ExpEmbedding
-
+    context(nameResolver: NameResolver)
     private fun operatorReplacement(ctx: LinearizationContext) = when (ctx.logicOperatorPolicy) {
         LogicOperatorPolicy.CONVERT_TO_IF -> ifReplacement
         LogicOperatorPolicy.CONVERT_TO_EXPRESSION -> expressionReplacement
     }
-
+    context(nameResolver: NameResolver)
     override fun toViper(ctx: LinearizationContext): Exp =
         operatorReplacement(ctx).toViper(ctx)
 
+    context(nameResolver: NameResolver)
     override fun toViperBuiltinType(ctx: LinearizationContext): Exp =
         operatorReplacement(ctx).toViperBuiltinType(ctx)
 
+    context(nameResolver: NameResolver)
     override fun toViperStoringIn(result: VariableEmbedding, ctx: LinearizationContext) {
         operatorReplacement(ctx).toViperStoringIn(result, ctx)
     }
@@ -43,6 +47,7 @@ sealed class SequentialLogicOperatorEmbedding: BinaryDirectResultExpEmbedding {
 class SequentialAnd(override val left: ExpEmbedding, override val right: ExpEmbedding) : SequentialLogicOperatorEmbedding() {
     override val ifReplacement
         get() = If(left, right, BooleanLit(false), buildType { boolean() })
+    context(nameResolver: NameResolver)
     override val expressionReplacement
         get() = And(left, right)
 
@@ -52,6 +57,7 @@ class SequentialAnd(override val left: ExpEmbedding, override val right: ExpEmbe
 class SequentialOr(override val left: ExpEmbedding, override val right: ExpEmbedding) : SequentialLogicOperatorEmbedding() {
     override val ifReplacement
         get() = If(left, BooleanLit(true), right, buildType { boolean() })
+    context(nameResolver: NameResolver)
     override val expressionReplacement
         get() = Or(left, right)
 

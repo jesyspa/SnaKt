@@ -14,7 +14,7 @@ class CustomGetter(val getterMethod: CallableEmbedding) : GetterEmbedding {
     override fun getValue(
         receiver: ExpEmbedding,
         ctx: StmtConversionContext,
-    ): ExpEmbedding = getterMethod.insertCall(listOf(receiver), ctx, getterMethod.callableType.returnType)
+    ): ExpEmbedding = with(ctx.nameResolver) {getterMethod.insertCall(listOf(receiver), ctx, getterMethod.callableType.returnType)}
 }
 
 class CustomSetter(val setterMethod: CallableEmbedding) : SetterEmbedding {
@@ -22,5 +22,5 @@ class CustomSetter(val setterMethod: CallableEmbedding) : SetterEmbedding {
         receiver: ExpEmbedding,
         value: ExpEmbedding,
         ctx: StmtConversionContext,
-    ): ExpEmbedding = setterMethod.insertCall(listOf(receiver, value), ctx, setterMethod.callableType.returnType)
+    ): ExpEmbedding = with(ctx.nameResolver) {setterMethod.insertCall(listOf(receiver, value), ctx, setterMethod.callableType.returnType)}
 }

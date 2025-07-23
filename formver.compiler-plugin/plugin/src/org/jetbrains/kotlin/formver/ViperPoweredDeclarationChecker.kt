@@ -21,7 +21,6 @@ import org.jetbrains.kotlin.formver.reporting.reportVerifierError
 import org.jetbrains.kotlin.formver.viper.Verifier
 import org.jetbrains.kotlin.formver.viper.mangled
 import org.jetbrains.kotlin.formver.viper.ast.Program
-import org.jetbrains.kotlin.formver.viper.ast.registerAllNames
 import org.jetbrains.kotlin.formver.viper.ast.unwrapOr
 import org.jetbrains.kotlin.formver.viper.errors.VerifierError
 import org.jetbrains.kotlin.name.ClassId
@@ -50,19 +49,20 @@ class ViperPoweredDeclarationChecker(private val session: FirSession, private va
             val programConversionContext = ProgramConverter(session, config, errorCollector)
             programConversionContext.registerForVerification(declaration)
             val program = programConversionContext.program
-            program.registerAllNames()
             getProgramForLogging(program)?.let {
-                reporter.reportOn(declaration.source, PluginErrors.VIPER_TEXT, declaration.name.asString(), it.toDebugOutput())
+                reporter.reportOn(declaration.source, PluginErrors.VIPER_TEXT, declaration.name.asString(), with(programConversionContext.nameResolver) {it.toDebugOutput()})
             }
 
             if (shouldDumpExpEmbeddings(declaration)) {
-                for ((name, embedding) in programConversionContext.debugExpEmbeddings) {
-                    reporter.reportOn(
-                        declaration.source,
-                        PluginErrors.EXP_EMBEDDING,
-                        name.mangled,
-                        embedding.debugTreeView.print()
-                    )
+                with(programConversionContext.nameResolver) {
+                    for ((name, embedding) in programConversionContext.debugExpEmbeddings) {
+                        reporter.reportOn(
+                            declaration.source,
+                            PluginErrors.EXP_EMBEDDING,
+                            name.mangled,
+                            embedding.debugTreeView.print()
+                        )
+                    }
                 }
             }
 
@@ -76,11 +76,11 @@ class ViperPoweredDeclarationChecker(private val session: FirSession, private va
                 reporter.reportVerifierError(source, err, config.errorStyle)
             }
 
-            val consistent = verifier.checkConsistency(program, onFailure)
+            val consistent = with(programConversionContext.nameResolver) {verifier.checkConsistency(program, onFailure)}
             // If the Viper program is not consistent, that's our error; we shouldn't surface it to the user as an unverified contract.
             if (!consistent || !config.shouldVerify(declaration)) return
 
-            verifier.verify(program, onFailure)
+            with(programConversionContext.nameResolver) {verifier.verify(program, onFailure)}
         } catch (e: Exception) {
             val error = errorCollector.formatErrorWithInfos(e.message ?: "No message provided")
             reporter.reportOn(declaration.source, PluginErrors.INTERNAL_ERROR, error)

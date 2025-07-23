@@ -14,6 +14,7 @@ import org.jetbrains.kotlin.formver.embeddings.expression.debug.withDesignation
 import org.jetbrains.kotlin.formver.embeddings.types.*
 import org.jetbrains.kotlin.formver.linearization.LinearizationContext
 import org.jetbrains.kotlin.formver.linearization.pureToViper
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 import org.jetbrains.kotlin.formver.viper.ast.Stmt
 import org.jetbrains.kotlin.utils.addIfNotNull
@@ -25,6 +26,7 @@ data class Is(
     UnaryDirectResultExpEmbedding {
     override val type = buildType { boolean() }
 
+    context(nameResolver: NameResolver)
     override fun toViper(ctx: LinearizationContext) =
         RuntimeTypeDomain.boolInjection.toRef(
             RuntimeTypeDomain.isSubtype(
@@ -36,7 +38,7 @@ data class Is(
             pos = ctx.source.asPosition,
             info = sourceRole.asInfo
         )
-
+    context(nameResolver: NameResolver)
     override val debugExtraSubtrees: List<TreeView>
         get() = listOf(comparisonType.debugTreeView.withDesignation("type"))
 
@@ -50,9 +52,11 @@ data class Is(
  */
 data class Cast(override val inner: ExpEmbedding, override val type: TypeEmbedding) : UnaryDirectResultExpEmbedding {
     // TODO: Do we want to assert `inner isOf type` here before making a cast itself?
+    context(nameResolver: NameResolver)
     override fun toViper(ctx: LinearizationContext) = inner.toViper(ctx)
     override fun ignoringCasts(): ExpEmbedding = inner.ignoringCasts()
     override fun ignoringCastsAndMetaNodes(): ExpEmbedding = inner.ignoringCastsAndMetaNodes()
+    context(nameResolver: NameResolver)
     override val debugExtraSubtrees: List<TreeView>
         get() = listOf(type.debugTreeView.withDesignation("target"))
 
@@ -73,7 +77,7 @@ fun ExpEmbedding.withType(init: TypeBuilder.() -> PretypeBuilder): ExpEmbedding 
 data class SafeCast(val exp: ExpEmbedding, val targetType: TypeEmbedding) : StoredResultExpEmbedding, DefaultDebugTreeViewImplementation {
     override val type: TypeEmbedding
         get() = targetType.getNullable()
-
+    context(nameResolver: NameResolver)
     override fun toViperStoringIn(result: VariableEmbedding, ctx: LinearizationContext) {
         val expViper = exp.toViper(ctx)
         val expWrapped = ExpWrapper(expViper, exp.type)
@@ -83,7 +87,7 @@ data class SafeCast(val exp: ExpEmbedding, val targetType: TypeEmbedding) : Stor
 
     override val debugAnonymousSubexpressions: List<ExpEmbedding>
         get() = listOf(exp)
-
+    context(nameResolver: NameResolver)
     override val debugExtraSubtrees: List<TreeView>
         get() = listOf(targetType.debugTreeView.withDesignation("type"))
 
@@ -100,7 +104,7 @@ interface InhaleInvariants : ExpEmbedding, DefaultDebugTreeViewImplementation {
 
     override val debugAnonymousSubexpressions: List<ExpEmbedding>
         get() = listOf(exp)
-
+    context(nameResolver: NameResolver)
     override val debugExtraSubtrees: List<TreeView>
         get() = listOf(type.debugTreeView.withDesignation("type"))
 
@@ -119,7 +123,7 @@ interface InhaleInvariants : ExpEmbedding, DefaultDebugTreeViewImplementation {
  */
 private data class InhaleInvariantsForExp(override val exp: ExpEmbedding, override val invariants: List<TypeInvariantEmbedding>) :
     StoredResultExpEmbedding, InhaleInvariants {
-
+    context(nameResolver: NameResolver)
     override fun toViperStoringIn(result: VariableEmbedding, ctx: LinearizationContext) {
         exp.toViperStoringIn(result, ctx)
         for (invariant in invariants.fillHoles(result)) {
@@ -133,7 +137,7 @@ private data class InhaleInvariantsForVariable(
     override val invariants: List<TypeInvariantEmbedding>,
 ) :
     InhaleInvariants, OnlyToViperExpEmbedding {
-
+    context(nameResolver: NameResolver)
     override fun toViper(ctx: LinearizationContext): Exp {
         val variable = exp.underlyingVariable ?: error("Use of InhaleInvariantsForVariable for non-variable")
         for (invariant in invariants.fillHoles(variable)) {
@@ -147,7 +151,7 @@ private data class InhaleInvariantsForVariable(
 
 class InhaleInvariantsBuilder(val exp: ExpEmbedding) {
     val invariants = mutableListOf<TypeInvariantEmbedding>()
-
+    context(nameResolver: NameResolver)
     fun complete(): ExpEmbedding {
         if (proven) exp.type.subTypeInvariant()?.let { invariants.add(it) }
         if (access) {
@@ -164,16 +168,16 @@ class InhaleInvariantsBuilder(val exp: ExpEmbedding) {
 
     var access: Boolean = false
 }
-
+context(nameResolver: NameResolver)
 inline fun ExpEmbedding.withInvariants(block: InhaleInvariantsBuilder.() -> Unit): ExpEmbedding {
     val builder = InhaleInvariantsBuilder(this)
     builder.block()
     return builder.complete()
 }
-
+context(nameResolver: NameResolver)
 fun ExpEmbedding.withIsUnitInvariantIfUnit() = withInvariants {
     proven = type.equalToType { unit() }
 }
-
+context(nameResolver: NameResolver)
 inline fun ExpEmbedding.withNewTypeInvariants(newType: TypeEmbedding, block: InhaleInvariantsBuilder.() -> Unit) =
     if (this.type == newType) this else withType(newType).withInvariants(block)

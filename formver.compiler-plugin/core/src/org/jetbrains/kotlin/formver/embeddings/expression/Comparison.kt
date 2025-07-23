@@ -13,6 +13,7 @@ import org.jetbrains.kotlin.formver.embeddings.SourceRole
 import org.jetbrains.kotlin.formver.embeddings.asInfo
 import org.jetbrains.kotlin.formver.embeddings.types.buildType
 import org.jetbrains.kotlin.formver.linearization.LinearizationContext
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.EqAny
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 import org.jetbrains.kotlin.formver.viper.ast.NeAny
@@ -23,14 +24,14 @@ sealed interface AnyComparisonExpression : BinaryDirectResultExpEmbedding {
         get() = buildType { boolean() }
 
     val comparisonOperation: Operator
-
+    context(nameResolver: NameResolver)
     override fun toViper(ctx: LinearizationContext): Exp =
         RuntimeTypeDomain.boolInjection.toRef(
             toViperBuiltinType(ctx),
             pos = ctx.source.asPosition,
             info = sourceRole.asInfo
         )
-
+    context(nameResolver: NameResolver)
     override fun toViperBuiltinType(ctx: LinearizationContext): Exp =
         // this check guarantees that arguments will be of the same Viper type
         if (left.type == right.type)

@@ -14,6 +14,7 @@ import org.jetbrains.kotlin.formver.embeddings.expression.debug.TreeView
 import org.jetbrains.kotlin.formver.embeddings.expression.debug.withDesignation
 import org.jetbrains.kotlin.formver.linearization.LinearizationContext
 import org.jetbrains.kotlin.formver.linearization.pureToViper
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 
 data class WithPosition(override val inner: ExpEmbedding, val source: KtSourceElement) : PassthroughExpEmbedding {
@@ -25,6 +26,7 @@ data class WithPosition(override val inner: ExpEmbedding, val source: KtSourceEl
     override fun <R> accept(v: ExpVisitor<R>): R = v.visitWithPosition(this)
 
     // We ignore position information in the debug view.
+    context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = inner.debugTreeView
 }
@@ -64,6 +66,7 @@ data class SharingContext(override val inner: ExpEmbedding) : PassthroughExpEmbe
 
     override fun ignoringMetaNodes() = inner
     override fun ignoringCastsAndMetaNodes() = inner
+    context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = NamedBranchingNode(
             "SharingContext",
@@ -91,12 +94,15 @@ data class Shared(val inner: ExpEmbedding) : StoredResultExpEmbedding, DefaultTo
     override val type: TypeEmbedding
         get() = inner.type
 
+    context(nameResolver: NameResolver)
     override fun toViper(ctx: LinearizationContext): Exp = context.tryInitShared { inner.toViper(ctx) }
 
+    context(nameResolver: NameResolver)
     override fun toViperStoringIn(result: VariableEmbedding, ctx: LinearizationContext) {
         context.tryInitShared { inner.toViperStoringIn(result, ctx); result.toViper(ctx) }
     }
 
+    context(nameResolver: NameResolver)
     override fun toViperUnusedResult(ctx: LinearizationContext) {
         context.tryInitShared { inner.toViperUnusedResult(ctx); UnitLit.pureToViper(toBuiltin = false) }
     }
@@ -112,6 +118,7 @@ data class Shared(val inner: ExpEmbedding) : StoredResultExpEmbedding, DefaultTo
         _context = ctx
     }
 
+    context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = NamedBranchingNode(
             "Shared",

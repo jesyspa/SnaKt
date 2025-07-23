@@ -94,9 +94,9 @@ class ContractDescriptionConversionVisitor(
         val rhsRole = right.sourceRole as SourceRole.Condition
         return when (binaryLogicExpression.kind) {
             LogicOperationKind.AND ->
-                OperatorExpEmbeddings.And(left, right, SourceRole.Condition.Conjunction(lhsRole, rhsRole))
+                with(ctx.nameResolver) {OperatorExpEmbeddings.And(left, right, SourceRole.Condition.Conjunction(lhsRole, rhsRole))}
             LogicOperationKind.OR ->
-                OperatorExpEmbeddings.Or(left, right, SourceRole.Condition.Disjunction(lhsRole, rhsRole))
+                with(ctx.nameResolver) {OperatorExpEmbeddings.Or(left, right, SourceRole.Condition.Disjunction(lhsRole, rhsRole))}
         }
     }
 
@@ -105,7 +105,7 @@ class ContractDescriptionConversionVisitor(
         data: ContractVisitorContext,
     ): ExpEmbedding {
         val arg = logicalNot.arg.accept(this, data)
-        return OperatorExpEmbeddings.Not(arg, SourceRole.Condition.Negation(arg.sourceRole as SourceRole.Condition))
+        return with(ctx.nameResolver) {OperatorExpEmbeddings.Not(arg, SourceRole.Condition.Negation(arg.sourceRole as SourceRole.Condition))}
     }
 
     override fun visitConditionalEffectDeclaration(
@@ -116,7 +116,7 @@ class ContractDescriptionConversionVisitor(
         val cond = conditionalEffect.condition.accept(this, data)
         // The effect's source role it is guaranteed to be not null. The same goes for the condition's source role.
         val role = SourceRole.ConditionalEffect(effect.sourceRole as SourceRole.ReturnsEffect, cond.sourceRole as SourceRole.Condition)
-        return OperatorExpEmbeddings.Implies(effect, cond, role)
+        return with(ctx.nameResolver) {OperatorExpEmbeddings.Implies(effect, cond, role)}
     }
 
     override fun visitCallsEffectDeclaration(
@@ -134,7 +134,7 @@ class ContractDescriptionConversionVisitor(
         val argSymbol = isInstancePredicate.arg.getTargetParameter(data)
         val role = SourceRole.Condition.IsType(argSymbol, isInstancePredicate.type, isInstancePredicate.isNegated)
         return if (isInstancePredicate.isNegated) {
-            OperatorExpEmbeddings.Not(Is(argVar, ctx.embedType(isInstancePredicate.type)), role)
+            with(ctx.nameResolver) {OperatorExpEmbeddings.Not(Is(argVar, ctx.embedType(isInstancePredicate.type)), role)}
         } else {
             Is(argVar, ctx.embedType(isInstancePredicate.type), role)
         }

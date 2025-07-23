@@ -21,6 +21,7 @@ import org.jetbrains.kotlin.formver.names.NameMatcher
 import org.jetbrains.kotlin.formver.names.ScopedKotlinName
 import org.jetbrains.kotlin.formver.names.SpecialName
 import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.Field
 import org.jetbrains.kotlin.formver.viper.ast.PermExp
 import org.jetbrains.kotlin.formver.viper.ast.Type
@@ -87,11 +88,12 @@ object ListSizeFieldEmbedding : FieldEmbedding {
     override fun extraAccessInvariantsForParameter(): List<TypeInvariantEmbedding> = listOf(NonNegativeSizeTypeInvariantEmbedding)
 
     object NonNegativeSizeTypeInvariantEmbedding : TypeInvariantEmbedding {
+        context(nameResolver: NameResolver)
         override fun fillHole(exp: ExpEmbedding): ExpEmbedding =
             GeIntInt(FieldAccess(exp, ListSizeFieldEmbedding), IntLit(0))
     }
 }
-
+context(nameResolver: NameResolver)
 fun ScopedKotlinName.specialEmbedding(embedding: ClassTypeEmbedding): FieldEmbedding? =
     NameMatcher.matchClassScope(this) {
         ifBackingFieldName("size") {
