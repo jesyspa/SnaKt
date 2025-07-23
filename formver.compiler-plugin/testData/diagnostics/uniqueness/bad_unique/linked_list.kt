@@ -6,6 +6,6 @@ import org.jetbrains.kotlin.formver.plugin.Unique
 
 class Link(@Unique val next: Link?, @Unique var data: Int)
 
-fun <!VIPER_TEXT!>getVal<!>(@Unique l: Link): Int {
-    return l.next?.data
+fun <!VIPER_TEXT!>getVal<!>(@Unique l: Link): Int? {
+    return l.next?.next?.data
 }
