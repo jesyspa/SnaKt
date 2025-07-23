@@ -35,7 +35,6 @@ fun TestConfigurationBuilder.commonFirWithPluginFrontendConfiguration() {
         LANGUAGE with "+PropertyParamAnnotationDefaultTargetMode"
 
         +JvmEnvironmentConfigurationDirectives.FULL_JDK
-
     }
 
     useAdditionalSourceProviders(::StdlibReplacementsProvider)
