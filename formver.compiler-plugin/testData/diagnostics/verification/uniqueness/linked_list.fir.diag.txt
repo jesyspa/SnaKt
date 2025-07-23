@@ -23,7 +23,7 @@ predicate p$c$Link$unique(this$dispatch: Ref) {
 
 method f$getVal$TF$T$Link(p$l: Ref) returns (ret$0: Ref)
   requires acc(p$c$Link$unique(p$l), write)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$nullable(df$rt$intType()))
 {
   var anon$0: Ref
   var anon$1: Ref
@@ -32,17 +32,19 @@ method f$getVal$TF$T$Link(p$l: Ref) returns (ret$0: Ref)
   unfold acc(p$c$Link$shared(p$l), wildcard)
   anon$1 := p$l.bf$next
   if (anon$1 != df$rt$nullValue()) {
-    var anon$2: Ref
-    inhale acc(anon$1.bf$data, write)
-    anon$2 := anon$1.bf$data
-    exhale acc(anon$1.bf$data, write)
-    inhale df$rt$isSubtype(df$rt$typeOf(anon$2), df$rt$intType())
-    anon$0 := anon$2
+    unfold acc(p$c$Link$shared(anon$1), wildcard)
+    anon$0 := anon$1.bf$next
   } else {
     anon$0 := df$rt$nullValue()}
-  ret$0 := anon$0
+  if (anon$0 != df$rt$nullValue()) {
+    var anon$2: Ref
+    inhale acc(anon$0.bf$data, write)
+    anon$2 := anon$0.bf$data
+    exhale acc(anon$0.bf$data, write)
+    inhale df$rt$isSubtype(df$rt$typeOf(anon$2), df$rt$intType())
+    ret$0 := anon$2
+  } else {
+    ret$0 := df$rt$nullValue()}
   goto lbl$ret$0
   label lbl$ret$0
 }
-
-/linked_list.kt:(290,302): error: Return type mismatch: expected 'Int', actual 'Int?'.
