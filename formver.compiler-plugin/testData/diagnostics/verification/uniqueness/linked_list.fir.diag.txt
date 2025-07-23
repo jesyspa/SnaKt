@@ -1,0 +1,48 @@
+/linked_list.kt:(248,254): info: Generated Viper text for getVal:
+field bf$data: Ref
+
+field bf$next: Ref
+
+predicate p$c$Link$shared(this$dispatch: Ref) {
+  acc(this$dispatch.bf$next, wildcard) &&
+  (this$dispatch.bf$next != df$rt$nullValue() ==>
+  acc(p$c$Link$shared(this$dispatch.bf$next), wildcard)) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$next), df$rt$nullable(df$rt$c$Link()))
+}
+
+predicate p$c$Link$unique(this$dispatch: Ref) {
+  acc(this$dispatch.bf$next, wildcard) &&
+  (this$dispatch.bf$next != df$rt$nullValue() ==>
+  acc(p$c$Link$shared(this$dispatch.bf$next), wildcard)) &&
+  (this$dispatch.bf$next != df$rt$nullValue() ==>
+  acc(p$c$Link$unique(this$dispatch.bf$next), write)) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$next), df$rt$nullable(df$rt$c$Link())) &&
+  acc(this$dispatch.bf$data, write) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$data), df$rt$intType())
+}
+
+method f$getVal$TF$T$Link(p$l: Ref) returns (ret$0: Ref)
+  requires acc(p$c$Link$unique(p$l), write)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
+{
+  var anon$0: Ref
+  var anon$1: Ref
+  inhale df$rt$isSubtype(df$rt$typeOf(p$l), df$rt$c$Link())
+  inhale acc(p$c$Link$shared(p$l), wildcard)
+  unfold acc(p$c$Link$shared(p$l), wildcard)
+  anon$1 := p$l.bf$next
+  if (anon$1 != df$rt$nullValue()) {
+    var anon$2: Ref
+    inhale acc(anon$1.bf$data, write)
+    anon$2 := anon$1.bf$data
+    exhale acc(anon$1.bf$data, write)
+    inhale df$rt$isSubtype(df$rt$typeOf(anon$2), df$rt$intType())
+    anon$0 := anon$2
+  } else {
+    anon$0 := df$rt$nullValue()}
+  ret$0 := anon$0
+  goto lbl$ret$0
+  label lbl$ret$0
+}
+
+/linked_list.kt:(290,302): error: Return type mismatch: expected 'Int', actual 'Int?'.
