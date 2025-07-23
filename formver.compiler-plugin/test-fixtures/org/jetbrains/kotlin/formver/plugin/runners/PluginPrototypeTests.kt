@@ -38,10 +38,6 @@ fun TestConfigurationBuilder.commonFirWithPluginFrontendConfiguration() {
 
     }
 
-    globalDefaults {
-
-    }
-
     useAdditionalSourceProviders(::StdlibReplacementsProvider)
 
     useConfigurators(
