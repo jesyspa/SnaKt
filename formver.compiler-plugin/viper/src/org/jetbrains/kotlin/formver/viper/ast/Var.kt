@@ -11,15 +11,8 @@ import org.jetbrains.kotlin.formver.viper.MangledName
  *
  * This is like a `VariableEmbedding` but already at the Viper level, making expressions
  * that involve variables less cumbersome to write.
- *
- * Note that we do not mangle the name here: it is assumed that these variables are only
- * used in very controlled scopes.
  */
-data class Var(val name: String, val type: Type) {
-    val mangledName = object : MangledName {
-        override val mangledBaseName: String = name
-    }
-
-    fun use(): Exp.LocalVar = Exp.LocalVar(mangledName, type)
-    fun decl(): Declaration.LocalVarDecl = Declaration.LocalVarDecl(mangledName, type)
+data class Var(val name: MangledName, val type: Type) {
+    fun use(): Exp.LocalVar = Exp.LocalVar(name, type)
+    fun decl(): Declaration.LocalVarDecl = Declaration.LocalVarDecl(name, type)
 }
