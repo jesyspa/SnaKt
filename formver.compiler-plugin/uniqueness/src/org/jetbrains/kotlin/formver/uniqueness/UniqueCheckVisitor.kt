@@ -11,7 +11,6 @@ import org.jetbrains.kotlin.fir.expressions.FirBlock
 import org.jetbrains.kotlin.fir.expressions.FirFunctionCall
 import org.jetbrains.kotlin.fir.expressions.FirLiteralExpression
 import org.jetbrains.kotlin.fir.expressions.FirPropertyAccessExpression
-import org.jetbrains.kotlin.fir.expressions.allReceiverExpressions
 import org.jetbrains.kotlin.fir.expressions.arguments
 import org.jetbrains.kotlin.fir.expressions.toResolvedCallableSymbol
 import org.jetbrains.kotlin.fir.references.FirResolvedNamedReference
@@ -19,7 +18,6 @@ import org.jetbrains.kotlin.fir.symbols.SymbolInternals
 import org.jetbrains.kotlin.fir.symbols.impl.FirFunctionSymbol
 import org.jetbrains.kotlin.fir.visitors.FirVisitor
 import org.jetbrains.kotlin.text
-import kotlin.collections.plus
 
 object UniqueCheckVisitor : FirVisitor<UniqueLevel, UniqueCheckerContext>() {
     override fun visitElement(element: FirElement, data: UniqueCheckerContext): UniqueLevel = UniqueLevel.Shared
@@ -46,11 +44,9 @@ object UniqueCheckVisitor : FirVisitor<UniqueLevel, UniqueCheckerContext>() {
         propertyAccessExpression: FirPropertyAccessExpression, data: UniqueCheckerContext
     ): UniqueLevel {
         val currentAnnotation = propertyAccessExpression.calleeReference.accept(this, data)
-        val previousLevels = propertyAccessExpression.allReceiverExpressions.map {
-            it.accept(this, data)
-        }
+        val previousLevel = propertyAccessExpression.explicitReceiver?.accept(this, data) ?: UniqueLevel.Unique
 
-        return (previousLevels + currentAnnotation).max()
+        return listOf(currentAnnotation, previousLevel).max()
     }
 
     override fun visitBlock(block: FirBlock, data: UniqueCheckerContext): UniqueLevel {
