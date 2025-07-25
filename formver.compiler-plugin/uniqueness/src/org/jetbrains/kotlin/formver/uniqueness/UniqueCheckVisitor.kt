@@ -5,7 +5,6 @@
 
 package org.jetbrains.kotlin.formver.uniqueness
 
-import org.jetbrains.kotlin.fir.FirAnnotationContainer
 import org.jetbrains.kotlin.fir.FirElement
 import org.jetbrains.kotlin.fir.declarations.FirSimpleFunction
 import org.jetbrains.kotlin.fir.expressions.FirBlock
@@ -29,12 +28,6 @@ object UniqueCheckVisitor : FirVisitor<UniqueLevel, UniqueCheckerContext>() {
         simpleFunction.body?.accept(this, data)
         // Function definition doesn't have to return a unique level
         return UniqueLevel.Shared
-    }
-
-    override fun visitAnnotationContainer(
-        annotationContainer: FirAnnotationContainer, data: UniqueCheckerContext
-    ): UniqueLevel {
-        return data.resolveUniqueAnnotation(annotationContainer)
     }
 
     override fun visitLiteralExpression(
