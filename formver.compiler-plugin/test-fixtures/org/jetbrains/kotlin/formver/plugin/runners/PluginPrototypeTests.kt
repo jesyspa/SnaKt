@@ -12,6 +12,7 @@ import org.jetbrains.kotlin.test.builders.TestConfigurationBuilder
 import org.jetbrains.kotlin.test.directives.DiagnosticsDirectives.RENDER_DIAGNOSTICS_FULL_TEXT
 import org.jetbrains.kotlin.test.directives.FirDiagnosticsDirectives.ENABLE_PLUGIN_PHASES
 import org.jetbrains.kotlin.test.directives.JvmEnvironmentConfigurationDirectives
+import org.jetbrains.kotlin.test.directives.LanguageSettingsDirectives.LANGUAGE
 import org.jetbrains.kotlin.test.runners.AbstractFirLightTreeDiagnosticsTest
 import org.jetbrains.kotlin.test.services.EnvironmentBasedStandardLibrariesPathProvider
 import org.jetbrains.kotlin.test.services.KotlinStandardLibrariesPathProvider
@@ -31,6 +32,7 @@ fun TestConfigurationBuilder.commonFirWithPluginFrontendConfiguration() {
     defaultDirectives {
         +ENABLE_PLUGIN_PHASES
         +RENDER_DIAGNOSTICS_FULL_TEXT
+        LANGUAGE with "+PropertyParamAnnotationDefaultTargetMode"
 
         +JvmEnvironmentConfigurationDirectives.FULL_JDK
     }
