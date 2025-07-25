@@ -27,22 +27,34 @@ method f$getVal$TF$T$Link(p$l: Ref) returns (ret$0: Ref)
 {
   var anon$0: Ref
   var anon$1: Ref
+  var anon$2: Ref
+  var anon$3: Ref
   inhale df$rt$isSubtype(df$rt$typeOf(p$l), df$rt$c$Link())
   inhale acc(p$c$Link$shared(p$l), wildcard)
   unfold acc(p$c$Link$shared(p$l), wildcard)
-  anon$1 := p$l.bf$next
+  anon$3 := p$l.bf$next
+  if (anon$3 != df$rt$nullValue()) {
+    unfold acc(p$c$Link$shared(anon$3), wildcard)
+    anon$2 := anon$3.bf$next
+  } else {
+    anon$2 := df$rt$nullValue()}
+  if (anon$2 != df$rt$nullValue()) {
+    unfold acc(p$c$Link$shared(anon$2), wildcard)
+    anon$1 := anon$2.bf$next
+  } else {
+    anon$1 := df$rt$nullValue()}
   if (anon$1 != df$rt$nullValue()) {
     unfold acc(p$c$Link$shared(anon$1), wildcard)
     anon$0 := anon$1.bf$next
   } else {
     anon$0 := df$rt$nullValue()}
   if (anon$0 != df$rt$nullValue()) {
-    var anon$2: Ref
+    var anon$4: Ref
     inhale acc(anon$0.bf$data, write)
-    anon$2 := anon$0.bf$data
+    anon$4 := anon$0.bf$data
     exhale acc(anon$0.bf$data, write)
-    inhale df$rt$isSubtype(df$rt$typeOf(anon$2), df$rt$intType())
-    ret$0 := anon$2
+    inhale df$rt$isSubtype(df$rt$typeOf(anon$4), df$rt$intType())
+    ret$0 := anon$4
   } else {
     ret$0 := df$rt$nullValue()}
   goto lbl$ret$0
