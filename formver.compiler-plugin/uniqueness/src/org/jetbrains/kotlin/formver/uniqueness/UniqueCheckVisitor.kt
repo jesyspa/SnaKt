@@ -9,8 +9,11 @@ import org.jetbrains.kotlin.fir.FirElement
 import org.jetbrains.kotlin.fir.declarations.FirSimpleFunction
 import org.jetbrains.kotlin.fir.expressions.FirBlock
 import org.jetbrains.kotlin.fir.expressions.FirFunctionCall
+import org.jetbrains.kotlin.fir.expressions.FirLiteralExpression
+import org.jetbrains.kotlin.fir.expressions.FirPropertyAccessExpression
 import org.jetbrains.kotlin.fir.expressions.arguments
 import org.jetbrains.kotlin.fir.expressions.toResolvedCallableSymbol
+import org.jetbrains.kotlin.fir.references.FirResolvedNamedReference
 import org.jetbrains.kotlin.fir.symbols.SymbolInternals
 import org.jetbrains.kotlin.fir.symbols.impl.FirFunctionSymbol
 import org.jetbrains.kotlin.fir.visitors.FirVisitor
@@ -21,8 +24,29 @@ object UniqueCheckVisitor : FirVisitor<UniqueLevel, UniqueCheckerContext>() {
 
     override fun visitSimpleFunction(simpleFunction: FirSimpleFunction, data: UniqueCheckerContext): UniqueLevel {
         simpleFunction.body?.accept(this, data)
-        // Function definition don't have to return a unique level
+        // Function definition doesn't have to return a unique level
         return UniqueLevel.Shared
+    }
+
+    override fun visitLiteralExpression(
+        literalExpression: FirLiteralExpression, data: UniqueCheckerContext
+    ): UniqueLevel {
+        return UniqueLevel.Unique
+    }
+
+    override fun visitResolvedNamedReference(
+        resolvedNamedReference: FirResolvedNamedReference, data: UniqueCheckerContext
+    ): UniqueLevel {
+        return data.resolveUniqueAnnotation(resolvedNamedReference.resolvedSymbol)
+    }
+
+    override fun visitPropertyAccessExpression(
+        propertyAccessExpression: FirPropertyAccessExpression, data: UniqueCheckerContext
+    ): UniqueLevel {
+        val currentAnnotation = propertyAccessExpression.calleeReference.accept(this, data)
+        val previousLevel = propertyAccessExpression.explicitReceiver?.accept(this, data) ?: UniqueLevel.Unique
+
+        return listOf(currentAnnotation, previousLevel).max()
     }
 
     override fun visitBlock(block: FirBlock, data: UniqueCheckerContext): UniqueLevel {
@@ -46,7 +70,8 @@ object UniqueCheckVisitor : FirVisitor<UniqueLevel, UniqueCheckerContext>() {
         val arguments = functionCall.arguments
         arguments.forEachIndexed { index, argument ->
             val requiredUnique = requiredUniqueLevels[index]
-            if (requiredUnique == UniqueLevel.Unique && visitExpression(argument, data) == UniqueLevel.Shared) {
+            val argumentUnique = argument.accept(this, data)
+            if (requiredUnique == UniqueLevel.Unique && argumentUnique == UniqueLevel.Shared) {
                 throw IllegalArgumentException("uniqueness level not match ${argument.source.text}")
             }
         }
