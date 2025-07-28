@@ -5,6 +5,7 @@
 
 package org.jetbrains.kotlin.formver.domains
 
+import org.jetbrains.kotlin.formver.names.PlaceholderArgumentName
 import org.jetbrains.kotlin.formver.names.SpecialName
 import org.jetbrains.kotlin.formver.viper.ast.*
 
@@ -65,7 +66,7 @@ class FunctionBuilder private constructor() {
 
     fun argument(action: () -> Type): Exp.LocalVar {
         val argType = action()
-        val variable = Var("arg${formalArgs.size + 1}", argType)
+        val variable = Var(PlaceholderArgumentName(formalArgs.size + 1), argType)
         formalArgs.add(variable)
         return variable.use()
     }

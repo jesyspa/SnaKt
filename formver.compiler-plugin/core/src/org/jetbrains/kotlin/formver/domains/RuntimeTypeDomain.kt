@@ -5,6 +5,7 @@
 
 package org.jetbrains.kotlin.formver.domains
 
+import org.jetbrains.kotlin.formver.core.domains.domainVar
 import org.jetbrains.kotlin.formver.embeddings.types.ClassTypeEmbedding
 import org.jetbrains.kotlin.formver.embeddings.types.embedClassTypeFunc
 import org.jetbrains.kotlin.formver.viper.MangledName
@@ -230,20 +231,20 @@ class RuntimeTypeDomain(private val classes: List<ClassTypeEmbedding>) : Builtin
 
         // variables for readability improving
         context(nameResolver: NameResolver)
-        private val t: Var
-            get() = Var("t", RuntimeType)
+        private val t
+            get() = domainVar("t", RuntimeType)
         context(nameResolver: NameResolver)
-        private val t1: Var
-            get() = Var("t1", RuntimeType)
+        private val t1
+            get() = domainVar("t1", RuntimeType)
 
         context(nameResolver: NameResolver)
-        private val t2: Var
-            get() = Var("t2", RuntimeType)
+        private val t2
+            get() = domainVar("t2", RuntimeType)
 
         context(nameResolver: NameResolver)
-        private val t3: Var
-            get() = Var("t3", RuntimeType)
-        private val r = Var("r", Ref)
+        private val t3
+            get() = domainVar("t3", RuntimeType)
+        private val r = domainVar("r", Ref)
 
         // three basic functions
         /** `isSubtype: (Type, Type) -> Bool` */

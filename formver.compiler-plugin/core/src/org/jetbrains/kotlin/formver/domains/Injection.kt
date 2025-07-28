@@ -5,6 +5,7 @@
 
 package org.jetbrains.kotlin.formver.domains
 
+import org.jetbrains.kotlin.formver.core.domains.domainVar
 import org.jetbrains.kotlin.formver.domains.RuntimeTypeDomain.Companion.isOf
 import org.jetbrains.kotlin.formver.names.SimpleNameResolver
 import org.jetbrains.kotlin.formver.viper.NameResolver
@@ -44,8 +45,8 @@ class Injection(
     val viperType: Type,
     val typeFunction: DomainFunc
 ) {
-    private val v = Var("v", viperType)
-    private val r = Var("r", Type.Ref)
+    private val v = domainVar("v", viperType)
+    private val r = domainVar("r", Type.Ref)
     val toRef = RuntimeTypeDomain.createDomainFunc("${injectionName}ToRef", listOf(v.decl()), Type.Ref)
     val fromRef = RuntimeTypeDomain.createDomainFunc("${injectionName}FromRef", listOf(r.decl()), viperType)
     context(nameResolver: NameResolver)
