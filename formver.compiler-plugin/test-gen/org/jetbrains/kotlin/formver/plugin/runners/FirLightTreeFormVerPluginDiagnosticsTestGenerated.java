@@ -395,25 +395,15 @@ public class FirLightTreeFormVerPluginDiagnosticsTestGenerated extends AbstractF
     }
 
     @Test
+    @TestMetadata("multi_level.kt")
+    public void testMulti_level() {
+      runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/multi_level.kt");
+    }
+
+    @Test
     @TestMetadata("shared_to_shared.kt")
     public void testShared_to_shared() {
       runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/shared_to_shared.kt");
-    }
-
-    @Nested
-    @TestMetadata("formver.compiler-plugin/testData/diagnostics/uniqueness/property_access")
-    @TestDataPath("$PROJECT_ROOT")
-    public class Property_access {
-      @Test
-      public void testAllFilesPresentInProperty_access() {
-        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/uniqueness/property_access"), Pattern.compile("^(.+)\\.kt$"), null, true);
-      }
-
-      @Test
-      @TestMetadata("multi_level.kt")
-      public void testMulti_level() {
-        runTest("formver.compiler-plugin/testData/diagnostics/uniqueness/property_access/multi_level.kt");
-      }
     }
   }
 
