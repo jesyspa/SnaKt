@@ -395,6 +395,12 @@ public class FirLightTreeFormVerPluginDiagnosticsTestGenerated extends AbstractF
     }
 
     @Test
+    @TestMetadata("multi_level.kt")
+    public void testMulti_level() {
+      runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/multi_level.kt");
+    }
+
+    @Test
     @TestMetadata("shared_to_shared.kt")
     public void testShared_to_shared() {
       runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/shared_to_shared.kt");
