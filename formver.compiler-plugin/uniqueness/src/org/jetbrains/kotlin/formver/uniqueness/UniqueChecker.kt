@@ -6,6 +6,7 @@
 package org.jetbrains.kotlin.formver.uniqueness
 
 import org.jetbrains.kotlin.fir.FirSession
+import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
 import org.jetbrains.kotlin.formver.common.ErrorCollector
 import org.jetbrains.kotlin.formver.common.PluginConfiguration
 import org.jetbrains.kotlin.name.ClassId
@@ -24,10 +25,23 @@ class UniqueChecker(
     private val uniqueId: ClassId
         get() = getAnnotationId("Unique")
 
+    private val uniquenessContext: MutableMap<FirBasedSymbol<*>, UniqueLevel> = mutableMapOf()
+
     override fun resolveUniqueAnnotation(declaration: HasAnnotation): UniqueLevel {
         if (declaration.hasAnnotation(uniqueId, session)) {
             return UniqueLevel.Unique
         }
         return UniqueLevel.Shared
+    }
+
+    override fun getUniqueLevel(symbol: FirBasedSymbol<*>): UniqueLevel {
+        val level = uniquenessContext.getOrPut(symbol) {
+            resolveUniqueAnnotation(symbol)
+        }
+        return level
+    }
+
+    override fun assignUniqueLevel(symbol: FirBasedSymbol<*>, level: UniqueLevel) {
+        uniquenessContext[symbol] = level
     }
 }

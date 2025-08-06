@@ -1,0 +1,11 @@
+/consume_fields.kt:(477,552): error: attempting to access a non-accessible argument in z.y.x
+... while checking uniqueness level for fun consumeParent(@Unique z: B) {
+    consumeA(z.y)
+    consumeInt(z.y.x)
+}
+
+/consume_fields.kt:(554,636): error: uniqueness level not match z.y, required: Unique, actual: Shared
+... while checking uniqueness level for fun uniqueBecomeShared(@Unique z: B) {
+    makeIntoShared(z.y)
+    consumeA(z.y)
+}

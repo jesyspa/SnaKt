@@ -389,6 +389,12 @@ public class FirLightTreeFormVerPluginDiagnosticsTestGenerated extends AbstractF
     }
 
     @Test
+    @TestMetadata("consume_fields.kt")
+    public void testConsume_fields() {
+      runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/consume_fields.kt");
+    }
+
+    @Test
     @TestMetadata("direct_pass_shared_to_unique.kt")
     public void testDirect_pass_shared_to_unique() {
       runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/direct_pass_shared_to_unique.kt");

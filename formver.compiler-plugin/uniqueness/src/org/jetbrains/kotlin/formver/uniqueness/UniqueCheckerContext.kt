@@ -25,12 +25,27 @@ sealed interface HasAnnotation {
     fun hasAnnotation(id: ClassId, session: FirSession): Boolean
 }
 
+class UniqueLevelEmbedding(
+    private val uniqueContext: UniqueCheckerContext,
+    private val symbol: FirBasedSymbol<*>,
+) {
+    var level: UniqueLevel
+        get() = uniqueContext.getUniqueLevel(symbol)
+        set(newLevel) = uniqueContext.assignUniqueLevel(symbol, newLevel)
+}
+
 interface UniqueCheckerContext {
     val config: PluginConfiguration
     val errorCollector: ErrorCollector
     val session: FirSession
 
     fun resolveUniqueAnnotation(declaration: HasAnnotation): UniqueLevel
+
+    fun getUniqueLevel(symbol: FirBasedSymbol<*>): UniqueLevel
+    fun assignUniqueLevel(symbol: FirBasedSymbol<*>, level: UniqueLevel)
+
+    fun uniqueLevelOf(symbol: FirBasedSymbol<*>): UniqueLevelEmbedding =
+        UniqueLevelEmbedding(this, symbol)
 }
 
 fun UniqueCheckerContext.resolveUniqueAnnotation(declaration: FirBasedSymbol<*>): UniqueLevel =
