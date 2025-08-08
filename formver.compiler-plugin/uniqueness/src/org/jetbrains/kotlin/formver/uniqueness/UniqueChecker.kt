@@ -24,10 +24,48 @@ class UniqueChecker(
     private val uniqueId: ClassId
         get() = getAnnotationId("Unique")
 
+    /**
+     * Caches the current uniqueness level for FIR symbols that can hold or produce values whose aliasing is tracked.
+     *
+     * Keys:
+     *   Variable-like symbols:
+     *   - local variables
+     *   - value parameters
+     *   - properties/fields (incl. backing fields)
+     *
+     * Values:
+     * - The symbol’s current UniqueLevel. On first access it is initialized from the declaration’s annotations
+     *   (e.g., @Unique → Unique; otherwise Shared).
+     *
+     * Rules:
+     * - The checker may refine levels during analysis, typically relaxing Unique → Shared when uniqueness is broken
+     *   (e.g., aliasing, copying) or replacing Unique → Top when the symbol is moved
+     */
+    private val uniquenessContext: MutableMap<LocalPath, UniqueLevel> = mutableMapOf()
+    private val isPartiallyMoved: MutableMap<LocalPath, Boolean> = mutableMapOf()
+
     override fun resolveUniqueAnnotation(declaration: HasAnnotation): UniqueLevel {
         if (declaration.hasAnnotation(uniqueId, session)) {
             return UniqueLevel.Unique
         }
         return UniqueLevel.Shared
     }
+
+    override fun getUniqueLevel(symbol: LocalPath): UniqueLevel {
+        val level = uniquenessContext.getOrPut(symbol) {
+            resolveUniqueAnnotation(symbol.callee)
+        }
+        return level
+    }
+
+    override fun assignUniqueLevel(symbol: LocalPath, level: UniqueLevel) {
+        uniquenessContext[symbol] = level
+    }
+
+    override fun markPartiallyMoved(symbol: LocalPath, mark: Boolean) {
+        isPartiallyMoved[symbol] = mark
+    }
+
+    override fun isPartiallyMoved(symbol: LocalPath): Boolean =
+        isPartiallyMoved[symbol] ?: false
 }

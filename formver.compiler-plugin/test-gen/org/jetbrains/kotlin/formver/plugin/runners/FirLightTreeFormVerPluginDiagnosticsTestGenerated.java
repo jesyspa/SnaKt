@@ -389,6 +389,12 @@ public class FirLightTreeFormVerPluginDiagnosticsTestGenerated extends AbstractF
     }
 
     @Test
+    @TestMetadata("consume_fields.kt")
+    public void testConsume_fields() {
+      runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/consume_fields.kt");
+    }
+
+    @Test
     @TestMetadata("direct_pass_shared_to_unique.kt")
     public void testDirect_pass_shared_to_unique() {
       runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/direct_pass_shared_to_unique.kt");
@@ -401,9 +407,21 @@ public class FirLightTreeFormVerPluginDiagnosticsTestGenerated extends AbstractF
     }
 
     @Test
+    @TestMetadata("partial_move.kt")
+    public void testPartial_move() {
+      runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/partial_move.kt");
+    }
+
+    @Test
     @TestMetadata("shared_to_shared.kt")
     public void testShared_to_shared() {
       runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/shared_to_shared.kt");
+    }
+
+    @Test
+    @TestMetadata("twice.kt")
+    public void testTwice() {
+      runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/twice.kt");
     }
   }
 

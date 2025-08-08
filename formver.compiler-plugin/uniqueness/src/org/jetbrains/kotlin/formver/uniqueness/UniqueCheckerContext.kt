@@ -25,12 +25,29 @@ sealed interface HasAnnotation {
     fun hasAnnotation(id: ClassId, session: FirSession): Boolean
 }
 
+class UniqueLevelEmbedding(
+    private val uniqueContext: UniqueCheckerContext,
+    private val path: LocalPath
+) {
+    var level: UniqueLevel
+        get() = uniqueContext.getUniqueLevel(path)
+        set(newLevel) = uniqueContext.assignUniqueLevel(path, newLevel)
+}
+
+data class LocalPath(val local: FirBasedSymbol<*>, val callee: FirBasedSymbol<*>)
+
 interface UniqueCheckerContext {
     val config: PluginConfiguration
     val errorCollector: ErrorCollector
     val session: FirSession
 
     fun resolveUniqueAnnotation(declaration: HasAnnotation): UniqueLevel
+
+    fun getUniqueLevel(symbol: LocalPath): UniqueLevel
+    fun assignUniqueLevel(symbol: LocalPath, level: UniqueLevel)
+
+    fun markPartiallyMoved(symbol: LocalPath, mark: Boolean = true)
+    fun isPartiallyMoved(symbol: LocalPath): Boolean
 }
 
 fun UniqueCheckerContext.resolveUniqueAnnotation(declaration: FirBasedSymbol<*>): UniqueLevel =
@@ -38,3 +55,6 @@ fun UniqueCheckerContext.resolveUniqueAnnotation(declaration: FirBasedSymbol<*>)
 
 fun UniqueCheckerContext.resolveUniqueAnnotation(declaration: FirAnnotationContainer): UniqueLevel =
     resolveUniqueAnnotation(HasAnnotation.AnnotationContainer(declaration))
+
+fun UniqueCheckerContext.uniqueLevelOf(path: LocalPath): UniqueLevelEmbedding =
+    UniqueLevelEmbedding(this, path)
