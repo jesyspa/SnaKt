@@ -6,7 +6,6 @@
 package org.jetbrains.kotlin.formver.uniqueness
 
 import org.jetbrains.kotlin.fir.FirSession
-import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
 import org.jetbrains.kotlin.formver.common.ErrorCollector
 import org.jetbrains.kotlin.formver.common.PluginConfiguration
 import org.jetbrains.kotlin.name.ClassId
@@ -42,8 +41,8 @@ class UniqueChecker(
      * - The checker may refine levels during analysis, typically relaxing Unique → Shared when uniqueness is broken
      *   (e.g., aliasing, copying) or replacing Unique → Top when the symbol is moved
      */
-    private val uniquenessContext: MutableMap<FirBasedSymbol<*>, UniqueLevel> = mutableMapOf()
-    private val isPartiallyMoved: MutableMap<FirBasedSymbol<*>, Boolean> = mutableMapOf()
+    private val uniquenessContext: MutableMap<LocalPath, UniqueLevel> = mutableMapOf()
+    private val isPartiallyMoved: MutableMap<LocalPath, Boolean> = mutableMapOf()
 
     override fun resolveUniqueAnnotation(declaration: HasAnnotation): UniqueLevel {
         if (declaration.hasAnnotation(uniqueId, session)) {
@@ -52,21 +51,21 @@ class UniqueChecker(
         return UniqueLevel.Shared
     }
 
-    override fun getUniqueLevel(symbol: FirBasedSymbol<*>): UniqueLevel {
+    override fun getUniqueLevel(symbol: LocalPath): UniqueLevel {
         val level = uniquenessContext.getOrPut(symbol) {
-            resolveUniqueAnnotation(symbol)
+            resolveUniqueAnnotation(symbol.callee)
         }
         return level
     }
 
-    override fun assignUniqueLevel(symbol: FirBasedSymbol<*>, level: UniqueLevel) {
+    override fun assignUniqueLevel(symbol: LocalPath, level: UniqueLevel) {
         uniquenessContext[symbol] = level
     }
 
-    override fun markPartiallyMoved(symbol: FirBasedSymbol<*>, mark: Boolean) {
+    override fun markPartiallyMoved(symbol: LocalPath, mark: Boolean) {
         isPartiallyMoved[symbol] = mark
     }
 
-    override fun isPartiallyMoved(symbol: FirBasedSymbol<*>): Boolean =
+    override fun isPartiallyMoved(symbol: LocalPath): Boolean =
         isPartiallyMoved[symbol] ?: false
 }

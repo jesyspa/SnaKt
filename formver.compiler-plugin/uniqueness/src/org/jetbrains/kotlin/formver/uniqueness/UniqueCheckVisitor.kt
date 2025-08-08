@@ -14,10 +14,15 @@ import org.jetbrains.kotlin.fir.expressions.FirPropertyAccessExpression
 import org.jetbrains.kotlin.fir.expressions.arguments
 import org.jetbrains.kotlin.fir.expressions.toResolvedCallableSymbol
 import org.jetbrains.kotlin.fir.references.FirResolvedNamedReference
+import org.jetbrains.kotlin.fir.references.resolved
+import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
 import org.jetbrains.kotlin.fir.symbols.SymbolInternals
 import org.jetbrains.kotlin.fir.symbols.impl.FirFunctionSymbol
 import org.jetbrains.kotlin.fir.visitors.FirVisitor
 import org.jetbrains.kotlin.text
+
+fun FirPropertyAccessExpression.calleeSymbol() =
+    calleeReference.resolved?.resolvedSymbol ?: throw IllegalStateException("callee not resolved")
 
 data class UniqueVisit(val computedLevel: UniqueLevel, val embedding: UniqueLevelEmbedding?)
 
@@ -25,30 +30,41 @@ object PartiallyMovedMarker : FirVisitor<Unit, UniqueCheckerContext>() {
     override fun visitElement(element: FirElement, data: UniqueCheckerContext) =
         throw IllegalStateException("PartiallyMovedVisitor should not be called on general FIR elements")
 
-    override fun visitResolvedNamedReference(
-        resolvedNamedReference: FirResolvedNamedReference, data: UniqueCheckerContext
-    ) = data.markPartiallyMoved(resolvedNamedReference.resolvedSymbol)
-
     override fun visitPropertyAccessExpression(
         propertyAccessExpression: FirPropertyAccessExpression, data: UniqueCheckerContext
     ) {
         propertyAccessExpression.explicitReceiver?.accept(this, data)
-        propertyAccessExpression.calleeReference.accept(this, data)
+        data.markPartiallyMoved(
+            LocalPath(
+                propertyAccessExpression.accept(LocalVariableVisitor, data), propertyAccessExpression.calleeSymbol()
+            )
+        )
     }
 }
 
 object IsPartiallyMovedVisitor : FirVisitor<Boolean, UniqueCheckerContext>() {
     override fun visitElement(element: FirElement, data: UniqueCheckerContext) = false
 
+    override fun visitPropertyAccessExpression(
+        propertyAccessExpression: FirPropertyAccessExpression, data: UniqueCheckerContext
+    ): Boolean {
+        val local = propertyAccessExpression.accept(LocalVariableVisitor, data)
+        return data.isPartiallyMoved(LocalPath(local, propertyAccessExpression.calleeSymbol()))
+    }
+}
+
+object LocalVariableVisitor : FirVisitor<FirBasedSymbol<*>, UniqueCheckerContext>() {
+    override fun visitElement(element: FirElement, data: UniqueCheckerContext) =
+        throw IllegalStateException("LocalVariableVisitor should not be called on general FIR elements")
+
     override fun visitResolvedNamedReference(
-        resolvedNamedReference: FirResolvedNamedReference,
-        data: UniqueCheckerContext
-    ): Boolean = data.isPartiallyMoved(resolvedNamedReference.resolvedSymbol)
+        resolvedNamedReference: FirResolvedNamedReference, data: UniqueCheckerContext
+    ): FirBasedSymbol<*> = resolvedNamedReference.resolvedSymbol
 
     override fun visitPropertyAccessExpression(
-        propertyAccessExpression: FirPropertyAccessExpression,
-        data: UniqueCheckerContext
-    ): Boolean = propertyAccessExpression.calleeReference.accept(this, data)
+        propertyAccessExpression: FirPropertyAccessExpression, data: UniqueCheckerContext
+    ): FirBasedSymbol<*> = propertyAccessExpression.explicitReceiver?.accept(this, data)
+        ?: propertyAccessExpression.calleeReference.accept(this, data)
 }
 
 object UniqueCheckVisitor : FirVisitor<UniqueVisit, UniqueCheckerContext>() {
@@ -67,17 +83,16 @@ object UniqueCheckVisitor : FirVisitor<UniqueVisit, UniqueCheckerContext>() {
         literalExpression: FirLiteralExpression, data: UniqueCheckerContext
     ): UniqueVisit = UniqueVisit(UniqueLevel.Unique, null)
 
-    override fun visitResolvedNamedReference(
-        resolvedNamedReference: FirResolvedNamedReference, data: UniqueCheckerContext
-    ): UniqueVisit {
-        val embedding = data.uniqueLevelOf(resolvedNamedReference.resolvedSymbol)
-        return UniqueVisit(embedding.level, embedding)
-    }
-
     override fun visitPropertyAccessExpression(
         propertyAccessExpression: FirPropertyAccessExpression, data: UniqueCheckerContext
     ): UniqueVisit {
-        val (currentLevel, embedding) = propertyAccessExpression.calleeReference.accept(this, data)
+        val path = LocalPath(
+            propertyAccessExpression.accept(LocalVariableVisitor, data), propertyAccessExpression.calleeSymbol()
+        )
+
+        val embedding = data.uniqueLevelOf(path)
+
+        val currentLevel = embedding.level
         val previousLevel = propertyAccessExpression.explicitReceiver?.accept(this, data)?.computedLevel
 
         val resultingLevel = listOfNotNull(currentLevel, previousLevel).max()

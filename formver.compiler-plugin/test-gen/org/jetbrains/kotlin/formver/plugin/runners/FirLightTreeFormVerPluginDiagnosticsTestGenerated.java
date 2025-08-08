@@ -417,6 +417,12 @@ public class FirLightTreeFormVerPluginDiagnosticsTestGenerated extends AbstractF
     public void testShared_to_shared() {
       runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/shared_to_shared.kt");
     }
+
+    @Test
+    @TestMetadata("twice.kt")
+    public void testTwice() {
+      runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/twice.kt");
+    }
   }
 
   @Nested
