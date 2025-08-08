@@ -21,13 +21,42 @@ import org.jetbrains.kotlin.text
 
 data class UniqueVisit(val computedLevel: UniqueLevel, val embedding: UniqueLevelEmbedding?)
 
+object PartiallyMovedMarker : FirVisitor<Unit, UniqueCheckerContext>() {
+    override fun visitElement(element: FirElement, data: UniqueCheckerContext) =
+        throw IllegalStateException("PartiallyMovedVisitor should not be called on general FIR elements")
+
+    override fun visitResolvedNamedReference(
+        resolvedNamedReference: FirResolvedNamedReference, data: UniqueCheckerContext
+    ) = data.markPartiallyMoved(resolvedNamedReference.resolvedSymbol)
+
+    override fun visitPropertyAccessExpression(
+        propertyAccessExpression: FirPropertyAccessExpression, data: UniqueCheckerContext
+    ) {
+        propertyAccessExpression.explicitReceiver?.accept(this, data)
+        propertyAccessExpression.calleeReference.accept(this, data)
+    }
+}
+
+object IsPartiallyMovedVisitor : FirVisitor<Boolean, UniqueCheckerContext>() {
+    override fun visitElement(element: FirElement, data: UniqueCheckerContext) = false
+
+    override fun visitResolvedNamedReference(
+        resolvedNamedReference: FirResolvedNamedReference,
+        data: UniqueCheckerContext
+    ): Boolean = data.isPartiallyMoved(resolvedNamedReference.resolvedSymbol)
+
+    override fun visitPropertyAccessExpression(
+        propertyAccessExpression: FirPropertyAccessExpression,
+        data: UniqueCheckerContext
+    ): Boolean = propertyAccessExpression.calleeReference.accept(this, data)
+}
+
 object UniqueCheckVisitor : FirVisitor<UniqueVisit, UniqueCheckerContext>() {
     override fun visitElement(element: FirElement, data: UniqueCheckerContext) =
-        UniqueVisit(UniqueLevel.Shared, null)
+        throw IllegalStateException("UniqueCheckVisitor should not be called on general FIR elements")
 
     override fun visitSimpleFunction(
-        simpleFunction: FirSimpleFunction,
-        data: UniqueCheckerContext
+        simpleFunction: FirSimpleFunction, data: UniqueCheckerContext
     ): UniqueVisit {
         simpleFunction.body?.accept(this, data)
         // Function definition doesn't have to return a unique level
@@ -78,8 +107,12 @@ object UniqueCheckVisitor : FirVisitor<UniqueVisit, UniqueCheckerContext>() {
         arguments.forEachIndexed { index, argument ->
             val requiredUnique = requiredUniqueLevels[index]
             val (argumentUnique, embedding) = argument.accept(this, data)
-            require (argumentUnique != UniqueLevel.Top) {
-                "attempting to access a non-accessible argument in ${argument.source.text}"
+            require(argumentUnique != UniqueLevel.Top) {
+                "attempting to access a non-accessible argument ${argument.source.text} in ${functionCall.source.text}"
+            }
+
+            require(!argument.accept(IsPartiallyMovedVisitor, data)) {
+                "attempting to pass a partially moved argument ${argument.source.text} in ${functionCall.source.text}"
             }
 
             when (requiredUnique) {
@@ -88,8 +121,12 @@ object UniqueCheckVisitor : FirVisitor<UniqueVisit, UniqueCheckerContext>() {
                         "uniqueness level not match ${argument.source.text}, required: Unique, actual: $argumentUnique"
                     }
 
-                    embedding?.level = UniqueLevel.Top
+                    embedding?.let {
+                        it.level = UniqueLevel.Top
+                        argument.accept(PartiallyMovedMarker, data)
+                    }
                 }
+
                 UniqueLevel.Shared -> embedding?.level = UniqueLevel.Shared
                 else -> {
                     throw IllegalStateException("argument can't request unique level $requiredUnique")

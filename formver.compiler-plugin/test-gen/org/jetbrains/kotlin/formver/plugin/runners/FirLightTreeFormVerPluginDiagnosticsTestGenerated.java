@@ -407,6 +407,12 @@ public class FirLightTreeFormVerPluginDiagnosticsTestGenerated extends AbstractF
     }
 
     @Test
+    @TestMetadata("partial_move.kt")
+    public void testPartial_move() {
+      runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/partial_move.kt");
+    }
+
+    @Test
     @TestMetadata("shared_to_shared.kt")
     public void testShared_to_shared() {
       runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/shared_to_shared.kt");

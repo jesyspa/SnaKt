@@ -6,6 +6,7 @@ import org.jetbrains.kotlin.formver.plugin.Unique
 
 class A {
     @Unique val x = 1
+    @Unique val w = 2
 }
 
 class B {
@@ -20,9 +21,13 @@ fun makeIntoShared(a: A) {}
 
 fun valid_consume_all(@Unique z: B) {
     consumeInt(z.y.x)
-    consumeA(z.y)
-    consumeB(z)
+    consumeInt(z.y.w)
 }
+
+<!UNIQUENESS_VIOLATION!>fun doubleConsume(@Unique a: A) {
+    consumeA(a)
+    consumeA(a)
+}<!>
 
 <!UNIQUENESS_VIOLATION!>fun consumeParent(@Unique z: B) {
     consumeA(z.y)
@@ -33,3 +38,8 @@ fun valid_consume_all(@Unique z: B) {
     makeIntoShared(z.y)
     consumeA(z.y)
 }<!>
+
+fun uniqueBecomeSharedValid(@Unique z: B) {
+    makeIntoShared(z.y)
+    makeIntoShared(z.y)
+}

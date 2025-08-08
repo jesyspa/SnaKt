@@ -44,8 +44,8 @@ interface UniqueCheckerContext {
     fun getUniqueLevel(symbol: FirBasedSymbol<*>): UniqueLevel
     fun assignUniqueLevel(symbol: FirBasedSymbol<*>, level: UniqueLevel)
 
-    fun uniqueLevelOf(symbol: FirBasedSymbol<*>): UniqueLevelEmbedding =
-        UniqueLevelEmbedding(this, symbol)
+    fun markPartiallyMoved(symbol: FirBasedSymbol<*>, mark: Boolean = true)
+    fun isPartiallyMoved(symbol: FirBasedSymbol<*>): Boolean
 }
 
 fun UniqueCheckerContext.resolveUniqueAnnotation(declaration: FirBasedSymbol<*>): UniqueLevel =
@@ -53,3 +53,6 @@ fun UniqueCheckerContext.resolveUniqueAnnotation(declaration: FirBasedSymbol<*>)
 
 fun UniqueCheckerContext.resolveUniqueAnnotation(declaration: FirAnnotationContainer): UniqueLevel =
     resolveUniqueAnnotation(HasAnnotation.AnnotationContainer(declaration))
+
+fun UniqueCheckerContext.uniqueLevelOf(symbol: FirBasedSymbol<*>): UniqueLevelEmbedding =
+    UniqueLevelEmbedding(this, symbol)
