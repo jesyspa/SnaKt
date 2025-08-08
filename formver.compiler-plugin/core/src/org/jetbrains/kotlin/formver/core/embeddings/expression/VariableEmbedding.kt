@@ -30,7 +30,7 @@ import org.jetbrains.kotlin.formver.viper.mangled
 sealed interface VariableEmbedding : PureExpEmbedding, PropertyAccessEmbedding {
     val name: MangledName
     override val type: TypeEmbedding
-    val isUnique: Boolean
+    override val isUnique: Boolean
         get() = false
     val isBorrowed: Boolean
         get() = false

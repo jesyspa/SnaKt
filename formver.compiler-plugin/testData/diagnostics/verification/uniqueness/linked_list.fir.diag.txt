@@ -1,3 +1,5 @@
+/linked_list.kt:(231,312): warning: Viper verification error: Unfolding p$c$Link$shared(anon$1) might fail. There might be insufficient permission to access p$c$Link$shared(anon$1)
+
 /linked_list.kt:(249,255): info: Generated Viper text for getVal:
 field bf$data: Ref
 
@@ -30,10 +32,10 @@ method f$getVal$TF$T$Link(p$l: Ref) returns (ret$0: Ref)
   inhale df$rt$isSubtype(df$rt$typeOf(p$l), df$rt$c$Link())
   inhale acc(p$c$Link$shared(p$l), wildcard)
   unfold acc(p$c$Link$shared(p$l), wildcard)
-  anon$1 := p$l.bf$next
+  unfold acc(p$c$Link$shared(p$l), wildcard)
   if (anon$1 != df$rt$nullValue()) {
     unfold acc(p$c$Link$shared(anon$1), wildcard)
-    anon$0 := anon$1.bf$next
+    unfold acc(p$c$Link$shared(anon$1), wildcard)
   } else {
     anon$0 := df$rt$nullValue()}
   if (anon$0 != df$rt$nullValue()) {
@@ -49,7 +51,9 @@ method f$getVal$TF$T$Link(p$l: Ref) returns (ret$0: Ref)
   label lbl$ret$0
 }
 
-/linked_list.kt:(332,336): info: Generated Viper text for test:
+/linked_list.kt:(330,333): error: Syntax error: Expecting an element.
+
+/linked_list.kt:(355,359): info: Generated Viper text for test:
 field bf$data: Ref
 
 field bf$next: Ref
@@ -134,7 +138,7 @@ method f$test$TF$() returns (ret$0: Ref)
   l0$expr1 := df$rt$boolToRef(df$rt$intFromRef(anon$1) == 5)
   assert df$rt$boolFromRef(l0$expr1)
   unfold acc(p$c$Link$shared(l0$l), wildcard)
-  anon$3 := l0$l.bf$next
+  unfold acc(p$c$Link$shared(l0$l), wildcard)
   if (anon$3 != df$rt$nullValue()) {
     var anon$4: Ref
     inhale acc(anon$3.bf$data, write)
@@ -150,4 +154,4 @@ method f$test$TF$() returns (ret$0: Ref)
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }
 
-/linked_list.kt:(415,420): warning: Viper verification error: Assert might fail. Assertion df$rt$boolFromRef(l0$expr1) might not hold.
+/linked_list.kt:(438,443): warning: Viper verification error: Assert might fail. Assertion df$rt$boolFromRef(l0$expr1) might not hold.
