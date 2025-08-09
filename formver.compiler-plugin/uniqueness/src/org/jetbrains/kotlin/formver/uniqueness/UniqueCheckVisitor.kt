@@ -14,42 +14,57 @@ import org.jetbrains.kotlin.fir.expressions.FirPropertyAccessExpression
 import org.jetbrains.kotlin.fir.expressions.arguments
 import org.jetbrains.kotlin.fir.expressions.toResolvedCallableSymbol
 import org.jetbrains.kotlin.fir.references.FirResolvedNamedReference
+import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
 import org.jetbrains.kotlin.fir.symbols.SymbolInternals
 import org.jetbrains.kotlin.fir.symbols.impl.FirFunctionSymbol
 import org.jetbrains.kotlin.fir.visitors.FirVisitor
 import org.jetbrains.kotlin.text
 
-object UniqueCheckVisitor : FirVisitor<UniqueLevel, UniqueCheckerContext>() {
-    override fun visitElement(element: FirElement, data: UniqueCheckerContext): UniqueLevel = UniqueLevel.Shared
+object PathVisitor : FirVisitor<List<FirBasedSymbol<*>>, Unit>() {
+    override fun visitElement(element: FirElement, data: Unit) =
+        throw IllegalStateException("LocalVariableVisitor should not be called on general FIR elements")
 
-    override fun visitSimpleFunction(simpleFunction: FirSimpleFunction, data: UniqueCheckerContext): UniqueLevel {
+    override fun visitResolvedNamedReference(
+        resolvedNamedReference: FirResolvedNamedReference, data: Unit
+    ): List<FirBasedSymbol<*>> = listOf(resolvedNamedReference.resolvedSymbol)
+
+    override fun visitPropertyAccessExpression(
+        propertyAccessExpression: FirPropertyAccessExpression, data: Unit
+    ): List<FirBasedSymbol<*>> {
+        val parent = propertyAccessExpression.explicitReceiver?.accept(this, data) ?: emptyList()
+        return parent + propertyAccessExpression.calleeReference.accept(this, data)
+    }
+}
+
+fun FirPropertyAccessExpression.resolvePath(): List<FirBasedSymbol<*>> = accept(PathVisitor, Unit)
+
+object UniqueCheckVisitor : FirVisitor<Pair<UniqueLevel, ContextTrie?>, UniqueCheckerContext>() {
+    override fun visitElement(element: FirElement, data: UniqueCheckerContext) =
+        throw IllegalStateException("UniqueCheckVisitor should not be called on general FIR elements")
+
+    override fun visitSimpleFunction(
+        simpleFunction: FirSimpleFunction,
+        data: UniqueCheckerContext
+    ): Pair<UniqueLevel, ContextTrie?> {
         simpleFunction.body?.accept(this, data)
         // Function definition doesn't have to return a unique level
-        return UniqueLevel.Shared
+        return Pair(UniqueLevel.Shared, null)
     }
 
     override fun visitLiteralExpression(
         literalExpression: FirLiteralExpression, data: UniqueCheckerContext
-    ): UniqueLevel {
-        return UniqueLevel.Unique
-    }
-
-    override fun visitResolvedNamedReference(
-        resolvedNamedReference: FirResolvedNamedReference, data: UniqueCheckerContext
-    ): UniqueLevel {
-        return data.resolveUniqueAnnotation(resolvedNamedReference.resolvedSymbol)
-    }
+    ): Pair<UniqueLevel, ContextTrie?> = Pair(UniqueLevel.Unique, null)
 
     override fun visitPropertyAccessExpression(
         propertyAccessExpression: FirPropertyAccessExpression, data: UniqueCheckerContext
-    ): UniqueLevel {
-        val currentAnnotation = propertyAccessExpression.calleeReference.accept(this, data)
-        val previousLevel = propertyAccessExpression.explicitReceiver?.accept(this, data) ?: UniqueLevel.Unique
-
-        return listOf(currentAnnotation, previousLevel).max()
+    ): Pair<UniqueLevel, ContextTrie?> {
+        val path = propertyAccessExpression.resolvePath()
+        val last = data.getOrPutPath(path)
+        
+        return Pair(last.pathLUB(), last)
     }
 
-    override fun visitBlock(block: FirBlock, data: UniqueCheckerContext): UniqueLevel {
+    override fun visitBlock(block: FirBlock, data: UniqueCheckerContext): Pair<UniqueLevel, ContextTrie?> {
         block.statements.forEach { statement ->
             when (statement) {
                 is FirFunctionCall -> {
@@ -57,12 +72,12 @@ object UniqueCheckVisitor : FirVisitor<UniqueLevel, UniqueCheckerContext>() {
                 }
             }
         }
-        return UniqueLevel.Shared
+        return Pair(UniqueLevel.Shared, null)
     }
 
     @OptIn(SymbolInternals::class)
-    override fun visitFunctionCall(functionCall: FirFunctionCall, data: UniqueCheckerContext): UniqueLevel {
-        // To keep is simple, assume a functionCall always return Shared for now
+    override fun visitFunctionCall(functionCall: FirFunctionCall, data: UniqueCheckerContext): Pair<UniqueLevel, ContextTrie?> {
+        // To keep it simple, assume a functionCall always return Shared for now
         val symbol = functionCall.toResolvedCallableSymbol()
         val params = (symbol as FirFunctionSymbol<*>).fir.valueParameters
         val requiredUniqueLevels = params.map { data.resolveUniqueAnnotation(it) }
@@ -70,19 +85,38 @@ object UniqueCheckVisitor : FirVisitor<UniqueLevel, UniqueCheckerContext>() {
         val arguments = functionCall.arguments
         arguments.forEachIndexed { index, argument ->
             val requiredUnique = requiredUniqueLevels[index]
-            val argumentUnique = argument.accept(this, data)
-            if (requiredUnique == UniqueLevel.Unique && argumentUnique == UniqueLevel.Shared) {
-                throw IllegalArgumentException("uniqueness level not match ${argument.source.text}")
+            val (argumentUnique, trie) = argument.accept(this, data)
+            require(argumentUnique != UniqueLevel.Top) {
+                "attempting to access a non-accessible argument ${argument.source.text} in ${functionCall.source.text}"
+            }
+
+            val argumentSubtreeLUB = trie?.subtreeLUB()
+            require(argumentSubtreeLUB != UniqueLevel.Top) {
+                "attempting to pass a partially moved argument ${argument.source.text} in ${functionCall.source.text}"
+            }
+
+            when (requiredUnique) {
+                UniqueLevel.Unique -> {
+                    require(argumentUnique == UniqueLevel.Unique) {
+                        "uniqueness level not match ${argument.source.text}, required: Unique, actual: $argumentUnique"
+                    }
+
+                    trie?.level = UniqueLevel.Top
+                }
+                UniqueLevel.Shared -> trie?.level = UniqueLevel.Shared
+                else -> {
+                    throw IllegalStateException("argument can't request unique level $requiredUnique")
+                }
             }
         }
 
         val callee = functionCall.toResolvedCallableSymbol()?.fir as FirSimpleFunction
-        return data.resolveUniqueAnnotation(callee)
+        return Pair(data.resolveUniqueAnnotation(callee), null)
     }
 }
 
-object UniquenessCheckExceptionWrapper : FirVisitor<UniqueLevel, UniqueCheckerContext>() {
-    override fun visitElement(element: FirElement, data: UniqueCheckerContext): UniqueLevel {
+object UniquenessCheckExceptionWrapper : FirVisitor<Pair<UniqueLevel, ContextTrie?>, UniqueCheckerContext>() {
+    override fun visitElement(element: FirElement, data: UniqueCheckerContext): Pair<UniqueLevel, ContextTrie?> {
         try {
             return element.accept(UniqueCheckVisitor, data)
         } catch (e: Exception) {

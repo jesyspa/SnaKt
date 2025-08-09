@@ -1,0 +1,5 @@
+/partial_move.kt:(286,344): error: attempting to pass a partially moved argument a in takesA(a)
+... while checking uniqueness level for fun test(@Unique a: A) {
+    dropB(a.data)
+    takesA(a)
+}
