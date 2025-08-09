@@ -428,15 +428,15 @@ data class FieldAccess(val receiver: ExpEmbedding, val field: FieldEmbedding) : 
         receiver: ExpEmbedding,
         ctx: LinearizationContext
     ): Exp.PredicateAccess {
-        return if (receiver.isUnique) {
-            uniquePredicateAccessInvariant().fillHole(receiver)
-                .pureToViper(toBuiltin = true, ctx.source) as? Exp.PredicateAccess
-                ?: error("Attempt to unfold a predicate of ${name.mangled}.")
+
+        val predicate = if (receiver.isUnique) {
+            uniquePredicateAccessInvariant()
         } else {
-            sharedPredicateAccessInvariant().fillHole(receiver)
-                .pureToViper(toBuiltin = true, ctx.source) as? Exp.PredicateAccess
-                ?: error("Attempt to unfold a predicate of ${name.mangled}.")
+            sharedPredicateAccessInvariant()
         }
+        return predicate.fillHole(receiver)
+            .pureToViper(toBuiltin = true, ctx.source) as? Exp.PredicateAccess
+            ?: error("Attempt to unfold a predicate of ${name.mangled}.")
     }
 
 

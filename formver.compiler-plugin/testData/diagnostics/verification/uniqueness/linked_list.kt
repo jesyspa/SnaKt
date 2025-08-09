@@ -8,10 +8,9 @@ class Link(var data: Int, @Unique val next: Link?)
 
 @AlwaysVerify
 fun <!VIPER_TEXT!>getVal<!>(@Unique l: Link): Int? {
-    return l.next?.next?.data
+    return l.next?.data
 }
 
-fun f(a: Any) { ... }
 
 @AlwaysVerify
 fun <!VIPER_TEXT!>test<!>() {

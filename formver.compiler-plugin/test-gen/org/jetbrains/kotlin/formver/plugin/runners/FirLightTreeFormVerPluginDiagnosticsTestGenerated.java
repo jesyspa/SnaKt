@@ -722,6 +722,12 @@ public class FirLightTreeFormVerPluginDiagnosticsTestGenerated extends AbstractF
       }
 
       @Test
+      @TestMetadata("binary_tree.kt")
+      public void testBinary_tree() {
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/uniqueness/binary_tree.kt");
+      }
+
+      @Test
       @TestMetadata("linked_list.kt")
       public void testLinked_list() {
         runTest("formver.compiler-plugin/testData/diagnostics/verification/uniqueness/linked_list.kt");
