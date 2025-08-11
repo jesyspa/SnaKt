@@ -10,12 +10,12 @@ class A {
 
 fun consumeInt(@Unique x: Int) {}
 
-fun moveTwice(@Unique x: Int, @Unique y: Int) {
+fun moveSameTypedLocals(@Unique x: Int, @Unique y: Int) {
     consumeInt(x)
     consumeInt(y)
 }
 
-fun moveMemberTwice(@Unique x: A, @Unique y: A) {
+fun moveSameTypedLocalMembers(@Unique x: A, @Unique y: A) {
     consumeInt(x.x)
     consumeInt(y.x)
 }

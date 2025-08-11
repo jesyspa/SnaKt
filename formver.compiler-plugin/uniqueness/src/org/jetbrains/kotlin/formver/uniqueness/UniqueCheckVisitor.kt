@@ -38,14 +38,14 @@ object PathVisitor : FirVisitor<List<FirBasedSymbol<*>>, Unit>() {
 
 fun FirPropertyAccessExpression.resolvePath(): List<FirBasedSymbol<*>> = accept(PathVisitor, Unit)
 
-object UniqueCheckVisitor : FirVisitor<Pair<UniqueLevel, ContextTrie?>, UniqueCheckerContext>() {
+object UniqueCheckVisitor : FirVisitor<Pair<UniqueLevel, UniquePathContext?>, UniqueCheckerContext>() {
     override fun visitElement(element: FirElement, data: UniqueCheckerContext) =
         throw IllegalStateException("UniqueCheckVisitor should not be called on general FIR elements")
 
     override fun visitSimpleFunction(
         simpleFunction: FirSimpleFunction,
         data: UniqueCheckerContext
-    ): Pair<UniqueLevel, ContextTrie?> {
+    ): Pair<UniqueLevel, UniquePathContext?> {
         simpleFunction.body?.accept(this, data)
         // Function definition doesn't have to return a unique level
         return Pair(UniqueLevel.Shared, null)
@@ -53,18 +53,18 @@ object UniqueCheckVisitor : FirVisitor<Pair<UniqueLevel, ContextTrie?>, UniqueCh
 
     override fun visitLiteralExpression(
         literalExpression: FirLiteralExpression, data: UniqueCheckerContext
-    ): Pair<UniqueLevel, ContextTrie?> = Pair(UniqueLevel.Unique, null)
+    ): Pair<UniqueLevel, UniquePathContext?> = Pair(UniqueLevel.Unique, null)
 
     override fun visitPropertyAccessExpression(
         propertyAccessExpression: FirPropertyAccessExpression, data: UniqueCheckerContext
-    ): Pair<UniqueLevel, ContextTrie?> {
+    ): Pair<UniqueLevel, UniquePathContext?> {
         val path = propertyAccessExpression.resolvePath()
         val last = data.getOrPutPath(path)
         
-        return Pair(last.pathLUB(), last)
+        return Pair(last.pathLUB, last)
     }
 
-    override fun visitBlock(block: FirBlock, data: UniqueCheckerContext): Pair<UniqueLevel, ContextTrie?> {
+    override fun visitBlock(block: FirBlock, data: UniqueCheckerContext): Pair<UniqueLevel, UniquePathContext?> {
         block.statements.forEach { statement ->
             when (statement) {
                 is FirFunctionCall -> {
@@ -76,7 +76,7 @@ object UniqueCheckVisitor : FirVisitor<Pair<UniqueLevel, ContextTrie?>, UniqueCh
     }
 
     @OptIn(SymbolInternals::class)
-    override fun visitFunctionCall(functionCall: FirFunctionCall, data: UniqueCheckerContext): Pair<UniqueLevel, ContextTrie?> {
+    override fun visitFunctionCall(functionCall: FirFunctionCall, data: UniqueCheckerContext): Pair<UniqueLevel, UniquePathContext?> {
         // To keep it simple, assume a functionCall always return Shared for now
         val symbol = functionCall.toResolvedCallableSymbol()
         val params = (symbol as FirFunctionSymbol<*>).fir.valueParameters
@@ -90,7 +90,7 @@ object UniqueCheckVisitor : FirVisitor<Pair<UniqueLevel, ContextTrie?>, UniqueCh
                 "attempting to access a non-accessible argument ${argument.source.text} in ${functionCall.source.text}"
             }
 
-            val argumentSubtreeLUB = trie?.subtreeLUB()
+            val argumentSubtreeLUB = trie?.subtreeLUB
             require(argumentSubtreeLUB != UniqueLevel.Top) {
                 "attempting to pass a partially moved argument ${argument.source.text} in ${functionCall.source.text}"
             }
@@ -115,8 +115,8 @@ object UniqueCheckVisitor : FirVisitor<Pair<UniqueLevel, ContextTrie?>, UniqueCh
     }
 }
 
-object UniquenessCheckExceptionWrapper : FirVisitor<Pair<UniqueLevel, ContextTrie?>, UniqueCheckerContext>() {
-    override fun visitElement(element: FirElement, data: UniqueCheckerContext): Pair<UniqueLevel, ContextTrie?> {
+object UniquenessCheckExceptionWrapper : FirVisitor<Pair<UniqueLevel, UniquePathContext?>, UniqueCheckerContext>() {
+    override fun visitElement(element: FirElement, data: UniqueCheckerContext): Pair<UniqueLevel, UniquePathContext?> {
         try {
             return element.accept(UniqueCheckVisitor, data)
         } catch (e: Exception) {

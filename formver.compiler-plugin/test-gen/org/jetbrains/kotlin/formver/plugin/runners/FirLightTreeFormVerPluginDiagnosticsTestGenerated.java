@@ -401,6 +401,12 @@ public class FirLightTreeFormVerPluginDiagnosticsTestGenerated extends AbstractF
     }
 
     @Test
+    @TestMetadata("local_same_type.kt")
+    public void testLocal_same_type() {
+      runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/local_same_type.kt");
+    }
+
+    @Test
     @TestMetadata("multi_level.kt")
     public void testMulti_level() {
       runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/multi_level.kt");
@@ -416,12 +422,6 @@ public class FirLightTreeFormVerPluginDiagnosticsTestGenerated extends AbstractF
     @TestMetadata("shared_to_shared.kt")
     public void testShared_to_shared() {
       runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/shared_to_shared.kt");
-    }
-
-    @Test
-    @TestMetadata("twice.kt")
-    public void testTwice() {
-      runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/twice.kt");
     }
   }
 
