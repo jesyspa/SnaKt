@@ -25,25 +25,6 @@ sealed interface HasAnnotation {
     fun hasAnnotation(id: ClassId, session: FirSession): Boolean
 }
 
-private fun<T> List<T>.headTail(): Pair<T, List<T>> = first() to drop(1)
-
-class ContextTrie(
-    val parent: ContextTrie?, val children: MutableMap<FirBasedSymbol<*>, ContextTrie>, var level: UniqueLevel
-) {
-    context(context: UniqueCheckerContext) fun getOrPutPath(path: List<FirBasedSymbol<*>>): ContextTrie {
-        if (path.isEmpty()) return this
-
-        val (head, tail) = path.headTail()
-        val node = children.getOrPut(head) {
-            ContextTrie(this, mutableMapOf(), context.resolveUniqueAnnotation(head))
-        }
-        return node.getOrPutPath(tail)
-    }
-
-    fun subtreeLUB(): UniqueLevel = listOfNotNull(level, children.values.maxOfOrNull { it.subtreeLUB() }).max()
-    fun pathLUB(): UniqueLevel = listOfNotNull(parent?.pathLUB(), level).max()
-}
-
 interface UniqueCheckerContext {
     val config: PluginConfiguration
     val errorCollector: ErrorCollector
@@ -51,7 +32,15 @@ interface UniqueCheckerContext {
 
     fun resolveUniqueAnnotation(declaration: HasAnnotation): UniqueLevel
 
-    fun getOrPutPath(path: List<FirBasedSymbol<*>>): ContextTrie
+    /**
+     * Retrieves the [ContextTrie] node corresponding to the given path.
+     * If the path does not exist in the current context, inserts the necessary nodes.
+     *
+     * @param path A list of [FirBasedSymbol] items representing a sequence of symbols forming a path in code (`x.y.z -> [local/x, A/y, B/z]`).
+     * @return The [ContextTrie] node at the end of the specified path.
+     *         If intermediate nodes do not exist, they are created with unique levels extracted from annotations.
+     */
+    fun getOrPutPath(path: List<FirBasedSymbol<*>>): UniquePathContext
 }
 
 fun UniqueCheckerContext.resolveUniqueAnnotation(declaration: FirBasedSymbol<*>): UniqueLevel =
