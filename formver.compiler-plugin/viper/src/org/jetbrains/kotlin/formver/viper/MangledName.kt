@@ -5,13 +5,20 @@
 
 package org.jetbrains.kotlin.formver.viper
 
+import org.jetbrains.kotlin.formver.viper.ast.Program
+import viper.silver.ast.utility.Consistency
+import kotlin.properties.ReadOnlyProperty
+import kotlin.reflect.KProperty
+
 /**
  * Represents a Kotlin name with its Viper equivalent.
  *
  * We could directly convert names and pass them around as strings, but this
  * approach makes it easier to see where they came from during debugging.
  */
+
 interface MangledName {
+    context(nameResolver: NameResolver)
     val mangledType: String?
         get() = null
     context(nameResolver: NameResolver)
@@ -19,6 +26,8 @@ interface MangledName {
         get() = null
     context(nameResolver: NameResolver)
     val mangledBaseName: String
+    context(nameResolver: NameResolver)
+    fun registry(): Unit
 }
 context(nameResolver: NameResolver)
 val MangledName.mangled: String

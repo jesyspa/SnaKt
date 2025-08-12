@@ -27,54 +27,87 @@ data class SimpleKotlinName(val name: Name) : KotlinName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = name.asStringStripSpecialMarkers()
+    context(nameResolver: NameResolver)
+    override fun registry() = nameResolver.registry(this)
 }
 
-abstract class TypedKotlinName(override val mangledType: String, val name: Name) : KotlinName {
+abstract class TypedKotlinName(val Type: String, val name: Name) : KotlinName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = name.asStringStripSpecialMarkers()
+    context(nameResolver: NameResolver)
+    override val mangledType: String
+        get() = Type
 }
 
-abstract class TypedKotlinNameWithType(override val mangledType: String, val name: Name, val type: TypeEmbedding) : KotlinName {
+abstract class TypedKotlinNameWithType(val originalMangledType: String, val name: Name, val type: TypeEmbedding) : KotlinName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
-        get() = "${name.asStringStripSpecialMarkers()}\$${type.name.mangled}"
+        get() = "${name.asStringStripSpecialMarkers()}_${type.name.mangled}"
+    context(nameResolver: NameResolver)
+    override val mangledType: String
+        get() = originalMangledType
 }
 
 data class FunctionKotlinName(val originalName: Name, val originalType: FunctionTypeEmbedding) : TypedKotlinNameWithType(
     "f", originalName,
     originalType.asTypeEmbedding()
-)
+) {
+    context(nameResolver: NameResolver)
+    override fun registry() = nameResolver.registry(this)
+}
 
 /**
  * This name will never occur in the viper output, but rather is used to lookup properties.
  */
-data class PropertyKotlinName(val originalName: Name) : TypedKotlinName("pp", originalName)
-data class BackingFieldKotlinName(val originalName: Name) : TypedKotlinName("bf", originalName)
-data class GetterKotlinName(val originalName: Name) : TypedKotlinName("pg", originalName)
-data class SetterKotlinName(val originalName: Name) : TypedKotlinName("ps", originalName)
+data class PropertyKotlinName(val originalName: Name) : TypedKotlinName("pp", originalName) {
+    context(nameResolver: NameResolver)
+    override fun registry() = nameResolver.registry(this)
+}
+data class BackingFieldKotlinName(val originalName: Name) : TypedKotlinName("bf", originalName) {
+    context(nameResolver: NameResolver)
+    override fun registry() = nameResolver.registry(this)
+}
+data class GetterKotlinName(val originalName: Name) : TypedKotlinName("pg", originalName) {
+    context(nameResolver: NameResolver)
+    override fun registry() = nameResolver.registry(this)
+}
+data class SetterKotlinName(val originalName: Name) : TypedKotlinName("ps", originalName) {
+    context(nameResolver: NameResolver)
+    override fun registry() = nameResolver.registry(this)
+}
 data class ExtensionSetterKotlinName(val originalName: Name, val originalType: FunctionTypeEmbedding) :
-    TypedKotlinNameWithType("es", originalName, originalType.asTypeEmbedding())
-
+    TypedKotlinNameWithType("es", originalName, originalType.asTypeEmbedding()) {
+    context(nameResolver: NameResolver)
+    override fun registry() = nameResolver.registry(this)
+    }
 data class ExtensionGetterKotlinName(val originalName: Name, val originalType: FunctionTypeEmbedding) :
-    TypedKotlinNameWithType("eg", originalName, originalType.asTypeEmbedding())
+    TypedKotlinNameWithType("eg", originalName, originalType.asTypeEmbedding()) {
+    context(nameResolver: NameResolver)
+    override fun registry() = nameResolver.registry(this)
+    }
 
 data class ClassKotlinName(val name: FqName) : KotlinName {
+    context(nameResolver: NameResolver)
     override val mangledType: String
         get() = "c"
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = name.asViperString()
-
+    context(nameResolver: NameResolver)
+    override fun registry() = nameResolver.registry(this)
     constructor(classSegments: List<String>) : this(FqName.fromSegments(classSegments))
 }
 
 data class ConstructorKotlinName(val type: FunctionTypeEmbedding) : KotlinName {
+    context(nameResolver: NameResolver)
     override val mangledType: String
         get() = "con"
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = type.name.mangledBaseName
+    context(nameResolver: NameResolver)
+    override fun registry() = nameResolver.registry(this)
 }
 
 // It's a bit of a hack to make this as KotlinName, it should really just be any old name, but right now our scoped
@@ -83,20 +116,29 @@ data class PredicateKotlinName(val BaseName: String) : KotlinName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = BaseName
+    context(nameResolver: NameResolver)
     override val mangledType: String
         get() = "p"
+    context(nameResolver: NameResolver)
+    override fun registry() = nameResolver.registry(this)
 }
 
 data class PretypeName(val BaseName: String) : KotlinName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = BaseName
+    context(nameResolver: NameResolver)
+    override fun registry() = nameResolver.registry(this)
 }
 
 data class TypeName(val pretype: PretypeEmbedding, val nullable: Boolean) : KotlinName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = pretype.name.mangledBaseName
+    context(nameResolver: NameResolver)
     override val mangledType: String
         get() = listOfNotNull(if (nullable) "N" else null, "T", if (pretype is FunctionTypeEmbedding) "F" else null).joinToString("")
+        //get() = ""
+        context(nameResolver: NameResolver)
+        override fun registry() = nameResolver.registry(this)
 }

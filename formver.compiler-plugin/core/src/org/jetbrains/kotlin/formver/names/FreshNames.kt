@@ -19,19 +19,27 @@ import org.jetbrains.kotlin.resolve.scopes.LexicalScope
  * e.g. storage for the result of subexpressions.
  */
 data class AnonymousName(val n: Int) : MangledName {
+    context(nameResolver: NameResolver)
     override val mangledType: String
         get() = "anon"
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = n.toString()
+
+    context(nameResolver: NameResolver)
+    override fun registry() = nameResolver.registry(this)
 }
 
 data class AnonymousBuiltinName(val n: Int) : MangledName {
+    context(nameResolver: NameResolver)
     override val mangledType: String
         get() = $$"anon$builtin"
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = n.toString()
+
+    context(nameResolver: NameResolver)
+    override fun registry() = nameResolver.registry(this)
 }
 
 /**
@@ -41,37 +49,51 @@ data object PlaceholderReturnVariableName : MangledName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = "ret"
+
+    context(nameResolver: NameResolver)
+    override fun registry() = nameResolver.registry(this)
 }
 
 data class ReturnVariableName(val n: Int) : MangledName {
+    context(nameResolver: NameResolver)
     override val mangledType: String
         get() = "ret"
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = n.toString()
+    context(nameResolver: NameResolver)
+    override fun registry() = nameResolver.registry(this)
 }
 
 data object DispatchReceiverName : MangledName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = $$"this$dispatch"
+    context(nameResolver: NameResolver)
+    override fun registry() = nameResolver.registry(this)
 }
 
 data object ExtensionReceiverName : MangledName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = $$"this$extension"
+    context(nameResolver: NameResolver)
+    override fun registry() = nameResolver.registry(this)
 }
 
 data class SpecialName(val BaseName: String) : MangledName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = BaseName
+    context(nameResolver: NameResolver)
     override val mangledType: String
         get() = "sp"
+    context(nameResolver: NameResolver)
+    override fun registry() = nameResolver.registry(this)
 }
 
 abstract class NumberedLabelName(val Scope: String, val originalN: Int) : MangledName {
+    context(nameResolver: NameResolver)
     override val mangledType: String
         get() = "lbl"
     context(nameResolver: NameResolver)
@@ -83,22 +105,40 @@ abstract class NumberedLabelName(val Scope: String, val originalN: Int) : Mangle
         get() = Scope
 }
 
-data class ReturnLabelName(val scopeDepth: Int) : NumberedLabelName("ret", scopeDepth)
-data class BreakLabelName(val n: Int) : NumberedLabelName("break", n)
-data class ContinueLabelName(val n: Int) : NumberedLabelName("continue", n)
-data class CatchLabelName(val n: Int) : NumberedLabelName("catch", n)
-data class TryExitLabelName(val n: Int) : NumberedLabelName("try_exit", n)
+data class ReturnLabelName(val scopeDepth: Int) : NumberedLabelName("ret", scopeDepth) {
+    context(nameResolver: NameResolver)
+    override fun registry() = nameResolver.registry(this)
+}
+data class BreakLabelName(val n: Int) : NumberedLabelName("break", n) {
+    context(nameResolver: NameResolver)
+    override fun registry() = nameResolver.registry(this)
+}
+data class ContinueLabelName(val n: Int) : NumberedLabelName("continue", n) {
+    context(nameResolver: NameResolver)
+    override fun registry() = nameResolver.registry(this)
+}
+data class CatchLabelName(val n: Int) : NumberedLabelName("catch", n) {
+    context(nameResolver: NameResolver)
+    override fun registry() = nameResolver.registry(this)
+}
+data class TryExitLabelName(val n: Int) : NumberedLabelName("try_exit", n) {
+    context(nameResolver: NameResolver)
+    override fun registry() = nameResolver.registry(this)
+}
 
 
 data class PlaceholderArgumentName(val n: Int) : MangledName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = "arg$n"
-
+    context(nameResolver: NameResolver)
+    override fun registry() = nameResolver.registry(this)
 }
 
 data class DomainFuncParameterName(val BaseName: String) : MangledName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = BaseName
+    context(nameResolver: NameResolver)
+    override fun registry() = nameResolver.registry(this)
 }

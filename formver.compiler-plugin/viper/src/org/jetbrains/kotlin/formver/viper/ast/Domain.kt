@@ -13,16 +13,22 @@ import viper.silver.ast.NamedDomainAxiom
  * We also convert domain names and their function and axiom names as
  * they have to be globally unique as well.
  */
+
 data class DomainName(val BaseName: String) : MangledName {
+    context(nameResolver: NameResolver)
     override val mangledType: String
         get() = "d"
 
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = BaseName
+
+    context(nameResolver: NameResolver)
+    override fun registry() = nameResolver.registry(this)
 }
 
 data class DomainFuncName(val domainName: DomainName, val BaseName: String) : MangledName {
+    context(nameResolver: NameResolver)
     override val mangledType: String
         get() = "df"
     context(nameResolver: NameResolver)
@@ -31,6 +37,8 @@ data class DomainFuncName(val domainName: DomainName, val BaseName: String) : Ma
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = BaseName
+    context(nameResolver: NameResolver)
+    override fun registry() = nameResolver.registry(this)
 }
 
 /** Represents the name of a possible anonymous axiom.
@@ -51,6 +59,8 @@ data class NamedDomainAxiomLabel(override val domainName: DomainName, val BaseNa
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = BaseName
+    context(nameResolver: NameResolver)
+    override fun registry() = nameResolver.registry(this)
 }
 
 data class AnonymousDomainAxiomLabel(override val domainName: DomainName) : OptionalDomainAxiomLabel

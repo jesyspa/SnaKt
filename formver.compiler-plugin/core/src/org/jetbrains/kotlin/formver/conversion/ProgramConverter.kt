@@ -27,6 +27,7 @@ import org.jetbrains.kotlin.formver.names.*
 import org.jetbrains.kotlin.formver.viper.MangledName
 import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.Program
+import org.jetbrains.kotlin.formver.viper.ast.registerAllNames
 import org.jetbrains.kotlin.formver.viper.mangled
 import org.jetbrains.kotlin.utils.addIfNotNull
 import org.jetbrains.kotlin.utils.addToStdlib.ifFalse
@@ -67,18 +68,25 @@ class ProgramConverter(val session: FirSession, override val config: PluginConfi
     override val returnTargetProducer = FreshEntityProducer(::ReturnTarget)
 
     val program: Program
-
         get() = Program(
-            domains = listOf(RuntimeTypeDomain(classes.values.toList())),
-            // We need to deduplicate fields since public fields with the same name are represented differently
-            // at `FieldEmbedding` level but map to the same Viper.
-            fields = SpecialFields.all.map { it.toViper() } +
-                    with(nameResolver) {fields.distinctBy { it.name.mangled }.map { it.toViper() }},
-            functions = with(nameResolver) {SpecialFunctions.all},
-            methods = SpecialMethods.all + with(nameResolver) {methods.values.mapNotNull { it.viperMethod }.distinctBy { it.name.mangled }},
-            predicates = with(nameResolver) {classes.values.flatMap { listOf(it.details.sharedPredicate, it.details.uniquePredicate) }},
-        )
-
+                    domains = listOf(RuntimeTypeDomain(classes.values.toList())),
+                    // We need to deduplicate fields since public fields with the same name are represented differently
+                    // at `FieldEmbedding` level but map to the same Viper.
+                    fields = SpecialFields.all.map { it.toViper() } +
+                            with(nameResolver) { fields.distinctBy { it.name.mangled }.map { it.toViper() } },
+                    functions = with(nameResolver) { SpecialFunctions.all },
+                    methods = SpecialMethods.all + with(nameResolver) {
+                        methods.values.mapNotNull { it.viperMethod }.distinctBy { it.name.mangled }
+                    },
+                    predicates = with(nameResolver) {
+                        classes.values.flatMap {
+                            listOf(
+                                it.details.sharedPredicate,
+                                it.details.uniquePredicate
+                            )
+                        }
+                    },
+                )
     fun registerForVerification(declaration: FirSimpleFunction) {
         val signature = embedFullSignature(declaration.symbol)
         val returnTarget = returnTargetProducer.getFresh(signature.callableType.returnType)
@@ -103,6 +111,7 @@ class ProgramConverter(val session: FirSession, override val config: PluginConfi
         embedUserFunction(declaration.symbol, signature).apply {
             body = stmtCtx.convertMethodWithBody(declaration, signature, returnTarget)
         }
+
     }
 
     fun embedUserFunction(symbol: FirFunctionSymbol<*>, signature: FullNamedFunctionSignature): UserFunctionEmbedding {
