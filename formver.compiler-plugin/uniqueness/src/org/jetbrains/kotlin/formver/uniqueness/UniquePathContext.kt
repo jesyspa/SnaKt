@@ -17,6 +17,7 @@ import org.jetbrains.kotlin.formver.uniqueness.UniqueLevel.*
  */
 interface UniquePathContext {
     var level: UniqueLevel
+    context(_: UniqueCheckerContext) val borrowingLevel: BorrowingLevel
 
     /**
      * Retrieves the child node corresponding to the given path within the trie structure,
@@ -47,9 +48,4 @@ interface UniquePathContext {
      * Represents whether the subtree originating at this node in the trie has any changes
      */
     context(_: UniqueCheckerContext) val hasChanges: Boolean
-
-    /**
-     * Retrieves the local variable containing the current symbol.
-     */
-    val localVariable: FirBasedSymbol<*>?
 }

@@ -42,7 +42,7 @@ class UniqueChecker(
         if (declaration.hasAnnotation(borrowingId, session)) {
             return BorrowingLevel.Borrowed
         }
-        return BorrowingLevel.Owned
+        return BorrowingLevel.Plain
     }
 
     override fun getOrPutPath(path: List<FirBasedSymbol<*>>): UniquePathContext {

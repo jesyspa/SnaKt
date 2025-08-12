@@ -12,6 +12,6 @@ enum class UniqueLevel {
 }
 
 enum class BorrowingLevel {
-    Owned,
+    Plain,
     Borrowed,
 }

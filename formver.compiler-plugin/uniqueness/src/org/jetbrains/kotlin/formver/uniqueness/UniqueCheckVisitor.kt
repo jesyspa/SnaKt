@@ -8,6 +8,7 @@ package org.jetbrains.kotlin.formver.uniqueness
 import org.jetbrains.kotlin.fir.FirElement
 import org.jetbrains.kotlin.fir.declarations.FirSimpleFunction
 import org.jetbrains.kotlin.fir.expressions.FirBlock
+import org.jetbrains.kotlin.fir.expressions.FirExpression
 import org.jetbrains.kotlin.fir.expressions.FirFunctionCall
 import org.jetbrains.kotlin.fir.expressions.FirLiteralExpression
 import org.jetbrains.kotlin.fir.expressions.FirPropertyAccessExpression
@@ -48,8 +49,7 @@ object UniqueCheckVisitor : FirVisitor<Pair<UniqueLevel, UniquePathContext?>, Un
         throw IllegalStateException("UniqueCheckVisitor should not be called on general FIR elements")
 
     override fun visitSimpleFunction(
-        simpleFunction: FirSimpleFunction,
-        data: UniqueCheckerContext
+        simpleFunction: FirSimpleFunction, data: UniqueCheckerContext
     ): Pair<UniqueLevel, UniquePathContext?> {
         simpleFunction.body?.accept(this, data)
         // Function definition doesn't have to return a unique level
@@ -65,7 +65,7 @@ object UniqueCheckVisitor : FirVisitor<Pair<UniqueLevel, UniquePathContext?>, Un
     ): Pair<UniqueLevel, UniquePathContext?> {
         val path = propertyAccessExpression.resolvePath()
         val last = data.getOrPutPath(path)
-        
+
         return Pair(last.pathToRootLUB, last)
     }
 
@@ -80,8 +80,46 @@ object UniqueCheckVisitor : FirVisitor<Pair<UniqueLevel, UniquePathContext?>, Un
         return Pair(UniqueLevel.Shared, null)
     }
 
+    private fun verifyPassingRules(
+        functionCall: FirFunctionCall,
+        argument: FirExpression,
+        requirements: Pair<UniqueLevel, BorrowingLevel>,
+        actual: Pair<UniqueLevel, BorrowingLevel>,
+        pathContext: UniquePathContext?,
+        data: UniqueCheckerContext,
+    ) {
+        val (requiredUnique, requiredBorrowing) = requirements
+        val (argumentUnique, argumentBorrowing) = actual
+
+        require(argumentUnique != UniqueLevel.Top) {
+            "attempting to access a non-accessible argument ${argument.source.text} in ${functionCall.source.text}"
+        }
+
+        val argumentSubtreeLUB = pathContext?.subtreeLUB
+        require(argumentSubtreeLUB != UniqueLevel.Top) {
+            "attempting to pass a partially moved argument ${argument.source.text} in ${functionCall.source.text}"
+        }
+
+        require(argumentBorrowing <= requiredBorrowing) {
+            "attempting to pass argument ${argument.source.text} in ${functionCall.source.text} with incompatible borrowing level"
+        }
+
+        if (requiredUnique == UniqueLevel.Unique) {
+            require(argumentUnique == UniqueLevel.Unique) {
+                "uniqueness level not match ${argument.source.text}, required: Unique, actual: $argumentUnique"
+            }
+
+            val subtreeChanged = with(data) { pathContext?.hasChanges ?: false }
+            require(!subtreeChanged) {
+                "attempting to pass a partially shared argument ${argument.source.text} in ${functionCall.source.text}"
+            }
+        }
+    }
+
     @OptIn(SymbolInternals::class)
-    override fun visitFunctionCall(functionCall: FirFunctionCall, data: UniqueCheckerContext): Pair<UniqueLevel, UniquePathContext?> {
+    override fun visitFunctionCall(
+        functionCall: FirFunctionCall, data: UniqueCheckerContext
+    ): Pair<UniqueLevel, UniquePathContext?> {
         // To keep it simple, assume a functionCall always return Shared for now
         val symbol = functionCall.toResolvedCallableSymbol()
         val params = (symbol as FirFunctionSymbol<*>).fir.valueParameters
@@ -92,40 +130,23 @@ object UniqueCheckVisitor : FirVisitor<Pair<UniqueLevel, UniquePathContext?>, Un
         arguments.forEachIndexed { index, argument ->
             val requiredUnique = requiredUniqueLevels[index]
             val paramBorrowing = paramBorrowingLevels[index]
-            val (argumentUnique, trie) = argument.accept(this, data)
-            val argumentBorrowing =
-                trie?.localVariable?.let { data.resolveBorrowingAnnotation(it) } ?: BorrowingLevel.Owned
 
-            require(argumentUnique != UniqueLevel.Top) {
-                "attempting to access a non-accessible argument ${argument.source.text} in ${functionCall.source.text}"
-            }
+            val (argumentUnique, pathContext) = argument.accept(this, data)
+            val argumentBorrowing = with(data) { pathContext?.borrowingLevel ?: BorrowingLevel.Plain }
+            verifyPassingRules(
+                functionCall,
+                argument,
+                requirements = Pair(requiredUnique, paramBorrowing),
+                actual = Pair(argumentUnique, argumentBorrowing),
+                pathContext,
+                data,
+            )
 
-            val argumentSubtreeLUB = trie?.subtreeLUB
-            require(argumentSubtreeLUB != UniqueLevel.Top) {
-                "attempting to pass a partially moved argument ${argument.source.text} in ${functionCall.source.text}"
-            }
-
-            require(argumentBorrowing <= paramBorrowing) {
-                "attempting to pass argument ${argument.source.text} in ${functionCall.source.text} with incompatible borrowing level"
-            }
-
-            when (requiredUnique) {
-                UniqueLevel.Unique -> {
-                    require(argumentUnique == UniqueLevel.Unique) {
-                        "uniqueness level not match ${argument.source.text}, required: Unique, actual: $argumentUnique"
-                    }
-
-                    val subtreeChanged = with(data) { trie?.hasChanges ?: false }
-                    require(!subtreeChanged) {
-                        "attempting to pass a partially shared argument ${argument.source.text} in ${functionCall.source.text}"
-                    }
-
-                    if (paramBorrowing != BorrowingLevel.Borrowed) trie?.level = UniqueLevel.Top
-                }
-
-                UniqueLevel.Shared -> if (paramBorrowing != BorrowingLevel.Borrowed) trie?.level = UniqueLevel.Shared
-                else -> {
-                    throw IllegalStateException("argument can't request unique level $requiredUnique")
+            if (paramBorrowing != BorrowingLevel.Borrowed) {
+                when (requiredUnique) {
+                    UniqueLevel.Unique -> pathContext?.level = UniqueLevel.Top
+                    UniqueLevel.Shared -> pathContext?.level = UniqueLevel.Shared
+                    else -> throw IllegalStateException("argument can't request unique level $requiredUnique")
                 }
             }
         }

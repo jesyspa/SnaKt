@@ -19,6 +19,15 @@ class ContextTrie(
         return node.getOrPutPath(tail)
     }
 
+    private val localVariable: FirBasedSymbol<*>?
+        get() {
+            val local = parent?.localVariable ?: this.symbol
+            return local as? FirValueParameterSymbol
+        }
+
+    context(context: UniqueCheckerContext) override val borrowingLevel: BorrowingLevel
+        get() = localVariable?.let { context.resolveBorrowingAnnotation(it) } ?: BorrowingLevel.Plain
+
     override val subtreeLUB: UniqueLevel
         get() = listOfNotNull(
             level,
@@ -31,11 +40,5 @@ class ContextTrie(
         get() {
             val changed = symbol?.let { level != context.resolveUniqueAnnotation(it) } ?: false
             return changed || children.values.any { it.hasChanges }
-        }
-
-    override val localVariable: FirBasedSymbol<*>?
-        get() {
-            val local = parent?.localVariable ?: this.symbol
-            return local as? FirValueParameterSymbol
         }
 }
