@@ -1,91 +1,84 @@
 /custom_list.kt:(168,171): info: Generated Viper text for get:
-field bf$c$CustomList$private$value: Ref
+field bf_value: Ref
 
-field sp$size: Ref
+field sp_size: Ref
 
-method f$c$CustomList$get$TF$T$CustomList$T$Int(this$dispatch: Ref, p$index: Ref)
-  returns (ret$0: Ref)
-  requires acc(this$dispatch.sp$size, write)
-  requires df$rt$intFromRef(this$dispatch.sp$size) >= 0
-  requires df$rt$intFromRef(p$index) >= 0
-  requires df$rt$intFromRef(this$dispatch.sp$size) >
-    df$rt$intFromRef(p$index)
-  ensures acc(this$dispatch.sp$size, write)
-  ensures df$rt$intFromRef(this$dispatch.sp$size) >= 0
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
-  ensures df$rt$intFromRef(this$dispatch.sp$size) ==
-    old(df$rt$intFromRef(this$dispatch.sp$size))
+method f_get_TF_T_CustomList$T_Int(this$dispatch: Ref, index: Ref)
+  returns (ret_0: Ref)
+  requires acc(this$dispatch.sp_size, write)
+  requires df_intFromRef(this$dispatch.sp_size) >= 0
+  requires df_intFromRef(index) >= 0
+  requires df_intFromRef(this$dispatch.sp_size) > df_intFromRef(index)
+  ensures acc(this$dispatch.sp_size, write)
+  ensures df_intFromRef(this$dispatch.sp_size) >= 0
+  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
+  ensures df_intFromRef(this$dispatch.sp_size) ==
+    old(df_intFromRef(this$dispatch.sp_size))
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(this$dispatch), df$rt$c$CustomList())
-  inhale acc(p$c$CustomList$shared(this$dispatch), wildcard)
-  inhale df$rt$isSubtype(df$rt$typeOf(p$index), df$rt$intType())
-  unfold acc(p$c$CustomList$shared(this$dispatch), wildcard)
-  ret$0 := this$dispatch.bf$c$CustomList$private$value
-  goto lbl$ret$0
-  label lbl$ret$0
+  inhale df_isSubtype(df_typeOf(this$dispatch), df_c_CustomList())
+  inhale acc(p_c_CustomList_shared(this$dispatch), wildcard)
+  inhale df_isSubtype(df_typeOf(index), df_intType())
+  unfold acc(p_c_CustomList_shared(this$dispatch), wildcard)
+  ret_0 := this$dispatch.bf_value
+  goto lbl_0
+  label lbl_0
 }
 
 /custom_list.kt:(248,252): info: Generated Viper text for test:
-field bf$c$CustomList$private$value: Ref
+field bf_value: Ref
 
-field sp$size: Ref
+field sp_size: Ref
 
-method con$c$CustomList$T$Int$T$Int(p$size: Ref, p$value: Ref)
+method con_T_Int$T_Int(size: Ref, value: Ref) returns (ret: Ref)
+  ensures df_isSubtype(df_typeOf(ret), df_c_CustomList())
+  ensures acc(ret.sp_size, write)
+  ensures df_intFromRef(ret.sp_size) >= 0
+  ensures acc(p_c_CustomList_shared(ret), wildcard)
+  ensures acc(p_c_CustomList_unique(ret), write)
+
+
+method f_get_TF_T_CustomList$T_Int(this$dispatch: Ref, index: Ref)
   returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$CustomList())
-  ensures acc(ret.sp$size, write)
-  ensures df$rt$intFromRef(ret.sp$size) >= 0
-  ensures acc(p$c$CustomList$shared(ret), wildcard)
-  ensures acc(p$c$CustomList$unique(ret), write)
+  requires acc(this$dispatch.sp_size, write)
+  requires df_intFromRef(this$dispatch.sp_size) >= 0
+  requires df_intFromRef(index) >= 0
+  requires df_intFromRef(this$dispatch.sp_size) > df_intFromRef(index)
+  ensures acc(this$dispatch.sp_size, write)
+  ensures df_intFromRef(this$dispatch.sp_size) >= 0
+  ensures df_isSubtype(df_typeOf(ret), df_intType())
+  ensures df_intFromRef(this$dispatch.sp_size) ==
+    old(df_intFromRef(this$dispatch.sp_size))
 
 
-method f$c$CustomList$get$TF$T$CustomList$T$Int(this$dispatch: Ref, p$index: Ref)
-  returns (ret: Ref)
-  requires acc(this$dispatch.sp$size, write)
-  requires df$rt$intFromRef(this$dispatch.sp$size) >= 0
-  requires df$rt$intFromRef(p$index) >= 0
-  requires df$rt$intFromRef(this$dispatch.sp$size) >
-    df$rt$intFromRef(p$index)
-  ensures acc(this$dispatch.sp$size, write)
-  ensures df$rt$intFromRef(this$dispatch.sp$size) >= 0
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$intType())
-  ensures df$rt$intFromRef(this$dispatch.sp$size) ==
-    old(df$rt$intFromRef(this$dispatch.sp$size))
+method f_isEmpty_TF_T_CustomList(this$dispatch: Ref) returns (ret: Ref)
+  requires acc(this$dispatch.sp_size, write)
+  requires df_intFromRef(this$dispatch.sp_size) >= 0
+  ensures acc(this$dispatch.sp_size, write)
+  ensures df_intFromRef(this$dispatch.sp_size) >= 0
+  ensures df_isSubtype(df_typeOf(ret), df_boolType())
+  ensures df_intFromRef(this$dispatch.sp_size) ==
+    old(df_intFromRef(this$dispatch.sp_size))
+  ensures df_boolFromRef(ret) ==> df_intFromRef(this$dispatch.sp_size) == 0
+  ensures !df_boolFromRef(ret) ==> df_intFromRef(this$dispatch.sp_size) > 0
 
 
-method f$c$CustomList$isEmpty$TF$T$CustomList(this$dispatch: Ref)
-  returns (ret: Ref)
-  requires acc(this$dispatch.sp$size, write)
-  requires df$rt$intFromRef(this$dispatch.sp$size) >= 0
-  ensures acc(this$dispatch.sp$size, write)
-  ensures df$rt$intFromRef(this$dispatch.sp$size) >= 0
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$boolType())
-  ensures df$rt$intFromRef(this$dispatch.sp$size) ==
-    old(df$rt$intFromRef(this$dispatch.sp$size))
-  ensures df$rt$boolFromRef(ret) ==>
-    df$rt$intFromRef(this$dispatch.sp$size) == 0
-  ensures !df$rt$boolFromRef(ret) ==>
-    df$rt$intFromRef(this$dispatch.sp$size) > 0
-
-
-method f$test$TF$T$Int(p$n: Ref) returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method f_test_TF_T_Int(n: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  var l0$customList: Ref
-  var anon$0: Ref
-  inhale df$rt$isSubtype(df$rt$typeOf(p$n), df$rt$intType())
-  l0$customList := con$c$CustomList$T$Int$T$Int(p$n, df$rt$intToRef(0))
-  anon$0 := f$c$CustomList$isEmpty$TF$T$CustomList(l0$customList)
-  if (!df$rt$boolFromRef(anon$0)) {
-    var anon$1: Ref
-    var anon$2: Ref
-    var anon$3: Ref
-    anon$2 := l0$customList.sp$size
-    inhale df$rt$isSubtype(df$rt$typeOf(anon$2), df$rt$intType())
-    anon$1 := f$c$CustomList$get$TF$T$CustomList$T$Int(l0$customList, sp$minusInts(anon$2,
-      df$rt$intToRef(1)))
-    anon$3 := f$c$CustomList$get$TF$T$CustomList$T$Int(l0$customList, df$rt$intToRef(0))
+  var customList: Ref
+  var anon_0: Ref
+  inhale df_isSubtype(df_typeOf(n), df_intType())
+  customList := con_T_Int$T_Int(n, df_intToRef(0))
+  anon_0 := f_isEmpty_TF_T_CustomList(customList)
+  if (!df_boolFromRef(anon_0)) {
+    var anon_1: Ref
+    var anon_2: Ref
+    var anon_3: Ref
+    anon_2 := customList.sp_size
+    inhale df_isSubtype(df_typeOf(anon_2), df_intType())
+    anon_1 := f_get_TF_T_CustomList$T_Int(customList, sp_minusInts(anon_2, df_intToRef(1)))
+    anon_3 := f_get_TF_T_CustomList$T_Int(customList, df_intToRef(0))
   }
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  label lbl_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }

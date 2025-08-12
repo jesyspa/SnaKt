@@ -1,43 +1,43 @@
 /function_call.kt:(118,130): info: Generated Viper text for functionCall:
-method f$f$TF$T$Int(p$x: Ref) returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$intType())
+method f_f_TF_T_Int(x: Ref) returns (ret: Ref)
+  ensures df_isSubtype(df_typeOf(ret), df_intType())
 
 
-method f$functionCall$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method f_functionCall_TF_() returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  var anon$0: Ref
-  var anon$1: Ref
-  anon$0 := f$f$TF$T$Int(df$rt$intToRef(0))
-  anon$1 := f$f$TF$T$Int(df$rt$intToRef(0))
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  var anon_0: Ref
+  var anon_1: Ref
+  anon_0 := f_f_TF_T_Int(df_intToRef(0))
+  anon_1 := f_f_TF_T_Int(df_intToRef(0))
+  label lbl_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /function_call.kt:(160,178): info: Generated Viper text for functionCallNested:
-method f$f$TF$T$Int(p$x: Ref) returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$intType())
+method f_f_TF_T_Int(x: Ref) returns (ret: Ref)
+  ensures df_isSubtype(df_typeOf(ret), df_intType())
 
 
-method f$functionCallNested$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method f_functionCallNested_TF_() returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  var anon$0: Ref
-  var anon$1: Ref
-  var anon$2: Ref
-  anon$2 := f$f$TF$T$Int(df$rt$intToRef(0))
-  anon$1 := f$f$TF$T$Int(anon$2)
-  anon$0 := f$f$TF$T$Int(anon$1)
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  var anon_0: Ref
+  var anon_1: Ref
+  var anon_2: Ref
+  anon_2 := f_f_TF_T_Int(df_intToRef(0))
+  anon_1 := f_f_TF_T_Int(anon_2)
+  anon_0 := f_f_TF_T_Int(anon_1)
+  label lbl_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /function_call.kt:(205,215): info: Generated Viper text for callItself:
-method f$callItself$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method f_callItself_TF_() returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  var anon$0: Ref
-  anon$0 := f$callItself$TF$()
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  var anon_0: Ref
+  anon_0 := f_callItself_TF_()
+  label lbl_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }

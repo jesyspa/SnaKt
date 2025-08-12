@@ -1,60 +1,60 @@
 /inline.kt:(230,239): info: Generated Viper text for quadruple:
-method f$quadruple$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
+method f_quadruple_TF_T_Int(p_x: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
-  var anon$0: Ref
-  var ret$1: Ref
-  var l1$y: Ref
-  var anon$1: Ref
-  var ret$2: Ref
-  var l2$y: Ref
-  inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$intType())
-  l1$y := sp$plusInts(p$x, p$x)
-  ret$1 := l1$y
-  goto lbl$ret$1
-  label lbl$ret$1
-  anon$0 := ret$1
-  l2$y := sp$plusInts(p$x, p$x)
-  ret$2 := l2$y
-  goto lbl$ret$2
-  label lbl$ret$2
-  anon$1 := ret$2
-  ret$0 := sp$plusInts(anon$0, anon$1)
-  goto lbl$ret$0
-  label lbl$ret$0
+  var anon_0: Ref
+  var ret_1: Ref
+  var l1_y: Ref
+  var anon_1: Ref
+  var ret_2: Ref
+  var l2_y: Ref
+  inhale df_isSubtype(df_typeOf(p_x), df_intType())
+  l1_y := sp_plusInts(p_x, p_x)
+  ret_1 := l1_y
+  goto lbl_1
+  label lbl_1
+  anon_0 := ret_1
+  l2_y := sp_plusInts(p_x, p_x)
+  ret_2 := l2_y
+  goto lbl_2
+  label lbl_2
+  anon_1 := ret_2
+  ret_0 := sp_plusInts(anon_0, anon_1)
+  goto lbl_0
+  label lbl_0
 }
 
 /inline.kt:(469,481): info: Generated Viper text for useBranching:
-method f$useBranching$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
+method f_useBranching_TF_() returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
-  var anon$2: Ref
-  var ret$1: Ref
-  var anon$0: Ref
-  var anon$3: Ref
-  var ret$2: Ref
-  var anon$1: Ref
-  anon$0 := df$rt$boolToRef(false)
-  if (df$rt$boolFromRef(anon$0)) {
-    ret$1 := df$rt$intToRef(1)
-    goto lbl$ret$1
+  var anon_2: Ref
+  var ret_1: Ref
+  var anon_0: Ref
+  var anon_3: Ref
+  var ret_2: Ref
+  var anon_1: Ref
+  anon_0 := df_boolToRef(false)
+  if (df_boolFromRef(anon_0)) {
+    ret_1 := df_intToRef(1)
+    goto lbl_1
   } else {
-    ret$1 := df$rt$intToRef(0)
-    goto lbl$ret$1
+    ret_1 := df_intToRef(0)
+    goto lbl_1
   }
-  label lbl$ret$1
-  anon$2 := ret$1
-  anon$1 := df$rt$boolToRef(true)
-  if (df$rt$boolFromRef(anon$1)) {
-    ret$2 := df$rt$intToRef(1)
-    goto lbl$ret$2
+  label lbl_1
+  anon_2 := ret_1
+  anon_1 := df_boolToRef(true)
+  if (df_boolFromRef(anon_1)) {
+    ret_2 := df_intToRef(1)
+    goto lbl_2
   } else {
-    ret$2 := df$rt$intToRef(0)
-    goto lbl$ret$2
+    ret_2 := df_intToRef(0)
+    goto lbl_2
   }
-  label lbl$ret$2
-  anon$3 := ret$2
-  ret$0 := sp$plusInts(anon$2, anon$3)
-  goto lbl$ret$0
-  label lbl$ret$0
+  label lbl_2
+  anon_3 := ret_2
+  ret_0 := sp_plusInts(anon_2, anon_3)
+  goto lbl_0
+  label lbl_0
 }
