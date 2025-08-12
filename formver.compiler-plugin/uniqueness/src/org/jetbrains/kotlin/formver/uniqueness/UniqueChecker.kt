@@ -26,6 +26,9 @@ class UniqueChecker(
     private val uniqueId: ClassId
         get() = getAnnotationId("Unique")
 
+    private val borrowingId: ClassId
+        get() = getAnnotationId("Borrowed")
+
     private val uniqueContext = ContextTrie(null, null, mutableMapOf(), UniqueLevel.Unique)
 
     override fun resolveUniqueAnnotation(declaration: HasAnnotation): UniqueLevel {
@@ -33,6 +36,13 @@ class UniqueChecker(
             return UniqueLevel.Unique
         }
         return UniqueLevel.Shared
+    }
+
+    override fun resolveBorrowingAnnotation(declaration: HasAnnotation): BorrowingLevel {
+        if (declaration.hasAnnotation(borrowingId, session)) {
+            return BorrowingLevel.Borrowed
+        }
+        return BorrowingLevel.Owned
     }
 
     override fun getOrPutPath(path: List<FirBasedSymbol<*>>): UniquePathContext {

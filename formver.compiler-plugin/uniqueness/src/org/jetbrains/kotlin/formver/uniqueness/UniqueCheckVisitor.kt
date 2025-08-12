@@ -86,11 +86,16 @@ object UniqueCheckVisitor : FirVisitor<Pair<UniqueLevel, UniquePathContext?>, Un
         val symbol = functionCall.toResolvedCallableSymbol()
         val params = (symbol as FirFunctionSymbol<*>).fir.valueParameters
         val requiredUniqueLevels = params.map { data.resolveUniqueAnnotation(it) }
-        // Skip merge of context for now
+        val paramBorrowingLevels = params.map { data.resolveBorrowingAnnotation(it) }
+
         val arguments = functionCall.arguments
         arguments.forEachIndexed { index, argument ->
             val requiredUnique = requiredUniqueLevels[index]
+            val paramBorrowing = paramBorrowingLevels[index]
             val (argumentUnique, trie) = argument.accept(this, data)
+            val argumentBorrowing =
+                trie?.localVariable?.let { data.resolveBorrowingAnnotation(it) } ?: BorrowingLevel.Owned
+
             require(argumentUnique != UniqueLevel.Top) {
                 "attempting to access a non-accessible argument ${argument.source.text} in ${functionCall.source.text}"
             }
@@ -98,6 +103,10 @@ object UniqueCheckVisitor : FirVisitor<Pair<UniqueLevel, UniquePathContext?>, Un
             val argumentSubtreeLUB = trie?.subtreeLUB
             require(argumentSubtreeLUB != UniqueLevel.Top) {
                 "attempting to pass a partially moved argument ${argument.source.text} in ${functionCall.source.text}"
+            }
+
+            require(argumentBorrowing <= paramBorrowing) {
+                "attempting to pass argument ${argument.source.text} in ${functionCall.source.text} with incompatible borrowing level"
             }
 
             when (requiredUnique) {
@@ -111,10 +120,10 @@ object UniqueCheckVisitor : FirVisitor<Pair<UniqueLevel, UniquePathContext?>, Un
                         "attempting to pass a partially shared argument ${argument.source.text} in ${functionCall.source.text}"
                     }
 
-                    trie?.level = UniqueLevel.Top
+                    if (paramBorrowing != BorrowingLevel.Borrowed) trie?.level = UniqueLevel.Top
                 }
 
-                UniqueLevel.Shared -> trie?.level = UniqueLevel.Shared
+                UniqueLevel.Shared -> if (paramBorrowing != BorrowingLevel.Borrowed) trie?.level = UniqueLevel.Shared
                 else -> {
                     throw IllegalStateException("argument can't request unique level $requiredUnique")
                 }

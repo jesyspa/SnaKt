@@ -1,0 +1,9 @@
+/borrowing.kt:(635,704): error: attempting to pass argument z in consumeB(z) with incompatible borrowing level
+... while checking uniqueness level for fun borrowedToNonBorrowed(@Borrowed @Unique z: B) {
+    consumeB(z)
+}
+
+/borrowing.kt:(706,787): error: attempting to pass argument y in makeIntoShared(y) with incompatible borrowing level
+... while checking uniqueness level for fun borrowedToNonBorrowedShared(@Borrowed @Unique y: A) {
+    makeIntoShared(y)
+}

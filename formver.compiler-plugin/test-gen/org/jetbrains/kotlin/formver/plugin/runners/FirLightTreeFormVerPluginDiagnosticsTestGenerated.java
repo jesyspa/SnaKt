@@ -389,6 +389,12 @@ public class FirLightTreeFormVerPluginDiagnosticsTestGenerated extends AbstractF
     }
 
     @Test
+    @TestMetadata("borrowing.kt")
+    public void testBorrowing() {
+      runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/borrowing.kt");
+    }
+
+    @Test
     @TestMetadata("consume_properties.kt")
     public void testConsume_properties() {
       runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/consume_properties.kt");

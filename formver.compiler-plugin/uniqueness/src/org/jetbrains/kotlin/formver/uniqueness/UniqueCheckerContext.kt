@@ -31,6 +31,7 @@ interface UniqueCheckerContext {
     val session: FirSession
 
     fun resolveUniqueAnnotation(declaration: HasAnnotation): UniqueLevel
+    fun resolveBorrowingAnnotation(declaration: HasAnnotation): BorrowingLevel
 
     /**
      * Retrieves the [ContextTrie] node corresponding to the given path.
@@ -49,3 +50,9 @@ fun UniqueCheckerContext.resolveUniqueAnnotation(declaration: FirBasedSymbol<*>)
 
 fun UniqueCheckerContext.resolveUniqueAnnotation(declaration: FirAnnotationContainer): UniqueLevel =
     resolveUniqueAnnotation(HasAnnotation.AnnotationContainer(declaration))
+
+fun UniqueCheckerContext.resolveBorrowingAnnotation(declaration: FirBasedSymbol<*>): BorrowingLevel =
+    resolveBorrowingAnnotation(HasAnnotation.Symbol(declaration))
+
+fun UniqueCheckerContext.resolveBorrowingAnnotation(declaration: FirAnnotationContainer): BorrowingLevel =
+    resolveBorrowingAnnotation(HasAnnotation.AnnotationContainer(declaration))

@@ -46,5 +46,10 @@ interface UniquePathContext {
     /**
      * Represents whether the subtree originating at this node in the trie has any changes
      */
-    context(context: UniqueCheckerContext) val hasChanges: Boolean
+    context(_: UniqueCheckerContext) val hasChanges: Boolean
+
+    /**
+     * Retrieves the local variable containing the current symbol.
+     */
+    val localVariable: FirBasedSymbol<*>?
 }

@@ -10,3 +10,8 @@ enum class UniqueLevel {
     Shared,
     Top,
 }
+
+enum class BorrowingLevel {
+    Owned,
+    Borrowed,
+}
