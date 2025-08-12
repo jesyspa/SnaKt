@@ -35,7 +35,6 @@ abstract class TypedKotlinName(val Type: String, val name: Name) : KotlinName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = name.asStringStripSpecialMarkers()
-    context(nameResolver: NameResolver)
     override val mangledType: String
         get() = Type
 }
@@ -44,7 +43,6 @@ abstract class TypedKotlinNameWithType(val originalMangledType: String, val name
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = "${name.asStringStripSpecialMarkers()}_${type.name.mangled}"
-    context(nameResolver: NameResolver)
     override val mangledType: String
         get() = originalMangledType
 }
@@ -88,7 +86,6 @@ data class ExtensionGetterKotlinName(val originalName: Name, val originalType: F
     }
 
 data class ClassKotlinName(val name: FqName) : KotlinName {
-    context(nameResolver: NameResolver)
     override val mangledType: String
         get() = "c"
     context(nameResolver: NameResolver)
@@ -100,7 +97,6 @@ data class ClassKotlinName(val name: FqName) : KotlinName {
 }
 
 data class ConstructorKotlinName(val type: FunctionTypeEmbedding) : KotlinName {
-    context(nameResolver: NameResolver)
     override val mangledType: String
         get() = "con"
     context(nameResolver: NameResolver)
@@ -116,29 +112,32 @@ data class PredicateKotlinName(val BaseName: String) : KotlinName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = BaseName
-    context(nameResolver: NameResolver)
     override val mangledType: String
         get() = "p"
     context(nameResolver: NameResolver)
     override fun registry() = nameResolver.registry(this)
 }
 
-data class PretypeName(val BaseName: String) : KotlinName {
+data class PretypeName(val baseName: String) : KotlinName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
-        get() = BaseName
+        get() = baseName
     context(nameResolver: NameResolver)
     override fun registry() = nameResolver.registry(this)
 }
-
+data class SetOfNames(val list: List<MangledName>) : KotlinName {
+    context(nameResolver: NameResolver)
+    override val mangledBaseName: String
+        get() = list.joinToString("$") { it.mangled }
+    context(nameResolver: NameResolver)
+    override fun registry() = nameResolver.registry(this)
+}
 data class TypeName(val pretype: PretypeEmbedding, val nullable: Boolean) : KotlinName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = pretype.name.mangledBaseName
-    context(nameResolver: NameResolver)
     override val mangledType: String
         get() = listOfNotNull(if (nullable) "N" else null, "T", if (pretype is FunctionTypeEmbedding) "F" else null).joinToString("")
-        //get() = ""
-        context(nameResolver: NameResolver)
-        override fun registry() = nameResolver.registry(this)
+    context(nameResolver: NameResolver)
+    override fun registry() = nameResolver.registry(this)
 }

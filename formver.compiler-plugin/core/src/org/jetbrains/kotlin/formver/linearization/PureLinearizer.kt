@@ -33,7 +33,7 @@ class PureLinearizer(override val source: KtSourceElement?) : LinearizationConte
 
     override fun <R> withPosition(newSource: KtSourceElement, action: LinearizationContext.() -> R): R =
         PureLinearizer(newSource).action()
-    context(nameResolver: NameResolver)
+
     override fun freshAnonVar(type: TypeEmbedding): AnonymousVariableEmbedding {
         throw PureLinearizerMisuseException("newVar")
     }

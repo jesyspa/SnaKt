@@ -19,7 +19,6 @@ import org.jetbrains.kotlin.resolve.scopes.LexicalScope
  * e.g. storage for the result of subexpressions.
  */
 data class AnonymousName(val n: Int) : MangledName {
-    context(nameResolver: NameResolver)
     override val mangledType: String
         get() = "anon"
     context(nameResolver: NameResolver)
@@ -31,7 +30,7 @@ data class AnonymousName(val n: Int) : MangledName {
 }
 
 data class AnonymousBuiltinName(val n: Int) : MangledName {
-    context(nameResolver: NameResolver)
+
     override val mangledType: String
         get() = $$"anon$builtin"
     context(nameResolver: NameResolver)
@@ -55,7 +54,6 @@ data object PlaceholderReturnVariableName : MangledName {
 }
 
 data class ReturnVariableName(val n: Int) : MangledName {
-    context(nameResolver: NameResolver)
     override val mangledType: String
         get() = "ret"
     context(nameResolver: NameResolver)
@@ -85,7 +83,6 @@ data class SpecialName(val BaseName: String) : MangledName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = BaseName
-    context(nameResolver: NameResolver)
     override val mangledType: String
         get() = "sp"
     context(nameResolver: NameResolver)
@@ -93,7 +90,6 @@ data class SpecialName(val BaseName: String) : MangledName {
 }
 
 abstract class NumberedLabelName(val Scope: String, val originalN: Int) : MangledName {
-    context(nameResolver: NameResolver)
     override val mangledType: String
         get() = "lbl"
     context(nameResolver: NameResolver)

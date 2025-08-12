@@ -14,13 +14,13 @@ interface TypeInvariantHolder {
     /**
      * Invariants that provide access to a resource and thus behave linearly.
      */
-    context(nameResolver: NameResolver)
+
     fun accessInvariants(): List<TypeInvariantEmbedding> = emptyList()
 
     // Note: these functions will replace accessInvariants when nested unfold will be implemented
-    context(nameResolver: NameResolver)
+
     fun sharedPredicateAccessInvariant(): TypeInvariantEmbedding? = null
-    context(nameResolver: NameResolver)
+
     fun uniquePredicateAccessInvariant(): TypeInvariantEmbedding? = null
 
     /**

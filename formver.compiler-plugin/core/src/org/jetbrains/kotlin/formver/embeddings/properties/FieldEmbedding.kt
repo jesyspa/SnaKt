@@ -88,12 +88,10 @@ object ListSizeFieldEmbedding : FieldEmbedding {
     override fun extraAccessInvariantsForParameter(): List<TypeInvariantEmbedding> = listOf(NonNegativeSizeTypeInvariantEmbedding)
 
     object NonNegativeSizeTypeInvariantEmbedding : TypeInvariantEmbedding {
-        context(nameResolver: NameResolver)
         override fun fillHole(exp: ExpEmbedding): ExpEmbedding =
             GeIntInt(FieldAccess(exp, ListSizeFieldEmbedding), IntLit(0))
     }
 }
-context(nameResolver: NameResolver)
 fun ScopedKotlinName.specialEmbedding(embedding: ClassTypeEmbedding): FieldEmbedding? =
     NameMatcher.matchClassScope(this) {
         ifBackingFieldName("size") {

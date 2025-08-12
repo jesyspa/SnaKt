@@ -44,16 +44,13 @@ data class TypeEmbedding(val pretype: PretypeEmbedding, val flags: TypeEmbedding
 
     val isNullable: Boolean
         get() = flags.nullable
-    context(nameResolver: NameResolver)
+
     override val runtimeType: Exp
         get() = flags.adjustRuntimeType(pretype.runtimeType)
-    context(nameResolver: NameResolver)
     override fun accessInvariants(): List<TypeInvariantEmbedding> = flags.adjustManyInvariants(pretype.accessInvariants())
     override fun pureInvariants(): List<TypeInvariantEmbedding> = flags.adjustManyInvariants(pretype.pureInvariants())
-    context(nameResolver: NameResolver)
     override fun sharedPredicateAccessInvariant(): TypeInvariantEmbedding? =
         flags.adjustOptionalInvariant(pretype.sharedPredicateAccessInvariant())
-    context(nameResolver: NameResolver)
     override fun uniquePredicateAccessInvariant(): TypeInvariantEmbedding? =
         flags.adjustOptionalInvariant(pretype.uniquePredicateAccessInvariant())
 
@@ -64,7 +61,7 @@ data class TypeEmbedding(val pretype: PretypeEmbedding, val flags: TypeEmbedding
 }
 
 data class TypeEmbeddingFlags(val nullable: Boolean) {
-    context(nameResolver: NameResolver)
+
     fun adjustRuntimeType(runtimeType: Exp): Exp =
         if (nullable) RuntimeTypeDomain.nullable(runtimeType)
         else runtimeType

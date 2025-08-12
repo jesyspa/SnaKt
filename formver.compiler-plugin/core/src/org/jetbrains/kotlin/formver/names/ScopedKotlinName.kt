@@ -19,7 +19,6 @@ data class ScopedKotlinName(val scope: NameScope, val name: KotlinName) : Mangle
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = name.mangledBaseName
-    context(nameResolver: NameResolver)
     override val mangledType: String?
         get() = name.mangledType
     context(nameResolver: NameResolver)

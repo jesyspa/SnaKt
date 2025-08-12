@@ -18,7 +18,6 @@ import kotlin.reflect.KProperty
  */
 
 interface MangledName {
-    context(nameResolver: NameResolver)
     val mangledType: String?
         get() = null
     context(nameResolver: NameResolver)

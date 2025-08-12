@@ -70,15 +70,15 @@ class OperatorExpEmbeddingBuilder {
         additionalConditions = block
     }
 }
-context(nameResolver: NameResolver)
+
 inline fun <reified T : OperatorExpEmbeddingTemplate> buildOperator(block: OperatorExpEmbeddingBuilder.() -> Unit) =
     when (val completed = OperatorExpEmbeddingBuilder().apply(block).complete()) {
         is T -> completed
         else -> error("Attempt to create OperatorExpEmbedding with non-matching number of arguments.")
     }
-context(nameResolver: NameResolver)
+
 fun buildUnaryOperator(block: OperatorExpEmbeddingBuilder.() -> Unit) =
     buildOperator<UnaryOperatorExpEmbeddingTemplate>(block)
-context(nameResolver: NameResolver)
+
 fun buildBinaryOperator(block: OperatorExpEmbeddingBuilder.() -> Unit) =
     buildOperator<BinaryOperatorExpEmbeddingTemplate>(block)

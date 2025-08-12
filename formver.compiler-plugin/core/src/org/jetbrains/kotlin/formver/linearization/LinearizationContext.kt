@@ -35,7 +35,7 @@ interface LinearizationContext {
     val source: KtSourceElement?
     val unfoldPolicy: UnfoldPolicy
     val logicOperatorPolicy: LogicOperatorPolicy
-    context(nameResolver: NameResolver)
+
     fun freshAnonVar(type: TypeEmbedding): AnonymousVariableEmbedding
 
     fun asBlock(action: LinearizationContext.() -> Unit): Stmt.Seqn
@@ -46,7 +46,7 @@ interface LinearizationContext {
 
     fun addModifier(mod: StmtModifier)
 }
-context(nameResolver: NameResolver)
+
 fun LinearizationContext.freshAnonVar(init: TypeBuilder.() -> PretypeBuilder): AnonymousVariableEmbedding =
     freshAnonVar(buildType(init))
 

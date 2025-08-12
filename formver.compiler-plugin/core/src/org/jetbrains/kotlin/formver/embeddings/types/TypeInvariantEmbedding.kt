@@ -19,42 +19,35 @@ import org.jetbrains.kotlin.formver.viper.ast.PermExp
  * i.e. they can be seen as an `ExpEmbedding` with a hole.
  */
 interface TypeInvariantEmbedding {
-    context(nameResolver: NameResolver)
     fun fillHole(exp: ExpEmbedding): ExpEmbedding
 }
-context(nameResolver: NameResolver)
+
 fun List<TypeInvariantEmbedding>.fillHoles(exp: ExpEmbedding): List<ExpEmbedding> = map { it.fillHole(exp) }
 
 data object FalseTypeInvariant : TypeInvariantEmbedding {
-    context(nameResolver: NameResolver)
     override fun fillHole(exp: ExpEmbedding): ExpEmbedding = BooleanLit(false)
 }
 
 data class SubTypeInvariantEmbedding(val type: RuntimeTypeHolder) : TypeInvariantEmbedding {
-    context(nameResolver: NameResolver)
     override fun fillHole(exp: ExpEmbedding): ExpEmbedding = Is(exp, type)
 }
 
 data class IfNonNullInvariant(val invariant: TypeInvariantEmbedding) : TypeInvariantEmbedding {
-    context(nameResolver: NameResolver)
     override fun fillHole(exp: ExpEmbedding): ExpEmbedding =
         Implies(NeCmp(exp, NullLit), invariant.fillHole(exp.withType(exp.type.getNonNullable())))
 }
 
 data class FieldEqualsInvariant(val field: FieldEmbedding, val comparedWith: ExpEmbedding) : TypeInvariantEmbedding {
-    context(nameResolver: NameResolver)
     override fun fillHole(exp: ExpEmbedding): ExpEmbedding =
         EqCmp(PrimitiveFieldAccess(exp, field), comparedWith)
 }
 
 data class FieldAccessTypeInvariantEmbedding(val field: FieldEmbedding, val perm: PermExp) : TypeInvariantEmbedding {
-    context(nameResolver: NameResolver)
     override fun fillHole(exp: ExpEmbedding): ExpEmbedding = FieldAccessPermissions(exp, field, perm)
 }
 
 // Note that at present, the predicate name and class name are the same.
 // We may want to mangle it better down the line.
 data class PredicateAccessTypeInvariantEmbedding(val predicateName: MangledName, val perm: PermExp) : TypeInvariantEmbedding {
-    context(nameResolver: NameResolver)
     override fun fillHole(exp: ExpEmbedding): ExpEmbedding = PredicateAccessPermissions(predicateName, listOf(exp), perm)
 }

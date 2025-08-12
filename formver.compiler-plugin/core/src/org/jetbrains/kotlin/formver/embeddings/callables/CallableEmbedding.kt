@@ -20,7 +20,7 @@ interface CallableEmbedding {
 
     fun insertCall(args: List<ExpEmbedding>, ctx: StmtConversionContext): ExpEmbedding
 }
-context(nameResolver: NameResolver)
+
 fun CallableEmbedding.insertCall(args: List<ExpEmbedding>, ctx: StmtConversionContext, actualReturnType: TypeEmbedding) =
     insertCall(args, ctx).withNewTypeInvariants(actualReturnType) {
         access = true

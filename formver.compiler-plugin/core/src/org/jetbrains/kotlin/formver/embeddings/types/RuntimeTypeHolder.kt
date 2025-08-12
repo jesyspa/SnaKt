@@ -15,6 +15,5 @@ interface RuntimeTypeHolder : DebugPrintable {
      *
      * The Viper values are defined in RuntimeTypeDomain and are used for casting, subtyping and the `is` operator.
      */
-    context(nameResolver: NameResolver)
     val runtimeType: Exp
 }

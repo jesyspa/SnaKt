@@ -20,11 +20,11 @@ data class Program(
 ) : IntoSilver<viper.silver.ast.Program> {
     context(nameResolver: NameResolver)
     override fun toSilver(): viper.silver.ast.Program = viper.silver.ast.Program(
-        with(nameResolver) {domains.sortedBy { it.name.mangled }.toSilver().toScalaSeq()},
-        with(nameResolver) {fields.sortedBy { it.name.mangled }.toSilver().toScalaSeq()},
-        with(nameResolver) {functions.sortedBy { it.name.mangled }.toSilver().toScalaSeq()},
-        with(nameResolver) {predicates.sortedBy { it.name.mangled }.toSilver().toScalaSeq()},
-        with(nameResolver) {methods.sortedBy { it.name.mangled }.toSilver().toScalaSeq()},
+        domains.sortedBy { it.name.mangled }.toSilver().toScalaSeq(),
+        fields.sortedBy { it.name.mangled }.toSilver().toScalaSeq(),
+        functions.sortedBy { it.name.mangled }.toSilver().toScalaSeq(),
+        predicates.sortedBy { it.name.mangled }.toSilver().toScalaSeq(),
+        methods.sortedBy { it.name.mangled }.toSilver().toScalaSeq(),
         emptySeq(), /* extensions */
         pos.toSilver(),
         info.toSilver(),

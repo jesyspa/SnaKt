@@ -24,7 +24,6 @@ import org.jetbrains.kotlin.formver.viper.mangled
  * All pretype embeddings must be `data` classes or objects!
  */
 interface PretypeEmbedding : RuntimeTypeHolder, TypeInvariantHolder {
-    context(nameResolver: NameResolver)
     val name: MangledName
 
     context(nameResolver: NameResolver)
@@ -35,19 +34,19 @@ interface PretypeEmbedding : RuntimeTypeHolder, TypeInvariantHolder {
 }
 
 data object UnitTypeEmbedding : PretypeEmbedding {
-    context(nameResolver: NameResolver)
+
     override val runtimeType
         get() = RuntimeTypeDomain.unitType()
-    context(nameResolver: NameResolver)
+
     override val name: PretypeName
         get() = PretypeName("Unit")
 }
 
 data object NothingTypeEmbedding : PretypeEmbedding {
-    context(nameResolver: NameResolver)
+
     override val runtimeType
         get() = RuntimeTypeDomain.nothingType()
-    context(nameResolver: NameResolver)
+
     override val name: PretypeName
         get() = PretypeName("Nothing")
 
@@ -55,46 +54,44 @@ data object NothingTypeEmbedding : PretypeEmbedding {
 }
 
 data object AnyTypeEmbedding : PretypeEmbedding {
-    context(nameResolver: NameResolver)
+
     override val runtimeType
         get() = RuntimeTypeDomain.anyType()
-    context(nameResolver: NameResolver)
+
     override val name: PretypeName
         get() = PretypeName("Any")
 }
 
 data object IntTypeEmbedding : PretypeEmbedding {
-    context(nameResolver: NameResolver)
+
     override val runtimeType
         get() = RuntimeTypeDomain.intType()
-    context(nameResolver: NameResolver)
+
     override val name: PretypeName
         get() = PretypeName("Int")
 }
 
 data object BooleanTypeEmbedding : PretypeEmbedding {
-    context(nameResolver: NameResolver)
+
     override val runtimeType
         get() = RuntimeTypeDomain.boolType()
-    context(nameResolver: NameResolver)
+
     override val name: PretypeName
         get() = PretypeName("Boolean")
 }
 
 data object CharTypeEmbedding : PretypeEmbedding {
-    context(nameResolver: NameResolver)
+
     override val runtimeType
         get() = RuntimeTypeDomain.charType()
-    context(nameResolver: NameResolver)
     override val name: PretypeName
         get() = PretypeName("Char")
 }
 
 data object StringTypeEmbedding : PretypeEmbedding {
-    context(nameResolver: NameResolver)
+
     override val runtimeType
         get() = RuntimeTypeDomain.stringType()
-    context(nameResolver: NameResolver)
     override val name: PretypeName
         get() = PretypeName("String")
 }

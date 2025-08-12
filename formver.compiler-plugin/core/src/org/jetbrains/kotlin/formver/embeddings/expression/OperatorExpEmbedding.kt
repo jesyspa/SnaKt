@@ -90,7 +90,7 @@ class UnaryOperatorExpEmbeddingTemplate(override val type: TypeEmbedding, overri
             override val sourceRole = sourceRole
         }
 }
-context(nameResolver: NameResolver)
+
 fun List<ExpEmbedding>.toConjunction(): ExpEmbedding =
     if (isEmpty()) BooleanLit(true)
     else reduce { l, r -> OperatorExpEmbeddings.And(l, r) }

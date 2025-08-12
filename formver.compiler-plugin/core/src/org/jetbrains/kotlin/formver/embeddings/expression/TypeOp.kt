@@ -151,7 +151,6 @@ private data class InhaleInvariantsForVariable(
 
 class InhaleInvariantsBuilder(val exp: ExpEmbedding) {
     val invariants = mutableListOf<TypeInvariantEmbedding>()
-    context(nameResolver: NameResolver)
     fun complete(): ExpEmbedding {
         if (proven) exp.type.subTypeInvariant()?.let { invariants.add(it) }
         if (access) {
@@ -168,16 +167,16 @@ class InhaleInvariantsBuilder(val exp: ExpEmbedding) {
 
     var access: Boolean = false
 }
-context(nameResolver: NameResolver)
+
 inline fun ExpEmbedding.withInvariants(block: InhaleInvariantsBuilder.() -> Unit): ExpEmbedding {
     val builder = InhaleInvariantsBuilder(this)
     builder.block()
     return builder.complete()
 }
-context(nameResolver: NameResolver)
+
 fun ExpEmbedding.withIsUnitInvariantIfUnit() = withInvariants {
     proven = type.equalToType { unit() }
 }
-context(nameResolver: NameResolver)
+
 inline fun ExpEmbedding.withNewTypeInvariants(newType: TypeEmbedding, block: InhaleInvariantsBuilder.() -> Unit) =
     if (this.type == newType) this else withType(newType).withInvariants(block)

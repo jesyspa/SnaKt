@@ -17,13 +17,12 @@ class ClassEmbeddingDetails(
     val isInterface: Boolean,
 ) : TypeInvariantHolder {
     private var _superTypes: List<PretypeEmbedding>? = null
-    context(nameResolver: NameResolver)
+
     val superTypes: List<PretypeEmbedding>
         get() = _superTypes ?: error("Super types of ${type.name} have not been initialised yet.")
-    context(nameResolver: NameResolver)
+
     private val classSuperTypes: List<ClassTypeEmbedding>
         get() = superTypes.filterIsInstance<ClassTypeEmbedding>()
-    context(nameResolver: NameResolver)
     fun initSuperTypes(newSuperTypes: List<PretypeEmbedding>) {
         check(_superTypes == null) { "Super types of ${type.name} are already initialised." }
         _superTypes = newSuperTypes
@@ -32,13 +31,11 @@ class ClassEmbeddingDetails(
     private var _fields: Map<SimpleKotlinName, FieldEmbedding>? = null
     private var _sharedPredicate: Predicate? = null
     private var _uniquePredicate: Predicate? = null
-    context(nameResolver: NameResolver)
+
     val fields: Map<SimpleKotlinName, FieldEmbedding>
         get() = _fields ?: error("Fields of ${type.name} have not been initialised yet.")
-    context(nameResolver: NameResolver)
     val sharedPredicate: Predicate
         get() = _sharedPredicate ?: error("Predicate of ${type.name} has not been initialised yet.")
-    context(nameResolver: NameResolver)
     val uniquePredicate: Predicate
         get() = _uniquePredicate ?: error("Unique Predicate of ${type.name} has not been initialised yet.")
     context(nameResolver: NameResolver)
@@ -79,10 +76,9 @@ class ClassEmbeddingDetails(
             }
         }
     }
-    context(nameResolver: NameResolver)
+
     private val sharedPredicateName: ScopedKotlinName
         get() = ScopedKotlinName(type.name.asScope(), PredicateKotlinName("shared"))
-    context(nameResolver: NameResolver)
     private val uniquePredicateName: ScopedKotlinName
         get() = ScopedKotlinName(type.name.asScope(), PredicateKotlinName("unique"))
 
@@ -92,30 +88,27 @@ class ClassEmbeddingDetails(
      * While in Kotlin only classes can have backing fields, and so searching interface supertypes is not strictly necessary,
      * due to the way we handle list size we need to search all types.
      */
-    context(nameResolver: NameResolver)
     fun findField(name: SimpleKotlinName): FieldEmbedding? = fields[name]
-    context(nameResolver: NameResolver)
     fun <R> flatMapFields(action: (SimpleKotlinName, FieldEmbedding) -> List<R>): List<R> =
         classSuperTypes.flatMap { it.details.flatMapFields(action) } + fields.flatMap { (name, field) -> action(name, field) }
 
     // We can't easily implement this by recursion on the supertype structure since some supertypes may be seen multiple times.
     // TODO: figure out a nicer way to handle this.
-    context(nameResolver: NameResolver)
+
     override fun accessInvariants(): List<TypeInvariantEmbedding> =
         flatMapUniqueFields { _, field -> field.accessInvariantsForParameter() }
 
     // Note: this function will replace accessInvariants when nested unfold will be implemented
-    context(nameResolver: NameResolver)
+
     override fun sharedPredicateAccessInvariant() =
         PredicateAccessTypeInvariantEmbedding(sharedPredicateName, PermExp.WildcardPerm())
-    context(nameResolver: NameResolver)
+
     override fun uniquePredicateAccessInvariant() =
         PredicateAccessTypeInvariantEmbedding(uniquePredicateName, PermExp.FullPerm())
 
     override fun subTypeInvariant(): TypeInvariantEmbedding = type.subTypeInvariant()
 
     // Returns the sequence of classes in a hierarchy that need to be unfolded in order to access the given field
-    context(nameResolver: NameResolver)
     fun hierarchyUnfoldPath(field: FieldEmbedding): Sequence<ClassTypeEmbedding> = sequence {
         val className = field.containingClass?.name
         require(className != null) { "Cannot find hierarchy unfold path of a field with no class information" }
@@ -129,7 +122,7 @@ class ClassEmbeddingDetails(
             yieldAll(sup.details.hierarchyUnfoldPath(field))
         }
     }
-    context(nameResolver: NameResolver)
+
     fun <R> flatMapUniqueFields(action: (SimpleKotlinName, FieldEmbedding) -> List<R>): List<R> {
         val seenFields = mutableSetOf<SimpleKotlinName>()
         return flatMapFields { name, field ->

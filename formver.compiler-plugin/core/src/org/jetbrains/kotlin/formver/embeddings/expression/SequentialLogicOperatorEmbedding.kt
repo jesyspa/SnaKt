@@ -23,9 +23,9 @@ sealed class SequentialLogicOperatorEmbedding: BinaryDirectResultExpEmbedding {
         get() = buildType { boolean() }
 
     protected abstract val ifReplacement: ExpEmbedding
-    context(nameResolver: NameResolver)
+
     protected abstract val expressionReplacement: ExpEmbedding
-    context(nameResolver: NameResolver)
+
     private fun operatorReplacement(ctx: LinearizationContext) = when (ctx.logicOperatorPolicy) {
         LogicOperatorPolicy.CONVERT_TO_IF -> ifReplacement
         LogicOperatorPolicy.CONVERT_TO_EXPRESSION -> expressionReplacement
@@ -47,7 +47,6 @@ sealed class SequentialLogicOperatorEmbedding: BinaryDirectResultExpEmbedding {
 class SequentialAnd(override val left: ExpEmbedding, override val right: ExpEmbedding) : SequentialLogicOperatorEmbedding() {
     override val ifReplacement
         get() = If(left, right, BooleanLit(false), buildType { boolean() })
-    context(nameResolver: NameResolver)
     override val expressionReplacement
         get() = And(left, right)
 
@@ -57,7 +56,6 @@ class SequentialAnd(override val left: ExpEmbedding, override val right: ExpEmbe
 class SequentialOr(override val left: ExpEmbedding, override val right: ExpEmbedding) : SequentialLogicOperatorEmbedding() {
     override val ifReplacement
         get() = If(left, BooleanLit(true), right, buildType { boolean() })
-    context(nameResolver: NameResolver)
     override val expressionReplacement
         get() = Or(left, right)
 

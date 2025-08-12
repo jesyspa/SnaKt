@@ -8,10 +8,13 @@ package org.jetbrains.kotlin.formver.domains
 import org.jetbrains.kotlin.formver.core.domains.domainVar
 import org.jetbrains.kotlin.formver.embeddings.types.ClassTypeEmbedding
 import org.jetbrains.kotlin.formver.embeddings.types.embedClassTypeFunc
+import org.jetbrains.kotlin.formver.names.FunctionKotlinName
+import org.jetbrains.kotlin.formver.names.SimpleKotlinName
 import org.jetbrains.kotlin.formver.viper.MangledName
 import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.*
 import org.jetbrains.kotlin.formver.viper.mangled
+import org.jetbrains.kotlin.name.Name
 
 
 const val RUNTIME_TYPE_DOMAIN_NAME = "rt"
@@ -219,10 +222,10 @@ class RuntimeTypeDomain(private val classes: List<ClassTypeEmbedding>) : Builtin
             get() = Type.Domain(DomainName(RUNTIME_TYPE_DOMAIN_NAME), emptyList())
         val Ref = Type.Ref
 
-        fun createDomainFunc(funcName: String, args: List<Declaration.LocalVarDecl>, type: Type, unique: Boolean = false) =
+        fun createDomainFunc(funcName: MangledName, args: List<Declaration.LocalVarDecl>, type: Type, unique: Boolean = false) =
             DomainFunc(DomainFuncName(DomainName(RUNTIME_TYPE_DOMAIN_NAME), funcName), args, emptyList(), type, unique)
 
-        private fun createNewTypeDomainFunc(funcName: String) = createDomainFunc(
+        private fun createNewTypeDomainFunc(funcName: MangledName) = createDomainFunc(
             funcName,
             emptyList(),
             RuntimeType,
@@ -245,19 +248,20 @@ class RuntimeTypeDomain(private val classes: List<ClassTypeEmbedding>) : Builtin
         /** `isSubtype: (Type, Type) -> Bool` */
 
         val isSubtype: DomainFunc
-            get() = createDomainFunc("isSubtype", listOf(t1.decl(), t2.decl()), Type.Bool)
+            get() = createDomainFunc(SimpleKotlinName(Name.identifier("isSubtype")), listOf(t1.decl(), t2.decl()), Type.Bool)
 
         infix fun Exp.subtype(otherType: Exp) = isSubtype(this, otherType)
 
         /** `typeOf: Ref -> Type` */
 
         val typeOf: DomainFunc
-            get() = createDomainFunc("typeOf", listOf(r.decl()), RuntimeType)
+            get() = createDomainFunc(SimpleKotlinName(Name.identifier("typeOf")), listOf(r.decl()), RuntimeType)
 
         /** `nullable: Type -> Type` */
 
         val nullable: DomainFunc
-            get() = createDomainFunc("nullable", listOf(t.decl()), RuntimeType)
+            get() = createDomainFunc(SimpleKotlinName(Name.identifier("nullable")), listOf(t.decl()), RuntimeType)
+
 
         // many axioms will use `is` which can be represented as composition of `isSubtype` and `typeOf`
         /** `is: (Ref, Type) -> Bool` */
@@ -267,38 +271,37 @@ class RuntimeTypeDomain(private val classes: List<ClassTypeEmbedding>) : Builtin
         // built-in types function
 
         val charType: DomainFunc
-            get() = createNewTypeDomainFunc("charType")
+            get() = createNewTypeDomainFunc(SimpleKotlinName(Name.identifier("charType")))
 
         val intType: DomainFunc
-            get() = createNewTypeDomainFunc("intType")
+            get() = createNewTypeDomainFunc(SimpleKotlinName(Name.identifier("intType")))
 
 
         val boolType: DomainFunc
-            get() = createNewTypeDomainFunc("boolType")
+            get() = createNewTypeDomainFunc(SimpleKotlinName(Name.identifier("boolType")))
 
 
         val unitType: DomainFunc
-            get() = createNewTypeDomainFunc("unitType")
+            get() = createNewTypeDomainFunc(SimpleKotlinName(Name.identifier("unitType")))
 
 
         val stringType: DomainFunc
-            get() = createNewTypeDomainFunc("stringType")
+            get() = createNewTypeDomainFunc(SimpleKotlinName(Name.identifier("stringType")))
 
 
         val nothingType: DomainFunc
-            get() = createNewTypeDomainFunc("nothingType")
+            get() = createNewTypeDomainFunc(SimpleKotlinName(Name.identifier("nothingType")))
 
 
         val anyType: DomainFunc
-            get() = createNewTypeDomainFunc("anyType")
+            get() = createNewTypeDomainFunc(SimpleKotlinName(Name.identifier("anyType")))
 
 
         val functionType: DomainFunc
-            get() = createNewTypeDomainFunc("functionType")
+            get() = createNewTypeDomainFunc(SimpleKotlinName(Name.identifier("functionType")))
 
         // for creation of user types
-        context(nameResolver: NameResolver)
-        fun classTypeFunc(name: MangledName) = createDomainFunc(name.mangled, emptyList(), RuntimeType, true)
+        fun classTypeFunc(name: MangledName) = createDomainFunc(name, emptyList(), RuntimeType, true)
 
         // bijections to primitive types
 
@@ -319,29 +322,23 @@ class RuntimeTypeDomain(private val classes: List<ClassTypeEmbedding>) : Builtin
             get() = listOf(intInjection, boolInjection, charInjection, stringInjection)
 
         // special values
-        val nullValue = createDomainFunc("nullValue", emptyList(), Ref)
-        val unitValue = createDomainFunc("unitValue", emptyList(), Ref)
+        val nullValue = createDomainFunc(DomainName("nullValue"), emptyList(), Ref)
+        val unitValue = createDomainFunc(DomainName("unitValue"), emptyList(), Ref)
 
     }
-    context(nameResolver: NameResolver)
     val classTypes:Map<ClassTypeEmbedding, DomainFunc>
         get() = classes.associateWith { it.embedClassTypeFunc() }
-    context(nameResolver: NameResolver)
     val builtinTypes: List<DomainFunc>
         get() = listOf(intType, boolType, charType, unitType, nothingType, anyType, functionType, stringType)
 
-    context(nameResolver: NameResolver)
     val nonNullableTypes: List<DomainFunc>
         get() = buildList {
             addAll(builtinTypes)
             addAll(classTypes.values)
         }.distinctBy { it.name }
-
-    context(nameResolver: NameResolver)
     override val functions: List<DomainFunc>
         get() = nonNullableTypes + listOf(nullValue, unitValue, isSubtype, typeOf, nullable) +
                 allInjections.flatMap { listOf(it.toRef, it.fromRef) }
-    context(nameResolver: NameResolver)
     override val axioms: List<DomainAxiom>
         get() = AxiomListBuilder.build(this) {
             axiom("subtype_reflexive") {

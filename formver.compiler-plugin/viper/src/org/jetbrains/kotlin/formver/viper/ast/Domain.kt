@@ -15,10 +15,8 @@ import viper.silver.ast.NamedDomainAxiom
  */
 
 data class DomainName(val BaseName: String) : MangledName {
-    context(nameResolver: NameResolver)
     override val mangledType: String
         get() = "d"
-
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = BaseName
@@ -27,8 +25,7 @@ data class DomainName(val BaseName: String) : MangledName {
     override fun registry() = nameResolver.registry(this)
 }
 
-data class DomainFuncName(val domainName: DomainName, val BaseName: String) : MangledName {
-    context(nameResolver: NameResolver)
+data class DomainFuncName(val domainName: DomainName, val baseName: MangledName) : MangledName {
     override val mangledType: String
         get() = "df"
     context(nameResolver: NameResolver)
@@ -36,7 +33,7 @@ data class DomainFuncName(val domainName: DomainName, val BaseName: String) : Ma
         get() = domainName.mangledBaseName
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
-        get() = BaseName
+        get() = baseName.mangled
     context(nameResolver: NameResolver)
     override fun registry() = nameResolver.registry(this)
 }
@@ -131,9 +128,7 @@ abstract class Domain(
 
     open val includeInShortDump: Boolean = true
     abstract val typeVars: List<Type.TypeVar>
-    context(nameResolver: NameResolver)
     abstract val functions: List<DomainFunc>
-    context(nameResolver: NameResolver)
     abstract val axioms: List<DomainAxiom>
     context(nameResolver: NameResolver)
     override fun toSilver(): viper.silver.ast.Domain =
@@ -150,11 +145,11 @@ abstract class Domain(
         )
 
     // Don't use this directly, instead, use the custom types defined in `org.jetbrains.kotlin.formver.viper.ast.Type` for specific domains.
-    context(nameResolver: NameResolver)
+
     fun toType(typeParamSubst: Map<Type.TypeVar, Type> = typeVars.associateWith { it }): Type.Domain =
         Type.Domain(name, typeVars, typeParamSubst)
 
-    fun createDomainFunc(funcName: String, args: List<Declaration.LocalVarDecl>, type: Type, unique: Boolean = false) =
+    fun createDomainFunc(funcName: MangledName, args: List<Declaration.LocalVarDecl>, type: Type, unique: Boolean = false) =
         DomainFunc(DomainFuncName(this.name, funcName), args, typeVars, type, unique)
 
     fun createNamedDomainAxiom(axiomName: String, exp: Exp): DomainAxiom =
