@@ -1,6 +1,7 @@
 package org.jetbrains.kotlin.formver.uniqueness
 
 import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
+import org.jetbrains.kotlin.fir.symbols.impl.FirValueParameterSymbol
 
 class ContextTrie(
     val parent: ContextTrie?,
@@ -30,5 +31,11 @@ class ContextTrie(
         get() {
             val changed = symbol?.let { level != context.resolveUniqueAnnotation(it) } ?: false
             return changed || children.values.any { it.hasChanges }
+        }
+
+    override val localVariable: FirBasedSymbol<*>?
+        get() {
+            val local = parent?.localVariable ?: this.symbol
+            return local as? FirValueParameterSymbol
         }
 }
