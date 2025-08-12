@@ -26,7 +26,7 @@ class UniqueChecker(
     private val uniqueId: ClassId
         get() = getAnnotationId("Unique")
 
-    private val uniqueContext = ContextTrie(null, mutableMapOf(), UniqueLevel.Unique)
+    private val uniqueContext = ContextTrie(null, null, mutableMapOf(), UniqueLevel.Unique)
 
     override fun resolveUniqueAnnotation(declaration: HasAnnotation): UniqueLevel {
         if (declaration.hasAnnotation(uniqueId, session)) {
