@@ -28,7 +28,6 @@ abstract class AbstractPartiallySpecialKotlinFunction(
         get() = _baseEmbedding
 
     override val packageName = packageName.toList()
-    context(nameResolver: NameResolver)
     override fun initBaseEmbedding(embedding: FunctionEmbedding) {
         check(_baseEmbedding == null) { "Base embedding for partially special function $name already initialized." }
         _baseEmbedding = embedding

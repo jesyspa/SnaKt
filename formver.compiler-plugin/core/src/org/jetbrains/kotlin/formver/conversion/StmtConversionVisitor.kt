@@ -305,9 +305,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
             is LambdaExp -> {
                 // The lambda is already the receiver, so we do not need to convert it.
                 // TODO: do this more uniformly: convert the receiver, see it is a lambda, use insertCall on it.
-                with(data.nameResolver) {
-                    exp.insertCall(args, data, returnType)
-                }
+                exp.insertCall(args, data, returnType)
             }
             else -> {
                 InvokeFunctionObject(data.convert(receiver), args, returnType)
@@ -328,8 +326,8 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         val condition = data.convert(whileLoop.condition).withType { boolean() }
         val invariants = buildList {
             data.retrievePropertiesAndParameters().forEach {
-                with(data.nameResolver) {addIfNotNull(it.sharedPredicateAccessInvariant())}
-                with(data.nameResolver) {addAll(it.provenInvariants())}
+                addIfNotNull(it.sharedPredicateAccessInvariant())
+                addAll(it.provenInvariants())
             }
             extractLoopInvariants(whileLoop.block)?.let {
                 addAll(data.withScopeImpl(ScopeIndex.NoScope) { data.collectInvariants(it) })
@@ -394,10 +392,9 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
             exp.withType(newType)
         } else {
             // TODO: when there is a cast from B to A, only inhale invariants of A - invariants of B
-            with(data.nameResolver) {
-                exp.withNewTypeInvariants(newType) {
-                    access = true
-                }
+
+            exp.withNewTypeInvariants(newType) {
+                access = true
             }
         }
     }

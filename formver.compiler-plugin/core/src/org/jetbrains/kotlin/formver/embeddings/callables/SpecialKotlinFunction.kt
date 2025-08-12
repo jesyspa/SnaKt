@@ -53,7 +53,6 @@ interface PartiallySpecialKotlinFunction : SpecialKotlinFunction {
         return tryInsertCall(args, ctx) ?: baseEmbedding?.insertCall(args, ctx)
         ?: error("Base embedding for partially special function $name not specified")
     }
-    context(nameResolver: NameResolver)
     fun initBaseEmbedding(embedding: FunctionEmbedding)
     context(nameResolver: NameResolver)
     override val viperMethod: Method?

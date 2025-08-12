@@ -44,7 +44,7 @@ class ProgramConverter(val session: FirSession, override val config: PluginConfi
     override val nameResolver = SimpleNameResolver()
     private val methods: MutableMap<MangledName, FunctionEmbedding> =
         buildMap {
-            with(nameResolver) {putAll(SpecialKotlinFunctions.byName)}
+            putAll(SpecialKotlinFunctions.byName)
             putAll(PartiallySpecialKotlinFunctions.generateAllByName())
         }.toMutableMap()
     private val classes: MutableMap<MangledName, ClassTypeEmbedding> = mutableMapOf()
@@ -73,7 +73,7 @@ class ProgramConverter(val session: FirSession, override val config: PluginConfi
                     // We need to deduplicate fields since public fields with the same name are represented differently
                     // at `FieldEmbedding` level but map to the same Viper.
                     fields = SpecialFields.all.map { it.toViper() } +
-                            with(nameResolver) { fields.distinctBy { it.name.mangled }.map { it.toViper() } },
+                            with(nameResolver) {fields.distinctBy { it.name.mangled }.map { it.toViper() } },
                     functions = with(nameResolver) { SpecialFunctions.all },
                     methods = SpecialMethods.all + with(nameResolver) {
                         methods.values.mapNotNull { it.viperMethod }.distinctBy { it.name.mangled }
@@ -158,7 +158,7 @@ class ProgramConverter(val session: FirSession, override val config: PluginConfi
                 val callable = processCallable(symbol, signature)
                 val userFunction = UserFunctionEmbedding(callable)
                 existing.also {
-                    with(nameResolver) {it.initBaseEmbedding(userFunction)}
+                    it.initBaseEmbedding(userFunction)
                 }
 
             }
@@ -196,7 +196,7 @@ class ProgramConverter(val session: FirSession, override val config: PluginConfi
         // `ProgramConverter`.
 
         // Phase 1
-        with(nameResolver) {newDetails.initSuperTypes(symbol.resolvedSuperTypes.map { embedType(it).pretype })}
+        newDetails.initSuperTypes(symbol.resolvedSuperTypes.map { embedType(it).pretype })
 
         // Phase 2
         val properties = symbol.propertySymbols
@@ -348,13 +348,13 @@ class ProgramConverter(val session: FirSession, override val config: PluginConfi
             // TODO (inhale vs require) Decide if `predicateAccessInvariant` should be required rather than inhaled in the beginning of the body.
             override fun getPreconditions() = buildList {
                 subSignature.formalArgs.forEach {
-                    with(nameResolver) {addAll(it.pureInvariants())}
-                    with(nameResolver) {addAll(it.accessInvariants())}
+                    addAll(it.pureInvariants())
+                    addAll(it.accessInvariants())
                     if (it.isUnique) {
-                        with(nameResolver) {addIfNotNull(it.type.uniquePredicateAccessInvariant()?.fillHole(it))}
+                        addIfNotNull(it.type.uniquePredicateAccessInvariant()?.fillHole(it))
                     }
                 }
-                with(nameResolver) {addAll(subSignature.stdLibPreconditions())}
+                addAll(subSignature.stdLibPreconditions())
                 // We create a separate context to embed the preconditions here.
                 // Hence, some parts of FIR are translated later than the other and less explicitly.
                 // TODO: this process should be a separate step in the conversion.
@@ -365,19 +365,19 @@ class ProgramConverter(val session: FirSession, override val config: PluginConfi
 
             override fun getPostconditions(returnVariable: VariableEmbedding) = buildList {
                 subSignature.formalArgs.forEach {
-                    with(nameResolver) {addAll(it.accessInvariants())}
+                    addAll(it.accessInvariants())
                     if (it.isUnique && it.isBorrowed) {
                         with(nameResolver) {addIfNotNull(it.type.uniquePredicateAccessInvariant()?.fillHole(it))}
                     }
                 }
-                with(nameResolver) {addAll(returnVariable.pureInvariants())}
-                with(nameResolver) {addAll(returnVariable.provenInvariants())}
-                with(nameResolver) {addAll(returnVariable.allAccessInvariants())}
+                addAll(returnVariable.pureInvariants())
+                addAll(returnVariable.provenInvariants())
+                addAll(returnVariable.allAccessInvariants())
                 if (subSignature.callableType.returnsUnique) {
                     with(nameResolver) {addIfNotNull(returnVariable.uniquePredicateAccessInvariant())}
                 }
                 addAll(contractVisitor.getPostconditions(ContractVisitorContext(returnVariable, symbol)))
-                with(nameResolver) {addAll(subSignature.stdLibPostconditions(returnVariable))}
+                addAll(subSignature.stdLibPostconditions(returnVariable))
                 addIfNotNull(primaryConstructorInvariants(returnVariable))
                 // TODO: this process should be a separate step in the conversion (see above)
                 firSpec?.postcond?.let {
