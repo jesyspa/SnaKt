@@ -7,6 +7,7 @@ package org.jetbrains.kotlin.formver.uniqueness
 
 import org.jetbrains.kotlin.fir.FirSession
 import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
+import org.jetbrains.kotlin.fir.symbols.impl.FirValueParameterSymbol
 import org.jetbrains.kotlin.formver.common.ErrorCollector
 import org.jetbrains.kotlin.formver.common.PluginConfiguration
 import org.jetbrains.kotlin.name.ClassId
@@ -25,7 +26,7 @@ class UniqueChecker(
     private val uniqueId: ClassId
         get() = getAnnotationId("Unique")
 
-    private val uniqueContext = ContextTrie(null, mutableMapOf(), UniqueLevel.Bottom)
+    private val uniqueContext = ContextTrie(null, mutableMapOf(), UniqueLevel.Unique)
 
     override fun resolveUniqueAnnotation(declaration: HasAnnotation): UniqueLevel {
         if (declaration.hasAnnotation(uniqueId, session)) {
@@ -34,5 +35,11 @@ class UniqueChecker(
         return UniqueLevel.Shared
     }
 
-    override fun getOrPutPath(path: List<FirBasedSymbol<*>>) = uniqueContext.getOrPutPath(path)
+    override fun getOrPutPath(path: List<FirBasedSymbol<*>>): UniquePathContext {
+        require(path.isNotEmpty()) { "Provided path is empty" }
+        val head = path.first()
+        require(head is FirValueParameterSymbol) { "Provided path does not start with a local variable" }
+
+        return uniqueContext.getOrPutPath(path)
+    }
 }

@@ -37,6 +37,7 @@ interface UniqueCheckerContext {
      * If the path does not exist in the current context, inserts the necessary nodes.
      *
      * @param path A list of [FirBasedSymbol] items representing a sequence of symbols forming a path in code (`x.y.z -> [local/x, A/y, B/z]`).
+     *             Note that the first element in the path must be a local symbol.
      * @return The [ContextTrie] node at the end of the specified path.
      *         If intermediate nodes do not exist, they are created with unique levels extracted from annotations.
      */
