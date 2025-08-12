@@ -31,10 +31,10 @@ fun valid_borrow(@Unique z: B) {
     consumeB(z)
 }
 
-<!UNIQUENESS_VIOLATION!>fun borrowedToNonBorrowed(@Borrowed @Unique z: B) {
-    consumeB(z)
-}<!>
+fun borrowedToNonBorrowed(@Borrowed @Unique z: B) {
+    consumeB(<!UNIQUENESS_VIOLATION!>z<!>)
+}
 
-<!UNIQUENESS_VIOLATION!>fun borrowedToNonBorrowedShared(@Borrowed @Unique y: A) {
-    makeIntoShared(y)
-}<!>
+fun borrowedToNonBorrowedShared(@Borrowed @Unique y: A) {
+    makeIntoShared(<!UNIQUENESS_VIOLATION!>y<!>)
+}

@@ -7,19 +7,12 @@ package org.jetbrains.kotlin.formver.uniqueness
 
 import org.jetbrains.kotlin.fir.FirElement
 import org.jetbrains.kotlin.fir.declarations.FirSimpleFunction
-import org.jetbrains.kotlin.fir.expressions.FirBlock
-import org.jetbrains.kotlin.fir.expressions.FirExpression
-import org.jetbrains.kotlin.fir.expressions.FirFunctionCall
-import org.jetbrains.kotlin.fir.expressions.FirLiteralExpression
-import org.jetbrains.kotlin.fir.expressions.FirPropertyAccessExpression
-import org.jetbrains.kotlin.fir.expressions.arguments
-import org.jetbrains.kotlin.fir.expressions.toResolvedCallableSymbol
+import org.jetbrains.kotlin.fir.expressions.*
 import org.jetbrains.kotlin.fir.references.FirResolvedNamedReference
 import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
 import org.jetbrains.kotlin.fir.symbols.SymbolInternals
 import org.jetbrains.kotlin.fir.symbols.impl.FirFunctionSymbol
 import org.jetbrains.kotlin.fir.visitors.FirVisitor
-import org.jetbrains.kotlin.text
 
 object PathVisitor : FirVisitor<List<FirBasedSymbol<*>>, Unit>() {
     override fun visitElement(element: FirElement, data: Unit) =
@@ -91,27 +84,42 @@ object UniqueCheckVisitor : FirVisitor<Pair<UniqueLevel, UniquePathContext?>, Un
         val (requiredUnique, requiredBorrowing) = requirements
         val (argumentUnique, argumentBorrowing) = actual
 
-        require(argumentUnique != UniqueLevel.Top) {
-            "attempting to access a non-accessible argument ${argument.source.text} in ${functionCall.source.text}"
+        if (argumentUnique == UniqueLevel.Top) {
+            throw UniquenessCheckException(
+                argument.source,
+                "cannot access expression as its uniqueness state is top"
+            )
         }
 
         val argumentSubtreeLUB = pathContext?.subtreeLUB
-        require(argumentSubtreeLUB != UniqueLevel.Top) {
-            "attempting to pass a partially moved argument ${argument.source.text} in ${functionCall.source.text}"
+        if (argumentSubtreeLUB == UniqueLevel.Top) {
+            throw UniquenessCheckException(
+                argument.source,
+                "a partially moved object cannot be passed as an argument"
+            )
         }
 
-        require(argumentBorrowing <= requiredBorrowing) {
-            "attempting to pass argument ${argument.source.text} in ${functionCall.source.text} with incompatible borrowing level"
+        if (argumentBorrowing > requiredBorrowing) {
+            throw UniquenessCheckException(
+                argument.source,
+                "cannot pass borrowed value as non-borrowed"
+            )
         }
 
         if (requiredUnique == UniqueLevel.Unique) {
-            require(argumentUnique == UniqueLevel.Unique) {
-                "uniqueness level not match ${argument.source.text}, required: Unique, actual: $argumentUnique"
+            if (argumentUnique != UniqueLevel.Unique) {
+                throw UniquenessCheckException(
+                    argument.source,
+                    "expected unique value, got ${argumentUnique.toString().lowercase()}"
+                )
             }
 
             val subtreeChanged = with(data) { pathContext?.hasChanges ?: false }
-            require(!subtreeChanged) {
-                "attempting to pass a partially shared argument ${argument.source.text} in ${functionCall.source.text}"
+            if (subtreeChanged) {
+                throw UniquenessCheckException(
+                    argument.source,
+                    "cannot pass a partially shared argument"
+                )
             }
         }
     }
@@ -156,13 +164,3 @@ object UniqueCheckVisitor : FirVisitor<Pair<UniqueLevel, UniquePathContext?>, Un
     }
 }
 
-object UniquenessCheckExceptionWrapper : FirVisitor<Pair<UniqueLevel, UniquePathContext?>, UniqueCheckerContext>() {
-    override fun visitElement(element: FirElement, data: UniqueCheckerContext): Pair<UniqueLevel, UniquePathContext?> {
-        try {
-            return element.accept(UniqueCheckVisitor, data)
-        } catch (e: Exception) {
-            data.errorCollector.addErrorInfo("... while checking uniqueness level for ${element.source.text}")
-            throw e
-        }
-    }
-}

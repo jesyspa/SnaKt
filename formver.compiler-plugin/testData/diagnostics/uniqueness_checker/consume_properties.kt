@@ -24,20 +24,20 @@ fun valid_consume_all(@Unique z: B) {
     consumeInt(z.y.w)
 }
 
-<!UNIQUENESS_VIOLATION!>fun doubleConsume(@Unique a: A) {
+fun doubleConsume(@Unique a: A) {
     consumeA(a)
-    consumeA(a)
-}<!>
+    consumeA(<!UNIQUENESS_VIOLATION!>a<!>)
+}
 
-<!UNIQUENESS_VIOLATION!>fun consumeParent(@Unique z: B) {
+fun consumeParent(@Unique z: B) {
     consumeA(z.y)
-    consumeInt(z.y.x)
-}<!>
+    consumeInt(<!UNIQUENESS_VIOLATION!>z.y.x<!>)
+}
 
-<!UNIQUENESS_VIOLATION!>fun uniqueBecomeShared(@Unique z: B) {
+fun uniqueBecomeShared(@Unique z: B) {
     makeIntoShared(z.y)
-    consumeA(z.y)
-}<!>
+    consumeA(<!UNIQUENESS_VIOLATION!>z.y<!>)
+}
 
 fun uniqueBecomeSharedValid(@Unique z: B) {
     makeIntoShared(z.y)

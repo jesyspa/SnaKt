@@ -31,24 +31,15 @@ class UniqueChecker(
 
     private val uniqueContext = ContextTrie(null, null, mutableMapOf(), UniqueLevel.Unique)
 
-    override fun resolveUniqueAnnotation(declaration: HasAnnotation): UniqueLevel {
-        if (declaration.hasAnnotation(uniqueId, session)) {
-            return UniqueLevel.Unique
-        }
-        return UniqueLevel.Shared
-    }
+    override fun resolveUniqueAnnotation(declaration: HasAnnotation): UniqueLevel =
+        if (declaration.hasAnnotation(uniqueId, session)) UniqueLevel.Unique else UniqueLevel.Shared
 
-    override fun resolveBorrowingAnnotation(declaration: HasAnnotation): BorrowingLevel {
-        if (declaration.hasAnnotation(borrowingId, session)) {
-            return BorrowingLevel.Borrowed
-        }
-        return BorrowingLevel.Plain
-    }
+    override fun resolveBorrowingAnnotation(declaration: HasAnnotation): BorrowingLevel =
+        if (declaration.hasAnnotation(borrowingId, session)) BorrowingLevel.Borrowed else BorrowingLevel.Plain
 
     override fun getOrPutPath(path: List<FirBasedSymbol<*>>): UniquePathContext {
         require(path.isNotEmpty()) { "Provided path is empty" }
-        val head = path.first()
-        require(head is FirValueParameterSymbol) { "Provided path does not start with a local variable" }
+        require(path.first() is FirValueParameterSymbol) { "Provided path does not start with a local variable" }
 
         return uniqueContext.getOrPutPath(path)
     }

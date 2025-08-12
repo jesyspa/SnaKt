@@ -1,4 +1,1 @@
-/multi_level.kt:(361,401): error: uniqueness level not match z.y.x, required: Unique, actual: Shared
-... while checking uniqueness level for fun use_g(@Unique z: B) {
-    g(z.y.x)
-}
+/multi_level.kt:(393,398): error: expected unique value, got shared

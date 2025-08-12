@@ -8,6 +8,6 @@ fun f(@Unique x: Int) {
 
 }
 
-<!UNIQUENESS_VIOLATION!>fun use_f(y: Int) {
-    f(y)
-}<!>
+fun use_f(y: Int) {
+    f(<!UNIQUENESS_VIOLATION!>y<!>)
+}

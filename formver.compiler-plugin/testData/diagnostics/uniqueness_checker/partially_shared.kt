@@ -13,8 +13,8 @@ class A(
 fun consumeA(@Unique a: A) {}
 fun shareB(b: B) {}
 
-<!UNIQUENESS_VIOLATION!>fun test(@Unique a: A) {
+fun test(@Unique a: A) {
     shareB(a.data)
-    consumeA(a)
-}<!>
+    consumeA(<!UNIQUENESS_VIOLATION!>a<!>)
+}
 
