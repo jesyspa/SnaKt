@@ -44,9 +44,7 @@ sealed interface VariableEmbedding : PureExpEmbedding, PropertyAccessEmbedding {
         info: Info = Info.NoInfo,
         trafos: Trafos = Trafos.NoTrafos,
     ): Exp.LocalVar = Exp.LocalVar(name, Type.Ref, pos, info, trafos)
-    context(nameResolver: NameResolver)
     override fun toViper(source: KtSourceElement?): Exp = Exp.LocalVar(name, Type.Ref, source.asPosition, sourceRole.asInfo)
-    context(nameResolver: NameResolver)
     val isOriginallyRef: Boolean
         get() = true
 
@@ -86,7 +84,6 @@ class AnonymousBuiltinVariableEmbedding(n: Int, override val type: TypeEmbedding
     private val injection: Injection?
         get() = type.injectionOrNull
 
-    context(nameResolver: NameResolver)
     override fun toViper(source: KtSourceElement?): Exp {
         val inner = Exp.LocalVar(name, injection.viperType, source.asPosition, sourceRole.asInfo)
         return injection?.let { it.toRef(inner) } ?: inner
@@ -97,7 +94,6 @@ class AnonymousBuiltinVariableEmbedding(n: Int, override val type: TypeEmbedding
 
     override fun toLocalVarUse(pos: Position, info: Info, trafos: Trafos): Exp.LocalVar =
         Exp.LocalVar(name, injection.viperType, pos, info, trafos)
-    context(nameResolver: NameResolver)
     override val isOriginallyRef: Boolean
         get() = injection == null
 }

@@ -26,7 +26,6 @@ data class Is(
     UnaryDirectResultExpEmbedding {
     override val type = buildType { boolean() }
 
-    context(nameResolver: NameResolver)
     override fun toViper(ctx: LinearizationContext) =
         RuntimeTypeDomain.boolInjection.toRef(
             RuntimeTypeDomain.isSubtype(
@@ -52,7 +51,6 @@ data class Is(
  */
 data class Cast(override val inner: ExpEmbedding, override val type: TypeEmbedding) : UnaryDirectResultExpEmbedding {
     // TODO: Do we want to assert `inner isOf type` here before making a cast itself?
-    context(nameResolver: NameResolver)
     override fun toViper(ctx: LinearizationContext) = inner.toViper(ctx)
     override fun ignoringCasts(): ExpEmbedding = inner.ignoringCasts()
     override fun ignoringCastsAndMetaNodes(): ExpEmbedding = inner.ignoringCastsAndMetaNodes()
@@ -77,7 +75,6 @@ fun ExpEmbedding.withType(init: TypeBuilder.() -> PretypeBuilder): ExpEmbedding 
 data class SafeCast(val exp: ExpEmbedding, val targetType: TypeEmbedding) : StoredResultExpEmbedding, DefaultDebugTreeViewImplementation {
     override val type: TypeEmbedding
         get() = targetType.getNullable()
-    context(nameResolver: NameResolver)
     override fun toViperStoringIn(result: VariableEmbedding, ctx: LinearizationContext) {
         val expViper = exp.toViper(ctx)
         val expWrapped = ExpWrapper(expViper, exp.type)
@@ -123,7 +120,6 @@ interface InhaleInvariants : ExpEmbedding, DefaultDebugTreeViewImplementation {
  */
 private data class InhaleInvariantsForExp(override val exp: ExpEmbedding, override val invariants: List<TypeInvariantEmbedding>) :
     StoredResultExpEmbedding, InhaleInvariants {
-    context(nameResolver: NameResolver)
     override fun toViperStoringIn(result: VariableEmbedding, ctx: LinearizationContext) {
         exp.toViperStoringIn(result, ctx)
         for (invariant in invariants.fillHoles(result)) {
@@ -137,7 +133,6 @@ private data class InhaleInvariantsForVariable(
     override val invariants: List<TypeInvariantEmbedding>,
 ) :
     InhaleInvariants, OnlyToViperExpEmbedding {
-    context(nameResolver: NameResolver)
     override fun toViper(ctx: LinearizationContext): Exp {
         val variable = exp.underlyingVariable ?: error("Use of InhaleInvariantsForVariable for non-variable")
         for (invariant in invariants.fillHoles(variable)) {
@@ -164,7 +159,6 @@ class InhaleInvariantsBuilder(val exp: ExpEmbedding) {
     }
 
     var proven: Boolean = false
-
     var access: Boolean = false
 }
 

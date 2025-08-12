@@ -10,6 +10,7 @@ import org.jetbrains.kotlin.formver.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.embeddings.expression.AnonymousVariableEmbedding
 import org.jetbrains.kotlin.formver.embeddings.expression.ExpEmbedding
 import org.jetbrains.kotlin.formver.embeddings.expression.debug.print
+import org.jetbrains.kotlin.formver.names.SimpleNameResolver
 import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.Declaration
 import org.jetbrains.kotlin.formver.viper.ast.Exp
@@ -54,17 +55,17 @@ class PureLinearizer(override val source: KtSourceElement?) : LinearizationConte
         throw PureLinearizerMisuseException("addModifier")
     }
 }
-context(nameResolver: NameResolver)
 fun ExpEmbedding.pureToViper(toBuiltin: Boolean, source: KtSourceElement? = null): Exp {
     try {
         val linearizer = PureLinearizer(source)
         return if (toBuiltin) toViperBuiltinType(linearizer) else toViper(linearizer)
     } catch (e: PureLinearizerMisuseException) {
+        val catchNameResolver = SimpleNameResolver()
         val msg =
-            "PureLinearizer used to convert non-pure ExpEmbedding; operation ${e.offendingFunction} is not supported in a pure context.\nEmbedding debug view:\n${debugTreeView.print()}"
+            "PureLinearizer used to convert non-pure ExpEmbedding; operation ${e.offendingFunction} is not supported in a pure context.\nEmbedding debug view:\n${with(catchNameResolver) {debugTreeView.print()}}"
         throw IllegalStateException(msg)
     }
 }
-context(nameResolver: NameResolver)
+
 fun List<ExpEmbedding>.pureToViper(toBuiltin: Boolean, source: KtSourceElement? = null): List<Exp> =
     map { it.pureToViper(toBuiltin, source) }

@@ -24,14 +24,12 @@ sealed interface AnyComparisonExpression : BinaryDirectResultExpEmbedding {
         get() = buildType { boolean() }
 
     val comparisonOperation: Operator
-    context(nameResolver: NameResolver)
     override fun toViper(ctx: LinearizationContext): Exp =
         RuntimeTypeDomain.boolInjection.toRef(
             toViperBuiltinType(ctx),
             pos = ctx.source.asPosition,
             info = sourceRole.asInfo
         )
-    context(nameResolver: NameResolver)
     override fun toViperBuiltinType(ctx: LinearizationContext): Exp =
         // this check guarantees that arguments will be of the same Viper type
         if (left.type == right.type)

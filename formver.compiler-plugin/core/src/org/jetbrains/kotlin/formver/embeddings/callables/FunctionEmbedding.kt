@@ -10,7 +10,6 @@ import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.Method
 
 interface FunctionEmbedding : CallableEmbedding {
-    context(nameResolver: NameResolver)
     val viperMethod: Method?
 }
 
@@ -23,7 +22,6 @@ class UserFunctionEmbedding(private val callable: RichCallableEmbedding) : Funct
      * The presence of the body indicates that the function should be verified, as opposed to simply having a declaration available.
      */
     var body: FunctionBodyEmbedding? = null
-    context(nameResolver: NameResolver)
     override val viperMethod: Method?
         get() = body?.toViperMethod(callable) ?: callable.toViperMethodHeader()
 }

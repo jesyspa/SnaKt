@@ -30,15 +30,12 @@ sealed class SequentialLogicOperatorEmbedding: BinaryDirectResultExpEmbedding {
         LogicOperatorPolicy.CONVERT_TO_IF -> ifReplacement
         LogicOperatorPolicy.CONVERT_TO_EXPRESSION -> expressionReplacement
     }
-    context(nameResolver: NameResolver)
     override fun toViper(ctx: LinearizationContext): Exp =
         operatorReplacement(ctx).toViper(ctx)
 
-    context(nameResolver: NameResolver)
     override fun toViperBuiltinType(ctx: LinearizationContext): Exp =
         operatorReplacement(ctx).toViperBuiltinType(ctx)
 
-    context(nameResolver: NameResolver)
     override fun toViperStoringIn(result: VariableEmbedding, ctx: LinearizationContext) {
         operatorReplacement(ctx).toViperStoringIn(result, ctx)
     }

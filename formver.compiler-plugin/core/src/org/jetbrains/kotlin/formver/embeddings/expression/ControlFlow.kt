@@ -39,7 +39,6 @@ sealed interface Block : OptionalResultExpEmbedding {
     val exps: List<ExpEmbedding>
     override val type: TypeEmbedding
         get() = exps.lastOrNull()?.type ?: buildType { unit() }
-    context(nameResolver: NameResolver)
     override fun toViperMaybeStoringIn(result: VariableEmbedding?, ctx: LinearizationContext) {
         if (exps.isEmpty()) return
 
@@ -59,7 +58,6 @@ sealed interface Block : OptionalResultExpEmbedding {
 
 data class If(val condition: ExpEmbedding, val thenBranch: ExpEmbedding, val elseBranch: ExpEmbedding, override val type: TypeEmbedding) :
     OptionalResultExpEmbedding, DefaultDebugTreeViewImplementation {
-    context(nameResolver: NameResolver)
     override fun toViperMaybeStoringIn(result: VariableEmbedding?, ctx: LinearizationContext) {
         ctx.addStatement {
             val condViper = condition.toViperBuiltinType(ctx)
@@ -87,7 +85,6 @@ data class While(
 
     val continueLabel = LabelEmbedding(continueLabelName, invariants)
     val breakLabel = LabelEmbedding(breakLabelName)
-    context(nameResolver: NameResolver)
     override fun toViperSideEffects(ctx: LinearizationContext) {
         ctx.addLabel(continueLabel.toViper(ctx))
         val condVar = ctx.freshAnonVar { boolean() }
@@ -126,7 +123,6 @@ data class While(
 
 data class Goto(val target: LabelLink) : NoResultExpEmbedding, DefaultDebugTreeViewImplementation {
     override val type: TypeEmbedding = buildType { nothing() }
-    context(nameResolver: NameResolver)
     override fun toViperUnusedResult(ctx: LinearizationContext) {
         ctx.addStatement { target.toViperGoto(ctx) }
     }
@@ -142,7 +138,6 @@ data class Goto(val target: LabelLink) : NoResultExpEmbedding, DefaultDebugTreeV
 
 // Using this name to avoid clashes with all our other `Label` types.
 data class LabelExp(val label: LabelEmbedding) : UnitResultExpEmbedding {
-    context(nameResolver: NameResolver)
     override fun toViperSideEffects(ctx: LinearizationContext) {
         ctx.addLabel(label.toViper(ctx))
     }
@@ -160,7 +155,6 @@ data class LabelExp(val label: LabelEmbedding) : UnitResultExpEmbedding {
  */
 data class GotoChainNode(val label: LabelEmbedding?, val exp: ExpEmbedding, val next: LabelLink) : OptionalResultExpEmbedding {
     override val type: TypeEmbedding = exp.type
-    context(nameResolver: NameResolver)
     override fun toViperMaybeStoringIn(result: VariableEmbedding?, ctx: LinearizationContext) {
         label?.let { ctx.addLabel(it.toViper(ctx)) }
         ctx.addStatement {
@@ -177,7 +171,6 @@ data class GotoChainNode(val label: LabelEmbedding?, val exp: ExpEmbedding, val 
 }
 
 data class NonDeterministically(val exp: ExpEmbedding) : UnitResultExpEmbedding, DefaultDebugTreeViewImplementation {
-    context(nameResolver: NameResolver)
     override fun toViperSideEffects(ctx: LinearizationContext) {
         ctx.addStatement {
             val choice = ctx.freshAnonVar { boolean() }
@@ -195,7 +188,6 @@ data class NonDeterministically(val exp: ExpEmbedding) : UnitResultExpEmbedding,
 // Note: this is always a *real* Viper method call.
 data class MethodCall(val method: NamedFunctionSignature, val args: List<ExpEmbedding>) : StoredResultExpEmbedding {
     override val type: TypeEmbedding = method.callableType.returnType
-    context(nameResolver: NameResolver)
     override fun toViperStoringIn(result: VariableEmbedding, ctx: LinearizationContext) {
         ctx.addStatement {
             method.toMethodCall(
@@ -225,7 +217,6 @@ data class MethodCall(val method: NamedFunctionSignature, val args: List<ExpEmbe
  */
 data class InvokeFunctionObject(val receiver: ExpEmbedding, val args: List<ExpEmbedding>, override val type: TypeEmbedding) :
     OnlyToViperExpEmbedding {
-    context(nameResolver: NameResolver)
     override fun toViper(ctx: LinearizationContext): Exp {
         val variable = ctx.freshAnonVar(type)
         receiver.toViperUnusedResult(ctx)
@@ -251,7 +242,6 @@ data class InvokeFunctionObject(val receiver: ExpEmbedding, val args: List<ExpEm
 data class FunctionExp(val signature: FullNamedFunctionSignature?, val body: ExpEmbedding, val returnLabel: LabelEmbedding) :
     OptionalResultExpEmbedding {
     override val type: TypeEmbedding = body.type
-    context(nameResolver: NameResolver)
     override fun toViperMaybeStoringIn(result: VariableEmbedding?, ctx: LinearizationContext) {
         signature?.formalArgs?.forEach { arg ->
             // Ideally we would want to assume these rather than inhale them to prevent inconsistencies with permissions.
@@ -283,7 +273,6 @@ data class FunctionExp(val signature: FullNamedFunctionSignature?, val body: Exp
 
 data class Elvis(val left: ExpEmbedding, val right: ExpEmbedding, override val type: TypeEmbedding) : StoredResultExpEmbedding,
     DefaultDebugTreeViewImplementation {
-    context(nameResolver: NameResolver)
     override fun toViperStoringIn(result: VariableEmbedding, ctx: LinearizationContext) {
         val leftViper = left.toViper(ctx)
         val leftWrapped = ExpWrapper(leftViper, left.type)

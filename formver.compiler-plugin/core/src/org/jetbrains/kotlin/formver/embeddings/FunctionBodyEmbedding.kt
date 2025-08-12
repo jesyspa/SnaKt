@@ -14,7 +14,6 @@ import org.jetbrains.kotlin.formver.viper.ast.Method
 import org.jetbrains.kotlin.formver.viper.ast.Stmt
 
 data class FunctionBodyEmbedding(val viperBody: Stmt.Seqn, val returnTarget: ReturnTarget, val debugExpEmbedding: ExpEmbedding? = null) {
-    context(nameResolver: NameResolver)
     fun toViperMethod(signature: FullNamedFunctionSignature): Method =
         signature.toViperMethod(viperBody, returnTarget.variable)
 }

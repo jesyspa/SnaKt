@@ -22,12 +22,9 @@ interface InjectionBasedExpEmbedding : DirectResultExpEmbedding {
 }
 
 interface BinaryOperatorExpEmbedding : BinaryDirectResultExpEmbedding, InjectionBasedExpEmbedding {
-    context(nameResolver: NameResolver)
     override fun toViper(ctx: LinearizationContext): Exp {
         return refsOperation(left.toViper(ctx), right.toViper(ctx), pos = ctx.source.asPosition, info = sourceRole.asInfo)
     }
-
-    context(nameResolver: NameResolver)
     override fun toViperBuiltinType(ctx: LinearizationContext): Exp {
         return builtinsOperation(
             left.toViperBuiltinType(ctx),
@@ -41,11 +38,9 @@ interface BinaryOperatorExpEmbedding : BinaryDirectResultExpEmbedding, Injection
 }
 
 interface UnaryOperatorExpEmbedding : UnaryDirectResultExpEmbedding, InjectionBasedExpEmbedding {
-    context(nameResolver: NameResolver)
     override fun toViper(ctx: LinearizationContext) =
         refsOperation(inner.toViper(ctx), pos = ctx.source.asPosition, info = sourceRole.asInfo)
 
-    context(nameResolver: NameResolver)
     override fun toViperBuiltinType(ctx: LinearizationContext) =
         builtinsOperation(inner.toViperBuiltinType(ctx), pos = ctx.source.asPosition, info = sourceRole.asInfo)
 

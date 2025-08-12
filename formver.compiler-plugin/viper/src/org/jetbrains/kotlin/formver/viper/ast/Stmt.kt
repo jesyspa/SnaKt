@@ -34,7 +34,6 @@ sealed interface Stmt : IntoSilver<viper.silver.ast.Stmt> {
     }
 
     companion object {
-        context(nameResolver: NameResolver)
         fun assign(
             lhs: Exp,
             rhs: Exp,
@@ -46,7 +45,9 @@ sealed interface Stmt : IntoSilver<viper.silver.ast.Stmt> {
                 LocalVarAssign(lhs, rhs, position, info, trafos)
             is Exp.FieldAccess ->
                 FieldAssign(lhs, rhs, position, info, trafos)
-            else -> throw IllegalArgumentException("Expected an lvalue on the left-hand side of an assignment, but lhs was ${lhs.toSilver()}.")
+            else -> {
+                throw IllegalArgumentException("Expected an lvalue on the left-hand side of an assignment.")
+            }
         }
     }
 

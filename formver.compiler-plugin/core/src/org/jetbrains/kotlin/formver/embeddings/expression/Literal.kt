@@ -25,7 +25,6 @@ interface LiteralEmbedding : PureExpEmbedding {
     context(nameResolver: NameResolver)
     override val debugExtraSubtrees: List<TreeView>
         get() = listOf(PlaintextLeaf(value.toString()))
-    context(nameResolver: NameResolver)
     override fun toViper(source: KtSourceElement?): Exp =
         type.injection.toRef(
             value.viperLiteral(source.asPosition, sourceRole.asInfo),
@@ -35,16 +34,13 @@ interface LiteralEmbedding : PureExpEmbedding {
 }
 
 data object UnitLit : LiteralEmbedding, UnitResultExpEmbedding {
-    context(nameResolver: NameResolver)
     override fun toViper(ctx: LinearizationContext): Exp =
         super<UnitResultExpEmbedding>.toViper(ctx)
 
-    context(nameResolver: NameResolver)
     override fun toViperUnusedResult(ctx: LinearizationContext) =
         super<UnitResultExpEmbedding>.toViperUnusedResult(ctx)
 
     // No operation: we just want to return unit.
-    context(nameResolver: NameResolver)
     override fun toViperSideEffects(ctx: LinearizationContext) = Unit
 
     override val value = Unit
@@ -88,7 +84,6 @@ data object NullLit : LiteralEmbedding {
     override val value = null
 
     override val type = buildType { isNullable = true; nothing() }
-    context(nameResolver: NameResolver)
     override fun toViper(source: KtSourceElement?): Exp =
         RuntimeTypeDomain.nullValue(pos = source.asPosition)
 

@@ -21,7 +21,6 @@ class ForAllEmbedding(
     val variable: VariableEmbedding,
     conditions: List<ExpEmbedding>,
 ) : OnlyToBuiltinTypeExpEmbedding {
-    context(nameResolver: NameResolver)
     override fun toViperBuiltinType(ctx: LinearizationContext): Exp {
         val conjunction = subexpressions.map { it.toViperBuiltinType(ctx) }.toConjunction()
         return Exp.Forall(

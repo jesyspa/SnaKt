@@ -80,7 +80,6 @@ class SetterFunctionSignature(name: MangledName, symbol: FirPropertySymbol) :
         withReturnType { unit() }
     }
 }
-context(nameResolver: NameResolver)
 fun FullNamedFunctionSignature.toViperMethod(
     body: Stmt.Seqn?,
     returnVariable: VariableEmbedding,
