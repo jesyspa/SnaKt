@@ -42,4 +42,9 @@ interface UniquePathContext {
      * For example, for the node representing `x.y.z`, this would return the LUB of `x.y.z`, `x.y` and `x`
      */
     val pathToRootLUB: UniqueLevel
+
+    /**
+     * Represents whether the subtree originating at this node in the trie has any changes
+     */
+    context(context: UniqueCheckerContext) val hasChanges: Boolean
 }

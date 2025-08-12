@@ -106,8 +106,14 @@ object UniqueCheckVisitor : FirVisitor<Pair<UniqueLevel, UniquePathContext?>, Un
                         "uniqueness level not match ${argument.source.text}, required: Unique, actual: $argumentUnique"
                     }
 
+                    val subtreeChanged = with(data) { trie?.hasChanges ?: false }
+                    require(!subtreeChanged) {
+                        "attempting to pass a partially shared argument ${argument.source.text} in ${functionCall.source.text}"
+                    }
+
                     trie?.level = UniqueLevel.Top
                 }
+
                 UniqueLevel.Shared -> trie?.level = UniqueLevel.Shared
                 else -> {
                     throw IllegalStateException("argument can't request unique level $requiredUnique")
