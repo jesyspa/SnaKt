@@ -20,6 +20,6 @@ class ContextTrie(
             level,
             children.values.maxOfOrNull { it.subtreeLUB }).max()
 
-    override val pathLUB: UniqueLevel
-        get() = listOfNotNull(parent?.pathLUB, level).max()
+    override val pathToRootLUB: UniqueLevel
+        get() = listOfNotNull(parent?.pathToRootLUB, level).max()
 }

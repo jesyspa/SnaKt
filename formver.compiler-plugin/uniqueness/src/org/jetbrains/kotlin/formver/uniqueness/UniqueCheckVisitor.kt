@@ -36,6 +36,11 @@ object PathVisitor : FirVisitor<List<FirBasedSymbol<*>>, Unit>() {
     }
 }
 
+/**
+ * Resolve the path of a property access expression.
+ *
+ * For example, `a.b.c.d` will be resolved to `local/a`, `A/b`, `B/c`, `C/d`.
+ */
 fun FirPropertyAccessExpression.resolvePath(): List<FirBasedSymbol<*>> = accept(PathVisitor, Unit)
 
 object UniqueCheckVisitor : FirVisitor<Pair<UniqueLevel, UniquePathContext?>, UniqueCheckerContext>() {
@@ -61,7 +66,7 @@ object UniqueCheckVisitor : FirVisitor<Pair<UniqueLevel, UniquePathContext?>, Un
         val path = propertyAccessExpression.resolvePath()
         val last = data.getOrPutPath(path)
         
-        return Pair(last.pathLUB, last)
+        return Pair(last.pathToRootLUB, last)
     }
 
     override fun visitBlock(block: FirBlock, data: UniqueCheckerContext): Pair<UniqueLevel, UniquePathContext?> {

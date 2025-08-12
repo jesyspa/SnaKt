@@ -6,7 +6,6 @@
 package org.jetbrains.kotlin.formver.uniqueness
 
 enum class UniqueLevel {
-    Bottom,
     Unique,
     Shared,
     Top,

@@ -389,9 +389,9 @@ public class FirLightTreeFormVerPluginDiagnosticsTestGenerated extends AbstractF
     }
 
     @Test
-    @TestMetadata("consume_fields.kt")
-    public void testConsume_fields() {
-      runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/consume_fields.kt");
+    @TestMetadata("consume_properties.kt")
+    public void testConsume_properties() {
+      runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/consume_properties.kt");
     }
 
     @Test

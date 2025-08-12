@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.formver.uniqueness.UniqueLevel.*
 /**
  * Stores unique context for each path in a trie structure.
  *
- * Each path represents a sequence of symbols like x.y.z, where each node has a unique level annotation ([Bottom]/[Unique]/[Shared]/[Top])
+ * Each path represents a sequence of symbols like x.y.z, where each node has a unique level annotation ([Unique]/[Shared]/[Top])
  *
  * Example:
  * ```
@@ -29,6 +29,17 @@ interface UniquePathContext {
      */
     context(context: UniqueCheckerContext) fun getOrPutPath(path: List<FirBasedSymbol<*>>): UniquePathContext
 
+    /**
+     * Represents the least upper bound (LUB) of uniqueness levels for the subtree
+     * originating at this node in the trie structure.
+     */
     val subtreeLUB: UniqueLevel
-    val pathLUB: UniqueLevel
+
+    /**
+     * Represents the least upper bound (LUB) of uniqueness levels for the path from the current node
+     * to the root of the trie structure.
+     *
+     * For example, for the node representing `x.y.z`, this would return the LUB of `x.y.z`, `x.y` and `x`
+     */
+    val pathToRootLUB: UniqueLevel
 }
