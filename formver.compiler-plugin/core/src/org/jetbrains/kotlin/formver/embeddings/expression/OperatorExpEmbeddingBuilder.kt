@@ -22,7 +22,6 @@ class OperatorExpEmbeddingBuilder {
     private var viperApplicable: Applicable? = null
     private var callableType: FunctionTypeEmbedding? = null
     private var additionalConditions: (FunctionBuilder.() -> Unit)? = null
-    context(nameResolver: NameResolver)
     fun complete(): OperatorExpEmbeddingTemplate? {
         val callableType = callableType ?: error("Signature not specified to buildExpEmbedding.")
         val argumentTypes = callableType.formalArgTypes

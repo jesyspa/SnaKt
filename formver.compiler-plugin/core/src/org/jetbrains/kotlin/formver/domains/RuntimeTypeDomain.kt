@@ -214,14 +214,14 @@ class RuntimeTypeDomain(private val classes: List<ClassTypeEmbedding>) : Builtin
     // Define types that are not dependent on the user defined classes in a companion object.
     // That way other classes can refer to them without having an explicit reference to the concrete TypeDomain.
     companion object {
-        context(nameResolver: NameResolver)
+
         val RuntimeType: Type.Domain
-            get() = Type.Domain(DomainName(RUNTIME_TYPE_DOMAIN_NAME).mangled, emptyList())
+            get() = Type.Domain(DomainName(RUNTIME_TYPE_DOMAIN_NAME), emptyList())
         val Ref = Type.Ref
 
         fun createDomainFunc(funcName: String, args: List<Declaration.LocalVarDecl>, type: Type, unique: Boolean = false) =
             DomainFunc(DomainFuncName(DomainName(RUNTIME_TYPE_DOMAIN_NAME), funcName), args, emptyList(), type, unique)
-        context(nameResolver: NameResolver)
+
         private fun createNewTypeDomainFunc(funcName: String) = createDomainFunc(
             funcName,
             emptyList(),
@@ -230,76 +230,69 @@ class RuntimeTypeDomain(private val classes: List<ClassTypeEmbedding>) : Builtin
         )
 
         // variables for readability improving
-        context(nameResolver: NameResolver)
-        private val t
-            get() = domainVar("t", RuntimeType)
-        context(nameResolver: NameResolver)
-        private val t1
-            get() = domainVar("t1", RuntimeType)
 
-        context(nameResolver: NameResolver)
-        private val t2
-            get() = domainVar("t2", RuntimeType)
+        private val t = domainVar("t", RuntimeType)
 
-        context(nameResolver: NameResolver)
-        private val t3
-            get() = domainVar("t3", RuntimeType)
+        private val t1 = domainVar("t1", RuntimeType)
+
+
+        private val t2 = domainVar("t2", RuntimeType)
+
+        private val t3 = domainVar("t3", RuntimeType)
         private val r = domainVar("r", Ref)
 
         // three basic functions
         /** `isSubtype: (Type, Type) -> Bool` */
-        context(nameResolver: NameResolver)
+
         val isSubtype: DomainFunc
             get() = createDomainFunc("isSubtype", listOf(t1.decl(), t2.decl()), Type.Bool)
 
-        context(nameResolver: NameResolver)
         infix fun Exp.subtype(otherType: Exp) = isSubtype(this, otherType)
 
         /** `typeOf: Ref -> Type` */
-        context(nameResolver: NameResolver)
+
         val typeOf: DomainFunc
             get() = createDomainFunc("typeOf", listOf(r.decl()), RuntimeType)
 
         /** `nullable: Type -> Type` */
-        context(nameResolver: NameResolver)
+
         val nullable: DomainFunc
             get() = createDomainFunc("nullable", listOf(t.decl()), RuntimeType)
 
         // many axioms will use `is` which can be represented as composition of `isSubtype` and `typeOf`
         /** `is: (Ref, Type) -> Bool` */
-        context(nameResolver: NameResolver)
+
         infix fun Exp.isOf(elemType: Exp) = isSubtype(typeOf(this), elemType)
 
         // built-in types function
-        context(nameResolver: NameResolver)
+
         val charType: DomainFunc
             get() = createNewTypeDomainFunc("charType")
 
-        context(nameResolver: NameResolver)
         val intType: DomainFunc
             get() = createNewTypeDomainFunc("intType")
 
-        context(nameResolver: NameResolver)
+
         val boolType: DomainFunc
             get() = createNewTypeDomainFunc("boolType")
 
-        context(nameResolver: NameResolver)
+
         val unitType: DomainFunc
             get() = createNewTypeDomainFunc("unitType")
 
-        context(nameResolver: NameResolver)
+
         val stringType: DomainFunc
             get() = createNewTypeDomainFunc("stringType")
 
-        context(nameResolver: NameResolver)
+
         val nothingType: DomainFunc
             get() = createNewTypeDomainFunc("nothingType")
 
-        context(nameResolver: NameResolver)
+
         val anyType: DomainFunc
             get() = createNewTypeDomainFunc("anyType")
 
-        context(nameResolver: NameResolver)
+
         val functionType: DomainFunc
             get() = createNewTypeDomainFunc("functionType")
 
@@ -308,23 +301,20 @@ class RuntimeTypeDomain(private val classes: List<ClassTypeEmbedding>) : Builtin
         fun classTypeFunc(name: MangledName) = createDomainFunc(name.mangled, emptyList(), RuntimeType, true)
 
         // bijections to primitive types
-        context(nameResolver: NameResolver)
+
         val intInjection: Injection
             get() = Injection("int", Type.Int, intType)
 
-        context(nameResolver: NameResolver)
         val boolInjection: Injection
             get() = Injection("bool", Type.Bool, boolType)
 
-        context(nameResolver: NameResolver)
+
         val charInjection: Injection
             get() = Injection("char", Type.Int, charType)
 
-        context(nameResolver: NameResolver)
         val stringInjection: Injection
             get() = Injection("string", Type.Seq(Type.Int), stringType)
 
-        context(nameResolver: NameResolver)
         val allInjections: List<Injection>
             get() = listOf(intInjection, boolInjection, charInjection, stringInjection)
 

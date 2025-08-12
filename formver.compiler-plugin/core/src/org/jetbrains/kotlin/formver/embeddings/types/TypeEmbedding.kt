@@ -79,14 +79,13 @@ data class TypeEmbeddingFlags(val nullable: Boolean) {
     fun adjustOptionalInvariant(invariant: TypeInvariantEmbedding?): TypeInvariantEmbedding? =
         invariant?.let { adjustInvariant(it) }
 }
-context(nameResolver: NameResolver)
+
 inline fun TypeEmbedding.injectionOr(default: (TypeEmbedding) -> Injection) = injectionOrNull ?: default(this)
-context(nameResolver: NameResolver)
 val TypeEmbedding.injection
     get() = injectionOr {
         error("Type ${it.name} has no injection specified.")
     }
-context(nameResolver: NameResolver)
+
 val TypeEmbedding.injectionOrNull: Injection?
     get() =
         if (flags.nullable) null

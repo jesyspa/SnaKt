@@ -152,7 +152,7 @@ abstract class Domain(
     // Don't use this directly, instead, use the custom types defined in `org.jetbrains.kotlin.formver.viper.ast.Type` for specific domains.
     context(nameResolver: NameResolver)
     fun toType(typeParamSubst: Map<Type.TypeVar, Type> = typeVars.associateWith { it }): Type.Domain =
-        Type.Domain(name.mangled, typeVars, typeParamSubst)
+        Type.Domain(name, typeVars, typeParamSubst)
 
     fun createDomainFunc(funcName: String, args: List<Declaration.LocalVarDecl>, type: Type, unique: Boolean = false) =
         DomainFunc(DomainFuncName(this.name, funcName), args, typeVars, type, unique)
