@@ -322,8 +322,8 @@ class RuntimeTypeDomain(private val classes: List<ClassTypeEmbedding>) : Builtin
             get() = listOf(intInjection, boolInjection, charInjection, stringInjection)
 
         // special values
-        val nullValue = createDomainFunc(DomainName("nullValue"), emptyList(), Ref)
-        val unitValue = createDomainFunc(DomainName("unitValue"), emptyList(), Ref)
+        val nullValue = createDomainFunc(SimpleKotlinName(Name.identifier("nullValue")), emptyList(), Ref)
+        val unitValue = createDomainFunc(SimpleKotlinName(Name.identifier("unitValue")), emptyList(), Ref)
 
     }
     val classTypes:Map<ClassTypeEmbedding, DomainFunc>

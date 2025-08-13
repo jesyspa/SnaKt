@@ -5,7 +5,6 @@
 
 package org.jetbrains.kotlin.formver.embeddings.types
 
-import org.jetbrains.kotlin.formver.viper.NameResolver
 
 /**
  * Representation of an entity that, in Viper, should have invariants associated with it.

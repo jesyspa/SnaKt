@@ -10,7 +10,6 @@ import org.jetbrains.kotlin.formver.conversion.StmtConversionContext
 import org.jetbrains.kotlin.formver.conversion.SubstitutedArgument
 import org.jetbrains.kotlin.formver.conversion.insertInlineFunctionCall
 import org.jetbrains.kotlin.formver.embeddings.expression.ExpEmbedding
-import org.jetbrains.kotlin.formver.viper.NameResolver
 
 class InlineNamedFunction(
     val signature: FullNamedFunctionSignature,
@@ -29,6 +28,5 @@ class InlineNamedFunction(
         }
         return ctx.insertInlineFunctionCall(signature, paramNames, args, firBody, signature.labelName)
     }
-    context(nameResolver: NameResolver)
     override fun toViperMethodHeader(): Nothing? = null
 }

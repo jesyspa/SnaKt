@@ -16,36 +16,44 @@ import java.util.concurrent.atomic.AtomicInteger
  *  2. Strip unsupported characters.
  *  3. Ensure uniqueness by appending _<index> when necessary.
  */
+val reservedViper = setOf(
+    "field", "method", "function", "result", "predicate",
+    "domain", "axiom", "define", "requires", "ensures", "acc",
+    "package", "unique", "derives"
+)
 class SimpleNameResolver : NameResolver {
-    private var names: MutableMap<String?, MutableSet<MangledName>> = mutableMapOf()
-    private var types: MutableMap<String?, String> = mutableMapOf()
+    private var typesWithShortName: MutableSet<String?> = hashSetOf()
+    private var typesToNames: MutableMap<String?, MutableSet<MangledName>> = hashMapOf()
     override fun resolve(name: MangledName): String {
-        //return listOfNotNull(name.mangledType, name.mangledScope, name.mangledBaseName).joinToString("_")
-        val longName = listOfNotNull(name.mangledType, name.mangledScope, name.mangledBaseName).joinToString("_")
+        val type = name.mangledType
+        val baseName = name.mangledBaseName
 
-        val shortName = listOfNotNull(name.mangledType, name.mangledBaseName).joinToString("_")
-        if (types[name.mangledType]=="short") {
+        var shortName = listOfNotNull(type, baseName).joinToString("_")
+        if (reservedViper.contains(shortName)) shortName += "Value"
+
+        if (typesWithShortName.contains(type)) {
             return shortName
         } else {
+            val longName = listOfNotNull(type, name.mangledScope, baseName).joinToString("_")
             return longName
         }
     }
     override fun registry(name: MangledName) {
-        val key = name.mangledType
-        val newShortName = listOfNotNull(name.mangledType, name.mangledBaseName).joinToString("_")
+        val type = name.mangledType
+        val baseName = name.mangledBaseName
+        val newShortName = listOfNotNull(type, baseName).joinToString("_")
 
-        val existingSet = names.getOrPut(key) {
-            types[key] = "short"
+        val existingSet = typesToNames.getOrPut(type) {
+            typesWithShortName.add(type)
             mutableSetOf()
         }
         val hasConflict = existingSet.any {
-            it != name && (it.mangledType + "_" + it.mangledBaseName == newShortName)
+            it != name && (listOfNotNull(it.mangledType, it.mangledBaseName).joinToString("_") == newShortName)
         }
 
         if (hasConflict) {
-            types[key] = "long"
+            typesWithShortName.remove(type)
         }
-
         existingSet.add(name)
     }
 }

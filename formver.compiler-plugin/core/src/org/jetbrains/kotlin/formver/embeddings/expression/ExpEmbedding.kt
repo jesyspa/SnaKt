@@ -344,7 +344,6 @@ sealed interface UnitResultExpEmbedding : OnlyToViperExpEmbedding {
 
     fun toViperSideEffects(ctx: LinearizationContext)
 }
-context(nameResolver: NameResolver)
 fun List<ExpEmbedding>.toViper(ctx: LinearizationContext): List<Exp> = map { it.toViper(ctx) }
 
 /**

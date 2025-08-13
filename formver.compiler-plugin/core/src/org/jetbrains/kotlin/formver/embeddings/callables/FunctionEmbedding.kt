@@ -6,7 +6,6 @@
 package org.jetbrains.kotlin.formver.embeddings.callables
 
 import org.jetbrains.kotlin.formver.embeddings.FunctionBodyEmbedding
-import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.Method
 
 interface FunctionEmbedding : CallableEmbedding {

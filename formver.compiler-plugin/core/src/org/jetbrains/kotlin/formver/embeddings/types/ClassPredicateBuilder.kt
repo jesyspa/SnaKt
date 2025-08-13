@@ -23,7 +23,6 @@ internal class ClassPredicateBuilder private constructor(private val details: Cl
     private val body = mutableListOf<ExpEmbedding>()
 
     companion object {
-        context(nameResolver: NameResolver)
         fun build(
             classType: ClassEmbeddingDetails, predicateName: MangledName,
             action: ClassPredicateBuilder.() -> Unit,

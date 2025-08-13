@@ -13,7 +13,6 @@ import org.jetbrains.kotlin.formver.embeddings.types.buildFunctionPretype
 import org.jetbrains.kotlin.formver.embeddings.types.equalToType
 import org.jetbrains.kotlin.formver.embeddings.types.nullableAny
 import org.jetbrains.kotlin.formver.viper.MangledName
-import org.jetbrains.kotlin.formver.viper.NameResolver
 
 /**
  * Base class for implementations of `PartiallySpecialKotlinFunction`s.
@@ -38,8 +37,8 @@ class StringPlusAnyFunction : AbstractPartiallySpecialKotlinFunction("kotlin", c
     override fun tryInsertCall(args: List<ExpEmbedding>, ctx: StmtConversionContext): ExpEmbedding? {
         val argType = args[1].type
         return when {
-            argType.equalToType { string() } -> with(ctx.nameResolver) {AddStringString(args[0], args[1])}
-            argType.equalToType { char() } -> with(ctx.nameResolver) {AddStringChar(args[0], args[1])}
+            argType.equalToType { string() } -> AddStringString(args[0], args[1])
+            argType.equalToType { char() } -> AddStringChar(args[0], args[1])
             else -> null
         }
     }

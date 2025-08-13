@@ -74,18 +74,17 @@ class ProgramConverter(val session: FirSession, override val config: PluginConfi
                     // at `FieldEmbedding` level but map to the same Viper.
                     fields = SpecialFields.all.map { it.toViper() } +
                             with(nameResolver) {fields.distinctBy { it.name.mangled }.map { it.toViper() } },
-                    functions = with(nameResolver) { SpecialFunctions.all },
+                    functions =  SpecialFunctions.all,
                     methods = SpecialMethods.all + with(nameResolver) {
                         methods.values.mapNotNull { it.viperMethod }.distinctBy { it.name.mangled }
                     },
-                    predicates = with(nameResolver) {
+                    predicates =
                         classes.values.flatMap {
                             listOf(
                                 it.details.sharedPredicate,
                                 it.details.uniquePredicate
                             )
-                        }
-                    },
+                        },
                 )
     fun registerForVerification(declaration: FirSimpleFunction) {
         val signature = embedFullSignature(declaration.symbol)
@@ -200,13 +199,11 @@ class ProgramConverter(val session: FirSession, override val config: PluginConfi
 
         // Phase 2
         val properties = symbol.propertySymbols
-        with(nameResolver) {
-            newDetails.initFields(properties.mapNotNull { propertySymbol ->
+        newDetails.initFields(properties.mapNotNull { propertySymbol ->
                 SpecialProperties.isSpecial(propertySymbol).ifFalse {
                     processBackingField(propertySymbol, symbol)
                 }
             }.toMap())
-        }
         // Phase 3
         properties.forEach { processProperty(it, newDetails) }
 
@@ -367,14 +364,14 @@ class ProgramConverter(val session: FirSession, override val config: PluginConfi
                 subSignature.formalArgs.forEach {
                     addAll(it.accessInvariants())
                     if (it.isUnique && it.isBorrowed) {
-                        with(nameResolver) {addIfNotNull(it.type.uniquePredicateAccessInvariant()?.fillHole(it))}
+                        addIfNotNull(it.type.uniquePredicateAccessInvariant()?.fillHole(it))
                     }
                 }
                 addAll(returnVariable.pureInvariants())
                 addAll(returnVariable.provenInvariants())
                 addAll(returnVariable.allAccessInvariants())
                 if (subSignature.callableType.returnsUnique) {
-                    with(nameResolver) {addIfNotNull(returnVariable.uniquePredicateAccessInvariant())}
+                    addIfNotNull(returnVariable.uniquePredicateAccessInvariant())
                 }
                 addAll(contractVisitor.getPostconditions(ContractVisitorContext(returnVariable, symbol)))
                 addAll(subSignature.stdLibPostconditions(returnVariable))
@@ -395,7 +392,7 @@ class ProgramConverter(val session: FirSession, override val config: PluginConfi
                     }
                 }
                 return if (invariants.isEmpty()) null
-                else with(nameResolver) {invariants.toConjunction()}
+                else invariants.toConjunction()
             }
 
             override val declarationSource: KtSourceElement? = symbol.source
@@ -429,7 +426,7 @@ class ProgramConverter(val session: FirSession, override val config: PluginConfi
         val fieldIsAllowed = symbol.hasBackingField
                 && !symbol.isCustom
                 && (symbol.isFinal || classSymbol.isFinal)
-        val backingField = with(nameResolver) {
+        val backingField =
             scopedName.specialEmbedding(embedding) ?: fieldIsAllowed.ifTrue {
                 UserFieldEmbedding(
                     scopedName,
@@ -438,7 +435,6 @@ class ProgramConverter(val session: FirSession, override val config: PluginConfi
                     symbol.isUnique(session),
                     embedding,
                 )
-            }
         }
         return backingField?.let { unscopedName to it }
     }
@@ -454,7 +450,7 @@ class ProgramConverter(val session: FirSession, override val config: PluginConfi
     private fun processProperty(symbol: FirPropertySymbol, embedding: ClassEmbeddingDetails?) {
         val unscopedName = symbol.callableId.embedUnscopedPropertyName()
         properties[symbol.embedMemberPropertyName()] = SpecialProperties.byCallableId[symbol.callableId] ?: embedding.run {
-            val backingField = with(nameResolver) {embedding?.findField(unscopedName)}
+            val backingField = embedding?.findField(unscopedName)
             backingField?.let { fields.add(it) }
             embedProperty(symbol, backingField)
         }
@@ -490,7 +486,7 @@ class ProgramConverter(val session: FirSession, override val config: PluginConfi
             // We generate a dummy method header here to ensure all required types are processed already. If we skip this, any types
             // that are used only in contracts cause an error because they are not processed until too late.
             // TODO: fit this into the flow in some logical way instead.
-            with(nameResolver) {NonInlineNamedFunction(signature).also { it.toViperMethodHeader() }}
+            NonInlineNamedFunction(signature).also { it.toViperMethodHeader() }
         }
     }
 

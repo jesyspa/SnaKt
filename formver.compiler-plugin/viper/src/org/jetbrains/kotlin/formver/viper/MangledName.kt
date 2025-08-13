@@ -30,5 +30,4 @@ interface MangledName {
 }
 context(nameResolver: NameResolver)
 val MangledName.mangled: String
-    //get() = listOfNotNull(mangledType, mangledScope, mangledBaseName).joinToString("$")
     get() = nameResolver.resolve(this)

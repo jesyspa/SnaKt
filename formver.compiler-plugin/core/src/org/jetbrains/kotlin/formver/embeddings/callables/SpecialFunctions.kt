@@ -6,11 +6,9 @@
 package org.jetbrains.kotlin.formver.embeddings.callables
 
 import org.jetbrains.kotlin.formver.embeddings.expression.OperatorExpEmbeddings
-import org.jetbrains.kotlin.formver.viper.NameResolver
 
 
 object SpecialFunctions {
-    context(nameResolver: NameResolver)
     val all
         get() = OperatorExpEmbeddings.allTemplates.map { it.refsOperation }
 }

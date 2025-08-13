@@ -101,11 +101,9 @@ class InjectionImageFunction(
     additionalConditions: FunctionBuilder.() -> Unit = { }
 ) : Function by FunctionBuilder.build(name, {
     val viperResult = original.toFuncApp(argsInjections.map { it.fromRef(argument(Type.Ref)) })
-    val nameResolver = SimpleNameResolver()
-    with(nameResolver) {
-        returns(Type.Ref)
-        postcondition { result isOf resultInjection.typeFunction() }
-        postcondition { resultInjection.fromRef(result) eq viperResult }
-        additionalConditions()
-    }
+    returns(Type.Ref)
+    postcondition { result isOf resultInjection.typeFunction() }
+    postcondition { resultInjection.fromRef(result) eq viperResult }
+    additionalConditions()
+
 })

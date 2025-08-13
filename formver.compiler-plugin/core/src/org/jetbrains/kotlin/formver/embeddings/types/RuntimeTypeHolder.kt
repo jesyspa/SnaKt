@@ -6,7 +6,6 @@
 package org.jetbrains.kotlin.formver.embeddings.types
 
 import org.jetbrains.kotlin.formver.embeddings.expression.debug.DebugPrintable
-import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 
 interface RuntimeTypeHolder : DebugPrintable {

@@ -7,7 +7,6 @@ package org.jetbrains.kotlin.formver.embeddings.callables
 
 import org.jetbrains.kotlin.formver.conversion.StmtConversionContext
 import org.jetbrains.kotlin.formver.embeddings.expression.ExpEmbedding
-import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.Method
 
 /**
@@ -29,7 +28,6 @@ interface SpecialKotlinFunction : FunctionEmbedding {
  * Kotlin function that will always be handled specially, like aforementioned `Int.plus(Int)`.
  */
 interface FullySpecialKotlinFunction : SpecialKotlinFunction {
-    context(nameResolver: NameResolver)
     override val viperMethod: Method?
         get() = null
 }
@@ -54,7 +52,6 @@ interface PartiallySpecialKotlinFunction : SpecialKotlinFunction {
         ?: error("Base embedding for partially special function $name not specified")
     }
     fun initBaseEmbedding(embedding: FunctionEmbedding)
-    context(nameResolver: NameResolver)
     override val viperMethod: Method?
         get() = baseEmbedding?.viperMethod
 }

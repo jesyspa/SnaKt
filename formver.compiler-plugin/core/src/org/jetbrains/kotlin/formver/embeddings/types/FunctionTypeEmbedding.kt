@@ -8,7 +8,6 @@ package org.jetbrains.kotlin.formver.embeddings.types
 import org.jetbrains.kotlin.formver.domains.RuntimeTypeDomain
 import org.jetbrains.kotlin.formver.names.PretypeName
 import org.jetbrains.kotlin.formver.names.SetOfNames
-import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.mangled
 
 data class FunctionTypeEmbedding(

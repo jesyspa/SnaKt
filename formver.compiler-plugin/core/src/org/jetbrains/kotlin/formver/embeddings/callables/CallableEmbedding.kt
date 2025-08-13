@@ -10,7 +10,6 @@ import org.jetbrains.kotlin.formver.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.embeddings.expression.ExpEmbedding
 import org.jetbrains.kotlin.formver.embeddings.expression.withNewTypeInvariants
 import org.jetbrains.kotlin.formver.embeddings.types.FunctionTypeEmbedding
-import org.jetbrains.kotlin.formver.viper.NameResolver
 
 /**
  * Kotlin entity that can be called.

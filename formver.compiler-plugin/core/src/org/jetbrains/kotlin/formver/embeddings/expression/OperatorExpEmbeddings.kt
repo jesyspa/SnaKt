@@ -8,7 +8,6 @@ package org.jetbrains.kotlin.formver.embeddings.expression
 import org.jetbrains.kotlin.formver.domains.RuntimeTypeDomain.Companion.intInjection
 import org.jetbrains.kotlin.formver.domains.RuntimeTypeDomain.Companion.stringInjection
 import org.jetbrains.kotlin.formver.embeddings.types.buildFunctionPretype
-import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.*
 import org.jetbrains.kotlin.formver.viper.ast.Exp.Companion.toConjunction
 

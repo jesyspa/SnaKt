@@ -11,7 +11,6 @@ import org.jetbrains.kotlin.formver.embeddings.expression.AnonymousVariableEmbed
 import org.jetbrains.kotlin.formver.embeddings.types.PretypeBuilder
 import org.jetbrains.kotlin.formver.embeddings.types.TypeBuilder
 import org.jetbrains.kotlin.formver.embeddings.types.buildType
-import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.Declaration
 import org.jetbrains.kotlin.formver.viper.ast.Label
 import org.jetbrains.kotlin.formver.viper.ast.Stmt

@@ -146,12 +146,11 @@ fun StmtConversionContext.argumentDeclaration(arg: ExpEmbedding, callType: TypeE
     when (arg.ignoringMetaNodes()) {
         is LambdaExp -> null to arg
         else -> {
-            val argWithInvariants = with(nameResolver) {
+            val argWithInvariants =
                 arg.withNewTypeInvariants(callType) {
                     proven = true
                     access = true
                 }
-            }
             // If `argWithInvariants` is `Cast(...(Cast(someVariable))...)` it is fine to use it
             // since in Viper it will always be translated to `someVariable`.
             // On other hand, `TypeEmbedding` and invariants in Viper are guaranteed
@@ -194,8 +193,7 @@ fun StmtConversionContext.insertInlineFunctionCall(
         InlineParameterResolver(subs, returnTargetName, returnTarget),
         parent = parentCtx,
     )
-    return with(nameResolver) {
-        withMethodCtx(methodCtxFactory) {
+    return withMethodCtx(methodCtxFactory) {
             Block {
                 add(Declare(returnTarget.variable, null))
                 addAll(declarations)
@@ -203,7 +201,6 @@ fun StmtConversionContext.insertInlineFunctionCall(
                 // if unit is what we return we might not guarantee it yet
                 add(returnTarget.variable.withIsUnitInvariantIfUnit())
             }
-        }
     }
 }
 
@@ -243,10 +240,10 @@ fun StmtConversionContext.convertMethodWithBody(
     val seqnBuilder = SeqnBuilder(declaration.source)
     val linearizer = Linearizer(SharedLinearizationState(anonVarProducer), seqnBuilder, declaration.source)
 
-    with(nameResolver) {bodyExp.toViperUnusedResult(linearizer)}
+    bodyExp.toViperUnusedResult(linearizer)
     // note: we must guarantee somewhere that returned value is Unit
     // as we may not encounter any `return` statement in the body
-    with(nameResolver) {returnTarget.variable.withIsUnitInvariantIfUnit().toViperUnusedResult(linearizer)}
+    returnTarget.variable.withIsUnitInvariantIfUnit().toViperUnusedResult(linearizer)
 
     // TODO: Terminate conversion if purity check fails
     body.checkValidity(declaration.source, errorCollector)
