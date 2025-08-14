@@ -81,8 +81,7 @@ class AnonymousVariableEmbedding(n: Int, override val type: TypeEmbedding) : Var
 
 class AnonymousBuiltinVariableEmbedding(n: Int, override val type: TypeEmbedding) : VariableEmbedding {
     override val name: MangledName = AnonymousBuiltinName(n)
-    private val injection: Injection?
-        get() = type.injectionOrNull
+    private val injection: Injection? = type.injectionOrNull
 
     override fun toViper(source: KtSourceElement?): Exp {
         val inner = Exp.LocalVar(name, injection.viperType, source.asPosition, sourceRole.asInfo)

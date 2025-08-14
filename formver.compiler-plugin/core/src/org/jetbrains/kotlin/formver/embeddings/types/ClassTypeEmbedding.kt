@@ -14,8 +14,7 @@ import org.jetbrains.kotlin.formver.viper.ast.Exp
 
 // TODO: incorporate generic parameters.
 data class ClassTypeEmbedding(val baseName: ScopedKotlinName) : PretypeEmbedding {
-    override val name: ScopedKotlinName
-        get() = baseName
+    override val name: ScopedKotlinName = baseName
     private var _details: ClassEmbeddingDetails? = null
     val details: ClassEmbeddingDetails
         get() = _details ?: error("Details of $name have not been initialised yet.")
@@ -29,8 +28,7 @@ data class ClassTypeEmbedding(val baseName: ScopedKotlinName) : PretypeEmbedding
         get() = _details != null
     
 
-    override val runtimeType: Exp
-        get() = this.embedClassTypeFunc()()
+    override val runtimeType: Exp = this.embedClassTypeFunc()()
 
     override fun accessInvariants(): List<TypeInvariantEmbedding> = details.accessInvariants()
 

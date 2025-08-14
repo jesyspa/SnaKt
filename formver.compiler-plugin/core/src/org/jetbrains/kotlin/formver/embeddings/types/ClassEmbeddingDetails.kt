@@ -76,10 +76,8 @@ class ClassEmbeddingDetails(
         }
     }
 
-    private val sharedPredicateName: ScopedKotlinName
-        get() = ScopedKotlinName(type.name.asScope(), PredicateKotlinName("shared"))
-    private val uniquePredicateName: ScopedKotlinName
-        get() = ScopedKotlinName(type.name.asScope(), PredicateKotlinName("unique"))
+    private val sharedPredicateName: ScopedKotlinName = ScopedKotlinName(type.name.asScope(), PredicateKotlinName("shared"))
+    private val uniquePredicateName: ScopedKotlinName = ScopedKotlinName(type.name.asScope(), PredicateKotlinName("unique"))
 
     /**
      * Find an embedding of a backing field by this name amongst the ancestors of this type.

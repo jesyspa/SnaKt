@@ -17,11 +17,9 @@ data class FunctionTypeEmbedding(
     val returnType: TypeEmbedding,
     val returnsUnique: Boolean,
 ) : PretypeEmbedding {
-    override val runtimeType
-        get() = RuntimeTypeDomain.functionType()
+    override val runtimeType = RuntimeTypeDomain.functionType()
 
-    override val name: SetOfNames
-        get() = SetOfNames(formalArgTypes.map{it -> it.name})
+    override val name: SetOfNames = SetOfNames(formalArgTypes.map{it -> it.name})
 
     /**
      * The flattened structure of the callable parameters: in case the callable has a receiver

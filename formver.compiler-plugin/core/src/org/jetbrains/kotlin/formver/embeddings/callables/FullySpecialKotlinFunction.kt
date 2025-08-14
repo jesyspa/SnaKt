@@ -48,8 +48,7 @@ object SpecialKotlinFunctions {
         packageScope(SpecialPackages.formver)
         ClassKotlinName(listOf("InvariantBuilder"))
     }
-    val byName: Map<MangledName, FunctionEmbedding>
-        get() = buildFullySpecialFunctions {
+    val byName: Map<MangledName, FunctionEmbedding> = buildFullySpecialFunctions {
             val intIntToIntType = buildFunctionPretype {
                 withDispatchReceiver { int() }
                 withParam { int() }

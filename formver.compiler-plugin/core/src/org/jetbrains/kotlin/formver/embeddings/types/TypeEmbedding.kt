@@ -45,8 +45,7 @@ data class TypeEmbedding(val pretype: PretypeEmbedding, val flags: TypeEmbedding
     val isNullable: Boolean
         get() = flags.nullable
 
-    override val runtimeType: Exp
-        get() = flags.adjustRuntimeType(pretype.runtimeType)
+    override val runtimeType: Exp = flags.adjustRuntimeType(pretype.runtimeType)
     override fun accessInvariants(): List<TypeInvariantEmbedding> = flags.adjustManyInvariants(pretype.accessInvariants())
     override fun pureInvariants(): List<TypeInvariantEmbedding> = flags.adjustManyInvariants(pretype.pureInvariants())
     override fun sharedPredicateAccessInvariant(): TypeInvariantEmbedding? =
