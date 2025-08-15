@@ -7,7 +7,6 @@ fun <!VIPER_TEXT!>takeIntReturnInt<!>(x: Int): Int { return x }
 fun <!VIPER_TEXT!>takeIntReturnIntExpr<!>(x: Int): Int = x
 fun <!VIPER_TEXT!>withIntDeclaration<!>(): Int {
     val x = 0
-    return x
 }
 fun <!VIPER_TEXT!>intAssignment<!>() {
     var x = 0

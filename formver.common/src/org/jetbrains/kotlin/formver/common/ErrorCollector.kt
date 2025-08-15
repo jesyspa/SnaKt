@@ -12,7 +12,6 @@ import org.jetbrains.kotlin.KtSourceElement
  * TODO: Replace this with some kind of more systematic approach to generating diagnostics.
  */
 class ErrorCollector {
-    private val internalErrorInfos = mutableListOf<String>()
     private val minorErrors = mutableListOf<String>()
     private val purityErrors = mutableListOf<Pair<KtSourceElement, String>>()
 
@@ -24,12 +23,6 @@ class ErrorCollector {
         minorErrors.forEach(action)
     }
 
-    fun formatErrorWithInfos(error: String): String =
-        internalErrorInfos.joinToString(prefix = "$error\n", separator = "\n")
-
-    fun addErrorInfo(msg: String) {
-        internalErrorInfos.add(msg)
-    }
 
     fun addPurityError(position: KtSourceElement, msg: String) {
         purityErrors.add(Pair(position, msg))

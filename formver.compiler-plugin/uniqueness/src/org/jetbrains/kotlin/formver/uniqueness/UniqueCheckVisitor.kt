@@ -155,14 +155,3 @@ object UniqueCheckVisitor : FirVisitor<Pair<UniqueLevel, UniquePathContext?>, Un
         return Pair(data.resolveUniqueAnnotation(callee), null)
     }
 }
-
-object UniquenessCheckExceptionWrapper : FirVisitor<Pair<UniqueLevel, UniquePathContext?>, UniqueCheckerContext>() {
-    override fun visitElement(element: FirElement, data: UniqueCheckerContext): Pair<UniqueLevel, UniquePathContext?> {
-        try {
-            return element.accept(UniqueCheckVisitor, data)
-        } catch (e: Exception) {
-            data.errorCollector.addErrorInfo("... while checking uniqueness level for ${element.source.text}")
-            throw e
-        }
-    }
-}

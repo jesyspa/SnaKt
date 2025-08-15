@@ -5,6 +5,7 @@
 
 package org.jetbrains.kotlin.formver.plugin.compiler
 
+import org.jetbrains.kotlin.KtSourceElement
 import org.jetbrains.kotlin.diagnostics.DiagnosticReporter
 import org.jetbrains.kotlin.diagnostics.reportOn
 import org.jetbrains.kotlin.fir.FirSession
@@ -19,6 +20,7 @@ import org.jetbrains.kotlin.formver.common.ErrorCollector
 import org.jetbrains.kotlin.formver.common.LogLevel
 import org.jetbrains.kotlin.formver.common.PluginConfiguration
 import org.jetbrains.kotlin.formver.common.TargetsSelection
+import org.jetbrains.kotlin.formver.core.conversion.CheckException
 import org.jetbrains.kotlin.formver.core.conversion.ProgramConverter
 import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.print
 import org.jetbrains.kotlin.formver.plugin.compiler.reporting.reportVerifierError
@@ -95,8 +97,11 @@ class ViperPoweredDeclarationChecker(private val session: FirSession, private va
             if (!consistent || !config.shouldVerify(declaration)) return
 
             with(programConversionContext.nameResolver) {verifier.verify(program, onFailure)}
-        } catch (e: Exception) {
-            val error = errorCollector.formatErrorWithInfos(e.message ?: "No message provided")
+        } catch(e: CheckException) {
+            reporter.reportOn(e.source, PluginErrors.INTERNAL_ERROR, e.message)
+        }
+        catch (e: Exception) {
+            val error = e.message ?: "No message provided"
             reporter.reportOn(declaration.source, PluginErrors.INTERNAL_ERROR, error)
         }
 

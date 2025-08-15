@@ -5,6 +5,7 @@
 
 package org.jetbrains.kotlin.formver.core.conversion
 
+import org.jetbrains.kotlin.KtSourceElement
 import org.jetbrains.kotlin.contracts.description.LogicOperationKind
 import org.jetbrains.kotlin.fir.FirElement
 import org.jetbrains.kotlin.fir.declarations.FirProperty
@@ -59,7 +60,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
     // translating statements here, after all.  It isn't 100% clear how best to
     // communicate this.
     override fun visitElement(element: FirElement, data: StmtConversionContext): ExpEmbedding =
-        handleUnimplementedElement("Not yet implemented for $element (${element.source.text})", data)
+        handleUnimplementedElement(element.source, "Not yet implemented for $element (${element.source.text})", data)
 
     override fun visitReturnExpression(
         returnExpression: FirReturnExpression,
@@ -102,7 +103,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
             ConstantValueKind.String -> StringLit(literalExpression.value as String)
             ConstantValueKind.Null -> NullLit
             else -> handleUnimplementedElement(
-                "Constant Expression of type ${literalExpression.kind} is not yet implemented.",
+                literalExpression.source,"Constant Expression of type ${literalExpression.kind} is not yet implemented.",
                 data
             )
         }
@@ -141,7 +142,6 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         data: StmtConversionContext,
     ): ExpEmbedding {
         if (!whenBranches.hasNext()) return UnitLit
-
         val branch = whenBranches.next()
 
         // Note that only the last condition can be a FirElseIfTrue
@@ -193,7 +193,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
             FirOperation.EQ -> convertEqCmp(left, right)
             FirOperation.NOT_EQ -> Not(convertEqCmp(left, right))
             else -> handleUnimplementedElement(
-                "Equality comparison operation ${equalityOperatorCall.operation} not yet implemented.",
+                equalityOperatorCall.source,"Equality comparison operation ${equalityOperatorCall.operation} not yet implemented.",
                 data
             )
         }
@@ -435,7 +435,8 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
             }
 
             return resolved
-                ?: throw IllegalArgumentException("Can't resolve the 'this' receiver since the function does not have one.")
+                //?: throw IllegalArgumentException("Can't resolve the 'this' receiver since the function does not have one.")
+                ?: throw CheckException(thisReceiverExpression.source,"Can't resolve the 'this' receiver since the function does not have one.")
         }
 
         val symbol = thisReceiverExpression.calleeReference.boundSymbol
@@ -447,7 +448,8 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         }
         tryResolve(declSymbol)?.let { return it }
 
-        throw IllegalArgumentException("No resolution approach to this symbol worked.")
+        //throw IllegalArgumentException("No resolution approach to this symbol worked.")
+        throw CheckException(thisReceiverExpression.source,"No resolution approach to this symbol worked.")
     }
 
     override fun visitTypeOperatorCall(
@@ -469,7 +471,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
                 access = true
             }
 
-            else -> handleUnimplementedElement("Can't embed type operator ${typeOperatorCall.operation}.", data)
+            else -> handleUnimplementedElement(typeOperatorCall.source,"Can't embed type operator ${typeOperatorCall.operation}.", data)
         }
     }
 
@@ -555,25 +557,15 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
     ): ExpEmbedding = data.checkedSafeCallSubject
         ?: throw IllegalArgumentException("Trying to resolve checked subject $checkedSafeCallSubject which was not captured in StmtConversionContext")
 
-    private fun handleUnimplementedElement(msg: String, data: StmtConversionContext): ExpEmbedding =
+    private fun handleUnimplementedElement(source: KtSourceElement?, msg: String, data: StmtConversionContext): ExpEmbedding =
         when (data.config.behaviour) {
             UnsupportedFeatureBehaviour.THROW_EXCEPTION ->
-                TODO(msg)
+                //TODO(msg)
+                throw CheckException(source,msg)
 
             UnsupportedFeatureBehaviour.ASSUME_UNREACHABLE -> {
                 data.errorCollector.addMinorError(msg)
                 ErrorExp
             }
         }
-}
-
-object StmtConversionVisitorExceptionWrapper : FirVisitor<ExpEmbedding, StmtConversionContext>() {
-    override fun visitElement(element: FirElement, data: StmtConversionContext): ExpEmbedding {
-        try {
-            return element.accept(StmtConversionVisitor, data)
-        } catch (e: Exception) {
-            data.errorCollector.addErrorInfo("... while converting ${element.source.text}")
-            throw e
-        }
-    }
 }
