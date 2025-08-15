@@ -1,53 +1,53 @@
 /simple_precondition.kt:(238,242): info: Generated Viper text for test:
-field bf$size: Ref
+field bf_size: Ref
 
-method f$test$TF$T$Int(p$idx: Ref) returns (ret$0: Ref)
-  requires 0 <= df$rt$intFromRef(p$idx)
-  requires df$rt$intFromRef(p$idx) < 3
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method f_test_TF_T_Int(idx: Ref) returns (ret_0: Ref)
+  requires 0 <= df_intFromRef(idx)
+  requires df_intFromRef(idx) < 3
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(p$idx), df$rt$intType())
-  assert 0 <= df$rt$intFromRef(p$idx)
-  assert df$rt$intFromRef(p$idx) < 3
-  assert !(df$rt$intFromRef(p$idx) == 100)
-  assert Seq(97, 97, 97)[df$rt$intFromRef(p$idx)] == 97
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  inhale df_isSubtype(df_typeOf(idx), df_intType())
+  assert 0 <= df_intFromRef(idx)
+  assert df_intFromRef(idx) < 3
+  assert !(df_intFromRef(idx) == 100)
+  assert Seq(97, 97, 97)[df_intFromRef(idx)] == 97
+  label lbl_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /simple_precondition.kt:(446,469): info: Generated Viper text for inlineWithSpecification:
-method f$inlineWithSpecification$TF$T$Boolean(p$bool: Ref)
-  returns (ret$0: Ref)
+method f_inlineWithSpecification_TF_T_Boolean(bool: Ref)
+  returns (ret_0: Ref)
   requires true
-  requires df$rt$boolFromRef(p$bool)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  requires df_boolFromRef(bool)
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(p$bool), df$rt$boolType())
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  inhale df_isSubtype(df_typeOf(bool), df_boolType())
+  label lbl_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /simple_precondition.kt:(560,569): info: Generated Viper text for good_call:
-method f$good_call$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method f_good_call_TF_() returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  var anon$2: Ref
-  var ret$1: Ref
-  var anon$0: Ref
-  var ret$2: Ref
-  var anon$1: Ref
-  anon$2 := f$test$TF$T$Int(df$rt$intToRef(2))
-  anon$0 := df$rt$boolToRef(true)
-  label lbl$ret$1
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$1), df$rt$unitType())
-  anon$1 := df$rt$boolToRef(false)
-  label lbl$ret$2
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$2), df$rt$unitType())
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  var anon_2: Ref
+  var ret_1: Ref
+  var anon_0: Ref
+  var ret_2: Ref
+  var anon_1: Ref
+  anon_2 := f_test_TF_T_Int(df_intToRef(2))
+  anon_0 := df_boolToRef(true)
+  label lbl_1
+  inhale df_isSubtype(df_typeOf(ret_1), df_unitType())
+  anon_1 := df_boolToRef(false)
+  label lbl_2
+  inhale df_isSubtype(df_typeOf(ret_2), df_unitType())
+  label lbl_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
-method f$test$TF$T$Int(p$idx: Ref) returns (ret: Ref)
-  requires 0 <= df$rt$intFromRef(p$idx)
-  requires df$rt$intFromRef(p$idx) < 3
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$unitType())
+method f_test_TF_T_Int(idx: Ref) returns (ret: Ref)
+  requires 0 <= df_intFromRef(idx)
+  requires df_intFromRef(idx) < 3
+  ensures df_isSubtype(df_typeOf(ret), df_unitType())

@@ -7,19 +7,22 @@ package org.jetbrains.kotlin.formver.viper.ast
 
 import org.jetbrains.kotlin.formver.viper.*
 import viper.silver.ast.*
-
+sealed interface BinaryExp : Exp {
+    val left: Exp
+    val right: Exp
+}
 sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
 
     val type: Type
 
     //region Arithmetic Expressions
     data class Add(
-        val left: Exp,
-        val right: Exp,
+        override val left: Exp,
+        override val right: Exp,
         val pos: Position = Position.NoPosition,
         val info: Info = Info.NoInfo,
         val trafos: Trafos = Trafos.NoTrafos,
-    ) : Exp {
+    ) : BinaryExp {
         override val type = Type.Int
         context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.Add =
@@ -27,12 +30,12 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
     }
 
     data class Sub(
-        val left: Exp,
-        val right: Exp,
+        override val left: Exp,
+        override val right: Exp,
         val pos: Position = Position.NoPosition,
         val info: Info = Info.NoInfo,
         val trafos: Trafos = Trafos.NoTrafos,
-    ) : Exp {
+    ) : BinaryExp {
         override val type = Type.Int
         context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.Sub =
@@ -40,12 +43,12 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
     }
 
     data class Mul(
-        val left: Exp,
-        val right: Exp,
+        override val left: Exp,
+        override val right: Exp,
         val pos: Position = Position.NoPosition,
         val info: Info = Info.NoInfo,
         val trafos: Trafos = Trafos.NoTrafos,
-    ) : Exp {
+    ) : BinaryExp {
         override val type = Type.Int
         context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.Mul =
@@ -53,12 +56,12 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
     }
 
     data class Div(
-        val left: Exp,
-        val right: Exp,
+        override val left: Exp,
+        override val right: Exp,
         val pos: Position = Position.NoPosition,
         val info: Info = Info.NoInfo,
         val trafos: Trafos = Trafos.NoTrafos,
-    ) : Exp {
+    ) : BinaryExp {
         override val type = Type.Int
         context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.Div =
@@ -66,12 +69,12 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
     }
 
     data class Mod(
-        val left: Exp,
-        val right: Exp,
+        override val left: Exp,
+        override val right: Exp,
         val pos: Position = Position.NoPosition,
         val info: Info = Info.NoInfo,
         val trafos: Trafos = Trafos.NoTrafos,
-    ) : Exp {
+    ) : BinaryExp {
         override val type = Type.Int
         context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.Mod =
@@ -81,12 +84,12 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
 
     //region Integer Comparison Expressions
     data class LtCmp(
-        val left: Exp,
-        val right: Exp,
+        override val left: Exp,
+        override val right: Exp,
         val pos: Position = Position.NoPosition,
         val info: Info = Info.NoInfo,
         val trafos: Trafos = Trafos.NoTrafos,
-    ) : Exp {
+    ) : BinaryExp {
         override val type = Type.Bool
         context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.LtCmp =
@@ -94,12 +97,12 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
     }
 
     data class LeCmp(
-        val left: Exp,
-        val right: Exp,
+        override val left: Exp,
+        override val right: Exp,
         val pos: Position = Position.NoPosition,
         val info: Info = Info.NoInfo,
         val trafos: Trafos = Trafos.NoTrafos,
-    ) : Exp {
+    ) : BinaryExp {
         override val type = Type.Bool
         context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.LeCmp =
@@ -107,12 +110,12 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
     }
 
     data class GtCmp(
-        val left: Exp,
-        val right: Exp,
+        override val left: Exp,
+        override val right: Exp,
         val pos: Position = Position.NoPosition,
         val info: Info = Info.NoInfo,
         val trafos: Trafos = Trafos.NoTrafos,
-    ) : Exp {
+    ) : BinaryExp {
         override val type = Type.Bool
         context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.GtCmp =
@@ -120,12 +123,12 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
     }
 
     data class GeCmp(
-        val left: Exp,
-        val right: Exp,
+        override val left: Exp,
+        override val right: Exp,
         val pos: Position = Position.NoPosition,
         val info: Info = Info.NoInfo,
         val trafos: Trafos = Trafos.NoTrafos,
-    ) : Exp {
+    ) : BinaryExp {
         override val type = Type.Bool
         context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.GeCmp =
@@ -135,12 +138,12 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
 
     //region Boolean Comparison Expressions
     data class EqCmp(
-        val left: Exp,
-        val right: Exp,
+        override val left: Exp,
+        override val right: Exp,
         val pos: Position = Position.NoPosition,
         val info: Info = Info.NoInfo,
         val trafos: Trafos = Trafos.NoTrafos,
-    ) : Exp {
+    ) : BinaryExp {
         override val type = Type.Bool
         context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.EqCmp =
@@ -148,12 +151,12 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
     }
 
     data class NeCmp(
-        val left: Exp,
-        val right: Exp,
+        override val left: Exp,
+        override val right: Exp,
         val pos: Position = Position.NoPosition,
         val info: Info = Info.NoInfo,
         val trafos: Trafos = Trafos.NoTrafos,
-    ) : Exp {
+    ) : BinaryExp {
         override val type = Type.Bool
         context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.NeCmp =
@@ -163,12 +166,12 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
 
     //region Boolean Expressions
     data class And(
-        val left: Exp,
-        val right: Exp,
+        override val left: Exp,
+        override val right: Exp,
         val pos: Position = Position.NoPosition,
         val info: Info = Info.NoInfo,
         val trafos: Trafos = Trafos.NoTrafos,
-    ) : Exp {
+    ) : BinaryExp {
         override val type = Type.Bool
         context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.And =
@@ -176,12 +179,12 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
     }
 
     data class Or(
-        val left: Exp,
-        val right: Exp,
+        override val left: Exp,
+        override val right: Exp,
         val pos: Position = Position.NoPosition,
         val info: Info = Info.NoInfo,
         val trafos: Trafos = Trafos.NoTrafos,
-    ) : Exp {
+    ) : BinaryExp {
         override val type = Type.Bool
         context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.Or =
@@ -189,12 +192,12 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
     }
 
     data class Implies(
-        val left: Exp,
-        val right: Exp,
+        override val left: Exp,
+        override val right: Exp,
         val pos: Position = Position.NoPosition,
         val info: Info = Info.NoInfo,
         val trafos: Trafos = Trafos.NoTrafos,
-    ) : Exp {
+    ) : BinaryExp {
         override val type = Type.Bool
         context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.Implies =
@@ -277,8 +280,7 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
     ) : Exp {
         override val type = Type.Int
         context(nameResolver: NameResolver)
-        override fun toSilver(): viper.silver.ast.IntLit =
-            IntLit(value.toScalaBigInt(), pos.toSilver(), info.toSilver(), trafos.toSilver())
+        override fun toSilver(): viper.silver.ast.IntLit = IntLit(value.toScalaBigInt(), pos.toSilver(), info.toSilver(), trafos.toSilver())
     }
 
     data class NullLit(
@@ -336,8 +338,7 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
         val trafos: Trafos = Trafos.NoTrafos,
     ) : Exp {
         context(nameResolver: NameResolver)
-        override fun toSilver(): viper.silver.ast.Result =
-            Result(type.toSilver(), pos.toSilver(), info.toSilver(), trafos.toSilver())
+        override fun toSilver(): viper.silver.ast.Result = Result(type.toSilver(), pos.toSilver(), info.toSilver(), trafos.toSilver())
     }
 
     data class FuncApp(
@@ -485,12 +486,12 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
     }
 
     data class SeqAppend(
-        val left: Exp,
-        val right: Exp,
+        override val left: Exp,
+        override val right: Exp,
         val pos: Position = Position.NoPosition,
         val info: Info = Info.NoInfo,
         val trafos: Trafos = Trafos.NoTrafos,
-    ) : Exp {
+    ) : BinaryExp {
         context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.SeqAppend =
             viper.silver.ast.SeqAppend.apply(
@@ -512,8 +513,7 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
     ) : Exp {
         override val type = exp.type
         context(nameResolver: NameResolver)
-        override fun toSilver(): viper.silver.ast.Old =
-            Old(exp.toSilver(), pos.toSilver(), info.toSilver(), trafos.toSilver())
+        override fun toSilver(): viper.silver.ast.Old = Old(exp.toSilver(), pos.toSilver(), info.toSilver(), trafos.toSilver())
     }
 
     data class PredicateAccess(
@@ -592,8 +592,7 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
         /**
          * Create an Exp.Forall node, passing the local variables as local variable access expressions into the action.
          */
-        fun forall(v1: Var, action: ForallBuilder.(LocalVar) -> Exp): Exp =
-            forallImpl(listOf(v1.decl())) { action(v1.use()) }
+        fun forall(v1: Var, action: ForallBuilder.(LocalVar) -> Exp): Exp = forallImpl(listOf(v1.decl())) { action(v1.use()) }
 
         fun forall(v1: Var, v2: Var, action: ForallBuilder.(LocalVar, LocalVar) -> Exp): Exp =
             forallImpl(listOf(v1.decl(), v2.decl())) { action(v1.use(), v2.use()) }
@@ -717,6 +716,5 @@ fun Any?.viperLiteral(
     is String ->
         if (isEmpty()) Exp.EmptySeq(Type.Int, pos, info, trafos)
         else Exp.ExplicitSeq(map { it.viperLiteral(pos, info, trafos) }, pos, info, trafos)
-
     else -> error("Literal type not known.")
 }

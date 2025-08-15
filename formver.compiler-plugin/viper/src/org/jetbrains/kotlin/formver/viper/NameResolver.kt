@@ -12,4 +12,5 @@ import org.jetbrains.kotlin.formver.viper.MangledName
 
 interface NameResolver {
     fun resolve(name: MangledName): String
+    fun registry(name: MangledName)
 }
