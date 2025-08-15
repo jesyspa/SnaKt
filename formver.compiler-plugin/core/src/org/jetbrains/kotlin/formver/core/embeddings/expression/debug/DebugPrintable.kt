@@ -5,6 +5,9 @@
 
 package org.jetbrains.kotlin.formver.core.embeddings.expression.debug
 
+import org.jetbrains.kotlin.formver.viper.NameResolver
+
 interface DebugPrintable {
+    context(nameResolver: NameResolver)
     val debugTreeView: TreeView
 }

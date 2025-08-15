@@ -7,6 +7,7 @@ package org.jetbrains.kotlin.formver.core.embeddings.types
 
 import org.jetbrains.kotlin.formver.core.domains.RuntimeTypeDomain
 import org.jetbrains.kotlin.formver.core.names.PretypeName
+import org.jetbrains.kotlin.formver.core.names.SetOfNames
 import org.jetbrains.kotlin.formver.viper.mangled
 
 data class FunctionTypeEmbedding(
@@ -17,7 +18,8 @@ data class FunctionTypeEmbedding(
     val returnsUnique: Boolean,
 ) : PretypeEmbedding {
     override val runtimeType = RuntimeTypeDomain.functionType()
-    override val name = PretypeName(formalArgTypes.joinToString("$") { it.name.mangled })
+
+    override val name: SetOfNames = SetOfNames(formalArgTypes.map{it -> it.name})
 
     /**
      * The flattened structure of the callable parameters: in case the callable has a receiver

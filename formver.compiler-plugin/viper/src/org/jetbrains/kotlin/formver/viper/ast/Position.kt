@@ -6,6 +6,7 @@
 package org.jetbrains.kotlin.formver.viper.ast
 
 import org.jetbrains.kotlin.formver.viper.IntoSilver
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import viper.silver.ast.`NoPosition$`
 
 sealed class Position : IntoSilver<viper.silver.ast.Position> {
@@ -23,10 +24,12 @@ sealed class Position : IntoSilver<viper.silver.ast.Position> {
     }
 
     data object NoPosition : Position() {
+        context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.Position = `NoPosition$`.`MODULE$`
     }
 
     class Wrapped<P>(val source: P) : Position() {
+        context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.Position = Wrapper(source)
     }
 }

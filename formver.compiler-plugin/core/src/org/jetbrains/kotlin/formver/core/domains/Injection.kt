@@ -6,8 +6,10 @@
 package org.jetbrains.kotlin.formver.core.domains
 
 import org.jetbrains.kotlin.formver.core.domains.RuntimeTypeDomain.Companion.isOf
+import org.jetbrains.kotlin.formver.core.names.SimpleKotlinName
 import org.jetbrains.kotlin.formver.viper.ast.*
 import org.jetbrains.kotlin.formver.viper.ast.Function
+import org.jetbrains.kotlin.name.Name
 
 /**
  * Produces set of axioms for injections from built-in types in Viper to Ref.
@@ -44,9 +46,9 @@ class Injection(
 ) {
     private val v = domainVar("v", viperType)
     private val r = domainVar("r", Type.Ref)
-    val toRef = RuntimeTypeDomain.createDomainFunc("${injectionName}ToRef", listOf(v.decl()), Type.Ref)
-    val fromRef = RuntimeTypeDomain.createDomainFunc("${injectionName}FromRef", listOf(r.decl()), viperType)
 
+    val toRef = RuntimeTypeDomain.createDomainFunc(SimpleKotlinName(Name.identifier("${injectionName}ToRef")), listOf(v.decl()), Type.Ref)
+    val fromRef = RuntimeTypeDomain.createDomainFunc(SimpleKotlinName(Name.identifier("${injectionName}FromRef")), listOf(r.decl()), viperType)
     internal fun AxiomListBuilder.injectionAxioms() {
         axiom {
             Exp.forall(v) { v -> simpleTrigger { toRef(v) isOf typeFunction() } }
@@ -100,4 +102,5 @@ class InjectionImageFunction(
     postcondition { result isOf resultInjection.typeFunction() }
     postcondition { resultInjection.fromRef(result) eq viperResult }
     additionalConditions()
+
 })
