@@ -14,6 +14,7 @@ import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.withDesigna
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.linearization.LinearizationContext
 import org.jetbrains.kotlin.formver.core.linearization.pureToViper
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 
 data class WithPosition(override val inner: ExpEmbedding, val source: KtSourceElement) : PassthroughExpEmbedding {
@@ -25,6 +26,7 @@ data class WithPosition(override val inner: ExpEmbedding, val source: KtSourceEl
     override fun <R> accept(v: ExpVisitor<R>): R = v.visitWithPosition(this)
 
     // We ignore position information in the debug view.
+    context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = inner.debugTreeView
 }
@@ -64,6 +66,7 @@ data class SharingContext(override val inner: ExpEmbedding) : PassthroughExpEmbe
 
     override fun ignoringMetaNodes() = inner
     override fun ignoringCastsAndMetaNodes() = inner
+    context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = NamedBranchingNode(
             "SharingContext",
@@ -111,6 +114,7 @@ data class Shared(val inner: ExpEmbedding) : StoredResultExpEmbedding, DefaultTo
         _context = ctx
     }
 
+    context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = NamedBranchingNode(
             "Shared",

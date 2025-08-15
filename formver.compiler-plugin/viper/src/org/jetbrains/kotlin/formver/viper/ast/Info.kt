@@ -6,6 +6,7 @@
 package org.jetbrains.kotlin.formver.viper.ast
 
 import org.jetbrains.kotlin.formver.viper.IntoSilver
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import scala.collection.JavaConverters
 import scala.collection.immutable.Seq
 import viper.silver.ast.`NoInfo$`
@@ -26,10 +27,12 @@ sealed class Info : IntoSilver<viper.silver.ast.Info> {
     }
 
     data object NoInfo : Info() {
+        context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.Info = `NoInfo$`.`MODULE$`
     }
 
     class Wrapped(val info: Any) : Info() {
+        context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.Info = Wrapper(info)
     }
 }

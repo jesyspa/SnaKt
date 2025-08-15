@@ -18,6 +18,7 @@ import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.TreeView
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.asTypeEmbedding
 import org.jetbrains.kotlin.formver.core.linearization.LinearizationContext
+import org.jetbrains.kotlin.formver.viper.NameResolver
 
 class LambdaExp(
     val signature: FunctionSignature,
@@ -52,6 +53,7 @@ class LambdaExp(
         )
     }
 
+    context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = PlaintextLeaf("Lambda")
 
