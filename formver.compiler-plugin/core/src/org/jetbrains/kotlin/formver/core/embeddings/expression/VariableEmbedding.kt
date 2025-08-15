@@ -24,6 +24,7 @@ import org.jetbrains.kotlin.formver.core.embeddings.types.injectionOrNull
 import org.jetbrains.kotlin.formver.core.names.AnonymousBuiltinName
 import org.jetbrains.kotlin.formver.core.names.AnonymousName
 import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.*
 import org.jetbrains.kotlin.formver.viper.mangled
 
@@ -64,6 +65,7 @@ sealed interface VariableEmbedding : PureExpEmbedding, PropertyAccessEmbedding {
 
     fun allAccessInvariants() = accessInvariants() + listOfNotNull(sharedPredicateAccessInvariant())
 
+    context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = NamedBranchingNode("Var", PlaintextLeaf(name.mangled))
 }

@@ -18,6 +18,7 @@ data class Program(
     val info: Info = Info.NoInfo,
     val trafos: Trafos = Trafos.NoTrafos,
 ) : IntoSilver<viper.silver.ast.Program> {
+    context(nameResolver: NameResolver)
     override fun toSilver(): viper.silver.ast.Program = viper.silver.ast.Program(
         domains.sortedBy { it.name.mangled }.toSilver().toScalaSeq(),
         fields.sortedBy { it.name.mangled }.toSilver().toScalaSeq(),
@@ -46,5 +47,6 @@ data class Program(
         functions = functions.filter { it.includeInDumpPolicy == IncludeInDumpPolicy.ALWAYS }
     )
 
+    context(nameResolver: NameResolver)
     fun toDebugOutput(): String = toSilver().toString()
 }

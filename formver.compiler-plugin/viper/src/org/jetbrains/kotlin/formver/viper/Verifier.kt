@@ -36,6 +36,7 @@ class Verifier {
     /**
      * Check whether the Viper program is consistent.  Return true on success.
      */
+    context(nameResolver: NameResolver)
     fun checkConsistency(program: Program, onFailure: (ConsistencyError) -> Unit): Boolean {
         val viperProgram = program.toSilver()
         val consistencyResults = viperProgram.checkTransitively()
@@ -50,6 +51,7 @@ class Verifier {
     /**
      * Verify the program. Returns true on successful verification.
      */
+    context(nameResolver: NameResolver)
     fun verify(program: Program, onFailure: (VerificationError) -> Unit) {
         val viperProgram = program.toSilver()
 
