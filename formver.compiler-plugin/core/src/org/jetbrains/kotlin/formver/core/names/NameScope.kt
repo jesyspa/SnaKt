@@ -5,12 +5,14 @@
 
 package org.jetbrains.kotlin.formver.core.names
 
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.mangled
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.utils.addToStdlib.ifFalse
 
 sealed interface NameScope {
     val parent: NameScope?
+    context(nameResolver: NameResolver)
     val mangledScopeName: String?
 
     // Determines whether the parent should be part of the name.
@@ -34,6 +36,7 @@ val NameScope.allParentScopes: Sequence<NameScope>
         yield(this@allParentScopes)
     }
 
+context(nameResolver: NameResolver)
 val NameScope.fullMangledName: String?
     get() {
         val scopes = parentScopes.mapNotNull { it.mangledScopeName }.toList()
@@ -48,12 +51,14 @@ val NameScope.classNameIfAny: ClassKotlinName?
 
 data class PackageScope(val packageName: FqName) : NameScope {
     override val parent = null
-
+    
+    context(nameResolver: NameResolver)
     override val mangledScopeName: String?
         get() = packageName.isRoot.ifFalse { "pkg\$${packageName.asViperString()}" }
 }
 
 data class ClassScope(override val parent: NameScope, val className: ClassKotlinName) : NameScope {
+    context(nameResolver: NameResolver)
     override val mangledScopeName: String
         get() = className.mangled
 }
@@ -63,6 +68,7 @@ data class ClassScope(override val parent: NameScope, val className: ClassKotlin
  * this special `NameScope`. Note that it still needs package and class for other purposes.
  */
 data class PublicScope(override val parent: NameScope) : NameScope {
+    context(nameResolver: NameResolver)
     override val mangledScopeName: String
         get() = "public"
     override val parentAccessible: Boolean
@@ -70,25 +76,30 @@ data class PublicScope(override val parent: NameScope) : NameScope {
 }
 
 data class PrivateScope(override val parent: NameScope) : NameScope {
+    context(nameResolver: NameResolver)
     override val mangledScopeName: String
         get() = "private"
 }
 
 data object ParameterScope : NameScope {
     override val parent: NameScope? = null
+    context(nameResolver: NameResolver)
     override val mangledScopeName: String
         get() = "p"
 }
 
 data object BadScope : NameScope {
     override val parent: NameScope? = null
+    context(nameResolver: NameResolver)
     override val mangledScopeName: String
         get() = "<BAD>"
 }
 
 data class LocalScope(val level: Int) : NameScope {
     override val parent: NameScope? = null
-    override val mangledScopeName = "l$level"
+    context(nameResolver: NameResolver)
+    override val mangledScopeName: String
+        get() = "l$level"
 }
 
 /**
@@ -96,5 +107,7 @@ data class LocalScope(val level: Int) : NameScope {
  */
 data object FakeScope : NameScope {
     override val parent: NameScope? = null
-    override val mangledScopeName: String? = null
+    context(nameResolver: NameResolver)
+    override val mangledScopeName: String?
+        get() = null
 }

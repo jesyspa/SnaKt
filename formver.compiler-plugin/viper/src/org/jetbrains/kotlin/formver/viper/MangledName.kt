@@ -11,13 +11,17 @@ package org.jetbrains.kotlin.formver.viper
  * We could directly convert names and pass them around as strings, but this
  * approach makes it easier to see where they came from during debugging.
  */
+const val SEPARATOR = "_"
 interface MangledName {
     val mangledType: String?
         get() = null
+    context(nameResolver: NameResolver)
     val mangledScope: String?
         get() = null
+    context(nameResolver: NameResolver)
     val mangledBaseName: String
 }
 
+context(nameResolver: NameResolver)
 val MangledName.mangled: String
-    get() = listOfNotNull(mangledType, mangledScope, mangledBaseName).joinToString("$")
+    get() = nameResolver.resolve(this)

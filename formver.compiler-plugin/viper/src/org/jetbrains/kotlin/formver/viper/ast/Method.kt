@@ -19,7 +19,7 @@ abstract class Method(
     open val pres: List<Exp> = listOf()
     open val posts: List<Exp> = listOf()
     open val body: Stmt.Seqn? = null
-
+    context(nameResolver: NameResolver)
     override fun toSilver(): viper.silver.ast.Method =
         viper.silver.ast.Method(
             name.mangled,

@@ -1,8 +1,8 @@
 /nullability.kt:(24,35): info: Generated Viper text for return_null:
-method f$return_null$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$nullable(df$rt$intType()))
+method f_return_null_TF_() returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_nullable(df_intType()))
 {
-  ret$0 := df$rt$nullValue()
-  goto lbl$ret$0
-  label lbl$ret$0
+  ret_0 := df_nullValue()
+  goto lbl_0
+  label lbl_0
 }

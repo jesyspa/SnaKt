@@ -8,13 +8,17 @@ package org.jetbrains.kotlin.formver.viper
 import scala.Option
 
 interface IntoSilver<out T> {
+    context(nameResolver: NameResolver)
     fun toSilver(): T
 }
 
+context(nameResolver: NameResolver)
 fun <T, V> Option<T>.toSilver(): Option<V> where T : IntoSilver<V> = map { it.toSilver() }
 
+context(nameResolver: NameResolver)
 fun <T, V> List<T>.toSilver(): List<V> where T : IntoSilver<V> =
     map { it.toSilver() }
 
+context(nameResolver: NameResolver)
 fun <K, V, K2, V2> Map<K, V>.toSilver(): Map<K2, V2> where K : IntoSilver<K2>, V : IntoSilver<V2> =
     this.mapKeys { it.key.toSilver() }.mapValues { it.value.toSilver() }

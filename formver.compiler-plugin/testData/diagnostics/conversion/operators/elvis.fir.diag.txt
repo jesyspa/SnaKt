@@ -1,54 +1,54 @@
 /elvis.kt:(121,134): info: Generated Viper text for elvisOperator:
-method f$elvisOperator$TF$NT$Int(p$x: Ref) returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
+method f_elvisOperator_TF_NT_Int(x: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$nullable(df$rt$intType()))
-  if (p$x != df$rt$nullValue()) {
-    ret$0 := p$x
+  inhale df_isSubtype(df_typeOf(x), df_nullable(df_intType()))
+  if (x != df_nullValue()) {
+    ret_0 := x
   } else {
-    ret$0 := df$rt$intToRef(3)}
-  goto lbl$ret$0
-  label lbl$ret$0
+    ret_0 := df_intToRef(3)}
+  goto lbl_0
+  label lbl_0
 }
 
 /elvis.kt:(176,196): info: Generated Viper text for elvisOperatorComplex:
-method f$elvisOperator$TF$NT$Int(p$x: Ref) returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$intType())
-
-
-method f$elvisOperatorComplex$TF$NT$Int(p$x: Ref) returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
+method f_elvisOperatorComplex_TF_NT_Int(x: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
-  var anon$0: Ref
-  inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$nullable(df$rt$intType()))
-  anon$0 := f$id$TF$NT$Int(p$x)
-  if (anon$0 != df$rt$nullValue()) {
-    ret$0 := anon$0
+  var anon_0: Ref
+  inhale df_isSubtype(df_typeOf(x), df_nullable(df_intType()))
+  anon_0 := f_id_TF_NT_Int(x)
+  if (anon_0 != df_nullValue()) {
+    ret_0 := anon_0
   } else {
-    ret$0 := f$elvisOperator$TF$NT$Int(df$rt$intToRef(2))}
-  goto lbl$ret$0
-  label lbl$ret$0
+    ret_0 := f_elvisOperator_TF_NT_Int(df_intToRef(2))}
+  goto lbl_0
+  label lbl_0
 }
 
-method f$id$TF$NT$Int(p$x: Ref) returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$nullable(df$rt$intType()))
+method f_elvisOperator_TF_NT_Int(x: Ref) returns (ret: Ref)
+  ensures df_isSubtype(df_typeOf(ret), df_intType())
+
+
+method f_id_TF_NT_Int(x: Ref) returns (ret: Ref)
+  ensures df_isSubtype(df_typeOf(ret), df_nullable(df_intType()))
 
 
 /elvis.kt:(257,276): info: Generated Viper text for elvisOperatorReturn:
-method f$elvisOperatorReturn$TF$NT$Int(p$x: Ref) returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
+method f_elvisOperatorReturn_TF_NT_Int(x: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
-  var l0$y: Ref
-  inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$nullable(df$rt$intType()))
-  if (p$x != df$rt$nullValue()) {
-    l0$y := p$x
+  var y: Ref
+  inhale df_isSubtype(df_typeOf(x), df_nullable(df_intType()))
+  if (x != df_nullValue()) {
+    y := x
   } else {
-    var anon$0: Ref
-    ret$0 := df$rt$intToRef(0)
-    goto lbl$ret$0
-    l0$y := anon$0
+    var anon_0: Ref
+    ret_0 := df_intToRef(0)
+    goto lbl_0
+    y := anon_0
   }
-  ret$0 := l0$y
-  goto lbl$ret$0
-  label lbl$ret$0
+  ret_0 := y
+  goto lbl_0
+  label lbl_0
 }
