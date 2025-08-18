@@ -1,6 +1,6 @@
 // RENDER_PREDICATES
 
-import org.jetbrains.kotlin.formver.plugin.NeverVerify
+import org.jetbrains.kotlin.formver.plugin.AlwaysVerify
 import org.jetbrains.kotlin.formver.plugin.Unique
 import org.jetbrains.kotlin.formver.plugin.verify
 
@@ -11,11 +11,11 @@ fun <!VIPER_TEXT!>get_left_val<!>(@Unique n: Node): Int? {
 }
 
 // these expressions should all verify - they currently do not for what i think is the same reason as the linked list
-@NeverVerify
+@AlwaysVerify
 fun <!VIPER_TEXT!>test<!>() {
     val n = Node(5, Node(4, null, null), Node(3, Node(2, null, null), Node(1, null, null)))
     val expr1 = n.data == 5
-    verify(<!VIPER_VERIFICATION_ERROR!>expr1)
+    verify(<!VIPER_VERIFICATION_ERROR!>expr1<!>)
     val expr2 = n.left?.data == 4
-    verify(<!VIPER_VERIFICATION_ERROR!>expr2)
+    verify(expr2)
 }

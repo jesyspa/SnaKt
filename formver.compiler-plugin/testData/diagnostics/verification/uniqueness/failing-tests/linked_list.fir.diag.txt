@@ -43,7 +43,7 @@ method f$getVal$TF$T$Link(p$l: Ref) returns (ret$0: Ref)
   label lbl$ret$0
 }
 
-/linked_list.kt:(327,331): info: Generated Viper text for test:
+/linked_list.kt:(430,434): info: Generated Viper text for test:
 field bf$data: Ref
 
 field bf$next: Ref
@@ -144,4 +144,4 @@ method f$test$TF$() returns (ret$0: Ref)
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }
 
-/linked_list.kt:(410,415): warning: Viper verification error: Assert might fail. Assertion df$rt$boolFromRef(l0$expr1) might not hold.
+/linked_list.kt:(513,518): warning: Viper verification error: Assert might fail. Assertion df$rt$boolFromRef(l0$expr1) might not hold.

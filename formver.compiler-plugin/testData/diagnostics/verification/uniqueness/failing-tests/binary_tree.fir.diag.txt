@@ -55,7 +55,7 @@ method f$get_left_val$TF$T$Node(p$n: Ref) returns (ret$0: Ref)
   label lbl$ret$0
 }
 
-/binary_tree.kt:(383,387): info: Generated Viper text for test:
+/binary_tree.kt:(462,466): info: Generated Viper text for test:
 field bf$data: Ref
 
 field bf$left: Ref
@@ -181,4 +181,4 @@ method f$test$TF$() returns (ret$0: Ref)
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }
 
-/binary_tree.kt:(523,528): warning: Viper verification error: Assert might fail. Assertion df$rt$boolFromRef(l0$expr1) might not hold.
+/binary_tree.kt:(602,607): warning: Viper verification error: Assert might fail. Assertion df$rt$boolFromRef(l0$expr1) might not hold.
