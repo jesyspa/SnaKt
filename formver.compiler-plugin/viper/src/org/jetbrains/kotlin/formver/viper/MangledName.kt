@@ -11,6 +11,7 @@ package org.jetbrains.kotlin.formver.viper
  * We could directly convert names and pass them around as strings, but this
  * approach makes it easier to see where they came from during debugging.
  */
+const val SEPARATOR = "$"
 interface MangledName {
     val mangledType: String?
         get() = null
@@ -20,4 +21,4 @@ interface MangledName {
 }
 
 val MangledName.mangled: String
-    get() = listOfNotNull(mangledType, mangledScope, mangledBaseName).joinToString("$")
+    get() = listOfNotNull(mangledType, mangledScope, mangledBaseName).joinToString(SEPARATOR)
