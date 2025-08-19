@@ -10,7 +10,7 @@ fun <!VIPER_TEXT!>get_left_val<!>(@Unique n: Node): Int? {
     return n.left?.data
 }
 
-// these expressions should all verify - they currently do not for what i think is the same reason as the linked list
+// these expressions should all verify - they currently do not due to lack of uniqueness information
 @AlwaysVerify
 fun <!VIPER_TEXT!>test<!>() {
     val n = Node(5, Node(4, null, null), Node(3, Node(2, null, null), Node(1, null, null)))
