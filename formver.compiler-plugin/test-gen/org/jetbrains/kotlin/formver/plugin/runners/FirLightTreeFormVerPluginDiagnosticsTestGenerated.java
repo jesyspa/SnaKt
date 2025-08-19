@@ -749,6 +749,38 @@ public class FirLightTreeFormVerPluginDiagnosticsTestGenerated extends AbstractF
     }
 
     @Nested
+    @TestMetadata("formver.compiler-plugin/testData/diagnostics/verification/uniqueness")
+    @TestDataPath("$PROJECT_ROOT")
+    public class Uniqueness {
+      @Test
+      public void testAllFilesPresentInUniqueness() {
+        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/verification/uniqueness"), Pattern.compile("^(.+)\\.kt$"), null, true);
+      }
+
+      @Nested
+      @TestMetadata("formver.compiler-plugin/testData/diagnostics/verification/uniqueness/failing-tests")
+      @TestDataPath("$PROJECT_ROOT")
+      public class Failing_tests {
+        @Test
+        public void testAllFilesPresentInFailing_tests() {
+          KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/verification/uniqueness/failing-tests"), Pattern.compile("^(.+)\\.kt$"), null, true);
+        }
+
+        @Test
+        @TestMetadata("binary_tree.kt")
+        public void testBinary_tree() {
+          runTest("formver.compiler-plugin/testData/diagnostics/verification/uniqueness/failing-tests/binary_tree.kt");
+        }
+
+        @Test
+        @TestMetadata("linked_list.kt")
+        public void testLinked_list() {
+          runTest("formver.compiler-plugin/testData/diagnostics/verification/uniqueness/failing-tests/linked_list.kt");
+        }
+      }
+    }
+
+    @Nested
     @TestMetadata("formver.compiler-plugin/testData/diagnostics/verification/user_invariants")
     @TestDataPath("$PROJECT_ROOT")
     public class User_invariants {
