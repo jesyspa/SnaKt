@@ -41,7 +41,7 @@ method f$get_left_val$TF$T$Node(p$n: Ref) returns (ret$0: Ref)
   inhale df$rt$isSubtype(df$rt$typeOf(p$n), df$rt$c$Node())
   inhale acc(p$c$Node$shared(p$n), wildcard)
   unfold acc(p$c$Node$shared(p$n), wildcard)
-  unfold acc(p$c$Node$shared(p$n), wildcard)
+  anon$0 := p$n.bf$left
   if (anon$0 != df$rt$nullValue()) {
     var anon$1: Ref
     inhale acc(anon$0.bf$data, write)
@@ -165,7 +165,7 @@ method f$test$TF$() returns (ret$0: Ref)
   l0$expr1 := df$rt$boolToRef(df$rt$intFromRef(anon$4) == 5)
   assert df$rt$boolFromRef(l0$expr1)
   unfold acc(p$c$Node$shared(l0$n), wildcard)
-  unfold acc(p$c$Node$shared(l0$n), wildcard)
+  anon$6 := l0$n.bf$left
   if (anon$6 != df$rt$nullValue()) {
     var anon$7: Ref
     inhale acc(anon$6.bf$data, write)

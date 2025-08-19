@@ -29,7 +29,7 @@ method f$getVal$TF$T$Link(p$l: Ref) returns (ret$0: Ref)
   inhale df$rt$isSubtype(df$rt$typeOf(p$l), df$rt$c$Link())
   inhale acc(p$c$Link$shared(p$l), wildcard)
   unfold acc(p$c$Link$shared(p$l), wildcard)
-  unfold acc(p$c$Link$shared(p$l), wildcard)
+  anon$0 := p$l.bf$next
   if (anon$0 != df$rt$nullValue()) {
     var anon$1: Ref
     inhale acc(anon$0.bf$data, write)
@@ -128,7 +128,7 @@ method f$test$TF$() returns (ret$0: Ref)
   l0$expr1 := df$rt$boolToRef(df$rt$intFromRef(anon$1) == 5)
   assert df$rt$boolFromRef(l0$expr1)
   unfold acc(p$c$Link$shared(l0$l), wildcard)
-  unfold acc(p$c$Link$shared(l0$l), wildcard)
+  anon$3 := l0$l.bf$next
   if (anon$3 != df$rt$nullValue()) {
     var anon$4: Ref
     inhale acc(anon$3.bf$data, write)
