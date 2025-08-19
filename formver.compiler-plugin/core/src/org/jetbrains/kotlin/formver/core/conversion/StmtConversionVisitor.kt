@@ -567,13 +567,3 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         }
 }
 
-object StmtConversionVisitorExceptionWrapper : FirVisitor<ExpEmbedding, StmtConversionContext>() {
-    override fun visitElement(element: FirElement, data: StmtConversionContext): ExpEmbedding {
-        try {
-            return element.accept(StmtConversionVisitor, data)
-        } catch (e: Exception) {
-            data.errorCollector.addErrorInfo("... while converting ${element.source.text}")
-            throw e
-        }
-    }
-}
