@@ -12,6 +12,7 @@ import org.jetbrains.kotlin.utils.addToStdlib.ifFalse
 
 sealed interface NameScope {
     val parent: NameScope?
+
     context(nameResolver: NameResolver)
     val mangledScopeName: String?
 
@@ -51,7 +52,7 @@ val NameScope.classNameIfAny: ClassKotlinName?
 
 data class PackageScope(val packageName: FqName) : NameScope {
     override val parent = null
-    
+
     context(nameResolver: NameResolver)
     override val mangledScopeName: String?
         get() = packageName.isRoot.ifFalse { "pkg\$${packageName.asViperString()}" }
@@ -83,6 +84,7 @@ data class PrivateScope(override val parent: NameScope) : NameScope {
 
 data object ParameterScope : NameScope {
     override val parent: NameScope? = null
+
     context(nameResolver: NameResolver)
     override val mangledScopeName: String
         get() = "p"
@@ -90,6 +92,7 @@ data object ParameterScope : NameScope {
 
 data object BadScope : NameScope {
     override val parent: NameScope? = null
+
     context(nameResolver: NameResolver)
     override val mangledScopeName: String
         get() = "<BAD>"
@@ -97,6 +100,7 @@ data object BadScope : NameScope {
 
 data class LocalScope(val level: Int) : NameScope {
     override val parent: NameScope? = null
+
     context(nameResolver: NameResolver)
     override val mangledScopeName: String
         get() = "l$level"
@@ -107,6 +111,7 @@ data class LocalScope(val level: Int) : NameScope {
  */
 data object FakeScope : NameScope {
     override val parent: NameScope? = null
+
     context(nameResolver: NameResolver)
     override val mangledScopeName: String?
         get() = null

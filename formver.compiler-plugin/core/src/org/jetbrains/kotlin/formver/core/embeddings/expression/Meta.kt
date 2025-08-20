@@ -66,6 +66,7 @@ data class SharingContext(override val inner: ExpEmbedding) : PassthroughExpEmbe
 
     override fun ignoringMetaNodes() = inner
     override fun ignoringCastsAndMetaNodes() = inner
+
     context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = NamedBranchingNode(

@@ -62,7 +62,11 @@ fun ExpEmbedding.pureToViper(toBuiltin: Boolean, source: KtSourceElement? = null
     } catch (e: PureLinearizerMisuseException) {
         val catchNameResolver = SimpleNameResolver()
         val msg =
-            "PureLinearizer used to convert non-pure ExpEmbedding; operation ${e.offendingFunction} is not supported in a pure context.\nEmbedding debug view:\n${with(catchNameResolver) {debugTreeView.print()}}"
+            "PureLinearizer used to convert non-pure ExpEmbedding; operation ${e.offendingFunction} is not supported in a pure context.\nEmbedding debug view:\n${
+                with(
+                    catchNameResolver
+                ) { debugTreeView.print() }
+            }"
         throw IllegalStateException(msg)
     }
 }

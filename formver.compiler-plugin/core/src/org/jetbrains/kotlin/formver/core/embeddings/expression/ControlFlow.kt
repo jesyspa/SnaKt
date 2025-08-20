@@ -45,6 +45,7 @@ sealed interface Block : OptionalResultExpEmbedding {
         }
         exps.last().toViperMaybeStoringIn(result, ctx)
     }
+
     context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = BlockNode(exps.map { it.debugTreeView })
@@ -146,6 +147,7 @@ data class LabelExp(val label: LabelEmbedding) : UnitResultExpEmbedding {
     override fun toViperSideEffects(ctx: LinearizationContext) {
         ctx.addLabel(label.toViper(ctx))
     }
+
     context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = NamedBranchingNode("Label", label.debugTreeView)
@@ -169,6 +171,7 @@ data class GotoChainNode(val label: LabelEmbedding?, val exp: ExpEmbedding, val 
             next.toViperGoto(ctx)
         }
     }
+
     context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = NamedBranchingNode("GotoChainNode", listOfNotNull())
@@ -205,6 +208,7 @@ data class MethodCall(val method: NamedFunctionSignature, val args: List<ExpEmbe
             )
         }
     }
+
     context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = NamedBranchingNode(
@@ -239,6 +243,7 @@ data class InvokeFunctionObject(
             access = true
         }.toViper(ctx)
     }
+
     context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = NamedBranchingNode(
@@ -272,6 +277,7 @@ data class FunctionExp(
         body.toViperMaybeStoringIn(result, ctx)
         ctx.addLabel(returnLabel.toViper(ctx))
     }
+
     context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = NamedBranchingNode(

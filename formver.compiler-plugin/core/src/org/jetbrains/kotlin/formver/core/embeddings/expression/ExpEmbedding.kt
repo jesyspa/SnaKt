@@ -28,6 +28,7 @@ import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 import org.jetbrains.kotlin.formver.viper.ast.PermExp
 import org.jetbrains.kotlin.formver.viper.ast.Stmt
+import org.jetbrains.kotlin.formver.viper.debugMangled
 import org.jetbrains.kotlin.formver.viper.mangled
 
 sealed interface ExpEmbedding : DebugPrintable {
@@ -94,7 +95,7 @@ sealed interface ExpEmbedding : DebugPrintable {
 sealed class ToViperBuiltinMisuseError(msg: String) : RuntimeException(msg)
 
 class ToViperBuiltinOnlyError(exp: ExpEmbedding, nameResolver: NameResolver = SimpleNameResolver()) :
-    ToViperBuiltinMisuseError(with(nameResolver){"${exp.debugTreeView.print()} can only be translated to Viper built-in type"})
+    ToViperBuiltinMisuseError(with(nameResolver) { "${exp.debugTreeView.print()} can only be translated to Viper built-in type" })
 
 /**
  * `ExpEmbedding` with default translation from Ref to Viper built-in type.
@@ -162,6 +163,7 @@ sealed interface DefaultDebugTreeViewImplementation : ExpEmbedding {
     context(nameResolver: NameResolver)
     val debugExtraSubtrees: List<TreeView>
         get() = listOf()
+
     context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() {
@@ -421,12 +423,13 @@ data class FieldAccess(val receiver: ExpEmbedding, val field: FieldEmbedding) : 
         }
     }
 
-    private fun ClassTypeEmbedding.predicateAccess(receiver: ExpEmbedding, ctx: LinearizationContext): Exp.PredicateAccess =
-        sharedPredicateAccessInvariant()?.fillHole(receiver)?.pureToViper(toBuiltin = true, ctx.source) as? Exp.PredicateAccess
-            ?: error("Attempt to unfold a predicate of ${name.let{
-                val simpleNameResolver = SimpleNameResolver()
-                with(simpleNameResolver) {it.mangled}
-            }}.")
+    private fun ClassTypeEmbedding.predicateAccess(
+        receiver: ExpEmbedding,
+        ctx: LinearizationContext
+    ): Exp.PredicateAccess =
+        sharedPredicateAccessInvariant()?.fillHole(receiver)
+            ?.pureToViper(toBuiltin = true, ctx.source) as? Exp.PredicateAccess
+            ?: error("Attempt to unfold a predicate of ${name.debugMangled}.")
 
     private fun unfoldHierarchy(receiverWrapper: ExpEmbedding, ctx: LinearizationContext) {
         val hierarchyPath = (receiver.type.pretype as? ClassTypeEmbedding)?.details?.hierarchyUnfoldPath(field)
@@ -524,6 +527,7 @@ data class Assign(val lhs: ExpEmbedding, val rhs: ExpEmbedding) : UnitResultExpE
             ctx.addStatement { Stmt.assign(lhsViper, rhsViper, ctx.source.asPosition) }
         }
     }
+
     context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = OperatorNode(lhs.debugTreeView, " := ", rhs.debugTreeView)

@@ -14,15 +14,20 @@ import viper.silver.ast.NamedDomainAxiom
  * they have to be globally unique as well.
  */
 
-data class DomainName(val BaseName: String) : MangledName {
+data class DomainName(val baseName: String) : MangledName {
     override val mangledType: String
         get() = "d"
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
-        get() = BaseName
+        get() = baseName
+}
+data class UnqualifiedDomainFuncName(val baseName: String) : MangledName {
+    context(nameResolver: NameResolver)
+    override val mangledBaseName: String
+        get() = baseName
 }
 
-data class DomainFuncName(val domainName: DomainName, val baseName: MangledName) : MangledName {
+data class QualifiedDomainFuncName(val domainName: DomainName, val funcName: MangledName) : MangledName {
     override val mangledType: String
         get() = "df"
     context(nameResolver: NameResolver)
@@ -30,7 +35,7 @@ data class DomainFuncName(val domainName: DomainName, val baseName: MangledName)
         get() = domainName.mangledBaseName
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
-        get() = baseName.mangled
+        get() = funcName.mangled
 }
 
 /** Represents the name of a possible anonymous axiom.
@@ -42,7 +47,7 @@ sealed interface OptionalDomainAxiomLabel {
     val domainName: DomainName
 }
 
-data class NamedDomainAxiomLabel(override val domainName: DomainName, val BaseName: String) :
+data class NamedDomainAxiomLabel(override val domainName: DomainName, val baseName: String) :
     OptionalDomainAxiomLabel, MangledName {
     context(nameResolver: NameResolver)
     override val mangledScope: String
@@ -50,13 +55,13 @@ data class NamedDomainAxiomLabel(override val domainName: DomainName, val BaseNa
 
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
-        get() = BaseName
+        get() = baseName
 }
 
 data class AnonymousDomainAxiomLabel(override val domainName: DomainName) : OptionalDomainAxiomLabel
 
 data class DomainFunc(
-    val name: DomainFuncName,
+    val name: QualifiedDomainFuncName,
     val formalArgs: List<Declaration.LocalVarDecl>,
     val typeArgs: List<Type.TypeVar>,
     val returnType: Type,
@@ -143,7 +148,7 @@ abstract class Domain(
         Type.Domain(name, typeVars, typeParamSubst)
 
     fun createDomainFunc(funcName: MangledName, args: List<Declaration.LocalVarDecl>, type: Type, unique: Boolean = false) =
-        DomainFunc(DomainFuncName(this.name, funcName), args, typeVars, type, unique)
+        DomainFunc(QualifiedDomainFuncName(this.name, funcName), args, typeVars, type, unique)
 
     fun createNamedDomainAxiom(axiomName: String, exp: Exp): DomainAxiom =
         DomainAxiom(NamedDomainAxiomLabel(this.name, axiomName), exp)

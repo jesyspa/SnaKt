@@ -17,5 +17,6 @@ import org.jetbrains.kotlin.formver.viper.SEPARATOR
  *  3. Track used names to detect conflicts for future resolutions.
  */
 class SimpleNameResolver : NameResolver {
-    override fun resolve(name: MangledName): String = listOfNotNull(name.mangledType, name.mangledScope, name.mangledBaseName).joinToString(SEPARATOR)
+    override fun resolve(name: MangledName): String =
+        listOfNotNull(name.mangledType, name.mangledScope, name.mangledBaseName).joinToString(SEPARATOR)
 }

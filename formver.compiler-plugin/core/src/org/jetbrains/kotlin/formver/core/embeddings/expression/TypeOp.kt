@@ -38,6 +38,7 @@ data class Is(
             pos = ctx.source.asPosition,
             info = sourceRole.asInfo
         )
+
     context(nameResolver: NameResolver)
     override val debugExtraSubtrees: List<TreeView>
         get() = listOf(comparisonType.debugTreeView.withDesignation("type"))
@@ -55,6 +56,7 @@ data class Cast(override val inner: ExpEmbedding, override val type: TypeEmbeddi
     override fun toViper(ctx: LinearizationContext) = inner.toViper(ctx)
     override fun ignoringCasts(): ExpEmbedding = inner.ignoringCasts()
     override fun ignoringCastsAndMetaNodes(): ExpEmbedding = inner.ignoringCastsAndMetaNodes()
+
     context(nameResolver: NameResolver)
     override val debugExtraSubtrees: List<TreeView>
         get() = listOf(type.debugTreeView.withDesignation("target"))

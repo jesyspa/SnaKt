@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.formver.viper.NameResolver
 data class AnonymousName(val n: Int) : MangledName {
     override val mangledType: String
         get() = "anon"
+
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = n.toString()
@@ -29,6 +30,7 @@ data class AnonymousBuiltinName(val n: Int) : MangledName {
 
     override val mangledType: String
         get() = $$"anon$builtin"
+
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = n.toString()
@@ -46,6 +48,7 @@ data object PlaceholderReturnVariableName : MangledName {
 data class ReturnVariableName(val n: Int) : MangledName {
     override val mangledType: String
         get() = "ret"
+
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = n.toString()
@@ -74,6 +77,7 @@ data class SpecialName(val BaseName: String) : MangledName {
 abstract class NumberedLabelName(val Scope: String, val originalN: Int) : MangledName {
     override val mangledType: String
         get() = "lbl"
+
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = originalN.toString()

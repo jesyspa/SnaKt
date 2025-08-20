@@ -87,8 +87,8 @@ class ProgramConverter(
             // We need to deduplicate fields since public fields with the same name are represented differently
             // at `FieldEmbedding` level but map to the same Viper.
             fields = SpecialFields.all.map { it.toViper() } +
-                    with(nameResolver) {fields.distinctBy { it.name.mangled }.map { it.toViper() } },
-            functions =  SpecialFunctions.all,
+                    with(nameResolver) { fields.distinctBy { it.name.mangled }.map { it.toViper() } },
+            functions = SpecialFunctions.all,
             methods = SpecialMethods.all + with(nameResolver) {
                 methods.values.mapNotNull { it.viperMethod }.distinctBy { it.name.mangled }
             },

@@ -25,3 +25,9 @@ interface MangledName {
 context(nameResolver: NameResolver)
 val MangledName.mangled: String
     get() = nameResolver.resolve(this)
+
+val MangledName.debugMangled: String
+    get() {
+        val debugResolver = DebugNameResolver()
+        return debugResolver.resolve(this)
+    }
