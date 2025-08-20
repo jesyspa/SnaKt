@@ -207,7 +207,7 @@ const val RUNTIME_TYPE_DOMAIN_NAME = "rt"
  * // same for subtraction, multiplication and so on
  * ```
  */
-class RuntimeTypeDomain(private val classes: List<ClassTypeEmbedding>) : BuiltinDomain(RUNTIME_TYPE_DOMAIN_NAME) {
+class RuntimeTypeDomain(val classes: List<ClassTypeEmbedding>) : BuiltinDomain(RUNTIME_TYPE_DOMAIN_NAME) {
     override val typeVars: List<Type.TypeVar> = emptyList()
 
     // Define types that are not dependent on the user defined classes in a companion object.
@@ -230,6 +230,9 @@ class RuntimeTypeDomain(private val classes: List<ClassTypeEmbedding>) : Builtin
             true,
         )
 
+        private fun createNewTypeDomainFunc(funcName: String) = createNewTypeDomainFunc(
+            UnqualifiedDomainFuncName(funcName)
+        )
         // variables for readability improving
 
         private val t = domainVar("t", RuntimeType)
@@ -241,49 +244,38 @@ class RuntimeTypeDomain(private val classes: List<ClassTypeEmbedding>) : Builtin
 
         // three basic functions
         /** `isSubtype: (Type, Type) -> Bool` */
-
         //val isSubtype: DomainFunc = createDomainFunc(SimpleKotlinName(Name.identifier("isSubtype")), listOf(t1.decl(), t2.decl()), Type.Bool)
         val isSubtype: DomainFunc =
             createDomainFunc(UnqualifiedDomainFuncName("isSubtype"), listOf(t1.decl(), t2.decl()), Type.Bool)
-
         infix fun Exp.subtype(otherType: Exp) = isSubtype(this, otherType)
-
         /** `typeOf: Ref -> Type` */
-
         val typeOf: DomainFunc = createDomainFunc(UnqualifiedDomainFuncName("typeOf"), listOf(r.decl()), RuntimeType)
-
         /** `nullable: Type -> Type` */
-
         val nullable: DomainFunc =
             createDomainFunc(UnqualifiedDomainFuncName("nullable"), listOf(t.decl()), RuntimeType)
-
-
         // many axioms will use `is` which can be represented as composition of `isSubtype` and `typeOf`
         /** `is: (Ref, Type) -> Bool` */
-
         infix fun Exp.isOf(elemType: Exp) = isSubtype(typeOf(this), elemType)
 
         // built-in types function
-
-        val charType: DomainFunc = createNewTypeDomainFunc(UnqualifiedDomainFuncName("charType"))
-        val intType: DomainFunc = createNewTypeDomainFunc(UnqualifiedDomainFuncName("intType"))
-        val boolType: DomainFunc = createNewTypeDomainFunc(UnqualifiedDomainFuncName("boolType"))
-        val unitType: DomainFunc = createNewTypeDomainFunc(UnqualifiedDomainFuncName("unitType"))
-        val stringType: DomainFunc = createNewTypeDomainFunc(UnqualifiedDomainFuncName("stringType"))
-        val nothingType: DomainFunc = createNewTypeDomainFunc(UnqualifiedDomainFuncName("nothingType"))
-        val anyType: DomainFunc = createNewTypeDomainFunc(UnqualifiedDomainFuncName("anyType"))
-        val functionType: DomainFunc = createNewTypeDomainFunc(UnqualifiedDomainFuncName("functionType"))
+        val charType: DomainFunc = createNewTypeDomainFunc("charType")
+        val intType: DomainFunc = createNewTypeDomainFunc("intType")
+        val boolType: DomainFunc = createNewTypeDomainFunc("boolType")
+        val unitType: DomainFunc = createNewTypeDomainFunc("unitType")
+        val stringType: DomainFunc = createNewTypeDomainFunc("stringType")
+        val nothingType: DomainFunc = createNewTypeDomainFunc("nothingType")
+        val anyType: DomainFunc = createNewTypeDomainFunc("anyType")
+        val functionType: DomainFunc = createNewTypeDomainFunc("functionType")
 
         // for creation of user types
         fun classTypeFunc(name: MangledName) = createDomainFunc(name, emptyList(), RuntimeType, true)
 
         // bijections to primitive types
-
-        val intInjection: Injection = Injection("int", Type.Int, intType)
-        val boolInjection: Injection = Injection("bool", Type.Bool, boolType)
-        val charInjection: Injection = Injection("char", Type.Int, charType)
-        val stringInjection: Injection = Injection("string", Type.Seq(Type.Int), stringType)
-        val allInjections: List<Injection> = listOf(intInjection, boolInjection, charInjection, stringInjection)
+        val intInjection = Injection("int", Type.Int, intType)
+        val boolInjection = Injection("bool", Type.Bool, boolType)
+        val charInjection = Injection("char", Type.Int, charType)
+        val stringInjection = Injection("string", Type.Seq(Type.Int), stringType)
+        val allInjections = listOf(intInjection, boolInjection, charInjection, stringInjection)
 
         // special values
         val nullValue = createDomainFunc(UnqualifiedDomainFuncName("nullValue"), emptyList(), Ref)

@@ -6,10 +6,8 @@
 package org.jetbrains.kotlin.formver.core.domains
 
 import org.jetbrains.kotlin.formver.core.domains.RuntimeTypeDomain.Companion.isOf
-import org.jetbrains.kotlin.formver.core.names.SimpleKotlinName
 import org.jetbrains.kotlin.formver.viper.ast.*
 import org.jetbrains.kotlin.formver.viper.ast.Function
-import org.jetbrains.kotlin.name.Name
 
 /**
  * Produces set of axioms for injections from built-in types in Viper to Ref.
@@ -48,12 +46,12 @@ class Injection(
     private val r = domainVar("r", Type.Ref)
 
     val toRef = RuntimeTypeDomain.createDomainFunc(
-        SimpleKotlinName(Name.identifier("${injectionName}ToRef")),
+        UnqualifiedDomainFuncName("${injectionName}ToRef"),
         listOf(v.decl()),
         Type.Ref
     )
     val fromRef = RuntimeTypeDomain.createDomainFunc(
-        SimpleKotlinName(Name.identifier("${injectionName}FromRef")),
+        UnqualifiedDomainFuncName("${injectionName}FromRef"),
         listOf(r.decl()),
         viperType
     )

@@ -66,15 +66,15 @@ data object ExtensionReceiverName : MangledName {
         get() = $$"this$extension"
 }
 
-data class SpecialName(val BaseName: String) : MangledName {
+data class SpecialName(val baseName: String) : MangledName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
-        get() = BaseName
+        get() = baseName
     override val mangledType: String
         get() = "sp"
 }
 
-abstract class NumberedLabelName(val Scope: String, val originalN: Int) : MangledName {
+abstract class NumberedLabelName(val scope: String, val originalN: Int) : MangledName {
     override val mangledType: String
         get() = "lbl"
 
@@ -84,7 +84,7 @@ abstract class NumberedLabelName(val Scope: String, val originalN: Int) : Mangle
 
     context(nameResolver: NameResolver)
     override val mangledScope: String?
-        get() = Scope
+        get() = scope
 }
 
 data class ReturnLabelName(val scopeDepth: Int) : NumberedLabelName("ret", scopeDepth)
@@ -100,8 +100,8 @@ data class PlaceholderArgumentName(val n: Int) : MangledName {
         get() = "arg$n"
 }
 
-data class DomainFuncParameterName(val BaseName: String) : MangledName {
+data class DomainFuncParameterName(val baseName: String) : MangledName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
-        get() = BaseName
+        get() = baseName
 }
