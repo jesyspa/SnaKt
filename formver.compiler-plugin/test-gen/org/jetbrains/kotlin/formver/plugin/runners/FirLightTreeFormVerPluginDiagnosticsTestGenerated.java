@@ -67,6 +67,12 @@ public class FirLightTreeFormVerPluginDiagnosticsTestGenerated extends AbstractF
     }
 
     @Test
+    @TestMetadata("internal.kt")
+    public void testInternal() {
+      runTest("formver.compiler-plugin/testData/diagnostics/conversion/internal.kt");
+    }
+
+    @Test
     @TestMetadata("shadowing.kt")
     public void testShadowing() {
       runTest("formver.compiler-plugin/testData/diagnostics/conversion/shadowing.kt");

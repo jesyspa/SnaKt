@@ -65,3 +65,17 @@ method f_intAssignment_TF_() returns (ret_0: Ref)
   label lbl_0
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
+
+/basic.kt:(416,419): error: An internal error has occurred.
+Details: Constant Expression of type Double is not yet implemented.
+Please report this at https://github.com/jesyspa/kotlin
+
+/basic.kt:(515,524): error: Classifier 'class TestClass : Any' does not have a companion object, so it cannot be used as an expression.
+
+/basic.kt:(555,571): error: An internal error has occurred.
+Details: Not yet implemented for org.jetbrains.kotlin.fir.expressions.impl.FirGetClassCallImpl@3899c04a (TestClass::class)
+Please report this at https://github.com/jesyspa/kotlin
+
+/basic.kt:(619,702): error: An internal error has occurred.
+Details: No message provided
+Please report this at https://github.com/jesyspa/kotlin

@@ -1,4 +1,3 @@
-/direct_pass_shared_to_unique.kt:(212,242): error: uniqueness level not match y, required: Unique, actual: Shared
-... while checking uniqueness level for fun use_f(y: Int) {
-    f(y)
-}
+/direct_pass_shared_to_unique.kt:(212,242): error: An internal error has occurred.
+Details: uniqueness level not match y, required: Unique, actual: Shared
+Please report this at https://github.com/jesyspa/kotlin

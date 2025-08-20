@@ -1,17 +1,11 @@
-/consume_properties.kt:(487,554): error: attempting to access a non-accessible argument a in consumeA(a)
-... while checking uniqueness level for fun doubleConsume(@Unique a: A) {
-    consumeA(a)
-    consumeA(a)
-}
+/consume_properties.kt:(487,554): error: An internal error has occurred.
+Details: attempting to access a non-accessible argument a in consumeA(a)
+Please report this at https://github.com/jesyspa/kotlin
 
-/consume_properties.kt:(556,631): error: attempting to access a non-accessible argument z.y.x in consumeInt(z.y.x)
-... while checking uniqueness level for fun consumeParent(@Unique z: B) {
-    consumeA(z.y)
-    consumeInt(z.y.x)
-}
+/consume_properties.kt:(556,631): error: An internal error has occurred.
+Details: attempting to access a non-accessible argument z.y.x in consumeInt(z.y.x)
+Please report this at https://github.com/jesyspa/kotlin
 
-/consume_properties.kt:(633,715): error: uniqueness level not match z.y, required: Unique, actual: Shared
-... while checking uniqueness level for fun uniqueBecomeShared(@Unique z: B) {
-    makeIntoShared(z.y)
-    consumeA(z.y)
-}
+/consume_properties.kt:(633,715): error: An internal error has occurred.
+Details: uniqueness level not match z.y, required: Unique, actual: Shared
+Please report this at https://github.com/jesyspa/kotlin

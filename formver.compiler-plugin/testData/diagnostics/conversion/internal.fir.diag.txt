@@ -1,0 +1,37 @@
+/internal.kt:(82,85): error: An internal error has occurred.
+Details: Constant Expression of type Double is not yet implemented.
+Please report this at https://github.com/jesyspa/kotlin
+
+/internal.kt:(181,190): error: Classifier 'class TestClass : Any' does not have a companion object, so it cannot be used as an expression.
+
+/internal.kt:(221,237): error: An internal error has occurred.
+Details: Not yet implemented for org.jetbrains.kotlin.fir.expressions.impl.FirGetClassCallImpl@59f982b5 (TestClass::class)
+Please report this at https://github.com/jesyspa/kotlin
+
+/internal.kt:(285,368): error: An internal error has occurred.
+Details: No message provided
+Please report this at https://github.com/jesyspa/kotlin
+
+/internal.kt:(399,407): info: Generated Viper text for testWhen:
+method f_println_TF_NT_Any(message: Ref) returns (ret: Ref)
+  ensures df_isSubtype(df_typeOf(ret), df_unitType())
+
+
+method f_testWhen_TF_T_String(x: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+{
+  var anon_0: Ref
+  inhale df_isSubtype(df_typeOf(x), df_stringType())
+  anon_0 := x
+  if (anon_0 == df_intToRef(1)) {
+    var anon_1: Ref
+    anon_1 := f_println_TF_NT_Any(df_stringToRef(Seq(111, 110, 101)))
+  } else {
+    var anon_2: Ref
+    anon_2 := f_println_TF_NT_Any(df_stringToRef(Seq(111, 116, 104, 101, 114)))
+  }
+  label lbl_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+}
+
+/internal.kt:(444,445): error: Incompatible types 'String' and 'Int'.
