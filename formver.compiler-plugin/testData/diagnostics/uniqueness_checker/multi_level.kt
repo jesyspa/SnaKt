@@ -26,6 +26,6 @@ fun g(@Unique x: Int) {
 
 }
 
-<!UNIQUENESS_VIOLATION!>fun use_g(@Unique z: B) {
-    g(z.y.x)
-}<!>
+fun use_g(@Unique z: B) {
+    g(<!UNIQUENESS_VIOLATION!>z.y.x<!>)
+}
