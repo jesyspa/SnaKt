@@ -1,5 +1,1 @@
-/partially_shared.kt:(281,342): error: attempting to pass a partially shared argument a in consumeA(a)
-... while checking uniqueness level for fun test(@Unique a: A) {
-    shareB(a.data)
-    consumeA(a)
-}
+/partially_shared.kt:(338,339): error: cannot pass a partially shared argument

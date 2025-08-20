@@ -31,3 +31,4 @@ val MangledName.debugMangled: String
         val debugResolver = DebugNameResolver()
         return debugResolver.resolve(this)
     }
+

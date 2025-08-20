@@ -92,7 +92,7 @@ class ViperPoweredDeclarationChecker(private val session: FirSession, private va
 
             verifier.verify(viperProgram, onFailure)
         } catch (e: Exception) {
-            val error = errorCollector.formatErrorWithInfos(e.message ?: "No message provided")
+            val error = e.message ?: "No message provided"
             reporter.reportOn(declaration.source, PluginErrors.INTERNAL_ERROR, error)
         }
 

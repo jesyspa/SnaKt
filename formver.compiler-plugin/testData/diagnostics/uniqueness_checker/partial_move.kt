@@ -13,8 +13,8 @@ class A(
 fun takesA(@Unique a: A) {}
 fun dropB(@Unique b: B) {}
 
-<!UNIQUENESS_VIOLATION!>fun test(@Unique a: A) {
+fun test(@Unique a: A) {
     dropB(a.data)
-    takesA(a)
-}<!>
+    takesA(<!UNIQUENESS_VIOLATION!>a<!>)
+}
 
