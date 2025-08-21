@@ -16,6 +16,7 @@ class Predicate(
     val info: Info = Info.NoInfo,
     val trafos: Trafos = Trafos.NoTrafos,
 ) : IntoSilver<viper.silver.ast.Predicate> {
+    context(nameResolver: NameResolver)
     override fun toSilver(): viper.silver.ast.Predicate =
         viper.silver.ast.Predicate(
             name.mangled,

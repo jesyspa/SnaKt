@@ -6,6 +6,9 @@
 package org.jetbrains.kotlin.formver.viper.ast
 
 import org.jetbrains.kotlin.formver.viper.IntoSilver
+import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.NameResolver
+import org.jetbrains.kotlin.formver.viper.mangled
 import org.jetbrains.kotlin.formver.viper.toScalaMap
 import org.jetbrains.kotlin.formver.viper.toScalaSeq
 import viper.silver.ast.*
@@ -15,49 +18,58 @@ sealed interface Type : IntoSilver<viper.silver.ast.Type> {
     fun substitute(typeVarMap: kotlin.collections.Map<TypeVar, Type>): Type
 
     data object Int : Type {
+        context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.Type = `Int$`.`MODULE$`
         override fun substitute(typeVarMap: kotlin.collections.Map<TypeVar, Type>): Int = Int
     }
 
     data object Bool : Type {
+        context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.Type = `Bool$`.`MODULE$`
         override fun substitute(typeVarMap: kotlin.collections.Map<TypeVar, Type>): Bool = Bool
     }
 
     data object Perm : Type {
+        context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.Type = `Perm$`.`MODULE$`
         override fun substitute(typeVarMap: kotlin.collections.Map<TypeVar, Type>): Perm = Perm
     }
 
     data object Ref : Type {
+        context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.Type = `Ref$`.`MODULE$`
         override fun substitute(typeVarMap: kotlin.collections.Map<TypeVar, Type>): Ref = Ref
     }
 
     data object Wand : Type {
+        context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.Type = `Wand$`.`MODULE$`
         override fun substitute(typeVarMap: kotlin.collections.Map<TypeVar, Type>): Wand = Wand
     }
 
     data class Seq(val elemType: Type) : Type {
+        context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.Type = SeqType.apply(elemType.toSilver())
         override fun substitute(typeVarMap: kotlin.collections.Map<TypeVar, Type>): Seq =
             Seq(elemType.substitute(typeVarMap))
     }
 
     data class Set(val elemType: Type) : Type {
+        context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.Type = SetType.apply(elemType.toSilver())
         override fun substitute(typeVarMap: kotlin.collections.Map<TypeVar, Type>): Set =
             Set(elemType.substitute(typeVarMap))
     }
 
     data class Multiset(val elemType: Type) : Type {
+        context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.Type = MultisetType.apply(elemType.toSilver())
         override fun substitute(typeVarMap: kotlin.collections.Map<TypeVar, Type>): Multiset =
             Multiset(elemType.substitute(typeVarMap))
     }
 
     data class Map(val keyType: Type, val valueType: Type) : Type {
+        context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.Type = MapType.apply(keyType.toSilver(), valueType.toSilver())
         override fun substitute(typeVarMap: kotlin.collections.Map<TypeVar, Type>): Map =
             Map(keyType.substitute(typeVarMap), valueType.substitute(typeVarMap))
@@ -65,6 +77,7 @@ sealed interface Type : IntoSilver<viper.silver.ast.Type> {
     }
 
     data class TypeVar(val name: String) : Type {
+        context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.TypeVar =
             viper.silver.ast.TypeVar(name)
 
@@ -72,13 +85,14 @@ sealed interface Type : IntoSilver<viper.silver.ast.Type> {
     }
 
     data class Domain(
-        val domainName: String,
+        val domainName: DomainName,
         val typeParams: List<TypeVar> = emptyList(),
         val typeSubstitutions: kotlin.collections.Map<TypeVar, Type> = emptyMap(),
     ) : Type {
+        context(nameResolver: NameResolver)
         override fun toSilver(): DomainType =
             DomainType.apply(
-                domainName,
+                domainName.mangled,
                 typeSubstitutions.mapKeys { it.key.toSilver() }.mapValues { it.value.toSilver() }.toScalaMap(),
                 typeParams.map { it.toSilver() }.toScalaSeq()
             )

@@ -59,18 +59,20 @@ class ViperPoweredDeclarationChecker(private val session: FirSession, private va
                     declaration.source,
                     PluginErrors.VIPER_TEXT,
                     declaration.name.asString(),
-                    it.toDebugOutput()
+                    with(programConversionContext.nameResolver) {it.toDebugOutput()}
                 )
             }
 
             if (shouldDumpExpEmbeddings(declaration)) {
-                for ((name, embedding) in programConversionContext.debugExpEmbeddings) {
-                    reporter.reportOn(
-                        declaration.source,
-                        PluginErrors.EXP_EMBEDDING,
-                        name.mangled,
-                        embedding.debugTreeView.print()
-                    )
+                with(programConversionContext.nameResolver) {
+                    for ((name, embedding) in programConversionContext.debugExpEmbeddings) {
+                        reporter.reportOn(
+                            declaration.source,
+                            PluginErrors.EXP_EMBEDDING,
+                            name.mangled,
+                            embedding.debugTreeView.print()
+                        )
+                    }
                 }
             }
 
@@ -83,12 +85,12 @@ class ViperPoweredDeclarationChecker(private val session: FirSession, private va
                 val source = err.position.unwrapOr { declaration.source }
                 reporter.reportVerifierError(source, err, config.errorStyle)
             }
-
-            val consistent = verifier.checkConsistency(program, onFailure)
+            val viperProgram = with(programConversionContext.nameResolver) {program.toSilver()}
+            val consistent = verifier.checkConsistency(viperProgram, onFailure)
             // If the Viper program is not consistent, that's our error; we shouldn't surface it to the user as an unverified contract.
             if (!consistent || !config.shouldVerify(declaration)) return
 
-            verifier.verify(program, onFailure)
+            verifier.verify(viperProgram, onFailure)
         } catch (e: Exception) {
             val error = e.message ?: "No message provided"
             reporter.reportOn(declaration.source, PluginErrors.INTERNAL_ERROR, error)

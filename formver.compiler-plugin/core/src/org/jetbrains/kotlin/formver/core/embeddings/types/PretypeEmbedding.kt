@@ -10,6 +10,7 @@ import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.PlaintextLe
 import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.TreeView
 import org.jetbrains.kotlin.formver.core.names.PretypeName
 import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.mangled
 
 /**
@@ -25,6 +26,7 @@ import org.jetbrains.kotlin.formver.viper.mangled
 interface PretypeEmbedding : RuntimeTypeHolder, TypeInvariantHolder {
     val name: MangledName
 
+    context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = PlaintextLeaf(name.mangled)
 

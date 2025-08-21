@@ -22,10 +22,13 @@ import org.jetbrains.kotlin.formver.core.linearization.LinearizationContext
 import org.jetbrains.kotlin.formver.core.linearization.UnfoldPolicy
 import org.jetbrains.kotlin.formver.core.linearization.pureToViper
 import org.jetbrains.kotlin.formver.core.purity.PurityContext
+import org.jetbrains.kotlin.formver.names.SimpleNameResolver
 import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 import org.jetbrains.kotlin.formver.viper.ast.PermExp
 import org.jetbrains.kotlin.formver.viper.ast.Stmt
+import org.jetbrains.kotlin.formver.viper.debugMangled
 import org.jetbrains.kotlin.formver.viper.mangled
 
 sealed interface ExpEmbedding : DebugPrintable {
@@ -91,8 +94,8 @@ sealed interface ExpEmbedding : DebugPrintable {
 
 sealed class ToViperBuiltinMisuseError(msg: String) : RuntimeException(msg)
 
-class ToViperBuiltinOnlyError(exp: ExpEmbedding) :
-    ToViperBuiltinMisuseError("${exp.debugTreeView.print()} can only be translated to Viper built-in type")
+class ToViperBuiltinOnlyError(exp: ExpEmbedding, nameResolver: NameResolver = SimpleNameResolver()) :
+    ToViperBuiltinMisuseError(with(nameResolver) { "${exp.debugTreeView.print()} can only be translated to Viper built-in type" })
 
 /**
  * `ExpEmbedding` with default translation from Ref to Viper built-in type.
@@ -156,8 +159,12 @@ sealed interface DefaultDebugTreeViewImplementation : ExpEmbedding {
     val debugAnonymousSubexpressions: List<ExpEmbedding>
     val debugNamedSubexpressions: Map<String, ExpEmbedding>
         get() = mapOf()
+
+    context(nameResolver: NameResolver)
     val debugExtraSubtrees: List<TreeView>
         get() = listOf()
+
+    context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() {
             val anonymousSubtrees = debugAnonymousSubexpressions.map { it.debugTreeView }
@@ -361,6 +368,7 @@ data class PrimitiveFieldAccess(override val inner: ExpEmbedding, val field: Fie
     override fun toViper(ctx: LinearizationContext): Exp =
         Exp.FieldAccess(inner.toViper(ctx), field.toViper(), ctx.source.asPosition)
 
+    context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = OperatorNode(inner.debugTreeView, ".", this.field.debugTreeView)
 
@@ -419,9 +427,9 @@ data class FieldAccess(val receiver: ExpEmbedding, val field: FieldEmbedding) : 
         receiver: ExpEmbedding,
         ctx: LinearizationContext
     ): Exp.PredicateAccess =
-        sharedPredicateAccessInvariant().fillHole(receiver)
-            .pureToViper(toBuiltin = true, ctx.source) as? Exp.PredicateAccess
-            ?: error("Attempt to unfold a predicate of ${name.mangled}.")
+        sharedPredicateAccessInvariant()?.fillHole(receiver)
+            ?.pureToViper(toBuiltin = true, ctx.source) as? Exp.PredicateAccess
+            ?: error("Attempt to unfold a predicate of ${name.debugMangled}.")
 
     private fun unfoldHierarchy(receiverWrapper: ExpEmbedding, ctx: LinearizationContext) {
         val hierarchyPath = (receiver.type.pretype as? ClassTypeEmbedding)?.details?.hierarchyUnfoldPath(field)
@@ -435,6 +443,7 @@ data class FieldAccess(val receiver: ExpEmbedding, val field: FieldEmbedding) : 
         receiver.toViperUnusedResult(ctx)
     }
 
+    context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = OperatorNode(receiver.debugTreeView, ".", this.field.debugTreeView)
 
@@ -459,6 +468,7 @@ data class FieldModification(val receiver: ExpEmbedding, val field: FieldEmbeddi
         }
     }
 
+    context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = OperatorNode(
             OperatorNode(receiver.debugTreeView, ".", this.field.debugTreeView),
@@ -478,6 +488,7 @@ data class FieldAccessPermissions(override val inner: ExpEmbedding, val field: F
         inner.toViper(ctx).fieldAccessPredicate(field.toViper(), perm, ctx.source.asPosition)
 
     // field collides with the field context-sensitive keyword.
+    context(nameResolver: NameResolver)
     override val debugExtraSubtrees: List<TreeView>
         get() = listOf(this.field.debugTreeView, perm.debugTreeView)
 
@@ -494,6 +505,7 @@ data class PredicateAccessPermissions(val predicateName: MangledName, val args: 
     override val subexpressions: List<ExpEmbedding>
         get() = args
 
+    context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = NamedBranchingNode("PredicateAccess", buildList {
             add(PlaintextLeaf(predicateName.mangled).withDesignation("name"))
@@ -516,6 +528,7 @@ data class Assign(val lhs: ExpEmbedding, val rhs: ExpEmbedding) : UnitResultExpE
         }
     }
 
+    context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = OperatorNode(lhs.debugTreeView, " := ", rhs.debugTreeView)
 
@@ -535,6 +548,7 @@ data class Declare(val variable: VariableEmbedding, val initializer: ExpEmbeddin
     override val debugAnonymousSubexpressions: List<ExpEmbedding>
         get() = listOf()
 
+    context(nameResolver: NameResolver)
     override val debugExtraSubtrees: List<TreeView>
         get() = listOfNotNull(variable.debugTreeView, variable.type.debugTreeView, initializer?.debugTreeView)
 

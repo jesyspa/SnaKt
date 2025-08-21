@@ -15,10 +15,20 @@ const val SEPARATOR = "$"
 interface MangledName {
     val mangledType: String?
         get() = null
+    context(nameResolver: NameResolver)
     val mangledScope: String?
         get() = null
+    context(nameResolver: NameResolver)
     val mangledBaseName: String
 }
 
+context(nameResolver: NameResolver)
 val MangledName.mangled: String
-    get() = listOfNotNull(mangledType, mangledScope, mangledBaseName).joinToString(SEPARATOR)
+    get() = nameResolver.resolve(this)
+
+val MangledName.debugMangled: String
+    get() {
+        val debugResolver = DebugNameResolver()
+        return debugResolver.resolve(this)
+    }
+

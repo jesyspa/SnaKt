@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.withDesigna
 import org.jetbrains.kotlin.formver.core.embeddings.types.*
 import org.jetbrains.kotlin.formver.core.linearization.LinearizationContext
 import org.jetbrains.kotlin.formver.core.linearization.pureToViper
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 import org.jetbrains.kotlin.formver.viper.ast.Stmt
 import org.jetbrains.kotlin.utils.addIfNotNull
@@ -38,6 +39,7 @@ data class Is(
             info = sourceRole.asInfo
         )
 
+    context(nameResolver: NameResolver)
     override val debugExtraSubtrees: List<TreeView>
         get() = listOf(comparisonType.debugTreeView.withDesignation("type"))
 
@@ -54,6 +56,8 @@ data class Cast(override val inner: ExpEmbedding, override val type: TypeEmbeddi
     override fun toViper(ctx: LinearizationContext) = inner.toViper(ctx)
     override fun ignoringCasts(): ExpEmbedding = inner.ignoringCasts()
     override fun ignoringCastsAndMetaNodes(): ExpEmbedding = inner.ignoringCastsAndMetaNodes()
+
+    context(nameResolver: NameResolver)
     override val debugExtraSubtrees: List<TreeView>
         get() = listOf(type.debugTreeView.withDesignation("target"))
 
@@ -86,6 +90,7 @@ data class SafeCast(val exp: ExpEmbedding, val targetType: TypeEmbedding) : Stor
     override val debugAnonymousSubexpressions: List<ExpEmbedding>
         get() = listOf(exp)
 
+    context(nameResolver: NameResolver)
     override val debugExtraSubtrees: List<TreeView>
         get() = listOf(targetType.debugTreeView.withDesignation("type"))
 
@@ -103,6 +108,7 @@ interface InhaleInvariants : ExpEmbedding, DefaultDebugTreeViewImplementation {
     override val debugAnonymousSubexpressions: List<ExpEmbedding>
         get() = listOf(exp)
 
+    context(nameResolver: NameResolver)
     override val debugExtraSubtrees: List<TreeView>
         get() = listOf(type.debugTreeView.withDesignation("type"))
 

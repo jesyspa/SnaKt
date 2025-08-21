@@ -33,8 +33,10 @@ import org.jetbrains.kotlin.formver.core.isCustom
 import org.jetbrains.kotlin.formver.core.isUnique
 import org.jetbrains.kotlin.formver.core.names.*
 import org.jetbrains.kotlin.formver.core.shouldBeInlined
+import org.jetbrains.kotlin.formver.names.SimpleNameResolver
 import org.jetbrains.kotlin.formver.viper.MangledName
 import org.jetbrains.kotlin.formver.viper.ast.Program
+import org.jetbrains.kotlin.formver.viper.debugMangled
 import org.jetbrains.kotlin.formver.viper.mangled
 import org.jetbrains.kotlin.utils.addIfNotNull
 import org.jetbrains.kotlin.utils.addToStdlib.ifFalse
@@ -78,6 +80,7 @@ class ProgramConverter(
     override val anonVarProducer = FreshEntityProducer(::AnonymousVariableEmbedding)
     override val anonBuiltinVarProducer = FreshEntityProducer(::AnonymousBuiltinVariableEmbedding)
     override val returnTargetProducer = FreshEntityProducer(::ReturnTarget)
+    override val nameResolver = SimpleNameResolver()
 
     val program: Program
         get() = Program(
@@ -85,10 +88,16 @@ class ProgramConverter(
             // We need to deduplicate fields since public fields with the same name are represented differently
             // at `FieldEmbedding` level but map to the same Viper.
             fields = SpecialFields.all.map { it.toViper() } +
-                    fields.distinctBy { it.name.mangled }.map { it.toViper() },
+                     fields.distinctBy { it.name.debugMangled }.map { it.toViper() } ,
             functions = SpecialFunctions.all,
-            methods = SpecialMethods.all + methods.values.mapNotNull { it.viperMethod }.distinctBy { it.name.mangled },
-            predicates = classes.values.flatMap { listOf(it.details.sharedPredicate, it.details.uniquePredicate) }
+            methods = SpecialMethods.all +
+                methods.values.mapNotNull { it.viperMethod }.distinctBy { it.name.debugMangled},
+            predicates = classes.values.flatMap {
+                    listOf(
+                        it.details.sharedPredicate,
+                        it.details.uniquePredicate
+                    )
+                },
         )
 
     fun registerForVerification(declaration: FirSimpleFunction) {
