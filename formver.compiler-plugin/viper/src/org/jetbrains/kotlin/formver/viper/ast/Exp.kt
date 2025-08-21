@@ -280,7 +280,8 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
     ) : Exp {
         override val type = Type.Int
         context(nameResolver: NameResolver)
-        override fun toSilver(): viper.silver.ast.IntLit = IntLit(value.toScalaBigInt(), pos.toSilver(), info.toSilver(), trafos.toSilver())
+        override fun toSilver(): viper.silver.ast.IntLit =
+            IntLit(value.toScalaBigInt(), pos.toSilver(), info.toSilver(), trafos.toSilver())
     }
 
     data class NullLit(
@@ -338,7 +339,8 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
         val trafos: Trafos = Trafos.NoTrafos,
     ) : Exp {
         context(nameResolver: NameResolver)
-        override fun toSilver(): viper.silver.ast.Result = Result(type.toSilver(), pos.toSilver(), info.toSilver(), trafos.toSilver())
+        override fun toSilver(): viper.silver.ast.Result =
+            Result(type.toSilver(), pos.toSilver(), info.toSilver(), trafos.toSilver())
     }
 
     data class FuncApp(
@@ -513,7 +515,8 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
     ) : Exp {
         override val type = exp.type
         context(nameResolver: NameResolver)
-        override fun toSilver(): viper.silver.ast.Old = Old(exp.toSilver(), pos.toSilver(), info.toSilver(), trafos.toSilver())
+        override fun toSilver(): viper.silver.ast.Old =
+            Old(exp.toSilver(), pos.toSilver(), info.toSilver(), trafos.toSilver())
     }
 
     data class PredicateAccess(

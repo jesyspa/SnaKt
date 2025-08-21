@@ -25,6 +25,7 @@ import org.jetbrains.kotlin.formver.viper.mangled
  */
 interface PretypeEmbedding : RuntimeTypeHolder, TypeInvariantHolder {
     val name: MangledName
+
     context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = PlaintextLeaf(name.mangled)

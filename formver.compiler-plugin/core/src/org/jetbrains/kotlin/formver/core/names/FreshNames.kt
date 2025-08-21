@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.formver.viper.NameResolver
 data class AnonymousName(val n: Int) : MangledName {
     override val mangledType: String
         get() = "anon"
+
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = n.toString()
@@ -29,6 +30,7 @@ data class AnonymousBuiltinName(val n: Int) : MangledName {
 
     override val mangledType: String
         get() = $$"anon$builtin"
+
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = n.toString()
@@ -46,6 +48,7 @@ data object PlaceholderReturnVariableName : MangledName {
 data class ReturnVariableName(val n: Int) : MangledName {
     override val mangledType: String
         get() = "ret"
+
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = n.toString()
@@ -63,24 +66,25 @@ data object ExtensionReceiverName : MangledName {
         get() = $$"this$extension"
 }
 
-data class SpecialName(val BaseName: String) : MangledName {
+data class SpecialName(val baseName: String) : MangledName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
-        get() = BaseName
+        get() = baseName
     override val mangledType: String
         get() = "sp"
 }
 
-abstract class NumberedLabelName(val Scope: String, val originalN: Int) : MangledName {
+abstract class NumberedLabelName(val scope: String, val originalN: Int) : MangledName {
     override val mangledType: String
         get() = "lbl"
+
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = originalN.toString()
 
     context(nameResolver: NameResolver)
     override val mangledScope: String?
-        get() = Scope
+        get() = scope
 }
 
 data class ReturnLabelName(val scopeDepth: Int) : NumberedLabelName("ret", scopeDepth)
@@ -89,15 +93,14 @@ data class ContinueLabelName(val n: Int) : NumberedLabelName("continue", n)
 data class CatchLabelName(val n: Int) : NumberedLabelName("catch", n)
 data class TryExitLabelName(val n: Int) : NumberedLabelName("try_exit", n)
 
-
 data class PlaceholderArgumentName(val n: Int) : MangledName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = "arg$n"
 }
 
-data class DomainFuncParameterName(val BaseName: String) : MangledName {
+data class DomainFuncParameterName(val baseName: String) : MangledName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
-        get() = BaseName
+        get() = baseName
 }

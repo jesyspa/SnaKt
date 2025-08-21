@@ -90,13 +90,14 @@ class ViperPoweredDeclarationChecker(private val session: FirSession, private va
                 reporter.reportVerifierError(source, err, config.errorStyle)
             }
 
-            val consistent = with(programConversionContext.nameResolver) {verifier.checkConsistency(program, onFailure)}
+            val viperProgram = with(programConversionContext.nameResolver) {program.toSilver()}
+            val consistent = verifier.checkConsistency(viperProgram, onFailure)
             // If the Viper program is not consistent, that's our error; we shouldn't surface it to the user as an unverified contract.
             if (!consistent || !config.shouldVerify(declaration)) return
 
-            with(programConversionContext.nameResolver) {verifier.verify(program, onFailure)}
+            verifier.verify(viperProgram, onFailure)
         } catch (e: Exception) {
-            val error = errorCollector.formatErrorWithInfos(e.message ?: "No message provided")
+            val error = e.message ?: "No message provided"
             reporter.reportOn(declaration.source, PluginErrors.INTERNAL_ERROR, error)
         }
 

@@ -70,6 +70,7 @@ class FieldAssertionsBuilder(private val subject: VariableEmbedding, private val
 
     val isAlwaysReadable = field.accessPolicy == AccessPolicy.ALWAYS_READABLE
     val isUnique = field.isUnique
+
     context(nameResolver: NameResolver)
     val nameAsString: String
         get() = field.name.name.mangledBaseName

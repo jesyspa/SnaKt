@@ -46,9 +46,18 @@ class Injection(
 ) {
     private val v = domainVar("v", viperType)
     private val r = domainVar("r", Type.Ref)
+    
+    val toRef = RuntimeTypeDomain.createDomainFunc(
+        UnqualifiedDomainFuncName("${injectionName}ToRef"),
+        listOf(v.decl()),
+        Type.Ref
+    )
+    val fromRef = RuntimeTypeDomain.createDomainFunc(
+        UnqualifiedDomainFuncName("${injectionName}FromRef"),
+        listOf(r.decl()),
+        viperType
+    )
 
-    val toRef = RuntimeTypeDomain.createDomainFunc(SimpleKotlinName(Name.identifier("${injectionName}ToRef")), listOf(v.decl()), Type.Ref)
-    val fromRef = RuntimeTypeDomain.createDomainFunc(SimpleKotlinName(Name.identifier("${injectionName}FromRef")), listOf(r.decl()), viperType)
     internal fun AxiomListBuilder.injectionAxioms() {
         axiom {
             Exp.forall(v) { v -> simpleTrigger { toRef(v) isOf typeFunction() } }

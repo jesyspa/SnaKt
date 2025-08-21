@@ -7,12 +7,13 @@ package org.jetbrains.kotlin.formver.common
 
 import org.jetbrains.kotlin.KtSourceElement
 
-/** Collector for *internal* plugin errors.
+/** Collector for some plugin errors.
+ *
+ * We currently are not consistent with what we report this way, vs through other channels.
  *
  * TODO: Replace this with some kind of more systematic approach to generating diagnostics.
  */
 class ErrorCollector {
-    private val internalErrorInfos = mutableListOf<String>()
     private val minorErrors = mutableListOf<String>()
     private val purityErrors = mutableListOf<Pair<KtSourceElement, String>>()
 
@@ -22,13 +23,6 @@ class ErrorCollector {
 
     fun forEachMinorError(action: (String) -> Unit) {
         minorErrors.forEach(action)
-    }
-
-    fun formatErrorWithInfos(error: String): String =
-        internalErrorInfos.joinToString(prefix = "$error\n", separator = "\n")
-
-    fun addErrorInfo(msg: String) {
-        internalErrorInfos.add(msg)
     }
 
     fun addPurityError(position: KtSourceElement, msg: String) {
