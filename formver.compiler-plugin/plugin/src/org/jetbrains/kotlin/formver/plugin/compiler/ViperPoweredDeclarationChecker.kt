@@ -19,7 +19,7 @@ import org.jetbrains.kotlin.formver.common.ErrorCollector
 import org.jetbrains.kotlin.formver.common.LogLevel
 import org.jetbrains.kotlin.formver.common.PluginConfiguration
 import org.jetbrains.kotlin.formver.common.TargetsSelection
-import org.jetbrains.kotlin.formver.core.conversion.CheckException
+import org.jetbrains.kotlin.formver.core.conversion.InPlaceException
 import org.jetbrains.kotlin.formver.core.conversion.ProgramConverter
 import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.print
 import org.jetbrains.kotlin.formver.plugin.compiler.reporting.reportVerifierError
@@ -46,8 +46,7 @@ private fun TargetsSelection.applicable(declaration: FirSimpleFunction): Boolean
 
 class ViperPoweredDeclarationChecker(private val session: FirSession, private val config: PluginConfiguration) :
     FirSimpleFunctionChecker(MppCheckerKind.Common) {
-    context(context: CheckerContext, reporter: DiagnosticReporter)
-    override fun check(declaration: FirSimpleFunction) {
+    context(context: CheckerContext, reporter: DiagnosticReporter) override fun check(declaration: FirSimpleFunction) {
         if (!config.shouldConvert(declaration)) return
         val errorCollector = ErrorCollector()
         try {
@@ -60,8 +59,7 @@ class ViperPoweredDeclarationChecker(private val session: FirSession, private va
                     declaration.source,
                     PluginErrors.VIPER_TEXT,
                     declaration.name.asString(),
-                    with(programConversionContext.nameResolver) {it.toDebugOutput()}
-                )
+                    with(programConversionContext.nameResolver) { it.toDebugOutput() })
             }
 
             if (shouldDumpExpEmbeddings(declaration)) {
@@ -86,13 +84,13 @@ class ViperPoweredDeclarationChecker(private val session: FirSession, private va
                 val source = err.position.unwrapOr { declaration.source }
                 reporter.reportVerifierError(source, err, config.errorStyle)
             }
-            val viperProgram = with(programConversionContext.nameResolver) {program.toSilver()}
+            val viperProgram = with(programConversionContext.nameResolver) { program.toSilver() }
             val consistent = verifier.checkConsistency(viperProgram, onFailure)
             // If the Viper program is not consistent, that's our error; we shouldn't surface it to the user as an unverified contract.
             if (!consistent || !config.shouldVerify(declaration)) return
 
             verifier.verify(viperProgram, onFailure)
-        } catch (e: CheckException) {
+        } catch (e: InPlaceException) {
             reporter.reportOn(e.source, PluginErrors.VIPER_VERIFICATION_ERROR, e.message)
         } catch (e: Exception) {
             val error = e.message ?: "No message provided"
