@@ -82,7 +82,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         resolvedQualifier: FirResolvedQualifier, data: StmtConversionContext
     ): ExpEmbedding {
         if (!resolvedQualifier.resolvedType.isUnit) {
-            throw InPlaceException(
+            throw ExactLocationException(
                 resolvedQualifier.source, "Only `Unit` is supported among resolved qualifiers currently."
             )
         }
@@ -116,7 +116,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
     ): ExpEmbedding {
         val combinedLiteral = stringConcatenationCall.arguments.joinToString("") { arg ->
             if (arg !is FirLiteralExpression) {
-                throw InPlaceException(
+                throw ExactLocationException(
                     arg.source, "${arg::class.simpleName} is not supported as an element of string concatenation."
                 )
             }
@@ -183,7 +183,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         data: StmtConversionContext,
     ): ExpEmbedding {
         if (equalityOperatorCall.arguments.size != 2) {
-            throw InPlaceException(
+            throw ExactLocationException(
                 equalityOperatorCall.source,
                 "Invalid equality comparison $equalityOperatorCall, can only compare 2 elements."
             )
@@ -213,10 +213,10 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
     ): ExpEmbedding {
 
         val dispatchReceiver: FirExpression =
-            comparisonExpression.compareToCall.dispatchReceiver ?: throw InPlaceException(
+            comparisonExpression.compareToCall.dispatchReceiver ?: throw ExactLocationException(
                 comparisonExpression.compareToCall.source, "found 'compareTo' call with null receiver"
             )
-        val arg = comparisonExpression.compareToCall.argumentList.arguments.firstOrNull() ?: throw InPlaceException(
+        val arg = comparisonExpression.compareToCall.argumentList.arguments.firstOrNull() ?: throw ExactLocationException(
             comparisonExpression.compareToCall.source, "found `compareTo` call with no argument at position 0"
         )
         val left = data.convert(dispatchReceiver)
@@ -266,7 +266,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
             when (arg) {
                 is FirVarargArgumentsExpression -> {
                     if (function == null || !function.isVerifyFunction) {
-                        throw InPlaceException(
+                        throw ExactLocationException(
                             arg.source, "Vararg arguments are currently supported for `verify` function only."
                         )
                     }
@@ -292,13 +292,13 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
             }
 
             else -> {
-                if (!data.isValidForForAllBlock) throw InPlaceException(
+                if (!data.isValidForForAllBlock) throw ExactLocationException(
                     forAllLambda.source,
                     "`forAll` scope is only allowed inside one of the `loopInvariants`, `preconditions` or `postconditions`."
                 )
                 //error("`forAll` scope is only allowed inside one of the `loopInvariants`, `preconditions` or `postconditions`.")
                 val forAllArg = forAllLambda.valueParameters.first()
-                val forAllBody = forAllLambda.body ?: throw InPlaceException(
+                val forAllBody = forAllLambda.body ?: throw ExactLocationException(
                     forAllLambda.body?.source, "Lambda body should be accessible in `forAll` function call."
                 )
                 return data.insertForAllFunctionCall(forAllArg.symbol, forAllBody)
@@ -310,7 +310,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         implicitInvokeCall: FirImplicitInvokeCall,
         data: StmtConversionContext,
     ): ExpEmbedding {
-        val receiver = implicitInvokeCall.dispatchReceiver as? FirPropertyAccessExpression ?: throw InPlaceException(
+        val receiver = implicitInvokeCall.dispatchReceiver as? FirPropertyAccessExpression ?: throw ExactLocationException(
             implicitInvokeCall.source, "Implicit invoke calls only support a limited range of receivers at the moment."
         )
         val returnType = data.embedType(implicitInvokeCall.resolvedType)
@@ -332,7 +332,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
     override fun visitProperty(property: FirProperty, data: StmtConversionContext): ExpEmbedding {
         val symbol = property.symbol
         if (!symbol.isLocal) {
-            throw InPlaceException(property.source, "StmtConversionVisitor should not encounter non-local properties.")
+            throw ExactLocationException(property.source, "StmtConversionVisitor should not encounter non-local properties.")
         }
 
         val type = data.embedType(symbol.resolvedReturnType)
@@ -394,7 +394,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
                 data.embedPropertyAccess(lValue.expressionRef.value as FirPropertyAccessExpression)
             }
 
-            else -> throw InPlaceException(
+            else -> throw ExactLocationException(
                 variableAssignment.source, "Lvalue must be either property access or desugared assignment."
             )
         }
@@ -451,7 +451,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
 
             return resolved
             //?: throw IllegalArgumentException("Can't resolve the 'this' receiver since the function does not have one.")
-                ?: throw InPlaceException(
+                ?: throw ExactLocationException(
                     thisReceiverExpression.source,
                     "Can't resolve the 'this' receiver since the function does not have one."
                 )
@@ -462,11 +462,11 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         val declSymbol = when (symbol) {
             is FirReceiverParameterSymbol -> symbol.containingDeclarationSymbol
             is FirValueParameterSymbol -> symbol.containingDeclarationSymbol
-            else -> throw InPlaceException(symbol.source, "Unsupported receiver expression type.")
+            else -> throw ExactLocationException(symbol.source, "Unsupported receiver expression type.")
         }
         tryResolve(declSymbol)?.let { return it }
 
-        throw InPlaceException(thisReceiverExpression.source, "No resolution approach to this symbol worked.")
+        throw ExactLocationException(thisReceiverExpression.source, "No resolution approach to this symbol worked.")
     }
 
     override fun visitTypeOperatorCall(
@@ -502,7 +502,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         try {
             return LambdaExp(data.embedFunctionSignature(function.symbol), function, data, function.symbol.label!!.name)
         } catch (e: Exception) {
-            throw InPlaceException(
+            throw ExactLocationException(
                 anonymousFunctionExpression.source, e.message ?: "Failed to convert anonymous function expression."
             )
         }
@@ -574,7 +574,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
     override fun visitCheckedSafeCallSubject(
         checkedSafeCallSubject: FirCheckedSafeCallSubject,
         data: StmtConversionContext,
-    ): ExpEmbedding = data.checkedSafeCallSubject ?: throw InPlaceException(
+    ): ExpEmbedding = data.checkedSafeCallSubject ?: throw ExactLocationException(
         checkedSafeCallSubject.source,
         "Trying to resolve checked subject $checkedSafeCallSubject which was not captured in StmtConversionContext"
     )
@@ -584,7 +584,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
     ): ExpEmbedding = when (data.config.behaviour) {
         UnsupportedFeatureBehaviour.THROW_EXCEPTION ->
             //TODO(msg)
-            throw InPlaceException(source, msg)
+            throw ExactLocationException(source, msg)
 
         UnsupportedFeatureBehaviour.ASSUME_UNREACHABLE -> {
             data.errorCollector.addMinorError(msg)
