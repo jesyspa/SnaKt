@@ -5,6 +5,7 @@
 
 package org.jetbrains.kotlin.formver.core.conversion
 
+import org.jetbrains.kotlin.KtSourceElement
 import org.jetbrains.kotlin.contracts.description.LogicOperationKind
 import org.jetbrains.kotlin.fir.FirElement
 import org.jetbrains.kotlin.fir.declarations.FirProperty
@@ -59,7 +60,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
     // translating statements here, after all.  It isn't 100% clear how best to
     // communicate this.
     override fun visitElement(element: FirElement, data: StmtConversionContext): ExpEmbedding =
-        handleUnimplementedElement("Not yet implemented for $element (${element.source.text})", data)
+        handleUnimplementedElement(element.source, "Not yet implemented for $element (${element.source.text})", data)
 
     override fun visitReturnExpression(
         returnExpression: FirReturnExpression,
@@ -82,8 +83,8 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         resolvedQualifier: FirResolvedQualifier,
         data: StmtConversionContext
     ): ExpEmbedding {
-        check(resolvedQualifier.resolvedType.isUnit) {
-            "Only `Unit` is supported among resolved qualifiers currently."
+        if (!resolvedQualifier.resolvedType.isUnit) {
+            throw CheckException(resolvedQualifier.source,"Only `Unit` is supported among resolved qualifiers currently.")
         }
         return UnitLit
     }
@@ -102,7 +103,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
             ConstantValueKind.String -> StringLit(literalExpression.value as String)
             ConstantValueKind.Null -> NullLit
             else -> handleUnimplementedElement(
-                "Constant Expression of type ${literalExpression.kind} is not yet implemented.",
+                literalExpression.source,"Constant Expression of type ${literalExpression.kind} is not yet implemented.",
                 data
             )
         }
@@ -115,8 +116,8 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         data: StmtConversionContext
     ): ExpEmbedding {
         val combinedLiteral = stringConcatenationCall.arguments.joinToString("") { arg ->
-            check(arg is FirLiteralExpression) {
-                "${arg::class.simpleName} is not supported as an element of string concatenation."
+            if (arg !is FirLiteralExpression) {
+                throw CheckException(arg.source,"${arg::class.simpleName} is not supported as an element of string concatenation.")
             }
             arg.stringValue
         }
@@ -141,7 +142,6 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         data: StmtConversionContext,
     ): ExpEmbedding {
         if (!whenBranches.hasNext()) return UnitLit
-
         val branch = whenBranches.next()
 
         // Note that only the last condition can be a FirElseIfTrue
@@ -183,8 +183,8 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         equalityOperatorCall: FirEqualityOperatorCall,
         data: StmtConversionContext,
     ): ExpEmbedding {
-        require(equalityOperatorCall.arguments.size == 2) {
-            "Invalid equality comparison $equalityOperatorCall, can only compare 2 elements."
+        if (equalityOperatorCall.arguments.size != 2) {
+            throw CheckException(equalityOperatorCall.source,"Invalid equality comparison $equalityOperatorCall, can only compare 2 elements.")
         }
         val left = data.convert(equalityOperatorCall.arguments[0])
         val right = data.convert(equalityOperatorCall.arguments[1])
@@ -193,7 +193,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
             FirOperation.EQ -> convertEqCmp(left, right)
             FirOperation.NOT_EQ -> Not(convertEqCmp(left, right))
             else -> handleUnimplementedElement(
-                "Equality comparison operation ${equalityOperatorCall.operation} not yet implemented.",
+                equalityOperatorCall.source,"Equality comparison operation ${equalityOperatorCall.operation} not yet implemented.",
                 data
             )
         }
@@ -208,12 +208,9 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         comparisonExpression: FirComparisonExpression,
         data: StmtConversionContext,
     ): ExpEmbedding {
-        val dispatchReceiver = checkNotNull(comparisonExpression.compareToCall.dispatchReceiver) {
-            "found 'compareTo' call with null receiver"
-        }
-        val arg = checkNotNull(comparisonExpression.compareToCall.argumentList.arguments.firstOrNull()) {
-            "found `compareTo` call with no argument at position 0"
-        }
+
+        val dispatchReceiver: FirExpression = comparisonExpression.compareToCall.dispatchReceiver ?: throw CheckException(comparisonExpression.compareToCall.source,"found 'compareTo' call with null receiver")
+        val arg = comparisonExpression.compareToCall.argumentList.arguments.firstOrNull() ?: throw CheckException(comparisonExpression.compareToCall.source,"found `compareTo` call with no argument at position 0")
         val left = data.convert(dispatchReceiver)
         val right = data.convert(arg)
 
@@ -260,8 +257,8 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         flatMap { arg ->
             when (arg) {
                 is FirVarargArgumentsExpression -> {
-                    check(function != null && function.isVerifyFunction) {
-                        "vararg arguments are currently supported for `verify` function only"
+                    if (function == null || !function.isVerifyFunction) {
+                        throw CheckException(arg.source,"Vararg arguments are currently supported for `verify` function only.")
                     }
                     arg.arguments.map(data::convert)
                 }
@@ -286,10 +283,11 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
 
             else -> {
                 if (!data.isValidForForAllBlock)
-                    error("`forAll` scope is only allowed inside one of the `loopInvariants`, `preconditions` or `postconditions`.")
+                    throw CheckException(forAllLambda.source, "`forAll` scope is only allowed inside one of the `loopInvariants`, `preconditions` or `postconditions`.")
+                //error("`forAll` scope is only allowed inside one of the `loopInvariants`, `preconditions` or `postconditions`.")
                 val forAllArg = forAllLambda.valueParameters.first()
                 val forAllBody = forAllLambda.body
-                    ?: error("Lambda body should be accessible in `forAll` function call.")
+                    ?: throw CheckException(forAllLambda.body?.source,"Lambda body should be accessible in `forAll` function call.")
                 return data.insertForAllFunctionCall(forAllArg.symbol, forAllBody)
             }
         }
@@ -300,7 +298,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         data: StmtConversionContext,
     ): ExpEmbedding {
         val receiver = implicitInvokeCall.dispatchReceiver as? FirPropertyAccessExpression
-            ?: throw NotImplementedError("Implicit invoke calls only support a limited range of receivers at the moment.")
+            ?: throw CheckException(implicitInvokeCall.source,"Implicit invoke calls only support a limited range of receivers at the moment.")
         val returnType = data.embedType(implicitInvokeCall.resolvedType)
         val receiverSymbol = receiver.calleeReference.toResolvedSymbol<FirBasedSymbol<*>>()!!
         val args = implicitInvokeCall.argumentList.arguments.withVarargsHandled(data, function = null)
@@ -319,9 +317,16 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
 
     override fun visitProperty(property: FirProperty, data: StmtConversionContext): ExpEmbedding {
         val symbol = property.symbol
-        check(symbol.isLocal) {
-            "StmtConversionVisitor should not encounter non-local properties."
-        }
+        if (!symbol.isLocal) {
+            throw CheckException(property.source,"StmtConversionVisitor should not encounter non-local properties.")
+        }/*
+        if (property.initializer is FirAnonymousFunctionExpression) {
+            throw CheckException(
+                property.initializer?.source,
+                "Лямбда-выражения пока не поддерживаются в качестве инициализаторов свойств"
+            )
+        }*/
+
         val type = data.embedType(symbol.resolvedReturnType)
         return data.declareLocalProperty(symbol, property.initializer?.let { data.convert(it).withType(type) })
     }
@@ -381,7 +386,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
                 data.embedPropertyAccess(lValue.expressionRef.value as FirPropertyAccessExpression)
             }
 
-            else -> error("Lvalue must be either property access or desugared assignment.")
+            else -> throw CheckException(variableAssignment.source,"Lvalue must be either property access or desugared assignment.")
         }
         val convertedRValue = data.convert(variableAssignment.rValue)
         return embedding.setValue(convertedRValue, data)
@@ -435,7 +440,8 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
             }
 
             return resolved
-                ?: throw IllegalArgumentException("Can't resolve the 'this' receiver since the function does not have one.")
+            //?: throw IllegalArgumentException("Can't resolve the 'this' receiver since the function does not have one.")
+                ?: throw CheckException(thisReceiverExpression.source,"Can't resolve the 'this' receiver since the function does not have one.")
         }
 
         val symbol = thisReceiverExpression.calleeReference.boundSymbol
@@ -443,11 +449,11 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         val declSymbol = when (symbol) {
             is FirReceiverParameterSymbol -> symbol.containingDeclarationSymbol
             is FirValueParameterSymbol -> symbol.containingDeclarationSymbol
-            else -> error("Unsupported receiver expression type.")
+            else -> throw CheckException(symbol.source,"Unsupported receiver expression type.")
         }
         tryResolve(declSymbol)?.let { return it }
 
-        throw IllegalArgumentException("No resolution approach to this symbol worked.")
+        throw CheckException(thisReceiverExpression.source,"No resolution approach to this symbol worked.")
     }
 
     override fun visitTypeOperatorCall(
@@ -469,7 +475,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
                 access = true
             }
 
-            else -> handleUnimplementedElement("Can't embed type operator ${typeOperatorCall.operation}.", data)
+            else -> handleUnimplementedElement(typeOperatorCall.source,"Can't embed type operator ${typeOperatorCall.operation}.", data)
         }
     }
 
@@ -478,7 +484,11 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         data: StmtConversionContext,
     ): ExpEmbedding {
         val function = anonymousFunctionExpression.anonymousFunction
-        return LambdaExp(data.embedFunctionSignature(function.symbol), function, data, function.symbol.label!!.name)
+        try {
+            return LambdaExp(data.embedFunctionSignature(function.symbol), function, data, function.symbol.label!!.name)
+        } catch (e: Exception) {
+            throw CheckException(anonymousFunctionExpression.source, e.message?:"Failed to convert anonymous function expression.")
+        }
     }
 
     override fun visitTryExpression(tryExpression: FirTryExpression, data: StmtConversionContext): ExpEmbedding {
@@ -553,12 +563,13 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         checkedSafeCallSubject: FirCheckedSafeCallSubject,
         data: StmtConversionContext,
     ): ExpEmbedding = data.checkedSafeCallSubject
-        ?: throw IllegalArgumentException("Trying to resolve checked subject $checkedSafeCallSubject which was not captured in StmtConversionContext")
+        ?: throw CheckException(checkedSafeCallSubject.source,"Trying to resolve checked subject $checkedSafeCallSubject which was not captured in StmtConversionContext")
 
-    private fun handleUnimplementedElement(msg: String, data: StmtConversionContext): ExpEmbedding =
+    private fun handleUnimplementedElement(source: KtSourceElement?, msg: String, data: StmtConversionContext): ExpEmbedding =
         when (data.config.behaviour) {
             UnsupportedFeatureBehaviour.THROW_EXCEPTION ->
-                TODO(msg)
+                //TODO(msg)
+                throw CheckException(source,msg)
 
             UnsupportedFeatureBehaviour.ASSUME_UNREACHABLE -> {
                 data.errorCollector.addMinorError(msg)
@@ -566,4 +577,3 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
             }
         }
 }
-
