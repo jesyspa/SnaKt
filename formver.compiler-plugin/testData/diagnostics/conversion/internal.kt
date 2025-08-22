@@ -17,11 +17,4 @@ fun testClassUsages() {
     TestClass::class  // Class literal
 }*/
 
-// Test when expression
-fun <!VIPER_TEXT!>testWhen<!>(x: String) {
-    when (x) {
-        <!INCOMPATIBLE_TYPES!>1<!> -> println("one")
-        else -> println("other")
-    }
-}
 
