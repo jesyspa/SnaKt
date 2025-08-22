@@ -2,11 +2,7 @@
 
 /internal.kt:(191,194): warning: Viper verification error: Constant Expression of type Double is not yet implemented.
 
-/internal.kt:(290,299): error: Classifier 'class TestClass : Any' does not have a companion object, so it cannot be used as an expression.
-
-/internal.kt:(330,346): warning: Viper verification error: Not yet implemented for org.jetbrains.kotlin.fir.expressions.impl.FirGetClassCallImpl@3b6576d9 (TestClass::class)
-
-/internal.kt:(396,404): info: Generated Viper text for testWhen:
+/internal.kt:(401,409): info: Generated Viper text for testWhen:
 method f$pkg$kotlin_io$println$TF$NT$Any(p$message: Ref) returns (ret: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$unitType())
 
@@ -30,4 +26,4 @@ method f$testWhen$TF$T$String(p$x: Ref) returns (ret$0: Ref)
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }
 
-/internal.kt:(441,442): error: Incompatible types 'String' and 'Int'.
+/internal.kt:(446,447): error: Incompatible types 'String' and 'Int'.
