@@ -409,13 +409,13 @@ data class FieldAccess(val receiver: ExpEmbedding, val field: FieldEmbedding) : 
         if (field.unfoldToAccess) unfoldHierarchy(receiverWrapper, ctx)
 
         if (field.isUnique) {
-            unfoldHierarchy(receiverWrapper, ctx)
+            // unfoldHierarchy(receiverWrapper, ctx)
             val fieldAccess = PrimitiveFieldAccess(receiver, field)
-//            val invariant = uniquePredicateAccessInvariant()?.fillHole(receiver)
-//                ?.pureToViper(toBuiltin = true, ctx.source) as? Exp.PredicateAccess
-//            if (invariant != null) {
-//                ctx.addStatement {  Stmt.Unfold(invariant) }
-//            }
+            val invariant = uniquePredicateAccessInvariant()?.fillHole(receiver)
+                ?.pureToViper(toBuiltin = true, ctx.source) as? Exp.PredicateAccess
+            if (invariant != null) {
+                ctx.addStatement {  Stmt.Unfold(invariant) }
+            }
             ctx.addStatement {
                 Stmt.assign(
                     result.toViper(ctx),
