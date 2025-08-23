@@ -13,6 +13,8 @@ import org.jetbrains.kotlin.formver.core.embeddings.SourceRole
 import org.jetbrains.kotlin.formver.core.embeddings.asInfo
 import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.*
 import org.jetbrains.kotlin.formver.core.embeddings.properties.FieldEmbedding
+import org.jetbrains.kotlin.formver.core.embeddings.types.AnyTypeEmbedding.sharedPredicateAccessInvariant
+import org.jetbrains.kotlin.formver.core.embeddings.types.AnyTypeEmbedding.uniquePredicateAccessInvariant
 import org.jetbrains.kotlin.formver.core.embeddings.types.ClassTypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.buildType
@@ -408,6 +410,19 @@ data class FieldAccess(val receiver: ExpEmbedding, val field: FieldEmbedding) : 
 
         if (field.isUnique) {
             unfoldHierarchy(receiverWrapper, ctx)
+            val fieldAccess = PrimitiveFieldAccess(receiver, field)
+//            val invariant = uniquePredicateAccessInvariant()?.fillHole(receiver)
+//                ?.pureToViper(toBuiltin = true, ctx.source) as? Exp.PredicateAccess
+//            if (invariant != null) {
+//                ctx.addStatement {  Stmt.Unfold(invariant) }
+//            }
+            ctx.addStatement {
+                Stmt.assign(
+                    result.toViper(ctx),
+                    fieldAccess.pureToViper(toBuiltin = false, ctx.source),
+                    ctx.source.asPosition
+                )
+            }
         } else {
             val fieldAccess = PrimitiveFieldAccess(receiverWrapper, field)
             val invariant = accessInvariant?.fillHole(receiverWrapper)?.pureToViper(toBuiltin = true, ctx.source)
@@ -435,10 +450,17 @@ data class FieldAccess(val receiver: ExpEmbedding, val field: FieldEmbedding) : 
     private fun ClassTypeEmbedding.predicateAccess(
         receiver: ExpEmbedding,
         ctx: LinearizationContext
-    ): Exp.PredicateAccess =
-        sharedPredicateAccessInvariant()?.fillHole(receiver)
-            ?.pureToViper(toBuiltin = true, ctx.source) as? Exp.PredicateAccess
+    ): Exp.PredicateAccess {
+        val predicate = if (receiver.isUnique) { // once i figure out how the uniqueness information is passed through,
+                                                 // this will be replaced with the right conditional guard
+            uniquePredicateAccessInvariant()
+        } else {
+            sharedPredicateAccessInvariant()
+        }
+        return predicate.fillHole(receiver)
+            .pureToViper(toBuiltin = true, ctx.source) as? Exp.PredicateAccess
             ?: error("Attempt to unfold a predicate of ${name.debugMangled}.")
+    }
 
     private fun unfoldHierarchy(receiverWrapper: ExpEmbedding, ctx: LinearizationContext) {
         val hierarchyPath = (receiver.type.pretype as? ClassTypeEmbedding)?.details?.hierarchyUnfoldPath(field)
