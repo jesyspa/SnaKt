@@ -413,9 +413,7 @@ data class FieldAccess(val receiver: ExpEmbedding, val field: FieldEmbedding) : 
             val fieldAccess = PrimitiveFieldAccess(receiver, field)
             val invariant = uniquePredicateAccessInvariant()?.fillHole(receiver)
                 ?.pureToViper(toBuiltin = true, ctx.source) as? Exp.PredicateAccess
-            if (invariant != null) {
-                ctx.addStatement {  Stmt.Unfold(invariant) }
-            }
+            invariant?.let { ctx.addStatement {  Stmt.Unfold(invariant) } }
             ctx.addStatement {
                 Stmt.assign(
                     result.toViper(ctx),
