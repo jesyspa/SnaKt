@@ -6,6 +6,7 @@
 package org.jetbrains.kotlin.formver.viper.ast
 
 import org.jetbrains.kotlin.formver.viper.IntoSilver
+import org.jetbrains.kotlin.formver.viper.NameResolver
 
 sealed class PermExp : IntoSilver<viper.silver.ast.PermExp> {
     data class WildcardPerm(
@@ -13,6 +14,7 @@ sealed class PermExp : IntoSilver<viper.silver.ast.PermExp> {
         val info: Info = Info.NoInfo,
         val trafos: Trafos = Trafos.NoTrafos,
     ) : PermExp() {
+        context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.PermExp =
             viper.silver.ast.WildcardPerm(pos.toSilver(), info.toSilver(), trafos.toSilver())
     }
@@ -22,6 +24,7 @@ sealed class PermExp : IntoSilver<viper.silver.ast.PermExp> {
         val info: Info = Info.NoInfo,
         val trafos: Trafos = Trafos.NoTrafos,
     ) : PermExp() {
+        context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.PermExp =
             viper.silver.ast.FullPerm(pos.toSilver(), info.toSilver(), trafos.toSilver())
     }

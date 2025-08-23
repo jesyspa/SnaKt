@@ -6,11 +6,13 @@
 package org.jetbrains.kotlin.formver.viper.ast
 
 import org.jetbrains.kotlin.formver.viper.IntoSilver
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import viper.silver.ast.ErrorTrafo
 import viper.silver.ast.`NoTrafos$`
 
 sealed class Trafos : IntoSilver<ErrorTrafo> {
     data object NoTrafos : Trafos() {
+        context(nameResolver: NameResolver)
         override fun toSilver(): ErrorTrafo = `NoTrafos$`.`MODULE$`
     }
 }

@@ -36,8 +36,7 @@ class Verifier {
     /**
      * Check whether the Viper program is consistent.  Return true on success.
      */
-    fun checkConsistency(program: Program, onFailure: (ConsistencyError) -> Unit): Boolean {
-        val viperProgram = program.toSilver()
+    fun checkConsistency(viperProgram: viper.silver.ast.Program, onFailure: (ConsistencyError) -> Unit): Boolean {
         val consistencyResults = viperProgram.checkTransitively()
         var success = true
         for (result in consistencyResults) {
@@ -50,9 +49,7 @@ class Verifier {
     /**
      * Verify the program. Returns true on successful verification.
      */
-    fun verify(program: Program, onFailure: (VerificationError) -> Unit) {
-        val viperProgram = program.toSilver()
-
+    fun verify(viperProgram: viper.silver.ast.Program, onFailure: (VerificationError) -> Unit) {
         verifier.start()
         val results = verifier.verify(viperProgram, emptySeq<SilverCfg>(), null.toScalaOption<String?>())
 

@@ -1,0 +1,3 @@
+/borrowing.kt:(700,701): error: cannot pass borrowed value as non-borrowed
+
+/borrowing.kt:(783,784): error: cannot pass borrowed value as non-borrowed

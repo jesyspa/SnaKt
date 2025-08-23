@@ -1,0 +1,1 @@
+/partially_shared.kt:(338,339): error: cannot pass a partially shared argument

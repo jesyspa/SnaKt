@@ -7,6 +7,7 @@ package org.jetbrains.kotlin.formver.viper.ast
 
 import org.jetbrains.kotlin.formver.viper.IntoSilver
 import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.mangled
 
 class Field(
@@ -17,6 +18,7 @@ class Field(
     val info: Info = Info.NoInfo,
     val trafos: Trafos = Trafos.NoTrafos,
 ) : IntoSilver<viper.silver.ast.Field> {
+    context(nameResolver: NameResolver)
     override fun toSilver(): viper.silver.ast.Field =
         viper.silver.ast.Field(name.mangled, type.toSilver(), pos.toSilver(), info.toSilver(), trafos.toSilver())
 }

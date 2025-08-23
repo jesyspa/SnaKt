@@ -14,8 +14,9 @@ import org.jetbrains.kotlin.fir.analysis.checkers.declaration.FirSimpleFunctionC
 import org.jetbrains.kotlin.fir.declarations.FirSimpleFunction
 import org.jetbrains.kotlin.formver.common.ErrorCollector
 import org.jetbrains.kotlin.formver.common.PluginConfiguration
+import org.jetbrains.kotlin.formver.uniqueness.UniqueCheckVisitor
 import org.jetbrains.kotlin.formver.uniqueness.UniqueChecker
-import org.jetbrains.kotlin.formver.uniqueness.UniquenessCheckExceptionWrapper
+import org.jetbrains.kotlin.formver.uniqueness.UniquenessCheckException
 
 class UniqueDeclarationChecker(private val session: FirSession, private val config: PluginConfiguration) :
     FirSimpleFunctionChecker(MppCheckerKind.Common) {
@@ -26,10 +27,14 @@ class UniqueDeclarationChecker(private val session: FirSession, private val conf
         val errorCollector = ErrorCollector()
         try {
             val uniqueCheckerContext = UniqueChecker(session, config, errorCollector)
-            declaration.accept(UniquenessCheckExceptionWrapper, uniqueCheckerContext)
-        } catch (e: Exception) {
-            val error = errorCollector.formatErrorWithInfos(e.message ?: "No message provided")
-            reporter.reportOn(declaration.source, PluginErrors.UNIQUENESS_VIOLATION, error)
+            declaration.accept(UniqueCheckVisitor, uniqueCheckerContext)
+        }
+        catch (e: UniquenessCheckException) {
+            reporter.reportOn(e.source, PluginErrors.UNIQUENESS_VIOLATION, e.message)
+        }
+        catch (e: Exception) {
+            val error = e.message ?: "No message provided"
+            reporter.reportOn(declaration.source, PluginErrors.INTERNAL_ERROR, error)
         }
     }
 }

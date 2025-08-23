@@ -1,0 +1,5 @@
+/consume_properties.kt:(550,551): error: cannot access expression as its uniqueness state is top
+
+/consume_properties.kt:(623,628): error: cannot access expression as its uniqueness state is top
+
+/consume_properties.kt:(709,712): error: expected unique value, got shared

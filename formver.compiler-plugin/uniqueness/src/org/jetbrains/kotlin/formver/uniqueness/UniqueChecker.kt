@@ -6,8 +6,8 @@
 package org.jetbrains.kotlin.formver.uniqueness
 
 import org.jetbrains.kotlin.fir.FirSession
-import org.jetbrains.kotlin.fir.declarations.FirDeclaration
-import org.jetbrains.kotlin.fir.declarations.hasAnnotation
+import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
+import org.jetbrains.kotlin.fir.symbols.impl.FirValueParameterSymbol
 import org.jetbrains.kotlin.formver.common.ErrorCollector
 import org.jetbrains.kotlin.formver.common.PluginConfiguration
 import org.jetbrains.kotlin.name.ClassId
@@ -18,19 +18,29 @@ class UniqueChecker(
     override val session: FirSession,
     override val config: PluginConfiguration,
     override val errorCollector: ErrorCollector,
-) :
-    UniqueCheckerContext {
-
+) : UniqueCheckerContext {
+    @Suppress("SameParameterValue")
     private fun getAnnotationId(name: String): ClassId =
         ClassId(FqName.fromSegments(listOf("org", "jetbrains", "kotlin", "formver", "plugin")), Name.identifier(name))
 
     private val uniqueId: ClassId
         get() = getAnnotationId("Unique")
 
-    override fun resolveUniqueAnnotation(declaration: FirDeclaration): UniqueLevel {
-        if (declaration.hasAnnotation(uniqueId, session)) {
-            return UniqueLevel.Unique
-        }
-        return UniqueLevel.Shared
+    private val borrowingId: ClassId
+        get() = getAnnotationId("Borrowed")
+
+    private val uniqueContext = ContextTrie(null, null, mutableMapOf(), UniqueLevel.Unique)
+
+    override fun resolveUniqueAnnotation(declaration: HasAnnotation): UniqueLevel =
+        if (declaration.hasAnnotation(uniqueId, session)) UniqueLevel.Unique else UniqueLevel.Shared
+
+    override fun resolveBorrowingAnnotation(declaration: HasAnnotation): BorrowingLevel =
+        if (declaration.hasAnnotation(borrowingId, session)) BorrowingLevel.Borrowed else BorrowingLevel.Plain
+
+    override fun getOrPutPath(path: List<FirBasedSymbol<*>>): UniquePathContext {
+        require(path.isNotEmpty()) { "Provided path is empty" }
+        require(path.first() is FirValueParameterSymbol) { "Provided path does not start with a local variable" }
+
+        return uniqueContext.getOrPutPath(path)
     }
 }

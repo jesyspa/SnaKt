@@ -1,0 +1,1 @@
+/partial_move.kt:(340,341): error: a partially moved object cannot be passed as an argument

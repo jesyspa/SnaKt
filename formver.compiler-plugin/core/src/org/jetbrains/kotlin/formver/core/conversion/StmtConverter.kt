@@ -34,7 +34,7 @@ data class StmtConverter(
     override val activeCatchLabels: List<LabelEmbedding> = listOf(),
 ) : StmtConversionContext, MethodConversionContext by methodCtx {
     override fun convert(stmt: FirStatement): ExpEmbedding =
-        stmt.accept(StmtConversionVisitorExceptionWrapper, this).withPosition(stmt.source)
+        stmt.accept(StmtConversionVisitor, this).withPosition(stmt.source)
 
     override fun <R> withNewScope(action: StmtConversionContext.() -> R): R = withNewScopeImpl { action() }
     override fun <R> withNoScope(action: StmtConversionContext.() -> R): R =
