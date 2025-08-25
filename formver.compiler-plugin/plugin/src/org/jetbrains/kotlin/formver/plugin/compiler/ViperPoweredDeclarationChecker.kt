@@ -92,7 +92,7 @@ class ViperPoweredDeclarationChecker(private val session: FirSession, private va
 
             verifier.verify(viperProgram, onFailure)
         } catch (e: SnaktInternalException) {
-            reporter.reportOn(e.source, PluginErrors.VIPER_VERIFICATION_ERROR, e.message)
+            reporter.reportOn(e.source, PluginErrors.INTERNAL_ERROR, e.message)
         } catch (e: Exception) {
             val error = e.message ?: "No message provided"
             reporter.reportOn(declaration.source, PluginErrors.INTERNAL_ERROR, error)
