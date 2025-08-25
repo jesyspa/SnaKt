@@ -11,7 +11,9 @@ package org.jetbrains.kotlin.formver.viper
  * We could directly convert names and pass them around as strings, but this
  * approach makes it easier to see where they came from during debugging.
  */
+
 const val SEPARATOR = "$"
+
 interface MangledName {
     val mangledType: String?
         get() = null
@@ -31,4 +33,3 @@ val MangledName.debugMangled: String
         val debugResolver = DebugNameResolver()
         return debugResolver.resolve(this)
     }
-

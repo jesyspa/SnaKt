@@ -21,6 +21,7 @@ data class DomainName(val baseName: String) : MangledName {
     override val mangledBaseName: String
         get() = baseName
 }
+
 data class UnqualifiedDomainFuncName(val baseName: String) : MangledName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String

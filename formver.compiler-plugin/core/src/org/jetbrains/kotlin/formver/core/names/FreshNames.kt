@@ -93,7 +93,6 @@ data class ContinueLabelName(val n: Int) : NumberedLabelName("continue", n)
 data class CatchLabelName(val n: Int) : NumberedLabelName("catch", n)
 data class TryExitLabelName(val n: Int) : NumberedLabelName("try_exit", n)
 
-
 data class PlaceholderArgumentName(val n: Int) : MangledName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String

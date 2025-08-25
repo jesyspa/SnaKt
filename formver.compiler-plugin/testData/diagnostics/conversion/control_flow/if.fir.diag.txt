@@ -1,54 +1,54 @@
 /if.kt:(23,31): info: Generated Viper text for simpleIf:
 method f$simpleIf$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
+  ensures df$isSubtype(df$typeOf(ret$0), df$intType())
 {
   if (true) {
-    ret$0 := df$rt$intToRef(0)
-    goto lbl$ret$0
+    ret$0 := df$intToRef(0)
+    goto lbl$0
   } else {
-    ret$0 := df$rt$intToRef(1)
-    goto lbl$ret$0
+    ret$0 := df$intToRef(1)
+    goto lbl$0
   }
-  label lbl$ret$0
+  label lbl$0
 }
 
 /if.kt:(116,129): info: Generated Viper text for ifOnParameter:
-method f$ifOnParameter$TF$T$Boolean(p$b: Ref) returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
+method f$ifOnParameter$TF$T$Boolean(b: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$intType())
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
-  if (df$rt$boolFromRef(p$b)) {
-    ret$0 := df$rt$intToRef(0)
-    goto lbl$ret$0
+  inhale df$isSubtype(df$typeOf(b), df$boolType())
+  if (df$boolFromRef(b)) {
+    ret$0 := df$intToRef(0)
+    goto lbl$0
   } else {
-    ret$0 := df$rt$intToRef(1)
-    goto lbl$ret$0
+    ret$0 := df$intToRef(1)
+    goto lbl$0
   }
-  label lbl$ret$0
+  label lbl$0
 }
 
 /if.kt:(221,235): info: Generated Viper text for ifAsExpression:
 method f$ifAsExpression$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
+  ensures df$isSubtype(df$typeOf(ret$0), df$boolType())
 {
   var l0$b: Ref
-  l0$b := df$rt$boolToRef(false)
-  if (df$rt$boolFromRef(l0$b)) {
+  l0$b := df$boolToRef(false)
+  if (df$boolFromRef(l0$b)) {
     var anon$0: Ref
     anon$0 := f$simpleIf$TF$()
-    ret$0 := df$rt$boolToRef(false)
+    ret$0 := df$boolToRef(false)
   } else {
     var anon$1: Ref
     anon$1 := f$ifOnParameter$TF$T$Boolean(l0$b)
-    ret$0 := df$rt$boolToRef(true)
+    ret$0 := df$boolToRef(true)
   }
-  goto lbl$ret$0
-  label lbl$ret$0
+  goto lbl$0
+  label lbl$0
 }
 
 method f$ifOnParameter$TF$T$Boolean(p$b: Ref) returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$intType())
+  ensures df$isSubtype(df$typeOf(ret), df$intType())
 
 
 method f$simpleIf$TF$() returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$intType())
+  ensures df$isSubtype(df$typeOf(ret), df$intType())

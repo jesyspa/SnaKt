@@ -236,15 +236,18 @@ class RuntimeTypeDomain(val classes: List<ClassTypeEmbedding>) : BuiltinDomain(R
         // variables for readability improving
 
         private val t = domainVar("t", RuntimeType)
+
         private val t1 = domainVar("t1", RuntimeType)
+
+
         private val t2 = domainVar("t2", RuntimeType)
+
         private val t3 = domainVar("t3", RuntimeType)
 
         private val r = domainVar("r", Ref)
 
         // three basic functions
         /** `isSubtype: (Type, Type) -> Bool` */
-        //val isSubtype: DomainFunc = createDomainFunc(SimpleKotlinName(Name.identifier("isSubtype")), listOf(t1.decl(), t2.decl()), Type.Bool)
         val isSubtype: DomainFunc =
             createDomainFunc(UnqualifiedDomainFuncName("isSubtype"), listOf(t1.decl(), t2.decl()), Type.Bool)
         infix fun Exp.subtype(otherType: Exp) = isSubtype(this, otherType)
@@ -309,8 +312,8 @@ class RuntimeTypeDomain(val classes: List<ClassTypeEmbedding>) : BuiltinDomain(R
                     subTrigger { t1 subtype t3 }
                 }
                 compoundTrigger {
-                    subTrigger { t2 subtype t3 }
-                    subTrigger { t1 subtype t3 }
+                    subTrigger { t2 subtype t3}
+                    subTrigger { t1 subtype t3}
                 }
                 t1 subtype t3
             }

@@ -1,69 +1,61 @@
 /as_operator.kt:(57,63): info: Generated Viper text for testAs:
-method f$testAs$TF$T$Foo(p$foo: Ref) returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$c$Bar())
+method f$testAs$TF$T$Foo(foo: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$c$Bar())
   ensures acc(p$c$Bar$shared(ret$0), wildcard)
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(p$foo), df$rt$c$Foo())
-  inhale acc(p$c$Foo$shared(p$foo), wildcard)
-  inhale df$rt$isSubtype(df$rt$typeOf(p$foo), df$rt$c$Bar())
-  inhale acc(p$c$Bar$shared(p$foo), wildcard)
-  ret$0 := p$foo
-  goto lbl$ret$0
-  label lbl$ret$0
+  inhale df$isSubtype(df$typeOf(foo), df$c$Foo())
+  inhale acc(p$c$Foo$shared(foo), wildcard)
+  inhale df$isSubtype(df$typeOf(foo), df$c$Bar())
+  inhale acc(p$c$Bar$shared(foo), wildcard)
+  ret$0 := foo
+  goto lbl$0
+  label lbl$0
 }
 
 /as_operator.kt:(97,111): info: Generated Viper text for testNullableAs:
-method f$testNullableAs$TF$NT$Foo(p$foo: Ref) returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$nullable(df$rt$c$Bar()))
-  ensures ret$0 != df$rt$nullValue() ==>
-    acc(p$c$Bar$shared(ret$0), wildcard)
+method f$testNullableAs$TF$NT$Foo(foo: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$nullable(df$c$Bar()))
+  ensures ret$0 != df$nullValue() ==> acc(p$c$Bar$shared(ret$0), wildcard)
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(p$foo), df$rt$nullable(df$rt$c$Foo()))
-  inhale p$foo != df$rt$nullValue() ==>
-    acc(p$c$Foo$shared(p$foo), wildcard)
-  inhale df$rt$isSubtype(df$rt$typeOf(p$foo), df$rt$nullable(df$rt$c$Bar()))
-  inhale p$foo != df$rt$nullValue() ==>
-    acc(p$c$Bar$shared(p$foo), wildcard)
-  ret$0 := p$foo
-  goto lbl$ret$0
-  label lbl$ret$0
+  inhale df$isSubtype(df$typeOf(foo), df$nullable(df$c$Foo()))
+  inhale foo != df$nullValue() ==> acc(p$c$Foo$shared(foo), wildcard)
+  inhale df$isSubtype(df$typeOf(foo), df$nullable(df$c$Bar()))
+  inhale foo != df$nullValue() ==> acc(p$c$Bar$shared(foo), wildcard)
+  ret$0 := foo
+  goto lbl$0
+  label lbl$0
 }
 
 /as_operator.kt:(148,158): info: Generated Viper text for testSafeAs:
-method f$testSafeAs$TF$T$Foo(p$foo: Ref) returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$nullable(df$rt$c$Bar()))
-  ensures ret$0 != df$rt$nullValue() ==>
-    acc(p$c$Bar$shared(ret$0), wildcard)
+method f$testSafeAs$TF$T$Foo(foo: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$nullable(df$c$Bar()))
+  ensures ret$0 != df$nullValue() ==> acc(p$c$Bar$shared(ret$0), wildcard)
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(p$foo), df$rt$c$Foo())
-  inhale acc(p$c$Foo$shared(p$foo), wildcard)
-  if (df$rt$isSubtype(df$rt$typeOf(p$foo), df$rt$c$Bar())) {
-    ret$0 := p$foo
+  inhale df$isSubtype(df$typeOf(foo), df$c$Foo())
+  inhale acc(p$c$Foo$shared(foo), wildcard)
+  if (df$isSubtype(df$typeOf(foo), df$c$Bar())) {
+    ret$0 := foo
   } else {
-    ret$0 := df$rt$nullValue()}
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$nullable(df$rt$c$Bar()))
-  inhale ret$0 != df$rt$nullValue() ==>
-    acc(p$c$Bar$shared(ret$0), wildcard)
-  goto lbl$ret$0
-  label lbl$ret$0
+    ret$0 := df$nullValue()}
+  inhale df$isSubtype(df$typeOf(ret$0), df$nullable(df$c$Bar()))
+  inhale ret$0 != df$nullValue() ==> acc(p$c$Bar$shared(ret$0), wildcard)
+  goto lbl$0
+  label lbl$0
 }
 
 /as_operator.kt:(194,212): info: Generated Viper text for testNullableSafeAs:
-method f$testNullableSafeAs$TF$NT$Foo(p$foo: Ref) returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$nullable(df$rt$c$Bar()))
-  ensures ret$0 != df$rt$nullValue() ==>
-    acc(p$c$Bar$shared(ret$0), wildcard)
+method f$testNullableSafeAs$TF$NT$Foo(foo: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$nullable(df$c$Bar()))
+  ensures ret$0 != df$nullValue() ==> acc(p$c$Bar$shared(ret$0), wildcard)
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(p$foo), df$rt$nullable(df$rt$c$Foo()))
-  inhale p$foo != df$rt$nullValue() ==>
-    acc(p$c$Foo$shared(p$foo), wildcard)
-  if (df$rt$isSubtype(df$rt$typeOf(p$foo), df$rt$c$Bar())) {
-    ret$0 := p$foo
+  inhale df$isSubtype(df$typeOf(foo), df$nullable(df$c$Foo()))
+  inhale foo != df$nullValue() ==> acc(p$c$Foo$shared(foo), wildcard)
+  if (df$isSubtype(df$typeOf(foo), df$c$Bar())) {
+    ret$0 := foo
   } else {
-    ret$0 := df$rt$nullValue()}
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$nullable(df$rt$c$Bar()))
-  inhale ret$0 != df$rt$nullValue() ==>
-    acc(p$c$Bar$shared(ret$0), wildcard)
-  goto lbl$ret$0
-  label lbl$ret$0
+    ret$0 := df$nullValue()}
+  inhale df$isSubtype(df$typeOf(ret$0), df$nullable(df$c$Bar()))
+  inhale ret$0 != df$nullValue() ==> acc(p$c$Bar$shared(ret$0), wildcard)
+  goto lbl$0
+  label lbl$0
 }

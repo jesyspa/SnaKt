@@ -1,63 +1,63 @@
 /simple_forall.kt:(64,92): info: Generated Viper text for anyIntegerSquaredAtLeastZero:
 method f$anyIntegerSquaredAtLeastZero$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
+  ensures df$isSubtype(df$typeOf(ret$0), df$intType())
   ensures (forall anon$builtin$1: Int ::anon$builtin$1 * anon$builtin$1 >=
       0 &&
-      anon$builtin$1 * anon$builtin$1 >= df$rt$intFromRef(ret$0))
+      anon$builtin$1 * anon$builtin$1 >= df$intFromRef(ret$0))
 {
-  ret$0 := df$rt$intToRef(0)
-  goto lbl$ret$0
-  label lbl$ret$0
+  ret$0 := df$intToRef(0)
+  goto lbl$0
+  label lbl$0
 }
 
 /simple_forall.kt:(259,298): info: Generated Viper text for anyIntegerSquaredIsAtLeastOneExceptZero:
 method f$anyIntegerSquaredIsAtLeastOneExceptZero$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
+  ensures df$isSubtype(df$typeOf(ret$0), df$intType())
   ensures (forall anon$builtin$1: Int ::!(anon$builtin$1 == 0) ==>
-      anon$builtin$1 * anon$builtin$1 >= df$rt$intFromRef(ret$0))
+      anon$builtin$1 * anon$builtin$1 >= df$intFromRef(ret$0))
 {
-  ret$0 := df$rt$intToRef(1)
-  goto lbl$ret$0
-  label lbl$ret$0
+  ret$0 := df$intToRef(1)
+  goto lbl$0
+  label lbl$0
 }
 
 /simple_forall.kt:(460,503): info: Generated Viper text for anyIntegerSquaredIsAtLeastZeroStringVersion:
-method f$anyIntegerSquaredIsAtLeastZeroStringVersion$TF$T$String(p$str: Ref)
+method f$anyIntegerSquaredIsAtLeastZeroStringVersion$TF$T$String(str: Ref)
   returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
+  ensures df$isSubtype(df$typeOf(ret$0), df$intType())
 {
-  var l0$res: Ref
-  var l0$i: Ref
+  var res: Ref
+  var i: Ref
   var anon$1: Ref
-  inhale df$rt$isSubtype(df$rt$typeOf(p$str), df$rt$stringType())
-  l0$res := df$rt$intToRef(0)
-  l0$i := df$rt$intToRef(10)
+  inhale df$isSubtype(df$typeOf(str), df$stringType())
+  res := df$intToRef(0)
+  i := df$intToRef(10)
   label lbl$continue$0
-    invariant df$rt$isSubtype(df$rt$typeOf(l0$res), df$rt$intType())
-    invariant df$rt$isSubtype(df$rt$typeOf(l0$i), df$rt$intType())
-    invariant df$rt$isSubtype(df$rt$typeOf(p$str), df$rt$stringType())
+    invariant df$isSubtype(df$typeOf(res), df$intType())
+    invariant df$isSubtype(df$typeOf(i), df$intType())
+    invariant df$isSubtype(df$typeOf(str), df$stringType())
     invariant (forall anon$builtin$0: Int ::0 <= anon$builtin$0 &&
-        anon$builtin$0 < |df$rt$stringFromRef(p$str)| ==>
-        (df$rt$stringFromRef(p$str)[anon$builtin$0] - 97) *
-        (df$rt$stringFromRef(p$str)[anon$builtin$0] - 97) >=
-        df$rt$intFromRef(l0$res))
-  anon$1 := sp$gtInts(l0$i, df$rt$intToRef(0))
-  if (df$rt$boolFromRef(anon$1)) {
+        anon$builtin$0 < |df$stringFromRef(str)| ==>
+        (df$stringFromRef(str)[anon$builtin$0] - 97) *
+        (df$stringFromRef(str)[anon$builtin$0] - 97) >=
+        df$intFromRef(res))
+  anon$1 := sp$gtInts(i, df$intToRef(0))
+  if (df$boolFromRef(anon$1)) {
     var anon$0: Ref
-    anon$0 := l0$i
-    l0$i := sp$minusInts(anon$0, df$rt$intToRef(1))
+    anon$0 := i
+    i := sp$minusInts(anon$0, df$intToRef(1))
     goto lbl$continue$0
   }
   label lbl$break$0
-  assert df$rt$isSubtype(df$rt$typeOf(l0$res), df$rt$intType())
-  assert df$rt$isSubtype(df$rt$typeOf(l0$i), df$rt$intType())
-  assert df$rt$isSubtype(df$rt$typeOf(p$str), df$rt$stringType())
+  assert df$isSubtype(df$typeOf(res), df$intType())
+  assert df$isSubtype(df$typeOf(i), df$intType())
+  assert df$isSubtype(df$typeOf(str), df$stringType())
   assert (forall anon$builtin$0: Int ::0 <= anon$builtin$0 &&
-      anon$builtin$0 < |df$rt$stringFromRef(p$str)| ==>
-      (df$rt$stringFromRef(p$str)[anon$builtin$0] - 97) *
-      (df$rt$stringFromRef(p$str)[anon$builtin$0] - 97) >=
-      df$rt$intFromRef(l0$res))
-  ret$0 := l0$res
+      anon$builtin$0 < |df$stringFromRef(str)| ==>
+      (df$stringFromRef(str)[anon$builtin$0] - 97) *
+      (df$stringFromRef(str)[anon$builtin$0] - 97) >=
+      df$intFromRef(res))
+  ret$0 := res
   goto lbl$ret$0
   label lbl$ret$0
 }

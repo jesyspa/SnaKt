@@ -1,38 +1,36 @@
 /list.kt:(91,110): info: Generated Viper text for empty_list_expr_get:
 field sp$size: Ref
 
+method f$emptyList$TF$() returns (ret: Ref)
+  ensures df$isSubtype(df$typeOf(ret), df$c$pkg$kotlin_collections$List())
+  ensures acc(ret.sp$size, write)
+  ensures df$intFromRef(ret.sp$size) >= 0
+  ensures acc(p$pkg$kotlin_collections$c$List$shared(ret), wildcard)
+  ensures df$intFromRef(ret.sp$size) == 0
+
+
 method f$empty_list_expr_get$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  var l0$s: Ref
+  var s: Ref
   var anon$0: Ref
-  anon$0 := f$pkg$kotlin_collections$emptyList$TF$()
-  l0$s := f$pkg$kotlin_collections$c$List$get$TF$T$List$T$Int(anon$0, df$rt$intToRef(0))
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  anon$0 := f$emptyList$TF$()
+  s := f$get$TF$T$List$T$Int(anon$0, df$intToRef(0))
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
-method f$pkg$kotlin_collections$c$List$get$TF$T$List$T$Int(this$dispatch: Ref,
-  p$index: Ref)
+method f$get$TF$T$List$T$Int(this$dispatch: Ref, index: Ref)
   returns (ret: Ref)
   requires acc(this$dispatch.sp$size, write)
-  requires df$rt$intFromRef(this$dispatch.sp$size) >= 0
-  requires df$rt$intFromRef(p$index) >= 0
-  requires df$rt$intFromRef(this$dispatch.sp$size) >
-    df$rt$intFromRef(p$index)
+  requires df$intFromRef(this$dispatch.sp$size) >= 0
+  requires df$intFromRef(index) >= 0
+  requires df$intFromRef(this$dispatch.sp$size) > df$intFromRef(index)
   ensures acc(this$dispatch.sp$size, write)
-  ensures df$rt$intFromRef(this$dispatch.sp$size) >= 0
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$intType())
-  ensures df$rt$intFromRef(this$dispatch.sp$size) ==
-    old(df$rt$intFromRef(this$dispatch.sp$size))
-
-
-method f$pkg$kotlin_collections$emptyList$TF$() returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$pkg$kotlin_collections$List())
-  ensures acc(ret.sp$size, write)
-  ensures df$rt$intFromRef(ret.sp$size) >= 0
-  ensures acc(p$pkg$kotlin_collections$c$List$shared(ret), wildcard)
-  ensures df$rt$intFromRef(ret.sp$size) == 0
+  ensures df$intFromRef(this$dispatch.sp$size) >= 0
+  ensures df$isSubtype(df$typeOf(ret), df$intType())
+  ensures df$intFromRef(this$dispatch.sp$size) ==
+    old(df$intFromRef(this$dispatch.sp$size))
 
 
 /list.kt:(127,146): warning: Invalid index for the following list sub-expression, the index may be greater than the list's size.
@@ -40,38 +38,36 @@ method f$pkg$kotlin_collections$emptyList$TF$() returns (ret: Ref)
 /list.kt:(168,182): info: Generated Viper text for empty_list_get:
 field sp$size: Ref
 
+method f$emptyList$TF$() returns (ret: Ref)
+  ensures df$isSubtype(df$typeOf(ret), df$c$pkg$kotlin_collections$List())
+  ensures acc(ret.sp$size, write)
+  ensures df$intFromRef(ret.sp$size) >= 0
+  ensures acc(p$pkg$kotlin_collections$c$List$shared(ret), wildcard)
+  ensures df$intFromRef(ret.sp$size) == 0
+
+
 method f$empty_list_get$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  var l0$myList: Ref
-  var l0$s: Ref
-  l0$myList := f$pkg$kotlin_collections$emptyList$TF$()
-  l0$s := f$pkg$kotlin_collections$c$List$get$TF$T$List$T$Int(l0$myList, df$rt$intToRef(0))
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  var myList: Ref
+  var s: Ref
+  myList := f$emptyList$TF$()
+  s := f$get$TF$T$List$T$Int(myList, df$intToRef(0))
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
-method f$pkg$kotlin_collections$c$List$get$TF$T$List$T$Int(this$dispatch: Ref,
-  p$index: Ref)
+method f$get$TF$T$List$T$Int(this$dispatch: Ref, index: Ref)
   returns (ret: Ref)
   requires acc(this$dispatch.sp$size, write)
-  requires df$rt$intFromRef(this$dispatch.sp$size) >= 0
-  requires df$rt$intFromRef(p$index) >= 0
-  requires df$rt$intFromRef(this$dispatch.sp$size) >
-    df$rt$intFromRef(p$index)
+  requires df$intFromRef(this$dispatch.sp$size) >= 0
+  requires df$intFromRef(index) >= 0
+  requires df$intFromRef(this$dispatch.sp$size) > df$intFromRef(index)
   ensures acc(this$dispatch.sp$size, write)
-  ensures df$rt$intFromRef(this$dispatch.sp$size) >= 0
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$intType())
-  ensures df$rt$intFromRef(this$dispatch.sp$size) ==
-    old(df$rt$intFromRef(this$dispatch.sp$size))
-
-
-method f$pkg$kotlin_collections$emptyList$TF$() returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$pkg$kotlin_collections$List())
-  ensures acc(ret.sp$size, write)
-  ensures df$rt$intFromRef(ret.sp$size) >= 0
-  ensures acc(p$pkg$kotlin_collections$c$List$shared(ret), wildcard)
-  ensures df$rt$intFromRef(ret.sp$size) == 0
+  ensures df$intFromRef(this$dispatch.sp$size) >= 0
+  ensures df$isSubtype(df$typeOf(ret), df$intType())
+  ensures df$intFromRef(this$dispatch.sp$size) ==
+    old(df$intFromRef(this$dispatch.sp$size))
 
 
 /list.kt:(239,248): warning: Invalid index for list 'myList', the index may be greater than the list's size.
@@ -79,37 +75,34 @@ method f$pkg$kotlin_collections$emptyList$TF$() returns (ret: Ref)
 /list.kt:(270,281): info: Generated Viper text for unsafe_last:
 field sp$size: Ref
 
-method f$pkg$kotlin_collections$c$List$get$TF$T$List$T$Int(this$dispatch: Ref,
-  p$index: Ref)
+method f$get$TF$T$List$T$Int(this$dispatch: Ref, index: Ref)
   returns (ret: Ref)
   requires acc(this$dispatch.sp$size, write)
-  requires df$rt$intFromRef(this$dispatch.sp$size) >= 0
-  requires df$rt$intFromRef(p$index) >= 0
-  requires df$rt$intFromRef(this$dispatch.sp$size) >
-    df$rt$intFromRef(p$index)
+  requires df$intFromRef(this$dispatch.sp$size) >= 0
+  requires df$intFromRef(index) >= 0
+  requires df$intFromRef(this$dispatch.sp$size) > df$intFromRef(index)
   ensures acc(this$dispatch.sp$size, write)
-  ensures df$rt$intFromRef(this$dispatch.sp$size) >= 0
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$intType())
-  ensures df$rt$intFromRef(this$dispatch.sp$size) ==
-    old(df$rt$intFromRef(this$dispatch.sp$size))
+  ensures df$intFromRef(this$dispatch.sp$size) >= 0
+  ensures df$isSubtype(df$typeOf(ret), df$intType())
+  ensures df$intFromRef(this$dispatch.sp$size) ==
+    old(df$intFromRef(this$dispatch.sp$size))
 
 
-method f$unsafe_last$TF$T$List(p$l: Ref) returns (ret$0: Ref)
-  requires acc(p$l.sp$size, write)
-  requires df$rt$intFromRef(p$l.sp$size) >= 0
-  ensures acc(p$l.sp$size, write)
-  ensures df$rt$intFromRef(p$l.sp$size) >= 0
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
+method f$unsafe_last$TF$T$List(l: Ref) returns (ret$0: Ref)
+  requires acc(l.sp$size, write)
+  requires df$intFromRef(l.sp$size) >= 0
+  ensures acc(l.sp$size, write)
+  ensures df$intFromRef(l.sp$size) >= 0
+  ensures df$isSubtype(df$typeOf(ret$0), df$intType())
 {
   var anon$0: Ref
-  inhale df$rt$isSubtype(df$rt$typeOf(p$l), df$rt$c$pkg$kotlin_collections$List())
-  inhale acc(p$pkg$kotlin_collections$c$List$shared(p$l), wildcard)
-  anon$0 := p$l.sp$size
-  inhale df$rt$isSubtype(df$rt$typeOf(anon$0), df$rt$intType())
-  ret$0 := f$pkg$kotlin_collections$c$List$get$TF$T$List$T$Int(p$l, sp$minusInts(anon$0,
-    df$rt$intToRef(1)))
-  goto lbl$ret$0
-  label lbl$ret$0
+  inhale df$isSubtype(df$typeOf(l), df$c$pkg$kotlin_collections$List())
+  inhale acc(p$pkg$kotlin_collections$c$List$shared(l), wildcard)
+  anon$0 := l.sp$size
+  inhale df$isSubtype(df$typeOf(anon$0), df$intType())
+  ret$0 := f$get$TF$T$List$T$Int(l, sp$minusInts(anon$0, df$intToRef(1)))
+  goto lbl$0
+  label lbl$0
 }
 
 /list.kt:(315,328): warning: Invalid index for list 'l', the index may be less than zero.
@@ -117,50 +110,45 @@ method f$unsafe_last$TF$T$List(p$l: Ref) returns (ret$0: Ref)
 /list.kt:(350,357): info: Generated Viper text for add_get:
 field sp$size: Ref
 
-method f$add_get$TF$T$MutableList(p$l: Ref) returns (ret$0: Ref)
-  requires acc(p$l.sp$size, write)
-  requires df$rt$intFromRef(p$l.sp$size) >= 0
-  ensures acc(p$l.sp$size, write)
-  ensures df$rt$intFromRef(p$l.sp$size) >= 0
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method f$add$TF$T$MutableList$T$Int(this$dispatch: Ref, element: Ref)
+  returns (ret: Ref)
+  requires acc(this$dispatch.sp$size, write)
+  requires df$intFromRef(this$dispatch.sp$size) >= 0
+  ensures acc(this$dispatch.sp$size, write)
+  ensures df$intFromRef(this$dispatch.sp$size) >= 0
+  ensures df$isSubtype(df$typeOf(ret), df$boolType())
+  ensures df$intFromRef(this$dispatch.sp$size) ==
+    old(df$intFromRef(this$dispatch.sp$size)) + 1
+
+
+method f$add_get$TF$T$MutableList(l: Ref) returns (ret$0: Ref)
+  requires acc(l.sp$size, write)
+  requires df$intFromRef(l.sp$size) >= 0
+  ensures acc(l.sp$size, write)
+  ensures df$intFromRef(l.sp$size) >= 0
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
   var anon$0: Ref
-  var l0$n: Ref
-  inhale df$rt$isSubtype(df$rt$typeOf(p$l), df$rt$c$pkg$kotlin_collections$MutableList())
-  inhale acc(p$pkg$kotlin_collections$c$MutableList$shared(p$l), wildcard)
-  anon$0 := f$pkg$kotlin_collections$c$MutableList$add$TF$T$MutableList$T$Int(p$l,
-    df$rt$intToRef(1))
-  l0$n := f$pkg$kotlin_collections$c$MutableList$get$TF$T$MutableList$T$Int(p$l,
-    df$rt$intToRef(1))
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  var n: Ref
+  inhale df$isSubtype(df$typeOf(l), df$c$pkg$kotlin_collections$MutableList())
+  inhale acc(p$pkg$kotlin_collections$c$MutableList$shared(l), wildcard)
+  anon$0 := f$add$TF$T$MutableList$T$Int(l, df$intToRef(1))
+  n := f$get$TF$T$MutableList$T$Int(l, df$intToRef(1))
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
-method f$pkg$kotlin_collections$c$MutableList$add$TF$T$MutableList$T$Int(this$dispatch: Ref,
-  p$element: Ref)
+method f$get$TF$T$MutableList$T$Int(this$dispatch: Ref, index: Ref)
   returns (ret: Ref)
   requires acc(this$dispatch.sp$size, write)
-  requires df$rt$intFromRef(this$dispatch.sp$size) >= 0
+  requires df$intFromRef(this$dispatch.sp$size) >= 0
+  requires df$intFromRef(index) >= 0
+  requires df$intFromRef(this$dispatch.sp$size) > df$intFromRef(index)
   ensures acc(this$dispatch.sp$size, write)
-  ensures df$rt$intFromRef(this$dispatch.sp$size) >= 0
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$boolType())
-  ensures df$rt$intFromRef(this$dispatch.sp$size) ==
-    old(df$rt$intFromRef(this$dispatch.sp$size)) + 1
-
-
-method f$pkg$kotlin_collections$c$MutableList$get$TF$T$MutableList$T$Int(this$dispatch: Ref,
-  p$index: Ref)
-  returns (ret: Ref)
-  requires acc(this$dispatch.sp$size, write)
-  requires df$rt$intFromRef(this$dispatch.sp$size) >= 0
-  requires df$rt$intFromRef(p$index) >= 0
-  requires df$rt$intFromRef(this$dispatch.sp$size) >
-    df$rt$intFromRef(p$index)
-  ensures acc(this$dispatch.sp$size, write)
-  ensures df$rt$intFromRef(this$dispatch.sp$size) >= 0
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$intType())
-  ensures df$rt$intFromRef(this$dispatch.sp$size) ==
-    old(df$rt$intFromRef(this$dispatch.sp$size))
+  ensures df$intFromRef(this$dispatch.sp$size) >= 0
+  ensures df$isSubtype(df$typeOf(ret), df$intType())
+  ensures df$intFromRef(this$dispatch.sp$size) ==
+    old(df$intFromRef(this$dispatch.sp$size))
 
 
 /list.kt:(406,410): warning: Invalid index for list 'l', the index may be greater than the list's size.
@@ -168,45 +156,42 @@ method f$pkg$kotlin_collections$c$MutableList$get$TF$T$MutableList$T$Int(this$di
 /list.kt:(432,446): info: Generated Viper text for empty_list_sub:
 field sp$size: Ref
 
+method f$emptyList$TF$() returns (ret: Ref)
+  ensures df$isSubtype(df$typeOf(ret), df$c$pkg$kotlin_collections$List())
+  ensures acc(ret.sp$size, write)
+  ensures df$intFromRef(ret.sp$size) >= 0
+  ensures acc(p$pkg$kotlin_collections$c$List$shared(ret), wildcard)
+  ensures df$intFromRef(ret.sp$size) == 0
+
+
 method f$empty_list_sub$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  var l0$l: Ref
+  var l: Ref
   var anon$0: Ref
-  anon$0 := f$pkg$kotlin_collections$emptyList$TF$()
-  l0$l := f$pkg$kotlin_collections$c$List$subList$TF$T$List$T$Int$T$Int(anon$0,
-    df$rt$intToRef(0), df$rt$intToRef(1))
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  anon$0 := f$emptyList$TF$()
+  l := f$subList$TF$T$List$T$Int$T$Int(anon$0, df$intToRef(0), df$intToRef(1))
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
-method f$pkg$kotlin_collections$c$List$subList$TF$T$List$T$Int$T$Int(this$dispatch: Ref,
-  p$fromIndex: Ref, p$toIndex: Ref)
+method f$subList$TF$T$List$T$Int$T$Int(this$dispatch: Ref, fromIndex: Ref, toIndex: Ref)
   returns (ret: Ref)
   requires acc(this$dispatch.sp$size, write)
-  requires df$rt$intFromRef(this$dispatch.sp$size) >= 0
-  requires df$rt$intFromRef(p$fromIndex) <= df$rt$intFromRef(p$toIndex)
-  requires df$rt$intFromRef(p$fromIndex) >= 0
-  requires df$rt$intFromRef(p$toIndex) <=
-    df$rt$intFromRef(this$dispatch.sp$size)
+  requires df$intFromRef(this$dispatch.sp$size) >= 0
+  requires df$intFromRef(fromIndex) <= df$intFromRef(toIndex)
+  requires df$intFromRef(fromIndex) >= 0
+  requires df$intFromRef(toIndex) <= df$intFromRef(this$dispatch.sp$size)
   ensures acc(this$dispatch.sp$size, write)
-  ensures df$rt$intFromRef(this$dispatch.sp$size) >= 0
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$pkg$kotlin_collections$List())
+  ensures df$intFromRef(this$dispatch.sp$size) >= 0
+  ensures df$isSubtype(df$typeOf(ret), df$c$pkg$kotlin_collections$List())
   ensures acc(ret.sp$size, write)
-  ensures df$rt$intFromRef(ret.sp$size) >= 0
+  ensures df$intFromRef(ret.sp$size) >= 0
   ensures acc(p$pkg$kotlin_collections$c$List$shared(ret), wildcard)
-  ensures df$rt$intFromRef(this$dispatch.sp$size) ==
-    old(df$rt$intFromRef(this$dispatch.sp$size))
-  ensures df$rt$intFromRef(ret.sp$size) ==
-    df$rt$intFromRef(p$toIndex) - df$rt$intFromRef(p$fromIndex)
-
-
-method f$pkg$kotlin_collections$emptyList$TF$() returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$pkg$kotlin_collections$List())
-  ensures acc(ret.sp$size, write)
-  ensures df$rt$intFromRef(ret.sp$size) >= 0
-  ensures acc(p$pkg$kotlin_collections$c$List$shared(ret), wildcard)
-  ensures df$rt$intFromRef(ret.sp$size) == 0
+  ensures df$intFromRef(this$dispatch.sp$size) ==
+    old(df$intFromRef(this$dispatch.sp$size))
+  ensures df$intFromRef(ret.sp$size) ==
+    df$intFromRef(toIndex) - df$intFromRef(fromIndex)
 
 
 /list.kt:(463,493): warning: Invalid sub-list range for the following list sub-expression, the range may be greater than the list's size.
@@ -214,45 +199,42 @@ method f$pkg$kotlin_collections$emptyList$TF$() returns (ret: Ref)
 /list.kt:(515,538): info: Generated Viper text for empty_list_sub_negative:
 field sp$size: Ref
 
+method f$emptyList$TF$() returns (ret: Ref)
+  ensures df$isSubtype(df$typeOf(ret), df$c$pkg$kotlin_collections$List())
+  ensures acc(ret.sp$size, write)
+  ensures df$intFromRef(ret.sp$size) >= 0
+  ensures acc(p$pkg$kotlin_collections$c$List$shared(ret), wildcard)
+  ensures df$intFromRef(ret.sp$size) == 0
+
+
 method f$empty_list_sub_negative$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  var l0$l: Ref
+  var l: Ref
   var anon$0: Ref
-  anon$0 := f$pkg$kotlin_collections$emptyList$TF$()
-  l0$l := f$pkg$kotlin_collections$c$List$subList$TF$T$List$T$Int$T$Int(anon$0,
-    df$rt$intToRef(-1), df$rt$intToRef(1))
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  anon$0 := f$emptyList$TF$()
+  l := f$subList$TF$T$List$T$Int$T$Int(anon$0, df$intToRef(-1), df$intToRef(1))
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
-method f$pkg$kotlin_collections$c$List$subList$TF$T$List$T$Int$T$Int(this$dispatch: Ref,
-  p$fromIndex: Ref, p$toIndex: Ref)
+method f$subList$TF$T$List$T$Int$T$Int(this$dispatch: Ref, fromIndex: Ref, toIndex: Ref)
   returns (ret: Ref)
   requires acc(this$dispatch.sp$size, write)
-  requires df$rt$intFromRef(this$dispatch.sp$size) >= 0
-  requires df$rt$intFromRef(p$fromIndex) <= df$rt$intFromRef(p$toIndex)
-  requires df$rt$intFromRef(p$fromIndex) >= 0
-  requires df$rt$intFromRef(p$toIndex) <=
-    df$rt$intFromRef(this$dispatch.sp$size)
+  requires df$intFromRef(this$dispatch.sp$size) >= 0
+  requires df$intFromRef(fromIndex) <= df$intFromRef(toIndex)
+  requires df$intFromRef(fromIndex) >= 0
+  requires df$intFromRef(toIndex) <= df$intFromRef(this$dispatch.sp$size)
   ensures acc(this$dispatch.sp$size, write)
-  ensures df$rt$intFromRef(this$dispatch.sp$size) >= 0
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$pkg$kotlin_collections$List())
+  ensures df$intFromRef(this$dispatch.sp$size) >= 0
+  ensures df$isSubtype(df$typeOf(ret), df$c$pkg$kotlin_collections$List())
   ensures acc(ret.sp$size, write)
-  ensures df$rt$intFromRef(ret.sp$size) >= 0
+  ensures df$intFromRef(ret.sp$size) >= 0
   ensures acc(p$pkg$kotlin_collections$c$List$shared(ret), wildcard)
-  ensures df$rt$intFromRef(this$dispatch.sp$size) ==
-    old(df$rt$intFromRef(this$dispatch.sp$size))
-  ensures df$rt$intFromRef(ret.sp$size) ==
-    df$rt$intFromRef(p$toIndex) - df$rt$intFromRef(p$fromIndex)
-
-
-method f$pkg$kotlin_collections$emptyList$TF$() returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$pkg$kotlin_collections$List())
-  ensures acc(ret.sp$size, write)
-  ensures df$rt$intFromRef(ret.sp$size) >= 0
-  ensures acc(p$pkg$kotlin_collections$c$List$shared(ret), wildcard)
-  ensures df$rt$intFromRef(ret.sp$size) == 0
+  ensures df$intFromRef(this$dispatch.sp$size) ==
+    old(df$intFromRef(this$dispatch.sp$size))
+  ensures df$intFromRef(ret.sp$size) ==
+    df$intFromRef(toIndex) - df$intFromRef(fromIndex)
 
 
 /list.kt:(555,586): warning: Invalid sub-list range for the following list sub-expression, the range may be including negative indices.

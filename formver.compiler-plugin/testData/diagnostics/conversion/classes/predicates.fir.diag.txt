@@ -17,54 +17,54 @@ predicate p$c$Baz$unique(this$dispatch: Ref) {
 
 predicate p$c$PrimitiveFields$shared(this$dispatch: Ref) {
   acc(this$dispatch.bf$a, wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$a), df$rt$intType())
+  df$isSubtype(df$typeOf(this$dispatch.bf$a), df$intType())
 }
 
 predicate p$c$PrimitiveFields$unique(this$dispatch: Ref) {
   acc(this$dispatch.bf$a, wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$a), df$rt$intType()) &&
+  df$isSubtype(df$typeOf(this$dispatch.bf$a), df$intType()) &&
   acc(this$dispatch.bf$b, write) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$b), df$rt$intType())
+  df$isSubtype(df$typeOf(this$dispatch.bf$b), df$intType())
 }
 
 predicate p$c$Recursive$shared(this$dispatch: Ref) {
   acc(this$dispatch.bf$next, wildcard) &&
-  (this$dispatch.bf$next != df$rt$nullValue() ==>
+  (this$dispatch.bf$next != df$nullValue() ==>
   acc(p$c$Recursive$shared(this$dispatch.bf$next), wildcard)) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$next), df$rt$nullable(df$rt$c$Recursive()))
+  df$isSubtype(df$typeOf(this$dispatch.bf$next), df$nullable(df$c$Recursive()))
 }
 
 predicate p$c$Recursive$unique(this$dispatch: Ref) {
   acc(this$dispatch.bf$next, wildcard) &&
-  (this$dispatch.bf$next != df$rt$nullValue() ==>
+  (this$dispatch.bf$next != df$nullValue() ==>
   acc(p$c$Recursive$shared(this$dispatch.bf$next), wildcard)) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$next), df$rt$nullable(df$rt$c$Recursive()))
+  df$isSubtype(df$typeOf(this$dispatch.bf$next), df$nullable(df$c$Recursive()))
 }
 
 predicate p$c$ReferenceField$shared(this$dispatch: Ref) {
   acc(this$dispatch.bf$pf, wildcard) &&
   acc(p$c$PrimitiveFields$shared(this$dispatch.bf$pf), wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$pf), df$rt$c$PrimitiveFields()) &&
+  df$isSubtype(df$typeOf(this$dispatch.bf$pf), df$c$PrimitiveFields()) &&
   acc(p$c$Baz$shared(this$dispatch), wildcard)
 }
 
 predicate p$c$ReferenceField$unique(this$dispatch: Ref) {
   acc(this$dispatch.bf$pf, wildcard) &&
   acc(p$c$PrimitiveFields$shared(this$dispatch.bf$pf), wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$pf), df$rt$c$PrimitiveFields()) &&
+  df$isSubtype(df$typeOf(this$dispatch.bf$pf), df$c$PrimitiveFields()) &&
   acc(p$c$Baz$unique(this$dispatch), write)
 }
 
-method f$useClasses$TF$T$ReferenceField$T$Recursive(p$rf: Ref, p$rec: Ref)
+method f$useClasses$TF$T$ReferenceField$T$Recursive(rf: Ref, rec: Ref)
   returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(p$rf), df$rt$c$ReferenceField())
-  inhale acc(p$c$ReferenceField$shared(p$rf), wildcard)
-  inhale df$rt$isSubtype(df$rt$typeOf(p$rec), df$rt$c$Recursive())
-  inhale acc(p$c$Recursive$shared(p$rec), wildcard)
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  inhale df$isSubtype(df$typeOf(rf), df$c$ReferenceField())
+  inhale acc(p$c$ReferenceField$shared(rf), wildcard)
+  inhale df$isSubtype(df$typeOf(rec), df$c$Recursive())
+  inhale acc(p$c$Recursive$shared(rec), wildcard)
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
 /predicates.kt:(354,374): info: Generated Viper text for threeLayersHierarchy:
@@ -74,14 +74,14 @@ field bf$y: Ref
 
 predicate p$c$A$shared(this$dispatch: Ref) {
   acc(this$dispatch.bf$x, wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$x), df$rt$intType())
+  df$isSubtype(df$typeOf(this$dispatch.bf$x), df$intType())
 }
 
 predicate p$c$A$unique(this$dispatch: Ref) {
   acc(this$dispatch.bf$x, wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$x), df$rt$intType()) &&
+  df$isSubtype(df$typeOf(this$dispatch.bf$x), df$intType()) &&
   acc(this$dispatch.bf$y, write) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$y), df$rt$intType())
+  df$isSubtype(df$typeOf(this$dispatch.bf$y), df$intType())
 }
 
 predicate p$c$B$shared(this$dispatch: Ref) {
@@ -100,13 +100,13 @@ predicate p$c$C$unique(this$dispatch: Ref) {
   acc(p$c$B$unique(this$dispatch), write)
 }
 
-method f$threeLayersHierarchy$TF$T$C(p$c: Ref) returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method f$threeLayersHierarchy$TF$T$C(c: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(p$c), df$rt$c$C())
-  inhale acc(p$c$C$shared(p$c), wildcard)
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  inhale df$isSubtype(df$typeOf(c), df$c$C())
+  inhale acc(p$c$C$shared(c), wildcard)
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
 /predicates.kt:(390,403): info: Generated Viper text for listHierarchy:
@@ -164,15 +164,15 @@ predicate p$pkg$kotlin_collections$c$MutableList$unique(this$dispatch: Ref) {
   acc(p$pkg$kotlin_collections$c$MutableCollection$unique(this$dispatch), write)
 }
 
-method f$listHierarchy$TF$T$MutableList(p$xs: Ref) returns (ret$0: Ref)
-  requires acc(p$xs.sp$size, write)
-  requires df$rt$intFromRef(p$xs.sp$size) >= 0
-  ensures acc(p$xs.sp$size, write)
-  ensures df$rt$intFromRef(p$xs.sp$size) >= 0
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method f$listHierarchy$TF$T$MutableList(xs: Ref) returns (ret$0: Ref)
+  requires acc(xs.sp$size, write)
+  requires df$intFromRef(xs.sp$size) >= 0
+  ensures acc(xs.sp$size, write)
+  ensures df$intFromRef(xs.sp$size) >= 0
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(p$xs), df$rt$c$pkg$kotlin_collections$MutableList())
-  inhale acc(p$pkg$kotlin_collections$c$MutableList$shared(p$xs), wildcard)
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  inhale df$isSubtype(df$typeOf(xs), df$c$pkg$kotlin_collections$MutableList())
+  inhale acc(p$pkg$kotlin_collections$c$MutableList$shared(xs), wildcard)
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }

@@ -2,25 +2,25 @@
 field bf$size: Ref
 
 method f$test$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  var l0$x: Ref
+  var x: Ref
   var anon$1: Ref
   var anon$0: Ref
   var anon$2: Ref
-  l0$x := df$rt$intToRef(42)
+  x := df$intToRef(42)
   assert true
   assert false
-  assert 2 <= df$rt$intFromRef(l0$x)
-  anon$0 := l0$x
-  l0$x := sp$plusInts(anon$0, df$rt$intToRef(1))
+  assert 2 <= df$intFromRef(x)
+  anon$0 := x
+  x := sp$plusInts(anon$0, df$intToRef(1))
   anon$1 := anon$0
-  assert df$rt$intFromRef(anon$1) < 43
-  l0$x := sp$plusInts(l0$x, df$rt$intToRef(1))
-  anon$2 := l0$x
-  assert df$rt$intFromRef(anon$2) < 43
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  assert df$intFromRef(anon$1) < 43
+  x := sp$plusInts(x, df$intToRef(1))
+  anon$2 := x
+  assert df$intFromRef(anon$2) < 43
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
 /assert_statements.kt:(160,166): error: Assert condition is impure
@@ -31,16 +31,16 @@ method f$test$TF$() returns (ret$0: Ref)
 field bf$size: Ref
 
 method f$testImpure$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  var l0$x: Ref
+  var x: Ref
   var anon$0: Ref
-  l0$x := df$rt$intToRef(42)
-  l0$x := sp$plusInts(l0$x, df$rt$intToRef(1))
-  anon$0 := l0$x
-  assert df$rt$intFromRef(anon$0) < 43
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  x := df$intToRef(42)
+  x := sp$plusInts(x, df$intToRef(1))
+  anon$0 := x
+  assert df$intFromRef(anon$0) < 43
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
 /assert_statements.kt:(237,243): error: Assert condition is impure

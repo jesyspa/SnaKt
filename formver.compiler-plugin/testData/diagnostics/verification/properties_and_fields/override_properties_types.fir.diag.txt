@@ -1,51 +1,51 @@
 /override_properties_types.kt:(520,530): info: Generated Viper text for extractInt:
 field bf$field: Ref
 
-method f$extractInt$TF$T$Base$T$Boolean(p$base: Ref, p$returnNull: Ref)
+method f$extractInt$TF$T$Base$T$Boolean(base: Ref, returnNull: Ref)
   returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$nullable(df$rt$intType()))
-  ensures ret$0 == df$rt$nullValue() ==> df$rt$boolFromRef(p$returnNull)
+  ensures df$isSubtype(df$typeOf(ret$0), df$nullable(df$intType()))
+  ensures ret$0 == df$nullValue() ==> df$boolFromRef(returnNull)
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(p$base), df$rt$c$Base())
-  inhale acc(p$c$Base$shared(p$base), wildcard)
-  inhale df$rt$isSubtype(df$rt$typeOf(p$returnNull), df$rt$boolType())
-  if (df$rt$boolFromRef(p$returnNull)) {
+  inhale df$isSubtype(df$typeOf(base), df$c$Base())
+  inhale acc(p$c$Base$shared(base), wildcard)
+  inhale df$isSubtype(df$typeOf(returnNull), df$boolType())
+  if (df$boolFromRef(returnNull)) {
     var anon$0: Ref
-    anon$0 := df$rt$nullValue()
+    anon$0 := df$nullValue()
     ret$0 := anon$0
   } else {
     var anon$1: Ref
-    if (df$rt$isSubtype(df$rt$typeOf(p$base), df$rt$c$OpenClassOpenFieldVarDerived())) {
+    if (df$isSubtype(df$typeOf(base), df$c$OpenClassOpenFieldVarDerived())) {
       var anon$2: Ref
-      inhale acc(p$c$OpenClassOpenFieldVarDerived$shared(p$base), wildcard)
-      anon$2 := pg$public$field(p$base)
+      inhale acc(p$c$OpenClassOpenFieldVarDerived$shared(base), wildcard)
+      anon$2 := pg$public$field(base)
       anon$1 := anon$2
-      inhale df$rt$isSubtype(df$rt$typeOf(anon$1), df$rt$intType())
-    } elseif (df$rt$isSubtype(df$rt$typeOf(p$base), df$rt$c$FinalClassOpenFieldVarDerived())) {
-      inhale acc(p$c$FinalClassOpenFieldVarDerived$shared(p$base), wildcard)
-      inhale acc(p$base.bf$field, write)
-      anon$1 := p$base.bf$field
-      exhale acc(p$base.bf$field, write)
-      inhale df$rt$isSubtype(df$rt$typeOf(anon$1), df$rt$intType())
-    } elseif (df$rt$isSubtype(df$rt$typeOf(p$base), df$rt$c$FinalClassFinalFieldValDerived())) {
-      inhale acc(p$c$FinalClassFinalFieldValDerived$shared(p$base), wildcard)
-      unfold acc(p$c$FinalClassFinalFieldValDerived$shared(p$base), wildcard)
-      anon$1 := p$base.bf$field
-    } elseif (df$rt$isSubtype(df$rt$typeOf(p$base), df$rt$c$OpenClassFinalFieldVarDerived())) {
-      inhale acc(p$c$OpenClassFinalFieldVarDerived$shared(p$base), wildcard)
-      inhale acc(p$base.bf$field, write)
-      anon$1 := p$base.bf$field
-      exhale acc(p$base.bf$field, write)
-      inhale df$rt$isSubtype(df$rt$typeOf(anon$1), df$rt$intType())
+      inhale df$isSubtype(df$typeOf(anon$1), df$intType())
+    } elseif (df$isSubtype(df$typeOf(base), df$c$FinalClassOpenFieldVarDerived())) {
+      inhale acc(p$c$FinalClassOpenFieldVarDerived$shared(base), wildcard)
+      inhale acc(base.bf$field, write)
+      anon$1 := base.bf$field
+      exhale acc(base.bf$field, write)
+      inhale df$isSubtype(df$typeOf(anon$1), df$intType())
+    } elseif (df$isSubtype(df$typeOf(base), df$c$FinalClassFinalFieldValDerived())) {
+      inhale acc(p$c$FinalClassFinalFieldValDerived$shared(base), wildcard)
+      unfold acc(p$c$FinalClassFinalFieldValDerived$shared(base), wildcard)
+      anon$1 := base.bf$field
+    } elseif (df$isSubtype(df$typeOf(base), df$c$OpenClassFinalFieldVarDerived())) {
+      inhale acc(p$c$OpenClassFinalFieldVarDerived$shared(base), wildcard)
+      inhale acc(base.bf$field, write)
+      anon$1 := base.bf$field
+      exhale acc(base.bf$field, write)
+      inhale df$isSubtype(df$typeOf(anon$1), df$intType())
     } else {
-      anon$1 := df$rt$intToRef(0)}
+      anon$1 := df$intToRef(0)}
     ret$0 := anon$1
   }
-  goto lbl$ret$0
-  label lbl$ret$0
+  goto lbl$0
+  label lbl$0
 }
 
 method pg$public$field(this$dispatch: Ref) returns (ret: Ref)
 
 
-method ps$public$field(this$dispatch: Ref, anon$0: Ref) returns (ret: Ref)
+method ps$field(this$dispatch: Ref, anon$0: Ref) returns (ret: Ref)
