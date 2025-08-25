@@ -1,30 +1,30 @@
 /viper_verify.kt:(125,137): info: Generated Viper text for verify_false:
-field bf_size: Ref
+field bf$size: Ref
 
-method f_verify_false_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$verify_false$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
   assert false
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
 /viper_verify.kt:(153,158): warning: Viper verification error: Assert might fail. Assertion false might not hold.
 
 /viper_verify.kt:(181,196): info: Generated Viper text for verify_compound:
-field bf_size: Ref
+field bf$size: Ref
 
-method f_verify_compound_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$verify_compound$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  var anon_0: Ref
+  var anon$0: Ref
   if (true) {
-    anon_0 := df_boolToRef(false)
+    anon$0 := df$boolToRef(false)
   } else {
-    anon_0 := df_boolToRef(false)}
-  assert df_boolFromRef(anon_0)
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+    anon$0 := df$boolToRef(false)}
+  assert df$boolFromRef(anon$0)
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
-/viper_verify.kt:(212,225): warning: Viper verification error: Assert might fail. Assertion df_boolFromRef(anon_0) might not hold.
+/viper_verify.kt:(212,225): warning: Viper verification error: Assert might fail. Assertion df$boolFromRef(anon$0) might not hold.

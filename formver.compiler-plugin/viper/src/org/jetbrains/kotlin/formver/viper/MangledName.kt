@@ -12,7 +12,7 @@ package org.jetbrains.kotlin.formver.viper
  * approach makes it easier to see where they came from during debugging.
  */
 
-const val SEPARATOR = "_"
+const val SEPARATOR = "$"
 
 interface MangledName {
     val mangledType: String?

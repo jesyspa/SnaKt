@@ -1,77 +1,77 @@
 /shadowing.kt:(23,34): info: Generated Viper text for shadowLocal:
-method f_shadowLocal_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$shadowLocal$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  var l0_foo: Ref
-  var l0_x: Ref
-  l0_x := df_intToRef(0)
-  if (df_intFromRef(l0_x) == 0) {
-    var l2_x: Ref
-    l0_foo := l0_x
-    l2_x := df_intToRef(1)
-    l0_foo := l2_x
+  var l0$foo: Ref
+  var l0$x: Ref
+  l0$x := df$intToRef(0)
+  if (df$intFromRef(l0$x) == 0) {
+    var l2$x: Ref
+    l0$foo := l0$x
+    l2$x := df$intToRef(1)
+    l0$foo := l2$x
   } else {
-    var l3_x: Ref
-    l0_foo := l0_x
-    l3_x := df_intToRef(2)
-    l0_foo := l3_x
+    var l3$x: Ref
+    l0$foo := l0$x
+    l3$x := df$intToRef(2)
+    l0$foo := l3$x
   }
-  l0_foo := l0_x
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  l0$foo := l0$x
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
 /shadowing.kt:(232,243): info: Generated Viper text for shadowParam:
-method f_shadowParam_TF_T_Int(p_x: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$shadowParam$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  var l0_foo: Ref
-  var l0_x: Ref
-  inhale df_isSubtype(df_typeOf(p_x), df_intType())
-  l0_foo := p_x
-  l0_x := df_intToRef(0)
-  l0_foo := l0_x
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  var l0$foo: Ref
+  var l0$x: Ref
+  inhale df$isSubtype(df$typeOf(p$x), df$intType())
+  l0$foo := p$x
+  l0$x := df$intToRef(0)
+  l0$foo := l0$x
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
 /shadowing.kt:(322,334): info: Generated Viper text for shadowNested:
-method f_shadowNested_TF_T_Int(p_x: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$shadowNested$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  var l0_foo: Ref
-  var l0_x: Ref
-  inhale df_isSubtype(df_typeOf(p_x), df_intType())
-  l0_foo := p_x
-  l0_x := df_intToRef(0)
-  l0_foo := l0_x
+  var l0$foo: Ref
+  var l0$x: Ref
+  inhale df$isSubtype(df$typeOf(p$x), df$intType())
+  l0$foo := p$x
+  l0$x := df$intToRef(0)
+  l0$foo := l0$x
   if (true) {
-    var l2_x: Ref
-    var anon_0: Ref
-    l0_foo := l0_x
-    l2_x := df_intToRef(1)
-    l0_foo := l2_x
-    label lbl_continue_0
-      invariant df_isSubtype(df_typeOf(l2_x), df_intType())
-      invariant df_isSubtype(df_typeOf(l0_foo), df_intType())
-      invariant df_isSubtype(df_typeOf(l0_x), df_intType())
-      invariant df_isSubtype(df_typeOf(p_x), df_intType())
-    anon_0 := df_boolToRef(true)
-    if (df_boolFromRef(anon_0)) {
-      var l3_x: Ref
-      l0_foo := l2_x
-      l3_x := df_intToRef(2)
-      l0_foo := l3_x
-      goto lbl_continue_0
+    var l2$x: Ref
+    var anon$0: Ref
+    l0$foo := l0$x
+    l2$x := df$intToRef(1)
+    l0$foo := l2$x
+    label lbl$continue$0
+      invariant df$isSubtype(df$typeOf(l2$x), df$intType())
+      invariant df$isSubtype(df$typeOf(l0$foo), df$intType())
+      invariant df$isSubtype(df$typeOf(l0$x), df$intType())
+      invariant df$isSubtype(df$typeOf(p$x), df$intType())
+    anon$0 := df$boolToRef(true)
+    if (df$boolFromRef(anon$0)) {
+      var l3$x: Ref
+      l0$foo := l2$x
+      l3$x := df$intToRef(2)
+      l0$foo := l3$x
+      goto lbl$continue$0
     }
-    label lbl_break_0
-    assert df_isSubtype(df_typeOf(l2_x), df_intType())
-    assert df_isSubtype(df_typeOf(l0_foo), df_intType())
-    assert df_isSubtype(df_typeOf(l0_x), df_intType())
-    assert df_isSubtype(df_typeOf(p_x), df_intType())
-    l0_foo := l2_x
+    label lbl$break$0
+    assert df$isSubtype(df$typeOf(l2$x), df$intType())
+    assert df$isSubtype(df$typeOf(l0$foo), df$intType())
+    assert df$isSubtype(df$typeOf(l0$x), df$intType())
+    assert df$isSubtype(df$typeOf(p$x), df$intType())
+    l0$foo := l2$x
   }
-  l0_foo := l0_x
-  label lbl_ret_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  l0$foo := l0$x
+  label lbl$ret$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }

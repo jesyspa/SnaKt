@@ -1,218 +1,218 @@
 /when.kt:(23,33): info: Generated Viper text for returnWhen:
-method f_returnWhen_TF_T_Boolean_T_Boolean_T_Boolean(a: Ref, b: Ref, c: Ref)
-  returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
+method f$returnWhen$TF$T$Boolean$T$Boolean$T$Boolean(a: Ref, b: Ref, c: Ref)
+  returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$intType())
 {
-  inhale df_isSubtype(df_typeOf(a), df_boolType())
-  inhale df_isSubtype(df_typeOf(b), df_boolType())
-  inhale df_isSubtype(df_typeOf(c), df_boolType())
-  if (df_boolFromRef(a)) {
-    ret_0 := df_intToRef(0)
-  } elseif (df_boolFromRef(b)) {
-    ret_0 := df_intToRef(1)
-  } elseif (df_boolFromRef(c)) {
-    ret_0 := df_intToRef(2)
+  inhale df$isSubtype(df$typeOf(a), df$boolType())
+  inhale df$isSubtype(df$typeOf(b), df$boolType())
+  inhale df$isSubtype(df$typeOf(c), df$boolType())
+  if (df$boolFromRef(a)) {
+    ret$0 := df$intToRef(0)
+  } elseif (df$boolFromRef(b)) {
+    ret$0 := df$intToRef(1)
+  } elseif (df$boolFromRef(c)) {
+    ret$0 := df$intToRef(2)
   } else {
-    ret_0 := df_intToRef(3)}
-  goto lbl_0
-  label lbl_0
+    ret$0 := df$intToRef(3)}
+  goto lbl$0
+  label lbl$0
 }
 
 /when.kt:(171,181): info: Generated Viper text for whenReturn:
-method f_whenReturn_TF_T_Boolean_T_Boolean_T_Boolean(a: Ref, b: Ref, c: Ref)
-  returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
+method f$whenReturn$TF$T$Boolean$T$Boolean$T$Boolean(a: Ref, b: Ref, c: Ref)
+  returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$intType())
 {
-  inhale df_isSubtype(df_typeOf(a), df_boolType())
-  inhale df_isSubtype(df_typeOf(b), df_boolType())
-  inhale df_isSubtype(df_typeOf(c), df_boolType())
-  if (df_boolFromRef(a)) {
-    ret_0 := df_intToRef(0)
-    goto lbl_0
-  } elseif (df_boolFromRef(b)) {
-    ret_0 := df_intToRef(1)
-    goto lbl_0
-  } elseif (df_boolFromRef(c)) {
-    ret_0 := df_intToRef(2)
-    goto lbl_0
+  inhale df$isSubtype(df$typeOf(a), df$boolType())
+  inhale df$isSubtype(df$typeOf(b), df$boolType())
+  inhale df$isSubtype(df$typeOf(c), df$boolType())
+  if (df$boolFromRef(a)) {
+    ret$0 := df$intToRef(0)
+    goto lbl$0
+  } elseif (df$boolFromRef(b)) {
+    ret$0 := df$intToRef(1)
+    goto lbl$0
+  } elseif (df$boolFromRef(c)) {
+    ret$0 := df$intToRef(2)
+    goto lbl$0
   } else {
-    ret_0 := df_intToRef(3)
-    goto lbl_0
+    ret$0 := df$intToRef(3)
+    goto lbl$0
   }
-  label lbl_0
+  label lbl$0
 }
 
 /when.kt:(340,356): info: Generated Viper text for singleBranchWhen:
-method f_singleBranchWhen_TF_T_Boolean(a: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
+method f$singleBranchWhen$TF$T$Boolean(a: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$intType())
 {
   var x: Ref
-  inhale df_isSubtype(df_typeOf(a), df_boolType())
-  x := df_intToRef(1)
-  if (df_boolFromRef(a)) {
-    x := df_intToRef(2)
+  inhale df$isSubtype(df$typeOf(a), df$boolType())
+  x := df$intToRef(1)
+  if (df$boolFromRef(a)) {
+    x := df$intToRef(2)
   }
-  ret_0 := x
-  goto lbl_0
-  label lbl_0
+  ret$0 := x
+  goto lbl$0
+  label lbl$0
 }
 
 /when.kt:(446,456): info: Generated Viper text for noElseWhen:
-method f_noElseWhen_TF_T_Boolean_T_Boolean_T_Boolean(a: Ref, b: Ref, c: Ref)
-  returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
+method f$noElseWhen$TF$T$Boolean$T$Boolean$T$Boolean(a: Ref, b: Ref, c: Ref)
+  returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$intType())
 {
   var y: Ref
-  inhale df_isSubtype(df_typeOf(a), df_boolType())
-  inhale df_isSubtype(df_typeOf(b), df_boolType())
-  inhale df_isSubtype(df_typeOf(c), df_boolType())
-  y := df_intToRef(0)
-  if (df_boolFromRef(a)) {
-    y := df_intToRef(1)
-  } elseif (df_boolFromRef(b)) {
-    y := df_intToRef(2)
-  } elseif (df_boolFromRef(c)) {
-    y := df_intToRef(3)
+  inhale df$isSubtype(df$typeOf(a), df$boolType())
+  inhale df$isSubtype(df$typeOf(b), df$boolType())
+  inhale df$isSubtype(df$typeOf(c), df$boolType())
+  y := df$intToRef(0)
+  if (df$boolFromRef(a)) {
+    y := df$intToRef(1)
+  } elseif (df$boolFromRef(b)) {
+    y := df$intToRef(2)
+  } elseif (df$boolFromRef(c)) {
+    y := df$intToRef(3)
   }
-  ret_0 := y
-  goto lbl_0
-  label lbl_0
+  ret$0 := y
+  goto lbl$0
+  label lbl$0
 }
 
 /when.kt:(608,626): info: Generated Viper text for whenWithSubjectVar:
-method f_whenWithSubjectVar_TF_T_Int(x: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
+method f$whenWithSubjectVar$TF$T$Int(x: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$intType())
 {
-  var anon_0: Ref
-  inhale df_isSubtype(df_typeOf(x), df_intType())
-  anon_0 := x
-  if (df_intFromRef(anon_0) == 1) {
-    ret_0 := df_intToRef(2)
-  } elseif (df_intFromRef(anon_0) == 2) {
-    ret_0 := df_intToRef(3)
+  var anon$0: Ref
+  inhale df$isSubtype(df$typeOf(x), df$intType())
+  anon$0 := x
+  if (df$intFromRef(anon$0) == 1) {
+    ret$0 := df$intToRef(2)
+  } elseif (df$intFromRef(anon$0) == 2) {
+    ret$0 := df$intToRef(3)
   } else {
-    ret_0 := df_intToRef(42)}
-  goto lbl_0
-  label lbl_0
+    ret$0 := df$intToRef(42)}
+  goto lbl$0
+  label lbl$0
 }
 
 /when.kt:(726,745): info: Generated Viper text for whenWithSubjectCall:
-method f_whenWithSubjectCall_TF_T_Int(x: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
+method f$whenWithSubjectCall$TF$T$Int(x: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$intType())
 {
-  var anon_0: Ref
-  inhale df_isSubtype(df_typeOf(x), df_intType())
-  anon_0 := f_whenWithSubjectVar_TF_T_Int(x)
-  if (df_intFromRef(anon_0) == 1) {
-    ret_0 := df_intToRef(2)
-  } elseif (df_intFromRef(anon_0) == 2) {
-    ret_0 := df_intToRef(3)
+  var anon$0: Ref
+  inhale df$isSubtype(df$typeOf(x), df$intType())
+  anon$0 := f$whenWithSubjectVar$TF$T$Int(x)
+  if (df$intFromRef(anon$0) == 1) {
+    ret$0 := df$intToRef(2)
+  } elseif (df$intFromRef(anon$0) == 2) {
+    ret$0 := df$intToRef(3)
   } else {
-    var anon_1: Ref
-    anon_1 := f_whenWithSubjectVar_TF_T_Int(df_intToRef(0))
-    if (df_intFromRef(anon_1) == 3) {
-      ret_0 := df_intToRef(4)
-    } elseif (df_intFromRef(anon_1) == 4) {
-      ret_0 := df_intToRef(5)
+    var anon$1: Ref
+    anon$1 := f$whenWithSubjectVar$TF$T$Int(df$intToRef(0))
+    if (df$intFromRef(anon$1) == 3) {
+      ret$0 := df$intToRef(4)
+    } elseif (df$intFromRef(anon$1) == 4) {
+      ret$0 := df$intToRef(5)
     } else {
-      ret_0 := df_intToRef(42)}
+      ret$0 := df$intToRef(42)}
   }
-  goto lbl_0
-  label lbl_0
+  goto lbl$0
+  label lbl$0
 }
 
-method f_whenWithSubjectVar_TF_T_Int(x: Ref) returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_intType())
+method f$whenWithSubjectVar$TF$T$Int(x: Ref) returns (ret: Ref)
+  ensures df$isSubtype(df$typeOf(ret), df$intType())
 
 
 /when.kt:(963,972): info: Generated Viper text for emptyWhen:
-method f_emptyWhen_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
+method f$emptyWhen$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$intType())
 {
-  ret_0 := df_intToRef(1)
-  goto lbl_0
-  label lbl_0
+  ret$0 := df$intToRef(1)
+  goto lbl$0
+  label lbl$0
 }
 
 /when.kt:(1015,1027): info: Generated Viper text for unusedResult:
-method f_unusedResult_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
+method f$unusedResult$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$intType())
 {
   var x: Ref
-  x := df_intToRef(0)
-  ret_0 := x
-  goto lbl_0
-  label lbl_0
+  x := df$intToRef(0)
+  ret$0 := x
+  goto lbl$0
+  label lbl$0
 }
 
 /when.kt:(1221,1227): info: Generated Viper text for whenIs:
-method f_whenIs_TF_T_Foo(x: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
+method f$whenIs$TF$T$Foo(x: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$boolType())
 {
-  var anon_0: Ref
-  inhale df_isSubtype(df_typeOf(x), df_c_Foo())
-  inhale acc(p_c_Foo_shared(x), wildcard)
-  anon_0 := x
-  if (df_isSubtype(df_typeOf(anon_0), df_c_Bar())) {
-    ret_0 := df_boolToRef(true)
+  var anon$0: Ref
+  inhale df$isSubtype(df$typeOf(x), df$c$Foo())
+  inhale acc(p$c$Foo$shared(x), wildcard)
+  anon$0 := x
+  if (df$isSubtype(df$typeOf(anon$0), df$c$Bar())) {
+    ret$0 := df$boolToRef(true)
   } else {
-    ret_0 := df_boolToRef(false)}
-  goto lbl_0
-  label lbl_0
+    ret$0 := df$boolToRef(false)}
+  goto lbl$0
+  label lbl$0
 }
 
 /when.kt:(1301,1315): info: Generated Viper text for whenSubjectVal:
-method f_whenSubjectVal_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
+method f$whenSubjectVal$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$intType())
 {
   var x: Ref
-  x := df_intToRef(0)
-  if (df_intFromRef(x) == 1) {
-    ret_0 := df_intToRef(1)
+  x := df$intToRef(0)
+  if (df$intFromRef(x) == 1) {
+    ret$0 := df$intToRef(1)
   } else {
-    ret_0 := x}
-  goto lbl_0
-  label lbl_0
+    ret$0 := x}
+  goto lbl$0
+  label lbl$0
 }
 
 /when.kt:(1392,1412): info: Generated Viper text for whenSubjectValNested:
-method f_whenSubjectValNested_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$whenSubjectValNested$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
   var x: Ref
-  x := df_intToRef(1)
-  if (df_intFromRef(x) == 0) {
+  x := df$intToRef(1)
+  if (df$intFromRef(x) == 0) {
   } else {
-    var anon_0: Ref
+    var anon$0: Ref
     var y: Ref
-    y := df_intToRef(1)
-    if (df_intFromRef(y) == 1) {
-      anon_0 := df_intToRef(1)
+    y := df$intToRef(1)
+    if (df$intFromRef(y) == 1) {
+      anon$0 := df$intToRef(1)
     } else {
       var z: Ref
-      z := df_intToRef(1)
-      if (df_intFromRef(z) == df_intFromRef(y)) {
-        anon_0 := df_intToRef(2)
-      } elseif (df_intFromRef(z) == df_intFromRef(x) + 1) {
-        anon_0 := df_intToRef(3)
+      z := df$intToRef(1)
+      if (df$intFromRef(z) == df$intFromRef(y)) {
+        anon$0 := df$intToRef(2)
+      } elseif (df$intFromRef(z) == df$intFromRef(x) + 1) {
+        anon$0 := df$intToRef(3)
       } else {
-        anon_0 := df_intToRef(4)}
+        anon$0 := df$intToRef(4)}
     }
-    if (df_intFromRef(x) == df_intFromRef(anon_0)) {
+    if (df$intFromRef(x) == df$intFromRef(anon$0)) {
     }
   }
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
 /when.kt:(1674,1697): info: Generated Viper text for whenSubjectVarShadowing:
-method f_whenSubjectVarShadowing_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$whenSubjectVarShadowing$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  var l0_x: Ref
-  var l1_x: Ref
-  l0_x := df_intToRef(0)
-  l1_x := df_intToRef(1)
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  var l0$x: Ref
+  var l1$x: Ref
+  l0$x := df$intToRef(0)
+  l1$x := df$intToRef(1)
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }

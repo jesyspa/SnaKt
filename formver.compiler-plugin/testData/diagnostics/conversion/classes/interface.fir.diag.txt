@@ -1,58 +1,58 @@
 /interface.kt:(84,98): info: Generated Viper text for testProperties:
-method f_testProperties_TF_T_Foo(foo: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$testProperties$TF$T$Foo(foo: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  var anon_0: Ref
+  var anon$0: Ref
   var x: Ref
-  var anon_1: Ref
-  var anon_2: Ref
-  var anon_3: Ref
-  var anon_4: Ref
-  inhale df_isSubtype(df_typeOf(foo), df_c_Foo())
-  inhale acc(p_shared(foo), wildcard)
-  anon_0 := ps_varProp(foo, df_intToRef(0))
-  anon_2 := pg_varProp(foo)
-  anon_1 := anon_2
-  inhale df_isSubtype(df_typeOf(anon_1), df_intType())
-  anon_4 := pg_valProp(foo)
-  anon_3 := anon_4
-  inhale df_isSubtype(df_typeOf(anon_3), df_intType())
-  x := sp_plusInts(anon_1, anon_3)
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  var anon$1: Ref
+  var anon$2: Ref
+  var anon$3: Ref
+  var anon$4: Ref
+  inhale df$isSubtype(df$typeOf(foo), df$c$Foo())
+  inhale acc(p$shared(foo), wildcard)
+  anon$0 := ps$varProp(foo, df$intToRef(0))
+  anon$2 := pg$varProp(foo)
+  anon$1 := anon$2
+  inhale df$isSubtype(df$typeOf(anon$1), df$intType())
+  anon$4 := pg$valProp(foo)
+  anon$3 := anon$4
+  inhale df$isSubtype(df$typeOf(anon$3), df$intType())
+  x := sp$plusInts(anon$1, anon$3)
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
-method pg_valProp(this$dispatch: Ref) returns (ret: Ref)
+method pg$valProp(this$dispatch: Ref) returns (ret: Ref)
 
 
-method pg_varProp(this$dispatch: Ref) returns (ret: Ref)
+method pg$varProp(this$dispatch: Ref) returns (ret: Ref)
 
 
-method ps_varProp(this$dispatch: Ref, anon_0: Ref) returns (ret: Ref)
+method ps$varProp(this$dispatch: Ref, anon$0: Ref) returns (ret: Ref)
 
 
 /interface.kt:(348,358): info: Generated Viper text for createImpl:
-field bf_number: Ref
+field bf$number: Ref
 
-method con_T_Int(number: Ref) returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_Impl())
-  ensures acc(p_c_Impl_shared(ret), wildcard)
-  ensures acc(p_c_Impl_unique(ret), write)
-  ensures df_intFromRef((unfolding acc(p_c_Impl_shared(ret), wildcard) in
-      ret.bf_number)) ==
-    df_intFromRef(number)
+method con$T$Int(number: Ref) returns (ret: Ref)
+  ensures df$isSubtype(df$typeOf(ret), df$c$Impl())
+  ensures acc(p$c$Impl$shared(ret), wildcard)
+  ensures acc(p$c$Impl$unique(ret), write)
+  ensures df$intFromRef((unfolding acc(p$c$Impl$shared(ret), wildcard) in
+      ret.bf$number)) ==
+    df$intFromRef(number)
 
 
-method f_createImpl_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$createImpl$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
   var impl: Ref
   var implField: Ref
-  impl := con_T_Int(df_intToRef(-1))
-  unfold acc(p_c_Impl_shared(impl), wildcard)
-  implField := impl.bf_number
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  impl := con$T$Int(df$intToRef(-1))
+  unfold acc(p$c$Impl$shared(impl), wildcard)
+  implField := impl.bf$number
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
-method pg_number(this$dispatch: Ref) returns (ret: Ref)
+method pg$number(this$dispatch: Ref) returns (ret: Ref)

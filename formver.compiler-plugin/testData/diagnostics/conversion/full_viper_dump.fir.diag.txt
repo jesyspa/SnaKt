@@ -1,421 +1,421 @@
 /full_viper_dump.kt:(172,173): info: Generated Viper text for f:
-domain d_rt  {
+domain d$rt  {
 
-  unique function df_intType(): d_rt
+  unique function df$intType(): d$rt
 
-  unique function df_boolType(): d_rt
+  unique function df$boolType(): d$rt
 
-  unique function df_charType(): d_rt
+  unique function df$charType(): d$rt
 
-  unique function df_unitType(): d_rt
+  unique function df$unitType(): d$rt
 
-  unique function df_nothingType(): d_rt
+  unique function df$nothingType(): d$rt
 
-  unique function df_anyType(): d_rt
+  unique function df$anyType(): d$rt
 
-  unique function df_functionType(): d_rt
+  unique function df$functionType(): d$rt
 
-  unique function df_stringType(): d_rt
+  unique function df$stringType(): d$rt
 
-  unique function df_c_Foo(): d_rt
+  unique function df$c$Foo(): d$rt
 
-  function df_nullValue(): Ref
+  function df$nullValue(): Ref
 
-  function df_unitValue(): Ref
+  function df$unitValue(): Ref
 
-  function df_isSubtype(t1: d_rt, t2: d_rt): Bool
+  function df$isSubtype(t1: d$rt, t2: d$rt): Bool
 
-  function df_typeOf(r: Ref): d_rt
+  function df$typeOf(r: Ref): d$rt
 
-  function df_nullable(t: d_rt): d_rt
+  function df$nullable(t: d$rt): d$rt
 
-  function df_intToRef(v: Int): Ref
+  function df$intToRef(v: Int): Ref
 
-  function df_intFromRef(r: Ref): Int
+  function df$intFromRef(r: Ref): Int
 
-  function df_boolToRef(v: Bool): Ref
+  function df$boolToRef(v: Bool): Ref
 
-  function df_boolFromRef(r: Ref): Bool
+  function df$boolFromRef(r: Ref): Bool
 
-  function df_charToRef(v: Int): Ref
+  function df$charToRef(v: Int): Ref
 
-  function df_charFromRef(r: Ref): Int
+  function df$charFromRef(r: Ref): Int
 
-  function df_stringToRef(v: Seq[Int]): Ref
+  function df$stringToRef(v: Seq[Int]): Ref
 
-  function df_stringFromRef(r: Ref): Seq[Int]
+  function df$stringFromRef(r: Ref): Seq[Int]
 
   axiom subtype_reflexive {
-    (forall t: d_rt ::df_isSubtype(t, t))
+    (forall t: d$rt ::df$isSubtype(t, t))
   }
 
   axiom subtype_transitive {
-    (forall t1: d_rt, t2: d_rt, t3: d_rt ::
-      { df_isSubtype(t1, t2), df_isSubtype(t2, t3) }
-      { df_isSubtype(t1, t2), df_isSubtype(t1, t3) }
-      { df_isSubtype(t2, t3), df_isSubtype(t1, t3) }
-      df_isSubtype(t1, t2) && df_isSubtype(t2, t3) ==> df_isSubtype(t1, t3))
+    (forall t1: d$rt, t2: d$rt, t3: d$rt ::
+      { df$isSubtype(t1, t2), df$isSubtype(t2, t3) }
+      { df$isSubtype(t1, t2), df$isSubtype(t1, t3) }
+      { df$isSubtype(t2, t3), df$isSubtype(t1, t3) }
+      df$isSubtype(t1, t2) && df$isSubtype(t2, t3) ==> df$isSubtype(t1, t3))
   }
 
   axiom subtype_antisymmetric {
-    (forall t1: d_rt, t2: d_rt ::
-      { df_isSubtype(t1, t2), df_isSubtype(t2, t1) }
-      df_isSubtype(t1, t2) && df_isSubtype(t2, t1) ==> t1 == t2)
+    (forall t1: d$rt, t2: d$rt ::
+      { df$isSubtype(t1, t2), df$isSubtype(t2, t1) }
+      df$isSubtype(t1, t2) && df$isSubtype(t2, t1) ==> t1 == t2)
   }
 
   axiom nullable_idempotent {
-    (forall t: d_rt ::
-      { df_nullable(df_nullable(t)) }
-      df_nullable(df_nullable(t)) == df_nullable(t))
+    (forall t: d$rt ::
+      { df$nullable(df$nullable(t)) }
+      df$nullable(df$nullable(t)) == df$nullable(t))
   }
 
   axiom nullable_supertype {
-    (forall t: d_rt :: { df_nullable(t) } df_isSubtype(t, df_nullable(t)))
+    (forall t: d$rt :: { df$nullable(t) } df$isSubtype(t, df$nullable(t)))
   }
 
   axiom nullable_preserves_subtype {
-    (forall t1: d_rt, t2: d_rt ::
-      { df_isSubtype(df_nullable(t1), df_nullable(t2)) }
-      df_isSubtype(t1, t2) ==>
-      df_isSubtype(df_nullable(t1), df_nullable(t2)))
+    (forall t1: d$rt, t2: d$rt ::
+      { df$isSubtype(df$nullable(t1), df$nullable(t2)) }
+      df$isSubtype(t1, t2) ==>
+      df$isSubtype(df$nullable(t1), df$nullable(t2)))
   }
 
   axiom nullable_any_supertype {
-    (forall t: d_rt ::df_isSubtype(t, df_nullable(df_anyType())))
+    (forall t: d$rt ::df$isSubtype(t, df$nullable(df$anyType())))
   }
 
   axiom {
-    df_isSubtype(df_intType(), df_anyType())
+    df$isSubtype(df$intType(), df$anyType())
   }
 
   axiom {
-    df_isSubtype(df_boolType(), df_anyType())
+    df$isSubtype(df$boolType(), df$anyType())
   }
 
   axiom {
-    df_isSubtype(df_charType(), df_anyType())
+    df$isSubtype(df$charType(), df$anyType())
   }
 
   axiom {
-    df_isSubtype(df_unitType(), df_anyType())
+    df$isSubtype(df$unitType(), df$anyType())
   }
 
   axiom {
-    df_isSubtype(df_nothingType(), df_anyType())
+    df$isSubtype(df$nothingType(), df$anyType())
   }
 
   axiom {
-    df_isSubtype(df_anyType(), df_anyType())
+    df$isSubtype(df$anyType(), df$anyType())
   }
 
   axiom {
-    df_isSubtype(df_functionType(), df_anyType())
+    df$isSubtype(df$functionType(), df$anyType())
   }
 
   axiom {
-    df_isSubtype(df_stringType(), df_anyType())
+    df$isSubtype(df$stringType(), df$anyType())
   }
 
   axiom {
-    df_isSubtype(df_c_Foo(), df_anyType())
+    df$isSubtype(df$c$Foo(), df$anyType())
   }
 
   axiom supertype_of_nothing {
-    (forall t: d_rt ::df_isSubtype(df_nothingType(), t))
+    (forall t: d$rt ::df$isSubtype(df$nothingType(), t))
   }
 
   axiom any_not_nullable_type_level {
-    (forall t: d_rt ::!df_isSubtype(df_nullable(t), df_anyType()))
+    (forall t: d$rt ::!df$isSubtype(df$nullable(t), df$anyType()))
   }
 
   axiom null_smartcast_value_level {
-    (forall r: Ref, t: d_rt ::
-      { df_isSubtype(df_typeOf(r), df_nullable(t)) }
-      df_isSubtype(df_typeOf(r), df_nullable(t)) ==>
-      r == df_nullValue() || df_isSubtype(df_typeOf(r), t))
+    (forall r: Ref, t: d$rt ::
+      { df$isSubtype(df$typeOf(r), df$nullable(t)) }
+      df$isSubtype(df$typeOf(r), df$nullable(t)) ==>
+      r == df$nullValue() || df$isSubtype(df$typeOf(r), t))
   }
 
   axiom nothing_empty {
-    (forall r: Ref ::!df_isSubtype(df_typeOf(r), df_nothingType()))
+    (forall r: Ref ::!df$isSubtype(df$typeOf(r), df$nothingType()))
   }
 
   axiom null_smartcast_type_level {
-    (forall t1: d_rt, t2: d_rt ::
-      { df_isSubtype(t1, df_anyType()), df_isSubtype(t1, df_nullable(t2)) }
-      df_isSubtype(t1, df_anyType()) && df_isSubtype(t1, df_nullable(t2)) ==>
-      df_isSubtype(t1, t2))
+    (forall t1: d$rt, t2: d$rt ::
+      { df$isSubtype(t1, df$anyType()), df$isSubtype(t1, df$nullable(t2)) }
+      df$isSubtype(t1, df$anyType()) && df$isSubtype(t1, df$nullable(t2)) ==>
+      df$isSubtype(t1, t2))
   }
 
   axiom type_of_null {
-    df_isSubtype(df_typeOf(df_nullValue()), df_nullable(df_nothingType()))
+    df$isSubtype(df$typeOf(df$nullValue()), df$nullable(df$nothingType()))
   }
 
   axiom any_not_nullable_value_level {
-    !df_isSubtype(df_typeOf(df_nullValue()), df_anyType())
+    !df$isSubtype(df$typeOf(df$nullValue()), df$anyType())
   }
 
   axiom type_of_unit {
-    df_isSubtype(df_typeOf(df_unitValue()), df_unitType())
+    df$isSubtype(df$typeOf(df$unitValue()), df$unitType())
   }
 
   axiom uniqueness_of_unit {
     (forall r: Ref ::
-      { df_isSubtype(df_typeOf(r), df_unitType()) }
-      df_isSubtype(df_typeOf(r), df_unitType()) ==> r == df_unitValue())
+      { df$isSubtype(df$typeOf(r), df$unitType()) }
+      df$isSubtype(df$typeOf(r), df$unitType()) ==> r == df$unitValue())
   }
 
   axiom {
     (forall v: Int ::
-      { df_isSubtype(df_typeOf(df_intToRef(v)), df_intType()) }
-      df_isSubtype(df_typeOf(df_intToRef(v)), df_intType()))
+      { df$isSubtype(df$typeOf(df$intToRef(v)), df$intType()) }
+      df$isSubtype(df$typeOf(df$intToRef(v)), df$intType()))
   }
 
   axiom {
     (forall v: Int ::
-      { df_intFromRef(df_intToRef(v)) }
-      df_intFromRef(df_intToRef(v)) == v)
+      { df$intFromRef(df$intToRef(v)) }
+      df$intFromRef(df$intToRef(v)) == v)
   }
 
   axiom {
     (forall r: Ref ::
-      { df_intToRef(df_intFromRef(r)) }
-      df_isSubtype(df_typeOf(r), df_intType()) ==>
-      df_intToRef(df_intFromRef(r)) == r)
+      { df$intToRef(df$intFromRef(r)) }
+      df$isSubtype(df$typeOf(r), df$intType()) ==>
+      df$intToRef(df$intFromRef(r)) == r)
   }
 
   axiom {
     (forall v: Bool ::
-      { df_isSubtype(df_typeOf(df_boolToRef(v)), df_boolType()) }
-      df_isSubtype(df_typeOf(df_boolToRef(v)), df_boolType()))
+      { df$isSubtype(df$typeOf(df$boolToRef(v)), df$boolType()) }
+      df$isSubtype(df$typeOf(df$boolToRef(v)), df$boolType()))
   }
 
   axiom {
     (forall v: Bool ::
-      { df_boolFromRef(df_boolToRef(v)) }
-      df_boolFromRef(df_boolToRef(v)) == v)
+      { df$boolFromRef(df$boolToRef(v)) }
+      df$boolFromRef(df$boolToRef(v)) == v)
   }
 
   axiom {
     (forall r: Ref ::
-      { df_boolToRef(df_boolFromRef(r)) }
-      df_isSubtype(df_typeOf(r), df_boolType()) ==>
-      df_boolToRef(df_boolFromRef(r)) == r)
+      { df$boolToRef(df$boolFromRef(r)) }
+      df$isSubtype(df$typeOf(r), df$boolType()) ==>
+      df$boolToRef(df$boolFromRef(r)) == r)
   }
 
   axiom {
     (forall v: Int ::
-      { df_isSubtype(df_typeOf(df_charToRef(v)), df_charType()) }
-      df_isSubtype(df_typeOf(df_charToRef(v)), df_charType()))
+      { df$isSubtype(df$typeOf(df$charToRef(v)), df$charType()) }
+      df$isSubtype(df$typeOf(df$charToRef(v)), df$charType()))
   }
 
   axiom {
     (forall v: Int ::
-      { df_charFromRef(df_charToRef(v)) }
-      df_charFromRef(df_charToRef(v)) == v)
+      { df$charFromRef(df$charToRef(v)) }
+      df$charFromRef(df$charToRef(v)) == v)
   }
 
   axiom {
     (forall r: Ref ::
-      { df_charToRef(df_charFromRef(r)) }
-      df_isSubtype(df_typeOf(r), df_charType()) ==>
-      df_charToRef(df_charFromRef(r)) == r)
+      { df$charToRef(df$charFromRef(r)) }
+      df$isSubtype(df$typeOf(r), df$charType()) ==>
+      df$charToRef(df$charFromRef(r)) == r)
   }
 
   axiom {
     (forall v: Seq[Int] ::
-      { df_isSubtype(df_typeOf(df_stringToRef(v)), df_stringType()) }
-      df_isSubtype(df_typeOf(df_stringToRef(v)), df_stringType()))
+      { df$isSubtype(df$typeOf(df$stringToRef(v)), df$stringType()) }
+      df$isSubtype(df$typeOf(df$stringToRef(v)), df$stringType()))
   }
 
   axiom {
     (forall v: Seq[Int] ::
-      { df_stringFromRef(df_stringToRef(v)) }
-      df_stringFromRef(df_stringToRef(v)) == v)
+      { df$stringFromRef(df$stringToRef(v)) }
+      df$stringFromRef(df$stringToRef(v)) == v)
   }
 
   axiom {
     (forall r: Ref ::
-      { df_stringToRef(df_stringFromRef(r)) }
-      df_isSubtype(df_typeOf(r), df_stringType()) ==>
-      df_stringToRef(df_stringFromRef(r)) == r)
+      { df$stringToRef(df$stringFromRef(r)) }
+      df$isSubtype(df$typeOf(r), df$stringType()) ==>
+      df$stringToRef(df$stringFromRef(r)) == r)
   }
 }
 
-field bf_x: Ref
+field bf$x: Ref
 
-function sp_addCharInt(arg1: Ref, arg2: Ref): Ref
-  ensures df_isSubtype(df_typeOf(result), df_charType())
-  ensures df_charFromRef(result) ==
-    df_charFromRef(arg1) + df_intFromRef(arg2)
-
-
-function sp_addStringChar(arg1: Ref, arg2: Ref): Ref
-  ensures df_isSubtype(df_typeOf(result), df_stringType())
-  ensures df_stringFromRef(result) ==
-    df_stringFromRef(arg1) ++ Seq(df_charFromRef(arg2))
+function sp$addCharInt(arg1: Ref, arg2: Ref): Ref
+  ensures df$isSubtype(df$typeOf(result), df$charType())
+  ensures df$charFromRef(result) ==
+    df$charFromRef(arg1) + df$intFromRef(arg2)
 
 
-function sp_addStrings(arg1: Ref, arg2: Ref): Ref
-  ensures df_isSubtype(df_typeOf(result), df_stringType())
-  ensures df_stringFromRef(result) ==
-    df_stringFromRef(arg1) ++ df_stringFromRef(arg2)
+function sp$addStringChar(arg1: Ref, arg2: Ref): Ref
+  ensures df$isSubtype(df$typeOf(result), df$stringType())
+  ensures df$stringFromRef(result) ==
+    df$stringFromRef(arg1) ++ Seq(df$charFromRef(arg2))
 
 
-function sp_andBools(arg1: Ref, arg2: Ref): Ref
-  ensures df_isSubtype(df_typeOf(result), df_boolType())
-  ensures df_boolFromRef(result) ==
-    (df_boolFromRef(arg1) && df_boolFromRef(arg2))
+function sp$addStrings(arg1: Ref, arg2: Ref): Ref
+  ensures df$isSubtype(df$typeOf(result), df$stringType())
+  ensures df$stringFromRef(result) ==
+    df$stringFromRef(arg1) ++ df$stringFromRef(arg2)
 
 
-function sp_divInts(arg1: Ref, arg2: Ref): Ref
-  requires df_intFromRef(arg2) != 0
-  ensures df_isSubtype(df_typeOf(result), df_intType())
-  ensures df_intFromRef(result) ==
-    df_intFromRef(arg1) / df_intFromRef(arg2)
+function sp$andBools(arg1: Ref, arg2: Ref): Ref
+  ensures df$isSubtype(df$typeOf(result), df$boolType())
+  ensures df$boolFromRef(result) ==
+    (df$boolFromRef(arg1) && df$boolFromRef(arg2))
 
 
-function sp_geChars(arg1: Ref, arg2: Ref): Ref
-  ensures df_isSubtype(df_typeOf(result), df_boolType())
-  ensures df_boolFromRef(result) ==
-    df_charFromRef(arg1) >= df_charFromRef(arg2)
+function sp$divInts(arg1: Ref, arg2: Ref): Ref
+  requires df$intFromRef(arg2) != 0
+  ensures df$isSubtype(df$typeOf(result), df$intType())
+  ensures df$intFromRef(result) ==
+    df$intFromRef(arg1) / df$intFromRef(arg2)
 
 
-function sp_geInts(arg1: Ref, arg2: Ref): Ref
-  ensures df_isSubtype(df_typeOf(result), df_boolType())
-  ensures df_boolFromRef(result) ==
-    df_intFromRef(arg1) >= df_intFromRef(arg2)
+function sp$geChars(arg1: Ref, arg2: Ref): Ref
+  ensures df$isSubtype(df$typeOf(result), df$boolType())
+  ensures df$boolFromRef(result) ==
+    df$charFromRef(arg1) >= df$charFromRef(arg2)
 
 
-function sp_gtChars(arg1: Ref, arg2: Ref): Ref
-  ensures df_isSubtype(df_typeOf(result), df_boolType())
-  ensures df_boolFromRef(result) ==
-    df_charFromRef(arg1) > df_charFromRef(arg2)
+function sp$geInts(arg1: Ref, arg2: Ref): Ref
+  ensures df$isSubtype(df$typeOf(result), df$boolType())
+  ensures df$boolFromRef(result) ==
+    df$intFromRef(arg1) >= df$intFromRef(arg2)
 
 
-function sp_gtInts(arg1: Ref, arg2: Ref): Ref
-  ensures df_isSubtype(df_typeOf(result), df_boolType())
-  ensures df_boolFromRef(result) ==
-    df_intFromRef(arg1) > df_intFromRef(arg2)
+function sp$gtChars(arg1: Ref, arg2: Ref): Ref
+  ensures df$isSubtype(df$typeOf(result), df$boolType())
+  ensures df$boolFromRef(result) ==
+    df$charFromRef(arg1) > df$charFromRef(arg2)
 
 
-function sp_impliesBools(arg1: Ref, arg2: Ref): Ref
-  ensures df_isSubtype(df_typeOf(result), df_boolType())
-  ensures df_boolFromRef(result) ==
-    (df_boolFromRef(arg1) ==> df_boolFromRef(arg2))
+function sp$gtInts(arg1: Ref, arg2: Ref): Ref
+  ensures df$isSubtype(df$typeOf(result), df$boolType())
+  ensures df$boolFromRef(result) ==
+    df$intFromRef(arg1) > df$intFromRef(arg2)
 
 
-function sp_leChars(arg1: Ref, arg2: Ref): Ref
-  ensures df_isSubtype(df_typeOf(result), df_boolType())
-  ensures df_boolFromRef(result) ==
-    df_charFromRef(arg1) <= df_charFromRef(arg2)
+function sp$impliesBools(arg1: Ref, arg2: Ref): Ref
+  ensures df$isSubtype(df$typeOf(result), df$boolType())
+  ensures df$boolFromRef(result) ==
+    (df$boolFromRef(arg1) ==> df$boolFromRef(arg2))
 
 
-function sp_leInts(arg1: Ref, arg2: Ref): Ref
-  ensures df_isSubtype(df_typeOf(result), df_boolType())
-  ensures df_boolFromRef(result) ==
-    df_intFromRef(arg1) <= df_intFromRef(arg2)
+function sp$leChars(arg1: Ref, arg2: Ref): Ref
+  ensures df$isSubtype(df$typeOf(result), df$boolType())
+  ensures df$boolFromRef(result) ==
+    df$charFromRef(arg1) <= df$charFromRef(arg2)
 
 
-function sp_ltChars(arg1: Ref, arg2: Ref): Ref
-  ensures df_isSubtype(df_typeOf(result), df_boolType())
-  ensures df_boolFromRef(result) ==
-    df_charFromRef(arg1) < df_charFromRef(arg2)
+function sp$leInts(arg1: Ref, arg2: Ref): Ref
+  ensures df$isSubtype(df$typeOf(result), df$boolType())
+  ensures df$boolFromRef(result) ==
+    df$intFromRef(arg1) <= df$intFromRef(arg2)
 
 
-function sp_ltInts(arg1: Ref, arg2: Ref): Ref
-  ensures df_isSubtype(df_typeOf(result), df_boolType())
-  ensures df_boolFromRef(result) ==
-    df_intFromRef(arg1) < df_intFromRef(arg2)
+function sp$ltChars(arg1: Ref, arg2: Ref): Ref
+  ensures df$isSubtype(df$typeOf(result), df$boolType())
+  ensures df$boolFromRef(result) ==
+    df$charFromRef(arg1) < df$charFromRef(arg2)
 
 
-function sp_minusInts(arg1: Ref, arg2: Ref): Ref
-  ensures df_isSubtype(df_typeOf(result), df_intType())
-  ensures df_intFromRef(result) ==
-    df_intFromRef(arg1) - df_intFromRef(arg2)
+function sp$ltInts(arg1: Ref, arg2: Ref): Ref
+  ensures df$isSubtype(df$typeOf(result), df$boolType())
+  ensures df$boolFromRef(result) ==
+    df$intFromRef(arg1) < df$intFromRef(arg2)
 
 
-function sp_notBool(arg1: Ref): Ref
-  ensures df_isSubtype(df_typeOf(result), df_boolType())
-  ensures df_boolFromRef(result) == !df_boolFromRef(arg1)
+function sp$minusInts(arg1: Ref, arg2: Ref): Ref
+  ensures df$isSubtype(df$typeOf(result), df$intType())
+  ensures df$intFromRef(result) ==
+    df$intFromRef(arg1) - df$intFromRef(arg2)
 
 
-function sp_orBools(arg1: Ref, arg2: Ref): Ref
-  ensures df_isSubtype(df_typeOf(result), df_boolType())
-  ensures df_boolFromRef(result) ==
-    (df_boolFromRef(arg1) || df_boolFromRef(arg2))
+function sp$notBool(arg1: Ref): Ref
+  ensures df$isSubtype(df$typeOf(result), df$boolType())
+  ensures df$boolFromRef(result) == !df$boolFromRef(arg1)
 
 
-function sp_plusInts(arg1: Ref, arg2: Ref): Ref
-  ensures df_isSubtype(df_typeOf(result), df_intType())
-  ensures df_intFromRef(result) ==
-    df_intFromRef(arg1) + df_intFromRef(arg2)
+function sp$orBools(arg1: Ref, arg2: Ref): Ref
+  ensures df$isSubtype(df$typeOf(result), df$boolType())
+  ensures df$boolFromRef(result) ==
+    (df$boolFromRef(arg1) || df$boolFromRef(arg2))
 
 
-function sp_remInts(arg1: Ref, arg2: Ref): Ref
-  requires df_intFromRef(arg2) != 0
-  ensures df_isSubtype(df_typeOf(result), df_intType())
-  ensures df_intFromRef(result) ==
-    df_intFromRef(arg1) % df_intFromRef(arg2)
+function sp$plusInts(arg1: Ref, arg2: Ref): Ref
+  ensures df$isSubtype(df$typeOf(result), df$intType())
+  ensures df$intFromRef(result) ==
+    df$intFromRef(arg1) + df$intFromRef(arg2)
 
 
-function sp_stringGet(arg1: Ref, arg2: Ref): Ref
-  requires df_intFromRef(arg2) >= 0 &&
-    df_intFromRef(arg2) < |df_stringFromRef(arg1)|
-  ensures df_isSubtype(df_typeOf(result), df_charType())
-  ensures df_charFromRef(result) ==
-    df_stringFromRef(arg1)[df_intFromRef(arg2)]
+function sp$remInts(arg1: Ref, arg2: Ref): Ref
+  requires df$intFromRef(arg2) != 0
+  ensures df$isSubtype(df$typeOf(result), df$intType())
+  ensures df$intFromRef(result) ==
+    df$intFromRef(arg1) % df$intFromRef(arg2)
 
 
-function sp_stringLength(arg1: Ref): Ref
-  ensures df_isSubtype(df_typeOf(result), df_intType())
-  ensures df_intFromRef(result) == |df_stringFromRef(arg1)|
+function sp$stringGet(arg1: Ref, arg2: Ref): Ref
+  requires df$intFromRef(arg2) >= 0 &&
+    df$intFromRef(arg2) < |df$stringFromRef(arg1)|
+  ensures df$isSubtype(df$typeOf(result), df$charType())
+  ensures df$charFromRef(result) ==
+    df$stringFromRef(arg1)[df$intFromRef(arg2)]
 
 
-function sp_subCharInt(arg1: Ref, arg2: Ref): Ref
-  ensures df_isSubtype(df_typeOf(result), df_charType())
-  ensures df_charFromRef(result) ==
-    df_charFromRef(arg1) - df_intFromRef(arg2)
+function sp$stringLength(arg1: Ref): Ref
+  ensures df$isSubtype(df$typeOf(result), df$intType())
+  ensures df$intFromRef(result) == |df$stringFromRef(arg1)|
 
 
-function sp_subChars(arg1: Ref, arg2: Ref): Ref
-  ensures df_isSubtype(df_typeOf(result), df_intType())
-  ensures df_intFromRef(result) ==
-    df_charFromRef(arg1) - df_charFromRef(arg2)
+function sp$subCharInt(arg1: Ref, arg2: Ref): Ref
+  ensures df$isSubtype(df$typeOf(result), df$charType())
+  ensures df$charFromRef(result) ==
+    df$charFromRef(arg1) - df$intFromRef(arg2)
 
 
-function sp_timesInts(arg1: Ref, arg2: Ref): Ref
-  ensures df_isSubtype(df_typeOf(result), df_intType())
-  ensures df_intFromRef(result) ==
-    df_intFromRef(arg1) * df_intFromRef(arg2)
+function sp$subChars(arg1: Ref, arg2: Ref): Ref
+  ensures df$isSubtype(df$typeOf(result), df$intType())
+  ensures df$intFromRef(result) ==
+    df$charFromRef(arg1) - df$charFromRef(arg2)
 
 
-predicate p_shared(this$dispatch: Ref) {
-  acc(this$dispatch.bf_x, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.bf_x), df_intType())
+function sp$timesInts(arg1: Ref, arg2: Ref): Ref
+  ensures df$isSubtype(df$typeOf(result), df$intType())
+  ensures df$intFromRef(result) ==
+    df$intFromRef(arg1) * df$intFromRef(arg2)
+
+
+predicate p$shared(this$dispatch: Ref) {
+  acc(this$dispatch.bf$x, wildcard) &&
+  df$isSubtype(df$typeOf(this$dispatch.bf$x), df$intType())
 }
 
-predicate p_unique(this$dispatch: Ref) {
-  acc(this$dispatch.bf_x, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.bf_x), df_intType())
+predicate p$unique(this$dispatch: Ref) {
+  acc(this$dispatch.bf$x, wildcard) &&
+  df$isSubtype(df$typeOf(this$dispatch.bf$x), df$intType())
 }
 
-method con_T_Int(x: Ref) returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_Foo())
-  ensures acc(p_shared(ret), wildcard)
-  ensures acc(p_unique(ret), write)
-  ensures df_intFromRef((unfolding acc(p_shared(ret), wildcard) in
-      ret.bf_x)) ==
-    df_intFromRef(x)
+method con$T$Int(x: Ref) returns (ret: Ref)
+  ensures df$isSubtype(df$typeOf(ret), df$c$Foo())
+  ensures acc(p$shared(ret), wildcard)
+  ensures acc(p$unique(ret), write)
+  ensures df$intFromRef((unfolding acc(p$shared(ret), wildcard) in
+      ret.bf$x)) ==
+    df$intFromRef(x)
 
 
-method f_f_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$f$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
   var foo: Ref
-  foo := con_T_Int(df_intToRef(0))
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  foo := con$T$Int(df$intToRef(0))
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
-/full_viper_dump.kt:(172,173): info: Generated ExpEmbedding for f_f_TF_:
-Function(name = f_f_TF_, { Declare(Var(foo), T_Foo, MethodCall(callee = con_T_Int, Int(0))) }, return = lbl_0)
+/full_viper_dump.kt:(172,173): info: Generated ExpEmbedding for f$f$TF$:
+Function(name = f$f$TF$, { Declare(Var(foo), T$Foo, MethodCall(callee = con$T$Int, Int(0))) }, return = lbl$0)

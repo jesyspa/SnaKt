@@ -1,39 +1,39 @@
 /smartcast.kt:(23,38): info: Generated Viper text for smartcastReturn:
-method f_smartcastReturn_TF_NT_Int(n: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
+method f$smartcastReturn$TF$NT$Int(n: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$intType())
 {
-  inhale df_isSubtype(df_typeOf(n), df_nullable(df_intType()))
-  if (!(n == df_nullValue())) {
-    ret_0 := n
+  inhale df$isSubtype(df$typeOf(n), df$nullable(df$intType()))
+  if (!(n == df$nullValue())) {
+    ret$0 := n
   } else {
-    ret_0 := df_intToRef(0)}
-  goto lbl_0
-  label lbl_0
+    ret$0 := df$intToRef(0)}
+  goto lbl$0
+  label lbl$0
 }
 
 /smartcast.kt:(88,106): info: Generated Viper text for isNullOrEmptyWrong:
-method f_isNullOrEmptyWrong_TF_NT_CharSequence(seq: Ref)
-  returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
+method f$isNullOrEmptyWrong$TF$NT$CharSequence(seq: Ref)
+  returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$boolType())
 {
-  inhale df_isSubtype(df_typeOf(seq), df_nullable(df_c_pkg$kotlin_CharSequence()))
-  inhale seq != df_nullValue() ==> acc(p_shared(seq), wildcard)
-  if (seq == df_nullValue()) {
-    var anon_0: Ref
-    if (seq != df_nullValue()) {
-      var anon_1: Ref
-      var anon_2: Ref
-      anon_2 := pg_length(seq)
-      anon_1 := anon_2
-      inhale df_isSubtype(df_typeOf(anon_1), df_intType())
-      anon_0 := anon_1
+  inhale df$isSubtype(df$typeOf(seq), df$nullable(df$c$pkg$kotlin$CharSequence()))
+  inhale seq != df$nullValue() ==> acc(p$shared(seq), wildcard)
+  if (seq == df$nullValue()) {
+    var anon$0: Ref
+    if (seq != df$nullValue()) {
+      var anon$1: Ref
+      var anon$2: Ref
+      anon$2 := pg$length(seq)
+      anon$1 := anon$2
+      inhale df$isSubtype(df$typeOf(anon$1), df$intType())
+      anon$0 := anon$1
     } else {
-      anon_0 := df_nullValue()}
-    ret_0 := df_boolToRef(anon_0 == df_intToRef(0))
+      anon$0 := df$nullValue()}
+    ret$0 := df$boolToRef(anon$0 == df$intToRef(0))
   } else {
-    ret_0 := df_boolToRef(false)}
-  goto lbl_0
-  label lbl_0
+    ret$0 := df$boolToRef(false)}
+  goto lbl$0
+  label lbl$0
 }
 
-method pg_length(this$dispatch: Ref) returns (ret: Ref)
+method pg$length(this$dispatch: Ref) returns (ret: Ref)

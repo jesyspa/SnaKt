@@ -1,247 +1,247 @@
 /try_catch.kt:(158,166): info: Generated Viper text for tryCatch:
-method f_call_TF_T_Int(x: Ref) returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_unitType())
+method f$call$TF$T$Int(x: Ref) returns (ret: Ref)
+  ensures df$isSubtype(df$typeOf(ret), df$unitType())
 
 
-method f_tryCatch_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$tryCatch$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  var anon_0: Ref
-  var anon_1: Ref
-  var anon_2: Ref
-  var anon_3: Ref
+  var anon$0: Ref
+  var anon$1: Ref
+  var anon$2: Ref
+  var anon$3: Ref
   var e: Ref
-  var anon_4: Ref
-  if (df_boolFromRef(anon_0)) {
-    goto lbl_catch_0
+  var anon$4: Ref
+  if (df$boolFromRef(anon$0)) {
+    goto lbl$catch$0
   }
-  anon_1 := f_call_TF_T_Int(df_intToRef(0))
-  anon_2 := f_call_TF_T_Int(df_intToRef(1))
-  if (df_boolFromRef(anon_3)) {
-    goto lbl_catch_0
+  anon$1 := f$call$TF$T$Int(df$intToRef(0))
+  anon$2 := f$call$TF$T$Int(df$intToRef(1))
+  if (df$boolFromRef(anon$3)) {
+    goto lbl$catch$0
   }
-  goto lbl_try_exit_0
-  label lbl_catch_0
-  anon_4 := f_call_TF_T_Int(df_intToRef(2))
-  goto lbl_try_exit_0
-  label lbl_try_exit_0
-  label lbl_ret_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  goto lbl$try_exit$0
+  label lbl$catch$0
+  anon$4 := f$call$TF$T$Int(df$intToRef(2))
+  goto lbl$try_exit$0
+  label lbl$try_exit$0
+  label lbl$ret$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
-method pg_cause(this$dispatch: Ref) returns (ret: Ref)
+method pg$cause(this$dispatch: Ref) returns (ret: Ref)
 
 
-method pg_message(this$dispatch: Ref) returns (ret: Ref)
+method pg$message(this$dispatch: Ref) returns (ret: Ref)
 
 
 /try_catch.kt:(271,285): info: Generated Viper text for nestedTryCatch:
-method f_call_TF_T_Int(p_x: Ref) returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_unitType())
+method f$call$TF$T$Int(p$x: Ref) returns (ret: Ref)
+  ensures df$isSubtype(df$typeOf(ret), df$unitType())
 
 
-method f_nestedTryCatch_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$nestedTryCatch$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  var anon_0: Ref
-  var anon_1: Ref
-  var anon_2: Ref
-  var anon_3: Ref
-  var anon_4: Ref
-  var l3_e: Ref
-  var anon_5: Ref
-  var anon_6: Ref
-  var l4_e: Ref
-  if (df_boolFromRef(anon_0)) {
-    goto lbl_catch_0
+  var anon$0: Ref
+  var anon$1: Ref
+  var anon$2: Ref
+  var anon$3: Ref
+  var anon$4: Ref
+  var l3$e: Ref
+  var anon$5: Ref
+  var anon$6: Ref
+  var l4$e: Ref
+  if (df$boolFromRef(anon$0)) {
+    goto lbl$catch$0
   }
-  anon_1 := f_call_TF_T_Int(df_intToRef(0))
-  if (df_boolFromRef(anon_2)) {
-    goto lbl_catch_1
+  anon$1 := f$call$TF$T$Int(df$intToRef(0))
+  if (df$boolFromRef(anon$2)) {
+    goto lbl$catch$1
   }
-  anon_3 := f_call_TF_T_Int(df_intToRef(1))
-  if (df_boolFromRef(anon_4)) {
-    goto lbl_catch_1
+  anon$3 := f$call$TF$T$Int(df$intToRef(1))
+  if (df$boolFromRef(anon$4)) {
+    goto lbl$catch$1
   }
-  goto lbl_try_exit_1
-  label lbl_catch_1
-  anon_5 := f_call_TF_T_Int(df_intToRef(2))
-  goto lbl_try_exit_1
-  label lbl_try_exit_1
-  if (df_boolFromRef(anon_6)) {
-    goto lbl_catch_0
+  goto lbl$try_exit$1
+  label lbl$catch$1
+  anon$5 := f$call$TF$T$Int(df$intToRef(2))
+  goto lbl$try_exit$1
+  label lbl$try_exit$1
+  if (df$boolFromRef(anon$6)) {
+    goto lbl$catch$0
   }
-  goto lbl_try_exit_0
-  label lbl_catch_0
-  goto lbl_try_exit_0
-  label lbl_try_exit_0
-  label lbl_ret_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  goto lbl$try_exit$0
+  label lbl$catch$0
+  goto lbl$try_exit$0
+  label lbl$try_exit$0
+  label lbl$ret$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
-method pg_cause(this$dispatch: Ref) returns (ret: Ref)
+method pg$cause(this$dispatch: Ref) returns (ret: Ref)
 
 
-method pg_message(this$dispatch: Ref) returns (ret: Ref)
+method pg$message(this$dispatch: Ref) returns (ret: Ref)
 
 
 /try_catch.kt:(574,592): info: Generated Viper text for tryCatchWithInline:
-method f_call_TF_T_Int(x: Ref) returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_unitType())
+method f$call$TF$T$Int(x: Ref) returns (ret: Ref)
+  ensures df$isSubtype(df$typeOf(ret), df$unitType())
 
 
-method f_tryCatchWithInline_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$tryCatchWithInline$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  var anon_0: Ref
-  var ret_1: Ref
-  var anon_1: Ref
-  var anon_2: Ref
-  var anon_3: Ref
+  var anon$0: Ref
+  var ret$1: Ref
+  var anon$1: Ref
+  var anon$2: Ref
+  var anon$3: Ref
   var e: Ref
-  var anon_4: Ref
-  if (df_boolFromRef(anon_0)) {
-    goto lbl_catch_0
+  var anon$4: Ref
+  if (df$boolFromRef(anon$0)) {
+    goto lbl$catch$0
   }
-  anon_1 := f_call_TF_T_Int(df_intToRef(0))
-  anon_2 := f_call_TF_T_Int(df_intToRef(1))
-  label lbl_ret_1
-  inhale df_isSubtype(df_typeOf(ret_1), df_unitType())
-  if (df_boolFromRef(anon_3)) {
-    goto lbl_catch_0
+  anon$1 := f$call$TF$T$Int(df$intToRef(0))
+  anon$2 := f$call$TF$T$Int(df$intToRef(1))
+  label lbl$ret$1
+  inhale df$isSubtype(df$typeOf(ret$1), df$unitType())
+  if (df$boolFromRef(anon$3)) {
+    goto lbl$catch$0
   }
-  goto lbl_try_exit_0
-  label lbl_catch_0
-  anon_4 := f_call_TF_T_Int(df_intToRef(2))
-  goto lbl_try_exit_0
-  label lbl_try_exit_0
-  label lbl_ret_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  goto lbl$try_exit$0
+  label lbl$catch$0
+  anon$4 := f$call$TF$T$Int(df$intToRef(2))
+  goto lbl$try_exit$0
+  label lbl$try_exit$0
+  label lbl$ret$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
-method pg_cause(this$dispatch: Ref) returns (ret: Ref)
+method pg$cause(this$dispatch: Ref) returns (ret: Ref)
 
 
-method pg_message(this$dispatch: Ref) returns (ret: Ref)
+method pg$message(this$dispatch: Ref) returns (ret: Ref)
 
 
 /try_catch.kt:(685,702): info: Generated Viper text for tryCatchShadowing:
-method f_tryCatchShadowing_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$tryCatchShadowing$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  var l0_x: Ref
-  var anon_0: Ref
-  var l1_x: Ref
-  var anon_1: Ref
-  var l2_e: Ref
-  var l2_x: Ref
-  l0_x := df_intToRef(0)
-  if (df_boolFromRef(anon_0)) {
-    goto lbl_catch_0
+  var l0$x: Ref
+  var anon$0: Ref
+  var l1$x: Ref
+  var anon$1: Ref
+  var l2$e: Ref
+  var l2$x: Ref
+  l0$x := df$intToRef(0)
+  if (df$boolFromRef(anon$0)) {
+    goto lbl$catch$0
   }
-  l1_x := df_intToRef(1)
-  if (df_boolFromRef(anon_1)) {
-    goto lbl_catch_0
+  l1$x := df$intToRef(1)
+  if (df$boolFromRef(anon$1)) {
+    goto lbl$catch$0
   }
-  goto lbl_try_exit_0
-  label lbl_catch_0
-  l2_x := df_intToRef(2)
-  goto lbl_try_exit_0
-  label lbl_try_exit_0
-  label lbl_ret_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  goto lbl$try_exit$0
+  label lbl$catch$0
+  l2$x := df$intToRef(2)
+  goto lbl$try_exit$0
+  label lbl$try_exit$0
+  label lbl$ret$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
-method pg_cause(this$dispatch: Ref) returns (ret: Ref)
+method pg$cause(this$dispatch: Ref) returns (ret: Ref)
 
 
-method pg_message(this$dispatch: Ref) returns (ret: Ref)
+method pg$message(this$dispatch: Ref) returns (ret: Ref)
 
 
 /try_catch.kt:(813,828): info: Generated Viper text for multipleCatches:
-method f_call_TF_T_Int(p_x: Ref) returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_unitType())
+method f$call$TF$T$Int(p$x: Ref) returns (ret: Ref)
+  ensures df$isSubtype(df$typeOf(ret), df$unitType())
 
 
-method f_multipleCatches_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$multipleCatches$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  var anon_0: Ref
-  var anon_1: Ref
-  var anon_2: Ref
-  var anon_3: Ref
-  var anon_4: Ref
-  var anon_5: Ref
-  var l2_e: Ref
-  var anon_6: Ref
-  var l3_e: Ref
-  var anon_7: Ref
-  if (df_boolFromRef(anon_0)) {
-    goto lbl_catch_0
+  var anon$0: Ref
+  var anon$1: Ref
+  var anon$2: Ref
+  var anon$3: Ref
+  var anon$4: Ref
+  var anon$5: Ref
+  var l2$e: Ref
+  var anon$6: Ref
+  var l3$e: Ref
+  var anon$7: Ref
+  if (df$boolFromRef(anon$0)) {
+    goto lbl$catch$0
   }
-  if (df_boolFromRef(anon_1)) {
-    goto lbl_catch_1
+  if (df$boolFromRef(anon$1)) {
+    goto lbl$catch$1
   }
-  anon_2 := f_call_TF_T_Int(df_intToRef(0))
-  anon_3 := f_call_TF_T_Int(df_intToRef(1))
-  if (df_boolFromRef(anon_4)) {
-    goto lbl_catch_0
+  anon$2 := f$call$TF$T$Int(df$intToRef(0))
+  anon$3 := f$call$TF$T$Int(df$intToRef(1))
+  if (df$boolFromRef(anon$4)) {
+    goto lbl$catch$0
   }
-  if (df_boolFromRef(anon_5)) {
-    goto lbl_catch_1
+  if (df$boolFromRef(anon$5)) {
+    goto lbl$catch$1
   }
-  goto lbl_try_exit_0
-  label lbl_catch_0
-  anon_6 := f_call_TF_T_Int(df_intToRef(2))
-  goto lbl_try_exit_0
-  label lbl_catch_1
-  anon_7 := f_call_TF_T_Int(df_intToRef(3))
-  goto lbl_try_exit_0
-  label lbl_try_exit_0
-  label lbl_ret_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  goto lbl$try_exit$0
+  label lbl$catch$0
+  anon$6 := f$call$TF$T$Int(df$intToRef(2))
+  goto lbl$try_exit$0
+  label lbl$catch$1
+  anon$7 := f$call$TF$T$Int(df$intToRef(3))
+  goto lbl$try_exit$0
+  label lbl$try_exit$0
+  label lbl$ret$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
-method pg_cause(this$dispatch: Ref) returns (ret: Ref)
+method pg$cause(this$dispatch: Ref) returns (ret: Ref)
 
 
-method pg_message(this$dispatch: Ref) returns (ret: Ref)
+method pg$message(this$dispatch: Ref) returns (ret: Ref)
 
 
 /try_catch.kt:(1044,1056): info: Generated Viper text for useException:
-method f_call_TF_T_Int(p_x: Ref) returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_unitType())
+method f$call$TF$T$Int(p$x: Ref) returns (ret: Ref)
+  ensures df$isSubtype(df$typeOf(ret), df$unitType())
 
 
-method f_ignore_TF_T_Exception(p_e: Ref) returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_unitType())
+method f$ignore$TF$T$Exception(p$e: Ref) returns (ret: Ref)
+  ensures df$isSubtype(df$typeOf(ret), df$unitType())
 
 
-method f_useException_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$useException$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  var anon_0: Ref
-  var anon_1: Ref
-  var anon_2: Ref
-  var l2_e: Ref
-  var anon_3: Ref
-  if (df_boolFromRef(anon_0)) {
-    goto lbl_catch_0
+  var anon$0: Ref
+  var anon$1: Ref
+  var anon$2: Ref
+  var l2$e: Ref
+  var anon$3: Ref
+  if (df$boolFromRef(anon$0)) {
+    goto lbl$catch$0
   }
-  anon_1 := f_call_TF_T_Int(df_intToRef(0))
-  if (df_boolFromRef(anon_2)) {
-    goto lbl_catch_0
+  anon$1 := f$call$TF$T$Int(df$intToRef(0))
+  if (df$boolFromRef(anon$2)) {
+    goto lbl$catch$0
   }
-  goto lbl_try_exit_0
-  label lbl_catch_0
-  anon_3 := f_ignore_TF_T_Exception(l2_e)
-  goto lbl_try_exit_0
-  label lbl_try_exit_0
-  label lbl_ret_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  goto lbl$try_exit$0
+  label lbl$catch$0
+  anon$3 := f$ignore$TF$T$Exception(l2$e)
+  goto lbl$try_exit$0
+  label lbl$try_exit$0
+  label lbl$ret$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
-method pg_cause(this$dispatch: Ref) returns (ret: Ref)
+method pg$cause(this$dispatch: Ref) returns (ret: Ref)
 
 
-method pg_message(this$dispatch: Ref) returns (ret: Ref)
+method pg$message(this$dispatch: Ref) returns (ret: Ref)

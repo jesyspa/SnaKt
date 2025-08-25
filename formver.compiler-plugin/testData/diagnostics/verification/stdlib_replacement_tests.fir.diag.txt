@@ -1,201 +1,201 @@
 /stdlib_replacement_tests.kt:(104,113): info: Generated Viper text for useChecks:
-method f_useChecks_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$useChecks$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  var ret_1: Ref
-  var anon_0: Ref
-  var ret_2: Ref
-  var anon_1: Ref
-  anon_0 := df_boolToRef(true)
-  label lbl_1
-  inhale df_isSubtype(df_typeOf(ret_1), df_unitType())
-  anon_1 := df_boolToRef(true)
-  label lbl_2
-  inhale df_isSubtype(df_typeOf(ret_2), df_unitType())
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  var ret$1: Ref
+  var anon$0: Ref
+  var ret$2: Ref
+  var anon$1: Ref
+  anon$0 := df$boolToRef(true)
+  label lbl$1
+  inhale df$isSubtype(df$typeOf(ret$1), df$unitType())
+  anon$1 := df$boolToRef(true)
+  label lbl$2
+  inhale df$isSubtype(df$typeOf(ret$2), df$unitType())
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
 /stdlib_replacement_tests.kt:(298,305): info: Generated Viper text for useRuns:
-field bf_size: Ref
+field bf$size: Ref
 
-method f_useRuns_TF_T_Int(x: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$useRuns$TF$T$Int(x: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
   var cond1: Ref
-  var anon_2: Ref
-  var anon_3: Ref
-  var ret_1: Ref
-  var anon_4: Ref
-  var ret_2: Ref
+  var anon$2: Ref
+  var anon$3: Ref
+  var ret$1: Ref
+  var anon$4: Ref
+  var ret$2: Ref
   var cond2: Ref
-  var anon_5: Ref
-  var anon_6: Ref
-  var ret_3: Ref
-  var anon_0: Ref
-  var anon_7: Ref
-  var ret_4: Ref
-  var anon_1: Ref
-  inhale df_isSubtype(df_typeOf(x), df_intType())
-  ret_2 := sp_plusInts(x, df_intToRef(1))
-  goto lbl_2
-  label lbl_2
-  anon_4 := ret_2
-  ret_1 := anon_4
-  inhale df_isSubtype(df_typeOf(ret_1), df_nullable(df_anyType()))
-  goto lbl_1
-  label lbl_1
-  anon_3 := ret_1
-  anon_2 := anon_3
-  inhale df_isSubtype(df_typeOf(anon_2), df_intType())
-  cond1 := df_boolToRef(df_intFromRef(anon_2) == 1 + df_intFromRef(x))
-  inhale df_isSubtype(df_typeOf(x), df_nullable(df_anyType()))
-  anon_0 := x
-  inhale df_isSubtype(df_typeOf(anon_0), df_intType())
-  anon_1 := anon_0
-  ret_4 := sp_plusInts(anon_1, df_intToRef(1))
-  goto lbl_4
-  label lbl_4
-  anon_7 := ret_4
-  ret_3 := anon_7
-  inhale df_isSubtype(df_typeOf(ret_3), df_nullable(df_anyType()))
-  goto lbl_3
-  label lbl_3
-  anon_6 := ret_3
-  anon_5 := anon_6
-  inhale df_isSubtype(df_typeOf(anon_5), df_intType())
-  cond2 := df_boolToRef(df_intFromRef(anon_5) == 1 + df_intFromRef(x))
-  assert df_boolFromRef(cond1)
-  assert df_boolFromRef(cond2)
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  var anon$5: Ref
+  var anon$6: Ref
+  var ret$3: Ref
+  var anon$0: Ref
+  var anon$7: Ref
+  var ret$4: Ref
+  var anon$1: Ref
+  inhale df$isSubtype(df$typeOf(x), df$intType())
+  ret$2 := sp$plusInts(x, df$intToRef(1))
+  goto lbl$2
+  label lbl$2
+  anon$4 := ret$2
+  ret$1 := anon$4
+  inhale df$isSubtype(df$typeOf(ret$1), df$nullable(df$anyType()))
+  goto lbl$1
+  label lbl$1
+  anon$3 := ret$1
+  anon$2 := anon$3
+  inhale df$isSubtype(df$typeOf(anon$2), df$intType())
+  cond1 := df$boolToRef(df$intFromRef(anon$2) == 1 + df$intFromRef(x))
+  inhale df$isSubtype(df$typeOf(x), df$nullable(df$anyType()))
+  anon$0 := x
+  inhale df$isSubtype(df$typeOf(anon$0), df$intType())
+  anon$1 := anon$0
+  ret$4 := sp$plusInts(anon$1, df$intToRef(1))
+  goto lbl$4
+  label lbl$4
+  anon$7 := ret$4
+  ret$3 := anon$7
+  inhale df$isSubtype(df$typeOf(ret$3), df$nullable(df$anyType()))
+  goto lbl$3
+  label lbl$3
+  anon$6 := ret$3
+  anon$5 := anon$6
+  inhale df$isSubtype(df$typeOf(anon$5), df$intType())
+  cond2 := df$boolToRef(df$intFromRef(anon$5) == 1 + df$intFromRef(x))
+  assert df$boolFromRef(cond1)
+  assert df$boolFromRef(cond2)
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
 /stdlib_replacement_tests.kt:(459,466): info: Generated Viper text for useAlso:
-field bf_size: Ref
+field bf$size: Ref
 
-method f_useAlso_TF_T_Int(x: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$useAlso$TF$T$Int(x: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  var anon_2: Ref
-  var anon_3: Ref
-  var ret_1: Ref
-  var anon_0: Ref
-  var ret_2: Ref
-  var anon_1: Ref
-  inhale df_isSubtype(df_typeOf(x), df_intType())
-  anon_0 := sp_plusInts(x, df_intToRef(1))
-  inhale df_isSubtype(df_typeOf(anon_0), df_nullable(df_anyType()))
-  inhale df_isSubtype(df_typeOf(anon_0), df_intType())
-  anon_1 := anon_0
-  assert df_intFromRef(anon_1) == 1 + df_intFromRef(x)
-  label lbl_2
-  inhale df_isSubtype(df_typeOf(ret_2), df_unitType())
-  ret_1 := anon_0
-  goto lbl_1
-  label lbl_1
-  anon_3 := ret_1
-  anon_2 := anon_3
-  inhale df_isSubtype(df_typeOf(anon_2), df_intType())
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  var anon$2: Ref
+  var anon$3: Ref
+  var ret$1: Ref
+  var anon$0: Ref
+  var ret$2: Ref
+  var anon$1: Ref
+  inhale df$isSubtype(df$typeOf(x), df$intType())
+  anon$0 := sp$plusInts(x, df$intToRef(1))
+  inhale df$isSubtype(df$typeOf(anon$0), df$nullable(df$anyType()))
+  inhale df$isSubtype(df$typeOf(anon$0), df$intType())
+  anon$1 := anon$0
+  assert df$intFromRef(anon$1) == 1 + df$intFromRef(x)
+  label lbl$2
+  inhale df$isSubtype(df$typeOf(ret$2), df$unitType())
+  ret$1 := anon$0
+  goto lbl$1
+  label lbl$1
+  anon$3 := ret$1
+  anon$2 := anon$3
+  inhale df$isSubtype(df$typeOf(anon$2), df$intType())
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
 /stdlib_replacement_tests.kt:(531,537): info: Generated Viper text for useLet:
-field bf_size: Ref
+field bf$size: Ref
 
-method f_useLet_TF_T_Int(x: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$useLet$TF$T$Int(x: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
   var cond1: Ref
-  var anon_2: Ref
-  var anon_3: Ref
-  var ret_1: Ref
-  var anon_0: Ref
-  var anon_4: Ref
-  var ret_2: Ref
-  var anon_1: Ref
-  inhale df_isSubtype(df_typeOf(x), df_intType())
-  inhale df_isSubtype(df_typeOf(x), df_nullable(df_anyType()))
-  anon_0 := x
-  inhale df_isSubtype(df_typeOf(anon_0), df_intType())
-  anon_1 := anon_0
-  ret_2 := sp_plusInts(anon_1, df_intToRef(1))
-  goto lbl_2
-  label lbl_2
-  anon_4 := ret_2
-  ret_1 := anon_4
-  inhale df_isSubtype(df_typeOf(ret_1), df_nullable(df_anyType()))
-  goto lbl_1
-  label lbl_1
-  anon_3 := ret_1
-  anon_2 := anon_3
-  inhale df_isSubtype(df_typeOf(anon_2), df_intType())
-  cond1 := df_boolToRef(df_intFromRef(anon_2) == 1 + df_intFromRef(x))
-  assert df_boolFromRef(cond1)
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  var anon$2: Ref
+  var anon$3: Ref
+  var ret$1: Ref
+  var anon$0: Ref
+  var anon$4: Ref
+  var ret$2: Ref
+  var anon$1: Ref
+  inhale df$isSubtype(df$typeOf(x), df$intType())
+  inhale df$isSubtype(df$typeOf(x), df$nullable(df$anyType()))
+  anon$0 := x
+  inhale df$isSubtype(df$typeOf(anon$0), df$intType())
+  anon$1 := anon$0
+  ret$2 := sp$plusInts(anon$1, df$intToRef(1))
+  goto lbl$2
+  label lbl$2
+  anon$4 := ret$2
+  ret$1 := anon$4
+  inhale df$isSubtype(df$typeOf(ret$1), df$nullable(df$anyType()))
+  goto lbl$1
+  label lbl$1
+  anon$3 := ret$1
+  anon$2 := anon$3
+  inhale df$isSubtype(df$typeOf(anon$2), df$intType())
+  cond1 := df$boolToRef(df$intFromRef(anon$2) == 1 + df$intFromRef(x))
+  assert df$boolFromRef(cond1)
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
 /stdlib_replacement_tests.kt:(621,628): info: Generated Viper text for useWith:
-field bf_size: Ref
+field bf$size: Ref
 
-method f_useWith_TF_T_Int(x: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$useWith$TF$T$Int(x: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  var anon_2: Ref
-  var anon_3: Ref
-  var ret_1: Ref
-  var anon_0: Ref
-  var anon_4: Ref
-  var ret_2: Ref
-  var anon_1: Ref
-  inhale df_isSubtype(df_typeOf(x), df_intType())
-  anon_0 := sp_plusInts(x, df_intToRef(1))
-  inhale df_isSubtype(df_typeOf(anon_0), df_nullable(df_anyType()))
-  inhale df_isSubtype(df_typeOf(anon_0), df_intType())
-  anon_1 := anon_0
-  assert df_intFromRef(anon_1) == 1 + df_intFromRef(x)
-  label lbl_2
-  inhale df_isSubtype(df_typeOf(ret_2), df_unitType())
-  anon_4 := ret_2
-  ret_1 := anon_4
-  inhale df_isSubtype(df_typeOf(ret_1), df_nullable(df_anyType()))
-  goto lbl_1
-  label lbl_1
-  anon_3 := ret_1
-  anon_2 := anon_3
-  inhale df_isSubtype(df_typeOf(anon_2), df_unitType())
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  var anon$2: Ref
+  var anon$3: Ref
+  var ret$1: Ref
+  var anon$0: Ref
+  var anon$4: Ref
+  var ret$2: Ref
+  var anon$1: Ref
+  inhale df$isSubtype(df$typeOf(x), df$intType())
+  anon$0 := sp$plusInts(x, df$intToRef(1))
+  inhale df$isSubtype(df$typeOf(anon$0), df$nullable(df$anyType()))
+  inhale df$isSubtype(df$typeOf(anon$0), df$intType())
+  anon$1 := anon$0
+  assert df$intFromRef(anon$1) == 1 + df$intFromRef(x)
+  label lbl$2
+  inhale df$isSubtype(df$typeOf(ret$2), df$unitType())
+  anon$4 := ret$2
+  ret$1 := anon$4
+  inhale df$isSubtype(df$typeOf(ret$1), df$nullable(df$anyType()))
+  goto lbl$1
+  label lbl$1
+  anon$3 := ret$1
+  anon$2 := anon$3
+  inhale df$isSubtype(df$typeOf(anon$2), df$unitType())
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
 /stdlib_replacement_tests.kt:(694,702): info: Generated Viper text for useApply:
-field bf_size: Ref
+field bf$size: Ref
 
-method f_useApply_TF_T_Int(x: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$useApply$TF$T$Int(x: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  var anon_2: Ref
-  var anon_3: Ref
-  var ret_1: Ref
-  var anon_0: Ref
-  var ret_2: Ref
-  var anon_1: Ref
-  inhale df_isSubtype(df_typeOf(x), df_intType())
-  anon_0 := sp_plusInts(x, df_intToRef(1))
-  inhale df_isSubtype(df_typeOf(anon_0), df_nullable(df_anyType()))
-  inhale df_isSubtype(df_typeOf(anon_0), df_intType())
-  anon_1 := anon_0
-  assert df_intFromRef(anon_1) == 1 + df_intFromRef(x)
-  label lbl_2
-  inhale df_isSubtype(df_typeOf(ret_2), df_unitType())
-  ret_1 := anon_0
-  goto lbl_1
-  label lbl_1
-  anon_3 := ret_1
-  anon_2 := anon_3
-  inhale df_isSubtype(df_typeOf(anon_2), df_intType())
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  var anon$2: Ref
+  var anon$3: Ref
+  var ret$1: Ref
+  var anon$0: Ref
+  var ret$2: Ref
+  var anon$1: Ref
+  inhale df$isSubtype(df$typeOf(x), df$intType())
+  anon$0 := sp$plusInts(x, df$intToRef(1))
+  inhale df$isSubtype(df$typeOf(anon$0), df$nullable(df$anyType()))
+  inhale df$isSubtype(df$typeOf(anon$0), df$intType())
+  anon$1 := anon$0
+  assert df$intFromRef(anon$1) == 1 + df$intFromRef(x)
+  label lbl$2
+  inhale df$isSubtype(df$typeOf(ret$2), df$unitType())
+  ret$1 := anon$0
+  goto lbl$1
+  label lbl$1
+  anon$3 := ret$1
+  anon$2 := anon$3
+  inhale df$isSubtype(df$typeOf(anon$2), df$intType())
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }

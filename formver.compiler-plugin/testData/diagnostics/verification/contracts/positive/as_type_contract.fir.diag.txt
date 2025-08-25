@@ -1,60 +1,60 @@
 /as_type_contract.kt:(152,162): info: Generated Viper text for asOperator:
-method f_asOperator_TF_T_Foo(foo: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_c_Bar())
-  ensures acc(p_c_Bar_shared(ret_0), wildcard)
-  ensures true ==> df_isSubtype(df_typeOf(foo), df_c_Bar())
+method f$asOperator$TF$T$Foo(foo: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$c$Bar())
+  ensures acc(p$c$Bar$shared(ret$0), wildcard)
+  ensures true ==> df$isSubtype(df$typeOf(foo), df$c$Bar())
 {
-  inhale df_isSubtype(df_typeOf(foo), df_c_Foo())
-  inhale acc(p_c_Foo_shared(foo), wildcard)
-  inhale df_isSubtype(df_typeOf(foo), df_c_Bar())
-  inhale acc(p_c_Bar_shared(foo), wildcard)
-  ret_0 := foo
-  goto lbl_0
-  label lbl_0
+  inhale df$isSubtype(df$typeOf(foo), df$c$Foo())
+  inhale acc(p$c$Foo$shared(foo), wildcard)
+  inhale df$isSubtype(df$typeOf(foo), df$c$Bar())
+  inhale acc(p$c$Bar$shared(foo), wildcard)
+  ret$0 := foo
+  goto lbl$0
+  label lbl$0
 }
 
 /as_type_contract.kt:(307,321): info: Generated Viper text for safeAsOperator:
-method f_safeAsOperator_TF_T_Foo(foo: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_nullable(df_c_Bar()))
-  ensures ret_0 != df_nullValue() ==> acc(p_c_Bar_shared(ret_0), wildcard)
-  ensures ret_0 != df_nullValue() ==>
-    df_isSubtype(df_typeOf(foo), df_c_Bar())
+method f$safeAsOperator$TF$T$Foo(foo: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$nullable(df$c$Bar()))
+  ensures ret$0 != df$nullValue() ==> acc(p$c$Bar$shared(ret$0), wildcard)
+  ensures ret$0 != df$nullValue() ==>
+    df$isSubtype(df$typeOf(foo), df$c$Bar())
 {
-  inhale df_isSubtype(df_typeOf(foo), df_c_Foo())
-  inhale acc(p_c_Foo_shared(foo), wildcard)
-  inhale df_isSubtype(df_typeOf(foo), df_nullable(df_c_Bar()))
-  inhale foo != df_nullValue() ==> acc(p_c_Bar_shared(foo), wildcard)
-  ret_0 := foo
-  goto lbl_0
-  label lbl_0
+  inhale df$isSubtype(df$typeOf(foo), df$c$Foo())
+  inhale acc(p$c$Foo$shared(foo), wildcard)
+  inhale df$isSubtype(df$typeOf(foo), df$nullable(df$c$Bar()))
+  inhale foo != df$nullValue() ==> acc(p$c$Bar$shared(foo), wildcard)
+  ret$0 := foo
+  goto lbl$0
+  label lbl$0
 }
 
 /as_type_contract.kt:(504,508): info: Generated Viper text for getX:
-field bf_x: Ref
+field bf$x: Ref
 
-method f_getX_TF_T_Any(a: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_nullable(df_intType()))
-  ensures ret_0 != df_nullValue() ==>
-    df_isSubtype(df_typeOf(a), df_c_IntHolder())
-  ensures ret_0 == df_nullValue() ==>
-    !df_isSubtype(df_typeOf(a), df_c_IntHolder())
+method f$getX$TF$T$Any(a: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$nullable(df$intType()))
+  ensures ret$0 != df$nullValue() ==>
+    df$isSubtype(df$typeOf(a), df$c$IntHolder())
+  ensures ret$0 == df$nullValue() ==>
+    !df$isSubtype(df$typeOf(a), df$c$IntHolder())
 {
-  var anon_0: Ref
-  inhale df_isSubtype(df_typeOf(a), df_anyType())
-  if (df_isSubtype(df_typeOf(a), df_c_IntHolder())) {
-    anon_0 := a
+  var anon$0: Ref
+  inhale df$isSubtype(df$typeOf(a), df$anyType())
+  if (df$isSubtype(df$typeOf(a), df$c$IntHolder())) {
+    anon$0 := a
   } else {
-    anon_0 := df_nullValue()}
-  inhale df_isSubtype(df_typeOf(anon_0), df_nullable(df_c_IntHolder()))
-  inhale anon_0 != df_nullValue() ==>
-    acc(p_c_IntHolder_shared(anon_0), wildcard)
-  if (anon_0 != df_nullValue()) {
-    var anon_1: Ref
-    unfold acc(p_c_IntHolder_shared(anon_0), wildcard)
-    anon_1 := anon_0.bf_x
-    ret_0 := anon_1
+    anon$0 := df$nullValue()}
+  inhale df$isSubtype(df$typeOf(anon$0), df$nullable(df$c$IntHolder()))
+  inhale anon$0 != df$nullValue() ==>
+    acc(p$c$IntHolder$shared(anon$0), wildcard)
+  if (anon$0 != df$nullValue()) {
+    var anon$1: Ref
+    unfold acc(p$c$IntHolder$shared(anon$0), wildcard)
+    anon$1 := anon$0.bf$x
+    ret$0 := anon$1
   } else {
-    ret_0 := df_nullValue()}
-  goto lbl_0
-  label lbl_0
+    ret$0 := df$nullValue()}
+  goto lbl$0
+  label lbl$0
 }

@@ -1,111 +1,111 @@
 /non-local-returns.kt:(155,167): info: Generated Viper text for simpleReturn:
-method f_simpleReturn_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
+method f$simpleReturn$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$intType())
 {
-  var ret_1: Ref
-  var ret_2: Ref
-  var anon_0: Ref
-  anon_0 := df_intToRef(0)
-  ret_0 := df_intToRef(1)
-  goto lbl_0
-  ret_2 := anon_0
-  goto lbl_2
-  label lbl_2
-  ret_1 := ret_2
-  goto lbl_1
-  label lbl_1
-  ret_0 := ret_1
-  goto lbl_0
-  label lbl_0
+  var ret$1: Ref
+  var ret$2: Ref
+  var anon$0: Ref
+  anon$0 := df$intToRef(0)
+  ret$0 := df$intToRef(1)
+  goto lbl$0
+  ret$2 := anon$0
+  goto lbl$2
+  label lbl$2
+  ret$1 := ret$2
+  goto lbl$1
+  label lbl$1
+  ret$0 := ret$1
+  goto lbl$0
+  label lbl$0
 }
 
 /non-local-returns.kt:(238,252): info: Generated Viper text for returnAtInline:
-method f_returnAtInline_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
+method f$returnAtInline$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$intType())
 {
-  var ret_1: Ref
-  var ret_2: Ref
-  var anon_0: Ref
-  anon_0 := df_intToRef(0)
-  ret_2 := df_intToRef(1)
-  goto lbl_2
-  ret_2 := anon_0
-  goto lbl_2
-  label lbl_2
-  ret_1 := ret_2
-  goto lbl_1
-  label lbl_1
-  ret_0 := ret_1
-  goto lbl_0
-  label lbl_0
+  var ret$1: Ref
+  var ret$2: Ref
+  var anon$0: Ref
+  anon$0 := df$intToRef(0)
+  ret$2 := df$intToRef(1)
+  goto lbl$2
+  ret$2 := anon$0
+  goto lbl$2
+  label lbl$2
+  ret$1 := ret$2
+  goto lbl$1
+  label lbl$1
+  ret$0 := ret$1
+  goto lbl$0
+  label lbl$0
 }
 
 /non-local-returns.kt:(330,342): info: Generated Viper text for doubleInvoke:
-method f_doubleInvoke_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
+method f$doubleInvoke$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$intType())
 {
-  var ret_1: Ref
-  var ret_2: Ref
-  var anon_0: Ref
-  var ret_3: Ref
-  var ret_4: Ref
-  var anon_1: Ref
-  anon_0 := df_intToRef(0)
-  anon_1 := df_intToRef(0)
-  ret_4 := df_intToRef(1)
-  goto lbl_4
-  ret_4 := anon_1
-  goto lbl_4
-  label lbl_4
-  ret_3 := ret_4
-  goto lbl_3
-  label lbl_3
-  ret_2 := df_intToRef(2)
-  goto lbl_2
-  ret_2 := anon_0
-  goto lbl_2
-  label lbl_2
-  ret_1 := ret_2
-  goto lbl_1
-  label lbl_1
-  ret_0 := ret_1
-  goto lbl_0
-  label lbl_0
+  var ret$1: Ref
+  var ret$2: Ref
+  var anon$0: Ref
+  var ret$3: Ref
+  var ret$4: Ref
+  var anon$1: Ref
+  anon$0 := df$intToRef(0)
+  anon$1 := df$intToRef(0)
+  ret$4 := df$intToRef(1)
+  goto lbl$4
+  ret$4 := anon$1
+  goto lbl$4
+  label lbl$4
+  ret$3 := ret$4
+  goto lbl$3
+  label lbl$3
+  ret$2 := df$intToRef(2)
+  goto lbl$2
+  ret$2 := anon$0
+  goto lbl$2
+  label lbl$2
+  ret$1 := ret$2
+  goto lbl$1
+  label lbl$1
+  ret$0 := ret$1
+  goto lbl$0
+  label lbl$0
 }
 
 /non-local-returns.kt:(567,573): info: Generated Viper text for nested:
-method f_nested_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
+method f$nested$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$intType())
 {
-  var ret_1: Ref
-  var ret_2: Ref
-  var anon_0: Ref
-  var ret_3: Ref
-  var ret_4: Ref
-  var anon_1: Ref
-  anon_0 := df_intToRef(0)
-  anon_1 := df_intToRef(1)
-  ret_4 := df_intToRef(2)
-  goto lbl_4
-  ret_2 := df_intToRef(3)
-  goto lbl_2
-  ret_0 := df_intToRef(4)
-  goto lbl_0
-  ret_4 := anon_1
-  goto lbl_4
-  label lbl_4
-  ret_3 := ret_4
-  goto lbl_3
-  label lbl_3
-  ret_2 := df_intToRef(5)
-  goto lbl_2
-  ret_2 := anon_0
-  goto lbl_2
-  label lbl_2
-  ret_1 := ret_2
-  goto lbl_1
-  label lbl_1
-  ret_0 := ret_1
-  goto lbl_0
-  label lbl_0
+  var ret$1: Ref
+  var ret$2: Ref
+  var anon$0: Ref
+  var ret$3: Ref
+  var ret$4: Ref
+  var anon$1: Ref
+  anon$0 := df$intToRef(0)
+  anon$1 := df$intToRef(1)
+  ret$4 := df$intToRef(2)
+  goto lbl$4
+  ret$2 := df$intToRef(3)
+  goto lbl$2
+  ret$0 := df$intToRef(4)
+  goto lbl$0
+  ret$4 := anon$1
+  goto lbl$4
+  label lbl$4
+  ret$3 := ret$4
+  goto lbl$3
+  label lbl$3
+  ret$2 := df$intToRef(5)
+  goto lbl$2
+  ret$2 := anon$0
+  goto lbl$2
+  label lbl$2
+  ret$1 := ret$2
+  goto lbl$1
+  label lbl$1
+  ret$0 := ret$1
+  goto lbl$0
+  label lbl$0
 }

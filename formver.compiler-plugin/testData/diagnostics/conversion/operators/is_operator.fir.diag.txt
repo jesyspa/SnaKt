@@ -1,34 +1,34 @@
 /is_operator.kt:(23,36): info: Generated Viper text for isNonNullable:
-method f_isNonNullable_TF_NT_Int(x: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
+method f$isNonNullable$TF$NT$Int(x: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$boolType())
 {
-  inhale df_isSubtype(df_typeOf(x), df_nullable(df_intType()))
-  ret_0 := df_boolToRef(df_isSubtype(df_typeOf(x), df_intType()))
-  goto lbl_0
-  label lbl_0
+  inhale df$isSubtype(df$typeOf(x), df$nullable(df$intType()))
+  ret$0 := df$boolToRef(df$isSubtype(df$typeOf(x), df$intType()))
+  goto lbl$0
+  label lbl$0
 }
 
 /is_operator.kt:(84,97): info: Generated Viper text for notIsNullable:
-method f_notIsNullable_TF_NT_Int(x: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
+method f$notIsNullable$TF$NT$Int(x: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$boolType())
 {
-  inhale df_isSubtype(df_typeOf(x), df_nullable(df_intType()))
-  ret_0 := sp_notBool(df_boolToRef(df_isSubtype(df_typeOf(x), df_nothingType())))
-  goto lbl_0
-  label lbl_0
+  inhale df$isSubtype(df$typeOf(x), df$nullable(df$intType()))
+  ret$0 := sp$notBool(df$boolToRef(df$isSubtype(df$typeOf(x), df$nothingType())))
+  goto lbl$0
+  label lbl$0
 }
 
 /is_operator.kt:(150,159): info: Generated Viper text for smartCast:
-method f_smartCast_TF_NT_Any(x: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
+method f$smartCast$TF$NT$Any(x: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$intType())
 {
-  inhale df_isSubtype(df_typeOf(x), df_nullable(df_anyType()))
-  if (df_isSubtype(df_typeOf(x), df_intType())) {
-    ret_0 := x
-    goto lbl_0
+  inhale df$isSubtype(df$typeOf(x), df$nullable(df$anyType()))
+  if (df$isSubtype(df$typeOf(x), df$intType())) {
+    ret$0 := x
+    goto lbl$0
   } else {
-    ret_0 := df_intToRef(-1)
-    goto lbl_0
+    ret$0 := df$intToRef(-1)
+    goto lbl$0
   }
-  label lbl_0
+  label lbl$0
 }

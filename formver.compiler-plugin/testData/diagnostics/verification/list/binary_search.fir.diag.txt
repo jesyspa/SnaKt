@@ -1,161 +1,161 @@
 /binary_search.kt:(90,108): info: Generated Viper text for safe_binary_search:
-field sp_size: Ref
+field sp$size: Ref
 
-method f_get_TF_T_List_T_Int(this$dispatch: Ref, index: Ref)
+method f$get$TF$T$List$T$Int(this$dispatch: Ref, index: Ref)
   returns (ret: Ref)
-  requires acc(this$dispatch.sp_size, write)
-  requires df_intFromRef(this$dispatch.sp_size) >= 0
-  requires df_intFromRef(index) >= 0
-  requires df_intFromRef(this$dispatch.sp_size) > df_intFromRef(index)
-  ensures acc(this$dispatch.sp_size, write)
-  ensures df_intFromRef(this$dispatch.sp_size) >= 0
-  ensures df_isSubtype(df_typeOf(ret), df_intType())
-  ensures df_intFromRef(this$dispatch.sp_size) ==
-    old(df_intFromRef(this$dispatch.sp_size))
+  requires acc(this$dispatch.sp$size, write)
+  requires df$intFromRef(this$dispatch.sp$size) >= 0
+  requires df$intFromRef(index) >= 0
+  requires df$intFromRef(this$dispatch.sp$size) > df$intFromRef(index)
+  ensures acc(this$dispatch.sp$size, write)
+  ensures df$intFromRef(this$dispatch.sp$size) >= 0
+  ensures df$isSubtype(df$typeOf(ret), df$intType())
+  ensures df$intFromRef(this$dispatch.sp$size) ==
+    old(df$intFromRef(this$dispatch.sp$size))
 
 
-method f_isEmpty_TF_T_List(this$dispatch: Ref) returns (ret: Ref)
-  requires acc(this$dispatch.sp_size, write)
-  requires df_intFromRef(this$dispatch.sp_size) >= 0
-  ensures acc(this$dispatch.sp_size, write)
-  ensures df_intFromRef(this$dispatch.sp_size) >= 0
-  ensures df_isSubtype(df_typeOf(ret), df_boolType())
-  ensures df_intFromRef(this$dispatch.sp_size) ==
-    old(df_intFromRef(this$dispatch.sp_size))
-  ensures df_boolFromRef(ret) ==> df_intFromRef(this$dispatch.sp_size) == 0
-  ensures !df_boolFromRef(ret) ==> df_intFromRef(this$dispatch.sp_size) > 0
+method f$isEmpty$TF$T$List(this$dispatch: Ref) returns (ret: Ref)
+  requires acc(this$dispatch.sp$size, write)
+  requires df$intFromRef(this$dispatch.sp$size) >= 0
+  ensures acc(this$dispatch.sp$size, write)
+  ensures df$intFromRef(this$dispatch.sp$size) >= 0
+  ensures df$isSubtype(df$typeOf(ret), df$boolType())
+  ensures df$intFromRef(this$dispatch.sp$size) ==
+    old(df$intFromRef(this$dispatch.sp$size))
+  ensures df$boolFromRef(ret) ==> df$intFromRef(this$dispatch.sp$size) == 0
+  ensures !df$boolFromRef(ret) ==> df$intFromRef(this$dispatch.sp$size) > 0
 
 
-method f_safe_binary_search_TF_T_List_T_Int(arr: Ref, target: Ref)
-  returns (ret_0: Ref)
-  requires acc(arr.sp_size, write)
-  requires df_intFromRef(arr.sp_size) >= 0
-  ensures acc(arr.sp_size, write)
-  ensures df_intFromRef(arr.sp_size) >= 0
-  ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
+method f$safe_binary_search$TF$T$List$T$Int(arr: Ref, target: Ref)
+  returns (ret$0: Ref)
+  requires acc(arr.sp$size, write)
+  requires df$intFromRef(arr.sp$size) >= 0
+  ensures acc(arr.sp$size, write)
+  ensures df$intFromRef(arr.sp$size) >= 0
+  ensures df$isSubtype(df$typeOf(ret$0), df$boolType())
 {
   var size: Ref
   var mid: Ref
-  var anon_0: Ref
-  var anon_1: Ref
-  inhale df_isSubtype(df_typeOf(arr), df_c_pkg$kotlin_collections_List())
-  inhale acc(p_pkg$kotlin_collections$c_List_shared(arr), wildcard)
-  inhale df_isSubtype(df_typeOf(target), df_intType())
-  size := arr.sp_size
-  inhale df_isSubtype(df_typeOf(size), df_intType())
-  anon_0 := arr.sp_size
-  inhale df_isSubtype(df_typeOf(anon_0), df_intType())
-  mid := sp_divInts(anon_0, df_intToRef(2))
-  anon_1 := f_isEmpty_TF_T_List(arr)
-  if (df_boolFromRef(anon_1)) {
-    ret_0 := df_boolToRef(false)
+  var anon$0: Ref
+  var anon$1: Ref
+  inhale df$isSubtype(df$typeOf(arr), df$c$pkg$kotlin_collections$List())
+  inhale acc(p$pkg$kotlin_collections$c$List$shared(arr), wildcard)
+  inhale df$isSubtype(df$typeOf(target), df$intType())
+  size := arr.sp$size
+  inhale df$isSubtype(df$typeOf(size), df$intType())
+  anon$0 := arr.sp$size
+  inhale df$isSubtype(df$typeOf(anon$0), df$intType())
+  mid := sp$divInts(anon$0, df$intToRef(2))
+  anon$1 := f$isEmpty$TF$T$List(arr)
+  if (df$boolFromRef(anon$1)) {
+    ret$0 := df$boolToRef(false)
   } else {
-    var anon_2: Ref
-    anon_2 := f_get_TF_T_List_T_Int(arr, mid)
-    if (df_intFromRef(anon_2) == df_intFromRef(target)) {
-      ret_0 := df_boolToRef(true)
+    var anon$2: Ref
+    anon$2 := f$get$TF$T$List$T$Int(arr, mid)
+    if (df$intFromRef(anon$2) == df$intFromRef(target)) {
+      ret$0 := df$boolToRef(true)
     } else {
-      var anon_3: Ref
-      anon_3 := f_get_TF_T_List_T_Int(arr, mid)
-      if (df_intFromRef(anon_3) < df_intFromRef(target)) {
-        var anon_4: Ref
-        anon_4 := f_subList_TF_T_List_T_Int_T_Int(arr, sp_plusInts(mid, df_intToRef(1)),
+      var anon$3: Ref
+      anon$3 := f$get$TF$T$List$T$Int(arr, mid)
+      if (df$intFromRef(anon$3) < df$intFromRef(target)) {
+        var anon$4: Ref
+        anon$4 := f$subList$TF$T$List$T$Int$T$Int(arr, sp$plusInts(mid, df$intToRef(1)),
           size)
-        ret_0 := f_safe_binary_search_TF_T_List_T_Int(anon_4, target)
+        ret$0 := f$safe_binary_search$TF$T$List$T$Int(anon$4, target)
       } else {
-        var anon_5: Ref
-        anon_5 := f_subList_TF_T_List_T_Int_T_Int(arr, df_intToRef(0), mid)
-        ret_0 := f_safe_binary_search_TF_T_List_T_Int(anon_5, target)
+        var anon$5: Ref
+        anon$5 := f$subList$TF$T$List$T$Int$T$Int(arr, df$intToRef(0), mid)
+        ret$0 := f$safe_binary_search$TF$T$List$T$Int(anon$5, target)
       }
     }
   }
-  goto lbl_0
-  label lbl_0
+  goto lbl$0
+  label lbl$0
 }
 
-method f_subList_TF_T_List_T_Int_T_Int(this$dispatch: Ref, fromIndex: Ref, toIndex: Ref)
+method f$subList$TF$T$List$T$Int$T$Int(this$dispatch: Ref, fromIndex: Ref, toIndex: Ref)
   returns (ret: Ref)
-  requires acc(this$dispatch.sp_size, write)
-  requires df_intFromRef(this$dispatch.sp_size) >= 0
-  requires df_intFromRef(fromIndex) <= df_intFromRef(toIndex)
-  requires df_intFromRef(fromIndex) >= 0
-  requires df_intFromRef(toIndex) <= df_intFromRef(this$dispatch.sp_size)
-  ensures acc(this$dispatch.sp_size, write)
-  ensures df_intFromRef(this$dispatch.sp_size) >= 0
-  ensures df_isSubtype(df_typeOf(ret), df_c_pkg$kotlin_collections_List())
-  ensures acc(ret.sp_size, write)
-  ensures df_intFromRef(ret.sp_size) >= 0
-  ensures acc(p_pkg$kotlin_collections$c_List_shared(ret), wildcard)
-  ensures df_intFromRef(this$dispatch.sp_size) ==
-    old(df_intFromRef(this$dispatch.sp_size))
-  ensures df_intFromRef(ret.sp_size) ==
-    df_intFromRef(toIndex) - df_intFromRef(fromIndex)
+  requires acc(this$dispatch.sp$size, write)
+  requires df$intFromRef(this$dispatch.sp$size) >= 0
+  requires df$intFromRef(fromIndex) <= df$intFromRef(toIndex)
+  requires df$intFromRef(fromIndex) >= 0
+  requires df$intFromRef(toIndex) <= df$intFromRef(this$dispatch.sp$size)
+  ensures acc(this$dispatch.sp$size, write)
+  ensures df$intFromRef(this$dispatch.sp$size) >= 0
+  ensures df$isSubtype(df$typeOf(ret), df$c$pkg$kotlin_collections$List())
+  ensures acc(ret.sp$size, write)
+  ensures df$intFromRef(ret.sp$size) >= 0
+  ensures acc(p$pkg$kotlin_collections$c$List$shared(ret), wildcard)
+  ensures df$intFromRef(this$dispatch.sp$size) ==
+    old(df$intFromRef(this$dispatch.sp$size))
+  ensures df$intFromRef(ret.sp$size) ==
+    df$intFromRef(toIndex) - df$intFromRef(fromIndex)
 
 
 /binary_search.kt:(537,563): info: Generated Viper text for unsafe_binary_search_fixed:
-field sp_size: Ref
+field sp$size: Ref
 
-method f_get_TF_T_List_T_Int(this$dispatch: Ref, index: Ref)
+method f$get$TF$T$List$T$Int(this$dispatch: Ref, index: Ref)
   returns (ret: Ref)
-  requires acc(this$dispatch.sp_size, write)
-  requires df_intFromRef(this$dispatch.sp_size) >= 0
-  requires df_intFromRef(index) >= 0
-  requires df_intFromRef(this$dispatch.sp_size) > df_intFromRef(index)
-  ensures acc(this$dispatch.sp_size, write)
-  ensures df_intFromRef(this$dispatch.sp_size) >= 0
-  ensures df_isSubtype(df_typeOf(ret), df_intType())
-  ensures df_intFromRef(this$dispatch.sp_size) ==
-    old(df_intFromRef(this$dispatch.sp_size))
+  requires acc(this$dispatch.sp$size, write)
+  requires df$intFromRef(this$dispatch.sp$size) >= 0
+  requires df$intFromRef(index) >= 0
+  requires df$intFromRef(this$dispatch.sp$size) > df$intFromRef(index)
+  ensures acc(this$dispatch.sp$size, write)
+  ensures df$intFromRef(this$dispatch.sp$size) >= 0
+  ensures df$isSubtype(df$typeOf(ret), df$intType())
+  ensures df$intFromRef(this$dispatch.sp$size) ==
+    old(df$intFromRef(this$dispatch.sp$size))
 
 
-method f_unsafe_binary_search_fixed_TF_T_List_T_Int_T_Int_T_Int(arr: Ref, target: Ref,
+method f$unsafe_binary_search_fixed$TF$T$List$T$Int$T$Int$T$Int(arr: Ref, target: Ref,
   left: Ref, right: Ref)
-  returns (ret_0: Ref)
-  requires acc(arr.sp_size, write)
-  requires df_intFromRef(arr.sp_size) >= 0
-  ensures acc(arr.sp_size, write)
-  ensures df_intFromRef(arr.sp_size) >= 0
-  ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
+  returns (ret$0: Ref)
+  requires acc(arr.sp$size, write)
+  requires df$intFromRef(arr.sp$size) >= 0
+  ensures acc(arr.sp$size, write)
+  ensures df$intFromRef(arr.sp$size) >= 0
+  ensures df$isSubtype(df$typeOf(ret$0), df$boolType())
 {
-  var anon_0: Ref
-  var anon_1: Ref
+  var anon$0: Ref
+  var anon$1: Ref
   var mid: Ref
-  var anon_3: Ref
-  inhale df_isSubtype(df_typeOf(arr), df_c_pkg$kotlin_collections_List())
-  inhale acc(p_pkg$kotlin_collections$c_List_shared(arr), wildcard)
-  inhale df_isSubtype(df_typeOf(target), df_intType())
-  inhale df_isSubtype(df_typeOf(left), df_intType())
-  inhale df_isSubtype(df_typeOf(right), df_intType())
-  if (df_intFromRef(left) > df_intFromRef(right)) {
-    anon_1 := df_boolToRef(true)
+  var anon$3: Ref
+  inhale df$isSubtype(df$typeOf(arr), df$c$pkg$kotlin_collections$List())
+  inhale acc(p$pkg$kotlin_collections$c$List$shared(arr), wildcard)
+  inhale df$isSubtype(df$typeOf(target), df$intType())
+  inhale df$isSubtype(df$typeOf(left), df$intType())
+  inhale df$isSubtype(df$typeOf(right), df$intType())
+  if (df$intFromRef(left) > df$intFromRef(right)) {
+    anon$1 := df$boolToRef(true)
   } else {
-    anon_1 := sp_ltInts(left, df_intToRef(0))}
-  if (df_boolFromRef(anon_1)) {
-    anon_0 := df_boolToRef(true)
+    anon$1 := sp$ltInts(left, df$intToRef(0))}
+  if (df$boolFromRef(anon$1)) {
+    anon$0 := df$boolToRef(true)
   } else {
-    var anon_2: Ref
-    anon_2 := arr.sp_size
-    inhale df_isSubtype(df_typeOf(anon_2), df_intType())
-    anon_0 := sp_geInts(right, anon_2)
+    var anon$2: Ref
+    anon$2 := arr.sp$size
+    inhale df$isSubtype(df$typeOf(anon$2), df$intType())
+    anon$0 := sp$geInts(right, anon$2)
   }
-  if (df_boolFromRef(anon_0)) {
-    ret_0 := df_boolToRef(false)
-    goto lbl_0
+  if (df$boolFromRef(anon$0)) {
+    ret$0 := df$boolToRef(false)
+    goto lbl$0
   }
-  mid := sp_plusInts(left, sp_divInts(sp_minusInts(right, left), df_intToRef(2)))
-  anon_3 := f_get_TF_T_List_T_Int(arr, mid)
-  if (df_intFromRef(anon_3) == df_intFromRef(target)) {
-    ret_0 := df_boolToRef(true)
+  mid := sp$plusInts(left, sp$divInts(sp$minusInts(right, left), df$intToRef(2)))
+  anon$3 := f$get$TF$T$List$T$Int(arr, mid)
+  if (df$intFromRef(anon$3) == df$intFromRef(target)) {
+    ret$0 := df$boolToRef(true)
   } else {
-    var anon_4: Ref
-    anon_4 := f_get_TF_T_List_T_Int(arr, mid)
-    if (df_intFromRef(anon_4) < df_intFromRef(target)) {
-      ret_0 := f_unsafe_binary_search_fixed_TF_T_List_T_Int_T_Int_T_Int(arr,
-        target, sp_plusInts(mid, df_intToRef(1)), right)
+    var anon$4: Ref
+    anon$4 := f$get$TF$T$List$T$Int(arr, mid)
+    if (df$intFromRef(anon$4) < df$intFromRef(target)) {
+      ret$0 := f$unsafe_binary_search_fixed$TF$T$List$T$Int$T$Int$T$Int(arr,
+        target, sp$plusInts(mid, df$intToRef(1)), right)
     } else {
-      ret_0 := f_unsafe_binary_search_fixed_TF_T_List_T_Int_T_Int_T_Int(arr,
-        target, left, sp_minusInts(mid, df_intToRef(1)))}
+      ret$0 := f$unsafe_binary_search_fixed$TF$T$List$T$Int$T$Int$T$Int(arr,
+        target, left, sp$minusInts(mid, df$intToRef(1)))}
   }
-  goto lbl_0
-  label lbl_0
+  goto lbl$0
+  label lbl$0
 }

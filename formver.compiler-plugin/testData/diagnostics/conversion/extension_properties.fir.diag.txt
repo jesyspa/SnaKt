@@ -1,87 +1,87 @@
 /extension_properties.kt:(114,137): info: Generated Viper text for extensionGetterProperty:
-method eg_intValProp_TF_T_Int(this$dispatch: Ref) returns (ret: Ref)
+method eg$intValProp$TF$T$Int(this$dispatch: Ref) returns (ret: Ref)
 
 
-method f_extensionGetterProperty_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$extensionGetterProperty$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
   var a: Ref
-  var anon_0: Ref
+  var anon$0: Ref
   var b: Ref
-  var anon_1: Ref
-  var anon_2: Ref
-  var anon_3: Ref
-  anon_0 := eg_intValProp_TF_T_Int(df_intToRef(0))
-  a := anon_0
-  inhale df_isSubtype(df_typeOf(a), df_intType())
-  anon_3 := eg_intValProp_TF_T_Int(df_intToRef(1))
-  anon_2 := anon_3
-  inhale df_isSubtype(df_typeOf(anon_2), df_intType())
-  anon_1 := eg_intValProp_TF_T_Int(anon_2)
-  b := anon_1
-  inhale df_isSubtype(df_typeOf(b), df_intType())
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  var anon$1: Ref
+  var anon$2: Ref
+  var anon$3: Ref
+  anon$0 := eg$intValProp$TF$T$Int(df$intToRef(0))
+  a := anon$0
+  inhale df$isSubtype(df$typeOf(a), df$intType())
+  anon$3 := eg$intValProp$TF$T$Int(df$intToRef(1))
+  anon$2 := anon$3
+  inhale df$isSubtype(df$typeOf(anon$2), df$intType())
+  anon$1 := eg$intValProp$TF$T$Int(anon$2)
+  b := anon$1
+  inhale df$isSubtype(df$typeOf(b), df$intType())
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
 /extension_properties.kt:(210,233): info: Generated Viper text for extensionSetterProperty:
-method eg_intVarProp_TF_T_Int(this$dispatch: Ref) returns (ret: Ref)
+method eg$intVarProp$TF$T$Int(this$dispatch: Ref) returns (ret: Ref)
 
 
-method es_intVarProp_TF_T_Int_T_Int(this$dispatch: Ref, anon_0: Ref)
+method es$intVarProp$TF$T$Int$T$Int(this$dispatch: Ref, anon$0: Ref)
   returns (ret: Ref)
 
 
-method f_extensionSetterProperty_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$extensionSetterProperty$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  var anon_0: Ref
-  anon_0 := es_intVarProp_TF_T_Int_T_Int(df_intToRef(42), df_intToRef(0))
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  var anon$0: Ref
+  anon$0 := es$intVarProp$TF$T$Int$T$Int(df$intToRef(42), df$intToRef(0))
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
 /extension_properties.kt:(414,453): info: Generated Viper text for extensionGetterPropertyUserDefinedClass:
-field bf_x: Ref
+field bf$x: Ref
 
-method eg_pfValProp_TF_T_PrimitiveField(this$dispatch: Ref)
+method eg$pfValProp$TF$T$PrimitiveField(this$dispatch: Ref)
   returns (ret: Ref)
 
 
-method f_extensionGetterPropertyUserDefinedClass_TF_T_PrimitiveField(pf: Ref)
-  returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$extensionGetterPropertyUserDefinedClass$TF$T$PrimitiveField(pf: Ref)
+  returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
   var x: Ref
-  var anon_0: Ref
-  inhale df_isSubtype(df_typeOf(pf), df_c_PrimitiveField())
-  inhale acc(p_shared(pf), wildcard)
-  anon_0 := eg_pfValProp_TF_T_PrimitiveField(pf)
-  x := anon_0
-  inhale df_isSubtype(df_typeOf(x), df_intType())
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  var anon$0: Ref
+  inhale df$isSubtype(df$typeOf(pf), df$c$PrimitiveField())
+  inhale acc(p$shared(pf), wildcard)
+  anon$0 := eg$pfValProp$TF$T$PrimitiveField(pf)
+  x := anon$0
+  inhale df$isSubtype(df$typeOf(x), df$intType())
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
 /extension_properties.kt:(508,547): info: Generated Viper text for extensionSetterPropertyUserDefinedClass:
-field bf_x: Ref
+field bf$x: Ref
 
-method eg_pfVarProp_TF_T_PrimitiveField(this$dispatch: Ref)
+method eg$pfVarProp$TF$T$PrimitiveField(this$dispatch: Ref)
   returns (ret: Ref)
 
 
-method es_pfVarProp_TF_T_PrimitiveField_T_Int(this$dispatch: Ref, anon_0: Ref)
+method es$pfVarProp$TF$T$PrimitiveField$T$Int(this$dispatch: Ref, anon$0: Ref)
   returns (ret: Ref)
 
 
-method f_extensionSetterPropertyUserDefinedClass_TF_T_PrimitiveField(pf: Ref)
-  returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$extensionSetterPropertyUserDefinedClass$TF$T$PrimitiveField(pf: Ref)
+  returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  var anon_0: Ref
-  inhale df_isSubtype(df_typeOf(pf), df_c_PrimitiveField())
-  inhale acc(p_shared(pf), wildcard)
-  anon_0 := es_pfVarProp_TF_T_PrimitiveField_T_Int(pf, df_intToRef(42))
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  var anon$0: Ref
+  inhale df$isSubtype(df$typeOf(pf), df$c$PrimitiveField())
+  inhale acc(p$shared(pf), wildcard)
+  anon$0 := es$pfVarProp$TF$T$PrimitiveField$T$Int(pf, df$intToRef(42))
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }

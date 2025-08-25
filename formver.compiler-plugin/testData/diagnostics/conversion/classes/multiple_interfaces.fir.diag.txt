@@ -1,65 +1,65 @@
 /multiple_interfaces.kt:(162,173): info: Generated Viper text for testDiamond:
-method con_() returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_D())
-  ensures acc(p_c_D_shared(ret), wildcard)
-  ensures acc(p_c_D_unique(ret), write)
+method con$() returns (ret: Ref)
+  ensures df$isSubtype(df$typeOf(ret), df$c$D())
+  ensures acc(p$c$D$shared(ret), wildcard)
+  ensures acc(p$c$D$unique(ret), write)
 
 
-method f_testDiamond_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
+method f$testDiamond$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$intType())
 {
-  var anon_0: Ref
-  var anon_1: Ref
-  anon_1 := con_()
-  anon_0 := pg_public_field(anon_1)
-  ret_0 := anon_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_intType())
-  goto lbl_0
-  label lbl_0
+  var anon$0: Ref
+  var anon$1: Ref
+  anon$1 := con$()
+  anon$0 := pg$public$field(anon$1)
+  ret$0 := anon$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$intType())
+  goto lbl$0
+  label lbl$0
 }
 
-method pg_public_field(this$dispatch: Ref) returns (ret: Ref)
+method pg$public$field(this$dispatch: Ref) returns (ret: Ref)
 
 
 /multiple_interfaces.kt:(405,415): info: Generated Viper text for testVarVal:
-method con_c_G_() returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_G())
-  ensures acc(p_c_G_shared(ret), wildcard)
-  ensures acc(p_c_G_unique(ret), write)
+method con$c$G$() returns (ret: Ref)
+  ensures df$isSubtype(df$typeOf(ret), df$c$G())
+  ensures acc(p$c$G$shared(ret), wildcard)
+  ensures acc(p$c$G$unique(ret), write)
 
 
-method con_c_I_() returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_I())
-  ensures acc(p_c_I_shared(ret), wildcard)
-  ensures acc(p_c_I_unique(ret), write)
+method con$c$I$() returns (ret: Ref)
+  ensures df$isSubtype(df$typeOf(ret), df$c$I())
+  ensures acc(p$c$I$shared(ret), wildcard)
+  ensures acc(p$c$I$unique(ret), write)
 
 
-method f_testVarVal_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$testVarVal$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
   var g: Ref
-  var anon_0: Ref
-  var anon_1: Ref
-  var anon_2: Ref
+  var anon$0: Ref
+  var anon$1: Ref
+  var anon$2: Ref
   var i: Ref
-  var anon_3: Ref
-  var anon_4: Ref
-  var anon_5: Ref
-  g := con_c_G_()
-  anon_1 := pg_public_field(g)
-  anon_0 := anon_1
-  inhale df_isSubtype(df_typeOf(anon_0), df_intType())
-  anon_2 := ps_public_field(g, df_intToRef(1))
-  i := con_c_I_()
-  anon_4 := pg_public_field(i)
-  anon_3 := anon_4
-  inhale df_isSubtype(df_typeOf(anon_3), df_intType())
-  anon_5 := ps_public_field(i, df_intToRef(1))
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  var anon$3: Ref
+  var anon$4: Ref
+  var anon$5: Ref
+  g := con$c$G$()
+  anon$1 := pg$public$field(g)
+  anon$0 := anon$1
+  inhale df$isSubtype(df$typeOf(anon$0), df$intType())
+  anon$2 := ps$public$field(g, df$intToRef(1))
+  i := con$c$I$()
+  anon$4 := pg$public$field(i)
+  anon$3 := anon$4
+  inhale df$isSubtype(df$typeOf(anon$3), df$intType())
+  anon$5 := ps$public$field(i, df$intToRef(1))
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
-method pg_public_field(this$dispatch: Ref) returns (ret: Ref)
+method pg$public$field(this$dispatch: Ref) returns (ret: Ref)
 
 
-method ps_public_field(this$dispatch: Ref, anon_0: Ref) returns (ret: Ref)
+method ps$public$field(this$dispatch: Ref, anon$0: Ref) returns (ret: Ref)

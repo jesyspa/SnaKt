@@ -1,40 +1,40 @@
 /chars.kt:(212,221): info: Generated Viper text for testChars:
-field bf_char: Ref
+field bf$char: Ref
 
-field bf_size: Ref
+field bf$size: Ref
 
-method con_T_Char(char: Ref) returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_CharBox())
-  ensures acc(p_c_CharBox_shared(ret), wildcard)
-  ensures acc(p_c_CharBox_unique(ret), write)
-  ensures df_charFromRef((unfolding acc(p_c_CharBox_shared(ret), wildcard) in
-      ret.bf_char)) ==
-    df_charFromRef(char)
+method con$T$Char(char: Ref) returns (ret: Ref)
+  ensures df$isSubtype(df$typeOf(ret), df$c$CharBox())
+  ensures acc(p$c$CharBox$shared(ret), wildcard)
+  ensures acc(p$c$CharBox$unique(ret), write)
+  ensures df$charFromRef((unfolding acc(p$c$CharBox$shared(ret), wildcard) in
+      ret.bf$char)) ==
+    df$charFromRef(char)
 
 
-method f_testChars_TF_T_Char(c: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$testChars$TF$T$Char(c: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
   var box: Ref
   var charA: Ref
   var cond1: Ref
-  var anon_0: Ref
+  var anon$0: Ref
   var charZ: Ref
-  inhale df_isSubtype(df_typeOf(c), df_charType())
-  box := con_T_Char(df_charToRef(97))
-  charA := df_charToRef(97)
-  unfold acc(p_c_CharBox_shared(box), wildcard)
-  anon_0 := box.bf_char
-  cond1 := df_boolToRef(df_charFromRef(charA) == df_charFromRef(anon_0))
-  assert df_boolFromRef(cond1)
-  charZ := df_charToRef(122)
-  assert df_charFromRef(charA) == df_charFromRef(charZ) - 25
-  assert df_charFromRef(charA) - df_charFromRef(charZ) == -25
-  assert df_charFromRef(charZ) == df_charFromRef(charA) + 25
-  assert df_charFromRef(charA) <= df_charFromRef(charZ)
-  assert df_charFromRef(charA) < df_charFromRef(charZ)
-  assert df_charFromRef(charZ) > df_charFromRef(charA)
-  assert df_charFromRef(charZ) >= df_charFromRef(charZ)
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  inhale df$isSubtype(df$typeOf(c), df$charType())
+  box := con$T$Char(df$charToRef(97))
+  charA := df$charToRef(97)
+  unfold acc(p$c$CharBox$shared(box), wildcard)
+  anon$0 := box.bf$char
+  cond1 := df$boolToRef(df$charFromRef(charA) == df$charFromRef(anon$0))
+  assert df$boolFromRef(cond1)
+  charZ := df$charToRef(122)
+  assert df$charFromRef(charA) == df$charFromRef(charZ) - 25
+  assert df$charFromRef(charA) - df$charFromRef(charZ) == -25
+  assert df$charFromRef(charZ) == df$charFromRef(charA) + 25
+  assert df$charFromRef(charA) <= df$charFromRef(charZ)
+  assert df$charFromRef(charA) < df$charFromRef(charZ)
+  assert df$charFromRef(charZ) > df$charFromRef(charA)
+  assert df$charFromRef(charZ) >= df$charFromRef(charZ)
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }

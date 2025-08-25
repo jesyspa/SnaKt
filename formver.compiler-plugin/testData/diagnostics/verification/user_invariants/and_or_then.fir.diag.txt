@@ -1,47 +1,47 @@
 /and_or_then.kt:(64,75): info: Generated Viper text for resultOrArg:
-method f_resultOrArg_TF_T_Boolean(arg: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
-  ensures df_boolFromRef(ret_0) || df_boolFromRef(arg)
+method f$resultOrArg$TF$T$Boolean(arg: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$boolType())
+  ensures df$boolFromRef(ret$0) || df$boolFromRef(arg)
 {
-  inhale df_isSubtype(df_typeOf(arg), df_boolType())
-  ret_0 := sp_notBool(arg)
-  goto lbl_0
-  label lbl_0
+  inhale df$isSubtype(df$typeOf(arg), df$boolType())
+  ret$0 := sp$notBool(arg)
+  goto lbl$0
+  label lbl$0
 }
 
 /and_or_then.kt:(200,211): info: Generated Viper text for testImplies:
-method f_testImplies_TF_T_Boolean(arg: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
-  ensures df_boolFromRef(arg) ==> !df_boolFromRef(ret_0)
-  ensures df_boolFromRef(ret_0) ==> !df_boolFromRef(arg)
-  ensures !df_boolFromRef(arg) ==> df_boolFromRef(ret_0)
-  ensures !df_boolFromRef(ret_0) ==> df_boolFromRef(arg)
+method f$testImplies$TF$T$Boolean(arg: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$boolType())
+  ensures df$boolFromRef(arg) ==> !df$boolFromRef(ret$0)
+  ensures df$boolFromRef(ret$0) ==> !df$boolFromRef(arg)
+  ensures !df$boolFromRef(arg) ==> df$boolFromRef(ret$0)
+  ensures !df$boolFromRef(ret$0) ==> df$boolFromRef(arg)
 {
-  inhale df_isSubtype(df_typeOf(arg), df_boolType())
-  ret_0 := sp_notBool(arg)
-  goto lbl_0
-  label lbl_0
+  inhale df$isSubtype(df$typeOf(arg), df$boolType())
+  ret$0 := sp$notBool(arg)
+  goto lbl$0
+  label lbl$0
 }
 
 /and_or_then.kt:(417,424): info: Generated Viper text for testAnd:
-method f_testAnd_TF_T_Boolean_T_Boolean(p_arg1: Ref, p_arg2: Ref)
-  returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
-  ensures df_boolFromRef(ret_0) ==>
-    df_boolFromRef(p_arg1) && df_boolFromRef(p_arg2)
-  ensures !df_boolFromRef(ret_0) ==>
-    !df_boolFromRef(p_arg1) || !df_boolFromRef(p_arg2)
-  ensures df_boolFromRef(p_arg1) && df_boolFromRef(p_arg2) ==>
-    df_boolFromRef(ret_0)
-  ensures !df_boolFromRef(p_arg1) ==> !df_boolFromRef(ret_0)
-  ensures !df_boolFromRef(p_arg2) ==> !df_boolFromRef(ret_0)
+method f$testAnd$TF$T$Boolean$T$Boolean(p$arg1: Ref, p$arg2: Ref)
+  returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$boolType())
+  ensures df$boolFromRef(ret$0) ==>
+    df$boolFromRef(p$arg1) && df$boolFromRef(p$arg2)
+  ensures !df$boolFromRef(ret$0) ==>
+    !df$boolFromRef(p$arg1) || !df$boolFromRef(p$arg2)
+  ensures df$boolFromRef(p$arg1) && df$boolFromRef(p$arg2) ==>
+    df$boolFromRef(ret$0)
+  ensures !df$boolFromRef(p$arg1) ==> !df$boolFromRef(ret$0)
+  ensures !df$boolFromRef(p$arg2) ==> !df$boolFromRef(ret$0)
 {
-  inhale df_isSubtype(df_typeOf(p_arg1), df_boolType())
-  inhale df_isSubtype(df_typeOf(p_arg2), df_boolType())
-  if (df_boolFromRef(p_arg1)) {
-    ret_0 := p_arg2
+  inhale df$isSubtype(df$typeOf(p$arg1), df$boolType())
+  inhale df$isSubtype(df$typeOf(p$arg2), df$boolType())
+  if (df$boolFromRef(p$arg1)) {
+    ret$0 := p$arg2
   } else {
-    ret_0 := df_boolToRef(false)}
-  goto lbl_0
-  label lbl_0
+    ret$0 := df$boolToRef(false)}
+  goto lbl$0
+  label lbl$0
 }

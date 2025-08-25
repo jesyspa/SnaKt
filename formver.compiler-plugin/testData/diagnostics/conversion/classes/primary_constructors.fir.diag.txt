@@ -1,66 +1,66 @@
 /primary_constructors.kt:(70,91): info: Generated Viper text for createPrimitiveFields:
-field bf_a: Ref
+field bf$a: Ref
 
-field bf_b: Ref
+field bf$b: Ref
 
-method con_T_Int_T_Int(a: Ref, b: Ref) returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_PrimitiveFields())
-  ensures acc(p_shared(ret), wildcard)
-  ensures acc(p_unique(ret), write)
-  ensures df_intFromRef((unfolding acc(p_shared(ret), wildcard) in
-      ret.bf_a)) ==
-    df_intFromRef(a) &&
-    df_intFromRef((unfolding acc(p_shared(ret), wildcard) in ret.bf_b)) ==
-    df_intFromRef(b)
+method con$T$Int$T$Int(a: Ref, b: Ref) returns (ret: Ref)
+  ensures df$isSubtype(df$typeOf(ret), df$c$PrimitiveFields())
+  ensures acc(p$shared(ret), wildcard)
+  ensures acc(p$unique(ret), write)
+  ensures df$intFromRef((unfolding acc(p$shared(ret), wildcard) in
+      ret.bf$a)) ==
+    df$intFromRef(a) &&
+    df$intFromRef((unfolding acc(p$shared(ret), wildcard) in ret.bf$b)) ==
+    df$intFromRef(b)
 
 
-method f_createPrimitiveFields_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_c_PrimitiveFields())
-  ensures acc(p_shared(ret_0), wildcard)
+method f$createPrimitiveFields$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$c$PrimitiveFields())
+  ensures acc(p$shared(ret$0), wildcard)
 {
-  ret_0 := con_T_Int_T_Int(df_intToRef(10), df_intToRef(20))
-  goto lbl_0
-  label lbl_0
+  ret$0 := con$T$Int$T$Int(df$intToRef(10), df$intToRef(20))
+  goto lbl$0
+  label lbl$0
 }
 
 /primary_constructors.kt:(178,193): info: Generated Viper text for createRecursive:
-field bf_a: Ref
+field bf$a: Ref
 
-method con_NT_Recursive(a: Ref) returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_Recursive())
-  ensures acc(p_shared(ret), wildcard)
-  ensures acc(p_unique(ret), write)
-  ensures (unfolding acc(p_shared(ret), wildcard) in ret.bf_a) == a
+method con$NT$Recursive(a: Ref) returns (ret: Ref)
+  ensures df$isSubtype(df$typeOf(ret), df$c$Recursive())
+  ensures acc(p$shared(ret), wildcard)
+  ensures acc(p$unique(ret), write)
+  ensures (unfolding acc(p$shared(ret), wildcard) in ret.bf$a) == a
 
 
-method f_createRecursive_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_c_Recursive())
-  ensures acc(p_shared(ret_0), wildcard)
+method f$createRecursive$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$c$Recursive())
+  ensures acc(p$shared(ret$0), wildcard)
 {
-  ret_0 := con_NT_Recursive(df_nullValue())
-  goto lbl_0
-  label lbl_0
+  ret$0 := con$NT$Recursive(df$nullValue())
+  goto lbl$0
+  label lbl$0
 }
 
 /primary_constructors.kt:(279,296): info: Generated Viper text for createFieldInBody:
-field bf_a: Ref
+field bf$a: Ref
 
-field bf_c: Ref
+field bf$c: Ref
 
-method con_T_Int(c: Ref) returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_FieldInBody())
-  ensures acc(p_shared(ret), wildcard)
-  ensures acc(p_unique(ret), write)
-  ensures df_intFromRef((unfolding acc(p_shared(ret), wildcard) in
-      ret.bf_c)) ==
-    df_intFromRef(c)
+method con$T$Int(c: Ref) returns (ret: Ref)
+  ensures df$isSubtype(df$typeOf(ret), df$c$FieldInBody())
+  ensures acc(p$shared(ret), wildcard)
+  ensures acc(p$unique(ret), write)
+  ensures df$intFromRef((unfolding acc(p$shared(ret), wildcard) in
+      ret.bf$c)) ==
+    df$intFromRef(c)
 
 
-method f_createFieldInBody_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_c_FieldInBody())
-  ensures acc(p_shared(ret_0), wildcard)
+method f$createFieldInBody$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$c$FieldInBody())
+  ensures acc(p$shared(ret$0), wildcard)
 {
-  ret_0 := con_T_Int(df_intToRef(10))
-  goto lbl_0
-  label lbl_0
+  ret$0 := con$T$Int(df$intToRef(10))
+  goto lbl$0
+  label lbl$0
 }

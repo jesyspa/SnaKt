@@ -1,37 +1,37 @@
 /increment.kt:(23,34): info: Generated Viper text for test_simple:
-method f_test_simple_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$test_simple$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
   var x: Ref
-  x := df_intToRef(10)
-  x := sp_plusInts(x, df_intToRef(5))
-  x := sp_minusInts(x, df_intToRef(1))
-  x := sp_minusInts(x, df_intToRef(3))
-  x := sp_plusInts(x, df_intToRef(1))
-  x := sp_timesInts(x, df_intToRef(2))
-  x := sp_divInts(x, df_intToRef(4))
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  x := df$intToRef(10)
+  x := sp$plusInts(x, df$intToRef(5))
+  x := sp$minusInts(x, df$intToRef(1))
+  x := sp$minusInts(x, df$intToRef(3))
+  x := sp$plusInts(x, df$intToRef(1))
+  x := sp$timesInts(x, df$intToRef(2))
+  x := sp$divInts(x, df$intToRef(4))
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
 /increment.kt:(121,140): info: Generated Viper text for test_postincvrement:
-method f_test_postincvrement_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$test_postincvrement$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
   var x: Ref
   var first: Ref
-  var anon_0: Ref
+  var anon$0: Ref
   var second: Ref
-  var anon_1: Ref
+  var anon$1: Ref
   var unary: Ref
-  x := df_intToRef(10)
-  anon_0 := x
-  x := sp_plusInts(anon_0, df_intToRef(1))
-  first := anon_0
-  anon_1 := x
-  x := sp_minusInts(anon_1, df_intToRef(1))
-  second := anon_1
+  x := df$intToRef(10)
+  anon$0 := x
+  x := sp$plusInts(anon$0, df$intToRef(1))
+  first := anon$0
+  anon$1 := x
+  x := sp$minusInts(anon$1, df$intToRef(1))
+  second := anon$1
   unary := x
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }

@@ -1,36 +1,36 @@
 /exp_side_effects.kt:(185,189): info: Generated Viper text for test:
-field bf_x: Ref
+field bf$x: Ref
 
-method f_getFoo_TF_() returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_Foo())
-  ensures acc(p_shared(ret), wildcard)
-
-
-method f_sideEffect_TF_() returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_intType())
+method f$getFoo$TF$() returns (ret: Ref)
+  ensures df$isSubtype(df$typeOf(ret), df$c$Foo())
+  ensures acc(p$shared(ret), wildcard)
 
 
-method f_test_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$sideEffect$TF$() returns (ret: Ref)
+  ensures df$isSubtype(df$typeOf(ret), df$intType())
+
+
+method f$test$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  var anon_0: Ref
-  var anon_1: Ref
+  var anon$0: Ref
+  var anon$1: Ref
   var y: Ref
-  var anon_2: Ref
-  var anon_3: Ref
-  var anon_4: Ref
-  anon_0 := f_getFoo_TF_()
-  anon_1 := f_sideEffect_TF_()
-  inhale acc(anon_0.bf_x, write)
-  anon_0.bf_x := anon_1
-  exhale acc(anon_0.bf_x, write)
-  anon_3 := f_getFoo_TF_()
-  inhale acc(anon_3.bf_x, write)
-  anon_2 := anon_3.bf_x
-  exhale acc(anon_3.bf_x, write)
-  inhale df_isSubtype(df_typeOf(anon_2), df_intType())
-  anon_4 := f_sideEffect_TF_()
-  y := sp_plusInts(anon_2, anon_4)
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  var anon$2: Ref
+  var anon$3: Ref
+  var anon$4: Ref
+  anon$0 := f$getFoo$TF$()
+  anon$1 := f$sideEffect$TF$()
+  inhale acc(anon$0.bf$x, write)
+  anon$0.bf$x := anon$1
+  exhale acc(anon$0.bf$x, write)
+  anon$3 := f$getFoo$TF$()
+  inhale acc(anon$3.bf$x, write)
+  anon$2 := anon$3.bf$x
+  exhale acc(anon$3.bf$x, write)
+  inhale df$isSubtype(df$typeOf(anon$2), df$intType())
+  anon$4 := f$sideEffect$TF$()
+  y := sp$plusInts(anon$2, anon$4)
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }

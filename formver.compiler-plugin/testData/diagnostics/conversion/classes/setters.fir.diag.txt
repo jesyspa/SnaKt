@@ -1,92 +1,92 @@
 /setters.kt:(103,127): info: Generated Viper text for testPrimitiveFieldSetter:
-field bf_a: Ref
+field bf$a: Ref
 
-method f_testPrimitiveFieldSetter_TF_T_PrimitiveField(pf: Ref)
-  returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$testPrimitiveFieldSetter$TF$T$PrimitiveField(pf: Ref)
+  returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  inhale df_isSubtype(df_typeOf(pf), df_c_PrimitiveField())
-  inhale acc(p_shared(pf), wildcard)
-  inhale acc(pf.bf_a, write)
-  pf.bf_a := df_intToRef(0)
-  exhale acc(pf.bf_a, write)
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  inhale df$isSubtype(df$typeOf(pf), df$c$PrimitiveField())
+  inhale acc(p$shared(pf), wildcard)
+  inhale acc(pf.bf$a, write)
+  pf.bf$a := df$intToRef(0)
+  exhale acc(pf.bf$a, write)
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
 /setters.kt:(170,194): info: Generated Viper text for testReferenceFieldSetter:
-field bf_a: Ref
+field bf$a: Ref
 
-field bf_pf: Ref
+field bf$pf: Ref
 
-method con_T_Int(a: Ref) returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_PrimitiveField())
-  ensures acc(p_c_PrimitiveField_shared(ret), wildcard)
-  ensures acc(p_c_PrimitiveField_unique(ret), write)
+method con$T$Int(a: Ref) returns (ret: Ref)
+  ensures df$isSubtype(df$typeOf(ret), df$c$PrimitiveField())
+  ensures acc(p$c$PrimitiveField$shared(ret), wildcard)
+  ensures acc(p$c$PrimitiveField$unique(ret), write)
 
 
-method f_testReferenceFieldSetter_TF_T_ReferenceField(rf: Ref)
-  returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$testReferenceFieldSetter$TF$T$ReferenceField(rf: Ref)
+  returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  var anon_0: Ref
-  inhale df_isSubtype(df_typeOf(rf), df_c_ReferenceField())
-  inhale acc(p_c_ReferenceField_shared(rf), wildcard)
-  anon_0 := con_T_Int(df_intToRef(0))
-  inhale acc(rf.bf_pf, write)
-  rf.bf_pf := anon_0
-  exhale acc(rf.bf_pf, write)
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  var anon$0: Ref
+  inhale df$isSubtype(df$typeOf(rf), df$c$ReferenceField())
+  inhale acc(p$c$ReferenceField$shared(rf), wildcard)
+  anon$0 := con$T$Int(df$intToRef(0))
+  inhale acc(rf.bf$pf, write)
+  rf.bf$pf := anon$0
+  exhale acc(rf.bf$pf, write)
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
 /setters.kt:(427,454): info: Generated Viper text for testPrimitivePropertySetter:
-method f_testPrimitivePropertySetter_TF_T_PrimitiveProperty(pp: Ref)
-  returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$testPrimitivePropertySetter$TF$T$PrimitiveProperty(pp: Ref)
+  returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  var anon_0: Ref
-  inhale df_isSubtype(df_typeOf(pp), df_c_PrimitiveProperty())
-  inhale acc(p_shared(pp), wildcard)
-  anon_0 := ps_aProp(pp, df_intToRef(0))
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  var anon$0: Ref
+  inhale df$isSubtype(df$typeOf(pp), df$c$PrimitiveProperty())
+  inhale acc(p$shared(pp), wildcard)
+  anon$0 := ps$aProp(pp, df$intToRef(0))
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
-method pg_aProp(this$dispatch: Ref) returns (ret: Ref)
+method pg$aProp(this$dispatch: Ref) returns (ret: Ref)
 
 
-method ps_aProp(this$dispatch: Ref, anon_0: Ref) returns (ret: Ref)
+method ps$aProp(this$dispatch: Ref, anon$0: Ref) returns (ret: Ref)
 
 
 /setters.kt:(504,531): info: Generated Viper text for testReferencePropertySetter:
-method con_() returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_PrimitiveProperty())
-  ensures acc(p_c_PrimitiveProperty_shared(ret), wildcard)
-  ensures acc(p_c_PrimitiveProperty_unique(ret), write)
+method con$() returns (ret: Ref)
+  ensures df$isSubtype(df$typeOf(ret), df$c$PrimitiveProperty())
+  ensures acc(p$c$PrimitiveProperty$shared(ret), wildcard)
+  ensures acc(p$c$PrimitiveProperty$unique(ret), write)
 
 
-method f_testReferencePropertySetter_TF_T_ReferenceProperty(rp: Ref)
-  returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$testReferencePropertySetter$TF$T$ReferenceProperty(rp: Ref)
+  returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  var anon_0: Ref
-  var anon_1: Ref
-  inhale df_isSubtype(df_typeOf(rp), df_c_ReferenceProperty())
-  inhale acc(p_c_ReferenceProperty_shared(rp), wildcard)
-  anon_1 := con_()
-  anon_0 := ps_ppProp(rp, anon_1)
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  var anon$0: Ref
+  var anon$1: Ref
+  inhale df$isSubtype(df$typeOf(rp), df$c$ReferenceProperty())
+  inhale acc(p$c$ReferenceProperty$shared(rp), wildcard)
+  anon$1 := con$()
+  anon$0 := ps$ppProp(rp, anon$1)
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
-method pg_aProp(this$dispatch: Ref) returns (ret: Ref)
+method pg$aProp(this$dispatch: Ref) returns (ret: Ref)
 
 
-method pg_ppProp(this$dispatch: Ref) returns (ret: Ref)
+method pg$ppProp(this$dispatch: Ref) returns (ret: Ref)
 
 
-method ps_aProp(this$dispatch: Ref, anon_0: Ref) returns (ret: Ref)
+method ps$aProp(this$dispatch: Ref, anon$0: Ref) returns (ret: Ref)
 
 
-method ps_ppProp(this$dispatch: Ref, anon_0: Ref) returns (ret: Ref)
+method ps$ppProp(this$dispatch: Ref, anon$0: Ref) returns (ret: Ref)

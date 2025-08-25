@@ -1,39 +1,39 @@
 /function_object.kt:(23,35): info: Generated Viper text for unitFunction:
-method f_unitFunction_TF_TF_(f: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$unitFunction$TF$TF$(f: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
-  inhale df_isSubtype(df_typeOf(f), df_functionType())
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  inhale df$isSubtype(df$typeOf(f), df$functionType())
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
 /function_object.kt:(90,108): info: Generated Viper text for functionObjectCall:
-method f_functionObjectCall_TF_TF_T_Boolean_T_Int(g: Ref)
-  returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
+method f$functionObjectCall$TF$TF$T$Boolean$T$Int(g: Ref)
+  returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$intType())
 {
-  var anon_0: Ref
-  inhale df_isSubtype(df_typeOf(g), df_functionType())
-  inhale df_isSubtype(df_typeOf(anon_0), df_intType())
-  ret_0 := anon_0
-  goto lbl_0
-  label lbl_0
+  var anon$0: Ref
+  inhale df$isSubtype(df$typeOf(g), df$functionType())
+  inhale df$isSubtype(df$typeOf(anon$0), df$intType())
+  ret$0 := anon$0
+  goto lbl$0
+  label lbl$0
 }
 
 /function_object.kt:(171,195): info: Generated Viper text for functionObjectNestedCall:
-method f_functionObjectNestedCall_TF_TF_T_Int_TF_T_Boolean(f: Ref, g: Ref)
-  returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
+method f$functionObjectNestedCall$TF$TF$T$Int$TF$T$Boolean(f: Ref, g: Ref)
+  returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$intType())
 {
-  var anon_0: Ref
-  var anon_1: Ref
-  var anon_2: Ref
-  inhale df_isSubtype(df_typeOf(f), df_functionType())
-  inhale df_isSubtype(df_typeOf(g), df_functionType())
-  inhale df_isSubtype(df_typeOf(anon_2), df_intType())
-  inhale df_isSubtype(df_typeOf(anon_1), df_intType())
-  inhale df_isSubtype(df_typeOf(anon_0), df_intType())
-  ret_0 := anon_0
-  goto lbl_0
-  label lbl_0
+  var anon$0: Ref
+  var anon$1: Ref
+  var anon$2: Ref
+  inhale df$isSubtype(df$typeOf(f), df$functionType())
+  inhale df$isSubtype(df$typeOf(g), df$functionType())
+  inhale df$isSubtype(df$typeOf(anon$2), df$intType())
+  inhale df$isSubtype(df$typeOf(anon$1), df$intType())
+  inhale df$isSubtype(df$typeOf(anon$0), df$intType())
+  ret$0 := anon$0
+  goto lbl$0
+  label lbl$0
 }

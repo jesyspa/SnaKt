@@ -1,54 +1,54 @@
 /secondary_constructors.kt:(249,271): info: Generated Viper text for onlySecondConstructors:
-field bf_a: Ref
+field bf$a: Ref
 
-method con_T_Boolean(b: Ref) returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_NoPrimaryConstructor())
-  ensures acc(p_shared(ret), wildcard)
-  ensures acc(p_unique(ret), write)
-
-
-method con_T_Int(n: Ref) returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_NoPrimaryConstructor())
-  ensures acc(p_shared(ret), wildcard)
-  ensures acc(p_unique(ret), write)
+method con$T$Boolean(b: Ref) returns (ret: Ref)
+  ensures df$isSubtype(df$typeOf(ret), df$c$NoPrimaryConstructor())
+  ensures acc(p$shared(ret), wildcard)
+  ensures acc(p$unique(ret), write)
 
 
-method f_onlySecondConstructors_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method con$T$Int(n: Ref) returns (ret: Ref)
+  ensures df$isSubtype(df$typeOf(ret), df$c$NoPrimaryConstructor())
+  ensures acc(p$shared(ret), wildcard)
+  ensures acc(p$unique(ret), write)
+
+
+method f$onlySecondConstructors$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
   var npc1: Ref
   var npc2: Ref
-  npc1 := con_T_Boolean(df_boolToRef(true))
-  npc2 := con_T_Int(df_intToRef(42))
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  npc1 := con$T$Boolean(df$boolToRef(true))
+  npc2 := con$T$Int(df$intToRef(42))
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
 /secondary_constructors.kt:(365,392): info: Generated Viper text for primaryAndSecondConstructor:
-field bf_a: Ref
+field bf$a: Ref
 
-method con_T_Boolean(b: Ref) returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_BothConstructors())
-  ensures acc(p_shared(ret), wildcard)
-  ensures acc(p_unique(ret), write)
-
-
-method con_T_Int(a: Ref) returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_BothConstructors())
-  ensures acc(p_shared(ret), wildcard)
-  ensures acc(p_unique(ret), write)
-  ensures df_intFromRef((unfolding acc(p_shared(ret), wildcard) in
-      ret.bf_a)) ==
-    df_intFromRef(a)
+method con$T$Boolean(b: Ref) returns (ret: Ref)
+  ensures df$isSubtype(df$typeOf(ret), df$c$BothConstructors())
+  ensures acc(p$shared(ret), wildcard)
+  ensures acc(p$unique(ret), write)
 
 
-method f_primaryAndSecondConstructor_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method con$T$Int(a: Ref) returns (ret: Ref)
+  ensures df$isSubtype(df$typeOf(ret), df$c$BothConstructors())
+  ensures acc(p$shared(ret), wildcard)
+  ensures acc(p$unique(ret), write)
+  ensures df$intFromRef((unfolding acc(p$shared(ret), wildcard) in
+      ret.bf$a)) ==
+    df$intFromRef(a)
+
+
+method f$primaryAndSecondConstructor$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
   var bc1: Ref
   var bc2: Ref
-  bc1 := con_T_Boolean(df_boolToRef(false))
-  bc2 := con_T_Int(df_intToRef(42))
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  bc1 := con$T$Boolean(df$boolToRef(false))
+  bc2 := con$T$Int(df$intToRef(42))
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }

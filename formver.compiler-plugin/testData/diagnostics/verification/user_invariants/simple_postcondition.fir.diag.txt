@@ -1,63 +1,63 @@
 /simple_postcondition.kt:(64,75): info: Generated Viper text for testGreater:
-method f_testGreater_TF_T_Int(init: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
-  ensures df_intFromRef(ret_0) > df_intFromRef(init)
+method f$testGreater$TF$T$Int(init: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$intType())
+  ensures df$intFromRef(ret$0) > df$intFromRef(init)
 {
-  inhale df_isSubtype(df_typeOf(init), df_intType())
-  ret_0 := sp_plusInts(init, df_intToRef(5))
-  goto lbl_0
-  label lbl_0
+  inhale df$isSubtype(df$typeOf(init), df$intType())
+  ret$0 := sp$plusInts(init, df$intToRef(5))
+  goto lbl$0
+  label lbl$0
 }
 
 /simple_postcondition.kt:(201,211): info: Generated Viper text for testString:
-method f_testString_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_charType())
-  ensures df_charFromRef(ret_0) == 97
+method f$testString$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$charType())
+  ensures df$charFromRef(ret$0) == 97
 {
-  ret_0 := sp_stringGet(df_stringToRef(Seq(98, 97, 98)), df_intToRef(1))
-  goto lbl_0
-  label lbl_0
+  ret$0 := sp$stringGet(df$stringToRef(Seq(98, 97, 98)), df$intToRef(1))
+  goto lbl$0
+  label lbl$0
 }
 
 /simple_postcondition.kt:(323,343): info: Generated Viper text for testWithPrecondition:
-method f_testWithPrecondition_TF_T_Int(int: Ref) returns (ret_0: Ref)
-  requires df_intFromRef(int) > 10
-  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
-  ensures df_intFromRef(ret_0) > 0
+method f$testWithPrecondition$TF$T$Int(int: Ref) returns (ret$0: Ref)
+  requires df$intFromRef(int) > 10
+  ensures df$isSubtype(df$typeOf(ret$0), df$intType())
+  ensures df$intFromRef(ret$0) > 0
 {
-  inhale df_isSubtype(df_typeOf(int), df_intType())
-  ret_0 := sp_minusInts(int, df_intToRef(10))
-  goto lbl_0
-  label lbl_0
+  inhale df$isSubtype(df$typeOf(int), df$intType())
+  ret$0 := sp$minusInts(int, df$intToRef(10))
+  goto lbl$0
+  label lbl$0
 }
 
 /simple_postcondition.kt:(492,507): info: Generated Viper text for returnGreater13:
-method f_returnGreater13_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
-  ensures df_intFromRef(ret_0) > 13
+method f$returnGreater13$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$intType())
+  ensures df$intFromRef(ret$0) > 13
 {
-  ret_0 := df_intToRef(16)
-  goto lbl_0
-  label lbl_0
+  ret$0 := df$intToRef(16)
+  goto lbl$0
+  label lbl$0
 }
 
 /simple_postcondition.kt:(600,637): info: Generated Viper text for testPostconditionIsUsedByPrecondition:
-method f_returnGreater13_TF_() returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_intType())
-  ensures df_intFromRef(ret) > 13
+method f$returnGreater13$TF$() returns (ret: Ref)
+  ensures df$isSubtype(df$typeOf(ret), df$intType())
+  ensures df$intFromRef(ret) > 13
 
 
-method f_testPostconditionIsUsedByPrecondition_TF_() returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
+method f$testPostconditionIsUsedByPrecondition$TF$() returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$intType())
 {
-  var anon_0: Ref
-  anon_0 := f_returnGreater13_TF_()
-  ret_0 := f_testWithPrecondition_TF_T_Int(anon_0)
-  goto lbl_0
-  label lbl_0
+  var anon$0: Ref
+  anon$0 := f$returnGreater13$TF$()
+  ret$0 := f$testWithPrecondition$TF$T$Int(anon$0)
+  goto lbl$0
+  label lbl$0
 }
 
-method f_testWithPrecondition_TF_T_Int(int: Ref) returns (ret: Ref)
-  requires df_intFromRef(int) > 10
-  ensures df_isSubtype(df_typeOf(ret), df_intType())
-  ensures df_intFromRef(ret) > 0
+method f$testWithPrecondition$TF$T$Int(int: Ref) returns (ret: Ref)
+  requires df$intFromRef(int) > 10
+  ensures df$isSubtype(df$typeOf(ret), df$intType())
+  ensures df$intFromRef(ret) > 0

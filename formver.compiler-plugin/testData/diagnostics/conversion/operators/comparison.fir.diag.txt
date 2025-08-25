@@ -1,43 +1,43 @@
 /comparison.kt:(23,27): info: Generated Viper text for less:
-method f_less_TF_T_Int_T_Int(x: Ref, y: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
+method f$less$TF$T$Int$T$Int(x: Ref, y: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$boolType())
 {
-  inhale df_isSubtype(df_typeOf(x), df_intType())
-  inhale df_isSubtype(df_typeOf(y), df_intType())
-  ret_0 := sp_ltInts(x, y)
-  goto lbl_0
-  label lbl_0
+  inhale df$isSubtype(df$typeOf(x), df$intType())
+  inhale df$isSubtype(df$typeOf(y), df$intType())
+  ret$0 := sp$ltInts(x, y)
+  goto lbl$0
+  label lbl$0
 }
 
 /comparison.kt:(79,88): info: Generated Viper text for lessEqual:
-method f_lessEqual_TF_T_Int_T_Int(x: Ref, y: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
+method f$lessEqual$TF$T$Int$T$Int(x: Ref, y: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$boolType())
 {
-  inhale df_isSubtype(df_typeOf(x), df_intType())
-  inhale df_isSubtype(df_typeOf(y), df_intType())
-  ret_0 := sp_leInts(x, y)
-  goto lbl_0
-  label lbl_0
+  inhale df$isSubtype(df$typeOf(x), df$intType())
+  inhale df$isSubtype(df$typeOf(y), df$intType())
+  ret$0 := sp$leInts(x, y)
+  goto lbl$0
+  label lbl$0
 }
 
 /comparison.kt:(141,148): info: Generated Viper text for greater:
-method f_greater_TF_T_Int_T_Int(x: Ref, y: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
+method f$greater$TF$T$Int$T$Int(x: Ref, y: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$boolType())
 {
-  inhale df_isSubtype(df_typeOf(x), df_intType())
-  inhale df_isSubtype(df_typeOf(y), df_intType())
-  ret_0 := sp_gtInts(x, y)
-  goto lbl_0
-  label lbl_0
+  inhale df$isSubtype(df$typeOf(x), df$intType())
+  inhale df$isSubtype(df$typeOf(y), df$intType())
+  ret$0 := sp$gtInts(x, y)
+  goto lbl$0
+  label lbl$0
 }
 
 /comparison.kt:(200,212): info: Generated Viper text for greaterEqual:
-method f_greaterEqual_TF_T_Int_T_Int(x: Ref, y: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
+method f$greaterEqual$TF$T$Int$T$Int(x: Ref, y: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$boolType())
 {
-  inhale df_isSubtype(df_typeOf(x), df_intType())
-  inhale df_isSubtype(df_typeOf(y), df_intType())
-  ret_0 := sp_geInts(x, y)
-  goto lbl_0
-  label lbl_0
+  inhale df$isSubtype(df$typeOf(x), df$intType())
+  inhale df$isSubtype(df$typeOf(y), df$intType())
+  ret$0 := sp$geInts(x, y)
+  goto lbl$0
+  label lbl$0
 }

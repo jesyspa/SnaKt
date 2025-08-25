@@ -1,72 +1,72 @@
 /property_getters.kt:(102,129): info: Generated Viper text for testPrimitivePropertyGetter:
-method f_testPrimitivePropertyGetter_TF_T_PrimitiveProperty(pp: Ref)
-  returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
+method f$testPrimitivePropertyGetter$TF$T$PrimitiveProperty(pp: Ref)
+  returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$intType())
 {
-  var anon_0: Ref
-  inhale df_isSubtype(df_typeOf(pp), df_c_PrimitiveProperty())
-  inhale acc(p_shared(pp), wildcard)
-  anon_0 := pg_nProp(pp)
-  ret_0 := anon_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_intType())
-  goto lbl_0
-  label lbl_0
+  var anon$0: Ref
+  inhale df$isSubtype(df$typeOf(pp), df$c$PrimitiveProperty())
+  inhale acc(p$shared(pp), wildcard)
+  anon$0 := pg$nProp(pp)
+  ret$0 := anon$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$intType())
+  goto lbl$0
+  label lbl$0
 }
 
-method pg_nProp(this$dispatch: Ref) returns (ret: Ref)
+method pg$nProp(this$dispatch: Ref) returns (ret: Ref)
 
 
 /property_getters.kt:(286,313): info: Generated Viper text for testReferencePropertyGetter:
-method f_testReferencePropertyGetter_TF_T_ReferenceProperty(rp: Ref)
-  returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$testReferencePropertyGetter$TF$T$ReferenceProperty(rp: Ref)
+  returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
   var pp: Ref
-  var anon_0: Ref
+  var anon$0: Ref
   var ppn: Ref
-  var anon_1: Ref
-  inhale df_isSubtype(df_typeOf(rp), df_c_ReferenceProperty())
-  inhale acc(p_c_ReferenceProperty_shared(rp), wildcard)
-  anon_0 := pg_rProp(rp)
-  pp := anon_0
-  inhale df_isSubtype(df_typeOf(pp), df_c_PrimitiveProperty())
-  inhale acc(p_c_PrimitiveProperty_shared(pp), wildcard)
-  anon_1 := pg_nProp(pp)
-  ppn := anon_1
-  inhale df_isSubtype(df_typeOf(ppn), df_intType())
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  var anon$1: Ref
+  inhale df$isSubtype(df$typeOf(rp), df$c$ReferenceProperty())
+  inhale acc(p$c$ReferenceProperty$shared(rp), wildcard)
+  anon$0 := pg$rProp(rp)
+  pp := anon$0
+  inhale df$isSubtype(df$typeOf(pp), df$c$PrimitiveProperty())
+  inhale acc(p$c$PrimitiveProperty$shared(pp), wildcard)
+  anon$1 := pg$nProp(pp)
+  ppn := anon$1
+  inhale df$isSubtype(df$typeOf(ppn), df$intType())
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
-method pg_nProp(this$dispatch: Ref) returns (ret: Ref)
+method pg$nProp(this$dispatch: Ref) returns (ret: Ref)
 
 
-method pg_rProp(this$dispatch: Ref) returns (ret: Ref)
+method pg$rProp(this$dispatch: Ref) returns (ret: Ref)
 
 
 /property_getters.kt:(391,418): info: Generated Viper text for testCascadingPropertyGetter:
-method f_testCascadingPropertyGetter_TF_T_ReferenceProperty(rp: Ref)
-  returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$testCascadingPropertyGetter$TF$T$ReferenceProperty(rp: Ref)
+  returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
   var ppn: Ref
-  var anon_0: Ref
-  var anon_1: Ref
-  var anon_2: Ref
-  inhale df_isSubtype(df_typeOf(rp), df_c_ReferenceProperty())
-  inhale acc(p_c_ReferenceProperty_shared(rp), wildcard)
-  anon_2 := pg_rProp(rp)
-  anon_1 := anon_2
-  inhale df_isSubtype(df_typeOf(anon_1), df_c_PrimitiveProperty())
-  inhale acc(p_c_PrimitiveProperty_shared(anon_1), wildcard)
-  anon_0 := pg_nProp(anon_1)
-  ppn := anon_0
-  inhale df_isSubtype(df_typeOf(ppn), df_intType())
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  var anon$0: Ref
+  var anon$1: Ref
+  var anon$2: Ref
+  inhale df$isSubtype(df$typeOf(rp), df$c$ReferenceProperty())
+  inhale acc(p$c$ReferenceProperty$shared(rp), wildcard)
+  anon$2 := pg$rProp(rp)
+  anon$1 := anon$2
+  inhale df$isSubtype(df$typeOf(anon$1), df$c$PrimitiveProperty())
+  inhale acc(p$c$PrimitiveProperty$shared(anon$1), wildcard)
+  anon$0 := pg$nProp(anon$1)
+  ppn := anon$0
+  inhale df$isSubtype(df$typeOf(ppn), df$intType())
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
-method pg_nProp(this$dispatch: Ref) returns (ret: Ref)
+method pg$nProp(this$dispatch: Ref) returns (ret: Ref)
 
 
-method pg_rProp(this$dispatch: Ref) returns (ret: Ref)
+method pg$rProp(this$dispatch: Ref) returns (ret: Ref)

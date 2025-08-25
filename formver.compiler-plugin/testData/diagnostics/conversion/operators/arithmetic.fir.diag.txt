@@ -1,43 +1,43 @@
 /arithmetic.kt:(23,31): info: Generated Viper text for addition:
-method f_addition_TF_T_Int(x: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$addition$TF$T$Int(x: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
   var y: Ref
-  inhale df_isSubtype(df_typeOf(x), df_intType())
-  y := sp_plusInts(x, x)
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  inhale df$isSubtype(df$typeOf(x), df$intType())
+  y := sp$plusInts(x, x)
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
 /arithmetic.kt:(66,77): info: Generated Viper text for subtraction:
-method f_subtraction_TF_T_Int(x: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$subtraction$TF$T$Int(x: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
   var y: Ref
-  inhale df_isSubtype(df_typeOf(x), df_intType())
-  y := sp_minusInts(x, x)
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  inhale df$isSubtype(df$typeOf(x), df$intType())
+  y := sp$minusInts(x, x)
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
 /arithmetic.kt:(112,126): info: Generated Viper text for multiplication:
-method f_multiplication_TF_T_Int(x: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$multiplication$TF$T$Int(x: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
   var y: Ref
-  inhale df_isSubtype(df_typeOf(x), df_intType())
-  y := sp_timesInts(x, x)
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  inhale df$isSubtype(df$typeOf(x), df$intType())
+  y := sp$timesInts(x, x)
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
 
 /arithmetic.kt:(161,169): info: Generated Viper text for division:
-method f_division_TF_T_Int(x: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+method f$division$TF$T$Int(x: Ref) returns (ret$0: Ref)
+  ensures df$isSubtype(df$typeOf(ret$0), df$unitType())
 {
   var y: Ref
-  inhale df_isSubtype(df_typeOf(x), df_intType())
-  y := sp_divInts(x, x)
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+  inhale df$isSubtype(df$typeOf(x), df$intType())
+  y := sp$divInts(x, x)
+  label lbl$0
+  inhale df$isSubtype(df$typeOf(ret$0), df$unitType())
 }
