@@ -1,3 +1,0 @@
-/internal.kt:(85,104): warning: Viper verification error: Failed to convert anonymous function expression.
-
-/internal.kt:(191,194): warning: Viper verification error: Constant Expression of type Double is not yet implemented.

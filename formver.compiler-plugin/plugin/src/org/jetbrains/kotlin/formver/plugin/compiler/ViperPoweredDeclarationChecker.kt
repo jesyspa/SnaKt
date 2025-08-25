@@ -19,7 +19,7 @@ import org.jetbrains.kotlin.formver.common.ErrorCollector
 import org.jetbrains.kotlin.formver.common.LogLevel
 import org.jetbrains.kotlin.formver.common.PluginConfiguration
 import org.jetbrains.kotlin.formver.common.TargetsSelection
-import org.jetbrains.kotlin.formver.core.conversion.ExactLocationException
+import org.jetbrains.kotlin.formver.common.SnaktInternalException
 import org.jetbrains.kotlin.formver.core.conversion.ProgramConverter
 import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.print
 import org.jetbrains.kotlin.formver.plugin.compiler.reporting.reportVerifierError
@@ -59,7 +59,8 @@ class ViperPoweredDeclarationChecker(private val session: FirSession, private va
                     declaration.source,
                     PluginErrors.VIPER_TEXT,
                     declaration.name.asString(),
-                    with(programConversionContext.nameResolver) { it.toDebugOutput() })
+                    with(programConversionContext.nameResolver) { it.toDebugOutput() }
+                )
             }
 
             if (shouldDumpExpEmbeddings(declaration)) {
@@ -90,7 +91,7 @@ class ViperPoweredDeclarationChecker(private val session: FirSession, private va
             if (!consistent || !config.shouldVerify(declaration)) return
 
             verifier.verify(viperProgram, onFailure)
-        } catch (e: ExactLocationException) {
+        } catch (e: SnaktInternalException) {
             reporter.reportOn(e.source, PluginErrors.VIPER_VERIFICATION_ERROR, e.message)
         } catch (e: Exception) {
             val error = e.message ?: "No message provided"
