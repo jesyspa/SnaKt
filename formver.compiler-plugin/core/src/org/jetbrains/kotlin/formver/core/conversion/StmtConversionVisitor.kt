@@ -5,6 +5,7 @@
 
 package org.jetbrains.kotlin.formver.core.conversion
 
+import org.jetbrains.kotlin.KtSourceElement
 import org.jetbrains.kotlin.contracts.description.LogicOperationKind
 import org.jetbrains.kotlin.fir.FirElement
 import org.jetbrains.kotlin.fir.declarations.FirProperty
@@ -18,6 +19,7 @@ import org.jetbrains.kotlin.fir.types.coneType
 import org.jetbrains.kotlin.fir.types.isUnit
 import org.jetbrains.kotlin.fir.types.resolvedType
 import org.jetbrains.kotlin.fir.visitors.FirVisitor
+import org.jetbrains.kotlin.formver.common.SnaktInternalException
 import org.jetbrains.kotlin.formver.common.UnsupportedFeatureBehaviour
 import org.jetbrains.kotlin.formver.core.embeddings.LabelLink
 import org.jetbrains.kotlin.formver.core.embeddings.callables.FunctionEmbedding
@@ -59,7 +61,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
     // translating statements here, after all.  It isn't 100% clear how best to
     // communicate this.
     override fun visitElement(element: FirElement, data: StmtConversionContext): ExpEmbedding =
-        handleUnimplementedElement("Not yet implemented for $element (${element.source.text})", data)
+        handleUnimplementedElement(element.source, "Not yet implemented for $element (${element.source.text})", data)
 
     override fun visitReturnExpression(
         returnExpression: FirReturnExpression,
@@ -73,17 +75,17 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         val returnTargetName = returnExpression.target.labelName
         val target = data.resolveReturnTarget(returnTargetName)
         return blockOf(
-            Assign(target.variable, expr),
-            Goto(target.label.toLink())
+            Assign(target.variable, expr), Goto(target.label.toLink())
         )
     }
 
     override fun visitResolvedQualifier(
-        resolvedQualifier: FirResolvedQualifier,
-        data: StmtConversionContext
+        resolvedQualifier: FirResolvedQualifier, data: StmtConversionContext
     ): ExpEmbedding {
-        check(resolvedQualifier.resolvedType.isUnit) {
-            "Only `Unit` is supported among resolved qualifiers currently."
+        if (!resolvedQualifier.resolvedType.isUnit) {
+            throw SnaktInternalException(
+                resolvedQualifier.source, "Only `Unit` is supported among resolved qualifiers currently."
+            )
         }
         return UnitLit
     }
@@ -94,29 +96,30 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
     override fun visitLiteralExpression(
         literalExpression: FirLiteralExpression,
         data: StmtConversionContext,
-    ): ExpEmbedding =
-        when (literalExpression.kind) {
-            ConstantValueKind.Int -> IntLit((literalExpression.value as Long).toInt())
-            ConstantValueKind.Boolean -> BooleanLit(literalExpression.value as Boolean)
-            ConstantValueKind.Char -> CharLit(literalExpression.value as Char)
-            ConstantValueKind.String -> StringLit(literalExpression.value as String)
-            ConstantValueKind.Null -> NullLit
-            else -> handleUnimplementedElement(
-                "Constant Expression of type ${literalExpression.kind} is not yet implemented.",
-                data
-            )
-        }
+    ): ExpEmbedding = when (literalExpression.kind) {
+        ConstantValueKind.Int -> IntLit((literalExpression.value as Long).toInt())
+        ConstantValueKind.Boolean -> BooleanLit(literalExpression.value as Boolean)
+        ConstantValueKind.Char -> CharLit(literalExpression.value as Char)
+        ConstantValueKind.String -> StringLit(literalExpression.value as String)
+        ConstantValueKind.Null -> NullLit
+        else -> handleUnimplementedElement(
+            literalExpression.source,
+            "Constant Expression of type ${literalExpression.kind} is not yet implemented.",
+            data
+        )
+    }
 
     private val FirLiteralExpression.stringValue: String
         get() = value.toString()
 
     override fun visitStringConcatenationCall(
-        stringConcatenationCall: FirStringConcatenationCall,
-        data: StmtConversionContext
+        stringConcatenationCall: FirStringConcatenationCall, data: StmtConversionContext
     ): ExpEmbedding {
         val combinedLiteral = stringConcatenationCall.arguments.joinToString("") { arg ->
-            check(arg is FirLiteralExpression) {
-                "${arg::class.simpleName} is not supported as an element of string concatenation."
+            if (arg !is FirLiteralExpression) {
+                throw SnaktInternalException(
+                    arg.source, "${arg::class.simpleName} is not supported as an element of string concatenation."
+                )
             }
             arg.stringValue
         }
@@ -183,8 +186,11 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         equalityOperatorCall: FirEqualityOperatorCall,
         data: StmtConversionContext,
     ): ExpEmbedding {
-        require(equalityOperatorCall.arguments.size == 2) {
-            "Invalid equality comparison $equalityOperatorCall, can only compare 2 elements."
+        if (equalityOperatorCall.arguments.size != 2) {
+            throw SnaktInternalException(
+                equalityOperatorCall.source,
+                "Invalid equality comparison $equalityOperatorCall, can only compare 2 elements."
+            )
         }
         val left = data.convert(equalityOperatorCall.arguments[0])
         val right = data.convert(equalityOperatorCall.arguments[1])
@@ -193,6 +199,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
             FirOperation.EQ -> convertEqCmp(left, right)
             FirOperation.NOT_EQ -> Not(convertEqCmp(left, right))
             else -> handleUnimplementedElement(
+                equalityOperatorCall.source,
                 "Equality comparison operation ${equalityOperatorCall.operation} not yet implemented.",
                 data
             )
@@ -208,12 +215,14 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         comparisonExpression: FirComparisonExpression,
         data: StmtConversionContext,
     ): ExpEmbedding {
-        val dispatchReceiver = checkNotNull(comparisonExpression.compareToCall.dispatchReceiver) {
-            "found 'compareTo' call with null receiver"
-        }
-        val arg = checkNotNull(comparisonExpression.compareToCall.argumentList.arguments.firstOrNull()) {
-            "found `compareTo` call with no argument at position 0"
-        }
+
+        val dispatchReceiver: FirExpression =
+            comparisonExpression.compareToCall.dispatchReceiver ?: throw SnaktInternalException(
+                comparisonExpression.compareToCall.source, "found 'compareTo' call with null receiver"
+            )
+        val arg = comparisonExpression.compareToCall.argumentList.arguments.firstOrNull() ?: throw SnaktInternalException(
+            comparisonExpression.compareToCall.source, "found `compareTo` call with no argument at position 0"
+        )
         val left = data.convert(dispatchReceiver)
         val right = data.convert(arg)
 
@@ -260,8 +269,10 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         flatMap { arg ->
             when (arg) {
                 is FirVarargArgumentsExpression -> {
-                    check(function != null && function.isVerifyFunction) {
-                        "vararg arguments are currently supported for `verify` function only"
+                    if (function == null || !function.isVerifyFunction) {
+                        throw SnaktInternalException(
+                            arg.source, "Vararg arguments are currently supported for `verify` function only."
+                        )
                     }
                     arg.arguments.map(data::convert)
                 }
@@ -285,11 +296,15 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
             }
 
             else -> {
-                if (!data.isValidForForAllBlock)
-                    error("`forAll` scope is only allowed inside one of the `loopInvariants`, `preconditions` or `postconditions`.")
+                if (!data.isValidForForAllBlock) throw SnaktInternalException(
+                    forAllLambda.source,
+                    "`forAll` scope is only allowed inside one of the `loopInvariants`, `preconditions` or `postconditions`."
+                )
+                //error("`forAll` scope is only allowed inside one of the `loopInvariants`, `preconditions` or `postconditions`.")
                 val forAllArg = forAllLambda.valueParameters.first()
-                val forAllBody = forAllLambda.body
-                    ?: error("Lambda body should be accessible in `forAll` function call.")
+                val forAllBody = forAllLambda.body ?: throw SnaktInternalException(
+                    forAllLambda.body?.source, "Lambda body should be accessible in `forAll` function call."
+                )
                 return data.insertForAllFunctionCall(forAllArg.symbol, forAllBody)
             }
         }
@@ -299,8 +314,9 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         implicitInvokeCall: FirImplicitInvokeCall,
         data: StmtConversionContext,
     ): ExpEmbedding {
-        val receiver = implicitInvokeCall.dispatchReceiver as? FirPropertyAccessExpression
-            ?: throw NotImplementedError("Implicit invoke calls only support a limited range of receivers at the moment.")
+        val receiver = implicitInvokeCall.dispatchReceiver as? FirPropertyAccessExpression ?: throw SnaktInternalException(
+            implicitInvokeCall.source, "Implicit invoke calls only support a limited range of receivers at the moment."
+        )
         val returnType = data.embedType(implicitInvokeCall.resolvedType)
         val receiverSymbol = receiver.calleeReference.toResolvedSymbol<FirBasedSymbol<*>>()!!
         val args = implicitInvokeCall.argumentList.arguments.withVarargsHandled(data, function = null)
@@ -319,9 +335,13 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
 
     override fun visitProperty(property: FirProperty, data: StmtConversionContext): ExpEmbedding {
         val symbol = property.symbol
-        check(symbol.isLocal) {
-            "StmtConversionVisitor should not encounter non-local properties."
+        if (!symbol.isLocal) {
+            throw SnaktInternalException(
+                property.source,
+                "StmtConversionVisitor should not encounter non-local properties."
+            )
         }
+
         val type = data.embedType(symbol.resolvedReturnType)
         return data.declareLocalProperty(symbol, property.initializer?.let { data.convert(it).withType(type) })
     }
@@ -381,7 +401,9 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
                 data.embedPropertyAccess(lValue.expressionRef.value as FirPropertyAccessExpression)
             }
 
-            else -> error("Lvalue must be either property access or desugared assignment.")
+            else -> throw SnaktInternalException(
+                variableAssignment.source, "Lvalue must be either property access or desugared assignment."
+            )
         }
         val convertedRValue = data.convert(variableAssignment.rValue)
         return embedding.setValue(convertedRValue, data)
@@ -435,7 +457,10 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
             }
 
             return resolved
-                ?: throw IllegalArgumentException("Can't resolve the 'this' receiver since the function does not have one.")
+                ?: throw SnaktInternalException(
+                    thisReceiverExpression.source,
+                    "Can't resolve the 'this' receiver since the function does not have one."
+                )
         }
 
         val symbol = thisReceiverExpression.calleeReference.boundSymbol
@@ -443,11 +468,11 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         val declSymbol = when (symbol) {
             is FirReceiverParameterSymbol -> symbol.containingDeclarationSymbol
             is FirValueParameterSymbol -> symbol.containingDeclarationSymbol
-            else -> error("Unsupported receiver expression type.")
+            else -> throw SnaktInternalException(symbol.source, "Unsupported receiver expression type.")
         }
         tryResolve(declSymbol)?.let { return it }
 
-        throw IllegalArgumentException("No resolution approach to this symbol worked.")
+        throw SnaktInternalException(thisReceiverExpression.source, "No resolution approach to this symbol worked.")
     }
 
     override fun visitTypeOperatorCall(
@@ -469,7 +494,9 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
                 access = true
             }
 
-            else -> handleUnimplementedElement("Can't embed type operator ${typeOperatorCall.operation}.", data)
+            else -> handleUnimplementedElement(
+                typeOperatorCall.source, "Can't embed type operator ${typeOperatorCall.operation}.", data
+            )
         }
     }
 
@@ -552,18 +579,20 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
     override fun visitCheckedSafeCallSubject(
         checkedSafeCallSubject: FirCheckedSafeCallSubject,
         data: StmtConversionContext,
-    ): ExpEmbedding = data.checkedSafeCallSubject
-        ?: throw IllegalArgumentException("Trying to resolve checked subject $checkedSafeCallSubject which was not captured in StmtConversionContext")
+    ): ExpEmbedding = data.checkedSafeCallSubject ?: throw SnaktInternalException(
+        checkedSafeCallSubject.source,
+        "Trying to resolve checked subject $checkedSafeCallSubject which was not captured in StmtConversionContext"
+    )
 
-    private fun handleUnimplementedElement(msg: String, data: StmtConversionContext): ExpEmbedding =
-        when (data.config.behaviour) {
-            UnsupportedFeatureBehaviour.THROW_EXCEPTION ->
-                TODO(msg)
+    private fun handleUnimplementedElement(
+        source: KtSourceElement?, msg: String, data: StmtConversionContext
+    ): ExpEmbedding = when (data.config.behaviour) {
+        UnsupportedFeatureBehaviour.THROW_EXCEPTION ->
+            throw SnaktInternalException(source, msg)
 
-            UnsupportedFeatureBehaviour.ASSUME_UNREACHABLE -> {
-                data.errorCollector.addMinorError(msg)
-                ErrorExp
-            }
+        UnsupportedFeatureBehaviour.ASSUME_UNREACHABLE -> {
+            data.errorCollector.addMinorError(msg)
+            ErrorExp
         }
+    }
 }
-
