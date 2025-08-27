@@ -19,4 +19,5 @@ import org.jetbrains.kotlin.formver.viper.SEPARATOR
 class SimpleNameResolver : NameResolver {
     override fun resolve(name: MangledName): String =
         listOfNotNull(name.mangledType, name.mangledScope, name.mangledBaseName).joinToString(SEPARATOR)
+    override fun register(name: MangledName) {}
 }
