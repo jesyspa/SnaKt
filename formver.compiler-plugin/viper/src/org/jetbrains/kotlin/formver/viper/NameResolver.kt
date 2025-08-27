@@ -12,10 +12,10 @@ import org.jetbrains.kotlin.formver.viper.MangledName
 
 interface NameResolver {
     fun resolve(name: MangledName): String
-    fun registry(name: MangledName)
+    fun register(name: MangledName)
 }
 
 class DebugNameResolver : NameResolver {
     override fun resolve(name: MangledName): String = listOfNotNull(name.mangledType, name.mangledScope, name.mangledBaseName).joinToString(SEPARATOR)
-    override fun registry(name: MangledName) {}
+    override fun register(name: MangledName) {}
 }

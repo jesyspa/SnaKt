@@ -53,13 +53,13 @@ data class Program(
 context(nameResolver: NameResolver)
 private fun registerExpNames(exp: Exp) {
     when (exp) {
-        is Exp.LocalVar -> nameResolver.registry(exp.name)
+        is Exp.LocalVar -> nameResolver.register(exp.name)
         is Exp.FieldAccess -> {
-            nameResolver.registry(exp.field.name)
+            nameResolver.register(exp.field.name)
             registerExpNames(exp.rcv)
         }
         is Exp.PredicateAccess -> {
-            nameResolver.registry(exp.predicateName)
+            nameResolver.register(exp.predicateName)
             exp.formalArgs.forEach { registerExpNames(it) }
         }
         is BinaryExp -> {
@@ -67,12 +67,12 @@ private fun registerExpNames(exp: Exp) {
             registerExpNames(exp.right)
         }
         is Exp.FuncApp -> {
-            nameResolver.registry(exp.functionName)
+            nameResolver.register(exp.functionName)
             exp.args.forEach { registerExpNames(it) }
         }
         is Exp.DomainFuncApp -> {
-            nameResolver.registry(exp.function.name)
-            exp.function.formalArgs.forEach { arg -> nameResolver.registry(arg.name) }
+            nameResolver.register(exp.function.name)
+            exp.function.formalArgs.forEach { arg -> nameResolver.register(arg.name) }
             exp.args.forEach { registerExpNames(it) }
         }
         else -> { }
@@ -83,24 +83,24 @@ context(nameResolver: NameResolver)
 private fun Program.registerSeqnNames(seqn: Stmt.Seqn) {
     seqn.scopedSeqnDeclarations.forEach { decl ->
         when (decl) {
-            is Declaration.LocalVarDecl -> nameResolver.registry(decl.name)
-            is Declaration.LabelDecl -> nameResolver.registry(decl.name)
+            is Declaration.LocalVarDecl -> nameResolver.register(decl.name)
+            is Declaration.LabelDecl -> nameResolver.register(decl.name)
         }
     }
     seqn.stmts.forEach { stmt ->
         when (stmt) {
-            is Stmt.Label -> nameResolver.registry(stmt.name)
+            is Stmt.Label -> nameResolver.register(stmt.name)
             is Stmt.Seqn -> registerSeqnNames(stmt)
-            is Stmt.Goto -> nameResolver.registry(stmt.name)
-            is Stmt.MethodCall -> nameResolver.registry(stmt.methodName)
+            is Stmt.Goto -> nameResolver.register(stmt.name)
+            is Stmt.MethodCall -> nameResolver.register(stmt.methodName)
             is Stmt.If -> {
                 registerSeqnNames(stmt.then)
                 stmt.els?.let { registerSeqnNames(it) }
             }
             is Stmt.While -> registerSeqnNames(stmt.body)
-            is Stmt.LocalVarAssign -> nameResolver.registry(stmt.lhs.name)
-            is Stmt.Fold -> nameResolver.registry(stmt.acc.predicateName)
-            is Stmt.Unfold -> nameResolver.registry(stmt.acc.predicateName)
+            is Stmt.LocalVarAssign -> nameResolver.register(stmt.lhs.name)
+            is Stmt.Fold -> nameResolver.register(stmt.acc.predicateName)
+            is Stmt.Unfold -> nameResolver.register(stmt.acc.predicateName)
             else -> { }
         }
     }
@@ -109,30 +109,30 @@ private fun Program.registerSeqnNames(seqn: Stmt.Seqn) {
 context(nameResolver: NameResolver)
 fun Program.registerAllNames() {
     domains.forEach { domain ->
-        nameResolver.registry(domain.name)
+        nameResolver.register(domain.name)
         domain.functions.forEach { function ->
-            nameResolver.registry(function.name)
-            function.formalArgs.forEach { arg -> nameResolver.registry(arg.name) }
+            nameResolver.register(function.name)
+            function.formalArgs.forEach { arg -> nameResolver.register(arg.name) }
         }
     }
-    fields.forEach { nameResolver.registry(it.name) }
+    fields.forEach { nameResolver.register(it.name) }
 
     functions.forEach { function ->
-        nameResolver.registry(function.name)
-        function.formalArgs.forEach { arg -> nameResolver.registry(arg.name) }
+        nameResolver.register(function.name)
+        function.formalArgs.forEach { arg -> nameResolver.register(arg.name) }
         function.body?.let { exp -> registerExpNames(exp) }
     }
 
     predicates.forEach { predicate ->
-        nameResolver.registry(predicate.name)
-        predicate.formalArgs.forEach { arg -> nameResolver.registry(arg.name) }
+        nameResolver.register(predicate.name)
+        predicate.formalArgs.forEach { arg -> nameResolver.register(arg.name) }
         registerExpNames(predicate.body)
     }
 
     methods.forEach { method ->
-        nameResolver.registry(method.name)
-        method.formalArgs.forEach { arg -> nameResolver.registry(arg.name) }
-        method.formalReturns.forEach { ret -> nameResolver.registry(ret.name) }
+        nameResolver.register(method.name)
+        method.formalArgs.forEach { arg -> nameResolver.register(arg.name) }
+        method.formalReturns.forEach { ret -> nameResolver.register(ret.name) }
         method.body?.let { seqn -> registerSeqnNames(seqn) }
     }
 }
