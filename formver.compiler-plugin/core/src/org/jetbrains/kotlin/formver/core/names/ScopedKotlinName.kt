@@ -17,9 +17,9 @@ import org.jetbrains.kotlin.name.FqName
  */
 data class ScopedKotlinName(val scope: NameScope, val name: KotlinName) : SymbolName {
     override val fullScope: NameExpr?
-        get() = scope.fullSymbolName?.let {scope.fullSymbolName}
+        get() = scope.fullSymbolName?.let {scope.fullSymbolName} ?: Lit("root")
     override val requiredScope: NameExpr?
-        get() = scope.fullSymbolName?.let { parseRequiredScope(scope.fullSymbolName!!)}
+        get() = scope.fullSymbolName?.let { parseRequiredScope(scope.fullSymbolName!!)} ?: Lit("root")
     override val mangledBaseName: NameExpr
         get() = name.mangledBaseName
     override val mangledType: String?

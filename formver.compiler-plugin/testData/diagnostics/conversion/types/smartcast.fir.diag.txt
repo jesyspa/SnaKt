@@ -1,40 +1,40 @@
 /smartcast.kt:(23,38): info: Generated Viper text for smartcastReturn:
-method f$smartcastReturn$TF$NT$Int(p$n: Ref) returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
+method root_smartcastReturn(n: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(p$n), df$rt$nullable(df$rt$intType()))
-  if (!(p$n == df$rt$nullValue())) {
-    ret$0 := p$n
+  inhale df_isSubtype(df_typeOf(n), df_nullable(df_intType()))
+  if (!(n == df_nullValue())) {
+    ret_0 := n
   } else {
-    ret$0 := df$rt$intToRef(0)}
-  goto lbl$ret$0
-  label lbl$ret$0
+    ret_0 := df_intToRef(0)}
+  goto lbl_0
+  label lbl_0
 }
 
 /smartcast.kt:(88,106): info: Generated Viper text for isNullOrEmptyWrong:
-method f$isNullOrEmptyWrong$TF$NT$CharSequence(p$seq: Ref)
-  returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
-{
-  inhale df$rt$isSubtype(df$rt$typeOf(p$seq), df$rt$nullable(df$rt$c$pkg$kotlin$CharSequence()))
-  inhale p$seq != df$rt$nullValue() ==>
-    acc(p$pkg$kotlin$c$CharSequence$shared(p$seq), wildcard)
-  if (p$seq == df$rt$nullValue()) {
-    var anon$0: Ref
-    if (p$seq != df$rt$nullValue()) {
-      var anon$1: Ref
-      var anon$2: Ref
-      anon$2 := pg$public$length(p$seq)
-      anon$1 := anon$2
-      inhale df$rt$isSubtype(df$rt$typeOf(anon$1), df$rt$intType())
-      anon$0 := anon$1
-    } else {
-      anon$0 := df$rt$nullValue()}
-    ret$0 := df$rt$boolToRef(anon$0 == df$rt$intToRef(0))
-  } else {
-    ret$0 := df$rt$boolToRef(false)}
-  goto lbl$ret$0
-  label lbl$ret$0
-}
+method c_CharSequence_length(this$dispatch: Ref) returns (ret: Ref)
 
-method pg$public$length(this$dispatch: Ref) returns (ret: Ref)
+
+method root_isNullOrEmptyWrong(seq: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
+{
+  inhale df_isSubtype(df_typeOf(seq), df_nullable(df_c_pkg$kotlin_CharSequence()))
+  inhale seq != df_nullValue() ==>
+    acc(c_CharSequence_shared(seq), wildcard)
+  if (seq == df_nullValue()) {
+    var anon_0: Ref
+    if (seq != df_nullValue()) {
+      var anon_1: Ref
+      var anon_2: Ref
+      anon_2 := c_CharSequence_length(seq)
+      anon_1 := anon_2
+      inhale df_isSubtype(df_typeOf(anon_1), df_intType())
+      anon_0 := anon_1
+    } else {
+      anon_0 := df_nullValue()}
+    ret_0 := df_boolToRef(anon_0 == df_intToRef(0))
+  } else {
+    ret_0 := df_boolToRef(false)}
+  goto lbl_0
+  label lbl_0
+}

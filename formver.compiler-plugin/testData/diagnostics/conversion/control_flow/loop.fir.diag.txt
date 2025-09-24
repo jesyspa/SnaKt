@@ -1,40 +1,40 @@
 /loop.kt:(23,32): info: Generated Viper text for whileLoop:
-method f$whileLoop$TF$T$Boolean(p$b: Ref) returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
+method root_whileLoop(b: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
 {
-  var anon$0: Ref
-  inhale df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
-  label lbl$continue$0
-    invariant df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
-  anon$0 := p$b
-  if (df$rt$boolFromRef(anon$0)) {
-    var l1$a: Ref
-    var l1$c: Ref
-    l1$a := df$rt$intToRef(1)
-    l1$c := df$rt$intToRef(2)
-    goto lbl$continue$0
+  var anon_0: Ref
+  inhale df_isSubtype(df_typeOf(b), df_boolType())
+  label lbl_continue_0
+    invariant df_isSubtype(df_typeOf(b), df_boolType())
+  anon_0 := b
+  if (df_boolFromRef(anon_0)) {
+    var a: Ref
+    var c: Ref
+    a := df_intToRef(1)
+    c := df_intToRef(2)
+    goto lbl_continue_0
   }
-  label lbl$break$0
-  assert df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
-  ret$0 := df$rt$boolToRef(false)
-  goto lbl$ret$0
-  label lbl$ret$0
+  label lbl_break_0
+  assert df_isSubtype(df_typeOf(b), df_boolType())
+  ret_0 := df_boolToRef(false)
+  goto lbl_ret_0
+  label lbl_ret_0
 }
 
 /loop.kt:(138,160): info: Generated Viper text for whileFunctionCondition:
-method f$whileFunctionCondition$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method root_whileFunctionCondition() returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  var anon$0: Ref
-  label lbl$continue$0
-  anon$0 := f$whileLoop$TF$T$Boolean(df$rt$boolToRef(true))
-  if (df$rt$boolFromRef(anon$0)) {
-    goto lbl$continue$0
+  var anon_0: Ref
+  label lbl_continue_0
+  anon_0 := root_whileLoop(df_boolToRef(true))
+  if (df_boolFromRef(anon_0)) {
+    goto lbl_continue_0
   }
-  label lbl$break$0
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  label lbl_break_0
+  label lbl_ret_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
-method f$whileLoop$TF$T$Boolean(p$b: Ref) returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$boolType())
+method root_whileLoop(b: Ref) returns (ret: Ref)
+  ensures df_isSubtype(df_typeOf(ret), df_boolType())

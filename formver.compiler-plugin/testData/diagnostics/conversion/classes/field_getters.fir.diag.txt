@@ -1,119 +1,116 @@
 /field_getters.kt:(70,94): info: Generated Viper text for testPrimitiveFieldGetter:
-field bf$a: Ref
+field root_a: Ref
 
-field bf$b: Ref
+field root_b: Ref
 
-method f$testPrimitiveFieldGetter$TF$T$PrimitiveFields(p$pf: Ref)
-  returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method root_testPrimitiveFieldGetter(pf: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  var l0$a: Ref
-  var l0$b: Ref
-  inhale df$rt$isSubtype(df$rt$typeOf(p$pf), df$rt$c$PrimitiveFields())
-  inhale acc(p$c$PrimitiveFields$shared(p$pf), wildcard)
-  unfold acc(p$c$PrimitiveFields$shared(p$pf), wildcard)
-  l0$a := p$pf.bf$a
-  inhale acc(p$pf.bf$b, write)
-  l0$b := p$pf.bf$b
-  exhale acc(p$pf.bf$b, write)
-  inhale df$rt$isSubtype(df$rt$typeOf(l0$b), df$rt$intType())
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  var a: Ref
+  var b: Ref
+  inhale df_isSubtype(df_typeOf(pf), df_c_root_PrimitiveFields())
+  inhale acc(PrimitiveFields_shared(pf), wildcard)
+  unfold acc(PrimitiveFields_shared(pf), wildcard)
+  a := pf.root_a
+  inhale acc(pf.root_b, write)
+  b := pf.root_b
+  exhale acc(pf.root_b, write)
+  inhale df_isSubtype(df_typeOf(b), df_intType())
+  label lbl_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /field_getters.kt:(230,254): info: Generated Viper text for testReferenceFieldGetter:
-field bf$a: Ref
+field root_a: Ref
 
-field bf$b: Ref
+field root_b: Ref
 
-field bf$f: Ref
+field root_f: Ref
 
-field bf$g: Ref
+field root_g: Ref
 
-method f$testReferenceFieldGetter$TF$T$ReferenceFields(p$rf: Ref)
-  returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method root_testReferenceFieldGetter(rf: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  var l0$f: Ref
-  var l0$g: Ref
-  var l0$fa: Ref
-  var l0$fb: Ref
-  var l0$ga: Ref
-  var l0$gb: Ref
-  inhale df$rt$isSubtype(df$rt$typeOf(p$rf), df$rt$c$ReferenceFields())
-  inhale acc(p$c$ReferenceFields$shared(p$rf), wildcard)
-  unfold acc(p$c$ReferenceFields$shared(p$rf), wildcard)
-  l0$f := p$rf.bf$f
-  inhale acc(p$rf.bf$g, write)
-  l0$g := p$rf.bf$g
-  exhale acc(p$rf.bf$g, write)
-  inhale df$rt$isSubtype(df$rt$typeOf(l0$g), df$rt$c$PrimitiveFields())
-  inhale acc(p$c$PrimitiveFields$shared(l0$g), wildcard)
-  unfold acc(p$c$PrimitiveFields$shared(l0$f), wildcard)
-  l0$fa := l0$f.bf$a
-  inhale acc(l0$f.bf$b, write)
-  l0$fb := l0$f.bf$b
-  exhale acc(l0$f.bf$b, write)
-  inhale df$rt$isSubtype(df$rt$typeOf(l0$fb), df$rt$intType())
-  unfold acc(p$c$PrimitiveFields$shared(l0$g), wildcard)
-  l0$ga := l0$g.bf$a
-  inhale acc(l0$g.bf$b, write)
-  l0$gb := l0$g.bf$b
-  exhale acc(l0$g.bf$b, write)
-  inhale df$rt$isSubtype(df$rt$typeOf(l0$gb), df$rt$intType())
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  var f: Ref
+  var g: Ref
+  var fa: Ref
+  var fb: Ref
+  var ga: Ref
+  var gb: Ref
+  inhale df_isSubtype(df_typeOf(rf), df_c_root_ReferenceFields())
+  inhale acc(ReferenceFields_shared(rf), wildcard)
+  unfold acc(ReferenceFields_shared(rf), wildcard)
+  f := rf.root_f
+  inhale acc(rf.root_g, write)
+  g := rf.root_g
+  exhale acc(rf.root_g, write)
+  inhale df_isSubtype(df_typeOf(g), df_c_root_PrimitiveFields())
+  inhale acc(PrimitiveFields_shared(g), wildcard)
+  unfold acc(PrimitiveFields_shared(f), wildcard)
+  fa := f.root_a
+  inhale acc(f.root_b, write)
+  fb := f.root_b
+  exhale acc(f.root_b, write)
+  inhale df_isSubtype(df_typeOf(fb), df_intType())
+  unfold acc(PrimitiveFields_shared(g), wildcard)
+  ga := g.root_a
+  inhale acc(g.root_b, write)
+  gb := g.root_b
+  exhale acc(g.root_b, write)
+  inhale df_isSubtype(df_typeOf(gb), df_intType())
+  label lbl_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /field_getters.kt:(387,411): info: Generated Viper text for testCascadingFieldGetter:
-field bf$a: Ref
+field root_a: Ref
 
-field bf$b: Ref
+field root_b: Ref
 
-field bf$f: Ref
+field root_f: Ref
 
-field bf$g: Ref
+field root_g: Ref
 
-method f$testCascadingFieldGetter$TF$T$ReferenceFields(p$rf: Ref)
-  returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method root_testCascadingFieldGetter(rf: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  var l0$fa: Ref
-  var anon$0: Ref
-  var l0$fb: Ref
-  var anon$1: Ref
-  var l0$ga: Ref
-  var anon$2: Ref
-  var l0$gb: Ref
-  var anon$3: Ref
-  inhale df$rt$isSubtype(df$rt$typeOf(p$rf), df$rt$c$ReferenceFields())
-  inhale acc(p$c$ReferenceFields$shared(p$rf), wildcard)
-  unfold acc(p$c$ReferenceFields$shared(p$rf), wildcard)
-  anon$0 := p$rf.bf$f
-  unfold acc(p$c$PrimitiveFields$shared(anon$0), wildcard)
-  l0$fa := anon$0.bf$a
-  unfold acc(p$c$ReferenceFields$shared(p$rf), wildcard)
-  anon$1 := p$rf.bf$f
-  inhale acc(anon$1.bf$b, write)
-  l0$fb := anon$1.bf$b
-  exhale acc(anon$1.bf$b, write)
-  inhale df$rt$isSubtype(df$rt$typeOf(l0$fb), df$rt$intType())
-  inhale acc(p$rf.bf$g, write)
-  anon$2 := p$rf.bf$g
-  exhale acc(p$rf.bf$g, write)
-  inhale df$rt$isSubtype(df$rt$typeOf(anon$2), df$rt$c$PrimitiveFields())
-  inhale acc(p$c$PrimitiveFields$shared(anon$2), wildcard)
-  unfold acc(p$c$PrimitiveFields$shared(anon$2), wildcard)
-  l0$ga := anon$2.bf$a
-  inhale acc(p$rf.bf$g, write)
-  anon$3 := p$rf.bf$g
-  exhale acc(p$rf.bf$g, write)
-  inhale df$rt$isSubtype(df$rt$typeOf(anon$3), df$rt$c$PrimitiveFields())
-  inhale acc(p$c$PrimitiveFields$shared(anon$3), wildcard)
-  inhale acc(anon$3.bf$b, write)
-  l0$gb := anon$3.bf$b
-  exhale acc(anon$3.bf$b, write)
-  inhale df$rt$isSubtype(df$rt$typeOf(l0$gb), df$rt$intType())
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  var fa: Ref
+  var anon_0: Ref
+  var fb: Ref
+  var anon_1: Ref
+  var ga: Ref
+  var anon_2: Ref
+  var gb: Ref
+  var anon_3: Ref
+  inhale df_isSubtype(df_typeOf(rf), df_c_root_ReferenceFields())
+  inhale acc(ReferenceFields_shared(rf), wildcard)
+  unfold acc(ReferenceFields_shared(rf), wildcard)
+  anon_0 := rf.root_f
+  unfold acc(PrimitiveFields_shared(anon_0), wildcard)
+  fa := anon_0.root_a
+  unfold acc(ReferenceFields_shared(rf), wildcard)
+  anon_1 := rf.root_f
+  inhale acc(anon_1.root_b, write)
+  fb := anon_1.root_b
+  exhale acc(anon_1.root_b, write)
+  inhale df_isSubtype(df_typeOf(fb), df_intType())
+  inhale acc(rf.root_g, write)
+  anon_2 := rf.root_g
+  exhale acc(rf.root_g, write)
+  inhale df_isSubtype(df_typeOf(anon_2), df_c_root_PrimitiveFields())
+  inhale acc(PrimitiveFields_shared(anon_2), wildcard)
+  unfold acc(PrimitiveFields_shared(anon_2), wildcard)
+  ga := anon_2.root_a
+  inhale acc(rf.root_g, write)
+  anon_3 := rf.root_g
+  exhale acc(rf.root_g, write)
+  inhale df_isSubtype(df_typeOf(anon_3), df_c_root_PrimitiveFields())
+  inhale acc(PrimitiveFields_shared(anon_3), wildcard)
+  inhale acc(anon_3.root_b, write)
+  gb := anon_3.root_b
+  exhale acc(anon_3.root_b, write)
+  inhale df_isSubtype(df_typeOf(gb), df_intType())
+  label lbl_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }

@@ -1,51 +1,56 @@
 /override_properties_types.kt:(520,530): info: Generated Viper text for extractInt:
-field bf$field: Ref
+field root_field: Ref
 
-method f$extractInt$TF$T$Base$T$Boolean(p$base: Ref, p$returnNull: Ref)
-  returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$nullable(df$rt$intType()))
-  ensures ret$0 == df$rt$nullValue() ==> df$rt$boolFromRef(p$returnNull)
+method Base_field(this$dispatch: Ref) returns (ret: Ref)
+
+
+method pg_OpenClassOpenFieldVarDerived_field(this$dispatch: Ref)
+  returns (ret: Ref)
+
+
+method ps_OpenClassOpenFieldVarDerived_field(this$dispatch: Ref, anon_0: Ref)
+  returns (ret: Ref)
+
+
+method root_extractInt(base: Ref, returnNull: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_nullable(df_intType()))
+  ensures ret_0 == df_nullValue() ==> df_boolFromRef(returnNull)
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(p$base), df$rt$c$Base())
-  inhale acc(p$c$Base$shared(p$base), wildcard)
-  inhale df$rt$isSubtype(df$rt$typeOf(p$returnNull), df$rt$boolType())
-  if (df$rt$boolFromRef(p$returnNull)) {
-    var anon$0: Ref
-    anon$0 := df$rt$nullValue()
-    ret$0 := anon$0
+  inhale df_isSubtype(df_typeOf(base), df_c_root_Base())
+  inhale acc(Base_shared(base), wildcard)
+  inhale df_isSubtype(df_typeOf(returnNull), df_boolType())
+  if (df_boolFromRef(returnNull)) {
+    var anon_0: Ref
+    anon_0 := df_nullValue()
+    ret_0 := anon_0
   } else {
-    var anon$1: Ref
-    if (df$rt$isSubtype(df$rt$typeOf(p$base), df$rt$c$OpenClassOpenFieldVarDerived())) {
-      var anon$2: Ref
-      inhale acc(p$c$OpenClassOpenFieldVarDerived$shared(p$base), wildcard)
-      anon$2 := pg$public$field(p$base)
-      anon$1 := anon$2
-      inhale df$rt$isSubtype(df$rt$typeOf(anon$1), df$rt$intType())
-    } elseif (df$rt$isSubtype(df$rt$typeOf(p$base), df$rt$c$FinalClassOpenFieldVarDerived())) {
-      inhale acc(p$c$FinalClassOpenFieldVarDerived$shared(p$base), wildcard)
-      inhale acc(p$base.bf$field, write)
-      anon$1 := p$base.bf$field
-      exhale acc(p$base.bf$field, write)
-      inhale df$rt$isSubtype(df$rt$typeOf(anon$1), df$rt$intType())
-    } elseif (df$rt$isSubtype(df$rt$typeOf(p$base), df$rt$c$FinalClassFinalFieldValDerived())) {
-      inhale acc(p$c$FinalClassFinalFieldValDerived$shared(p$base), wildcard)
-      unfold acc(p$c$FinalClassFinalFieldValDerived$shared(p$base), wildcard)
-      anon$1 := p$base.bf$field
-    } elseif (df$rt$isSubtype(df$rt$typeOf(p$base), df$rt$c$OpenClassFinalFieldVarDerived())) {
-      inhale acc(p$c$OpenClassFinalFieldVarDerived$shared(p$base), wildcard)
-      inhale acc(p$base.bf$field, write)
-      anon$1 := p$base.bf$field
-      exhale acc(p$base.bf$field, write)
-      inhale df$rt$isSubtype(df$rt$typeOf(anon$1), df$rt$intType())
+    var anon_1: Ref
+    if (df_isSubtype(df_typeOf(base), df_c_root_OpenClassOpenFieldVarDerived())) {
+      var anon_2: Ref
+      inhale acc(OpenClassOpenFieldVarDerived_shared(base), wildcard)
+      anon_2 := pg_OpenClassOpenFieldVarDerived_field(base)
+      anon_1 := anon_2
+      inhale df_isSubtype(df_typeOf(anon_1), df_intType())
+    } elseif (df_isSubtype(df_typeOf(base), df_c_root_FinalClassOpenFieldVarDerived())) {
+      inhale acc(FinalClassOpenFieldVarDerived_shared(base), wildcard)
+      inhale acc(base.root_field, write)
+      anon_1 := base.root_field
+      exhale acc(base.root_field, write)
+      inhale df_isSubtype(df_typeOf(anon_1), df_intType())
+    } elseif (df_isSubtype(df_typeOf(base), df_c_root_FinalClassFinalFieldValDerived())) {
+      inhale acc(FinalClassFinalFieldValDerived_shared(base), wildcard)
+      unfold acc(FinalClassFinalFieldValDerived_shared(base), wildcard)
+      anon_1 := base.root_field
+    } elseif (df_isSubtype(df_typeOf(base), df_c_root_OpenClassFinalFieldVarDerived())) {
+      inhale acc(OpenClassFinalFieldVarDerived_shared(base), wildcard)
+      inhale acc(base.root_field, write)
+      anon_1 := base.root_field
+      exhale acc(base.root_field, write)
+      inhale df_isSubtype(df_typeOf(anon_1), df_intType())
     } else {
-      anon$1 := df$rt$intToRef(0)}
-    ret$0 := anon$1
+      anon_1 := df_intToRef(0)}
+    ret_0 := anon_1
   }
-  goto lbl$ret$0
-  label lbl$ret$0
+  goto lbl_0
+  label lbl_0
 }
-
-method pg$public$field(this$dispatch: Ref) returns (ret: Ref)
-
-
-method ps$public$field(this$dispatch: Ref, anon$0: Ref) returns (ret: Ref)

@@ -1,26 +1,26 @@
 /assert_statements.kt:(63,67): info: Generated Viper text for test:
-field bf$size: Ref
+field root_size: Ref
 
-method f$test$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method root_test() returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  var l0$x: Ref
-  var anon$1: Ref
-  var anon$0: Ref
-  var anon$2: Ref
-  l0$x := df$rt$intToRef(42)
+  var x: Ref
+  var anon_1: Ref
+  var anon_0: Ref
+  var anon_2: Ref
+  x := df_intToRef(42)
   assert true
   assert false
-  assert 2 <= df$rt$intFromRef(l0$x)
-  anon$0 := l0$x
-  l0$x := sp$plusInts(anon$0, df$rt$intToRef(1))
-  anon$1 := anon$0
-  assert df$rt$intFromRef(anon$1) < 43
-  l0$x := sp$plusInts(l0$x, df$rt$intToRef(1))
-  anon$2 := l0$x
-  assert df$rt$intFromRef(anon$2) < 43
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  assert 2 <= df_intFromRef(x)
+  anon_0 := x
+  x := sp_plusInts(anon_0, df_intToRef(1))
+  anon_1 := anon_0
+  assert df_intFromRef(anon_1) < 43
+  x := sp_plusInts(x, df_intToRef(1))
+  anon_2 := x
+  assert df_intFromRef(anon_2) < 43
+  label lbl_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /assert_statements.kt:(160,166): error: Assert condition is impure
@@ -28,19 +28,19 @@ method f$test$TF$() returns (ret$0: Ref)
 /assert_statements.kt:(168,174): error: Assert condition is impure
 
 /assert_statements.kt:(196,206): info: Generated Viper text for testImpure:
-field bf$size: Ref
+field root_size: Ref
 
-method f$testImpure$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method root_testImpure() returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  var l0$x: Ref
-  var anon$0: Ref
-  l0$x := df$rt$intToRef(42)
-  l0$x := sp$plusInts(l0$x, df$rt$intToRef(1))
-  anon$0 := l0$x
-  assert df$rt$intFromRef(anon$0) < 43
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  var x: Ref
+  var anon_0: Ref
+  x := df_intToRef(42)
+  x := sp_plusInts(x, df_intToRef(1))
+  anon_0 := x
+  assert df_intFromRef(anon_0) < 43
+  label lbl_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /assert_statements.kt:(237,243): error: Assert condition is impure

@@ -1,43 +1,43 @@
 /arithmetic.kt:(23,31): info: Generated Viper text for addition:
-method f$addition$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method root_addition(x: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  var l0$y: Ref
-  inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$intType())
-  l0$y := sp$plusInts(p$x, p$x)
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  var y: Ref
+  inhale df_isSubtype(df_typeOf(x), df_intType())
+  y := sp_plusInts(x, x)
+  label lbl_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /arithmetic.kt:(66,77): info: Generated Viper text for subtraction:
-method f$subtraction$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method root_subtraction(x: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  var l0$y: Ref
-  inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$intType())
-  l0$y := sp$minusInts(p$x, p$x)
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  var y: Ref
+  inhale df_isSubtype(df_typeOf(x), df_intType())
+  y := sp_minusInts(x, x)
+  label lbl_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /arithmetic.kt:(112,126): info: Generated Viper text for multiplication:
-method f$multiplication$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method root_multiplication(x: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  var l0$y: Ref
-  inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$intType())
-  l0$y := sp$timesInts(p$x, p$x)
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  var y: Ref
+  inhale df_isSubtype(df_typeOf(x), df_intType())
+  y := sp_timesInts(x, x)
+  label lbl_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /arithmetic.kt:(161,169): info: Generated Viper text for division:
-method f$division$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method root_division(x: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  var l0$y: Ref
-  inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$intType())
-  l0$y := sp$divInts(p$x, p$x)
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  var y: Ref
+  inhale df_isSubtype(df_typeOf(x), df_intType())
+  y := sp_divInts(x, x)
+  label lbl_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }

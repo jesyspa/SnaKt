@@ -1,67 +1,67 @@
 /basic.kt:(23,33): info: Generated Viper text for returnUnit:
-method f$returnUnit$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method root_returnUnit() returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  label lbl_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /basic.kt:(43,52): info: Generated Viper text for returnInt:
-method f$returnInt$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
+method root_returnInt() returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
-  ret$0 := df$rt$intToRef(0)
-  goto lbl$ret$0
-  label lbl$ret$0
+  ret_0 := df_intToRef(0)
+  goto lbl_0
+  label lbl_0
 }
 
 /basic.kt:(77,94): info: Generated Viper text for takeIntReturnUnit:
-method f$takeIntReturnUnit$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method root_takeIntReturnUnit(x: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$intType())
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  inhale df_isSubtype(df_typeOf(x), df_intType())
+  label lbl_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /basic.kt:(140,156): info: Generated Viper text for takeIntReturnInt:
-method f$takeIntReturnInt$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
+method root_takeIntReturnInt(x: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$intType())
-  ret$0 := p$x
-  goto lbl$ret$0
-  label lbl$ret$0
+  inhale df_isSubtype(df_typeOf(x), df_intType())
+  ret_0 := x
+  goto lbl_0
+  label lbl_0
 }
 
 /basic.kt:(187,207): info: Generated Viper text for takeIntReturnIntExpr:
-method f$takeIntReturnIntExpr$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
+method root_takeIntReturnIntExpr(x: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$intType())
-  ret$0 := p$x
-  goto lbl$ret$0
-  label lbl$ret$0
+  inhale df_isSubtype(df_typeOf(x), df_intType())
+  ret_0 := x
+  goto lbl_0
+  label lbl_0
 }
 
 /basic.kt:(229,247): info: Generated Viper text for withIntDeclaration:
-method f$withIntDeclaration$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
+method root_withIntDeclaration() returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
-  var l0$x: Ref
-  l0$x := df$rt$intToRef(0)
-  ret$0 := l0$x
-  goto lbl$ret$0
-  label lbl$ret$0
+  var x: Ref
+  x := df_intToRef(0)
+  ret_0 := x
+  goto lbl_0
+  label lbl_0
 }
 
 /basic.kt:(290,303): info: Generated Viper text for intAssignment:
-method f$intAssignment$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method root_intAssignment() returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  var l0$x: Ref
-  l0$x := df$rt$intToRef(0)
-  l0$x := df$rt$intToRef(1)
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  var x: Ref
+  x := df_intToRef(0)
+  x := df_intToRef(1)
+  label lbl_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }

@@ -1,158 +1,158 @@
 /inline_returns.kt:(324,337): info: Generated Viper text for simple_return:
-field bf$size: Ref
+field root_size: Ref
 
-method f$simple_return$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method root_simple_return() returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  var l0$cond1: Ref
-  var ret$1: Ref
-  var anon$0: Ref
-  var ret$2: Ref
-  ret$2 := df$rt$boolToRef(false)
-  goto lbl$ret$2
-  label lbl$ret$2
-  anon$0 := ret$2
-  ret$1 := sp$notBool(anon$0)
-  goto lbl$ret$1
-  label lbl$ret$1
-  l0$cond1 := ret$1
-  assert df$rt$boolFromRef(l0$cond1)
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  var cond1: Ref
+  var ret_1: Ref
+  var anon_0: Ref
+  var ret_2: Ref
+  ret_2 := df_boolToRef(false)
+  goto lbl_2
+  label lbl_2
+  anon_0 := ret_2
+  ret_1 := sp_notBool(anon_0)
+  goto lbl_1
+  label lbl_1
+  cond1 := ret_1
+  assert df_boolFromRef(cond1)
+  label lbl_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /inline_returns.kt:(434,448): info: Generated Viper text for unnamed_return:
-method f$unnamed_return$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
-  ensures df$rt$boolFromRef(ret$0) == true
+method root_unnamed_return() returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
+  ensures df_boolFromRef(ret_0) == true
 {
-  var ret$1: Ref
-  var anon$0: Ref
-  var ret$2: Ref
-  ret$0 := df$rt$boolToRef(true)
-  goto lbl$ret$0
-  ret$2 := df$rt$boolToRef(true)
-  goto lbl$ret$2
-  label lbl$ret$2
-  anon$0 := ret$2
-  ret$1 := sp$notBool(anon$0)
-  goto lbl$ret$1
-  label lbl$ret$1
-  ret$0 := ret$1
-  goto lbl$ret$0
-  label lbl$ret$0
+  var ret_1: Ref
+  var anon_0: Ref
+  var ret_2: Ref
+  ret_0 := df_boolToRef(true)
+  goto lbl_0
+  ret_2 := df_boolToRef(true)
+  goto lbl_2
+  label lbl_2
+  anon_0 := ret_2
+  ret_1 := sp_notBool(anon_0)
+  goto lbl_1
+  label lbl_1
+  ret_0 := ret_1
+  goto lbl_0
+  label lbl_0
 }
 
 /inline_returns.kt:(605,623): info: Generated Viper text for named_local_return:
-method f$named_local_return$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
-  ensures df$rt$boolFromRef(ret$0) == true
+method root_named_local_return() returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
+  ensures df_boolFromRef(ret_0) == true
 {
-  var ret$1: Ref
-  var anon$0: Ref
-  var ret$2: Ref
-  ret$2 := df$rt$boolToRef(false)
-  goto lbl$ret$2
-  ret$2 := df$rt$boolToRef(true)
-  goto lbl$ret$2
-  label lbl$ret$2
-  anon$0 := ret$2
-  ret$1 := sp$notBool(anon$0)
-  goto lbl$ret$1
-  label lbl$ret$1
-  ret$0 := ret$1
-  goto lbl$ret$0
-  label lbl$ret$0
+  var ret_1: Ref
+  var anon_0: Ref
+  var ret_2: Ref
+  ret_2 := df_boolToRef(false)
+  goto lbl_2
+  ret_2 := df_boolToRef(true)
+  goto lbl_2
+  label lbl_2
+  anon_0 := ret_2
+  ret_1 := sp_notBool(anon_0)
+  goto lbl_1
+  label lbl_1
+  ret_0 := ret_1
+  goto lbl_0
+  label lbl_0
 }
 
 /inline_returns.kt:(785,806): info: Generated Viper text for named_nonlocal_return:
-method f$named_nonlocal_return$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
-  ensures df$rt$boolFromRef(ret$0) == true
+method root_named_nonlocal_return() returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
+  ensures df_boolFromRef(ret_0) == true
 {
-  var ret$1: Ref
-  var anon$0: Ref
-  var ret$2: Ref
-  ret$0 := df$rt$boolToRef(true)
-  goto lbl$ret$0
-  ret$2 := df$rt$boolToRef(true)
-  goto lbl$ret$2
-  label lbl$ret$2
-  anon$0 := ret$2
-  ret$1 := sp$notBool(anon$0)
-  goto lbl$ret$1
-  label lbl$ret$1
-  ret$0 := ret$1
-  goto lbl$ret$0
-  label lbl$ret$0
+  var ret_1: Ref
+  var anon_0: Ref
+  var ret_2: Ref
+  ret_0 := df_boolToRef(true)
+  goto lbl_0
+  ret_2 := df_boolToRef(true)
+  goto lbl_2
+  label lbl_2
+  anon_0 := ret_2
+  ret_1 := sp_notBool(anon_0)
+  goto lbl_1
+  label lbl_1
+  ret_0 := ret_1
+  goto lbl_0
+  label lbl_0
 }
 
 /inline_returns.kt:(985,1007): info: Generated Viper text for double_nonlocal_return:
-method f$double_nonlocal_return$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
-  ensures df$rt$boolFromRef(ret$0) == true
+method root_double_nonlocal_return() returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
+  ensures df_boolFromRef(ret_0) == true
 {
-  var ret$1: Ref
-  var anon$0: Ref
-  var ret$2: Ref
-  var l2$x: Ref
-  var ret$3: Ref
-  var anon$1: Ref
-  var ret$4: Ref
-  ret$0 := df$rt$boolToRef(true)
-  goto lbl$ret$0
-  ret$4 := df$rt$boolToRef(false)
-  goto lbl$ret$4
-  label lbl$ret$4
-  anon$1 := ret$4
-  ret$3 := sp$notBool(anon$1)
-  goto lbl$ret$3
-  label lbl$ret$3
-  l2$x := ret$3
-  ret$0 := df$rt$boolToRef(false)
-  goto lbl$ret$0
-  ret$2 := l2$x
-  goto lbl$ret$2
-  label lbl$ret$2
-  anon$0 := ret$2
-  ret$1 := sp$notBool(anon$0)
-  goto lbl$ret$1
-  label lbl$ret$1
-  ret$0 := ret$1
-  goto lbl$ret$0
-  label lbl$ret$0
+  var ret_1: Ref
+  var anon_0: Ref
+  var ret_2: Ref
+  var x: Ref
+  var ret_3: Ref
+  var anon_1: Ref
+  var ret_4: Ref
+  ret_0 := df_boolToRef(true)
+  goto lbl_0
+  ret_4 := df_boolToRef(false)
+  goto lbl_4
+  label lbl_4
+  anon_1 := ret_4
+  ret_3 := sp_notBool(anon_1)
+  goto lbl_3
+  label lbl_3
+  x := ret_3
+  ret_0 := df_boolToRef(false)
+  goto lbl_0
+  ret_2 := x
+  goto lbl_2
+  label lbl_2
+  anon_0 := ret_2
+  ret_1 := sp_notBool(anon_0)
+  goto lbl_1
+  label lbl_1
+  ret_0 := ret_1
+  goto lbl_0
+  label lbl_0
 }
 
 /inline_returns.kt:(1358,1386): info: Generated Viper text for named_double_nonlocal_return:
-method f$named_double_nonlocal_return$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
-  ensures df$rt$boolFromRef(ret$0) == true
+method root_named_double_nonlocal_return() returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
+  ensures df_boolFromRef(ret_0) == true
 {
-  var ret$1: Ref
-  var anon$0: Ref
-  var ret$2: Ref
-  var ret$3: Ref
-  var ret$4: Ref
-  ret$2 := df$rt$boolToRef(false)
-  goto lbl$ret$2
-  ret$0 := df$rt$boolToRef(false)
-  goto lbl$ret$0
-  label lbl$ret$4
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$4), df$rt$unitType())
-  ret$3 := ret$4
-  goto lbl$ret$3
-  label lbl$ret$3
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$3), df$rt$unitType())
-  ret$0 := df$rt$boolToRef(false)
-  goto lbl$ret$0
-  ret$2 := df$rt$boolToRef(true)
-  goto lbl$ret$2
-  label lbl$ret$2
-  anon$0 := ret$2
-  ret$1 := sp$notBool(anon$0)
-  goto lbl$ret$1
-  label lbl$ret$1
-  ret$0 := ret$1
-  goto lbl$ret$0
-  label lbl$ret$0
+  var ret_1: Ref
+  var anon_0: Ref
+  var ret_2: Ref
+  var ret_3: Ref
+  var ret_4: Ref
+  ret_2 := df_boolToRef(false)
+  goto lbl_2
+  ret_0 := df_boolToRef(false)
+  goto lbl_0
+  label lbl_4
+  inhale df_isSubtype(df_typeOf(ret_4), df_unitType())
+  ret_3 := ret_4
+  goto lbl_3
+  label lbl_3
+  inhale df_isSubtype(df_typeOf(ret_3), df_unitType())
+  ret_0 := df_boolToRef(false)
+  goto lbl_0
+  ret_2 := df_boolToRef(true)
+  goto lbl_2
+  label lbl_2
+  anon_0 := ret_2
+  ret_1 := sp_notBool(anon_0)
+  goto lbl_1
+  label lbl_1
+  ret_0 := ret_1
+  goto lbl_0
+  label lbl_0
 }
