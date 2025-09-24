@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.formver.core.domains.RuntimeTypeDomain
 import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.PlaintextLeaf
 import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.TreeView
 import org.jetbrains.kotlin.formver.core.names.PretypeName
-import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.SymbolName
 import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.mangled
 
@@ -24,7 +24,7 @@ import org.jetbrains.kotlin.formver.viper.mangled
  * All pretype embeddings must be `data` classes or objects!
  */
 interface PretypeEmbedding : RuntimeTypeHolder, TypeInvariantHolder {
-    val name: MangledName
+    val name: SymbolName
 
     context(nameResolver: NameResolver)
     override val debugTreeView: TreeView

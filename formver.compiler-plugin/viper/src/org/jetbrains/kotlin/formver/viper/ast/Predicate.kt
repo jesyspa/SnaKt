@@ -8,7 +8,7 @@ package org.jetbrains.kotlin.formver.viper.ast
 import org.jetbrains.kotlin.formver.viper.*
 
 class Predicate(
-    val name: MangledName,
+    val name: SymbolName,
     val formalArgs: List<Declaration.LocalVarDecl>,
     val body: Exp,
     val includeInDumpPolicy: IncludeInDumpPolicy = IncludeInDumpPolicy.PREDICATE_DUMP,

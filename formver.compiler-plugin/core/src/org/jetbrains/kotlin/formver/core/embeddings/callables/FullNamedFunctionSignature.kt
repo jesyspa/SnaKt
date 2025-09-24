@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.formver.core.embeddings.types.buildType
 import org.jetbrains.kotlin.formver.core.embeddings.types.nullableAny
 import org.jetbrains.kotlin.formver.core.linearization.pureToViper
 import org.jetbrains.kotlin.formver.core.names.DispatchReceiverName
-import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.SymbolName
 import org.jetbrains.kotlin.formver.viper.ast.Stmt
 import org.jetbrains.kotlin.formver.viper.ast.UserMethod
 
@@ -44,7 +44,7 @@ interface FullNamedFunctionSignature : NamedFunctionSignature {
  * Types of the arguments don't matter at all, but intuitively they must be `NullableAnyTypeEmbedding` as well.
  */
 abstract class PropertyAccessorFunctionSignature(
-    override val name: MangledName,
+    override val name: SymbolName,
     propertySymbol: FirPropertySymbol,
 ) : FullNamedFunctionSignature, GenericFunctionSignatureMixin() {
     override fun getPreconditions() = emptyList<ExpEmbedding>()
@@ -55,7 +55,7 @@ abstract class PropertyAccessorFunctionSignature(
     override val declarationSource: KtSourceElement? = propertySymbol.source
 }
 
-class GetterFunctionSignature(name: MangledName, symbol: FirPropertySymbol) :
+class GetterFunctionSignature(name: SymbolName, symbol: FirPropertySymbol) :
     PropertyAccessorFunctionSignature(name, symbol) {
     override val symbol: FirFunctionSymbol<*>
         get() = error {
@@ -67,7 +67,7 @@ class GetterFunctionSignature(name: MangledName, symbol: FirPropertySymbol) :
     }
 }
 
-class SetterFunctionSignature(name: MangledName, symbol: FirPropertySymbol) :
+class SetterFunctionSignature(name: SymbolName, symbol: FirPropertySymbol) :
     PropertyAccessorFunctionSignature(name, symbol) {
     override val symbol: FirFunctionSymbol<*>
         get() = error {

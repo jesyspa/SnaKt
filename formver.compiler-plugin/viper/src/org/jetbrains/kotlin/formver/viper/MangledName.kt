@@ -12,7 +12,7 @@ package org.jetbrains.kotlin.formver.viper
  * approach makes it easier to see where they came from during debugging.
  */
 const val SEPARATOR = "$"
-interface MangledName {
+interface SymbolName {
     val mangledType: String?
         get() = null
     context(nameResolver: NameResolver)
@@ -23,10 +23,10 @@ interface MangledName {
 }
 
 context(nameResolver: NameResolver)
-val MangledName.mangled: String
+val SymbolName.mangled: String
     get() = nameResolver.resolve(this)
 
-val MangledName.debugMangled: String
+val SymbolName.debugMangled: String
     get() {
         val debugResolver = DebugNameResolver()
         return debugResolver.resolve(this)
@@ -42,7 +42,7 @@ sealed interface NameExpr {
                 else listOf(this)
             }
         }
-        data class SymbolVal(val symbolName: MangledName) : Part {
+        data class SymbolVal(val symbolName: SymbolName) : Part {
             override fun toParts(): List<Part> = listOf(this)
         }
     }
@@ -54,7 +54,7 @@ data class Lit(val text: String?) : NameExpr {
         else listOf(NameExpr.Part.Lit(text))
     }
 }
-data class SymbolVal(val symbolName: MangledName) : NameExpr {
+data class SymbolVal(val symbolName: SymbolName) : NameExpr {
     override fun toParts() = listOf(NameExpr.Part.SymbolVal(symbolName))
 }
 

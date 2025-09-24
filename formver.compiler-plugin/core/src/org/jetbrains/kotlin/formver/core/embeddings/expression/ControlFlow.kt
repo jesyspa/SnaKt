@@ -17,7 +17,7 @@ import org.jetbrains.kotlin.formver.core.linearization.LinearizationContext
 import org.jetbrains.kotlin.formver.core.linearization.addLabel
 import org.jetbrains.kotlin.formver.core.linearization.freshAnonVar
 import org.jetbrains.kotlin.formver.core.linearization.pureToViper
-import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.SymbolName
 import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 import org.jetbrains.kotlin.formver.viper.ast.Stmt
@@ -81,8 +81,8 @@ data class If(
 data class While(
     val condition: ExpEmbedding,
     val body: ExpEmbedding,
-    val breakLabelName: MangledName,
-    val continueLabelName: MangledName,
+    val breakLabelName: SymbolName,
+    val continueLabelName: SymbolName,
     val invariants: List<ExpEmbedding>,
 ) : UnitResultExpEmbedding, DefaultDebugTreeViewImplementation {
     override val type: TypeEmbedding = buildType { unit() }

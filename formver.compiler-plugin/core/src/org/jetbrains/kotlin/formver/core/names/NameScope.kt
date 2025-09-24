@@ -38,7 +38,7 @@ val NameScope.allParentScopes: Sequence<NameScope>
     }
 
 context(nameResolver: NameResolver)
-val NameScope.fullMangledName: String?
+val NameScope.fullSymbolName: String?
     get() {
         val scopes = parentScopes.mapNotNull { it.mangledScopeName }.toList()
         return if (scopes.isEmpty()) null else scopes.joinToString("$")

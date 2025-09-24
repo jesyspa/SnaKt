@@ -5,10 +5,10 @@
 
 package org.jetbrains.kotlin.formver.viper.ast
 
-import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.SymbolName
 
 data class Label(
-    val name: MangledName,
+    val name: SymbolName,
     val invariants: List<Exp>,
 ) {
     fun toStmt(

@@ -5,7 +5,7 @@
 
 package org.jetbrains.kotlin.formver.core.names
 
-import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.SymbolName
 import org.jetbrains.kotlin.formver.viper.NameResolver
 
 /* This file contains mangled names for constructs introduced during the conversion to Viper.
@@ -17,7 +17,7 @@ import org.jetbrains.kotlin.formver.viper.NameResolver
  * Representation for names not present in the original source,
  * e.g. storage for the result of subexpressions.
  */
-data class AnonymousName(val n: Int) : MangledName {
+data class AnonymousName(val n: Int) : SymbolName {
     override val mangledType: String
         get() = "anon"
 
@@ -26,7 +26,7 @@ data class AnonymousName(val n: Int) : MangledName {
         get() = n.toString()
 }
 
-data class AnonymousBuiltinName(val n: Int) : MangledName {
+data class AnonymousBuiltinName(val n: Int) : SymbolName {
 
     override val mangledType: String
         get() = $$"anon$builtin"
@@ -39,13 +39,13 @@ data class AnonymousBuiltinName(val n: Int) : MangledName {
 /**
  * Name for return variable that should *only* be used in signatures of methods without a body.
  */
-data object PlaceholderReturnVariableName : MangledName {
+data object PlaceholderReturnVariableName : SymbolName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = "ret"
 }
 
-data class ReturnVariableName(val n: Int) : MangledName {
+data class ReturnVariableName(val n: Int) : SymbolName {
     override val mangledType: String
         get() = "ret"
 
@@ -54,19 +54,19 @@ data class ReturnVariableName(val n: Int) : MangledName {
         get() = n.toString()
 }
 
-data object DispatchReceiverName : MangledName {
+data object DispatchReceiverName : SymbolName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = $$"this$dispatch"
 }
 
-data object ExtensionReceiverName : MangledName {
+data object ExtensionReceiverName : SymbolName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = $$"this$extension"
 }
 
-data class SpecialName(val baseName: String) : MangledName {
+data class SpecialName(val baseName: String) : SymbolName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = baseName
@@ -74,7 +74,7 @@ data class SpecialName(val baseName: String) : MangledName {
         get() = "sp"
 }
 
-abstract class NumberedLabelName(val scope: String, val originalN: Int) : MangledName {
+abstract class NumberedLabelName(val scope: String, val originalN: Int) : SymbolName {
     override val mangledType: String
         get() = "lbl"
 
@@ -94,13 +94,13 @@ data class CatchLabelName(val n: Int) : NumberedLabelName("catch", n)
 data class TryExitLabelName(val n: Int) : NumberedLabelName("try_exit", n)
 
 
-data class PlaceholderArgumentName(val n: Int) : MangledName {
+data class PlaceholderArgumentName(val n: Int) : SymbolName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = "arg$n"
 }
 
-data class DomainFuncParameterName(val baseName: String) : MangledName {
+data class DomainFuncParameterName(val baseName: String) : SymbolName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = baseName
