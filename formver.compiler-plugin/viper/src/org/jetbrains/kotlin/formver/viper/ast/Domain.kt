@@ -17,25 +17,23 @@ import viper.silver.ast.NamedDomainAxiom
 data class DomainName(val baseName: String) : SymbolName {
     override val mangledType: String
         get() = "d"
-    context(nameResolver: NameResolver)
-    override val mangledBaseName: String
-        get() = baseName
+    override val mangledBaseName: NameExpr
+        get() = Lit(baseName)
 }
 data class UnqualifiedDomainFuncName(val baseName: String) : SymbolName {
-    context(nameResolver: NameResolver)
-    override val mangledBaseName: String
-        get() = baseName
+    override val mangledBaseName: NameExpr
+        get() = Lit(baseName)
 }
 
 data class QualifiedDomainFuncName(val domainName: DomainName, val funcName: SymbolName) : SymbolName {
     override val mangledType: String
         get() = "df"
-    context(nameResolver: NameResolver)
-    override val mangledScope: String
+    override val fullScope: NameExpr
         get() = domainName.mangledBaseName
-    context(nameResolver: NameResolver)
-    override val mangledBaseName: String
-        get() = funcName.mangled
+    override val requiredScope: NameExpr?
+        get() = parseRequiredScope(domainName.mangledBaseName)
+    override val mangledBaseName: NameExpr
+        get() = SymbolVal(funcName)
 }
 
 /** Represents the name of a possible anonymous axiom.
@@ -49,13 +47,12 @@ sealed interface OptionalDomainAxiomLabel {
 
 data class NamedDomainAxiomLabel(override val domainName: DomainName, val baseName: String) :
     OptionalDomainAxiomLabel, SymbolName {
-    context(nameResolver: NameResolver)
-    override val mangledScope: String
+    override val fullScope: NameExpr
         get() = domainName.mangledBaseName
-
-    context(nameResolver: NameResolver)
-    override val mangledBaseName: String
-        get() = baseName
+    override val requiredScope: NameExpr?
+        get() = parseRequiredScope(domainName.mangledBaseName)
+    override val mangledBaseName: NameExpr
+        get() = Lit(baseName)
 }
 
 data class AnonymousDomainAxiomLabel(override val domainName: DomainName) : OptionalDomainAxiomLabel

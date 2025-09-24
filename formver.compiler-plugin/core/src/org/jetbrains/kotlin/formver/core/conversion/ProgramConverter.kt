@@ -5,6 +5,8 @@
 
 package org.jetbrains.kotlin.formver.core.conversion
 
+import DebugNameResolver
+import debugMangled
 import org.jetbrains.kotlin.KtSourceElement
 import org.jetbrains.kotlin.descriptors.Visibilities
 import org.jetbrains.kotlin.descriptors.isInterface
@@ -36,7 +38,6 @@ import org.jetbrains.kotlin.formver.core.shouldBeInlined
 import org.jetbrains.kotlin.formver.names.SimpleNameResolver
 import org.jetbrains.kotlin.formver.viper.SymbolName
 import org.jetbrains.kotlin.formver.viper.ast.Program
-import org.jetbrains.kotlin.formver.viper.debugMangled
 import org.jetbrains.kotlin.formver.viper.mangled
 import org.jetbrains.kotlin.utils.addIfNotNull
 import org.jetbrains.kotlin.utils.addToStdlib.ifFalse
@@ -80,7 +81,7 @@ class ProgramConverter(
     override val anonVarProducer = FreshEntityProducer(::AnonymousVariableEmbedding)
     override val anonBuiltinVarProducer = FreshEntityProducer(::AnonymousBuiltinVariableEmbedding)
     override val returnTargetProducer = FreshEntityProducer(::ReturnTarget)
-    override val nameResolver = SimpleNameResolver()
+    override val nameResolver = DebugNameResolver()
 
     val program: Program
         get() = Program(

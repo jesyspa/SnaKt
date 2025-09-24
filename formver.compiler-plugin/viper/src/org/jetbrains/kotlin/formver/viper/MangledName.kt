@@ -4,7 +4,6 @@
  */
 
 package org.jetbrains.kotlin.formver.viper
-
 /**
  * Represents a Kotlin name with its Viper equivalent.
  *
@@ -15,22 +14,18 @@ const val SEPARATOR = "$"
 interface SymbolName {
     val mangledType: String?
         get() = null
-    context(nameResolver: NameResolver)
-    val mangledScope: String?
+    val requiredScope: NameExpr?
         get() = null
-    context(nameResolver: NameResolver)
-    val mangledBaseName: String
+    val fullScope: NameExpr?
+        get() = null
+    val mangledBaseName: NameExpr
+    val requiresType: Boolean
+        get() = false
 }
 
 context(nameResolver: NameResolver)
 val SymbolName.mangled: String
     get() = nameResolver.resolve(this)
-
-val SymbolName.debugMangled: String
-    get() {
-        val debugResolver = DebugNameResolver()
-        return debugResolver.resolve(this)
-    }
 
 sealed interface NameExpr {
     fun toParts(): List<Part> = emptyList()
