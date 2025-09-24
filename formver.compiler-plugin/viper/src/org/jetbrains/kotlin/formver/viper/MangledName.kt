@@ -10,7 +10,7 @@ package org.jetbrains.kotlin.formver.viper
  * We could directly convert names and pass them around as strings, but this
  * approach makes it easier to see where they came from during debugging.
  */
-const val SEPARATOR = "$"
+const val SEPARATOR = "_"
 interface SymbolName {
     val mangledType: String?
         get() = null
