@@ -9,9 +9,13 @@ import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.FunctionTypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.PretypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.asTypeEmbedding
+import org.jetbrains.kotlin.formver.viper.Join
+import org.jetbrains.kotlin.formver.viper.Lit
 import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.NameExpr
 import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.SEPARATOR
+import org.jetbrains.kotlin.formver.viper.SymbolVal
 import org.jetbrains.kotlin.formver.viper.mangled
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
@@ -25,22 +29,20 @@ import org.jetbrains.kotlin.name.Name
 sealed interface KotlinName : MangledName
 
 data class SimpleKotlinName(val name: Name) : KotlinName {
-    context(nameResolver: NameResolver)
-    override val mangledBaseName: String
-        get() = name.asStringStripSpecialMarkers()
+    override val mangledBaseName: NameExpr
+        get() = Lit(name.asStringStripSpecialMarkers())
 }
 
 abstract class TypedKotlinName(override val mangledType: String, open val name: Name) : KotlinName {
-    context(nameResolver: NameResolver)
-    override val mangledBaseName: String
-        get() = name.asStringStripSpecialMarkers()
+    override val mangledBaseName: NameExpr
+        get() = Lit(name.asStringStripSpecialMarkers())
 }
 
 abstract class TypedKotlinNameWithType(override val mangledType: String, open val name: Name, val type: TypeEmbedding) :
     KotlinName {
-    context(nameResolver: NameResolver)
-    override val mangledBaseName: String
-        get() = "${name.asStringStripSpecialMarkers()}$SEPARATOR${type.name.mangled}"
+    override val mangledBaseName: NameExpr
+        get() = Lit(name.asStringStripSpecialMarkers())
+    val additionalType: NameExpr = SymbolVal(type.name)
 }
 
 data class FunctionKotlinName(override val name: Name, val functionType: FunctionTypeEmbedding) :
@@ -66,9 +68,8 @@ data class ClassKotlinName(val name: FqName) : KotlinName {
     override val mangledType: String
         get() = "c"
 
-    context(nameResolver: NameResolver)
-    override val mangledBaseName: String
-        get() = name.asViperString()
+    override val mangledBaseName: NameExpr
+        get() = Lit(name.asViperString())
 
     constructor(classSegments: List<String>) : this(FqName.fromSegments(classSegments))
 }
@@ -77,36 +78,23 @@ data class ConstructorKotlinName(val type: FunctionTypeEmbedding) : KotlinName {
     override val mangledType: String
         get() = "con"
 
-    context(nameResolver: NameResolver)
-    override val mangledBaseName: String
+    override val mangledBaseName: NameExpr
         get() = type.name.mangledBaseName
 }
 
 // It's a bit of a hack to make this as KotlinName, it should really just be any old name, but right now our scoped
 // names are KotlinNames and changing that could be messy.
 data class PredicateKotlinName(val name: String) : KotlinName {
-    context(nameResolver: NameResolver)
-    override val mangledBaseName: String
-        get() = name
+    override val mangledBaseName: NameExpr
+        get() = Lit(name)
     override val mangledType: String
         get() = "p"
 }
 
-data class PretypeName(val name: String) : KotlinName {
-    context(nameResolver: NameResolver)
-    override val mangledBaseName: String
-        get() = name
-}
-
-data class SetOfNames(val names: List<MangledName>) : KotlinName {
-    context(nameResolver: NameResolver)
-    override val mangledBaseName: String
-        get() = names.joinToString(SEPARATOR) { it.mangled }
-}
+data class PretypeName(override val mangledBaseName: NameExpr) : KotlinName
 
 data class TypeName(val pretype: PretypeEmbedding, val nullable: Boolean) : KotlinName {
-    context(nameResolver: NameResolver)
-    override val mangledBaseName: String
+    override val mangledBaseName: NameExpr
         get() = pretype.name.mangledBaseName
     override val mangledType: String
         get() = listOfNotNull(

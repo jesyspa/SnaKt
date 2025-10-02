@@ -15,22 +15,18 @@ const val SEPARATOR = "$"
 interface MangledName {
     val mangledType: String?
         get() = null
-    context(nameResolver: NameResolver)
-    val mangledScope: String?
+    val requiredScope: NameExpr?
         get() = null
-    context(nameResolver: NameResolver)
-    val mangledBaseName: String
+    val fullScope: NameExpr?
+        get() = null
+    val mangledBaseName: NameExpr
+    val requiresType: Boolean
+        get() = false
 }
 
 context(nameResolver: NameResolver)
 val MangledName.mangled: String
     get() = nameResolver.resolve(this)
-
-val MangledName.debugMangled: String
-    get() {
-        val debugResolver = DebugNameResolver()
-        return debugResolver.resolve(this)
-    }
 
 sealed interface NameExpr {
     fun toParts(): List<Part> = emptyList()
@@ -42,7 +38,7 @@ sealed interface NameExpr {
                 else listOf(this)
             }
         }
-        data class SymbolVal(val symbolName: MangledName) : Part {
+        data class SymbolVal(val MangledName: MangledName) : Part {
             override fun toParts(): List<Part> = listOf(this)
         }
     }
@@ -54,8 +50,8 @@ data class Lit(val text: String?) : NameExpr {
         else listOf(NameExpr.Part.Lit(text))
     }
 }
-data class SymbolVal(val symbolName: MangledName) : NameExpr {
-    override fun toParts() = listOf(NameExpr.Part.SymbolVal(symbolName))
+data class SymbolVal(val MangledName: MangledName) : NameExpr {
+    override fun toParts() = listOf(NameExpr.Part.SymbolVal(MangledName))
 }
 
 data class Join(val items: List<NameExpr>, val sep: String = SEPARATOR) : NameExpr {

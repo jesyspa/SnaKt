@@ -28,8 +28,8 @@ import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 import org.jetbrains.kotlin.formver.viper.ast.PermExp
 import org.jetbrains.kotlin.formver.viper.ast.Stmt
-import org.jetbrains.kotlin.formver.viper.debugMangled
 import org.jetbrains.kotlin.formver.viper.mangled
+import debugMangled
 
 sealed interface ExpEmbedding : DebugPrintable {
     val type: TypeEmbedding

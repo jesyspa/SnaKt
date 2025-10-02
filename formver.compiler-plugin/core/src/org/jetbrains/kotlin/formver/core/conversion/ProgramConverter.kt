@@ -36,11 +36,11 @@ import org.jetbrains.kotlin.formver.core.shouldBeInlined
 import org.jetbrains.kotlin.formver.names.SimpleNameResolver
 import org.jetbrains.kotlin.formver.viper.MangledName
 import org.jetbrains.kotlin.formver.viper.ast.Program
-import org.jetbrains.kotlin.formver.viper.debugMangled
-import org.jetbrains.kotlin.formver.viper.mangled
 import org.jetbrains.kotlin.utils.addIfNotNull
 import org.jetbrains.kotlin.utils.addToStdlib.ifFalse
 import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
+import DebugNameResolver
+import debugMangled
 
 /**
  * Tracks the top-level information about the program.
@@ -80,7 +80,7 @@ class ProgramConverter(
     override val anonVarProducer = FreshEntityProducer(::AnonymousVariableEmbedding)
     override val anonBuiltinVarProducer = FreshEntityProducer(::AnonymousBuiltinVariableEmbedding)
     override val returnTargetProducer = FreshEntityProducer(::ReturnTarget)
-    override val nameResolver = SimpleNameResolver()
+    override val nameResolver = DebugNameResolver()
 
     val program: Program
         get() = Program(
