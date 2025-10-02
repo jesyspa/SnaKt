@@ -1,43 +1,43 @@
 /function_call.kt:(118,130): info: Generated Viper text for functionCall:
-method f$f$TF$T$Int(p$x: Ref) returns (ret: Ref)
+method f$root$f$TF$T$Int(p$x: Ref) returns (ret: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$intType())
 
 
-method f$functionCall$TF$() returns (ret$0: Ref)
+method f$root$functionCall$TF() returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var anon$0: Ref
   var anon$1: Ref
-  anon$0 := f$f$TF$T$Int(df$rt$intToRef(0))
-  anon$1 := f$f$TF$T$Int(df$rt$intToRef(0))
+  anon$0 := f$root$f$TF$T$Int(df$rt$intToRef(0))
+  anon$1 := f$root$f$TF$T$Int(df$rt$intToRef(0))
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }
 
 /function_call.kt:(160,178): info: Generated Viper text for functionCallNested:
-method f$f$TF$T$Int(p$x: Ref) returns (ret: Ref)
+method f$root$f$TF$T$Int(p$x: Ref) returns (ret: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$intType())
 
 
-method f$functionCallNested$TF$() returns (ret$0: Ref)
+method f$root$functionCallNested$TF() returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var anon$0: Ref
   var anon$1: Ref
   var anon$2: Ref
-  anon$2 := f$f$TF$T$Int(df$rt$intToRef(0))
-  anon$1 := f$f$TF$T$Int(anon$2)
-  anon$0 := f$f$TF$T$Int(anon$1)
+  anon$2 := f$root$f$TF$T$Int(df$rt$intToRef(0))
+  anon$1 := f$root$f$TF$T$Int(anon$2)
+  anon$0 := f$root$f$TF$T$Int(anon$1)
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }
 
 /function_call.kt:(205,215): info: Generated Viper text for callItself:
-method f$callItself$TF$() returns (ret$0: Ref)
+method f$root$callItself$TF() returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var anon$0: Ref
-  anon$0 := f$callItself$TF$()
+  anon$0 := f$root$callItself$TF()
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }

@@ -1,6 +1,6 @@
 /z_function.kt:(187,198): info: Generated Viper text for zFuncHelper:
-method f$zFuncHelper$TF$T$String$T$String$T$Int$T$Int$T$Int(p$s: Ref, p$res: Ref,
-  p$i: Ref, p$checkedLeft: Ref, p$checkedRight: Ref)
+method f$root$zFuncHelper$TF$T$String$$$T$String$$$T$Int$$$T$Int$$$T$Int(p$s: Ref,
+  p$res: Ref, p$i: Ref, p$checkedLeft: Ref, p$checkedRight: Ref)
   returns (ret$0: Ref)
   requires 1 <= df$rt$intFromRef(p$i) &&
     df$rt$intFromRef(p$i) < |df$rt$stringFromRef(p$s)|
@@ -65,13 +65,14 @@ method f$zFuncHelper$TF$T$String$T$String$T$Int$T$Int$T$Int(p$s: Ref, p$res: Ref
 }
 
 /z_function.kt:(1389,1398): info: Generated Viper text for zFunction:
-method f$pkg$kotlin$c$String$plus$TF$T$String$NT$Any(this$dispatch: Ref, p$other: Ref)
+method f$pkg$kotlin$$$c$String$plus$TF$T$String$$$NT$Any(this$dispatch: Ref,
+  p$other: Ref)
   returns (ret: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$stringType())
 
 
-method f$zFuncHelper$TF$T$String$T$String$T$Int$T$Int$T$Int(p$s: Ref, p$res: Ref,
-  p$i: Ref, p$checkedLeft: Ref, p$checkedRight: Ref)
+method f$root$zFuncHelper$TF$T$String$$$T$String$$$T$Int$$$T$Int$$$T$Int(p$s: Ref,
+  p$res: Ref, p$i: Ref, p$checkedLeft: Ref, p$checkedRight: Ref)
   returns (ret: Ref)
   requires 1 <= df$rt$intFromRef(p$i) &&
     df$rt$intFromRef(p$i) < |df$rt$stringFromRef(p$s)|
@@ -111,7 +112,8 @@ method f$zFuncHelper$TF$T$String$T$String$T$Int$T$Int$T$Int(p$s: Ref, p$res: Ref
       df$rt$stringFromRef(p$s)[anon$builtin$16])
 
 
-method f$zFunction$TF$T$String(this$extension: Ref) returns (ret$0: Ref)
+method f$root$zFunction$TF$T$String(this$extension: Ref)
+  returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$stringType())
   ensures |df$rt$stringFromRef(ret$0)| ==
     |df$rt$stringFromRef(this$extension)|
@@ -187,7 +189,7 @@ method f$zFunction$TF$T$String(this$extension: Ref) returns (ret$0: Ref)
   if (df$rt$boolFromRef(anon$0)) {
     var l3$j: Ref
     var anon$1: Ref
-    l3$j := f$zFuncHelper$TF$T$String$T$String$T$Int$T$Int$T$Int(this$extension,
+    l3$j := f$root$zFuncHelper$TF$T$String$$$T$String$$$T$Int$$$T$Int$$$T$Int(this$extension,
       l0$res, l0$i, l0$checkedLeft, l0$checkedRight)
     label lbl$continue$1
       invariant df$rt$isSubtype(df$rt$typeOf(l3$j), df$rt$intType())
@@ -288,12 +290,13 @@ method f$zFunction$TF$T$String(this$extension: Ref) returns (ret$0: Ref)
 }
 
 /z_function.kt:(3481,3495): info: Generated Viper text for zFunctionNaive:
-method f$pkg$kotlin$c$String$plus$TF$T$String$NT$Any(this$dispatch: Ref, p$other: Ref)
+method f$pkg$kotlin$$$c$String$plus$TF$T$String$$$NT$Any(this$dispatch: Ref,
+  p$other: Ref)
   returns (ret: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$stringType())
 
 
-method f$zFunctionNaive$TF$T$String(this$extension: Ref)
+method f$root$zFunctionNaive$TF$T$String(this$extension: Ref)
   returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$stringType())
   ensures |df$rt$stringFromRef(ret$0)| ==

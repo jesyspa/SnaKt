@@ -1,5 +1,5 @@
 /any.kt:(23,40): info: Generated Viper text for anyArgumentReturn:
-method f$anyArgumentReturn$TF$T$Any(p$x: Ref) returns (ret$0: Ref)
+method f$root$anyArgumentReturn$TF$T$Any(p$x: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$anyType())
 {
   inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$anyType())
@@ -9,7 +9,7 @@ method f$anyArgumentReturn$TF$T$Any(p$x: Ref) returns (ret$0: Ref)
 }
 
 /any.kt:(76,83): info: Generated Viper text for anyCast:
-method f$anyCast$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
+method f$root$anyCast$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$anyType())
 {
   inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$intType())

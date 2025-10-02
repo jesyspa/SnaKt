@@ -1,7 +1,7 @@
 /simple_precondition.kt:(238,242): info: Generated Viper text for test:
-field bf$size: Ref
+field bf$root$size: Ref
 
-method f$test$TF$T$Int(p$idx: Ref) returns (ret$0: Ref)
+method f$root$test$TF$T$Int(p$idx: Ref) returns (ret$0: Ref)
   requires 0 <= df$rt$intFromRef(p$idx)
   requires df$rt$intFromRef(p$idx) < 3
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
@@ -16,7 +16,7 @@ method f$test$TF$T$Int(p$idx: Ref) returns (ret$0: Ref)
 }
 
 /simple_precondition.kt:(446,469): info: Generated Viper text for inlineWithSpecification:
-method f$inlineWithSpecification$TF$T$Boolean(p$bool: Ref)
+method f$root$inlineWithSpecification$TF$T$Boolean(p$bool: Ref)
   returns (ret$0: Ref)
   requires true
   requires df$rt$boolFromRef(p$bool)
@@ -28,7 +28,7 @@ method f$inlineWithSpecification$TF$T$Boolean(p$bool: Ref)
 }
 
 /simple_precondition.kt:(560,569): info: Generated Viper text for good_call:
-method f$good_call$TF$() returns (ret$0: Ref)
+method f$root$good_call$TF() returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var anon$2: Ref
@@ -36,7 +36,7 @@ method f$good_call$TF$() returns (ret$0: Ref)
   var anon$0: Ref
   var ret$2: Ref
   var anon$1: Ref
-  anon$2 := f$test$TF$T$Int(df$rt$intToRef(2))
+  anon$2 := f$root$test$TF$T$Int(df$rt$intToRef(2))
   anon$0 := df$rt$boolToRef(true)
   label lbl$ret$1
   inhale df$rt$isSubtype(df$rt$typeOf(ret$1), df$rt$unitType())
@@ -47,7 +47,7 @@ method f$good_call$TF$() returns (ret$0: Ref)
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }
 
-method f$test$TF$T$Int(p$idx: Ref) returns (ret: Ref)
+method f$root$test$TF$T$Int(p$idx: Ref) returns (ret: Ref)
   requires 0 <= df$rt$intFromRef(p$idx)
   requires df$rt$intFromRef(p$idx) < 3
   ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$unitType())

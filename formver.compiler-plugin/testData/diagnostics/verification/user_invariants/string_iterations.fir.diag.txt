@@ -1,5 +1,5 @@
 /string_iterations.kt:(71,83): info: Generated Viper text for firstAtLeast:
-method f$firstAtLeast$TF$T$String$T$Char(this$extension: Ref, p$c: Ref)
+method f$root$firstAtLeast$TF$T$String$$$T$Char(this$extension: Ref, p$c: Ref)
   returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
   ensures 0 <= df$rt$intFromRef(ret$0) &&
@@ -51,7 +51,7 @@ method f$firstAtLeast$TF$T$String$T$Char(this$extension: Ref, p$c: Ref)
 }
 
 /string_iterations.kt:(606,614): info: Generated Viper text for lastLess:
-method f$lastLess$TF$T$String$T$Char(this$extension: Ref, p$c: Ref)
+method f$root$lastLess$TF$T$String$$$T$Char(this$extension: Ref, p$c: Ref)
   returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
   ensures -1 <= df$rt$intFromRef(ret$0) &&

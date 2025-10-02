@@ -1,19 +1,19 @@
 /secondary_constructors.kt:(249,271): info: Generated Viper text for onlySecondConstructors:
-field bf$a: Ref
+field bf$root$a: Ref
 
 method con$c$NoPrimaryConstructor$T$Boolean(p$b: Ref) returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$NoPrimaryConstructor())
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$root$NoPrimaryConstructor())
   ensures acc(p$c$NoPrimaryConstructor$shared(ret), wildcard)
   ensures acc(p$c$NoPrimaryConstructor$unique(ret), write)
 
 
 method con$c$NoPrimaryConstructor$T$Int(p$n: Ref) returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$NoPrimaryConstructor())
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$root$NoPrimaryConstructor())
   ensures acc(p$c$NoPrimaryConstructor$shared(ret), wildcard)
   ensures acc(p$c$NoPrimaryConstructor$unique(ret), write)
 
 
-method f$onlySecondConstructors$TF$() returns (ret$0: Ref)
+method f$root$onlySecondConstructors$TF() returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var l0$npc1: Ref
@@ -25,24 +25,24 @@ method f$onlySecondConstructors$TF$() returns (ret$0: Ref)
 }
 
 /secondary_constructors.kt:(365,392): info: Generated Viper text for primaryAndSecondConstructor:
-field bf$a: Ref
+field bf$root$a: Ref
 
 method con$c$BothConstructors$T$Boolean(p$b: Ref) returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$BothConstructors())
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$root$BothConstructors())
   ensures acc(p$c$BothConstructors$shared(ret), wildcard)
   ensures acc(p$c$BothConstructors$unique(ret), write)
 
 
 method con$c$BothConstructors$T$Int(p$a: Ref) returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$BothConstructors())
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$root$BothConstructors())
   ensures acc(p$c$BothConstructors$shared(ret), wildcard)
   ensures acc(p$c$BothConstructors$unique(ret), write)
   ensures df$rt$intFromRef((unfolding acc(p$c$BothConstructors$shared(ret), wildcard) in
-      ret.bf$a)) ==
+      ret.bf$root$a)) ==
     df$rt$intFromRef(p$a)
 
 
-method f$primaryAndSecondConstructor$TF$() returns (ret$0: Ref)
+method f$root$primaryAndSecondConstructor$TF() returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var l0$bc1: Ref

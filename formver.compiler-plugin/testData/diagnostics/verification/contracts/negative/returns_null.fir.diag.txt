@@ -1,5 +1,6 @@
 /returns_null.kt:(121,146): info: Generated Viper text for returns_null_unverifiable:
-method f$returns_null_unverifiable$TF$NT$Int(p$x: Ref) returns (ret$0: Ref)
+method f$root$returns_null_unverifiable$TF$NT$Int(p$x: Ref)
+  returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$nullable(df$rt$intType()))
   ensures true ==> false
 {
@@ -12,7 +13,8 @@ method f$returns_null_unverifiable$TF$NT$Int(p$x: Ref) returns (ret$0: Ref)
 /returns_null.kt:(187,210): warning: Cannot verify that if the function returns then false.
 
 /returns_null.kt:(277,302): info: Generated Viper text for non_nullable_returns_null:
-method f$non_nullable_returns_null$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
+method f$root$non_nullable_returns_null$TF$T$Int(p$x: Ref)
+  returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
   ensures ret$0 == df$rt$nullValue()
 {

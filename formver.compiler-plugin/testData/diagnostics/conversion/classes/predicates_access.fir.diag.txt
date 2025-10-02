@@ -1,49 +1,49 @@
 /predicates_access.kt:(249,272): info: Generated Viper text for accessSuperTypeProperty:
-field bf$a: Ref
+field bf$root$a: Ref
 
-field bf$b: Ref
+field bf$root$b: Ref
 
-field bf$x: Ref
+field bf$root$x: Ref
 
-field bf$y: Ref
+field bf$root$y: Ref
 
 predicate p$c$A$shared(this$dispatch: Ref) {
-  acc(this$dispatch.bf$a, wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$a), df$rt$intType())
+  acc(this$dispatch.bf$root$a, wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$a), df$rt$intType())
 }
 
 predicate p$c$A$unique(this$dispatch: Ref) {
-  acc(this$dispatch.bf$a, wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$a), df$rt$intType())
+  acc(this$dispatch.bf$root$a, wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$a), df$rt$intType())
 }
 
 predicate p$c$B$shared(this$dispatch: Ref) {
-  acc(this$dispatch.bf$b, wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$b), df$rt$intType()) &&
+  acc(this$dispatch.bf$root$b, wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$b), df$rt$intType()) &&
   acc(p$c$A$shared(this$dispatch), wildcard)
 }
 
 predicate p$c$B$unique(this$dispatch: Ref) {
-  acc(this$dispatch.bf$b, wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$b), df$rt$intType()) &&
+  acc(this$dispatch.bf$root$b, wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$b), df$rt$intType()) &&
   acc(p$c$A$unique(this$dispatch), write)
 }
 
 predicate p$c$C$shared(this$dispatch: Ref) {
-  acc(this$dispatch.bf$x, wildcard) &&
-  acc(p$c$A$shared(this$dispatch.bf$x), wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$x), df$rt$c$A()) &&
+  acc(this$dispatch.bf$root$x, wildcard) &&
+  acc(p$c$A$shared(this$dispatch.bf$root$x), wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$x), df$rt$c$root$A()) &&
   acc(p$c$D$shared(this$dispatch), wildcard) &&
   acc(p$c$B$shared(this$dispatch), wildcard)
 }
 
 predicate p$c$C$unique(this$dispatch: Ref) {
-  acc(this$dispatch.bf$x, wildcard) &&
-  acc(p$c$A$shared(this$dispatch.bf$x), wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$x), df$rt$c$A()) &&
-  acc(this$dispatch.bf$y, write) &&
-  acc(p$c$A$shared(this$dispatch.bf$y), wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$y), df$rt$c$A()) &&
+  acc(this$dispatch.bf$root$x, wildcard) &&
+  acc(p$c$A$shared(this$dispatch.bf$root$x), wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$x), df$rt$c$root$A()) &&
+  acc(this$dispatch.bf$root$y, write) &&
+  acc(p$c$A$shared(this$dispatch.bf$root$y), wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$y), df$rt$c$root$A()) &&
   acc(p$c$D$unique(this$dispatch), write) &&
   acc(p$c$B$unique(this$dispatch), write)
 }
@@ -56,69 +56,69 @@ predicate p$c$D$unique(this$dispatch: Ref) {
   true
 }
 
-method f$accessSuperTypeProperty$TF$T$C(p$c: Ref) returns (ret$0: Ref)
+method f$root$accessSuperTypeProperty$TF$T$C(p$c: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var l0$temp: Ref
-  inhale df$rt$isSubtype(df$rt$typeOf(p$c), df$rt$c$C())
+  inhale df$rt$isSubtype(df$rt$typeOf(p$c), df$rt$c$root$C())
   inhale acc(p$c$C$shared(p$c), wildcard)
   unfold acc(p$c$C$shared(p$c), wildcard)
   unfold acc(p$c$B$shared(p$c), wildcard)
   unfold acc(p$c$A$shared(p$c), wildcard)
-  l0$temp := p$c.bf$a
+  l0$temp := p$c.bf$root$a
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }
 
-method pg$public$d(this$dispatch: Ref) returns (ret: Ref)
+method pg$c$D$$$public$d(this$dispatch: Ref) returns (ret: Ref)
 
 
 /predicates_access.kt:(306,318): info: Generated Viper text for accessNested:
-field bf$a: Ref
+field bf$root$a: Ref
 
-field bf$b: Ref
+field bf$root$b: Ref
 
-field bf$x: Ref
+field bf$root$x: Ref
 
-field bf$y: Ref
+field bf$root$y: Ref
 
 predicate p$c$A$shared(this$dispatch: Ref) {
-  acc(this$dispatch.bf$a, wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$a), df$rt$intType())
+  acc(this$dispatch.bf$root$a, wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$a), df$rt$intType())
 }
 
 predicate p$c$A$unique(this$dispatch: Ref) {
-  acc(this$dispatch.bf$a, wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$a), df$rt$intType())
+  acc(this$dispatch.bf$root$a, wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$a), df$rt$intType())
 }
 
 predicate p$c$B$shared(this$dispatch: Ref) {
-  acc(this$dispatch.bf$b, wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$b), df$rt$intType()) &&
+  acc(this$dispatch.bf$root$b, wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$b), df$rt$intType()) &&
   acc(p$c$A$shared(this$dispatch), wildcard)
 }
 
 predicate p$c$B$unique(this$dispatch: Ref) {
-  acc(this$dispatch.bf$b, wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$b), df$rt$intType()) &&
+  acc(this$dispatch.bf$root$b, wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$b), df$rt$intType()) &&
   acc(p$c$A$unique(this$dispatch), write)
 }
 
 predicate p$c$C$shared(this$dispatch: Ref) {
-  acc(this$dispatch.bf$x, wildcard) &&
-  acc(p$c$A$shared(this$dispatch.bf$x), wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$x), df$rt$c$A()) &&
+  acc(this$dispatch.bf$root$x, wildcard) &&
+  acc(p$c$A$shared(this$dispatch.bf$root$x), wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$x), df$rt$c$root$A()) &&
   acc(p$c$D$shared(this$dispatch), wildcard) &&
   acc(p$c$B$shared(this$dispatch), wildcard)
 }
 
 predicate p$c$C$unique(this$dispatch: Ref) {
-  acc(this$dispatch.bf$x, wildcard) &&
-  acc(p$c$A$shared(this$dispatch.bf$x), wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$x), df$rt$c$A()) &&
-  acc(this$dispatch.bf$y, write) &&
-  acc(p$c$A$shared(this$dispatch.bf$y), wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$y), df$rt$c$A()) &&
+  acc(this$dispatch.bf$root$x, wildcard) &&
+  acc(p$c$A$shared(this$dispatch.bf$root$x), wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$x), df$rt$c$root$A()) &&
+  acc(this$dispatch.bf$root$y, write) &&
+  acc(p$c$A$shared(this$dispatch.bf$root$y), wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$y), df$rt$c$root$A()) &&
   acc(p$c$D$unique(this$dispatch), write) &&
   acc(p$c$B$unique(this$dispatch), write)
 }
@@ -131,179 +131,179 @@ predicate p$c$D$unique(this$dispatch: Ref) {
   true
 }
 
-method f$accessNested$TF$T$C(p$c: Ref) returns (ret$0: Ref)
+method f$root$accessNested$TF$T$C(p$c: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var l0$temp: Ref
   var anon$0: Ref
-  inhale df$rt$isSubtype(df$rt$typeOf(p$c), df$rt$c$C())
+  inhale df$rt$isSubtype(df$rt$typeOf(p$c), df$rt$c$root$C())
   inhale acc(p$c$C$shared(p$c), wildcard)
   unfold acc(p$c$C$shared(p$c), wildcard)
-  anon$0 := p$c.bf$x
+  anon$0 := p$c.bf$root$x
   unfold acc(p$c$A$shared(anon$0), wildcard)
-  l0$temp := anon$0.bf$a
+  l0$temp := anon$0.bf$root$a
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }
 
-method pg$public$d(this$dispatch: Ref) returns (ret: Ref)
+method pg$c$D$$$public$d(this$dispatch: Ref) returns (ret: Ref)
 
 
 /predicates_access.kt:(354,368): info: Generated Viper text for accessNullable:
-field bf$a: Ref
+field bf$root$a: Ref
 
 predicate p$c$A$shared(this$dispatch: Ref) {
-  acc(this$dispatch.bf$a, wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$a), df$rt$intType())
+  acc(this$dispatch.bf$root$a, wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$a), df$rt$intType())
 }
 
 predicate p$c$A$unique(this$dispatch: Ref) {
-  acc(this$dispatch.bf$a, wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$a), df$rt$intType())
+  acc(this$dispatch.bf$root$a, wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$a), df$rt$intType())
 }
 
-method f$accessNullable$TF$NT$A(p$x: Ref) returns (ret$0: Ref)
+method f$root$accessNullable$TF$NT$A(p$x: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var l0$n: Ref
-  inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$nullable(df$rt$c$A()))
+  inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$nullable(df$rt$c$root$A()))
   inhale p$x != df$rt$nullValue() ==> acc(p$c$A$shared(p$x), wildcard)
   if (!(p$x == df$rt$nullValue())) {
     unfold acc(p$c$A$shared(p$x), wildcard)
-    l0$n := p$x.bf$a
+    l0$n := p$x.bf$root$a
   }
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }
 
 /predicates_access.kt:(442,452): info: Generated Viper text for accessCast:
-field bf$a: Ref
+field bf$root$a: Ref
 
-field bf$b: Ref
+field bf$root$b: Ref
 
 predicate p$c$A$shared(this$dispatch: Ref) {
-  acc(this$dispatch.bf$a, wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$a), df$rt$intType())
+  acc(this$dispatch.bf$root$a, wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$a), df$rt$intType())
 }
 
 predicate p$c$A$unique(this$dispatch: Ref) {
-  acc(this$dispatch.bf$a, wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$a), df$rt$intType())
+  acc(this$dispatch.bf$root$a, wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$a), df$rt$intType())
 }
 
 predicate p$c$B$shared(this$dispatch: Ref) {
-  acc(this$dispatch.bf$b, wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$b), df$rt$intType()) &&
+  acc(this$dispatch.bf$root$b, wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$b), df$rt$intType()) &&
   acc(p$c$A$shared(this$dispatch), wildcard)
 }
 
 predicate p$c$B$unique(this$dispatch: Ref) {
-  acc(this$dispatch.bf$b, wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$b), df$rt$intType()) &&
+  acc(this$dispatch.bf$root$b, wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$b), df$rt$intType()) &&
   acc(p$c$A$unique(this$dispatch), write)
 }
 
-method f$accessCast$TF$T$A(p$x: Ref) returns (ret$0: Ref)
+method f$root$accessCast$TF$T$A(p$x: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var l0$n: Ref
-  inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$c$A())
+  inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$c$root$A())
   inhale acc(p$c$A$shared(p$x), wildcard)
-  inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$c$B())
+  inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$c$root$B())
   inhale acc(p$c$B$shared(p$x), wildcard)
   unfold acc(p$c$B$shared(p$x), wildcard)
-  l0$n := p$x.bf$b
+  l0$n := p$x.bf$root$b
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }
 
 /predicates_access.kt:(501,515): info: Generated Viper text for accessSafeCast:
-field bf$a: Ref
+field bf$root$a: Ref
 
-field bf$b: Ref
+field bf$root$b: Ref
 
 predicate p$c$A$shared(this$dispatch: Ref) {
-  acc(this$dispatch.bf$a, wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$a), df$rt$intType())
+  acc(this$dispatch.bf$root$a, wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$a), df$rt$intType())
 }
 
 predicate p$c$A$unique(this$dispatch: Ref) {
-  acc(this$dispatch.bf$a, wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$a), df$rt$intType())
+  acc(this$dispatch.bf$root$a, wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$a), df$rt$intType())
 }
 
 predicate p$c$B$shared(this$dispatch: Ref) {
-  acc(this$dispatch.bf$b, wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$b), df$rt$intType()) &&
+  acc(this$dispatch.bf$root$b, wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$b), df$rt$intType()) &&
   acc(p$c$A$shared(this$dispatch), wildcard)
 }
 
 predicate p$c$B$unique(this$dispatch: Ref) {
-  acc(this$dispatch.bf$b, wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$b), df$rt$intType()) &&
+  acc(this$dispatch.bf$root$b, wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$b), df$rt$intType()) &&
   acc(p$c$A$unique(this$dispatch), write)
 }
 
-method f$accessSafeCast$TF$T$A(p$x: Ref) returns (ret$0: Ref)
+method f$root$accessSafeCast$TF$T$A(p$x: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var l0$n: Ref
   var l0$y: Ref
-  inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$c$A())
+  inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$c$root$A())
   inhale acc(p$c$A$shared(p$x), wildcard)
   l0$n := df$rt$intToRef(0)
-  if (df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$c$B())) {
+  if (df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$c$root$B())) {
     l0$y := p$x
   } else {
     l0$y := df$rt$nullValue()}
-  inhale df$rt$isSubtype(df$rt$typeOf(l0$y), df$rt$nullable(df$rt$c$B()))
+  inhale df$rt$isSubtype(df$rt$typeOf(l0$y), df$rt$nullable(df$rt$c$root$B()))
   inhale l0$y != df$rt$nullValue() ==> acc(p$c$B$shared(l0$y), wildcard)
   if (!(l0$y == df$rt$nullValue())) {
     unfold acc(p$c$B$shared(l0$y), wildcard)
-    l0$n := l0$y.bf$b
+    l0$n := l0$y.bf$root$b
   }
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }
 
 /predicates_access.kt:(612,627): info: Generated Viper text for accessSmartCast:
-field bf$a: Ref
+field bf$root$a: Ref
 
-field bf$b: Ref
+field bf$root$b: Ref
 
 predicate p$c$A$shared(this$dispatch: Ref) {
-  acc(this$dispatch.bf$a, wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$a), df$rt$intType())
+  acc(this$dispatch.bf$root$a, wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$a), df$rt$intType())
 }
 
 predicate p$c$A$unique(this$dispatch: Ref) {
-  acc(this$dispatch.bf$a, wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$a), df$rt$intType())
+  acc(this$dispatch.bf$root$a, wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$a), df$rt$intType())
 }
 
 predicate p$c$B$shared(this$dispatch: Ref) {
-  acc(this$dispatch.bf$b, wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$b), df$rt$intType()) &&
+  acc(this$dispatch.bf$root$b, wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$b), df$rt$intType()) &&
   acc(p$c$A$shared(this$dispatch), wildcard)
 }
 
 predicate p$c$B$unique(this$dispatch: Ref) {
-  acc(this$dispatch.bf$b, wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$b), df$rt$intType()) &&
+  acc(this$dispatch.bf$root$b, wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$b), df$rt$intType()) &&
   acc(p$c$A$unique(this$dispatch), write)
 }
 
-method f$accessSmartCast$TF$T$A(p$x: Ref) returns (ret$0: Ref)
+method f$root$accessSmartCast$TF$T$A(p$x: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var l0$n: Ref
-  inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$c$A())
+  inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$c$root$A())
   inhale acc(p$c$A$shared(p$x), wildcard)
   l0$n := df$rt$intToRef(0)
-  if (df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$c$B())) {
+  if (df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$c$root$B())) {
     inhale acc(p$c$B$shared(p$x), wildcard)
     unfold acc(p$c$B$shared(p$x), wildcard)
-    l0$n := p$x.bf$b
+    l0$n := p$x.bf$root$b
   }
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())

@@ -1,51 +1,51 @@
 /function_overloading.kt:(49,52): info: Generated Viper text for baz:
-method f$c$Bar$baz$TF$T$Bar$T$Foo(this$dispatch: Ref, p$f: Ref)
+method f$c$Bar$baz$TF$T$Bar$$$T$Foo(this$dispatch: Ref, p$f: Ref)
   returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(this$dispatch), df$rt$c$Bar())
+  inhale df$rt$isSubtype(df$rt$typeOf(this$dispatch), df$rt$c$root$Bar())
   inhale acc(p$c$Bar$shared(this$dispatch), wildcard)
-  inhale df$rt$isSubtype(df$rt$typeOf(p$f), df$rt$c$Foo())
+  inhale df$rt$isSubtype(df$rt$typeOf(p$f), df$rt$c$root$Foo())
   inhale acc(p$c$Foo$shared(p$f), wildcard)
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }
 
 /function_overloading.kt:(74,77): info: Generated Viper text for baz:
-method f$c$Bar$baz$TF$T$Bar$T$Bar(this$dispatch: Ref, p$b: Ref)
+method f$c$Bar$baz$TF$T$Bar$$$T$Bar(this$dispatch: Ref, p$b: Ref)
   returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(this$dispatch), df$rt$c$Bar())
+  inhale df$rt$isSubtype(df$rt$typeOf(this$dispatch), df$rt$c$root$Bar())
   inhale acc(p$c$Bar$shared(this$dispatch), wildcard)
-  inhale df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$c$Bar())
+  inhale df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$c$root$Bar())
   inhale acc(p$c$Bar$shared(p$b), wildcard)
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }
 
 /function_overloading.kt:(98,107): info: Generated Viper text for fakePrint:
-method f$fakePrint$TF$T$Bar(p$b: Ref) returns (ret$0: Ref)
+method f$root$fakePrint$TF$T$Bar(p$b: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$c$Bar())
+  inhale df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$c$root$Bar())
   inhale acc(p$c$Bar$shared(p$b), wildcard)
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }
 
 /function_overloading.kt:(125,134): info: Generated Viper text for fakePrint:
-method f$fakePrint$TF$T$Foo(p$f: Ref) returns (ret$0: Ref)
+method f$root$fakePrint$TF$T$Foo(p$f: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(p$f), df$rt$c$Foo())
+  inhale df$rt$isSubtype(df$rt$typeOf(p$f), df$rt$c$root$Foo())
   inhale acc(p$c$Foo$shared(p$f), wildcard)
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }
 
 /function_overloading.kt:(152,161): info: Generated Viper text for fakePrint:
-method f$fakePrint$TF$T$Int(p$value: Ref) returns (ret$0: Ref)
+method f$root$fakePrint$TF$T$Int(p$value: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   inhale df$rt$isSubtype(df$rt$typeOf(p$value), df$rt$intType())
@@ -54,7 +54,7 @@ method f$fakePrint$TF$T$Int(p$value: Ref) returns (ret$0: Ref)
 }
 
 /function_overloading.kt:(183,192): info: Generated Viper text for fakePrint:
-method f$fakePrint$TF$T$Boolean(p$truth: Ref) returns (ret$0: Ref)
+method f$root$fakePrint$TF$T$Boolean(p$truth: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   inhale df$rt$isSubtype(df$rt$typeOf(p$truth), df$rt$boolType())
@@ -63,7 +63,7 @@ method f$fakePrint$TF$T$Boolean(p$truth: Ref) returns (ret$0: Ref)
 }
 
 /function_overloading.kt:(219,238): info: Generated Viper text for differInNullability:
-method f$differInNullability$TF$T$Int(p$i: Ref) returns (ret$0: Ref)
+method f$root$differInNullability$TF$T$Int(p$i: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   inhale df$rt$isSubtype(df$rt$typeOf(p$i), df$rt$intType())
@@ -72,7 +72,7 @@ method f$differInNullability$TF$T$Int(p$i: Ref) returns (ret$0: Ref)
 }
 
 /function_overloading.kt:(256,275): info: Generated Viper text for differInNullability:
-method f$differInNullability$TF$NT$Int(p$i: Ref) returns (ret$0: Ref)
+method f$root$differInNullability$TF$NT$Int(p$i: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   inhale df$rt$isSubtype(df$rt$typeOf(p$i), df$rt$nullable(df$rt$intType()))
@@ -81,35 +81,35 @@ method f$differInNullability$TF$NT$Int(p$i: Ref) returns (ret$0: Ref)
 }
 
 /function_overloading.kt:(295,321): info: Generated Viper text for testGlobalScopeOverloading:
-method con$c$Bar$() returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$Bar())
+method con$c$Bar() returns (ret: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$root$Bar())
   ensures acc(p$c$Bar$shared(ret), wildcard)
   ensures acc(p$c$Bar$unique(ret), write)
 
 
-method con$c$Foo$() returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$Foo())
+method con$c$Foo() returns (ret: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$root$Foo())
   ensures acc(p$c$Foo$shared(ret), wildcard)
   ensures acc(p$c$Foo$unique(ret), write)
 
 
-method f$fakePrint$TF$T$Bar(p$b: Ref) returns (ret: Ref)
+method f$root$fakePrint$TF$T$Bar(p$b: Ref) returns (ret: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$unitType())
 
 
-method f$fakePrint$TF$T$Boolean(p$truth: Ref) returns (ret: Ref)
+method f$root$fakePrint$TF$T$Boolean(p$truth: Ref) returns (ret: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$unitType())
 
 
-method f$fakePrint$TF$T$Foo(p$f: Ref) returns (ret: Ref)
+method f$root$fakePrint$TF$T$Foo(p$f: Ref) returns (ret: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$unitType())
 
 
-method f$fakePrint$TF$T$Int(p$value: Ref) returns (ret: Ref)
+method f$root$fakePrint$TF$T$Int(p$value: Ref) returns (ret: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$unitType())
 
 
-method f$testGlobalScopeOverloading$TF$() returns (ret$0: Ref)
+method f$root$testGlobalScopeOverloading$TF() returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var anon$0: Ref
@@ -118,40 +118,40 @@ method f$testGlobalScopeOverloading$TF$() returns (ret$0: Ref)
   var anon$3: Ref
   var anon$4: Ref
   var anon$5: Ref
-  anon$0 := f$fakePrint$TF$T$Int(df$rt$intToRef(42))
-  anon$1 := f$fakePrint$TF$T$Boolean(df$rt$boolToRef(true))
-  anon$3 := con$c$Foo$()
-  anon$2 := f$fakePrint$TF$T$Foo(anon$3)
-  anon$5 := con$c$Bar$()
-  anon$4 := f$fakePrint$TF$T$Bar(anon$5)
+  anon$0 := f$root$fakePrint$TF$T$Int(df$rt$intToRef(42))
+  anon$1 := f$root$fakePrint$TF$T$Boolean(df$rt$boolToRef(true))
+  anon$3 := con$c$Foo()
+  anon$2 := f$root$fakePrint$TF$T$Foo(anon$3)
+  anon$5 := con$c$Bar()
+  anon$4 := f$root$fakePrint$TF$T$Bar(anon$5)
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }
 
 /function_overloading.kt:(413,441): info: Generated Viper text for testClassFunctionOverloading:
-method con$c$Bar$() returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$Bar())
+method con$c$Bar() returns (ret: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$root$Bar())
   ensures acc(p$c$Bar$shared(ret), wildcard)
   ensures acc(p$c$Bar$unique(ret), write)
 
 
-method con$c$Foo$() returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$Foo())
+method con$c$Foo() returns (ret: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$root$Foo())
   ensures acc(p$c$Foo$shared(ret), wildcard)
   ensures acc(p$c$Foo$unique(ret), write)
 
 
-method f$c$Bar$baz$TF$T$Bar$T$Bar(this$dispatch: Ref, p$b: Ref)
+method f$c$Bar$baz$TF$T$Bar$$$T$Bar(this$dispatch: Ref, p$b: Ref)
   returns (ret: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$unitType())
 
 
-method f$c$Bar$baz$TF$T$Bar$T$Foo(this$dispatch: Ref, p$f: Ref)
+method f$c$Bar$baz$TF$T$Bar$$$T$Foo(this$dispatch: Ref, p$f: Ref)
   returns (ret: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$unitType())
 
 
-method f$testClassFunctionOverloading$TF$() returns (ret$0: Ref)
+method f$root$testClassFunctionOverloading$TF() returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var l0$b: Ref
@@ -159,11 +159,11 @@ method f$testClassFunctionOverloading$TF$() returns (ret$0: Ref)
   var anon$1: Ref
   var anon$2: Ref
   var anon$3: Ref
-  l0$b := con$c$Bar$()
-  anon$1 := con$c$Foo$()
-  anon$0 := f$c$Bar$baz$TF$T$Bar$T$Foo(l0$b, anon$1)
-  anon$3 := con$c$Bar$()
-  anon$2 := f$c$Bar$baz$TF$T$Bar$T$Bar(l0$b, anon$3)
+  l0$b := con$c$Bar()
+  anon$1 := con$c$Foo()
+  anon$0 := f$c$Bar$baz$TF$T$Bar$$$T$Foo(l0$b, anon$1)
+  anon$3 := con$c$Bar()
+  anon$2 := f$c$Bar$baz$TF$T$Bar$$$T$Bar(l0$b, anon$3)
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }

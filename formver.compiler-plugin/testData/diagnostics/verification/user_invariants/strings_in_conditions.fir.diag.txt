@@ -1,5 +1,6 @@
 /strings_in_conditions.kt:(50,69): info: Generated Viper text for firstNotSortedIndex:
-method f$firstNotSortedIndex$TF$T$String(p$s: Ref) returns (ret$0: Ref)
+method f$root$firstNotSortedIndex$TF$T$String(p$s: Ref)
+  returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
   ensures 0 <= df$rt$intFromRef(ret$0) &&
     df$rt$intFromRef(ret$0) <= |df$rt$stringFromRef(p$s)|
@@ -46,7 +47,7 @@ method f$firstNotSortedIndex$TF$T$String(p$s: Ref) returns (ret$0: Ref)
 }
 
 /strings_in_conditions.kt:(621,636): info: Generated Viper text for returnNewString:
-method f$returnNewString$TF$() returns (ret$0: Ref)
+method f$root$returnNewString$TF() returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$stringType())
 {
   ret$0 := df$rt$stringToRef(Seq(52, 50))
@@ -55,7 +56,14 @@ method f$returnNewString$TF$() returns (ret$0: Ref)
 }
 
 /strings_in_conditions.kt:(672,689): info: Generated Viper text for addCharacterTimes:
-method f$addCharacterTimes$TF$T$String$T$Char$T$Int(p$s: Ref, p$c: Ref, p$n: Ref)
+method f$pkg$kotlin$$$c$String$plus$TF$T$String$$$NT$Any(this$dispatch: Ref,
+  p$other: Ref)
+  returns (ret: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$stringType())
+
+
+method f$root$addCharacterTimes$TF$T$String$$$T$Char$$$T$Int(p$s: Ref, p$c: Ref,
+  p$n: Ref)
   returns (ret$0: Ref)
   requires df$rt$intFromRef(p$n) >= 0
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$stringType())
@@ -112,7 +120,3 @@ method f$addCharacterTimes$TF$T$String$T$Char$T$Int(p$s: Ref, p$c: Ref, p$n: Ref
   goto lbl$ret$0
   label lbl$ret$0
 }
-
-method f$pkg$kotlin$c$String$plus$TF$T$String$NT$Any(this$dispatch: Ref, p$other: Ref)
-  returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$stringType())

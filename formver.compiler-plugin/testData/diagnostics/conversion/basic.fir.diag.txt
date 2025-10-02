@@ -1,5 +1,5 @@
 /basic.kt:(23,33): info: Generated Viper text for returnUnit:
-method f$returnUnit$TF$() returns (ret$0: Ref)
+method f$root$returnUnit$TF() returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   label lbl$ret$0
@@ -7,7 +7,7 @@ method f$returnUnit$TF$() returns (ret$0: Ref)
 }
 
 /basic.kt:(43,52): info: Generated Viper text for returnInt:
-method f$returnInt$TF$() returns (ret$0: Ref)
+method f$root$returnInt$TF() returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
 {
   ret$0 := df$rt$intToRef(0)
@@ -16,7 +16,7 @@ method f$returnInt$TF$() returns (ret$0: Ref)
 }
 
 /basic.kt:(77,94): info: Generated Viper text for takeIntReturnUnit:
-method f$takeIntReturnUnit$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
+method f$root$takeIntReturnUnit$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$intType())
@@ -25,7 +25,7 @@ method f$takeIntReturnUnit$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
 }
 
 /basic.kt:(140,156): info: Generated Viper text for takeIntReturnInt:
-method f$takeIntReturnInt$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
+method f$root$takeIntReturnInt$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
 {
   inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$intType())
@@ -35,7 +35,7 @@ method f$takeIntReturnInt$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
 }
 
 /basic.kt:(187,207): info: Generated Viper text for takeIntReturnIntExpr:
-method f$takeIntReturnIntExpr$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
+method f$root$takeIntReturnIntExpr$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
 {
   inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$intType())
@@ -45,7 +45,7 @@ method f$takeIntReturnIntExpr$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
 }
 
 /basic.kt:(229,247): info: Generated Viper text for withIntDeclaration:
-method f$withIntDeclaration$TF$() returns (ret$0: Ref)
+method f$root$withIntDeclaration$TF() returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
 {
   var l0$x: Ref
@@ -56,7 +56,7 @@ method f$withIntDeclaration$TF$() returns (ret$0: Ref)
 }
 
 /basic.kt:(290,303): info: Generated Viper text for intAssignment:
-method f$intAssignment$TF$() returns (ret$0: Ref)
+method f$root$intAssignment$TF() returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var l0$x: Ref

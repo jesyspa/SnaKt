@@ -1,5 +1,5 @@
 /is_operator.kt:(23,36): info: Generated Viper text for isNonNullable:
-method f$isNonNullable$TF$NT$Int(p$x: Ref) returns (ret$0: Ref)
+method f$root$isNonNullable$TF$NT$Int(p$x: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
 {
   inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$nullable(df$rt$intType()))
@@ -9,7 +9,7 @@ method f$isNonNullable$TF$NT$Int(p$x: Ref) returns (ret$0: Ref)
 }
 
 /is_operator.kt:(84,97): info: Generated Viper text for notIsNullable:
-method f$notIsNullable$TF$NT$Int(p$x: Ref) returns (ret$0: Ref)
+method f$root$notIsNullable$TF$NT$Int(p$x: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
 {
   inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$nullable(df$rt$intType()))
@@ -19,7 +19,7 @@ method f$notIsNullable$TF$NT$Int(p$x: Ref) returns (ret$0: Ref)
 }
 
 /is_operator.kt:(150,159): info: Generated Viper text for smartCast:
-method f$smartCast$TF$NT$Any(p$x: Ref) returns (ret$0: Ref)
+method f$root$smartCast$TF$NT$Any(p$x: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
 {
   inhale df$rt$isSubtype(df$rt$typeOf(p$x), df$rt$nullable(df$rt$anyType()))

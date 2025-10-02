@@ -1,10 +1,12 @@
 /merge_sort_of_string.kt:(72,76): info: Generated Viper text for subs:
-method f$pkg$kotlin$c$String$plus$TF$T$String$NT$Any(this$dispatch: Ref, p$other: Ref)
+method f$pkg$kotlin$$$c$String$plus$TF$T$String$$$NT$Any(this$dispatch: Ref,
+  p$other: Ref)
   returns (ret: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$stringType())
 
 
-method f$subs$TF$T$String$T$Int$T$Int(this$extension: Ref, p$lo: Ref, p$hi: Ref)
+method f$root$subs$TF$T$String$$$T$Int$$$T$Int(this$extension: Ref, p$lo: Ref,
+  p$hi: Ref)
   returns (ret$0: Ref)
   requires 0 <= df$rt$intFromRef(p$lo) &&
     df$rt$intFromRef(p$lo) <= df$rt$intFromRef(p$hi) &&
@@ -70,7 +72,13 @@ method f$subs$TF$T$String$T$Int$T$Int(this$extension: Ref, p$lo: Ref, p$hi: Ref)
 }
 
 /merge_sort_of_string.kt:(705,717): info: Generated Viper text for mergeStrings:
-method f$mergeStrings$TF$T$String$T$String(p$a: Ref, p$b: Ref)
+method f$pkg$kotlin$$$c$String$plus$TF$T$String$$$NT$Any(this$dispatch: Ref,
+  p$other: Ref)
+  returns (ret: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$stringType())
+
+
+method f$root$mergeStrings$TF$T$String$$$T$String(p$a: Ref, p$b: Ref)
   returns (ret$0: Ref)
   requires (forall anon$builtin$3: Int ::(1 <= anon$builtin$3 &&
       anon$builtin$3 < |df$rt$stringFromRef(p$a)| ==>
@@ -189,13 +197,9 @@ method f$mergeStrings$TF$T$String$T$String(p$a: Ref, p$b: Ref)
   label lbl$ret$0
 }
 
-method f$pkg$kotlin$c$String$plus$TF$T$String$NT$Any(this$dispatch: Ref, p$other: Ref)
-  returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$stringType())
-
-
 /merge_sort_of_string.kt:(1883,1894): info: Generated Viper text for mergeSorted:
-method f$mergeSorted$TF$T$String(this$extension: Ref) returns (ret$0: Ref)
+method f$root$mergeSorted$TF$T$String(this$extension: Ref)
+  returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$stringType())
   ensures |df$rt$stringFromRef(ret$0)| ==
     |df$rt$stringFromRef(this$extension)|
@@ -212,19 +216,19 @@ method f$mergeSorted$TF$T$String(this$extension: Ref) returns (ret$0: Ref)
     var anon$1: Ref
     var anon$2: Ref
     var anon$3: Ref
-    anon$1 := f$subs$TF$T$String$T$Int$T$Int(this$extension, df$rt$intToRef(0),
+    anon$1 := f$root$subs$TF$T$String$$$T$Int$$$T$Int(this$extension, df$rt$intToRef(0),
       sp$divInts(sp$stringLength(this$extension), df$rt$intToRef(2)))
-    anon$0 := f$mergeSorted$TF$T$String(anon$1)
-    anon$3 := f$subs$TF$T$String$T$Int$T$Int(this$extension, sp$divInts(sp$stringLength(this$extension),
+    anon$0 := f$root$mergeSorted$TF$T$String(anon$1)
+    anon$3 := f$root$subs$TF$T$String$$$T$Int$$$T$Int(this$extension, sp$divInts(sp$stringLength(this$extension),
       df$rt$intToRef(2)), sp$stringLength(this$extension))
-    anon$2 := f$mergeSorted$TF$T$String(anon$3)
-    ret$0 := f$mergeStrings$TF$T$String$T$String(anon$0, anon$2)
+    anon$2 := f$root$mergeSorted$TF$T$String(anon$3)
+    ret$0 := f$root$mergeStrings$TF$T$String$$$T$String(anon$0, anon$2)
   }
   goto lbl$ret$0
   label lbl$ret$0
 }
 
-method f$mergeStrings$TF$T$String$T$String(p$a: Ref, p$b: Ref)
+method f$root$mergeStrings$TF$T$String$$$T$String(p$a: Ref, p$b: Ref)
   returns (ret: Ref)
   requires (forall anon$builtin$5: Int ::(1 <= anon$builtin$5 &&
       anon$builtin$5 < |df$rt$stringFromRef(p$a)| ==>
@@ -242,7 +246,8 @@ method f$mergeStrings$TF$T$String$T$String(p$a: Ref, p$b: Ref)
       df$rt$stringFromRef(ret)[anon$builtin$6])
 
 
-method f$subs$TF$T$String$T$Int$T$Int(this$extension: Ref, p$lo: Ref, p$hi: Ref)
+method f$root$subs$TF$T$String$$$T$Int$$$T$Int(this$extension: Ref, p$lo: Ref,
+  p$hi: Ref)
   returns (ret: Ref)
   requires 0 <= df$rt$intFromRef(p$lo) &&
     df$rt$intFromRef(p$lo) <= df$rt$intFromRef(p$hi) &&

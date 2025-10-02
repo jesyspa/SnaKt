@@ -1,5 +1,5 @@
 /arithmetic.kt:(23,31): info: Generated Viper text for addition:
-method f$addition$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
+method f$root$addition$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var l0$y: Ref
@@ -10,7 +10,7 @@ method f$addition$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
 }
 
 /arithmetic.kt:(66,77): info: Generated Viper text for subtraction:
-method f$subtraction$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
+method f$root$subtraction$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var l0$y: Ref
@@ -21,7 +21,7 @@ method f$subtraction$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
 }
 
 /arithmetic.kt:(112,126): info: Generated Viper text for multiplication:
-method f$multiplication$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
+method f$root$multiplication$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var l0$y: Ref
@@ -32,7 +32,7 @@ method f$multiplication$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
 }
 
 /arithmetic.kt:(161,169): info: Generated Viper text for division:
-method f$division$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
+method f$root$division$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var l0$y: Ref

@@ -1,5 +1,5 @@
 /if.kt:(23,31): info: Generated Viper text for simpleIf:
-method f$simpleIf$TF$() returns (ret$0: Ref)
+method f$root$simpleIf$TF() returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
 {
   if (true) {
@@ -13,7 +13,7 @@ method f$simpleIf$TF$() returns (ret$0: Ref)
 }
 
 /if.kt:(116,129): info: Generated Viper text for ifOnParameter:
-method f$ifOnParameter$TF$T$Boolean(p$b: Ref) returns (ret$0: Ref)
+method f$root$ifOnParameter$TF$T$Boolean(p$b: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
 {
   inhale df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
@@ -28,27 +28,27 @@ method f$ifOnParameter$TF$T$Boolean(p$b: Ref) returns (ret$0: Ref)
 }
 
 /if.kt:(221,235): info: Generated Viper text for ifAsExpression:
-method f$ifAsExpression$TF$() returns (ret$0: Ref)
+method f$root$ifAsExpression$TF() returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
 {
   var l0$b: Ref
   l0$b := df$rt$boolToRef(false)
   if (df$rt$boolFromRef(l0$b)) {
     var anon$0: Ref
-    anon$0 := f$simpleIf$TF$()
+    anon$0 := f$root$simpleIf$TF()
     ret$0 := df$rt$boolToRef(false)
   } else {
     var anon$1: Ref
-    anon$1 := f$ifOnParameter$TF$T$Boolean(l0$b)
+    anon$1 := f$root$ifOnParameter$TF$T$Boolean(l0$b)
     ret$0 := df$rt$boolToRef(true)
   }
   goto lbl$ret$0
   label lbl$ret$0
 }
 
-method f$ifOnParameter$TF$T$Boolean(p$b: Ref) returns (ret: Ref)
+method f$root$ifOnParameter$TF$T$Boolean(p$b: Ref) returns (ret: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$intType())
 
 
-method f$simpleIf$TF$() returns (ret: Ref)
+method f$root$simpleIf$TF() returns (ret: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$intType())

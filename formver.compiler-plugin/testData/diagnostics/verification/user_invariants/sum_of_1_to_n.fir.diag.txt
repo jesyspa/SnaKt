@@ -1,5 +1,5 @@
 /sum_of_1_to_n.kt:(64,91): info: Generated Viper text for recursiveSumOfIntegersUpToN:
-method f$recursiveSumOfIntegersUpToN$TF$T$Int(p$n: Ref)
+method f$root$recursiveSumOfIntegersUpToN$TF$T$Int(p$n: Ref)
   returns (ret$0: Ref)
   requires df$rt$intFromRef(p$n) >= 0
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
@@ -12,7 +12,8 @@ method f$recursiveSumOfIntegersUpToN$TF$T$Int(p$n: Ref)
     goto lbl$ret$0
   } else {
     var anon$0: Ref
-    anon$0 := f$recursiveSumOfIntegersUpToN$TF$T$Int(sp$minusInts(p$n, df$rt$intToRef(1)))
+    anon$0 := f$root$recursiveSumOfIntegersUpToN$TF$T$Int(sp$minusInts(p$n,
+      df$rt$intToRef(1)))
     ret$0 := sp$plusInts(p$n, anon$0)
     goto lbl$ret$0
   }
@@ -20,7 +21,7 @@ method f$recursiveSumOfIntegersUpToN$TF$T$Int(p$n: Ref)
 }
 
 /sum_of_1_to_n.kt:(296,314): info: Generated Viper text for sumOfIntegersUpToN:
-method f$sumOfIntegersUpToN$TF$T$Int(p$n: Ref) returns (ret$0: Ref)
+method f$root$sumOfIntegersUpToN$TF$T$Int(p$n: Ref) returns (ret$0: Ref)
   requires df$rt$intFromRef(p$n) >= 0
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
   ensures df$rt$intFromRef(ret$0) ==

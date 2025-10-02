@@ -1,11 +1,11 @@
 /predicates.kt:(203,213): info: Generated Viper text for useClasses:
-field bf$a: Ref
+field bf$root$a: Ref
 
-field bf$b: Ref
+field bf$root$b: Ref
 
-field bf$next: Ref
+field bf$root$next: Ref
 
-field bf$pf: Ref
+field bf$root$pf: Ref
 
 predicate p$c$Baz$shared(this$dispatch: Ref) {
   true
@@ -16,72 +16,72 @@ predicate p$c$Baz$unique(this$dispatch: Ref) {
 }
 
 predicate p$c$PrimitiveFields$shared(this$dispatch: Ref) {
-  acc(this$dispatch.bf$a, wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$a), df$rt$intType())
+  acc(this$dispatch.bf$root$a, wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$a), df$rt$intType())
 }
 
 predicate p$c$PrimitiveFields$unique(this$dispatch: Ref) {
-  acc(this$dispatch.bf$a, wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$a), df$rt$intType()) &&
-  acc(this$dispatch.bf$b, write) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$b), df$rt$intType())
+  acc(this$dispatch.bf$root$a, wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$a), df$rt$intType()) &&
+  acc(this$dispatch.bf$root$b, write) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$b), df$rt$intType())
 }
 
 predicate p$c$Recursive$shared(this$dispatch: Ref) {
-  acc(this$dispatch.bf$next, wildcard) &&
-  (this$dispatch.bf$next != df$rt$nullValue() ==>
-  acc(p$c$Recursive$shared(this$dispatch.bf$next), wildcard)) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$next), df$rt$nullable(df$rt$c$Recursive()))
+  acc(this$dispatch.bf$root$next, wildcard) &&
+  (this$dispatch.bf$root$next != df$rt$nullValue() ==>
+  acc(p$c$Recursive$shared(this$dispatch.bf$root$next), wildcard)) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$next), df$rt$nullable(df$rt$c$root$Recursive()))
 }
 
 predicate p$c$Recursive$unique(this$dispatch: Ref) {
-  acc(this$dispatch.bf$next, wildcard) &&
-  (this$dispatch.bf$next != df$rt$nullValue() ==>
-  acc(p$c$Recursive$shared(this$dispatch.bf$next), wildcard)) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$next), df$rt$nullable(df$rt$c$Recursive()))
+  acc(this$dispatch.bf$root$next, wildcard) &&
+  (this$dispatch.bf$root$next != df$rt$nullValue() ==>
+  acc(p$c$Recursive$shared(this$dispatch.bf$root$next), wildcard)) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$next), df$rt$nullable(df$rt$c$root$Recursive()))
 }
 
 predicate p$c$ReferenceField$shared(this$dispatch: Ref) {
-  acc(this$dispatch.bf$pf, wildcard) &&
-  acc(p$c$PrimitiveFields$shared(this$dispatch.bf$pf), wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$pf), df$rt$c$PrimitiveFields()) &&
+  acc(this$dispatch.bf$root$pf, wildcard) &&
+  acc(p$c$PrimitiveFields$shared(this$dispatch.bf$root$pf), wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$pf), df$rt$c$root$PrimitiveFields()) &&
   acc(p$c$Baz$shared(this$dispatch), wildcard)
 }
 
 predicate p$c$ReferenceField$unique(this$dispatch: Ref) {
-  acc(this$dispatch.bf$pf, wildcard) &&
-  acc(p$c$PrimitiveFields$shared(this$dispatch.bf$pf), wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$pf), df$rt$c$PrimitiveFields()) &&
+  acc(this$dispatch.bf$root$pf, wildcard) &&
+  acc(p$c$PrimitiveFields$shared(this$dispatch.bf$root$pf), wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$pf), df$rt$c$root$PrimitiveFields()) &&
   acc(p$c$Baz$unique(this$dispatch), write)
 }
 
-method f$useClasses$TF$T$ReferenceField$T$Recursive(p$rf: Ref, p$rec: Ref)
+method f$root$useClasses$TF$T$ReferenceField$$$T$Recursive(p$rf: Ref, p$rec: Ref)
   returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(p$rf), df$rt$c$ReferenceField())
+  inhale df$rt$isSubtype(df$rt$typeOf(p$rf), df$rt$c$root$ReferenceField())
   inhale acc(p$c$ReferenceField$shared(p$rf), wildcard)
-  inhale df$rt$isSubtype(df$rt$typeOf(p$rec), df$rt$c$Recursive())
+  inhale df$rt$isSubtype(df$rt$typeOf(p$rec), df$rt$c$root$Recursive())
   inhale acc(p$c$Recursive$shared(p$rec), wildcard)
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }
 
 /predicates.kt:(354,374): info: Generated Viper text for threeLayersHierarchy:
-field bf$x: Ref
+field bf$root$x: Ref
 
-field bf$y: Ref
+field bf$root$y: Ref
 
 predicate p$c$A$shared(this$dispatch: Ref) {
-  acc(this$dispatch.bf$x, wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$x), df$rt$intType())
+  acc(this$dispatch.bf$root$x, wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$x), df$rt$intType())
 }
 
 predicate p$c$A$unique(this$dispatch: Ref) {
-  acc(this$dispatch.bf$x, wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$x), df$rt$intType()) &&
-  acc(this$dispatch.bf$y, write) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$y), df$rt$intType())
+  acc(this$dispatch.bf$root$x, wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$x), df$rt$intType()) &&
+  acc(this$dispatch.bf$root$y, write) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$y), df$rt$intType())
 }
 
 predicate p$c$B$shared(this$dispatch: Ref) {
@@ -100,10 +100,10 @@ predicate p$c$C$unique(this$dispatch: Ref) {
   acc(p$c$B$unique(this$dispatch), write)
 }
 
-method f$threeLayersHierarchy$TF$T$C(p$c: Ref) returns (ret$0: Ref)
+method f$root$threeLayersHierarchy$TF$T$C(p$c: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(p$c), df$rt$c$C())
+  inhale df$rt$isSubtype(df$rt$typeOf(p$c), df$rt$c$root$C())
   inhale acc(p$c$C$shared(p$c), wildcard)
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
@@ -112,59 +112,60 @@ method f$threeLayersHierarchy$TF$T$C(p$c: Ref) returns (ret$0: Ref)
 /predicates.kt:(390,403): info: Generated Viper text for listHierarchy:
 field sp$size: Ref
 
-predicate p$pkg$kotlin_collections$c$Collection$shared(this$dispatch: Ref) {
-  acc(p$pkg$kotlin_collections$c$Iterable$shared(this$dispatch), wildcard)
+predicate p$pkg$kotlin_collections$$$c$Collection$shared(this$dispatch: Ref) {
+  acc(p$pkg$kotlin_collections$$$c$Iterable$shared(this$dispatch), wildcard)
 }
 
-predicate p$pkg$kotlin_collections$c$Collection$unique(this$dispatch: Ref) {
-  acc(p$pkg$kotlin_collections$c$Iterable$unique(this$dispatch), write)
+predicate p$pkg$kotlin_collections$$$c$Collection$unique(this$dispatch: Ref) {
+  acc(p$pkg$kotlin_collections$$$c$Iterable$unique(this$dispatch), write)
 }
 
-predicate p$pkg$kotlin_collections$c$Iterable$shared(this$dispatch: Ref) {
+predicate p$pkg$kotlin_collections$$$c$Iterable$shared(this$dispatch: Ref) {
   true
 }
 
-predicate p$pkg$kotlin_collections$c$Iterable$unique(this$dispatch: Ref) {
+predicate p$pkg$kotlin_collections$$$c$Iterable$unique(this$dispatch: Ref) {
   true
 }
 
-predicate p$pkg$kotlin_collections$c$List$shared(this$dispatch: Ref) {
-  acc(p$pkg$kotlin_collections$c$Collection$shared(this$dispatch), wildcard)
+predicate p$pkg$kotlin_collections$$$c$List$shared(this$dispatch: Ref) {
+  acc(p$pkg$kotlin_collections$$$c$Collection$shared(this$dispatch), wildcard)
 }
 
-predicate p$pkg$kotlin_collections$c$List$unique(this$dispatch: Ref) {
-  acc(p$pkg$kotlin_collections$c$Collection$unique(this$dispatch), write)
+predicate p$pkg$kotlin_collections$$$c$List$unique(this$dispatch: Ref) {
+  acc(p$pkg$kotlin_collections$$$c$Collection$unique(this$dispatch), write)
 }
 
-predicate p$pkg$kotlin_collections$c$MutableCollection$shared(this$dispatch: Ref) {
-  acc(p$pkg$kotlin_collections$c$Collection$shared(this$dispatch), wildcard) &&
-  acc(p$pkg$kotlin_collections$c$MutableIterable$shared(this$dispatch), wildcard)
+predicate p$pkg$kotlin_collections$$$c$MutableCollection$shared(this$dispatch: Ref) {
+  acc(p$pkg$kotlin_collections$$$c$Collection$shared(this$dispatch), wildcard) &&
+  acc(p$pkg$kotlin_collections$$$c$MutableIterable$shared(this$dispatch), wildcard)
 }
 
-predicate p$pkg$kotlin_collections$c$MutableCollection$unique(this$dispatch: Ref) {
-  acc(p$pkg$kotlin_collections$c$Collection$unique(this$dispatch), write) &&
-  acc(p$pkg$kotlin_collections$c$MutableIterable$unique(this$dispatch), write)
+predicate p$pkg$kotlin_collections$$$c$MutableCollection$unique(this$dispatch: Ref) {
+  acc(p$pkg$kotlin_collections$$$c$Collection$unique(this$dispatch), write) &&
+  acc(p$pkg$kotlin_collections$$$c$MutableIterable$unique(this$dispatch), write)
 }
 
-predicate p$pkg$kotlin_collections$c$MutableIterable$shared(this$dispatch: Ref) {
-  acc(p$pkg$kotlin_collections$c$Iterable$shared(this$dispatch), wildcard)
+predicate p$pkg$kotlin_collections$$$c$MutableIterable$shared(this$dispatch: Ref) {
+  acc(p$pkg$kotlin_collections$$$c$Iterable$shared(this$dispatch), wildcard)
 }
 
-predicate p$pkg$kotlin_collections$c$MutableIterable$unique(this$dispatch: Ref) {
-  acc(p$pkg$kotlin_collections$c$Iterable$unique(this$dispatch), write)
+predicate p$pkg$kotlin_collections$$$c$MutableIterable$unique(this$dispatch: Ref) {
+  acc(p$pkg$kotlin_collections$$$c$Iterable$unique(this$dispatch), write)
 }
 
-predicate p$pkg$kotlin_collections$c$MutableList$shared(this$dispatch: Ref) {
-  acc(p$pkg$kotlin_collections$c$List$shared(this$dispatch), wildcard) &&
-  acc(p$pkg$kotlin_collections$c$MutableCollection$shared(this$dispatch), wildcard)
+predicate p$pkg$kotlin_collections$$$c$MutableList$shared(this$dispatch: Ref) {
+  acc(p$pkg$kotlin_collections$$$c$List$shared(this$dispatch), wildcard) &&
+  acc(p$pkg$kotlin_collections$$$c$MutableCollection$shared(this$dispatch), wildcard)
 }
 
-predicate p$pkg$kotlin_collections$c$MutableList$unique(this$dispatch: Ref) {
-  acc(p$pkg$kotlin_collections$c$List$unique(this$dispatch), write) &&
-  acc(p$pkg$kotlin_collections$c$MutableCollection$unique(this$dispatch), write)
+predicate p$pkg$kotlin_collections$$$c$MutableList$unique(this$dispatch: Ref) {
+  acc(p$pkg$kotlin_collections$$$c$List$unique(this$dispatch), write) &&
+  acc(p$pkg$kotlin_collections$$$c$MutableCollection$unique(this$dispatch), write)
 }
 
-method f$listHierarchy$TF$T$MutableList(p$xs: Ref) returns (ret$0: Ref)
+method f$root$listHierarchy$TF$T$MutableList(p$xs: Ref)
+  returns (ret$0: Ref)
   requires acc(p$xs.sp$size, write)
   requires df$rt$intFromRef(p$xs.sp$size) >= 0
   ensures acc(p$xs.sp$size, write)
@@ -172,7 +173,7 @@ method f$listHierarchy$TF$T$MutableList(p$xs: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   inhale df$rt$isSubtype(df$rt$typeOf(p$xs), df$rt$c$pkg$kotlin_collections$MutableList())
-  inhale acc(p$pkg$kotlin_collections$c$MutableList$shared(p$xs), wildcard)
+  inhale acc(p$pkg$kotlin_collections$$$c$MutableList$shared(p$xs), wildcard)
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }

@@ -1,5 +1,5 @@
 /returns_not_null.kt:(121,133): info: Generated Viper text for returns_null:
-method f$returns_null$TF$() returns (ret$0: Ref)
+method f$root$returns_null$TF() returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$nullable(df$rt$intType()))
   ensures ret$0 != df$rt$nullValue()
 {

@@ -1,5 +1,5 @@
 /increment.kt:(23,34): info: Generated Viper text for test_simple:
-method f$test_simple$TF$() returns (ret$0: Ref)
+method f$root$test_simple$TF() returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var l0$x: Ref
@@ -15,7 +15,7 @@ method f$test_simple$TF$() returns (ret$0: Ref)
 }
 
 /increment.kt:(121,140): info: Generated Viper text for test_postincvrement:
-method f$test_postincvrement$TF$() returns (ret$0: Ref)
+method f$root$test_postincvrement$TF() returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var l0$x: Ref

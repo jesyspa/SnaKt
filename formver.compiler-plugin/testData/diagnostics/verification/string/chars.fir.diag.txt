@@ -1,18 +1,18 @@
 /chars.kt:(212,221): info: Generated Viper text for testChars:
-field bf$char: Ref
+field bf$root$char: Ref
 
-field bf$size: Ref
+field bf$root$size: Ref
 
 method con$c$CharBox$T$Char(p$char: Ref) returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$CharBox())
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$root$CharBox())
   ensures acc(p$c$CharBox$shared(ret), wildcard)
   ensures acc(p$c$CharBox$unique(ret), write)
   ensures df$rt$charFromRef((unfolding acc(p$c$CharBox$shared(ret), wildcard) in
-      ret.bf$char)) ==
+      ret.bf$root$char)) ==
     df$rt$charFromRef(p$char)
 
 
-method f$testChars$TF$T$Char(p$c: Ref) returns (ret$0: Ref)
+method f$root$testChars$TF$T$Char(p$c: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var l0$box: Ref
@@ -24,7 +24,7 @@ method f$testChars$TF$T$Char(p$c: Ref) returns (ret$0: Ref)
   l0$box := con$c$CharBox$T$Char(df$rt$charToRef(97))
   l0$charA := df$rt$charToRef(97)
   unfold acc(p$c$CharBox$shared(l0$box), wildcard)
-  anon$0 := l0$box.bf$char
+  anon$0 := l0$box.bf$root$char
   l0$cond1 := df$rt$boolToRef(df$rt$charFromRef(l0$charA) ==
     df$rt$charFromRef(anon$0))
   assert df$rt$boolFromRef(l0$cond1)

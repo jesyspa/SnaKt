@@ -1,5 +1,5 @@
 /loop.kt:(23,32): info: Generated Viper text for whileLoop:
-method f$whileLoop$TF$T$Boolean(p$b: Ref) returns (ret$0: Ref)
+method f$root$whileLoop$TF$T$Boolean(p$b: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
 {
   var anon$0: Ref
@@ -22,12 +22,12 @@ method f$whileLoop$TF$T$Boolean(p$b: Ref) returns (ret$0: Ref)
 }
 
 /loop.kt:(138,160): info: Generated Viper text for whileFunctionCondition:
-method f$whileFunctionCondition$TF$() returns (ret$0: Ref)
+method f$root$whileFunctionCondition$TF() returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var anon$0: Ref
   label lbl$continue$0
-  anon$0 := f$whileLoop$TF$T$Boolean(df$rt$boolToRef(true))
+  anon$0 := f$root$whileLoop$TF$T$Boolean(df$rt$boolToRef(true))
   if (df$rt$boolFromRef(anon$0)) {
     goto lbl$continue$0
   }
@@ -36,5 +36,5 @@ method f$whileFunctionCondition$TF$() returns (ret$0: Ref)
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }
 
-method f$whileLoop$TF$T$Boolean(p$b: Ref) returns (ret: Ref)
+method f$root$whileLoop$TF$T$Boolean(p$b: Ref) returns (ret: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$boolType())

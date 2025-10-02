@@ -17,7 +17,7 @@ domain d$rt  {
 
   unique function df$rt$stringType(): d$rt
 
-  unique function df$rt$c$Foo(): d$rt
+  unique function df$rt$c$root$Foo(): d$rt
 
   function df$rt$nullValue(): Ref
 
@@ -120,7 +120,7 @@ domain d$rt  {
   }
 
   axiom {
-    df$rt$isSubtype(df$rt$c$Foo(), df$rt$anyType())
+    df$rt$isSubtype(df$rt$c$root$Foo(), df$rt$anyType())
   }
 
   axiom rt$supertype_of_nothing {
@@ -246,7 +246,7 @@ domain d$rt  {
   }
 }
 
-field bf$x: Ref
+field bf$root$x: Ref
 
 function sp$addCharInt(arg1: Ref, arg2: Ref): Ref
   ensures df$rt$isSubtype(df$rt$typeOf(result), df$rt$charType())
@@ -395,25 +395,25 @@ function sp$timesInts(arg1: Ref, arg2: Ref): Ref
 
 
 predicate p$c$Foo$shared(this$dispatch: Ref) {
-  acc(this$dispatch.bf$x, wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$x), df$rt$intType())
+  acc(this$dispatch.bf$root$x, wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$x), df$rt$intType())
 }
 
 predicate p$c$Foo$unique(this$dispatch: Ref) {
-  acc(this$dispatch.bf$x, wildcard) &&
-  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$x), df$rt$intType())
+  acc(this$dispatch.bf$root$x, wildcard) &&
+  df$rt$isSubtype(df$rt$typeOf(this$dispatch.bf$root$x), df$rt$intType())
 }
 
 method con$c$Foo$T$Int(p$x: Ref) returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$Foo())
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$root$Foo())
   ensures acc(p$c$Foo$shared(ret), wildcard)
   ensures acc(p$c$Foo$unique(ret), write)
   ensures df$rt$intFromRef((unfolding acc(p$c$Foo$shared(ret), wildcard) in
-      ret.bf$x)) ==
+      ret.bf$root$x)) ==
     df$rt$intFromRef(p$x)
 
 
-method f$f$TF$() returns (ret$0: Ref)
+method f$root$f$TF() returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var l0$foo: Ref
@@ -422,9 +422,9 @@ method f$f$TF$() returns (ret$0: Ref)
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }
 
-/full_viper_dump.kt:(172,173): info: Generated ExpEmbedding for f$f$TF$:
+/full_viper_dump.kt:(172,173): info: Generated ExpEmbedding for f$root$f$TF:
 Function(
-    name = f$f$TF$,
+    name = f$root$f$TF,
     { Declare(Var(l0$foo), T$Foo, MethodCall(callee = con$c$Foo$T$Int, Int(0))) },
     return = lbl$ret$0,
 )

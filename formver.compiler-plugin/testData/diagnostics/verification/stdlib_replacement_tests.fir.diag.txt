@@ -1,5 +1,5 @@
 /stdlib_replacement_tests.kt:(104,113): info: Generated Viper text for useChecks:
-method f$useChecks$TF$() returns (ret$0: Ref)
+method f$root$useChecks$TF() returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var ret$1: Ref
@@ -17,9 +17,9 @@ method f$useChecks$TF$() returns (ret$0: Ref)
 }
 
 /stdlib_replacement_tests.kt:(298,305): info: Generated Viper text for useRuns:
-field bf$size: Ref
+field bf$root$size: Ref
 
-method f$useRuns$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
+method f$root$useRuns$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var l0$cond1: Ref
@@ -74,9 +74,9 @@ method f$useRuns$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
 }
 
 /stdlib_replacement_tests.kt:(459,466): info: Generated Viper text for useAlso:
-field bf$size: Ref
+field bf$root$size: Ref
 
-method f$useAlso$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
+method f$root$useAlso$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var anon$2: Ref
@@ -104,9 +104,9 @@ method f$useAlso$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
 }
 
 /stdlib_replacement_tests.kt:(531,537): info: Generated Viper text for useLet:
-field bf$size: Ref
+field bf$root$size: Ref
 
-method f$useLet$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
+method f$root$useLet$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var l0$cond1: Ref
@@ -141,9 +141,9 @@ method f$useLet$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
 }
 
 /stdlib_replacement_tests.kt:(621,628): info: Generated Viper text for useWith:
-field bf$size: Ref
+field bf$root$size: Ref
 
-method f$useWith$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
+method f$root$useWith$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var anon$2: Ref
@@ -174,9 +174,9 @@ method f$useWith$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
 }
 
 /stdlib_replacement_tests.kt:(694,702): info: Generated Viper text for useApply:
-field bf$size: Ref
+field bf$root$size: Ref
 
-method f$useApply$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
+method f$root$useApply$TF$T$Int(p$x: Ref) returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var anon$2: Ref

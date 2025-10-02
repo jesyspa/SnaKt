@@ -1,7 +1,7 @@
 /assert_statements.kt:(63,67): info: Generated Viper text for test:
-field bf$size: Ref
+field bf$root$size: Ref
 
-method f$test$TF$() returns (ret$0: Ref)
+method f$root$test$TF() returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var l0$x: Ref
@@ -28,9 +28,9 @@ method f$test$TF$() returns (ret$0: Ref)
 /assert_statements.kt:(168,174): error: Assert condition is impure
 
 /assert_statements.kt:(196,206): info: Generated Viper text for testImpure:
-field bf$size: Ref
+field bf$root$size: Ref
 
-method f$testImpure$TF$() returns (ret$0: Ref)
+method f$root$testImpure$TF() returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var l0$x: Ref
