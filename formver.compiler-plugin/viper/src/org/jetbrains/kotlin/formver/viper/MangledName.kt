@@ -32,3 +32,62 @@ val MangledName.debugMangled: String
         return debugResolver.resolve(this)
     }
 
+sealed interface NameExpr {
+    fun toParts(): List<Part> = emptyList()
+
+    sealed interface Part: NameExpr {
+        data class Lit(val value: String?) : Part {
+            override fun toParts(): List<Part> {
+                return if (value.equals("")) emptyList()
+                else listOf(this)
+            }
+        }
+        data class SymbolVal(val symbolName: MangledName) : Part {
+            override fun toParts(): List<Part> = listOf(this)
+        }
+    }
+}
+
+data class Lit(val text: String?) : NameExpr {
+    override fun toParts(): List<NameExpr.Part> {
+        return if (text.equals("") || text==null) emptyList()
+        else listOf(NameExpr.Part.Lit(text))
+    }
+}
+data class SymbolVal(val symbolName: MangledName) : NameExpr {
+    override fun toParts() = listOf(NameExpr.Part.SymbolVal(symbolName))
+}
+
+data class Join(val items: List<NameExpr>, val sep: String = SEPARATOR) : NameExpr {
+    override fun toParts(): List<NameExpr.Part> {
+        if (items.isEmpty()) return emptyList()
+        val out = mutableListOf<NameExpr.Part>()
+        items.mapNotNull { item ->
+            item.toParts().takeIf { it.isNotEmpty() }
+        }.forEachIndexed { i, parts ->
+            out += parts
+            if (i < items.count { !it.toParts().isEmpty() } - 1) {
+                out += NameExpr.Part.Lit(sep)
+            }
+        }
+        return out
+    }
+}
+
+fun parseRequiredScope(scope: NameExpr): NameExpr? {
+    val parts = scope.toParts()
+    if (parts.isEmpty()) return null
+
+    val requiredParts = parts.mapNotNull { part ->
+        when (part) {
+            is NameExpr.Part.SymbolVal -> part
+            is NameExpr.Part.Lit -> null
+        }
+    }
+
+    return when {
+        requiredParts.isEmpty() -> Lit("")
+        requiredParts.size == 1 -> requiredParts[0]
+        else -> Join(requiredParts, SEPARATOR)
+    }
+}
