@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.formver.core.embeddings.types.PretypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.asTypeEmbedding
 import org.jetbrains.kotlin.formver.viper.Join
 import org.jetbrains.kotlin.formver.viper.Lit
-import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.SymbolName
 import org.jetbrains.kotlin.formver.viper.NameExpr
 import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.SEPARATOR
@@ -26,7 +26,7 @@ import org.jetbrains.kotlin.name.Name
  * This is a little more general than the `Name` type in Kotlin: we also use this
  * to represent getters and setters, for example.
  */
-sealed interface KotlinName : MangledName
+sealed interface KotlinName : SymbolName
 
 data class SimpleKotlinName(val name: Name) : KotlinName {
     override val mangledBaseName: NameExpr

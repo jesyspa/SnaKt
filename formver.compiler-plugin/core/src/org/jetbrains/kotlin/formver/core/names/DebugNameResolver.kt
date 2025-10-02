@@ -3,10 +3,10 @@ import org.jetbrains.kotlin.formver.core.names.TypedKotlinNameWithType
 import org.jetbrains.kotlin.formver.viper.NameExpr
 import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.SEPARATOR
-import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.SymbolName
 
 class DebugNameResolver : NameResolver {
-    override fun resolve(name: MangledName): String {
+    override fun resolve(name: SymbolName): String {
         val components = mutableListOf<String>()
 
         name.mangledType?.let { components.add(it) }
@@ -14,31 +14,31 @@ class DebugNameResolver : NameResolver {
         name.fullScope?.toParts()?.forEach { part ->
             when (part) {
                 is NameExpr.Part.Lit -> part.value?.let { components.add(it) }
-                is NameExpr.Part.SymbolVal -> components.add(resolve(part.MangledName))
+                is NameExpr.Part.SymbolVal -> components.add(resolve(part.SymbolName))
             }
         }
 
         name.mangledBaseName.toParts().forEach { part ->
             when (part) {
                 is NameExpr.Part.Lit -> part.value?.let { components.add(it) }
-                is NameExpr.Part.SymbolVal -> components.add(resolve(part.MangledName))
+                is NameExpr.Part.SymbolVal -> components.add(resolve(part.SymbolName))
             }
         }
         if (name is ScopedKotlinName && name.name is TypedKotlinNameWithType) {
             name.name.additionalType.toParts().forEach { part ->
                 when(part) {
                     is NameExpr.Part.Lit -> part.value?.let { components.add(it) }
-                    is NameExpr.Part.SymbolVal -> components.add(resolve(part.MangledName))
+                    is NameExpr.Part.SymbolVal -> components.add(resolve(part.SymbolName))
                 }
             }
         }
         return components.filter { it.isNotEmpty() }.joinToString(SEPARATOR)
     }
 
-    override fun register(name: MangledName) {}
+    override fun register(name: SymbolName) {}
 }
 
-val MangledName.debugMangled: String
+val SymbolName.debugMangled: String
     get() {
         val debugResolver = DebugNameResolver()
         return debugResolver.resolve(this)

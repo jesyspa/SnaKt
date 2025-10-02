@@ -12,7 +12,7 @@ package org.jetbrains.kotlin.formver.viper
  * approach makes it easier to see where they came from during debugging.
  */
 const val SEPARATOR = "$"
-interface MangledName {
+interface SymbolName {
     val mangledType: String?
         get() = null
     val requiredScope: NameExpr?
@@ -25,7 +25,7 @@ interface MangledName {
 }
 
 context(nameResolver: NameResolver)
-val MangledName.mangled: String
+val SymbolName.mangled: String
     get() = nameResolver.resolve(this)
 
 sealed interface NameExpr {
@@ -38,7 +38,7 @@ sealed interface NameExpr {
                 else listOf(this)
             }
         }
-        data class SymbolVal(val MangledName: MangledName) : Part {
+        data class SymbolVal(val SymbolName: SymbolName) : Part {
             override fun toParts(): List<Part> = listOf(this)
         }
     }
@@ -50,8 +50,8 @@ data class Lit(val text: String?) : NameExpr {
         else listOf(NameExpr.Part.Lit(text))
     }
 }
-data class SymbolVal(val MangledName: MangledName) : NameExpr {
-    override fun toParts() = listOf(NameExpr.Part.SymbolVal(MangledName))
+data class SymbolVal(val SymbolName: SymbolName) : NameExpr {
+    override fun toParts() = listOf(NameExpr.Part.SymbolVal(SymbolName))
 }
 
 data class Join(val items: List<NameExpr>, val sep: String = SEPARATOR) : NameExpr {

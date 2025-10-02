@@ -14,18 +14,18 @@ import viper.silver.ast.NamedDomainAxiom
  * they have to be globally unique as well.
  */
 
-data class DomainName(val baseName: String) : MangledName {
+data class DomainName(val baseName: String) : SymbolName {
     override val mangledType: String
         get() = "d"
     override val mangledBaseName: NameExpr
         get() = Lit(baseName)
 }
-data class UnqualifiedDomainFuncName(val baseName: String) : MangledName {
+data class UnqualifiedDomainFuncName(val baseName: String) : SymbolName {
     override val mangledBaseName: NameExpr
         get() = Lit(baseName)
 }
 
-data class QualifiedDomainFuncName(val domainName: DomainName, val funcName: MangledName) : MangledName {
+data class QualifiedDomainFuncName(val domainName: DomainName, val funcName: SymbolName) : SymbolName {
     override val mangledType: String
         get() = "df"
     override val fullScope: NameExpr
@@ -46,7 +46,7 @@ sealed interface OptionalDomainAxiomLabel {
 }
 
 data class NamedDomainAxiomLabel(override val domainName: DomainName, val baseName: String) :
-    OptionalDomainAxiomLabel, MangledName {
+    OptionalDomainAxiomLabel, SymbolName {
     override val fullScope: NameExpr
         get() = domainName.mangledBaseName
     override val requiredScope: NameExpr?
@@ -144,7 +144,7 @@ abstract class Domain(
     fun toType(typeParamSubst: Map<Type.TypeVar, Type> = typeVars.associateWith { it }): Type.Domain =
         Type.Domain(name, typeVars, typeParamSubst)
 
-    fun createDomainFunc(funcName: MangledName, args: List<Declaration.LocalVarDecl>, type: Type, unique: Boolean = false) =
+    fun createDomainFunc(funcName: SymbolName, args: List<Declaration.LocalVarDecl>, type: Type, unique: Boolean = false) =
         DomainFunc(QualifiedDomainFuncName(this.name, funcName), args, typeVars, type, unique)
 
     fun createNamedDomainAxiom(axiomName: String, exp: Exp): DomainAxiom =

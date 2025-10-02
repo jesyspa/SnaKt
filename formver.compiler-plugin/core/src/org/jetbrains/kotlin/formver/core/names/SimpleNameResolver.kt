@@ -1,6 +1,6 @@
 package org.jetbrains.kotlin.formver.names
 
-import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.SymbolName
 import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.SEPARATOR
 
@@ -17,7 +17,7 @@ import org.jetbrains.kotlin.formver.viper.SEPARATOR
  *  3. Track used names to detect conflicts for future resolutions.
  */
 class SimpleNameResolver : NameResolver {
-    override fun resolve(name: MangledName): String =
+    override fun resolve(name: SymbolName): String =
         listOfNotNull(name.mangledType, name.fullScope, name.mangledBaseName).joinToString(SEPARATOR)
-    override fun register(name: MangledName) {}
+    override fun register(name: SymbolName) {}
 }

@@ -8,11 +8,11 @@ package org.jetbrains.kotlin.formver.core.conversion
 import org.jetbrains.kotlin.formver.core.embeddings.properties.FieldEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.names.SpecialName
-import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.SymbolName
 import org.jetbrains.kotlin.formver.viper.ast.Type
 
 class SpecialField(baseName: String, override val type: TypeEmbedding, override val viperType: Type) : FieldEmbedding {
-    override val name: MangledName = SpecialName(baseName)
+    override val name: SymbolName = SpecialName(baseName)
     override val accessPolicy: AccessPolicy = AccessPolicy.ALWAYS_WRITEABLE
     override val includeInShortDump: Boolean = false
 }

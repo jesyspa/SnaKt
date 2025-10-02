@@ -30,7 +30,7 @@ import org.jetbrains.kotlin.formver.core.linearization.Linearizer
 import org.jetbrains.kotlin.formver.core.linearization.SeqnBuilder
 import org.jetbrains.kotlin.formver.core.linearization.SharedLinearizationState
 import org.jetbrains.kotlin.formver.core.purity.checkValidity
-import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.SymbolName
 import org.jetbrains.kotlin.utils.addIfNotNull
 import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
 import org.jetbrains.kotlin.utils.filterIsInstanceAnd
@@ -53,8 +53,8 @@ interface StmtConversionContext : MethodConversionContext {
     val checkedSafeCallSubject: ExpEmbedding?
     val activeCatchLabels: List<LabelEmbedding>
 
-    fun continueLabelName(targetName: String? = null): MangledName
-    fun breakLabelName(targetName: String? = null): MangledName
+    fun continueLabelName(targetName: String? = null): SymbolName
+    fun breakLabelName(targetName: String? = null): SymbolName
     fun addLoopName(targetName: String)
     fun convert(stmt: FirStatement): ExpEmbedding
 

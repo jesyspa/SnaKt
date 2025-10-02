@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.formver.core.conversion.StmtConversionContext
 import org.jetbrains.kotlin.formver.core.embeddings.expression.ExpEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.expression.UnitLit
 import org.jetbrains.kotlin.formver.core.embeddings.types.FunctionTypeEmbedding
-import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.SymbolName
 
 class FullySpecialKotlinFunctionImpl(
     override val packageName: List<String>,
@@ -23,7 +23,7 @@ class FullySpecialKotlinFunctionImpl(
 }
 
 class FullySpecialKotlinFunctionBuilder {
-    private val byName = mutableMapOf<MangledName, FunctionEmbedding>()
+    private val byName = mutableMapOf<SymbolName, FunctionEmbedding>()
 
     fun withCallableType(
         callableType: FunctionTypeEmbedding,
@@ -72,9 +72,9 @@ class FullySpecialKotlinFunctionBuilder {
         }
     }
 
-    fun complete(): Map<MangledName, FunctionEmbedding> = byName
+    fun complete(): Map<SymbolName, FunctionEmbedding> = byName
 }
 
-fun buildFullySpecialFunctions(functionsBlock: FullySpecialKotlinFunctionBuilder.() -> Unit): Map<MangledName, FunctionEmbedding> =
+fun buildFullySpecialFunctions(functionsBlock: FullySpecialKotlinFunctionBuilder.() -> Unit): Map<SymbolName, FunctionEmbedding> =
     FullySpecialKotlinFunctionBuilder().apply(functionsBlock).complete()
 

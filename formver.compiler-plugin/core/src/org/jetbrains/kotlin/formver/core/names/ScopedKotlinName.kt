@@ -5,7 +5,7 @@
 
 package org.jetbrains.kotlin.formver.core.names
 
-import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.SymbolName
 import org.jetbrains.kotlin.formver.viper.NameExpr
 import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.parseRequiredScope
@@ -14,11 +14,11 @@ import org.jetbrains.kotlin.name.FqName
 /**
  * Name of a Kotlin entity in the original program in a specified scope and optionally distinguished by type.
  */
-data class ScopedKotlinName(val scope: NameScope, val name: KotlinName) : MangledName {
+data class ScopedKotlinName(val scope: NameScope, val name: KotlinName) : SymbolName {
     override val fullScope: NameExpr?
-        get() = scope.fullMangledName?.let {scope.fullMangledName}
+        get() = scope.fullSymbolName?.let {scope.fullSymbolName}
     override val requiredScope: NameExpr?
-        get() = scope.fullMangledName?.let { parseRequiredScope(scope.fullMangledName!!)}
+        get() = scope.fullSymbolName?.let { parseRequiredScope(scope.fullSymbolName!!)}
 
     override val mangledBaseName: NameExpr
         get() = name.mangledBaseName

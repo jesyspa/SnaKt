@@ -34,7 +34,7 @@ val NameScope.allParentScopes: Sequence<NameScope>
         yield(this@allParentScopes)
     }
 
-val NameScope.fullMangledName: NameExpr?
+val NameScope.fullSymbolName: NameExpr?
     get() {
         val scopes = parentScopes.mapNotNull { it.mangledScopeName }.toList()
         return if (scopes.isEmpty()) null else Join(scopes, SEPARATOR)

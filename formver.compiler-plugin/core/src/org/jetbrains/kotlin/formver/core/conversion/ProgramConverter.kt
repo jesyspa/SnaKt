@@ -34,7 +34,7 @@ import org.jetbrains.kotlin.formver.core.isUnique
 import org.jetbrains.kotlin.formver.core.names.*
 import org.jetbrains.kotlin.formver.core.shouldBeInlined
 import org.jetbrains.kotlin.formver.names.SimpleNameResolver
-import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.SymbolName
 import org.jetbrains.kotlin.formver.viper.ast.Program
 import org.jetbrains.kotlin.utils.addIfNotNull
 import org.jetbrains.kotlin.utils.addToStdlib.ifFalse
@@ -54,22 +54,22 @@ class ProgramConverter(
     override val errorCollector: ErrorCollector
 ) :
     ProgramConversionContext {
-    private val methods: MutableMap<MangledName, FunctionEmbedding> =
+    private val methods: MutableMap<SymbolName, FunctionEmbedding> =
         buildMap {
             putAll(SpecialKotlinFunctions.byName)
             putAll(PartiallySpecialKotlinFunctions.generateAllByName())
         }.toMutableMap()
-    private val classes: MutableMap<MangledName, ClassTypeEmbedding> = mutableMapOf()
-    private val properties: MutableMap<MangledName, PropertyEmbedding> = mutableMapOf()
+    private val classes: MutableMap<SymbolName, ClassTypeEmbedding> = mutableMapOf()
+    private val properties: MutableMap<SymbolName, PropertyEmbedding> = mutableMapOf()
     private val fields: MutableSet<FieldEmbedding> = mutableSetOf()
 
     // Cast is valid since we check that values are not null. We specify the type for `filterValues` explicitly to ensure there's no
     // loss of type information earlier.
     @Suppress("UNCHECKED_CAST")
-    val debugExpEmbeddings: Map<MangledName, ExpEmbedding>
+    val debugExpEmbeddings: Map<SymbolName, ExpEmbedding>
         get() = methods
             .mapValues { (it.value as? UserFunctionEmbedding)?.body?.debugExpEmbedding }
-            .filterValues { value: ExpEmbedding? -> value != null } as Map<MangledName, ExpEmbedding>
+            .filterValues { value: ExpEmbedding? -> value != null } as Map<SymbolName, ExpEmbedding>
 
     override val whileIndexProducer = indexProducer()
     override val catchLabelNameProducer = simpleFreshEntityProducer(::CatchLabelName)

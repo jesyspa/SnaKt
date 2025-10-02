@@ -5,14 +5,14 @@
 
 package org.jetbrains.kotlin.formver.viper.ast
 
-import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.SymbolName
 
 /** Utility class to simplify writing domain functions and axioms.
  *
  * This is like a `VariableEmbedding` but already at the Viper level, making expressions
  * that involve variables less cumbersome to write.
  */
-data class Var(val name: MangledName, val type: Type) {
+data class Var(val name: SymbolName, val type: Type) {
     fun use(): Exp.LocalVar = Exp.LocalVar(name, type)
     fun decl(): Declaration.LocalVarDecl = Declaration.LocalVarDecl(name, type)
 }

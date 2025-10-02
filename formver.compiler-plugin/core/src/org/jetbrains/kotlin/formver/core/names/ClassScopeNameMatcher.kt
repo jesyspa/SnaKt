@@ -5,17 +5,17 @@
 
 package org.jetbrains.kotlin.formver.core.names
 
-import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.SymbolName
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 
-internal sealed class NameMatcher(val name: MangledName) {
+internal sealed class NameMatcher(val name: SymbolName) {
     companion object {
-        inline fun matchClassScope(name: MangledName, action: ClassScopeNameMatcher.() -> Nothing): Nothing {
+        inline fun matchClassScope(name: SymbolName, action: ClassScopeNameMatcher.() -> Nothing): Nothing {
             ClassScopeNameMatcher(name).action()
         }
 
-        inline fun matchGlobalScope(name: MangledName, action: GlobalScopeNameMatcher.() -> Nothing): Nothing {
+        inline fun matchGlobalScope(name: SymbolName, action: GlobalScopeNameMatcher.() -> Nothing): Nothing {
             GlobalScopeNameMatcher(name).action()
         }
     }
@@ -48,7 +48,7 @@ internal sealed class NameMatcher(val name: MangledName) {
 
 }
 
-internal class ClassScopeNameMatcher(name: MangledName) : NameMatcher(name) {
+internal class ClassScopeNameMatcher(name: SymbolName) : NameMatcher(name) {
     override val className = (scopedName?.scope as? ClassScope)?.className
 
     inline fun ifNoReceiver(action: NameMatcher.() -> Unit) {
@@ -68,6 +68,6 @@ internal class ClassScopeNameMatcher(name: MangledName) : NameMatcher(name) {
     }
 }
 
-internal class GlobalScopeNameMatcher(name: MangledName) : NameMatcher(name) {
+internal class GlobalScopeNameMatcher(name: SymbolName) : NameMatcher(name) {
     override val className = scopedName?.name as ClassKotlinName?
 }

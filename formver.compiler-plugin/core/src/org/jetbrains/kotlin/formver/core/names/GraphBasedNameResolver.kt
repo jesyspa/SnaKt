@@ -3,7 +3,7 @@ package org.jetbrains.kotlin.formver.core.names
 import debugMangled
 import org.jetbrains.kotlin.formver.viper.Join
 import org.jetbrains.kotlin.formver.viper.Lit
-import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.SymbolName
 import org.jetbrains.kotlin.formver.viper.NameExpr
 import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.SEPARATOR
@@ -15,13 +15,13 @@ data class Candidate(val expr: NameExpr) {
         expr.toParts().forEach { part ->
             when(part) {
                 is NameExpr.Part.Lit -> sb.append(part.value)
-                is NameExpr.Part.SymbolVal -> sb.append(nameResolver.resolve(part.MangledName))
+                is NameExpr.Part.SymbolVal -> sb.append(nameResolver.resolve(part.SymbolName))
             }
         }
         return sb.toString()
     }
 }
-data class NameBuilder(val name: MangledName, val candidates: MutableList<Candidate>) {
+data class NameBuilder(val name: SymbolName, val candidates: MutableList<Candidate>) {
     var currentIndex: Int = 0
     context(nameResolver: GraphBasedNameResolver)
     fun currentCandidate() : String {
@@ -39,12 +39,12 @@ val reservedViper = listOf(
     "package", "unique", "derives"
 )
 class GraphBasedNameResolver: NameResolver {
-    private val builderMap: MutableMap<MangledName, NameBuilder> = mutableMapOf()
-    override fun resolve(name: MangledName): String {
+    private val builderMap: MutableMap<SymbolName, NameBuilder> = mutableMapOf()
+    override fun resolve(name: SymbolName): String {
         if (name !in builderMap) register(name)
         return builderMap[name]?.currentCandidate() ?: name.debugMangled
     }
-    override fun register(name: MangledName) {
+    override fun register(name: SymbolName) {
         val base: NameExpr = name.mangledBaseName
         val requiredScope: NameExpr? = name.requiredScope
         val fullScope: NameExpr? = name.fullScope
@@ -52,14 +52,14 @@ class GraphBasedNameResolver: NameResolver {
 
         base.toParts().forEach { it ->
             it.let { it ->
-                val MangledName = it as? MangledName
-                MangledName?.let {register(it)}
+                val SymbolName = it as? SymbolName
+                SymbolName?.let {register(it)}
             }
         }
         requiredScope?.toParts()?.forEach { it ->
             it.let { it ->
-                val MangledName = it as? MangledName
-                MangledName?.let {register(it)}
+                val SymbolName = it as? SymbolName
+                SymbolName?.let {register(it)}
             }
         }
         fun joinExprs(vararg segs: NameExpr?): NameExpr {
@@ -84,17 +84,17 @@ class GraphBasedNameResolver: NameResolver {
         }
         builderMap[name] = NameBuilder(name, candidates)
     }
-    fun chooseNamesForFix(): Set<MangledName> {
-        val buckets = mutableMapOf<String, MutableList<MangledName>>()
+    fun chooseNamesForFix(): Set<SymbolName> {
+        val buckets = mutableMapOf<String, MutableList<SymbolName>>()
         for ((mn, nb) in builderMap) {
             val s = nb.currentCandidate()
             buckets.getOrPut(s) { mutableListOf() }.add(mn)
         }
 
-        val collisions: List<MangledName> =
+        val collisions: List<SymbolName> =
             buckets.values.filter { it.size > 1 }.flatten()
 
-        val reservedHits: List<MangledName> =
+        val reservedHits: List<SymbolName> =
             buckets.filterKeys { it in reservedViper }
                 .values.flatten()
         reservedHits.forEach { builderMap[it]?.currentCandidate()}
