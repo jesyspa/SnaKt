@@ -1,5 +1,5 @@
 /captured.kt:(155,165): info: Generated Viper text for captureArg:
-method root_captureArg(g: Ref) returns (ret_0: Ref)
+method captureArg(g: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   var ret_1: Ref
@@ -21,7 +21,7 @@ method root_captureArg(g: Ref) returns (ret_0: Ref)
 }
 
 /captured.kt:(225,235): info: Generated Viper text for captureVar:
-method root_captureVar() returns (ret_0: Ref)
+method captureVar() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   var x: Ref
@@ -42,7 +42,7 @@ method root_captureVar() returns (ret_0: Ref)
 }
 
 /captured.kt:(295,311): info: Generated Viper text for captureAndShadow:
-method root_captureAndShadow(p_x: Ref) returns (ret_0: Ref)
+method captureAndShadow(p_x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   var ret_1: Ref
@@ -66,7 +66,7 @@ method root_captureAndShadow(p_x: Ref) returns (ret_0: Ref)
 }
 
 /captured.kt:(513,528): info: Generated Viper text for captureVarClash:
-method root_captureVarClash(p_x: Ref) returns (ret_0: Ref)
+method captureVarClash(p_x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   var ret_1: Ref
@@ -90,7 +90,7 @@ method root_captureVarClash(p_x: Ref) returns (ret_0: Ref)
 }
 
 /captured.kt:(585,606): info: Generated Viper text for captureAndShadowClash:
-method root_captureAndShadowClash(p_x: Ref) returns (ret_0: Ref)
+method captureAndShadowClash(p_x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   var ret_1: Ref
@@ -118,7 +118,7 @@ method root_captureAndShadowClash(p_x: Ref) returns (ret_0: Ref)
 }
 
 /captured.kt:(715,736): info: Generated Viper text for nestedLambdaShadowing:
-method root_nestedLambdaShadowing(p_x: Ref) returns (ret_0: Ref)
+method nestedLambdaShadowing(p_x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   var ret_1: Ref
@@ -162,7 +162,7 @@ method root_nestedLambdaShadowing(p_x: Ref) returns (ret_0: Ref)
 }
 
 /captured.kt:(1008,1024): info: Generated Viper text for callDoubleInvoke:
-method root_callDoubleInvoke(p_x: Ref) returns (ret_0: Ref)
+method callDoubleInvoke(p_x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   var ret_1: Ref

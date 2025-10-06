@@ -6,7 +6,6 @@
 package org.jetbrains.kotlin.formver.viper.ast
 
 import org.jetbrains.kotlin.formver.viper.IntoSilver
-import org.jetbrains.kotlin.formver.viper.SymbolName
 import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.mangled
 import org.jetbrains.kotlin.formver.viper.toScalaMap

@@ -14,7 +14,7 @@ import org.jetbrains.kotlin.formver.core.embeddings.expression.VariableEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.expression.withPosition
 import org.jetbrains.kotlin.formver.core.names.BreakLabelName
 import org.jetbrains.kotlin.formver.core.names.ContinueLabelName
-import org.jetbrains.kotlin.formver.viper.SymbolName
+import org.jetbrains.kotlin.formver.viper.SymbolicName
 
 /**
  * Tracks the results of converting a block of statements.
@@ -54,12 +54,12 @@ data class StmtConverter(
             whileIndex
         }
 
-    override fun continueLabelName(targetName: String?): SymbolName {
+    override fun continueLabelName(targetName: String?): SymbolicName {
         val index = resolveWhileIndex(targetName)
         return ContinueLabelName(index)
     }
 
-    override fun breakLabelName(targetName: String?): SymbolName {
+    override fun breakLabelName(targetName: String?): SymbolicName {
         val index = resolveWhileIndex(targetName)
         return BreakLabelName(index)
     }

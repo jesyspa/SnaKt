@@ -1,5 +1,5 @@
 /arithmetic.kt:(23,31): info: Generated Viper text for addition:
-method root_addition(x: Ref) returns (ret_0: Ref)
+method addition(x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var y: Ref
@@ -10,7 +10,7 @@ method root_addition(x: Ref) returns (ret_0: Ref)
 }
 
 /arithmetic.kt:(66,77): info: Generated Viper text for subtraction:
-method root_subtraction(x: Ref) returns (ret_0: Ref)
+method subtraction(x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var y: Ref
@@ -21,7 +21,7 @@ method root_subtraction(x: Ref) returns (ret_0: Ref)
 }
 
 /arithmetic.kt:(112,126): info: Generated Viper text for multiplication:
-method root_multiplication(x: Ref) returns (ret_0: Ref)
+method multiplication(x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var y: Ref
@@ -32,7 +32,7 @@ method root_multiplication(x: Ref) returns (ret_0: Ref)
 }
 
 /arithmetic.kt:(161,169): info: Generated Viper text for division:
-method root_division(x: Ref) returns (ret_0: Ref)
+method division(x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var y: Ref

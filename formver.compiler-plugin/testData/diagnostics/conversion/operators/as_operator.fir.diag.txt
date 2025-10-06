@@ -1,61 +1,61 @@
 /as_operator.kt:(57,63): info: Generated Viper text for testAs:
-method root_testAs(foo: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_c_root_Bar())
-  ensures acc(Bar_shared(ret_0), wildcard)
+method testAs(foo: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_c_Bar())
+  ensures acc(c_Bar_shared(ret_0), wildcard)
 {
-  inhale df_isSubtype(df_typeOf(foo), df_c_root_Foo())
-  inhale acc(Foo_shared(foo), wildcard)
-  inhale df_isSubtype(df_typeOf(foo), df_c_root_Bar())
-  inhale acc(Bar_shared(foo), wildcard)
+  inhale df_isSubtype(df_typeOf(foo), df_c_Foo())
+  inhale acc(c_Foo_shared(foo), wildcard)
+  inhale df_isSubtype(df_typeOf(foo), df_c_Bar())
+  inhale acc(c_Bar_shared(foo), wildcard)
   ret_0 := foo
   goto lbl_0
   label lbl_0
 }
 
 /as_operator.kt:(97,111): info: Generated Viper text for testNullableAs:
-method root_testNullableAs(foo: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_nullable(df_c_root_Bar()))
-  ensures ret_0 != df_nullValue() ==> acc(Bar_shared(ret_0), wildcard)
+method testNullableAs(foo: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_nullable(df_c_Bar()))
+  ensures ret_0 != df_nullValue() ==> acc(c_Bar_shared(ret_0), wildcard)
 {
-  inhale df_isSubtype(df_typeOf(foo), df_nullable(df_c_root_Foo()))
-  inhale foo != df_nullValue() ==> acc(Foo_shared(foo), wildcard)
-  inhale df_isSubtype(df_typeOf(foo), df_nullable(df_c_root_Bar()))
-  inhale foo != df_nullValue() ==> acc(Bar_shared(foo), wildcard)
+  inhale df_isSubtype(df_typeOf(foo), df_nullable(df_c_Foo()))
+  inhale foo != df_nullValue() ==> acc(c_Foo_shared(foo), wildcard)
+  inhale df_isSubtype(df_typeOf(foo), df_nullable(df_c_Bar()))
+  inhale foo != df_nullValue() ==> acc(c_Bar_shared(foo), wildcard)
   ret_0 := foo
   goto lbl_0
   label lbl_0
 }
 
 /as_operator.kt:(148,158): info: Generated Viper text for testSafeAs:
-method root_testSafeAs(foo: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_nullable(df_c_root_Bar()))
-  ensures ret_0 != df_nullValue() ==> acc(Bar_shared(ret_0), wildcard)
+method testSafeAs(foo: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_nullable(df_c_Bar()))
+  ensures ret_0 != df_nullValue() ==> acc(c_Bar_shared(ret_0), wildcard)
 {
-  inhale df_isSubtype(df_typeOf(foo), df_c_root_Foo())
-  inhale acc(Foo_shared(foo), wildcard)
-  if (df_isSubtype(df_typeOf(foo), df_c_root_Bar())) {
+  inhale df_isSubtype(df_typeOf(foo), df_c_Foo())
+  inhale acc(c_Foo_shared(foo), wildcard)
+  if (df_isSubtype(df_typeOf(foo), df_c_Bar())) {
     ret_0 := foo
   } else {
     ret_0 := df_nullValue()}
-  inhale df_isSubtype(df_typeOf(ret_0), df_nullable(df_c_root_Bar()))
-  inhale ret_0 != df_nullValue() ==> acc(Bar_shared(ret_0), wildcard)
+  inhale df_isSubtype(df_typeOf(ret_0), df_nullable(df_c_Bar()))
+  inhale ret_0 != df_nullValue() ==> acc(c_Bar_shared(ret_0), wildcard)
   goto lbl_0
   label lbl_0
 }
 
 /as_operator.kt:(194,212): info: Generated Viper text for testNullableSafeAs:
-method root_testNullableSafeAs(foo: Ref) returns (ret_0: Ref)
-  ensures df_isSubtype(df_typeOf(ret_0), df_nullable(df_c_root_Bar()))
-  ensures ret_0 != df_nullValue() ==> acc(Bar_shared(ret_0), wildcard)
+method testNullableSafeAs(foo: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_nullable(df_c_Bar()))
+  ensures ret_0 != df_nullValue() ==> acc(c_Bar_shared(ret_0), wildcard)
 {
-  inhale df_isSubtype(df_typeOf(foo), df_nullable(df_c_root_Foo()))
-  inhale foo != df_nullValue() ==> acc(Foo_shared(foo), wildcard)
-  if (df_isSubtype(df_typeOf(foo), df_c_root_Bar())) {
+  inhale df_isSubtype(df_typeOf(foo), df_nullable(df_c_Foo()))
+  inhale foo != df_nullValue() ==> acc(c_Foo_shared(foo), wildcard)
+  if (df_isSubtype(df_typeOf(foo), df_c_Bar())) {
     ret_0 := foo
   } else {
     ret_0 := df_nullValue()}
-  inhale df_isSubtype(df_typeOf(ret_0), df_nullable(df_c_root_Bar()))
-  inhale ret_0 != df_nullValue() ==> acc(Bar_shared(ret_0), wildcard)
+  inhale df_isSubtype(df_typeOf(ret_0), df_nullable(df_c_Bar()))
+  inhale ret_0 != df_nullValue() ==> acc(c_Bar_shared(ret_0), wildcard)
   goto lbl_0
   label lbl_0
 }

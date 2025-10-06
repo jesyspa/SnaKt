@@ -1,5 +1,5 @@
 /string_iterations.kt:(71,83): info: Generated Viper text for firstAtLeast:
-method root_firstAtLeast(this$extension: Ref, c: Ref) returns (ret_0: Ref)
+method firstAtLeast(this$extension: Ref, c: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
   ensures 0 <= df_intFromRef(ret_0) &&
     df_intFromRef(ret_0) <= |df_stringFromRef(this$extension)|
@@ -47,7 +47,7 @@ method root_firstAtLeast(this$extension: Ref, c: Ref) returns (ret_0: Ref)
 }
 
 /string_iterations.kt:(606,614): info: Generated Viper text for lastLess:
-method root_lastLess(this$extension: Ref, c: Ref) returns (ret_0: Ref)
+method lastLess(this$extension: Ref, c: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
   ensures -1 <= df_intFromRef(ret_0) &&
     df_intFromRef(ret_0) <= |df_stringFromRef(this$extension)| - 1

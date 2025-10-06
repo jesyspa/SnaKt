@@ -1,5 +1,5 @@
 /return_break_continue.kt:(23,33): info: Generated Viper text for testReturn:
-method root_testReturn() returns (ret_0: Ref)
+method testReturn() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   ret_0 := df_intToRef(0)
@@ -10,7 +10,7 @@ method root_testReturn() returns (ret_0: Ref)
 }
 
 /return_break_continue.kt:(76,90): info: Generated Viper text for returnFromLoop:
-method root_returnFromLoop() returns (ret_0: Ref)
+method returnFromLoop() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   var anon_0: Ref
@@ -28,7 +28,7 @@ method root_returnFromLoop() returns (ret_0: Ref)
 }
 
 /return_break_continue.kt:(162,172): info: Generated Viper text for whileBreak:
-method root_whileBreak(b: Ref) returns (ret_0: Ref)
+method whileBreak(b: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   var i: Ref
@@ -53,7 +53,7 @@ method root_whileBreak(b: Ref) returns (ret_0: Ref)
 }
 
 /return_break_continue.kt:(276,289): info: Generated Viper text for whileContinue:
-method root_whileContinue() returns (ret_0: Ref)
+method whileContinue() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var b: Ref
@@ -74,7 +74,7 @@ method root_whileContinue() returns (ret_0: Ref)
 }
 
 /return_break_continue.kt:(375,386): info: Generated Viper text for whileNested:
-method root_whileNested(b: Ref) returns (ret_0: Ref)
+method whileNested(b: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var anon_0: Ref
@@ -114,7 +114,7 @@ method root_whileNested(b: Ref) returns (ret_0: Ref)
 }
 
 /return_break_continue.kt:(556,569): info: Generated Viper text for labelledBreak:
-method root_labelledBreak(b: Ref) returns (ret_0: Ref)
+method labelledBreak(b: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var anon_0: Ref
@@ -146,7 +146,7 @@ method root_labelledBreak(b: Ref) returns (ret_0: Ref)
 }
 
 /return_break_continue.kt:(754,770): info: Generated Viper text for labelledContinue:
-method root_labelledContinue(b: Ref) returns (ret_0: Ref)
+method labelledContinue(b: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var anon_0: Ref
@@ -178,7 +178,7 @@ method root_labelledContinue(b: Ref) returns (ret_0: Ref)
 }
 
 /return_break_continue.kt:(970,992): info: Generated Viper text for labelledWhileShadowing:
-method root_labelledWhileShadowing(b: Ref) returns (ret_0: Ref)
+method labelledWhileShadowing(b: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var anon_0: Ref

@@ -1,5 +1,5 @@
 /z_function.kt:(187,198): info: Generated Viper text for zFuncHelper:
-method root_zFuncHelper(s: Ref, res: Ref, i: Ref, checkedLeft: Ref, checkedRight: Ref)
+method zFuncHelper(s: Ref, res: Ref, i: Ref, checkedLeft: Ref, checkedRight: Ref)
   returns (ret_0: Ref)
   requires 1 <= df_intFromRef(i) &&
     df_intFromRef(i) < |df_stringFromRef(s)|
@@ -66,7 +66,7 @@ method String_plus(this$dispatch: Ref, other: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_stringType())
 
 
-method root_zFuncHelper(s: Ref, p_res: Ref, p_i: Ref, p_checkedLeft: Ref, p_checkedRight: Ref)
+method zFuncHelper(s: Ref, p_res: Ref, p_i: Ref, p_checkedLeft: Ref, p_checkedRight: Ref)
   returns (ret: Ref)
   requires 1 <= df_intFromRef(p_i) &&
     df_intFromRef(p_i) < |df_stringFromRef(s)|
@@ -104,7 +104,7 @@ method root_zFuncHelper(s: Ref, p_res: Ref, p_i: Ref, p_checkedLeft: Ref, p_chec
       df_stringFromRef(s)[anon$builtin_28])
 
 
-method root_zFunction(this$extension: Ref) returns (ret_0: Ref)
+method zFunction(this$extension: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_stringType())
   ensures |df_stringFromRef(ret_0)| == |df_stringFromRef(this$extension)|
   ensures (forall anon$builtin_23: Int ::0 <= anon$builtin_23 &&
@@ -175,7 +175,7 @@ method root_zFunction(this$extension: Ref) returns (ret_0: Ref)
   if (df_boolFromRef(anon_0)) {
     var j: Ref
     var anon_1: Ref
-    j := root_zFuncHelper(this$extension, l0_res, l0_i, l0_checkedLeft, l0_checkedRight)
+    j := zFuncHelper(this$extension, l0_res, l0_i, l0_checkedLeft, l0_checkedRight)
     label lbl_continue_1
       invariant df_isSubtype(df_typeOf(j), df_intType())
       invariant df_isSubtype(df_typeOf(l0_i), df_intType())
@@ -278,7 +278,7 @@ method String_plus(this$dispatch: Ref, other: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_stringType())
 
 
-method root_zFunctionNaive(this$extension: Ref) returns (ret_0: Ref)
+method zFunctionNaive(this$extension: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_stringType())
   ensures |df_stringFromRef(ret_0)| == |df_stringFromRef(this$extension)|
   ensures (forall anon$builtin_9: Int ::0 <= anon$builtin_9 &&

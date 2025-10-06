@@ -1,43 +1,43 @@
 /function_call.kt:(118,130): info: Generated Viper text for functionCall:
-method root_f(x: Ref) returns (ret: Ref)
+method f(x: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_intType())
 
 
-method root_functionCall() returns (ret_0: Ref)
+method functionCall() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var anon_0: Ref
   var anon_1: Ref
-  anon_0 := root_f(df_intToRef(0))
-  anon_1 := root_f(df_intToRef(0))
+  anon_0 := f(df_intToRef(0))
+  anon_1 := f(df_intToRef(0))
   label lbl_0
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /function_call.kt:(160,178): info: Generated Viper text for functionCallNested:
-method root_f(x: Ref) returns (ret: Ref)
+method f(x: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_intType())
 
 
-method root_functionCallNested() returns (ret_0: Ref)
+method functionCallNested() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var anon_0: Ref
   var anon_1: Ref
   var anon_2: Ref
-  anon_2 := root_f(df_intToRef(0))
-  anon_1 := root_f(anon_2)
-  anon_0 := root_f(anon_1)
+  anon_2 := f(df_intToRef(0))
+  anon_1 := f(anon_2)
+  anon_0 := f(anon_1)
   label lbl_0
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /function_call.kt:(205,215): info: Generated Viper text for callItself:
-method root_callItself() returns (ret_0: Ref)
+method callItself() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var anon_0: Ref
-  anon_0 := root_callItself()
+  anon_0 := callItself()
   label lbl_0
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }

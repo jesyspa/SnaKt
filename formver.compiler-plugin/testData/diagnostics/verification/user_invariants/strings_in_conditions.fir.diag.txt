@@ -1,5 +1,5 @@
 /strings_in_conditions.kt:(50,69): info: Generated Viper text for firstNotSortedIndex:
-method root_firstNotSortedIndex(s: Ref) returns (ret_0: Ref)
+method firstNotSortedIndex(s: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
   ensures 0 <= df_intFromRef(ret_0) &&
     df_intFromRef(ret_0) <= |df_stringFromRef(s)|
@@ -46,7 +46,7 @@ method root_firstNotSortedIndex(s: Ref) returns (ret_0: Ref)
 }
 
 /strings_in_conditions.kt:(621,636): info: Generated Viper text for returnNewString:
-method root_returnNewString() returns (ret_0: Ref)
+method returnNewString() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_stringType())
 {
   ret_0 := df_stringToRef(Seq(52, 50))
@@ -59,7 +59,7 @@ method String_plus(this$dispatch: Ref, other: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_stringType())
 
 
-method root_addCharacterTimes(s: Ref, c: Ref, n: Ref) returns (ret_0: Ref)
+method addCharacterTimes(s: Ref, c: Ref, n: Ref) returns (ret_0: Ref)
   requires df_intFromRef(n) >= 0
   ensures df_isSubtype(df_typeOf(ret_0), df_stringType())
   ensures |df_stringFromRef(ret_0)| ==

@@ -1,26 +1,26 @@
 /multiple_interfaces.kt:(162,173): info: Generated Viper text for testDiamond:
-method A_field(this$dispatch: Ref) returns (ret: Ref)
-
-
-method C_field(this$dispatch: Ref) returns (ret: Ref)
-
-
-method c_D_field(this$dispatch: Ref) returns (ret: Ref)
-
-
 method con_c_D() returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_root_D())
+  ensures df_isSubtype(df_typeOf(ret), df_c_D())
   ensures acc(c_D_shared(ret), wildcard)
   ensures acc(c_D_unique(ret), write)
 
 
-method root_testDiamond() returns (ret_0: Ref)
+method pg_c_A_field(this$dispatch: Ref) returns (ret: Ref)
+
+
+method pg_c_C_field(this$dispatch: Ref) returns (ret: Ref)
+
+
+method pg_c_D_field(this$dispatch: Ref) returns (ret: Ref)
+
+
+method testDiamond() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   var anon_0: Ref
   var anon_1: Ref
   anon_1 := con_c_D()
-  anon_0 := c_D_field(anon_1)
+  anon_0 := pg_c_D_field(anon_1)
   ret_0 := anon_0
   inhale df_isSubtype(df_typeOf(ret_0), df_intType())
   goto lbl_0
@@ -28,46 +28,46 @@ method root_testDiamond() returns (ret_0: Ref)
 }
 
 /multiple_interfaces.kt:(405,415): info: Generated Viper text for testVarVal:
-method E_field(this$dispatch: Ref) returns (ret: Ref)
-
-
 method con_c_G() returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_root_G())
+  ensures df_isSubtype(df_typeOf(ret), df_c_G())
   ensures acc(c_G_shared(ret), wildcard)
   ensures acc(c_G_unique(ret), write)
 
 
 method con_c_I() returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_root_I())
+  ensures df_isSubtype(df_typeOf(ret), df_c_I())
   ensures acc(c_I_shared(ret), wildcard)
   ensures acc(c_I_unique(ret), write)
 
 
-method pg_F_field(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_E_field(this$dispatch: Ref) returns (ret: Ref)
 
 
-method pg_H_field(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_F_field(this$dispatch: Ref) returns (ret: Ref)
 
 
 method pg_c_G_field(this$dispatch: Ref) returns (ret: Ref)
 
 
+method pg_c_H_field(this$dispatch: Ref) returns (ret: Ref)
+
+
 method pg_c_I_field(this$dispatch: Ref) returns (ret: Ref)
 
 
-method ps_F_field(this$dispatch: Ref, anon_0: Ref) returns (ret: Ref)
-
-
-method ps_H_field(this$dispatch: Ref, anon_0: Ref) returns (ret: Ref)
+method ps_c_F_field(this$dispatch: Ref, anon_0: Ref) returns (ret: Ref)
 
 
 method ps_c_G_field(this$dispatch: Ref, anon_0: Ref) returns (ret: Ref)
 
 
+method ps_c_H_field(this$dispatch: Ref, anon_0: Ref) returns (ret: Ref)
+
+
 method ps_c_I_field(this$dispatch: Ref, anon_0: Ref) returns (ret: Ref)
 
 
-method root_testVarVal() returns (ret_0: Ref)
+method testVarVal() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var g: Ref

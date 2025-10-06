@@ -1,5 +1,5 @@
 /simple_postcondition.kt:(64,75): info: Generated Viper text for testGreater:
-method root_testGreater(init: Ref) returns (ret_0: Ref)
+method testGreater(init: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
   ensures df_intFromRef(ret_0) > df_intFromRef(init)
 {
@@ -10,7 +10,7 @@ method root_testGreater(init: Ref) returns (ret_0: Ref)
 }
 
 /simple_postcondition.kt:(201,211): info: Generated Viper text for testString:
-method root_testString() returns (ret_0: Ref)
+method testString() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_charType())
   ensures df_charFromRef(ret_0) == 97
 {
@@ -20,7 +20,7 @@ method root_testString() returns (ret_0: Ref)
 }
 
 /simple_postcondition.kt:(323,343): info: Generated Viper text for testWithPrecondition:
-method root_testWithPrecondition(int: Ref) returns (ret_0: Ref)
+method testWithPrecondition(int: Ref) returns (ret_0: Ref)
   requires df_intFromRef(int) > 10
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
   ensures df_intFromRef(ret_0) > 0
@@ -32,7 +32,7 @@ method root_testWithPrecondition(int: Ref) returns (ret_0: Ref)
 }
 
 /simple_postcondition.kt:(492,507): info: Generated Viper text for returnGreater13:
-method root_returnGreater13() returns (ret_0: Ref)
+method returnGreater13() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
   ensures df_intFromRef(ret_0) > 13
 {
@@ -42,22 +42,22 @@ method root_returnGreater13() returns (ret_0: Ref)
 }
 
 /simple_postcondition.kt:(600,637): info: Generated Viper text for testPostconditionIsUsedByPrecondition:
-method root_returnGreater13() returns (ret: Ref)
+method returnGreater13() returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_intType())
   ensures df_intFromRef(ret) > 13
 
 
-method root_testPostconditionIsUsedByPrecondition() returns (ret_0: Ref)
+method testPostconditionIsUsedByPrecondition() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   var anon_0: Ref
-  anon_0 := root_returnGreater13()
-  ret_0 := root_testWithPrecondition(anon_0)
+  anon_0 := returnGreater13()
+  ret_0 := testWithPrecondition(anon_0)
   goto lbl_0
   label lbl_0
 }
 
-method root_testWithPrecondition(int: Ref) returns (ret: Ref)
+method testWithPrecondition(int: Ref) returns (ret: Ref)
   requires df_intFromRef(int) > 10
   ensures df_isSubtype(df_typeOf(ret), df_intType())
   ensures df_intFromRef(ret) > 0

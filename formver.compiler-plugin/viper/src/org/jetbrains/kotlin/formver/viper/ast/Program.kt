@@ -103,9 +103,7 @@ private fun Program.registerSeqnNames(seqn: Stmt.Seqn) {
             is Stmt.LocalVarAssign -> nameResolver.register(stmt.lhs.name)
             is Stmt.Fold -> nameResolver.register(stmt.acc.predicateName)
             is Stmt.Unfold -> nameResolver.register(stmt.acc.predicateName)
-            else -> {
-                val x = 1
-            }
+            else -> {}
         }
     }
 }

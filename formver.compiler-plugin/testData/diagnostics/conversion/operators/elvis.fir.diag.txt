@@ -1,5 +1,5 @@
 /elvis.kt:(121,134): info: Generated Viper text for elvisOperator:
-method root_elvisOperator(x: Ref) returns (ret_0: Ref)
+method elvisOperator(x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   inhale df_isSubtype(df_typeOf(x), df_nullable(df_intType()))
@@ -12,30 +12,30 @@ method root_elvisOperator(x: Ref) returns (ret_0: Ref)
 }
 
 /elvis.kt:(176,196): info: Generated Viper text for elvisOperatorComplex:
-method root_elvisOperator(x: Ref) returns (ret: Ref)
+method elvisOperator(x: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_intType())
 
 
-method root_elvisOperatorComplex(x: Ref) returns (ret_0: Ref)
+method elvisOperatorComplex(x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   var anon_0: Ref
   inhale df_isSubtype(df_typeOf(x), df_nullable(df_intType()))
-  anon_0 := root_id(x)
+  anon_0 := id(x)
   if (anon_0 != df_nullValue()) {
     ret_0 := anon_0
   } else {
-    ret_0 := root_elvisOperator(df_intToRef(2))}
+    ret_0 := elvisOperator(df_intToRef(2))}
   goto lbl_0
   label lbl_0
 }
 
-method root_id(x: Ref) returns (ret: Ref)
+method id(x: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_nullable(df_intType()))
 
 
 /elvis.kt:(257,276): info: Generated Viper text for elvisOperatorReturn:
-method root_elvisOperatorReturn(x: Ref) returns (ret_0: Ref)
+method elvisOperatorReturn(x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   var y: Ref

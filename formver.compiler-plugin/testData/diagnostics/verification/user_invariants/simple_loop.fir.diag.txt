@@ -1,7 +1,7 @@
 /simple_loop.kt:(239,243): info: Generated Viper text for test:
-field root_size: Ref
+field size: Ref
 
-method root_test(n: Ref) returns (ret_0: Ref)
+method test(n: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var it: Ref
@@ -54,7 +54,7 @@ method root_test(n: Ref) returns (ret_0: Ref)
 }
 
 /simple_loop.kt:(652,666): info: Generated Viper text for loopInsideLoop:
-method root_loopInsideLoop() returns (ret_0: Ref)
+method loopInsideLoop() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var i: Ref
@@ -94,9 +94,9 @@ method root_loopInsideLoop() returns (ret_0: Ref)
 }
 
 /simple_loop.kt:(974,983): info: Generated Viper text for withBreak:
-field root_size: Ref
+field size: Ref
 
-method root_withBreak() returns (ret_0: Ref)
+method withBreak() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var i: Ref
@@ -121,40 +121,40 @@ method root_withBreak() returns (ret_0: Ref)
 }
 
 /simple_loop.kt:(1230,1256): info: Generated Viper text for test_boolean_postcondition:
-field root_e: Ref
+field bf_e: Ref
 
-field root_size: Ref
+field size: Ref
 
-method WithVar_Int(e: Ref) returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_root_WithVar())
-  ensures acc(WithVar_shared(ret), wildcard)
-  ensures acc(WithVar_unique(ret), write)
+method c_WithVar_Int(e: Ref) returns (ret: Ref)
+  ensures df_isSubtype(df_typeOf(ret), df_c_WithVar())
+  ensures acc(c_WithVar_shared(ret), wildcard)
+  ensures acc(c_WithVar_unique(ret), write)
 
 
-method WithVar_doSomething(this$dispatch: Ref) returns (ret: Ref)
+method c_WithVar_doSomething(this$dispatch: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_boolType())
 
 
-method root_test_boolean_postcondition() returns (ret_0: Ref)
+method test_boolean_postcondition() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var withVar: Ref
   var boolean: Ref
   var anon_0: Ref
-  withVar := WithVar_Int(df_intToRef(42))
+  withVar := c_WithVar_Int(df_intToRef(42))
   boolean := df_boolToRef(true)
   label lbl_continue_0
-    invariant acc(WithVar_shared(withVar), wildcard)
-    invariant df_isSubtype(df_typeOf(withVar), df_c_root_WithVar())
+    invariant acc(c_WithVar_shared(withVar), wildcard)
+    invariant df_isSubtype(df_typeOf(withVar), df_c_WithVar())
     invariant df_isSubtype(df_typeOf(boolean), df_boolType())
   anon_0 := boolean
   if (df_boolFromRef(anon_0)) {
-    boolean := WithVar_doSomething(withVar)
+    boolean := c_WithVar_doSomething(withVar)
     goto lbl_continue_0
   }
   label lbl_break_0
-  assert acc(WithVar_shared(withVar), wildcard)
-  assert df_isSubtype(df_typeOf(withVar), df_c_root_WithVar())
+  assert acc(c_WithVar_shared(withVar), wildcard)
+  assert df_isSubtype(df_typeOf(withVar), df_c_WithVar())
   assert df_isSubtype(df_typeOf(boolean), df_boolType())
   assert !df_boolFromRef(boolean)
   label lbl_ret_0

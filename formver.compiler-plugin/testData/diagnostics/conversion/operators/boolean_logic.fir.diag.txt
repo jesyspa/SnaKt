@@ -1,5 +1,5 @@
 /boolean_logic.kt:(23,31): info: Generated Viper text for negation:
-method root_negation(x: Ref) returns (ret_0: Ref)
+method negation(x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
 {
   inhale df_isSubtype(df_typeOf(x), df_boolType())
@@ -9,7 +9,7 @@ method root_negation(x: Ref) returns (ret_0: Ref)
 }
 
 /boolean_logic.kt:(75,86): info: Generated Viper text for conjunction:
-method root_conjunction(x: Ref, y: Ref) returns (ret_0: Ref)
+method conjunction(x: Ref, y: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
 {
   inhale df_isSubtype(df_typeOf(x), df_boolType())
@@ -23,27 +23,27 @@ method root_conjunction(x: Ref, y: Ref) returns (ret_0: Ref)
 }
 
 /boolean_logic.kt:(146,168): info: Generated Viper text for conjunctionSideEffects:
-method root_conjunctionSideEffects(x: Ref, y: Ref) returns (ret_0: Ref)
+method conjunctionSideEffects(x: Ref, y: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
 {
   var anon_0: Ref
   inhale df_isSubtype(df_typeOf(x), df_boolType())
   inhale df_isSubtype(df_typeOf(y), df_boolType())
-  anon_0 := root_negation(x)
+  anon_0 := negation(x)
   if (df_boolFromRef(anon_0)) {
-    ret_0 := root_negation(y)
+    ret_0 := negation(y)
   } else {
     ret_0 := df_boolToRef(false)}
   goto lbl_0
   label lbl_0
 }
 
-method root_negation(x: Ref) returns (ret: Ref)
+method negation(x: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_boolType())
 
 
 /boolean_logic.kt:(341,352): info: Generated Viper text for disjunction:
-method root_disjunction(x: Ref, y: Ref) returns (ret_0: Ref)
+method disjunction(x: Ref, y: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
 {
   inhale df_isSubtype(df_typeOf(x), df_boolType())

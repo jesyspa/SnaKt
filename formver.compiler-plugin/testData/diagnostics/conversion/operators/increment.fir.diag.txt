@@ -1,5 +1,5 @@
 /increment.kt:(23,34): info: Generated Viper text for test_simple:
-method root_test_simple() returns (ret_0: Ref)
+method test_simple() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var x: Ref
@@ -15,7 +15,7 @@ method root_test_simple() returns (ret_0: Ref)
 }
 
 /increment.kt:(121,140): info: Generated Viper text for test_postincvrement:
-method root_test_postincvrement() returns (ret_0: Ref)
+method test_postincvrement() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var x: Ref

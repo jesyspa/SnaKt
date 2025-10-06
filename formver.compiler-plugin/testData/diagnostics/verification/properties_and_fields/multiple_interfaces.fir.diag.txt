@@ -1,16 +1,16 @@
 /multiple_interfaces.kt:(799,804): info: Generated Viper text for take1:
-method InterfaceWithImplementation1_field(this$dispatch: Ref)
+method pg_c_InterfaceWithImplementation1_field(this$dispatch: Ref)
   returns (ret: Ref)
 
 
-method root_take1(obj: Ref) returns (ret_0: Ref)
+method take1(obj: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var anon_0: Ref
   var anon_1: Ref
-  inhale df_isSubtype(df_typeOf(obj), df_c_root_InterfaceWithImplementation1())
-  inhale acc(InterfaceWithImplementation1_shared(obj), wildcard)
-  anon_1 := InterfaceWithImplementation1_field(obj)
+  inhale df_isSubtype(df_typeOf(obj), df_c_InterfaceWithImplementation1())
+  inhale acc(c_InterfaceWithImplementation1_shared(obj), wildcard)
+  anon_1 := pg_c_InterfaceWithImplementation1_field(obj)
   anon_0 := anon_1
   inhale df_isSubtype(df_typeOf(anon_0), df_intType())
   label lbl_0
@@ -18,18 +18,18 @@ method root_take1(obj: Ref) returns (ret_0: Ref)
 }
 
 /multiple_interfaces.kt:(863,868): info: Generated Viper text for take2:
-method InterfaceWithoutImplementation2_field(this$dispatch: Ref)
+method pg_c_InterfaceWithoutImplementation2_field(this$dispatch: Ref)
   returns (ret: Ref)
 
 
-method root_take2(obj: Ref) returns (ret_0: Ref)
+method take2(obj: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var anon_0: Ref
   var anon_1: Ref
-  inhale df_isSubtype(df_typeOf(obj), df_c_root_InterfaceWithoutImplementation2())
-  inhale acc(InterfaceWithoutImplementation2_shared(obj), wildcard)
-  anon_1 := InterfaceWithoutImplementation2_field(obj)
+  inhale df_isSubtype(df_typeOf(obj), df_c_InterfaceWithoutImplementation2())
+  inhale acc(c_InterfaceWithoutImplementation2_shared(obj), wildcard)
+  anon_1 := pg_c_InterfaceWithoutImplementation2_field(obj)
   anon_0 := anon_1
   inhale df_isSubtype(df_typeOf(anon_0), df_intType())
   label lbl_0
@@ -37,30 +37,30 @@ method root_take2(obj: Ref) returns (ret_0: Ref)
 }
 
 /multiple_interfaces.kt:(930,935): info: Generated Viper text for take3:
-field root_field: Ref
+field bf_field: Ref
 
-method root_take3(obj: Ref) returns (ret_0: Ref)
+method take3(obj: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  inhale df_isSubtype(df_typeOf(obj), df_c_root_AbstractWithFinalImplementation3())
-  inhale acc(AbstractWithFinalImplementation3_shared(obj), wildcard)
+  inhale df_isSubtype(df_typeOf(obj), df_c_AbstractWithFinalImplementation3())
+  inhale acc(c_AbstractWithFinalImplementation3_shared(obj), wildcard)
   label lbl_0
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /multiple_interfaces.kt:(998,1003): info: Generated Viper text for take4:
-method AbstractWithOpenImplementation4_field(this$dispatch: Ref)
+method pg_c_AbstractWithOpenImplementation4_field(this$dispatch: Ref)
   returns (ret: Ref)
 
 
-method root_take4(obj: Ref) returns (ret_0: Ref)
+method take4(obj: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var anon_0: Ref
   var anon_1: Ref
-  inhale df_isSubtype(df_typeOf(obj), df_c_root_AbstractWithOpenImplementation4())
-  inhale acc(AbstractWithOpenImplementation4_shared(obj), wildcard)
-  anon_1 := AbstractWithOpenImplementation4_field(obj)
+  inhale df_isSubtype(df_typeOf(obj), df_c_AbstractWithOpenImplementation4())
+  inhale acc(c_AbstractWithOpenImplementation4_shared(obj), wildcard)
+  anon_1 := pg_c_AbstractWithOpenImplementation4_field(obj)
   anon_0 := anon_1
   inhale df_isSubtype(df_typeOf(anon_0), df_intType())
   label lbl_0
@@ -68,69 +68,46 @@ method root_take4(obj: Ref) returns (ret_0: Ref)
 }
 
 /multiple_interfaces.kt:(1683,1694): info: Generated Viper text for createImpls:
-field root_field: Ref
+field bf_field: Ref
 
-field root_size: Ref
-
-method AbstractWithOpenImplementation4_field(this$dispatch: Ref)
-  returns (ret: Ref)
-
-
-method AnyInterfaceWithoutImplementation5_field(this$dispatch: Ref)
-  returns (ret: Ref)
-
-
-method InheritingInterfaceWithoutImplementation6_field(this$dispatch: Ref)
-  returns (ret: Ref)
-
-
-method InterfaceWithImplementation1_field(this$dispatch: Ref)
-  returns (ret: Ref)
-
-
-method InterfaceWithoutImplementation2_field(this$dispatch: Ref)
-  returns (ret: Ref)
-
-
-method c_Impl24_field(this$dispatch: Ref) returns (ret: Ref)
-
+field size: Ref
 
 method con_c_Impl12() returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_root_Impl12())
+  ensures df_isSubtype(df_typeOf(ret), df_c_Impl12())
   ensures acc(c_Impl12_shared(ret), wildcard)
   ensures acc(c_Impl12_unique(ret), write)
 
 
 method con_c_Impl14() returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_root_Impl14())
+  ensures df_isSubtype(df_typeOf(ret), df_c_Impl14())
   ensures acc(c_Impl14_shared(ret), wildcard)
   ensures acc(c_Impl14_unique(ret), write)
 
 
 method con_c_Impl23() returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_root_Impl23())
+  ensures df_isSubtype(df_typeOf(ret), df_c_Impl23())
   ensures acc(c_Impl23_shared(ret), wildcard)
   ensures acc(c_Impl23_unique(ret), write)
 
 
 method con_c_Impl24() returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_root_Impl24())
+  ensures df_isSubtype(df_typeOf(ret), df_c_Impl24())
   ensures acc(c_Impl24_shared(ret), wildcard)
   ensures acc(c_Impl24_unique(ret), write)
 
 
 method con_c_Impl3() returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_root_Impl3())
+  ensures df_isSubtype(df_typeOf(ret), df_c_Impl3())
   ensures acc(c_Impl3_shared(ret), wildcard)
   ensures acc(c_Impl3_unique(ret), write)
 
 
-method root_create6() returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_root_InheritingInterfaceWithoutImplementation6())
-  ensures acc(InheritingInterfaceWithoutImplementation6_shared(ret), wildcard)
+method create6() returns (ret: Ref)
+  ensures df_isSubtype(df_typeOf(ret), df_c_InheritingInterfaceWithoutImplementation6())
+  ensures acc(c_InheritingInterfaceWithoutImplementation6_shared(ret), wildcard)
 
 
-method root_createImpls() returns (ret_0: Ref)
+method createImpls() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var impl12: Ref
@@ -173,54 +150,54 @@ method root_createImpls() returns (ret_0: Ref)
   var cond5: Ref
   impl12 := con_c_Impl12()
   unfold acc(c_Impl12_shared(impl12), wildcard)
-  anon_0 := impl12.root_field
+  anon_0 := impl12.bf_field
   start12 := sp_minusInts(sp_plusInts(anon_0, df_intToRef(1)), df_intToRef(1))
-  anon_1 := root_take1(impl12)
-  anon_2 := root_take2(impl12)
+  anon_1 := take1(impl12)
+  anon_2 := take2(impl12)
   impl23 := con_c_Impl23()
   unfold acc(c_Impl23_shared(impl23), wildcard)
-  unfold acc(AbstractWithFinalImplementation3_shared(impl23), wildcard)
-  anon_3 := impl23.root_field
+  unfold acc(c_AbstractWithFinalImplementation3_shared(impl23), wildcard)
+  anon_3 := impl23.bf_field
   start23 := sp_minusInts(sp_plusInts(anon_3, df_intToRef(1)), df_intToRef(1))
-  anon_4 := root_take2(impl23)
-  anon_5 := root_take3(impl23)
+  anon_4 := take2(impl23)
+  anon_5 := take3(impl23)
   impl3 := con_c_Impl3()
   unfold acc(c_Impl3_shared(impl3), wildcard)
-  unfold acc(AbstractWithFinalImplementation3_shared(impl3), wildcard)
-  anon_6 := impl3.root_field
+  unfold acc(c_AbstractWithFinalImplementation3_shared(impl3), wildcard)
+  anon_6 := impl3.bf_field
   start3 := sp_minusInts(sp_plusInts(anon_6, df_intToRef(1)), df_intToRef(1))
-  anon_7 := root_take3(impl3)
+  anon_7 := take3(impl3)
   impl24 := con_c_Impl24()
-  anon_9 := c_Impl24_field(impl24)
+  anon_9 := pg_c_Impl24_field(impl24)
   anon_8 := anon_9
   inhale df_isSubtype(df_typeOf(anon_8), df_intType())
   start24 := sp_minusInts(sp_plusInts(anon_8, df_intToRef(1)), df_intToRef(1))
-  anon_10 := root_take2(impl24)
-  anon_11 := root_take4(impl24)
+  anon_10 := take2(impl24)
+  anon_11 := take4(impl24)
   impl14 := con_c_Impl14()
   unfold acc(c_Impl14_shared(impl14), wildcard)
-  anon_12 := impl14.root_field
+  anon_12 := impl14.bf_field
   start14 := sp_minusInts(sp_plusInts(anon_12, df_intToRef(1)), df_intToRef(1))
-  anon_13 := root_take1(impl14)
-  anon_14 := root_take4(impl14)
-  impl6 := root_create6()
-  anon_16 := InheritingInterfaceWithoutImplementation6_field(impl6)
+  anon_13 := take1(impl14)
+  anon_14 := take4(impl14)
+  impl6 := create6()
+  anon_16 := pg_c_InheritingInterfaceWithoutImplementation6_field(impl6)
   anon_15 := anon_16
   inhale df_isSubtype(df_typeOf(anon_15), df_intType())
   start6 := sp_minusInts(sp_plusInts(anon_15, df_intToRef(1)), df_intToRef(1))
   unfold acc(c_Impl12_shared(impl12), wildcard)
-  anon_17 := impl12.root_field
+  anon_17 := impl12.bf_field
   cond1 := df_boolToRef(df_intFromRef(start12) == df_intFromRef(anon_17))
   unfold acc(c_Impl23_shared(impl23), wildcard)
-  unfold acc(AbstractWithFinalImplementation3_shared(impl23), wildcard)
-  anon_18 := impl23.root_field
+  unfold acc(c_AbstractWithFinalImplementation3_shared(impl23), wildcard)
+  anon_18 := impl23.bf_field
   cond2 := df_boolToRef(df_intFromRef(start23) == df_intFromRef(anon_18))
   unfold acc(c_Impl3_shared(impl3), wildcard)
-  unfold acc(AbstractWithFinalImplementation3_shared(impl3), wildcard)
-  anon_19 := impl3.root_field
+  unfold acc(c_AbstractWithFinalImplementation3_shared(impl3), wildcard)
+  anon_19 := impl3.bf_field
   cond3 := df_boolToRef(df_intFromRef(start3) == df_intFromRef(anon_19))
   unfold acc(c_Impl14_shared(impl14), wildcard)
-  anon_20 := impl14.root_field
+  anon_20 := impl14.bf_field
   cond4 := df_boolToRef(df_intFromRef(start14) == df_intFromRef(anon_20))
   cond5 := df_boolToRef(df_isSubtype(df_typeOf(start6), df_intType()))
   assert df_boolFromRef(cond1)
@@ -232,17 +209,40 @@ method root_createImpls() returns (ret_0: Ref)
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
-method root_take1(obj: Ref) returns (ret: Ref)
+method pg_c_AbstractWithOpenImplementation4_field(this$dispatch: Ref)
+  returns (ret: Ref)
+
+
+method pg_c_AnyInterfaceWithoutImplementation5_field(this$dispatch: Ref)
+  returns (ret: Ref)
+
+
+method pg_c_Impl24_field(this$dispatch: Ref) returns (ret: Ref)
+
+
+method pg_c_InheritingInterfaceWithoutImplementation6_field(this$dispatch: Ref)
+  returns (ret: Ref)
+
+
+method pg_c_InterfaceWithImplementation1_field(this$dispatch: Ref)
+  returns (ret: Ref)
+
+
+method pg_c_InterfaceWithoutImplementation2_field(this$dispatch: Ref)
+  returns (ret: Ref)
+
+
+method take1(obj: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_unitType())
 
 
-method root_take2(obj: Ref) returns (ret: Ref)
+method take2(obj: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_unitType())
 
 
-method root_take3(obj: Ref) returns (ret: Ref)
+method take3(obj: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_unitType())
 
 
-method root_take4(obj: Ref) returns (ret: Ref)
+method take4(obj: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_unitType())

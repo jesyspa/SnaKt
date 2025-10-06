@@ -29,7 +29,7 @@ interface Applicable {
 }
 
 interface Function : IntoSilver<viper.silver.ast.Function>, Applicable {
-    val name: SymbolName
+    val name: SymbolicName
     val pos: Position
         get() = Position.NoPosition
     val info: Info
@@ -68,7 +68,7 @@ interface Function : IntoSilver<viper.silver.ast.Function>, Applicable {
 }
 
 abstract class BuiltinFunction(
-    override val name: SymbolName,
+    override val name: SymbolicName,
     override val pos: Position = Position.NoPosition,
     override val info: Info = Info.NoInfo,
     override val trafos: Trafos = Trafos.NoTrafos,

@@ -1,5 +1,5 @@
 /returns_booleans.kt:(121,146): info: Generated Viper text for incorrectly_returns_false:
-method root_incorrectly_returns_false() returns (ret_0: Ref)
+method incorrectly_returns_false() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
   ensures df_boolFromRef(ret_0) == true
 {
@@ -11,7 +11,7 @@ method root_incorrectly_returns_false() returns (ret_0: Ref)
 /returns_booleans.kt:(183,196): warning: Function may return a false value.
 
 /returns_booleans.kt:(264,288): info: Generated Viper text for incorrectly_returns_true:
-method root_incorrectly_returns_true() returns (ret_0: Ref)
+method incorrectly_returns_true() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
   ensures df_boolFromRef(ret_0) == false
 {

@@ -5,23 +5,21 @@
 
 package org.jetbrains.kotlin.formver.core.names
 
+import NameScope
 import org.jetbrains.kotlin.formver.viper.Lit
 import org.jetbrains.kotlin.formver.viper.NameExpr
-import org.jetbrains.kotlin.formver.viper.SymbolName
-import org.jetbrains.kotlin.formver.viper.NameResolver
+import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.parseRequiredScope
 import org.jetbrains.kotlin.name.FqName
 
 /**
  * Name of a Kotlin entity in the original program in a specified scope and optionally distinguished by type.
  */
-data class ScopedKotlinName(val scope: NameScope, val name: KotlinName) : SymbolName {
-    override val fullScope: NameExpr?
-        get() = scope.fullSymbolName?.let {scope.fullSymbolName} ?: Lit("root")
-    override val requiredScope: NameExpr?
-        get() = scope.fullSymbolName?.let { parseRequiredScope(scope.fullSymbolName!!)} ?: Lit("root")
+data class ScopedKotlinName(val scope: NameScope, val name: KotlinName) : SymbolicName {
     override val mangledBaseName: NameExpr
         get() = name.mangledBaseName
+    override val mangledScope: NameScope
+        get() = scope
     override val mangledType: String?
         get() = name.mangledType
 }
@@ -31,5 +29,5 @@ fun FqName.asViperString() = asString().replace('.', '_')
 fun ScopedKotlinName.asScope(): NameScope {
     val className = name as? ClassKotlinName
     require(className != null) { "Only classes can be used for scopes." }
-    return ClassScope(scope, className)
+    return ClassScope(this)
 }

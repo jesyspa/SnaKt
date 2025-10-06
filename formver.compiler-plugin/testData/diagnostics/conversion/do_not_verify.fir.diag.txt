@@ -1,5 +1,5 @@
 /do_not_verify.kt:(245,256): info: Generated Viper text for bad_returns:
-method root_bad_returns() returns (ret_0: Ref)
+method bad_returns() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
   ensures df_boolFromRef(ret_0) == true
 {

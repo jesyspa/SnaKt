@@ -1,49 +1,49 @@
 /function_overloading.kt:(49,52): info: Generated Viper text for baz:
-method Bar_baz(this$dispatch: Ref, f: Ref) returns (ret_0: Ref)
+method c_Bar_baz(this$dispatch: Ref, f: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  inhale df_isSubtype(df_typeOf(this$dispatch), df_c_root_Bar())
-  inhale acc(Bar_shared(this$dispatch), wildcard)
-  inhale df_isSubtype(df_typeOf(f), df_c_root_Foo())
-  inhale acc(Foo_shared(f), wildcard)
+  inhale df_isSubtype(df_typeOf(this$dispatch), df_c_Bar())
+  inhale acc(c_Bar_shared(this$dispatch), wildcard)
+  inhale df_isSubtype(df_typeOf(f), df_c_Foo())
+  inhale acc(c_Foo_shared(f), wildcard)
   label lbl_0
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /function_overloading.kt:(74,77): info: Generated Viper text for baz:
-method Bar_baz(this$dispatch: Ref, b: Ref) returns (ret_0: Ref)
+method c_Bar_baz(this$dispatch: Ref, b: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  inhale df_isSubtype(df_typeOf(this$dispatch), df_c_root_Bar())
-  inhale acc(Bar_shared(this$dispatch), wildcard)
-  inhale df_isSubtype(df_typeOf(b), df_c_root_Bar())
-  inhale acc(Bar_shared(b), wildcard)
+  inhale df_isSubtype(df_typeOf(this$dispatch), df_c_Bar())
+  inhale acc(c_Bar_shared(this$dispatch), wildcard)
+  inhale df_isSubtype(df_typeOf(b), df_c_Bar())
+  inhale acc(c_Bar_shared(b), wildcard)
   label lbl_0
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /function_overloading.kt:(98,107): info: Generated Viper text for fakePrint:
-method root_fakePrint(b: Ref) returns (ret_0: Ref)
+method fakePrint(b: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  inhale df_isSubtype(df_typeOf(b), df_c_root_Bar())
-  inhale acc(Bar_shared(b), wildcard)
+  inhale df_isSubtype(df_typeOf(b), df_c_Bar())
+  inhale acc(c_Bar_shared(b), wildcard)
   label lbl_0
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /function_overloading.kt:(125,134): info: Generated Viper text for fakePrint:
-method root_fakePrint(f: Ref) returns (ret_0: Ref)
+method fakePrint(f: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  inhale df_isSubtype(df_typeOf(f), df_c_root_Foo())
-  inhale acc(Foo_shared(f), wildcard)
+  inhale df_isSubtype(df_typeOf(f), df_c_Foo())
+  inhale acc(c_Foo_shared(f), wildcard)
   label lbl_0
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /function_overloading.kt:(152,161): info: Generated Viper text for fakePrint:
-method root_fakePrint(value: Ref) returns (ret_0: Ref)
+method fakePrint(value: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   inhale df_isSubtype(df_typeOf(value), df_intType())
@@ -52,7 +52,7 @@ method root_fakePrint(value: Ref) returns (ret_0: Ref)
 }
 
 /function_overloading.kt:(183,192): info: Generated Viper text for fakePrint:
-method root_fakePrint(truth: Ref) returns (ret_0: Ref)
+method fakePrint(truth: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   inhale df_isSubtype(df_typeOf(truth), df_boolType())
@@ -61,7 +61,7 @@ method root_fakePrint(truth: Ref) returns (ret_0: Ref)
 }
 
 /function_overloading.kt:(219,238): info: Generated Viper text for differInNullability:
-method root_differInNullability(i: Ref) returns (ret_0: Ref)
+method differInNullability(i: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   inhale df_isSubtype(df_typeOf(i), df_intType())
@@ -70,7 +70,7 @@ method root_differInNullability(i: Ref) returns (ret_0: Ref)
 }
 
 /function_overloading.kt:(256,275): info: Generated Viper text for differInNullability:
-method root_differInNullability(i: Ref) returns (ret_0: Ref)
+method differInNullability(i: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   inhale df_isSubtype(df_typeOf(i), df_nullable(df_intType()))
@@ -80,34 +80,34 @@ method root_differInNullability(i: Ref) returns (ret_0: Ref)
 
 /function_overloading.kt:(295,321): info: Generated Viper text for testGlobalScopeOverloading:
 method con_c_Bar() returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_root_Bar())
+  ensures df_isSubtype(df_typeOf(ret), df_c_Bar())
   ensures acc(c_Bar_shared(ret), wildcard)
   ensures acc(c_Bar_unique(ret), write)
 
 
 method con_c_Foo() returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_root_Foo())
+  ensures df_isSubtype(df_typeOf(ret), df_c_Foo())
   ensures acc(c_Foo_shared(ret), wildcard)
   ensures acc(c_Foo_unique(ret), write)
 
 
-method f_root_fakePrint_TF_T_Bar(b: Ref) returns (ret: Ref)
+method f_fakePrint_TF_T_Bar(b: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_unitType())
 
 
-method f_root_fakePrint_TF_T_Boolean(truth: Ref) returns (ret: Ref)
+method f_fakePrint_TF_T_Boolean(truth: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_unitType())
 
 
-method f_root_fakePrint_TF_T_Foo(f: Ref) returns (ret: Ref)
+method f_fakePrint_TF_T_Foo(f: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_unitType())
 
 
-method f_root_fakePrint_TF_T_Int(value: Ref) returns (ret: Ref)
+method f_fakePrint_TF_T_Int(value: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_unitType())
 
 
-method root_testGlobalScopeOverloading() returns (ret_0: Ref)
+method testGlobalScopeOverloading() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var anon_0: Ref
@@ -116,25 +116,25 @@ method root_testGlobalScopeOverloading() returns (ret_0: Ref)
   var anon_3: Ref
   var anon_4: Ref
   var anon_5: Ref
-  anon_0 := f_root_fakePrint_TF_T_Int(df_intToRef(42))
-  anon_1 := f_root_fakePrint_TF_T_Boolean(df_boolToRef(true))
+  anon_0 := f_fakePrint_TF_T_Int(df_intToRef(42))
+  anon_1 := f_fakePrint_TF_T_Boolean(df_boolToRef(true))
   anon_3 := con_c_Foo()
-  anon_2 := f_root_fakePrint_TF_T_Foo(anon_3)
+  anon_2 := f_fakePrint_TF_T_Foo(anon_3)
   anon_5 := con_c_Bar()
-  anon_4 := f_root_fakePrint_TF_T_Bar(anon_5)
+  anon_4 := f_fakePrint_TF_T_Bar(anon_5)
   label lbl_0
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /function_overloading.kt:(413,441): info: Generated Viper text for testClassFunctionOverloading:
 method con_c_Bar() returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_root_Bar())
+  ensures df_isSubtype(df_typeOf(ret), df_c_Bar())
   ensures acc(c_Bar_shared(ret), wildcard)
   ensures acc(c_Bar_unique(ret), write)
 
 
 method con_c_Foo() returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_root_Foo())
+  ensures df_isSubtype(df_typeOf(ret), df_c_Foo())
   ensures acc(c_Foo_shared(ret), wildcard)
   ensures acc(c_Foo_unique(ret), write)
 
@@ -147,7 +147,7 @@ method f_c_Bar_baz_Bar_Foo(this$dispatch: Ref, f: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_unitType())
 
 
-method root_testClassFunctionOverloading() returns (ret_0: Ref)
+method testClassFunctionOverloading() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var l0_b: Ref

@@ -1,5 +1,5 @@
 /lambdas.kt:(155,166): info: Generated Viper text for explicitArg:
-method root_explicitArg() returns (ret_0: Ref)
+method explicitArg() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   var ret_1: Ref
@@ -18,7 +18,7 @@ method root_explicitArg() returns (ret_0: Ref)
 }
 
 /lambdas.kt:(216,227): info: Generated Viper text for implicitArg:
-method root_implicitArg() returns (ret_0: Ref)
+method implicitArg() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   var ret_1: Ref
@@ -37,7 +37,7 @@ method root_implicitArg() returns (ret_0: Ref)
 }
 
 /lambdas.kt:(273,281): info: Generated Viper text for lambdaIf:
-method root_lambdaIf() returns (ret_0: Ref)
+method lambdaIf() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   var ret_1: Ref
@@ -59,7 +59,7 @@ method root_lambdaIf() returns (ret_0: Ref)
 }
 
 /lambdas.kt:(412,430): info: Generated Viper text for returnValueNotUsed:
-method root_returnValueNotUsed() returns (ret_0: Ref)
+method returnValueNotUsed() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var ret_1: Ref
@@ -77,7 +77,7 @@ method root_returnValueNotUsed() returns (ret_0: Ref)
 }
 
 /lambdas.kt:(466,475): info: Generated Viper text for shadowing:
-method root_shadowing() returns (ret_0: Ref)
+method shadowing() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   var x: Ref
@@ -102,7 +102,7 @@ method root_shadowing() returns (ret_0: Ref)
 }
 
 /lambdas.kt:(711,717): info: Generated Viper text for nested:
-method root_nested() returns (ret_0: Ref)
+method nested() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   var l0_x: Ref
@@ -129,7 +129,7 @@ method root_nested() returns (ret_0: Ref)
 }
 
 /lambdas.kt:(853,870): info: Generated Viper text for lambdaPassthrough:
-method root_lambdaPassthrough() returns (ret_0: Ref)
+method lambdaPassthrough() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var ret_1: Ref

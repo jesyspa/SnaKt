@@ -1,18 +1,18 @@
 /chars.kt:(212,221): info: Generated Viper text for testChars:
-field root_char: Ref
+field bf_char: Ref
 
-field root_size: Ref
+field size: Ref
 
-method CharBox_Char(char: Ref) returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_root_CharBox())
-  ensures acc(CharBox_shared(ret), wildcard)
-  ensures acc(CharBox_unique(ret), write)
-  ensures df_charFromRef((unfolding acc(CharBox_shared(ret), wildcard) in
-      ret.root_char)) ==
+method c_CharBox_Char(char: Ref) returns (ret: Ref)
+  ensures df_isSubtype(df_typeOf(ret), df_c_CharBox())
+  ensures acc(c_CharBox_shared(ret), wildcard)
+  ensures acc(c_CharBox_unique(ret), write)
+  ensures df_charFromRef((unfolding acc(c_CharBox_shared(ret), wildcard) in
+      ret.bf_char)) ==
     df_charFromRef(char)
 
 
-method root_testChars(c: Ref) returns (ret_0: Ref)
+method testChars(c: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var box: Ref
@@ -21,10 +21,10 @@ method root_testChars(c: Ref) returns (ret_0: Ref)
   var anon_0: Ref
   var charZ: Ref
   inhale df_isSubtype(df_typeOf(c), df_charType())
-  box := CharBox_Char(df_charToRef(97))
+  box := c_CharBox_Char(df_charToRef(97))
   charA := df_charToRef(97)
-  unfold acc(CharBox_shared(box), wildcard)
-  anon_0 := box.root_char
+  unfold acc(c_CharBox_shared(box), wildcard)
+  anon_0 := box.bf_char
   cond1 := df_boolToRef(df_charFromRef(charA) == df_charFromRef(anon_0))
   assert df_boolFromRef(cond1)
   charZ := df_charToRef(122)

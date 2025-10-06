@@ -1,5 +1,5 @@
 /smartcast.kt:(23,38): info: Generated Viper text for smartcastReturn:
-method root_smartcastReturn(n: Ref) returns (ret_0: Ref)
+method smartcastReturn(n: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   inhale df_isSubtype(df_typeOf(n), df_nullable(df_intType()))
@@ -12,13 +12,10 @@ method root_smartcastReturn(n: Ref) returns (ret_0: Ref)
 }
 
 /smartcast.kt:(88,106): info: Generated Viper text for isNullOrEmptyWrong:
-method c_CharSequence_length(this$dispatch: Ref) returns (ret: Ref)
-
-
-method root_isNullOrEmptyWrong(seq: Ref) returns (ret_0: Ref)
+method isNullOrEmptyWrong(seq: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
 {
-  inhale df_isSubtype(df_typeOf(seq), df_nullable(df_c_pkg$kotlin_CharSequence()))
+  inhale df_isSubtype(df_typeOf(seq), df_nullable(df_c_CharSequence()))
   inhale seq != df_nullValue() ==>
     acc(c_CharSequence_shared(seq), wildcard)
   if (seq == df_nullValue()) {
@@ -26,7 +23,7 @@ method root_isNullOrEmptyWrong(seq: Ref) returns (ret_0: Ref)
     if (seq != df_nullValue()) {
       var anon_1: Ref
       var anon_2: Ref
-      anon_2 := c_CharSequence_length(seq)
+      anon_2 := pg_c_CharSequence_length(seq)
       anon_1 := anon_2
       inhale df_isSubtype(df_typeOf(anon_1), df_intType())
       anon_0 := anon_1
@@ -38,3 +35,5 @@ method root_isNullOrEmptyWrong(seq: Ref) returns (ret_0: Ref)
   goto lbl_0
   label lbl_0
 }
+
+method pg_c_CharSequence_length(this$dispatch: Ref) returns (ret: Ref)

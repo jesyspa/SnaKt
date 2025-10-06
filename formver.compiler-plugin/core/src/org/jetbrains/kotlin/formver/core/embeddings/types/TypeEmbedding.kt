@@ -10,7 +10,7 @@ import org.jetbrains.kotlin.formver.core.domains.RuntimeTypeDomain
 import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.PlaintextLeaf
 import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.TreeView
 import org.jetbrains.kotlin.formver.core.names.TypeName
-import org.jetbrains.kotlin.formver.viper.SymbolName
+import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 import org.jetbrains.kotlin.formver.viper.mangled
@@ -28,7 +28,7 @@ data class TypeEmbedding(val pretype: PretypeEmbedding, val flags: TypeEmbedding
      * It may at some point necessary to make a `TypeName` hierarchy of some sort to
      * represent these names, but we do it inline for now.
      */
-    val name: SymbolName
+    val name: SymbolicName
         get() = TypeName(pretype, flags.nullable)
 
     /**

@@ -6,12 +6,12 @@
 package org.jetbrains.kotlin.formver.viper.ast
 
 import org.jetbrains.kotlin.formver.viper.IntoSilver
-import org.jetbrains.kotlin.formver.viper.SymbolName
+import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.mangled
 
 class Field(
-    val name: SymbolName,
+    val name: SymbolicName,
     val type: Type,
     val includeInShortDump: Boolean,
     val pos: Position = Position.NoPosition,

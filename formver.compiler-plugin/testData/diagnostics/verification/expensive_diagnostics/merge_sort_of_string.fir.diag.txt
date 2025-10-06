@@ -3,8 +3,7 @@ method String_plus(this$dispatch: Ref, other: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_stringType())
 
 
-method root_subs(this$extension: Ref, lo: Ref, hi: Ref)
-  returns (ret_0: Ref)
+method subs(this$extension: Ref, lo: Ref, hi: Ref) returns (ret_0: Ref)
   requires 0 <= df_intFromRef(lo) && df_intFromRef(lo) <= df_intFromRef(hi) &&
     df_intFromRef(hi) <= |df_stringFromRef(this$extension)|
   ensures df_isSubtype(df_typeOf(ret_0), df_stringType())
@@ -67,7 +66,7 @@ method String_plus(this$dispatch: Ref, other: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_stringType())
 
 
-method root_mergeStrings(a: Ref, b: Ref) returns (ret_0: Ref)
+method mergeStrings(a: Ref, b: Ref) returns (ret_0: Ref)
   requires (forall anon$builtin_7: Int ::(1 <= anon$builtin_7 &&
       anon$builtin_7 < |df_stringFromRef(a)| ==>
       df_stringFromRef(a)[anon$builtin_7 - 1] <=
@@ -185,7 +184,7 @@ method root_mergeStrings(a: Ref, b: Ref) returns (ret_0: Ref)
 }
 
 /merge_sort_of_string.kt:(1883,1894): info: Generated Viper text for mergeSorted:
-method root_mergeSorted(this$extension: Ref) returns (ret_0: Ref)
+method mergeSorted(this$extension: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_stringType())
   ensures |df_stringFromRef(ret_0)| == |df_stringFromRef(this$extension)|
   ensures (forall anon$builtin_12: Int ::1 <= anon$builtin_12 &&
@@ -201,19 +200,19 @@ method root_mergeSorted(this$extension: Ref) returns (ret_0: Ref)
     var anon_1: Ref
     var anon_2: Ref
     var anon_3: Ref
-    anon_1 := root_subs(this$extension, df_intToRef(0), sp_divInts(sp_stringLength(this$extension),
+    anon_1 := subs(this$extension, df_intToRef(0), sp_divInts(sp_stringLength(this$extension),
       df_intToRef(2)))
-    anon_0 := root_mergeSorted(anon_1)
-    anon_3 := root_subs(this$extension, sp_divInts(sp_stringLength(this$extension),
+    anon_0 := mergeSorted(anon_1)
+    anon_3 := subs(this$extension, sp_divInts(sp_stringLength(this$extension),
       df_intToRef(2)), sp_stringLength(this$extension))
-    anon_2 := root_mergeSorted(anon_3)
-    ret_0 := root_mergeStrings(anon_0, anon_2)
+    anon_2 := mergeSorted(anon_3)
+    ret_0 := mergeStrings(anon_0, anon_2)
   }
   goto lbl_0
   label lbl_0
 }
 
-method root_mergeStrings(a: Ref, b: Ref) returns (ret: Ref)
+method mergeStrings(a: Ref, b: Ref) returns (ret: Ref)
   requires (forall anon$builtin_13: Int ::(1 <= anon$builtin_13 &&
       anon$builtin_13 < |df_stringFromRef(a)| ==>
       df_stringFromRef(a)[anon$builtin_13 - 1] <=
@@ -230,7 +229,7 @@ method root_mergeStrings(a: Ref, b: Ref) returns (ret: Ref)
       df_stringFromRef(ret)[anon$builtin_14])
 
 
-method root_subs(this$extension: Ref, lo: Ref, hi: Ref) returns (ret: Ref)
+method subs(this$extension: Ref, lo: Ref, hi: Ref) returns (ret: Ref)
   requires 0 <= df_intFromRef(lo) && df_intFromRef(lo) <= df_intFromRef(hi) &&
     df_intFromRef(hi) <= |df_stringFromRef(this$extension)|
   ensures df_isSubtype(df_typeOf(ret), df_stringType())

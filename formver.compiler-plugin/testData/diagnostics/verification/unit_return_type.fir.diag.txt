@@ -1,5 +1,5 @@
 /unit_return_type.kt:(171,176): info: Generated Viper text for idFun:
-method root_idFun(p_t: Ref) returns (ret_0: Ref)
+method idFun(p_t: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_nullable(df_anyType()))
 {
   inhale df_isSubtype(df_typeOf(p_t), df_nullable(df_anyType()))
@@ -9,7 +9,7 @@ method root_idFun(p_t: Ref) returns (ret_0: Ref)
 }
 
 /unit_return_type.kt:(195,208): info: Generated Viper text for directReturns:
-method root_directReturns(b: Ref) returns (ret_0: Ref)
+method directReturns(b: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   inhale df_isSubtype(df_typeOf(b), df_boolType())
@@ -19,7 +19,7 @@ method root_directReturns(b: Ref) returns (ret_0: Ref)
   } else {
     var anon_0: Ref
     var anon_1: Ref
-    anon_1 := root_idFun(b)
+    anon_1 := idFun(b)
     anon_0 := anon_1
     inhale df_isSubtype(df_typeOf(anon_0), df_boolType())
     if (df_boolFromRef(anon_0)) {
@@ -31,18 +31,18 @@ method root_directReturns(b: Ref) returns (ret_0: Ref)
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
-method root_idFun(p_t: Ref) returns (ret: Ref)
+method idFun(p_t: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_nullable(df_anyType()))
 
 
 /unit_return_type.kt:(374,387): info: Generated Viper text for useInlineUnit:
-field root_size: Ref
+field size: Ref
 
-method root_idFun(p_t: Ref) returns (ret: Ref)
+method idFun(p_t: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_nullable(df_anyType()))
 
 
-method root_useInlineUnit(b: Ref) returns (ret_0: Ref)
+method useInlineUnit(b: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var unitRes: Ref
@@ -60,7 +60,7 @@ method root_useInlineUnit(b: Ref) returns (ret_0: Ref)
     var anon_2: Ref
     var anon_3: Ref
     tmp := df_intToRef(42)
-    anon_3 := root_idFun(tmp)
+    anon_3 := idFun(tmp)
     anon_2 := anon_3
     inhale df_isSubtype(df_typeOf(anon_2), df_intType())
   }

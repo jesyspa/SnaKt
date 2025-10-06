@@ -1,7 +1,7 @@
 /viper_verify.kt:(125,137): info: Generated Viper text for verify_false:
-field root_size: Ref
+field size: Ref
 
-method root_verify_false() returns (ret_0: Ref)
+method verify_false() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   assert false
@@ -12,9 +12,9 @@ method root_verify_false() returns (ret_0: Ref)
 /viper_verify.kt:(153,158): warning: Viper verification error: Assert might fail. Assertion false might not hold.
 
 /viper_verify.kt:(181,196): info: Generated Viper text for verify_compound:
-field root_size: Ref
+field size: Ref
 
-method root_verify_compound() returns (ret_0: Ref)
+method verify_compound() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var anon_0: Ref

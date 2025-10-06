@@ -1,5 +1,5 @@
 /sum_of_1_to_n.kt:(64,91): info: Generated Viper text for recursiveSumOfIntegersUpToN:
-method root_recursiveSumOfIntegersUpToN(n: Ref) returns (ret_0: Ref)
+method recursiveSumOfIntegersUpToN(n: Ref) returns (ret_0: Ref)
   requires df_intFromRef(n) >= 0
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
   ensures df_intFromRef(ret_0) ==
@@ -11,7 +11,7 @@ method root_recursiveSumOfIntegersUpToN(n: Ref) returns (ret_0: Ref)
     goto lbl_0
   } else {
     var anon_0: Ref
-    anon_0 := root_recursiveSumOfIntegersUpToN(sp_minusInts(n, df_intToRef(1)))
+    anon_0 := recursiveSumOfIntegersUpToN(sp_minusInts(n, df_intToRef(1)))
     ret_0 := sp_plusInts(n, anon_0)
     goto lbl_0
   }
@@ -19,7 +19,7 @@ method root_recursiveSumOfIntegersUpToN(n: Ref) returns (ret_0: Ref)
 }
 
 /sum_of_1_to_n.kt:(296,314): info: Generated Viper text for sumOfIntegersUpToN:
-method root_sumOfIntegersUpToN(n: Ref) returns (ret_0: Ref)
+method sumOfIntegersUpToN(n: Ref) returns (ret_0: Ref)
   requires df_intFromRef(n) >= 0
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
   ensures df_intFromRef(ret_0) ==

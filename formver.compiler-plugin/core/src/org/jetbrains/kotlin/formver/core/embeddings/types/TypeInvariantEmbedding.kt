@@ -7,7 +7,7 @@ package org.jetbrains.kotlin.formver.core.embeddings.types
 
 import org.jetbrains.kotlin.formver.core.embeddings.expression.*
 import org.jetbrains.kotlin.formver.core.embeddings.properties.FieldEmbedding
-import org.jetbrains.kotlin.formver.viper.SymbolName
+import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.ast.PermExp
 
 /**
@@ -46,7 +46,7 @@ data class FieldAccessTypeInvariantEmbedding(val field: FieldEmbedding, val perm
 
 // Note that at present, the predicate name and class name are the same.
 // We may want to mangle it better down the line.
-data class PredicateAccessTypeInvariantEmbedding(val predicateName: SymbolName, val perm: PermExp) :
+data class PredicateAccessTypeInvariantEmbedding(val predicateName: SymbolicName, val perm: PermExp) :
     TypeInvariantEmbedding {
     override fun fillHole(exp: ExpEmbedding): ExpEmbedding =
         PredicateAccessPermissions(predicateName, listOf(exp), perm)

@@ -1,8 +1,8 @@
 /recursion.kt:(23,32): info: Generated Viper text for recursive:
-method root_recursive() returns (ret_0: Ref)
+method recursive() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  ret_0 := root_recursive()
+  ret_0 := recursive()
   goto lbl_0
   label lbl_0
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())

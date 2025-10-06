@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.formver.viper.*
 
 sealed interface Declaration : IntoSilver<viper.silver.ast.Declaration> {
     data class LocalVarDecl(
-        val name: SymbolName,
+        val name: SymbolicName,
         val type: Type,
         val pos: Position = Position.NoPosition,
         val info: Info = Info.NoInfo,
@@ -27,7 +27,7 @@ sealed interface Declaration : IntoSilver<viper.silver.ast.Declaration> {
     }
 
     data class LabelDecl(
-        val name: SymbolName,
+        val name: SymbolicName,
         val invariants: List<Exp>,
         val position: Position = Position.NoPosition,
         val info: Info = Info.NoInfo,

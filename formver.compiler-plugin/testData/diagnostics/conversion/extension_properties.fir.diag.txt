@@ -1,5 +1,5 @@
 /extension_properties.kt:(114,137): info: Generated Viper text for extensionGetterProperty:
-method root_extensionGetterProperty() returns (ret_0: Ref)
+method extensionGetterProperty() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var a: Ref
@@ -8,78 +8,76 @@ method root_extensionGetterProperty() returns (ret_0: Ref)
   var anon_1: Ref
   var anon_2: Ref
   var anon_3: Ref
-  anon_0 := root_intValProp(df_intToRef(0))
+  anon_0 := intValProp(df_intToRef(0))
   a := anon_0
   inhale df_isSubtype(df_typeOf(a), df_intType())
-  anon_3 := root_intValProp(df_intToRef(1))
+  anon_3 := intValProp(df_intToRef(1))
   anon_2 := anon_3
   inhale df_isSubtype(df_typeOf(anon_2), df_intType())
-  anon_1 := root_intValProp(anon_2)
+  anon_1 := intValProp(anon_2)
   b := anon_1
   inhale df_isSubtype(df_typeOf(b), df_intType())
   label lbl_0
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
-method root_intValProp(this$dispatch: Ref) returns (ret: Ref)
+method intValProp(this$dispatch: Ref) returns (ret: Ref)
 
 
 /extension_properties.kt:(210,233): info: Generated Viper text for extensionSetterProperty:
-method eg_root_intVarProp(this$dispatch: Ref) returns (ret: Ref)
+method eg_intVarProp(this$dispatch: Ref) returns (ret: Ref)
 
 
-method es_root_intVarProp(this$dispatch: Ref, anon_0: Ref)
-  returns (ret: Ref)
+method es_intVarProp(this$dispatch: Ref, anon_0: Ref) returns (ret: Ref)
 
 
-method root_extensionSetterProperty() returns (ret_0: Ref)
+method extensionSetterProperty() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var anon_0: Ref
-  anon_0 := es_root_intVarProp(df_intToRef(42), df_intToRef(0))
+  anon_0 := es_intVarProp(df_intToRef(42), df_intToRef(0))
   label lbl_0
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /extension_properties.kt:(414,453): info: Generated Viper text for extensionGetterPropertyUserDefinedClass:
-field root_x: Ref
+field bf_x: Ref
 
-method root_extensionGetterPropertyUserDefinedClass(pf: Ref)
+method extensionGetterPropertyUserDefinedClass(pf: Ref)
   returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var x: Ref
   var anon_0: Ref
-  inhale df_isSubtype(df_typeOf(pf), df_c_root_PrimitiveField())
-  inhale acc(PrimitiveField_shared(pf), wildcard)
-  anon_0 := root_pfValProp(pf)
+  inhale df_isSubtype(df_typeOf(pf), df_c_PrimitiveField())
+  inhale acc(c_PrimitiveField_shared(pf), wildcard)
+  anon_0 := pfValProp(pf)
   x := anon_0
   inhale df_isSubtype(df_typeOf(x), df_intType())
   label lbl_0
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
-method root_pfValProp(this$dispatch: Ref) returns (ret: Ref)
+method pfValProp(this$dispatch: Ref) returns (ret: Ref)
 
 
 /extension_properties.kt:(508,547): info: Generated Viper text for extensionSetterPropertyUserDefinedClass:
-field root_x: Ref
+field x: Ref
 
-method eg_root_pfVarProp(this$dispatch: Ref) returns (ret: Ref)
-
-
-method es_root_pfVarProp(this$dispatch: Ref, anon_0: Ref)
-  returns (ret: Ref)
+method eg_pfVarProp(this$dispatch: Ref) returns (ret: Ref)
 
 
-method root_extensionSetterPropertyUserDefinedClass(pf: Ref)
+method es_pfVarProp(this$dispatch: Ref, anon_0: Ref) returns (ret: Ref)
+
+
+method extensionSetterPropertyUserDefinedClass(pf: Ref)
   returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var anon_0: Ref
-  inhale df_isSubtype(df_typeOf(pf), df_c_root_PrimitiveField())
-  inhale acc(PrimitiveField_shared(pf), wildcard)
-  anon_0 := es_root_pfVarProp(pf, df_intToRef(42))
+  inhale df_isSubtype(df_typeOf(pf), df_c_PrimitiveField())
+  inhale acc(c_PrimitiveField_shared(pf), wildcard)
+  anon_0 := es_pfVarProp(pf, df_intToRef(42))
   label lbl_0
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }

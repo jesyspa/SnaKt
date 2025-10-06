@@ -1,5 +1,5 @@
 /is_type_contract.kt:(151,172): info: Generated Viper text for unverifiableTypeCheck:
-method root_unverifiableTypeCheck(x: Ref) returns (ret_0: Ref)
+method unverifiableTypeCheck(x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
   ensures true ==> df_isSubtype(df_typeOf(x), df_unitType())
 {
@@ -12,7 +12,7 @@ method root_unverifiableTypeCheck(x: Ref) returns (ret_0: Ref)
 /is_type_contract.kt:(216,245): warning: Cannot verify that if the function returns then x is Unit.
 
 /is_type_contract.kt:(319,341): info: Generated Viper text for nullableNotNonNullable:
-method root_nullableNotNonNullable(x: Ref) returns (ret_0: Ref)
+method nullableNotNonNullable(x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
   ensures true ==> df_isSubtype(df_typeOf(x), df_intType())
 {

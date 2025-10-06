@@ -1,5 +1,5 @@
 /simple_forall.kt:(64,92): info: Generated Viper text for anyIntegerSquaredAtLeastZero:
-method root_anyIntegerSquaredAtLeastZero() returns (ret_0: Ref)
+method anyIntegerSquaredAtLeastZero() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
   ensures (forall anon$builtin_3: Int ::anon$builtin_3 * anon$builtin_3 >=
       0 &&
@@ -11,7 +11,7 @@ method root_anyIntegerSquaredAtLeastZero() returns (ret_0: Ref)
 }
 
 /simple_forall.kt:(259,298): info: Generated Viper text for anyIntegerSquaredIsAtLeastOneExceptZero:
-method root_anyIntegerSquaredIsAtLeastOneExceptZero() returns (ret_0: Ref)
+method anyIntegerSquaredIsAtLeastOneExceptZero() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
   ensures (forall anon$builtin_3: Int ::!(anon$builtin_3 == 0) ==>
       anon$builtin_3 * anon$builtin_3 >= df_intFromRef(ret_0))
@@ -22,7 +22,7 @@ method root_anyIntegerSquaredIsAtLeastOneExceptZero() returns (ret_0: Ref)
 }
 
 /simple_forall.kt:(460,503): info: Generated Viper text for anyIntegerSquaredIsAtLeastZeroStringVersion:
-method root_anyIntegerSquaredIsAtLeastZeroStringVersion(str: Ref)
+method anyIntegerSquaredIsAtLeastZeroStringVersion(str: Ref)
   returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {

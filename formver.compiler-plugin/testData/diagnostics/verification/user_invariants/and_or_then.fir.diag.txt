@@ -1,5 +1,5 @@
 /and_or_then.kt:(64,75): info: Generated Viper text for resultOrArg:
-method root_resultOrArg(arg: Ref) returns (ret_0: Ref)
+method resultOrArg(arg: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
   ensures df_boolFromRef(ret_0) || df_boolFromRef(arg)
 {
@@ -10,7 +10,7 @@ method root_resultOrArg(arg: Ref) returns (ret_0: Ref)
 }
 
 /and_or_then.kt:(200,211): info: Generated Viper text for testImplies:
-method root_testImplies(arg: Ref) returns (ret_0: Ref)
+method testImplies(arg: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
   ensures df_boolFromRef(arg) ==> !df_boolFromRef(ret_0)
   ensures df_boolFromRef(ret_0) ==> !df_boolFromRef(arg)
@@ -24,7 +24,7 @@ method root_testImplies(arg: Ref) returns (ret_0: Ref)
 }
 
 /and_or_then.kt:(417,424): info: Generated Viper text for testAnd:
-method root_testAnd(p_arg1: Ref, p_arg2: Ref) returns (ret_0: Ref)
+method testAnd(p_arg1: Ref, p_arg2: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
   ensures df_boolFromRef(ret_0) ==>
     df_boolFromRef(p_arg1) && df_boolFromRef(p_arg2)

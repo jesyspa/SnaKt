@@ -1,5 +1,5 @@
 /loop.kt:(23,32): info: Generated Viper text for whileLoop:
-method root_whileLoop(b: Ref) returns (ret_0: Ref)
+method whileLoop(b: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
 {
   var anon_0: Ref
@@ -22,12 +22,12 @@ method root_whileLoop(b: Ref) returns (ret_0: Ref)
 }
 
 /loop.kt:(138,160): info: Generated Viper text for whileFunctionCondition:
-method root_whileFunctionCondition() returns (ret_0: Ref)
+method whileFunctionCondition() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var anon_0: Ref
   label lbl_continue_0
-  anon_0 := root_whileLoop(df_boolToRef(true))
+  anon_0 := whileLoop(df_boolToRef(true))
   if (df_boolFromRef(anon_0)) {
     goto lbl_continue_0
   }
@@ -36,5 +36,5 @@ method root_whileFunctionCondition() returns (ret_0: Ref)
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
-method root_whileLoop(b: Ref) returns (ret: Ref)
+method whileLoop(b: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_boolType())

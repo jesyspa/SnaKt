@@ -1,5 +1,5 @@
 /viper_casts_while_inlining.kt:(250,255): info: Generated Viper text for idFun:
-method root_idFun(arg: Ref) returns (ret_0: Ref)
+method idFun(arg: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_nullable(df_anyType()))
 {
   inhale df_isSubtype(df_typeOf(arg), df_nullable(df_anyType()))
@@ -9,18 +9,18 @@ method root_idFun(arg: Ref) returns (ret_0: Ref)
 }
 
 /viper_casts_while_inlining.kt:(609,626): info: Generated Viper text for checkMemberAccess:
-field root_member: Ref
+field bf_member: Ref
 
-method ClassWithMember_Int(member: Ref) returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_root_ClassWithMember())
-  ensures acc(ClassWithMember_shared(ret), wildcard)
-  ensures acc(ClassWithMember_unique(ret), write)
-  ensures df_intFromRef((unfolding acc(ClassWithMember_shared(ret), wildcard) in
-      ret.root_member)) ==
+method c_ClassWithMember_Int(member: Ref) returns (ret: Ref)
+  ensures df_isSubtype(df_typeOf(ret), df_c_ClassWithMember())
+  ensures acc(c_ClassWithMember_shared(ret), wildcard)
+  ensures acc(c_ClassWithMember_unique(ret), write)
+  ensures df_intFromRef((unfolding acc(c_ClassWithMember_shared(ret), wildcard) in
+      ret.bf_member)) ==
     df_intFromRef(member)
 
 
-method root_checkMemberAccess() returns (ret_0: Ref)
+method checkMemberAccess() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
   ensures df_boolFromRef(ret_0) == true
 {
@@ -41,15 +41,15 @@ method root_checkMemberAccess() returns (ret_0: Ref)
   var ret_4: Ref
   var anon_3: Ref
   var anon_11: Ref
-  obj := ClassWithMember_Int(df_intToRef(42))
+  obj := c_ClassWithMember_Int(df_intToRef(42))
   inhale df_isSubtype(df_typeOf(obj), df_nullable(df_anyType()))
   anon_0 := obj
-  anon_7 := root_idFun(anon_0)
+  anon_7 := idFun(anon_0)
   anon_1 := anon_7
-  inhale df_isSubtype(df_typeOf(anon_1), df_c_root_ClassWithMember())
-  inhale acc(ClassWithMember_shared(anon_1), wildcard)
-  unfold acc(ClassWithMember_shared(anon_1), wildcard)
-  ret_2 := anon_1.root_member
+  inhale df_isSubtype(df_typeOf(anon_1), df_c_ClassWithMember())
+  inhale acc(c_ClassWithMember_shared(anon_1), wildcard)
+  unfold acc(c_ClassWithMember_shared(anon_1), wildcard)
+  ret_2 := anon_1.bf_member
   goto lbl_2
   label lbl_2
   anon_6 := ret_2
@@ -62,11 +62,11 @@ method root_checkMemberAccess() returns (ret_0: Ref)
   inhale df_isSubtype(df_typeOf(anon_4), df_intType())
   inhale df_isSubtype(df_typeOf(obj), df_nullable(df_anyType()))
   anon_2 := obj
-  inhale df_isSubtype(df_typeOf(anon_2), df_c_root_ClassWithMember())
-  inhale acc(ClassWithMember_shared(anon_2), wildcard)
+  inhale df_isSubtype(df_typeOf(anon_2), df_c_ClassWithMember())
+  inhale acc(c_ClassWithMember_shared(anon_2), wildcard)
   anon_3 := anon_2
-  unfold acc(ClassWithMember_shared(obj), wildcard)
-  anon_11 := obj.root_member
+  unfold acc(c_ClassWithMember_shared(obj), wildcard)
+  anon_11 := obj.bf_member
   ret_0 := df_boolToRef(df_intFromRef(anon_11) == 42)
   goto lbl_0
   label lbl_4
@@ -81,22 +81,22 @@ method root_checkMemberAccess() returns (ret_0: Ref)
   label lbl_0
 }
 
-method root_idFun(arg: Ref) returns (ret: Ref)
+method idFun(arg: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_nullable(df_anyType()))
 
 
 /viper_casts_while_inlining.kt:(895,919): info: Generated Viper text for checkGenericMemberAccess:
-field root_wrapped: Ref
+field bf_wrapped: Ref
 
-method Box_Any(wrapped: Ref) returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_root_Box())
-  ensures acc(Box_shared(ret), wildcard)
-  ensures acc(Box_unique(ret), write)
-  ensures (unfolding acc(Box_shared(ret), wildcard) in ret.root_wrapped) ==
+method c_Box_Any(wrapped: Ref) returns (ret: Ref)
+  ensures df_isSubtype(df_typeOf(ret), df_c_Box())
+  ensures acc(c_Box_shared(ret), wildcard)
+  ensures acc(c_Box_unique(ret), write)
+  ensures (unfolding acc(c_Box_shared(ret), wildcard) in ret.bf_wrapped) ==
     wrapped
 
 
-method root_checkGenericMemberAccess(box: Ref) returns (ret_0: Ref)
+method checkGenericMemberAccess(box: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
   ensures df_boolFromRef(ret_0) == true
 {
@@ -116,33 +116,33 @@ method root_checkGenericMemberAccess(box: Ref) returns (ret_0: Ref)
   var anon_3: Ref
   var anon_10: Ref
   var anon_11: Ref
-  inhale df_isSubtype(df_typeOf(box), df_c_root_Box())
-  inhale acc(Box_shared(box), wildcard)
+  inhale df_isSubtype(df_typeOf(box), df_c_Box())
+  inhale acc(c_Box_shared(box), wildcard)
   inhale df_isSubtype(df_typeOf(box), df_nullable(df_anyType()))
   anon_0 := box
-  anon_4 := root_idFun(anon_0)
+  anon_4 := idFun(anon_0)
   anon_1 := anon_4
-  inhale df_isSubtype(df_typeOf(anon_1), df_c_root_Box())
-  inhale acc(Box_shared(anon_1), wildcard)
-  unfold acc(Box_shared(anon_1), wildcard)
-  ret_2 := anon_1.root_wrapped
+  inhale df_isSubtype(df_typeOf(anon_1), df_c_Box())
+  inhale acc(c_Box_shared(anon_1), wildcard)
+  unfold acc(c_Box_shared(anon_1), wildcard)
+  ret_2 := anon_1.bf_wrapped
   goto lbl_2
   label lbl_2
   ret_1 := ret_2
   goto lbl_1
   label lbl_1
-  unfold acc(Box_shared(box), wildcard)
-  anon_8 := box.root_wrapped
-  anon_7 := Box_Any(anon_8)
+  unfold acc(c_Box_shared(box), wildcard)
+  anon_8 := box.bf_wrapped
+  anon_7 := c_Box_Any(anon_8)
   anon_2 := anon_7
   inhale df_isSubtype(df_typeOf(anon_2), df_nullable(df_anyType()))
-  inhale df_isSubtype(df_typeOf(anon_2), df_c_root_Box())
-  inhale acc(Box_shared(anon_2), wildcard)
+  inhale df_isSubtype(df_typeOf(anon_2), df_c_Box())
+  inhale acc(c_Box_shared(anon_2), wildcard)
   anon_3 := anon_2
-  unfold acc(Box_shared(anon_3), wildcard)
-  anon_10 := anon_3.root_wrapped
-  unfold acc(Box_shared(box), wildcard)
-  anon_11 := box.root_wrapped
+  unfold acc(c_Box_shared(anon_3), wildcard)
+  anon_10 := anon_3.bf_wrapped
+  unfold acc(c_Box_shared(box), wildcard)
+  anon_11 := box.bf_wrapped
   ret_0 := df_boolToRef(anon_10 == anon_11)
   goto lbl_0
   label lbl_4
@@ -157,14 +157,14 @@ method root_checkGenericMemberAccess(box: Ref) returns (ret_0: Ref)
   label lbl_0
 }
 
-method root_idFun(arg: Ref) returns (ret: Ref)
+method idFun(arg: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_nullable(df_anyType()))
 
 
 /viper_casts_while_inlining.kt:(1161,1182): info: Generated Viper text for checkArgumentIsCopied:
-field root_a: Ref
+field a: Ref
 
-method root_checkArgumentIsCopied(x: Ref) returns (ret_0: Ref)
+method checkArgumentIsCopied(x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var anon_2: Ref
@@ -175,19 +175,19 @@ method root_checkArgumentIsCopied(x: Ref) returns (ret_0: Ref)
   var anon_5: Ref
   var ret_2: Ref
   var anon_1: Ref
-  inhale df_isSubtype(df_typeOf(x), df_c_root_ClassWithVar())
-  inhale acc(ClassWithVar_shared(x), wildcard)
-  inhale acc(x.root_a, write)
-  anon_4 := x.root_a
-  exhale acc(x.root_a, write)
+  inhale df_isSubtype(df_typeOf(x), df_c_ClassWithVar())
+  inhale acc(c_ClassWithVar_shared(x), wildcard)
+  inhale acc(x.a, write)
+  anon_4 := x.a
+  exhale acc(x.a, write)
   inhale df_isSubtype(df_typeOf(anon_4), df_intType())
   anon_0 := anon_4
   inhale df_isSubtype(df_typeOf(anon_0), df_nullable(df_anyType()))
   inhale df_isSubtype(df_typeOf(anon_0), df_intType())
   anon_1 := anon_0
-  inhale acc(x.root_a, write)
-  x.root_a := df_intToRef(42)
-  exhale acc(x.root_a, write)
+  inhale acc(x.a, write)
+  x.a := df_intToRef(42)
+  exhale acc(x.a, write)
   ret_2 := anon_1
   goto lbl_2
   label lbl_2
@@ -204,15 +204,15 @@ method root_checkArgumentIsCopied(x: Ref) returns (ret_0: Ref)
 }
 
 /viper_casts_while_inlining.kt:(1347,1364): info: Generated Viper text for accessManyMembers:
-field root_a: Ref
+field a: Ref
 
-field root_b: Ref
+field b: Ref
 
-field root_c: Ref
+field c: Ref
 
-field root_i: Ref
+field i: Ref
 
-method root_accessManyMembers(m: Ref) returns (ret_0: Ref)
+method accessManyMembers(m: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var anon_4: Ref
@@ -242,27 +242,27 @@ method root_accessManyMembers(m: Ref) returns (ret_0: Ref)
   var anon_20: Ref
   var anon_21: Ref
   var anon_22: Ref
-  inhale df_isSubtype(df_typeOf(m), df_c_root_ManyMembers())
-  inhale acc(ManyMembers_shared(m), wildcard)
+  inhale df_isSubtype(df_typeOf(m), df_c_ManyMembers())
+  inhale acc(c_ManyMembers_shared(m), wildcard)
   inhale df_isSubtype(df_typeOf(m), df_nullable(df_anyType()))
   anon_0 := m
-  inhale df_isSubtype(df_typeOf(anon_0), df_c_root_ManyMembers())
-  inhale acc(ManyMembers_shared(anon_0), wildcard)
+  inhale df_isSubtype(df_typeOf(anon_0), df_c_ManyMembers())
+  inhale acc(c_ManyMembers_shared(anon_0), wildcard)
   anon_1 := anon_0
-  unfold acc(ManyMembers_shared(anon_1), wildcard)
-  anon_9 := anon_1.root_i
-  anon_8 := root_idFun(anon_9)
+  unfold acc(c_ManyMembers_shared(anon_1), wildcard)
+  anon_9 := anon_1.i
+  anon_8 := idFun(anon_9)
   anon_7 := anon_8
   inhale df_isSubtype(df_typeOf(anon_7), df_intType())
-  inhale acc(anon_1.root_b, write)
-  anon_12 := anon_1.root_b
-  exhale acc(anon_1.root_b, write)
+  inhale acc(anon_1.b, write)
+  anon_12 := anon_1.b
+  exhale acc(anon_1.b, write)
   inhale df_isSubtype(df_typeOf(anon_12), df_boolType())
-  anon_11 := root_idFun(anon_12)
+  anon_11 := idFun(anon_12)
   anon_10 := anon_11
   inhale df_isSubtype(df_typeOf(anon_10), df_boolType())
-  unfold acc(ManyMembers_shared(anon_1), wildcard)
-  ret_2 := anon_1.root_c
+  unfold acc(c_ManyMembers_shared(anon_1), wildcard)
+  ret_2 := anon_1.c
   goto lbl_2
   label lbl_2
   anon_6 := ret_2
@@ -272,28 +272,28 @@ method root_accessManyMembers(m: Ref) returns (ret_0: Ref)
   label lbl_1
   anon_5 := ret_1
   anon_4 := anon_5
-  inhale df_isSubtype(df_typeOf(anon_4), df_c_root_ClassWithVar())
-  inhale acc(ClassWithVar_shared(anon_4), wildcard)
+  inhale df_isSubtype(df_typeOf(anon_4), df_c_ClassWithVar())
+  inhale acc(c_ClassWithVar_shared(anon_4), wildcard)
   inhale df_isSubtype(df_typeOf(m), df_nullable(df_anyType()))
   anon_2 := m
-  anon_16 := root_idFun(anon_2)
+  anon_16 := idFun(anon_2)
   anon_3 := anon_16
-  inhale df_isSubtype(df_typeOf(anon_3), df_c_root_ManyMembers())
-  inhale acc(ManyMembers_shared(anon_3), wildcard)
-  unfold acc(ManyMembers_shared(anon_3), wildcard)
-  anon_19 := anon_3.root_i
-  anon_18 := root_idFun(anon_19)
+  inhale df_isSubtype(df_typeOf(anon_3), df_c_ManyMembers())
+  inhale acc(c_ManyMembers_shared(anon_3), wildcard)
+  unfold acc(c_ManyMembers_shared(anon_3), wildcard)
+  anon_19 := anon_3.i
+  anon_18 := idFun(anon_19)
   anon_17 := anon_18
   inhale df_isSubtype(df_typeOf(anon_17), df_intType())
-  inhale acc(anon_3.root_b, write)
-  anon_22 := anon_3.root_b
-  exhale acc(anon_3.root_b, write)
+  inhale acc(anon_3.b, write)
+  anon_22 := anon_3.b
+  exhale acc(anon_3.b, write)
   inhale df_isSubtype(df_typeOf(anon_22), df_boolType())
-  anon_21 := root_idFun(anon_22)
+  anon_21 := idFun(anon_22)
   anon_20 := anon_21
   inhale df_isSubtype(df_typeOf(anon_20), df_boolType())
-  unfold acc(ManyMembers_shared(anon_3), wildcard)
-  ret_4 := anon_3.root_c
+  unfold acc(c_ManyMembers_shared(anon_3), wildcard)
+  ret_4 := anon_3.c
   goto lbl_4
   label lbl_4
   anon_15 := ret_4
@@ -303,28 +303,28 @@ method root_accessManyMembers(m: Ref) returns (ret_0: Ref)
   label lbl_3
   anon_14 := ret_3
   anon_13 := anon_14
-  inhale df_isSubtype(df_typeOf(anon_13), df_c_root_ClassWithVar())
-  inhale acc(ClassWithVar_shared(anon_13), wildcard)
+  inhale df_isSubtype(df_typeOf(anon_13), df_c_ClassWithVar())
+  inhale acc(c_ClassWithVar_shared(anon_13), wildcard)
   label lbl_0
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
-method root_idFun(arg: Ref) returns (ret: Ref)
+method idFun(arg: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_nullable(df_anyType()))
 
 
 /viper_casts_while_inlining.kt:(1540,1558): info: Generated Viper text for checkEvaluatedOnce:
-field root_a: Ref
+field a: Ref
 
-field root_b: Ref
+field b: Ref
 
-field root_c: Ref
+field bf_i: Ref
 
-field root_i: Ref
+field c: Ref
 
-field root_size: Ref
+field size: Ref
 
-method root_checkEvaluatedOnce(i: Ref, mm: Ref) returns (ret_0: Ref)
+method checkEvaluatedOnce(i: Ref, mm: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var anon_2: Ref
@@ -337,11 +337,11 @@ method root_checkEvaluatedOnce(i: Ref, mm: Ref) returns (ret_0: Ref)
   var ret_2: Ref
   var anon_1: Ref
   inhale df_isSubtype(df_typeOf(i), df_intType())
-  inhale df_isSubtype(df_typeOf(mm), df_c_root_ManyMembers())
-  inhale acc(ManyMembers_shared(mm), wildcard)
-  inhale acc(mm.root_b, write)
-  anon_5 := mm.root_b
-  exhale acc(mm.root_b, write)
+  inhale df_isSubtype(df_typeOf(mm), df_c_ManyMembers())
+  inhale acc(c_ManyMembers_shared(mm), wildcard)
+  inhale acc(mm.b, write)
+  anon_5 := mm.b
+  exhale acc(mm.b, write)
   inhale df_isSubtype(df_typeOf(anon_5), df_boolType())
   if (df_boolFromRef(anon_5)) {
     anon_4 := df_intToRef(1)

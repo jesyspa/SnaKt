@@ -1,7 +1,7 @@
 /simple_precondition.kt:(238,242): info: Generated Viper text for test:
-field root_size: Ref
+field size: Ref
 
-method root_test(idx: Ref) returns (ret_0: Ref)
+method test(idx: Ref) returns (ret_0: Ref)
   requires 0 <= df_intFromRef(idx)
   requires df_intFromRef(idx) < 3
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
@@ -16,7 +16,7 @@ method root_test(idx: Ref) returns (ret_0: Ref)
 }
 
 /simple_precondition.kt:(446,469): info: Generated Viper text for inlineWithSpecification:
-method root_inlineWithSpecification(bool: Ref) returns (ret_0: Ref)
+method inlineWithSpecification(bool: Ref) returns (ret_0: Ref)
   requires true
   requires df_boolFromRef(bool)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
@@ -27,7 +27,7 @@ method root_inlineWithSpecification(bool: Ref) returns (ret_0: Ref)
 }
 
 /simple_precondition.kt:(560,569): info: Generated Viper text for good_call:
-method root_good_call() returns (ret_0: Ref)
+method good_call() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var anon_2: Ref
@@ -35,7 +35,7 @@ method root_good_call() returns (ret_0: Ref)
   var anon_0: Ref
   var ret_2: Ref
   var anon_1: Ref
-  anon_2 := root_test(df_intToRef(2))
+  anon_2 := test(df_intToRef(2))
   anon_0 := df_boolToRef(true)
   label lbl_1
   inhale df_isSubtype(df_typeOf(ret_1), df_unitType())
@@ -46,7 +46,7 @@ method root_good_call() returns (ret_0: Ref)
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
-method root_test(idx: Ref) returns (ret: Ref)
+method test(idx: Ref) returns (ret: Ref)
   requires 0 <= df_intFromRef(idx)
   requires df_intFromRef(idx) < 3
   ensures df_isSubtype(df_typeOf(ret), df_unitType())

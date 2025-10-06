@@ -1,5 +1,5 @@
 /returns_null.kt:(121,146): info: Generated Viper text for returns_null_unverifiable:
-method root_returns_null_unverifiable(x: Ref) returns (ret_0: Ref)
+method returns_null_unverifiable(x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_nullable(df_intType()))
   ensures true ==> false
 {
@@ -12,7 +12,7 @@ method root_returns_null_unverifiable(x: Ref) returns (ret_0: Ref)
 /returns_null.kt:(187,210): warning: Cannot verify that if the function returns then false.
 
 /returns_null.kt:(277,302): info: Generated Viper text for non_nullable_returns_null:
-method root_non_nullable_returns_null(x: Ref) returns (ret_0: Ref)
+method non_nullable_returns_null(x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
   ensures ret_0 == df_nullValue()
 {

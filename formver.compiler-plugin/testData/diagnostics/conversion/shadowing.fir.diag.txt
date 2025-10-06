@@ -1,5 +1,5 @@
 /shadowing.kt:(23,34): info: Generated Viper text for shadowLocal:
-method root_shadowLocal() returns (ret_0: Ref)
+method shadowLocal() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var foo: Ref
@@ -22,7 +22,7 @@ method root_shadowLocal() returns (ret_0: Ref)
 }
 
 /shadowing.kt:(232,243): info: Generated Viper text for shadowParam:
-method root_shadowParam(p_x: Ref) returns (ret_0: Ref)
+method shadowParam(p_x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var foo: Ref
@@ -36,7 +36,7 @@ method root_shadowParam(p_x: Ref) returns (ret_0: Ref)
 }
 
 /shadowing.kt:(322,334): info: Generated Viper text for shadowNested:
-method root_shadowNested(p_x: Ref) returns (ret_0: Ref)
+method shadowNested(p_x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var foo: Ref

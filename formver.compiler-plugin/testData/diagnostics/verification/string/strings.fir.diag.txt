@@ -1,28 +1,18 @@
 /strings.kt:(237,245): info: Generated Viper text for testType:
-field root_size: Ref
+field bf_str: Ref
 
-field root_str: Ref
-
-predicate StringBox_shared(this$dispatch: Ref) {
-  acc(this$dispatch.root_str, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.root_str), df_stringType())
-}
-
-predicate StringBox_unique(this$dispatch: Ref) {
-  acc(this$dispatch.root_str, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.root_str), df_stringType())
-}
+field size: Ref
 
 predicate c_BooleanArray_shared(this$dispatch: Ref) {
-  acc(this$dispatch.root_size, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.root_size), df_intType()) &&
+  acc(this$dispatch.size, wildcard) &&
+  df_isSubtype(df_typeOf(this$dispatch.size), df_intType()) &&
   acc(c_Cloneable_shared(this$dispatch), wildcard) &&
   acc(c_Serializable_shared(this$dispatch), wildcard)
 }
 
 predicate c_BooleanArray_unique(this$dispatch: Ref) {
-  acc(this$dispatch.root_size, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.root_size), df_intType()) &&
+  acc(this$dispatch.size, wildcard) &&
+  df_isSubtype(df_typeOf(this$dispatch.size), df_intType()) &&
   acc(c_Cloneable_unique(this$dispatch), write) &&
   acc(c_Serializable_unique(this$dispatch), write)
 }
@@ -43,16 +33,26 @@ predicate c_Serializable_unique(this$dispatch: Ref) {
   true
 }
 
-method StringBox_String(str: Ref) returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_root_StringBox())
-  ensures acc(StringBox_shared(ret), wildcard)
-  ensures acc(StringBox_unique(ret), write)
-  ensures df_stringFromRef((unfolding acc(StringBox_shared(ret), wildcard) in
-      ret.root_str)) ==
+predicate c_StringBox_shared(this$dispatch: Ref) {
+  acc(this$dispatch.bf_str, wildcard) &&
+  df_isSubtype(df_typeOf(this$dispatch.bf_str), df_stringType())
+}
+
+predicate c_StringBox_unique(this$dispatch: Ref) {
+  acc(this$dispatch.bf_str, wildcard) &&
+  df_isSubtype(df_typeOf(this$dispatch.bf_str), df_stringType())
+}
+
+method c_StringBox_T_String(str: Ref) returns (ret: Ref)
+  ensures df_isSubtype(df_typeOf(ret), df_c_StringBox())
+  ensures acc(c_StringBox_shared(ret), wildcard)
+  ensures acc(c_StringBox_unique(ret), write)
+  ensures df_stringFromRef((unfolding acc(c_StringBox_shared(ret), wildcard) in
+      ret.bf_str)) ==
     df_stringFromRef(str)
 
 
-method root_testType(s: Ref) returns (ret_0: Ref)
+method testType(s: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var cond1: Ref
@@ -62,13 +62,13 @@ method root_testType(s: Ref) returns (ret_0: Ref)
   var anon_2: Ref
   var anon_3: Ref
   inhale df_isSubtype(df_typeOf(s), df_stringType())
-  anon_1 := StringBox_String(s)
-  unfold acc(StringBox_shared(anon_1), wildcard)
-  anon_0 := anon_1.root_str
+  anon_1 := c_StringBox_T_String(s)
+  unfold acc(c_StringBox_shared(anon_1), wildcard)
+  anon_0 := anon_1.bf_str
   cond1 := df_boolToRef(df_stringFromRef(anon_0) == df_stringFromRef(s))
-  anon_3 := StringBox_String(df_stringToRef(Seq(115, 116, 114)))
-  unfold acc(StringBox_shared(anon_3), wildcard)
-  anon_2 := anon_3.root_str
+  anon_3 := c_StringBox_T_String(df_stringToRef(Seq(115, 116, 114)))
+  unfold acc(c_StringBox_shared(anon_3), wildcard)
+  anon_2 := anon_3.bf_str
   cond2 := df_boolToRef(df_stringFromRef(anon_2) == Seq(115, 116, 114))
   assert df_boolFromRef(cond1)
   assert df_boolFromRef(cond2)
@@ -77,30 +77,20 @@ method root_testType(s: Ref) returns (ret_0: Ref)
 }
 
 /strings.kt:(412,427): info: Generated Viper text for testLengthField:
-field root_size: Ref
+field bf_str: Ref
 
-field root_str: Ref
-
-predicate StringBox_shared(this$dispatch: Ref) {
-  acc(this$dispatch.root_str, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.root_str), df_stringType())
-}
-
-predicate StringBox_unique(this$dispatch: Ref) {
-  acc(this$dispatch.root_str, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.root_str), df_stringType())
-}
+field size: Ref
 
 predicate c_BooleanArray_shared(this$dispatch: Ref) {
-  acc(this$dispatch.root_size, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.root_size), df_intType()) &&
+  acc(this$dispatch.size, wildcard) &&
+  df_isSubtype(df_typeOf(this$dispatch.size), df_intType()) &&
   acc(c_Cloneable_shared(this$dispatch), wildcard) &&
   acc(c_Serializable_shared(this$dispatch), wildcard)
 }
 
 predicate c_BooleanArray_unique(this$dispatch: Ref) {
-  acc(this$dispatch.root_size, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.root_size), df_intType()) &&
+  acc(this$dispatch.size, wildcard) &&
+  df_isSubtype(df_typeOf(this$dispatch.size), df_intType()) &&
   acc(c_Cloneable_unique(this$dispatch), write) &&
   acc(c_Serializable_unique(this$dispatch), write)
 }
@@ -121,16 +111,26 @@ predicate c_Serializable_unique(this$dispatch: Ref) {
   true
 }
 
-method StringBox_String(str: Ref) returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_root_StringBox())
-  ensures acc(StringBox_shared(ret), wildcard)
-  ensures acc(StringBox_unique(ret), write)
-  ensures df_stringFromRef((unfolding acc(StringBox_shared(ret), wildcard) in
-      ret.root_str)) ==
+predicate c_StringBox_shared(this$dispatch: Ref) {
+  acc(this$dispatch.bf_str, wildcard) &&
+  df_isSubtype(df_typeOf(this$dispatch.bf_str), df_stringType())
+}
+
+predicate c_StringBox_unique(this$dispatch: Ref) {
+  acc(this$dispatch.bf_str, wildcard) &&
+  df_isSubtype(df_typeOf(this$dispatch.bf_str), df_stringType())
+}
+
+method c_StringBox_T_String(str: Ref) returns (ret: Ref)
+  ensures df_isSubtype(df_typeOf(ret), df_c_StringBox())
+  ensures acc(c_StringBox_shared(ret), wildcard)
+  ensures acc(c_StringBox_unique(ret), write)
+  ensures df_stringFromRef((unfolding acc(c_StringBox_shared(ret), wildcard) in
+      ret.bf_str)) ==
     df_stringFromRef(str)
 
 
-method root_testLengthField(s: Ref) returns (ret_0: Ref)
+method testLengthField(s: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var len: Ref
@@ -139,9 +139,9 @@ method root_testLengthField(s: Ref) returns (ret_0: Ref)
   var anon_1: Ref
   inhale df_isSubtype(df_typeOf(s), df_stringType())
   len := sp_stringLength(s)
-  anon_1 := StringBox_String(df_stringToRef(Seq(115, 116, 114)))
-  unfold acc(StringBox_shared(anon_1), wildcard)
-  anon_0 := anon_1.root_str
+  anon_1 := c_StringBox_T_String(df_stringToRef(Seq(115, 116, 114)))
+  unfold acc(c_StringBox_shared(anon_1), wildcard)
+  anon_0 := anon_1.bf_str
   cond1 := df_boolToRef(|df_stringFromRef(anon_0)| == 3)
   assert df_boolFromRef(cond1)
   label lbl_0
@@ -149,18 +149,18 @@ method root_testLengthField(s: Ref) returns (ret_0: Ref)
 }
 
 /strings.kt:(552,559): info: Generated Viper text for testOps:
-field root_size: Ref
+field size: Ref
 
 predicate c_BooleanArray_shared(this$dispatch: Ref) {
-  acc(this$dispatch.root_size, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.root_size), df_intType()) &&
+  acc(this$dispatch.size, wildcard) &&
+  df_isSubtype(df_typeOf(this$dispatch.size), df_intType()) &&
   acc(c_Cloneable_shared(this$dispatch), wildcard) &&
   acc(c_Serializable_shared(this$dispatch), wildcard)
 }
 
 predicate c_BooleanArray_unique(this$dispatch: Ref) {
-  acc(this$dispatch.root_size, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.root_size), df_intType()) &&
+  acc(this$dispatch.size, wildcard) &&
+  df_isSubtype(df_typeOf(this$dispatch.size), df_intType()) &&
   acc(c_Cloneable_unique(this$dispatch), write) &&
   acc(c_Serializable_unique(this$dispatch), write)
 }
@@ -185,7 +185,7 @@ method String_plus(this$dispatch: Ref, other: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_stringType())
 
 
-method root_testOps(s: Ref) returns (ret_0: Ref)
+method testOps(s: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var c: Ref

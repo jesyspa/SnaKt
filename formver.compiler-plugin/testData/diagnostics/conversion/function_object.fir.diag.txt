@@ -1,5 +1,5 @@
 /function_object.kt:(23,35): info: Generated Viper text for unitFunction:
-method root_unitFunction(f: Ref) returns (ret_0: Ref)
+method unitFunction(f: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   inhale df_isSubtype(df_typeOf(f), df_functionType())
@@ -8,7 +8,7 @@ method root_unitFunction(f: Ref) returns (ret_0: Ref)
 }
 
 /function_object.kt:(90,108): info: Generated Viper text for functionObjectCall:
-method root_functionObjectCall(g: Ref) returns (ret_0: Ref)
+method functionObjectCall(g: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   var anon_0: Ref
@@ -20,7 +20,7 @@ method root_functionObjectCall(g: Ref) returns (ret_0: Ref)
 }
 
 /function_object.kt:(171,195): info: Generated Viper text for functionObjectNestedCall:
-method root_functionObjectNestedCall(f: Ref, g: Ref) returns (ret_0: Ref)
+method functionObjectNestedCall(f: Ref, g: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   var anon_0: Ref

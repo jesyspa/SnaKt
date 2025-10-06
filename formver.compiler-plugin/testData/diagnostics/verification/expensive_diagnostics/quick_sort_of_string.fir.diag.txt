@@ -1,6 +1,5 @@
 /quick_sort_of_string.kt:(282,294): info: Generated Viper text for minOrMaxChar:
-method root_minOrMaxChar(this$extension: Ref, calcMin: Ref)
-  returns (ret_0: Ref)
+method minOrMaxChar(this$extension: Ref, calcMin: Ref) returns (ret_0: Ref)
   requires |df_stringFromRef(this$extension)| >= 1
   ensures df_isSubtype(df_typeOf(ret_0), df_charType())
   ensures df_boolFromRef(calcMin) ==>
@@ -79,8 +78,7 @@ method root_minOrMaxChar(this$extension: Ref, calcMin: Ref)
 }
 
 /quick_sort_of_string.kt:(1135,1144): info: Generated Viper text for quickSort:
-method root_minOrMaxChar(this$extension: Ref, calcMin: Ref)
-  returns (ret: Ref)
+method minOrMaxChar(this$extension: Ref, calcMin: Ref) returns (ret: Ref)
   requires |df_stringFromRef(this$extension)| >= 1
   ensures df_isSubtype(df_typeOf(ret), df_charType())
   ensures df_boolFromRef(calcMin) ==>
@@ -95,7 +93,7 @@ method root_minOrMaxChar(this$extension: Ref, calcMin: Ref)
       df_stringFromRef(this$extension)[anon$builtin_20])
 
 
-method root_quickSort(this$extension: Ref) returns (ret_0: Ref)
+method quickSort(this$extension: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_stringType())
   ensures |df_stringFromRef(ret_0)| == |df_stringFromRef(this$extension)|
   ensures (forall anon$builtin_18: Int ::1 <= anon$builtin_18 &&
@@ -110,14 +108,14 @@ method root_quickSort(this$extension: Ref) returns (ret_0: Ref)
     ret_0 := this$extension
     goto lbl_0
   }
-  l0_minVal := root_minOrMaxChar(this$extension, df_boolToRef(true))
-  l0_maxVal := root_minOrMaxChar(this$extension, df_boolToRef(false))
-  ret_0 := root_quickSortRec(this$extension, l0_minVal, l0_maxVal)
+  l0_minVal := minOrMaxChar(this$extension, df_boolToRef(true))
+  l0_maxVal := minOrMaxChar(this$extension, df_boolToRef(false))
+  ret_0 := quickSortRec(this$extension, l0_minVal, l0_maxVal)
   goto lbl_0
   label lbl_0
 }
 
-method root_quickSortRec(this$extension: Ref, p_minVal: Ref, p_maxVal: Ref)
+method quickSortRec(this$extension: Ref, p_minVal: Ref, p_maxVal: Ref)
   returns (ret: Ref)
   requires (forall anon$builtin_21: Int ::0 <= anon$builtin_21 &&
       anon$builtin_21 < |df_stringFromRef(this$extension)| ==>
@@ -142,14 +140,14 @@ method String_plus(this$dispatch: Ref, other: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_stringType())
 
 
-method root_chooseIndex(this$extension: Ref) returns (ret: Ref)
+method chooseIndex(this$extension: Ref) returns (ret: Ref)
   requires |df_stringFromRef(this$extension)| >= 1
   ensures df_isSubtype(df_typeOf(ret), df_intType())
   ensures 0 <= df_intFromRef(ret) &&
     df_intFromRef(ret) < |df_stringFromRef(this$extension)|
 
 
-method root_quickSortRec(this$extension: Ref, minVal: Ref, maxVal: Ref)
+method quickSortRec(this$extension: Ref, minVal: Ref, maxVal: Ref)
   returns (ret_0: Ref)
   requires (forall anon$builtin_12: Int ::0 <= anon$builtin_12 &&
       anon$builtin_12 < |df_stringFromRef(this$extension)| ==>
@@ -184,7 +182,7 @@ method root_quickSortRec(this$extension: Ref, minVal: Ref, maxVal: Ref)
     ret_0 := this$extension
     goto lbl_ret_0
   }
-  anon_1 := root_chooseIndex(this$extension)
+  anon_1 := chooseIndex(this$extension)
   medVal := sp_stringGet(this$extension, anon_1)
   i := df_intToRef(0)
   lessString := df_stringToRef(Seq[Int]())
@@ -265,8 +263,8 @@ method root_quickSortRec(this$extension: Ref, minVal: Ref, maxVal: Ref)
   assert (forall anon$builtin_5: Int ::0 <= anon$builtin_5 &&
       anon$builtin_5 < |df_stringFromRef(eqString)| ==>
       df_stringFromRef(eqString)[anon$builtin_5] == df_charFromRef(medVal))
-  anon_4 := root_quickSortRec(lessString, minVal, medVal)
-  anon_5 := root_quickSortRec(greaterString, medVal, maxVal)
+  anon_4 := quickSortRec(lessString, minVal, medVal)
+  anon_5 := quickSortRec(greaterString, medVal, maxVal)
   ret_0 := sp_addStrings(sp_addStrings(anon_4, eqString), anon_5)
   goto lbl_ret_0
   label lbl_ret_0

@@ -1,5 +1,5 @@
 /comparison.kt:(23,27): info: Generated Viper text for less:
-method root_less(x: Ref, y: Ref) returns (ret_0: Ref)
+method less(x: Ref, y: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
 {
   inhale df_isSubtype(df_typeOf(x), df_intType())
@@ -10,7 +10,7 @@ method root_less(x: Ref, y: Ref) returns (ret_0: Ref)
 }
 
 /comparison.kt:(79,88): info: Generated Viper text for lessEqual:
-method root_lessEqual(x: Ref, y: Ref) returns (ret_0: Ref)
+method lessEqual(x: Ref, y: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
 {
   inhale df_isSubtype(df_typeOf(x), df_intType())
@@ -21,7 +21,7 @@ method root_lessEqual(x: Ref, y: Ref) returns (ret_0: Ref)
 }
 
 /comparison.kt:(141,148): info: Generated Viper text for greater:
-method root_greater(x: Ref, y: Ref) returns (ret_0: Ref)
+method greater(x: Ref, y: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
 {
   inhale df_isSubtype(df_typeOf(x), df_intType())
@@ -32,7 +32,7 @@ method root_greater(x: Ref, y: Ref) returns (ret_0: Ref)
 }
 
 /comparison.kt:(200,212): info: Generated Viper text for greaterEqual:
-method root_greaterEqual(x: Ref, y: Ref) returns (ret_0: Ref)
+method greaterEqual(x: Ref, y: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
 {
   inhale df_isSubtype(df_typeOf(x), df_intType())

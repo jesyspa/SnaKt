@@ -17,7 +17,7 @@ domain rt  {
 
   unique function df_stringType(): rt
 
-  unique function df_c_root_Foo(): rt
+  unique function df_c_Foo(): rt
 
   function df_nullValue(): Ref
 
@@ -117,7 +117,7 @@ domain rt  {
   }
 
   axiom {
-    df_isSubtype(df_c_root_Foo(), df_anyType())
+    df_isSubtype(df_c_Foo(), df_anyType())
   }
 
   axiom supertype_of_nothing {
@@ -241,7 +241,7 @@ domain rt  {
   }
 }
 
-field root_x: Ref
+field bf_x: Ref
 
 function sp_addCharInt(arg1: Ref, arg2: Ref): Ref
   ensures df_isSubtype(df_typeOf(result), df_charType())
@@ -389,33 +389,33 @@ function sp_timesInts(arg1: Ref, arg2: Ref): Ref
     df_intFromRef(arg1) * df_intFromRef(arg2)
 
 
-predicate Foo_shared(this$dispatch: Ref) {
-  acc(this$dispatch.root_x, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.root_x), df_intType())
+predicate c_Foo_shared(this$dispatch: Ref) {
+  acc(this$dispatch.bf_x, wildcard) &&
+  df_isSubtype(df_typeOf(this$dispatch.bf_x), df_intType())
 }
 
-predicate Foo_unique(this$dispatch: Ref) {
-  acc(this$dispatch.root_x, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.root_x), df_intType())
+predicate c_Foo_unique(this$dispatch: Ref) {
+  acc(this$dispatch.bf_x, wildcard) &&
+  df_isSubtype(df_typeOf(this$dispatch.bf_x), df_intType())
 }
 
-method Foo_Int(x: Ref) returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_root_Foo())
-  ensures acc(Foo_shared(ret), wildcard)
-  ensures acc(Foo_unique(ret), write)
-  ensures df_intFromRef((unfolding acc(Foo_shared(ret), wildcard) in
-      ret.root_x)) ==
+method c_Foo_Int(x: Ref) returns (ret: Ref)
+  ensures df_isSubtype(df_typeOf(ret), df_c_Foo())
+  ensures acc(c_Foo_shared(ret), wildcard)
+  ensures acc(c_Foo_unique(ret), write)
+  ensures df_intFromRef((unfolding acc(c_Foo_shared(ret), wildcard) in
+      ret.bf_x)) ==
     df_intFromRef(x)
 
 
-method root_f() returns (ret_0: Ref)
+method f() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var foo: Ref
-  foo := Foo_Int(df_intToRef(0))
+  foo := c_Foo_Int(df_intToRef(0))
   label lbl_0
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
-/full_viper_dump.kt:(172,173): info: Generated ExpEmbedding for root_f:
-Function(name = root_f, { Declare(Var(foo), Foo, MethodCall(callee = Foo_Int, Int(0))) }, return = lbl_0)
+/full_viper_dump.kt:(172,173): info: Generated ExpEmbedding for f:
+Function(name = f, { Declare(Var(foo), Foo, MethodCall(callee = c_Foo_Int, Int(0))) }, return = lbl_0)

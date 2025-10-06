@@ -14,14 +14,14 @@ method c_List_get(this$dispatch: Ref, index: Ref) returns (ret: Ref)
 
 
 method emptyList() returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_pkg$kotlin_collections_List())
+  ensures df_isSubtype(df_typeOf(ret), df_c_List())
   ensures acc(ret.sp_size, write)
   ensures df_intFromRef(ret.sp_size) >= 0
   ensures acc(c_List_shared(ret), wildcard)
   ensures df_intFromRef(ret.sp_size) == 0
 
 
-method root_empty_list_expr_get() returns (ret_0: Ref)
+method empty_list_expr_get() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var s: Ref
@@ -50,14 +50,14 @@ method c_List_get(this$dispatch: Ref, index: Ref) returns (ret: Ref)
 
 
 method emptyList() returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_pkg$kotlin_collections_List())
+  ensures df_isSubtype(df_typeOf(ret), df_c_List())
   ensures acc(ret.sp_size, write)
   ensures df_intFromRef(ret.sp_size) >= 0
   ensures acc(c_List_shared(ret), wildcard)
   ensures df_intFromRef(ret.sp_size) == 0
 
 
-method root_empty_list_get() returns (ret_0: Ref)
+method empty_list_get() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var myList: Ref
@@ -85,7 +85,7 @@ method c_List_get(this$dispatch: Ref, index: Ref) returns (ret: Ref)
     old(df_intFromRef(this$dispatch.sp_size))
 
 
-method root_unsafe_last(l: Ref) returns (ret_0: Ref)
+method unsafe_last(l: Ref) returns (ret_0: Ref)
   requires acc(l.sp_size, write)
   requires df_intFromRef(l.sp_size) >= 0
   ensures acc(l.sp_size, write)
@@ -93,7 +93,7 @@ method root_unsafe_last(l: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   var anon_0: Ref
-  inhale df_isSubtype(df_typeOf(l), df_c_pkg$kotlin_collections_List())
+  inhale df_isSubtype(df_typeOf(l), df_c_List())
   inhale acc(c_List_shared(l), wildcard)
   anon_0 := l.sp_size
   inhale df_isSubtype(df_typeOf(anon_0), df_intType())
@@ -106,6 +106,23 @@ method root_unsafe_last(l: Ref) returns (ret_0: Ref)
 
 /list.kt:(350,357): info: Generated Viper text for add_get:
 field sp_size: Ref
+
+method add_get(l: Ref) returns (ret_0: Ref)
+  requires acc(l.sp_size, write)
+  requires df_intFromRef(l.sp_size) >= 0
+  ensures acc(l.sp_size, write)
+  ensures df_intFromRef(l.sp_size) >= 0
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
+{
+  var anon_0: Ref
+  var n: Ref
+  inhale df_isSubtype(df_typeOf(l), df_c_MutableList())
+  inhale acc(c_MutableList_shared(l), wildcard)
+  anon_0 := c_MutableList_add(l, df_intToRef(1))
+  n := c_MutableList_get(l, df_intToRef(1))
+  label lbl_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
+}
 
 method c_MutableList_add(this$dispatch: Ref, element: Ref)
   returns (ret: Ref)
@@ -130,23 +147,6 @@ method c_MutableList_get(this$dispatch: Ref, index: Ref) returns (ret: Ref)
     old(df_intFromRef(this$dispatch.sp_size))
 
 
-method root_add_get(l: Ref) returns (ret_0: Ref)
-  requires acc(l.sp_size, write)
-  requires df_intFromRef(l.sp_size) >= 0
-  ensures acc(l.sp_size, write)
-  ensures df_intFromRef(l.sp_size) >= 0
-  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
-{
-  var anon_0: Ref
-  var n: Ref
-  inhale df_isSubtype(df_typeOf(l), df_c_pkg$kotlin_collections_MutableList())
-  inhale acc(c_MutableList_shared(l), wildcard)
-  anon_0 := c_MutableList_add(l, df_intToRef(1))
-  n := c_MutableList_get(l, df_intToRef(1))
-  label lbl_0
-  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
-}
-
 /list.kt:(406,410): warning: Invalid index for list 'l', the index may be greater than the list's size.
 
 /list.kt:(432,446): info: Generated Viper text for empty_list_sub:
@@ -161,7 +161,7 @@ method c_List_subList(this$dispatch: Ref, fromIndex: Ref, toIndex: Ref)
   requires df_intFromRef(toIndex) <= df_intFromRef(this$dispatch.sp_size)
   ensures acc(this$dispatch.sp_size, write)
   ensures df_intFromRef(this$dispatch.sp_size) >= 0
-  ensures df_isSubtype(df_typeOf(ret), df_c_pkg$kotlin_collections_List())
+  ensures df_isSubtype(df_typeOf(ret), df_c_List())
   ensures acc(ret.sp_size, write)
   ensures df_intFromRef(ret.sp_size) >= 0
   ensures acc(c_List_shared(ret), wildcard)
@@ -172,14 +172,14 @@ method c_List_subList(this$dispatch: Ref, fromIndex: Ref, toIndex: Ref)
 
 
 method emptyList() returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_pkg$kotlin_collections_List())
+  ensures df_isSubtype(df_typeOf(ret), df_c_List())
   ensures acc(ret.sp_size, write)
   ensures df_intFromRef(ret.sp_size) >= 0
   ensures acc(c_List_shared(ret), wildcard)
   ensures df_intFromRef(ret.sp_size) == 0
 
 
-method root_empty_list_sub() returns (ret_0: Ref)
+method empty_list_sub() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var l: Ref
@@ -204,7 +204,7 @@ method c_List_subList(this$dispatch: Ref, fromIndex: Ref, toIndex: Ref)
   requires df_intFromRef(toIndex) <= df_intFromRef(this$dispatch.sp_size)
   ensures acc(this$dispatch.sp_size, write)
   ensures df_intFromRef(this$dispatch.sp_size) >= 0
-  ensures df_isSubtype(df_typeOf(ret), df_c_pkg$kotlin_collections_List())
+  ensures df_isSubtype(df_typeOf(ret), df_c_List())
   ensures acc(ret.sp_size, write)
   ensures df_intFromRef(ret.sp_size) >= 0
   ensures acc(c_List_shared(ret), wildcard)
@@ -215,14 +215,14 @@ method c_List_subList(this$dispatch: Ref, fromIndex: Ref, toIndex: Ref)
 
 
 method emptyList() returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_pkg$kotlin_collections_List())
+  ensures df_isSubtype(df_typeOf(ret), df_c_List())
   ensures acc(ret.sp_size, write)
   ensures df_intFromRef(ret.sp_size) >= 0
   ensures acc(c_List_shared(ret), wildcard)
   ensures df_intFromRef(ret.sp_size) == 0
 
 
-method root_empty_list_sub_negative() returns (ret_0: Ref)
+method empty_list_sub_negative() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var l: Ref

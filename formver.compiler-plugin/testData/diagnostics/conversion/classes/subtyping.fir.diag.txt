@@ -1,5 +1,5 @@
 /subtyping.kt:(80,89): info: Generated Viper text for smartCast:
-method root_smartCast(x: Ref) returns (ret_0: Ref)
+method smartCast(x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   inhale df_isSubtype(df_typeOf(x), df_nullable(df_intType()))
@@ -14,7 +14,7 @@ method root_smartCast(x: Ref) returns (ret_0: Ref)
 }
 
 /subtyping.kt:(187,202): info: Generated Viper text for returnSubtyping:
-method root_returnSubtyping() returns (ret_0: Ref)
+method returnSubtyping() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_nullable(df_intType()))
 {
   ret_0 := df_intToRef(0)
@@ -23,7 +23,7 @@ method root_returnSubtyping() returns (ret_0: Ref)
 }
 
 /subtyping.kt:(233,252): info: Generated Viper text for assignmentSubtyping:
-method root_assignmentSubtyping() returns (ret_0: Ref)
+method assignmentSubtyping() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var x: Ref
@@ -34,14 +34,14 @@ method root_assignmentSubtyping() returns (ret_0: Ref)
 }
 
 /subtyping.kt:(358,384): info: Generated Viper text for functionParameterSubtyping:
-method root_functionParameterSubtyping() returns (ret_0: Ref)
+method functionParameterSubtyping() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var anon_0: Ref
-  anon_0 := root_nullableParameter(df_boolToRef(false))
+  anon_0 := nullableParameter(df_boolToRef(false))
   label lbl_0
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
-method root_nullableParameter(b: Ref) returns (ret: Ref)
+method nullableParameter(b: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_unitType())

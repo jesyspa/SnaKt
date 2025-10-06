@@ -1,5 +1,5 @@
 /non-local-returns.kt:(155,167): info: Generated Viper text for simpleReturn:
-method root_simpleReturn() returns (ret_0: Ref)
+method simpleReturn() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   var ret_1: Ref
@@ -20,7 +20,7 @@ method root_simpleReturn() returns (ret_0: Ref)
 }
 
 /non-local-returns.kt:(238,252): info: Generated Viper text for returnAtInline:
-method root_returnAtInline() returns (ret_0: Ref)
+method returnAtInline() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   var ret_1: Ref
@@ -41,7 +41,7 @@ method root_returnAtInline() returns (ret_0: Ref)
 }
 
 /non-local-returns.kt:(330,342): info: Generated Viper text for doubleInvoke:
-method root_doubleInvoke() returns (ret_0: Ref)
+method doubleInvoke() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   var ret_1: Ref
@@ -74,7 +74,7 @@ method root_doubleInvoke() returns (ret_0: Ref)
 }
 
 /non-local-returns.kt:(567,573): info: Generated Viper text for nested:
-method root_nested() returns (ret_0: Ref)
+method nested() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   var ret_1: Ref

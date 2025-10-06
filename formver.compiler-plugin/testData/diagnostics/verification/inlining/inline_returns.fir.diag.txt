@@ -1,7 +1,7 @@
 /inline_returns.kt:(324,337): info: Generated Viper text for simple_return:
-field root_size: Ref
+field size: Ref
 
-method root_simple_return() returns (ret_0: Ref)
+method simple_return() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var cond1: Ref
@@ -22,7 +22,7 @@ method root_simple_return() returns (ret_0: Ref)
 }
 
 /inline_returns.kt:(434,448): info: Generated Viper text for unnamed_return:
-method root_unnamed_return() returns (ret_0: Ref)
+method unnamed_return() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
   ensures df_boolFromRef(ret_0) == true
 {
@@ -44,7 +44,7 @@ method root_unnamed_return() returns (ret_0: Ref)
 }
 
 /inline_returns.kt:(605,623): info: Generated Viper text for named_local_return:
-method root_named_local_return() returns (ret_0: Ref)
+method named_local_return() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
   ensures df_boolFromRef(ret_0) == true
 {
@@ -66,7 +66,7 @@ method root_named_local_return() returns (ret_0: Ref)
 }
 
 /inline_returns.kt:(785,806): info: Generated Viper text for named_nonlocal_return:
-method root_named_nonlocal_return() returns (ret_0: Ref)
+method named_nonlocal_return() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
   ensures df_boolFromRef(ret_0) == true
 {
@@ -88,7 +88,7 @@ method root_named_nonlocal_return() returns (ret_0: Ref)
 }
 
 /inline_returns.kt:(985,1007): info: Generated Viper text for double_nonlocal_return:
-method root_double_nonlocal_return() returns (ret_0: Ref)
+method double_nonlocal_return() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
   ensures df_boolFromRef(ret_0) == true
 {
@@ -124,7 +124,7 @@ method root_double_nonlocal_return() returns (ret_0: Ref)
 }
 
 /inline_returns.kt:(1358,1386): info: Generated Viper text for named_double_nonlocal_return:
-method root_named_double_nonlocal_return() returns (ret_0: Ref)
+method named_double_nonlocal_return() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
   ensures df_boolFromRef(ret_0) == true
 {

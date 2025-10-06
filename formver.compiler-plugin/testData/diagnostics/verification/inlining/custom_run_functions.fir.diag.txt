@@ -1,7 +1,7 @@
 /custom_run_functions.kt:(1194,1200): info: Generated Viper text for useRun:
-field root_size: Ref
+field size: Ref
 
-method root_useRun() returns (ret_0: Ref)
+method useRun() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var genericResult: Ref
@@ -359,7 +359,7 @@ method root_useRun() returns (ret_0: Ref)
 }
 
 /custom_run_functions.kt:(2354,2369): info: Generated Viper text for complexScenario:
-method root_complexScenario(arg: Ref) returns (ret_0: Ref)
+method complexScenario(arg: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
   ensures df_boolFromRef(ret_0) == true ==> df_boolFromRef(arg)
   ensures df_boolFromRef(ret_0) == false ==> !df_boolFromRef(arg)
@@ -531,17 +531,17 @@ method root_complexScenario(arg: Ref) returns (ret_0: Ref)
 }
 
 /custom_run_functions.kt:(3410,3425): info: Generated Viper text for testCustomClass:
-field root_member: Ref
+field member: Ref
 
-field root_size: Ref
+field size: Ref
 
 method con_c_CustomClass() returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_root_CustomClass())
+  ensures df_isSubtype(df_typeOf(ret), df_c_CustomClass())
   ensures acc(c_CustomClass_shared(ret), wildcard)
   ensures acc(c_CustomClass_unique(ret), write)
 
 
-method root_testCustomClass() returns (ret_0: Ref)
+method testCustomClass() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var custom: Ref
@@ -558,7 +558,7 @@ method root_testCustomClass() returns (ret_0: Ref)
   var ret_4: Ref
   custom := con_c_CustomClass()
   unfold acc(c_CustomClass_shared(custom), wildcard)
-  ret_2 := custom.root_member
+  ret_2 := custom.member
   goto lbl_2
   label lbl_2
   anon_2 := ret_2
@@ -570,7 +570,7 @@ method root_testCustomClass() returns (ret_0: Ref)
   anon_0 := anon_1
   inhale df_isSubtype(df_typeOf(anon_0), df_intType())
   unfold acc(c_CustomClass_shared(custom), wildcard)
-  ret_4 := custom.root_member
+  ret_4 := custom.member
   goto lbl_4
   label lbl_4
   anon_5 := ret_4

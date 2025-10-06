@@ -1,69 +1,70 @@
 /member_functions.kt:(51,60): info: Generated Viper text for memberFun:
-field root_x: Ref
+field x: Ref
 
-method Foo_memberFun(this$dispatch: Ref) returns (ret_0: Ref)
+method c_Foo_memberFun(this$dispatch: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
-  inhale df_isSubtype(df_typeOf(this$dispatch), df_c_root_Foo())
-  inhale acc(Foo_shared(this$dispatch), wildcard)
-  unfold acc(Foo_shared(this$dispatch), wildcard)
-  ret_0 := this$dispatch.root_x
+  inhale df_isSubtype(df_typeOf(this$dispatch), df_c_Foo())
+  inhale acc(c_Foo_shared(this$dispatch), wildcard)
+  unfold acc(c_Foo_shared(this$dispatch), wildcard)
+  ret_0 := this$dispatch.x
   goto lbl_0
   label lbl_0
 }
 
 /member_functions.kt:(102,115): info: Generated Viper text for callMemberFun:
-field root_x: Ref
+field x: Ref
 
-method Foo_callMemberFun(this$dispatch: Ref) returns (ret_0: Ref)
+method c_Foo_callMemberFun(this$dispatch: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var anon_0: Ref
-  inhale df_isSubtype(df_typeOf(this$dispatch), df_c_root_Foo())
-  inhale acc(Foo_shared(this$dispatch), wildcard)
-  anon_0 := Foo_memberFun(this$dispatch)
+  inhale df_isSubtype(df_typeOf(this$dispatch), df_c_Foo())
+  inhale acc(c_Foo_shared(this$dispatch), wildcard)
+  anon_0 := c_Foo_memberFun(this$dispatch)
   label lbl_0
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
-method Foo_memberFun(this$dispatch: Ref) returns (ret: Ref)
+method c_Foo_memberFun(this$dispatch: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_intType())
 
 
 /member_functions.kt:(155,166): info: Generated Viper text for siblingCall:
-field root_x: Ref
+field x: Ref
 
-method Foo_memberFun(this$dispatch: Ref) returns (ret: Ref)
+method c_Foo_memberFun(this$dispatch: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_intType())
 
 
-method Foo_siblingCall(this$dispatch: Ref, other: Ref) returns (ret_0: Ref)
+method c_Foo_siblingCall(this$dispatch: Ref, other: Ref)
+  returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var anon_0: Ref
-  inhale df_isSubtype(df_typeOf(this$dispatch), df_c_root_Foo())
-  inhale acc(Foo_shared(this$dispatch), wildcard)
-  inhale df_isSubtype(df_typeOf(other), df_c_root_Foo())
-  inhale acc(Foo_shared(other), wildcard)
-  anon_0 := Foo_memberFun(other)
+  inhale df_isSubtype(df_typeOf(this$dispatch), df_c_Foo())
+  inhale acc(c_Foo_shared(this$dispatch), wildcard)
+  inhale df_isSubtype(df_typeOf(other), df_c_Foo())
+  inhale acc(c_Foo_shared(other), wildcard)
+  anon_0 := c_Foo_memberFun(other)
   label lbl_0
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /member_functions.kt:(220,238): info: Generated Viper text for outerMemberFunCall:
-field root_x: Ref
+field x: Ref
 
-method Foo_memberFun(this$dispatch: Ref) returns (ret: Ref)
+method c_Foo_memberFun(this$dispatch: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_intType())
 
 
-method root_outerMemberFunCall(f: Ref) returns (ret_0: Ref)
+method outerMemberFunCall(f: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var anon_0: Ref
-  inhale df_isSubtype(df_typeOf(f), df_c_root_Foo())
-  inhale acc(Foo_shared(f), wildcard)
-  anon_0 := Foo_memberFun(f)
+  inhale df_isSubtype(df_typeOf(f), df_c_Foo())
+  inhale acc(c_Foo_shared(f), wildcard)
+  anon_0 := c_Foo_memberFun(f)
   label lbl_0
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }

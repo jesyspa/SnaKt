@@ -1,174 +1,174 @@
 /inheritance.kt:(93,97): info: Generated Viper text for getY:
-field root_b: Ref
+field b: Ref
 
-field root_x: Ref
+field x: Ref
 
-field root_y: Ref
+field y: Ref
 
-method Foo_getY(this$dispatch: Ref) returns (ret_0: Ref)
+method c_Foo_getY(this$dispatch: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
-  inhale df_isSubtype(df_typeOf(this$dispatch), df_c_root_Foo())
-  inhale acc(Foo_shared(this$dispatch), wildcard)
-  unfold acc(Foo_shared(this$dispatch), wildcard)
-  ret_0 := this$dispatch.root_y
+  inhale df_isSubtype(df_typeOf(this$dispatch), df_c_Foo())
+  inhale acc(c_Foo_shared(this$dispatch), wildcard)
+  unfold acc(c_Foo_shared(this$dispatch), wildcard)
+  ret_0 := this$dispatch.y
   goto lbl_0
   label lbl_0
 }
 
 /inheritance.kt:(190,193): info: Generated Viper text for sum:
-field root_b: Ref
+field b: Ref
 
-field root_x: Ref
+field x: Ref
 
-field root_y: Ref
+field y: Ref
 
-field root_z: Ref
+field z: Ref
 
-method Bar_sum(this$dispatch: Ref) returns (ret_0: Ref)
+method c_Bar_sum(this$dispatch: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   var anon_0: Ref
   var anon_1: Ref
-  inhale df_isSubtype(df_typeOf(this$dispatch), df_c_root_Bar())
-  inhale acc(Bar_shared(this$dispatch), wildcard)
-  unfold acc(Bar_shared(this$dispatch), wildcard)
-  unfold acc(Foo_shared(this$dispatch), wildcard)
-  anon_0 := this$dispatch.root_x
-  unfold acc(Bar_shared(this$dispatch), wildcard)
-  anon_1 := this$dispatch.root_z
+  inhale df_isSubtype(df_typeOf(this$dispatch), df_c_Bar())
+  inhale acc(c_Bar_shared(this$dispatch), wildcard)
+  unfold acc(c_Bar_shared(this$dispatch), wildcard)
+  unfold acc(c_Foo_shared(this$dispatch), wildcard)
+  anon_0 := this$dispatch.x
+  unfold acc(c_Bar_shared(this$dispatch), wildcard)
+  anon_1 := this$dispatch.z
   ret_0 := sp_plusInts(anon_0, anon_1)
   goto lbl_0
   label lbl_0
 }
 
 /inheritance.kt:(236,251): info: Generated Viper text for callSuperMethod:
-field root_b: Ref
+field b: Ref
 
-field root_x: Ref
+field x: Ref
 
-field root_y: Ref
+field y: Ref
 
-field root_z: Ref
+field z: Ref
 
-method Foo_getY(this$dispatch: Ref) returns (ret: Ref)
+method c_Foo_getY(this$dispatch: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_intType())
 
 
-method root_callSuperMethod(bar: Ref) returns (ret_0: Ref)
+method callSuperMethod(bar: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
-  inhale df_isSubtype(df_typeOf(bar), df_c_root_Bar())
-  inhale acc(Bar_shared(bar), wildcard)
-  ret_0 := Foo_getY(bar)
+  inhale df_isSubtype(df_typeOf(bar), df_c_Bar())
+  inhale acc(c_Bar_shared(bar), wildcard)
+  ret_0 := c_Foo_getY(bar)
   goto lbl_0
   label lbl_0
 }
 
 /inheritance.kt:(298,314): info: Generated Viper text for accessSuperField:
-field root_b: Ref
+field b: Ref
 
-field root_x: Ref
+field x: Ref
 
-field root_y: Ref
+field y: Ref
 
-field root_z: Ref
+field z: Ref
 
-method root_accessSuperField(bar: Ref) returns (ret_0: Ref)
+method accessSuperField(bar: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
 {
-  inhale df_isSubtype(df_typeOf(bar), df_c_root_Bar())
-  inhale acc(Bar_shared(bar), wildcard)
-  inhale acc(bar.root_b, write)
-  ret_0 := bar.root_b
-  exhale acc(bar.root_b, write)
+  inhale df_isSubtype(df_typeOf(bar), df_c_Bar())
+  inhale acc(c_Bar_shared(bar), wildcard)
+  inhale acc(bar.b, write)
+  ret_0 := bar.b
+  exhale acc(bar.b, write)
   inhale df_isSubtype(df_typeOf(ret_0), df_boolType())
   goto lbl_0
   label lbl_0
 }
 
 /inheritance.kt:(360,374): info: Generated Viper text for accessNewField:
-field root_b: Ref
+field b: Ref
 
-field root_x: Ref
+field x: Ref
 
-field root_y: Ref
+field y: Ref
 
-field root_z: Ref
+field z: Ref
 
-method root_accessNewField(bar: Ref) returns (ret_0: Ref)
+method accessNewField(bar: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
-  inhale df_isSubtype(df_typeOf(bar), df_c_root_Bar())
-  inhale acc(Bar_shared(bar), wildcard)
-  unfold acc(Bar_shared(bar), wildcard)
-  ret_0 := bar.root_z
+  inhale df_isSubtype(df_typeOf(bar), df_c_Bar())
+  inhale acc(c_Bar_shared(bar), wildcard)
+  unfold acc(c_Bar_shared(bar), wildcard)
+  ret_0 := bar.z
   goto lbl_0
   label lbl_0
 }
 
 /inheritance.kt:(416,429): info: Generated Viper text for callNewMethod:
-field root_b: Ref
+field b: Ref
 
-field root_x: Ref
+field x: Ref
 
-field root_y: Ref
+field y: Ref
 
-field root_z: Ref
+field z: Ref
 
-method Bar_sum(this$dispatch: Ref) returns (ret: Ref)
+method c_Bar_sum(this$dispatch: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_intType())
 
 
-method root_callNewMethod(bar: Ref) returns (ret_0: Ref)
+method callNewMethod(bar: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
-  inhale df_isSubtype(df_typeOf(bar), df_c_root_Bar())
-  inhale acc(Bar_shared(bar), wildcard)
-  ret_0 := Bar_sum(bar)
+  inhale df_isSubtype(df_typeOf(bar), df_c_Bar())
+  inhale acc(c_Bar_shared(bar), wildcard)
+  ret_0 := c_Bar_sum(bar)
   goto lbl_0
   label lbl_0
 }
 
 /inheritance.kt:(475,488): info: Generated Viper text for setSuperField:
-field root_b: Ref
+field b: Ref
 
-field root_x: Ref
+field x: Ref
 
-field root_y: Ref
+field y: Ref
 
-field root_z: Ref
+field z: Ref
 
-method root_setSuperField(bar: Ref) returns (ret_0: Ref)
+method setSuperField(bar: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  inhale df_isSubtype(df_typeOf(bar), df_c_root_Bar())
-  inhale acc(Bar_shared(bar), wildcard)
-  inhale acc(bar.root_b, write)
-  bar.root_b := df_boolToRef(true)
-  exhale acc(bar.root_b, write)
+  inhale df_isSubtype(df_typeOf(bar), df_c_Bar())
+  inhale acc(c_Bar_shared(bar), wildcard)
+  inhale acc(bar.b, write)
+  bar.b := df_boolToRef(true)
+  exhale acc(bar.b, write)
   label lbl_0
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /inheritance.kt:(525,546): info: Generated Viper text for accessSuperSuperField:
-field root_b: Ref
+field b: Ref
 
-field root_x: Ref
+field x: Ref
 
-field root_y: Ref
+field y: Ref
 
-field root_z: Ref
+field z: Ref
 
-method root_accessSuperSuperField(baz: Ref) returns (ret_0: Ref)
+method accessSuperSuperField(baz: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
-  inhale df_isSubtype(df_typeOf(baz), df_c_root_Baz())
-  inhale acc(Baz_shared(baz), wildcard)
-  unfold acc(Baz_shared(baz), wildcard)
-  unfold acc(Bar_shared(baz), wildcard)
-  unfold acc(Foo_shared(baz), wildcard)
-  ret_0 := baz.root_x
+  inhale df_isSubtype(df_typeOf(baz), df_c_Baz())
+  inhale acc(c_Baz_shared(baz), wildcard)
+  unfold acc(c_Baz_shared(baz), wildcard)
+  unfold acc(c_Bar_shared(baz), wildcard)
+  unfold acc(c_Foo_shared(baz), wildcard)
+  ret_0 := baz.x
   goto lbl_0
   label lbl_0
 }

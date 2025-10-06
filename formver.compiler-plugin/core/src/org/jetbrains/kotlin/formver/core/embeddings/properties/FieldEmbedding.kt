@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.formver.core.embeddings.types.*
 import org.jetbrains.kotlin.formver.core.names.NameMatcher
 import org.jetbrains.kotlin.formver.core.names.ScopedKotlinName
 import org.jetbrains.kotlin.formver.core.names.SpecialName
-import org.jetbrains.kotlin.formver.viper.SymbolName
+import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.ast.Field
 import org.jetbrains.kotlin.formver.viper.ast.PermExp
 import org.jetbrains.kotlin.formver.viper.ast.Type
@@ -25,7 +25,7 @@ import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
  * Embedding of a backing field of a property.
  */
 interface FieldEmbedding {
-    val name: SymbolName
+    val name: SymbolicName
     val type: TypeEmbedding
     val viperType: Type
     val accessPolicy: AccessPolicy

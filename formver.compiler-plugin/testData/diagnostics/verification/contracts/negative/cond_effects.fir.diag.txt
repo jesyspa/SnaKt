@@ -1,5 +1,5 @@
 /cond_effects.kt:(121,146): info: Generated Viper text for compoundConditionalEffect:
-method root_compoundConditionalEffect(b: Ref) returns (ret_0: Ref)
+method compoundConditionalEffect(b: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
   ensures true ==> df_boolFromRef(b) && false
 {
@@ -11,7 +11,7 @@ method root_compoundConditionalEffect(b: Ref) returns (ret_0: Ref)
 /cond_effects.kt:(190,220): warning: Cannot verify that if the function returns then (b && false).
 
 /cond_effects.kt:(271,287): info: Generated Viper text for mayReturnNonNull:
-method root_mayReturnNonNull(x: Ref) returns (ret_0: Ref)
+method mayReturnNonNull(x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_nullable(df_anyType()))
   ensures ret_0 == df_nullValue() ==>
     df_isSubtype(df_typeOf(x), df_intType())
@@ -25,7 +25,7 @@ method root_mayReturnNonNull(x: Ref) returns (ret_0: Ref)
 /cond_effects.kt:(328,360): warning: Cannot verify that if a null value is returned then x is Int.
 
 /cond_effects.kt:(424,437): info: Generated Viper text for mayReturnNull:
-method root_mayReturnNull(x: Ref) returns (ret_0: Ref)
+method mayReturnNull(x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_nullable(df_anyType()))
   ensures ret_0 != df_nullValue() ==>
     df_isSubtype(df_typeOf(x), df_intType())
@@ -39,20 +39,17 @@ method root_mayReturnNull(x: Ref) returns (ret_0: Ref)
 /cond_effects.kt:(478,513): warning: Cannot verify that if a non-null value is returned then x is Int.
 
 /cond_effects.kt:(723,741): info: Generated Viper text for isNullOrEmptyWrong:
-method c_CharSequence_length(this$dispatch: Ref) returns (ret: Ref)
-
-
-method root_isNullOrEmptyWrong(seq: Ref) returns (ret_0: Ref)
+method isNullOrEmptyWrong(seq: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
   ensures df_boolFromRef(ret_0) == false ==> seq != df_nullValue()
 {
-  inhale df_isSubtype(df_typeOf(seq), df_nullable(df_c_pkg$kotlin_CharSequence()))
+  inhale df_isSubtype(df_typeOf(seq), df_nullable(df_c_CharSequence()))
   inhale seq != df_nullValue() ==>
     acc(c_CharSequence_shared(seq), wildcard)
   if (!(seq == df_nullValue())) {
     var anon_0: Ref
     var anon_1: Ref
-    anon_1 := c_CharSequence_length(seq)
+    anon_1 := pg_c_CharSequence_length(seq)
     anon_0 := anon_1
     inhale df_isSubtype(df_typeOf(anon_0), df_intType())
     ret_0 := sp_notBool(df_boolToRef(df_intFromRef(anon_0) == 0))
@@ -62,10 +59,13 @@ method root_isNullOrEmptyWrong(seq: Ref) returns (ret_0: Ref)
   label lbl_0
 }
 
+method pg_c_CharSequence_length(this$dispatch: Ref) returns (ret: Ref)
+
+
 /cond_effects.kt:(796,832): warning: Cannot verify that if a false value is returned then seq != null.
 
 /cond_effects.kt:(925,942): info: Generated Viper text for recursiveContract:
-method root_recursiveContract(n: Ref, x: Ref) returns (ret_0: Ref)
+method recursiveContract(n: Ref, x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
   ensures df_boolFromRef(ret_0) == true ==>
     df_isSubtype(df_typeOf(x), df_stringType())
@@ -75,7 +75,7 @@ method root_recursiveContract(n: Ref, x: Ref) returns (ret_0: Ref)
   if (df_intFromRef(n) == 0) {
     ret_0 := df_boolToRef(df_isSubtype(df_typeOf(x), df_intType()))
   } else {
-    ret_0 := root_recursiveContract(sp_minusInts(n, df_intToRef(1)), x)}
+    ret_0 := recursiveContract(sp_minusInts(n, df_intToRef(1)), x)}
   goto lbl_0
   label lbl_0
 }

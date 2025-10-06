@@ -24,7 +24,7 @@ import org.jetbrains.kotlin.formver.core.linearization.UnfoldPolicy
 import org.jetbrains.kotlin.formver.core.linearization.pureToViper
 import org.jetbrains.kotlin.formver.core.purity.PurityContext
 import org.jetbrains.kotlin.formver.names.SimpleNameResolver
-import org.jetbrains.kotlin.formver.viper.SymbolName
+import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 import org.jetbrains.kotlin.formver.viper.ast.PermExp
@@ -496,7 +496,7 @@ data class FieldAccessPermissions(override val inner: ExpEmbedding, val field: F
 }
 
 // Ideally we would use the predicate, but due to the possibility of recursion this is inconvenient at present.
-data class PredicateAccessPermissions(val predicateName: SymbolName, val args: List<ExpEmbedding>, val perm: PermExp) :
+data class PredicateAccessPermissions(val predicateName: SymbolicName, val args: List<ExpEmbedding>, val perm: PermExp) :
     OnlyToBuiltinTypeExpEmbedding {
     override val type: TypeEmbedding = buildType { boolean() }
     override fun toViperBuiltinType(ctx: LinearizationContext): Exp =

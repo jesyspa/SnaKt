@@ -1,5 +1,5 @@
 /returns_booleans.kt:(121,133): info: Generated Viper text for returns_true:
-method root_returns_true() returns (ret_0: Ref)
+method returns_true() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
   ensures true
   ensures df_boolFromRef(ret_0) == true
@@ -10,7 +10,7 @@ method root_returns_true() returns (ret_0: Ref)
 }
 
 /returns_booleans.kt:(268,281): info: Generated Viper text for returns_false:
-method root_returns_false() returns (ret_0: Ref)
+method returns_false() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
   ensures true
   ensures df_boolFromRef(ret_0) == false
@@ -21,7 +21,7 @@ method root_returns_false() returns (ret_0: Ref)
 }
 
 /returns_booleans.kt:(418,435): info: Generated Viper text for conditional_basic:
-method root_conditional_basic(b: Ref) returns (ret_0: Ref)
+method conditional_basic(b: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
   ensures df_boolFromRef(ret_0) == true ==> true
   ensures df_boolFromRef(ret_0) == false ==> df_boolFromRef(b)
@@ -33,7 +33,7 @@ method root_conditional_basic(b: Ref) returns (ret_0: Ref)
 }
 
 /returns_booleans.kt:(612,636): info: Generated Viper text for binary_logic_expressions:
-method root_binary_logic_expressions(a: Ref, b: Ref) returns (ret_0: Ref)
+method binary_logic_expressions(a: Ref, b: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
   ensures df_boolFromRef(ret_0) == false ==> df_boolFromRef(b) && false
   ensures df_boolFromRef(ret_0) == true ==>
@@ -47,7 +47,7 @@ method root_binary_logic_expressions(a: Ref, b: Ref) returns (ret_0: Ref)
 }
 
 /returns_booleans.kt:(855,866): info: Generated Viper text for logical_not:
-method root_logical_not(b: Ref) returns (ret_0: Ref)
+method logical_not(b: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
   ensures df_boolFromRef(ret_0) == true ==>
     !df_boolFromRef(b) && df_boolFromRef(b)
@@ -61,20 +61,20 @@ method root_logical_not(b: Ref) returns (ret_0: Ref)
 }
 
 /returns_booleans.kt:(1052,1075): info: Generated Viper text for call_fun_with_contracts:
-method root_binary_logic_expressions(p_a: Ref, b: Ref) returns (ret: Ref)
+method binary_logic_expressions(p_a: Ref, b: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_boolType())
   ensures df_boolFromRef(ret) == false ==> df_boolFromRef(b) && false
   ensures df_boolFromRef(ret) == true ==>
     (true || df_boolFromRef(p_a)) && (df_boolFromRef(b) || true)
 
 
-method root_call_fun_with_contracts(b: Ref) returns (ret_0: Ref)
+method call_fun_with_contracts(b: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
   ensures df_boolFromRef(ret_0) == true
 {
   var l0_a: Ref
   inhale df_isSubtype(df_typeOf(b), df_boolType())
-  l0_a := root_binary_logic_expressions(b, b)
+  l0_a := binary_logic_expressions(b, b)
   ret_0 := l0_a
   goto lbl_0
   label lbl_0
@@ -95,7 +95,7 @@ method c_Collection_isEmpty(this$dispatch: Ref) returns (ret: Ref)
   ensures !df_boolFromRef(ret) ==> df_intFromRef(this$dispatch.sp_size) > 0
 
 
-method root_isNullOrEmpty(this$extension: Ref) returns (ret_0: Ref)
+method isNullOrEmpty(this$extension: Ref) returns (ret_0: Ref)
   requires this$extension != df_nullValue() ==>
     acc(this$extension.sp_size, write)
   requires this$extension != df_nullValue() ==>
@@ -108,7 +108,7 @@ method root_isNullOrEmpty(this$extension: Ref) returns (ret_0: Ref)
   ensures df_boolFromRef(ret_0) == false ==>
     this$extension != df_nullValue()
 {
-  inhale df_isSubtype(df_typeOf(this$extension), df_nullable(df_c_pkg$kotlin_collections_Collection()))
+  inhale df_isSubtype(df_typeOf(this$extension), df_nullable(df_c_Collection()))
   inhale this$extension != df_nullValue() ==>
     acc(c_Collection_shared(this$extension), wildcard)
   if (this$extension == df_nullValue()) {

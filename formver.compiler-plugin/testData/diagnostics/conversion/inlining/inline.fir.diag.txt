@@ -1,5 +1,5 @@
 /inline.kt:(230,239): info: Generated Viper text for quadruple:
-method root_quadruple(x: Ref) returns (ret_0: Ref)
+method quadruple(x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   var anon_0: Ref
@@ -25,7 +25,7 @@ method root_quadruple(x: Ref) returns (ret_0: Ref)
 }
 
 /inline.kt:(469,481): info: Generated Viper text for useBranching:
-method root_useBranching() returns (ret_0: Ref)
+method useBranching() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   var anon_2: Ref

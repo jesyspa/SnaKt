@@ -4,6 +4,9 @@
  */
 
 package org.jetbrains.kotlin.formver.viper
+
+import NameScope
+
 /**
  * Represents a Kotlin name with its Viper equivalent.
  *
@@ -11,20 +14,20 @@ package org.jetbrains.kotlin.formver.viper
  * approach makes it easier to see where they came from during debugging.
  */
 const val SEPARATOR = "_"
-interface SymbolName {
+interface SymbolicName {
     val mangledType: String?
         get() = null
-    val requiredScope: NameExpr?
-        get() = null
-    val fullScope: NameExpr?
+    val mangledScope: NameScope?
         get() = null
     val mangledBaseName: NameExpr
+
+    // needed for fresh names (see FreshNames.kt)
     val requiresType: Boolean
         get() = false
 }
 
 context(nameResolver: NameResolver)
-val SymbolName.mangled: String
+val SymbolicName.mangled: String
     get() = nameResolver.resolve(this)
 
 sealed interface NameExpr {
@@ -37,7 +40,7 @@ sealed interface NameExpr {
                 else listOf(this)
             }
         }
-        data class SymbolVal(val symbolName: SymbolName) : Part {
+        data class SymbolVal(val symbolicName: SymbolicName) : Part {
             override fun toParts(): List<Part> = listOf(this)
         }
     }
@@ -49,8 +52,8 @@ data class Lit(val text: String?) : NameExpr {
         else listOf(NameExpr.Part.Lit(text))
     }
 }
-data class SymbolVal(val symbolName: SymbolName) : NameExpr {
-    override fun toParts() = listOf(NameExpr.Part.SymbolVal(symbolName))
+data class SymbolVal(val symbolicName: SymbolicName) : NameExpr {
+    override fun toParts() = listOf(NameExpr.Part.SymbolVal(symbolicName))
 }
 
 data class Join(val items: List<NameExpr>, val sep: String = SEPARATOR) : NameExpr {
@@ -69,6 +72,15 @@ data class Join(val items: List<NameExpr>, val sep: String = SEPARATOR) : NameEx
     }
 }
 
+fun joinExprs(vararg segs: NameExpr?): NameExpr {
+    val items = segs
+        .filterNotNull()
+    return when (items.size) {
+        0 -> Lit("")
+        1 -> items[0]
+        else -> Join(items, SEPARATOR)
+    }
+}
 
 fun parseRequiredScope(scope: NameExpr): NameExpr? {
     val parts = scope.toParts()

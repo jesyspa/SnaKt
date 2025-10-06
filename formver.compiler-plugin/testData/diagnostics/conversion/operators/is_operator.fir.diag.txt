@@ -1,5 +1,5 @@
 /is_operator.kt:(23,36): info: Generated Viper text for isNonNullable:
-method root_isNonNullable(x: Ref) returns (ret_0: Ref)
+method isNonNullable(x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
 {
   inhale df_isSubtype(df_typeOf(x), df_nullable(df_intType()))
@@ -9,7 +9,7 @@ method root_isNonNullable(x: Ref) returns (ret_0: Ref)
 }
 
 /is_operator.kt:(84,97): info: Generated Viper text for notIsNullable:
-method root_notIsNullable(x: Ref) returns (ret_0: Ref)
+method notIsNullable(x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
 {
   inhale df_isSubtype(df_typeOf(x), df_nullable(df_intType()))
@@ -19,7 +19,7 @@ method root_notIsNullable(x: Ref) returns (ret_0: Ref)
 }
 
 /is_operator.kt:(150,159): info: Generated Viper text for smartCast:
-method root_smartCast(x: Ref) returns (ret_0: Ref)
+method smartCast(x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   inhale df_isSubtype(df_typeOf(x), df_nullable(df_anyType()))

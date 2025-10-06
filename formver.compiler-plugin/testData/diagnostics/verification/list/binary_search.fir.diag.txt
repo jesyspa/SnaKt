@@ -34,7 +34,7 @@ method c_List_subList(this$dispatch: Ref, fromIndex: Ref, toIndex: Ref)
   requires df_intFromRef(toIndex) <= df_intFromRef(this$dispatch.sp_size)
   ensures acc(this$dispatch.sp_size, write)
   ensures df_intFromRef(this$dispatch.sp_size) >= 0
-  ensures df_isSubtype(df_typeOf(ret), df_c_pkg$kotlin_collections_List())
+  ensures df_isSubtype(df_typeOf(ret), df_c_List())
   ensures acc(ret.sp_size, write)
   ensures df_intFromRef(ret.sp_size) >= 0
   ensures acc(c_List_shared(ret), wildcard)
@@ -44,7 +44,7 @@ method c_List_subList(this$dispatch: Ref, fromIndex: Ref, toIndex: Ref)
     df_intFromRef(toIndex) - df_intFromRef(fromIndex)
 
 
-method root_safe_binary_search(arr: Ref, target: Ref) returns (ret_0: Ref)
+method safe_binary_search(arr: Ref, target: Ref) returns (ret_0: Ref)
   requires acc(arr.sp_size, write)
   requires df_intFromRef(arr.sp_size) >= 0
   ensures acc(arr.sp_size, write)
@@ -55,7 +55,7 @@ method root_safe_binary_search(arr: Ref, target: Ref) returns (ret_0: Ref)
   var mid: Ref
   var anon_0: Ref
   var anon_1: Ref
-  inhale df_isSubtype(df_typeOf(arr), df_c_pkg$kotlin_collections_List())
+  inhale df_isSubtype(df_typeOf(arr), df_c_List())
   inhale acc(c_List_shared(arr), wildcard)
   inhale df_isSubtype(df_typeOf(target), df_intType())
   size := arr.sp_size
@@ -77,11 +77,11 @@ method root_safe_binary_search(arr: Ref, target: Ref) returns (ret_0: Ref)
       if (df_intFromRef(anon_3) < df_intFromRef(target)) {
         var anon_4: Ref
         anon_4 := c_List_subList(arr, sp_plusInts(mid, df_intToRef(1)), size)
-        ret_0 := root_safe_binary_search(anon_4, target)
+        ret_0 := safe_binary_search(anon_4, target)
       } else {
         var anon_5: Ref
         anon_5 := c_List_subList(arr, df_intToRef(0), mid)
-        ret_0 := root_safe_binary_search(anon_5, target)
+        ret_0 := safe_binary_search(anon_5, target)
       }
     }
   }
@@ -104,7 +104,7 @@ method c_List_get(this$dispatch: Ref, index: Ref) returns (ret: Ref)
     old(df_intFromRef(this$dispatch.sp_size))
 
 
-method root_unsafe_binary_search_fixed(arr: Ref, target: Ref, left: Ref, right: Ref)
+method unsafe_binary_search_fixed(arr: Ref, target: Ref, left: Ref, right: Ref)
   returns (ret_0: Ref)
   requires acc(arr.sp_size, write)
   requires df_intFromRef(arr.sp_size) >= 0
@@ -116,7 +116,7 @@ method root_unsafe_binary_search_fixed(arr: Ref, target: Ref, left: Ref, right: 
   var anon_1: Ref
   var mid: Ref
   var anon_3: Ref
-  inhale df_isSubtype(df_typeOf(arr), df_c_pkg$kotlin_collections_List())
+  inhale df_isSubtype(df_typeOf(arr), df_c_List())
   inhale acc(c_List_shared(arr), wildcard)
   inhale df_isSubtype(df_typeOf(target), df_intType())
   inhale df_isSubtype(df_typeOf(left), df_intType())
@@ -145,10 +145,10 @@ method root_unsafe_binary_search_fixed(arr: Ref, target: Ref, left: Ref, right: 
     var anon_4: Ref
     anon_4 := c_List_get(arr, mid)
     if (df_intFromRef(anon_4) < df_intFromRef(target)) {
-      ret_0 := root_unsafe_binary_search_fixed(arr, target, sp_plusInts(mid,
-        df_intToRef(1)), right)
+      ret_0 := unsafe_binary_search_fixed(arr, target, sp_plusInts(mid, df_intToRef(1)),
+        right)
     } else {
-      ret_0 := root_unsafe_binary_search_fixed(arr, target, left, sp_minusInts(mid,
+      ret_0 := unsafe_binary_search_fixed(arr, target, left, sp_minusInts(mid,
         df_intToRef(1)))}
   }
   goto lbl_0

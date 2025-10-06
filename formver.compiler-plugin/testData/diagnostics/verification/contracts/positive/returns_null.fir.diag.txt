@@ -1,5 +1,5 @@
 /returns_null.kt:(121,140): info: Generated Viper text for simple_returns_null:
-method root_simple_returns_null(x: Ref) returns (ret_0: Ref)
+method simple_returns_null(x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_nullable(df_intType()))
   ensures ret_0 == df_nullValue()
   ensures ret_0 != df_nullValue() ==> false
@@ -11,7 +11,7 @@ method root_simple_returns_null(x: Ref) returns (ret_0: Ref)
 }
 
 /returns_null.kt:(300,320): info: Generated Viper text for returns_null_implies:
-method root_returns_null_implies(x: Ref) returns (ret_0: Ref)
+method returns_null_implies(x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_nullable(df_boolType()))
   ensures ret_0 == df_nullValue() ==> x == df_nullValue()
   ensures ret_0 != df_nullValue() ==> x != df_nullValue()
@@ -23,8 +23,7 @@ method root_returns_null_implies(x: Ref) returns (ret_0: Ref)
 }
 
 /returns_null.kt:(511,531): info: Generated Viper text for returns_null_with_if:
-method root_returns_null_with_if(x: Ref, y: Ref, z: Ref)
-  returns (ret_0: Ref)
+method returns_null_with_if(x: Ref, y: Ref, z: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_nullable(df_intType()))
   ensures ret_0 == df_nullValue() ==>
     x == df_nullValue() && y == df_nullValue() || z == df_nullValue()
@@ -45,7 +44,7 @@ method root_returns_null_with_if(x: Ref, y: Ref, z: Ref)
 }
 
 /returns_null.kt:(833,862): info: Generated Viper text for non_nullable_returns_not_null:
-method root_non_nullable_returns_not_null(x: Ref) returns (ret_0: Ref)
+method non_nullable_returns_not_null(x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
   ensures ret_0 != df_nullValue()
 {
@@ -56,8 +55,7 @@ method root_non_nullable_returns_not_null(x: Ref) returns (ret_0: Ref)
 }
 
 /returns_null.kt:(981,1010): info: Generated Viper text for non_nullable_compared_to_null:
-method root_non_nullable_compared_to_null(x: Ref, y: Ref)
-  returns (ret_0: Ref)
+method non_nullable_compared_to_null(x: Ref, y: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
   ensures true ==> y == df_nullValue() || x != df_nullValue()
 {

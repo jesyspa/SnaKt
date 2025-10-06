@@ -7,10 +7,8 @@ package org.jetbrains.kotlin.formver.core.domains
 
 import org.jetbrains.kotlin.formver.core.embeddings.types.ClassTypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.embedClassTypeFunc
-import org.jetbrains.kotlin.formver.core.names.SimpleKotlinName
-import org.jetbrains.kotlin.formver.viper.SymbolName
+import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.ast.*
-import org.jetbrains.kotlin.name.Name
 
 
 const val RUNTIME_TYPE_DOMAIN_NAME = "rt"
@@ -218,12 +216,12 @@ class RuntimeTypeDomain(val classes: List<ClassTypeEmbedding>) : BuiltinDomain(R
         val Ref = Type.Ref
 
         fun createDomainFunc(
-            funcName: SymbolName, args: List<Declaration.LocalVarDecl>, type: Type, unique: Boolean = false
+            funcName: SymbolicName, args: List<Declaration.LocalVarDecl>, type: Type, unique: Boolean = false
         ) = DomainFunc(
             QualifiedDomainFuncName(DomainName(RUNTIME_TYPE_DOMAIN_NAME), funcName), args, emptyList(), type, unique
         )
 
-        private fun createNewTypeDomainFunc(funcName: SymbolName) = createDomainFunc(
+        private fun createNewTypeDomainFunc(funcName: SymbolicName) = createDomainFunc(
             funcName,
             emptyList(),
             RuntimeType,
@@ -268,7 +266,7 @@ class RuntimeTypeDomain(val classes: List<ClassTypeEmbedding>) : BuiltinDomain(R
         val functionType: DomainFunc = createNewTypeDomainFunc("functionType")
 
         // for creation of user types
-        fun classTypeFunc(name: SymbolName) = createDomainFunc(name, emptyList(), RuntimeType, true)
+        fun classTypeFunc(name: SymbolicName) = createDomainFunc(name, emptyList(), RuntimeType, true)
 
         // bijections to primitive types
         val intInjection = Injection("int", Type.Int, intType)

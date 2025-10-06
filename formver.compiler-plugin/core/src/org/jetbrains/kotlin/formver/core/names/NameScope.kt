@@ -2,25 +2,23 @@
  * Copyright 2010-2023 JetBrains s.r.o. and Kotlin Programming Language contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
-
 package org.jetbrains.kotlin.formver.core.names
 
+import NameScope
 import org.jetbrains.kotlin.formver.viper.Join
 import org.jetbrains.kotlin.formver.viper.Lit
 import org.jetbrains.kotlin.formver.viper.NameExpr
-import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.SEPARATOR
 import org.jetbrains.kotlin.formver.viper.SymbolVal
-import org.jetbrains.kotlin.formver.viper.mangled
+import org.jetbrains.kotlin.formver.viper.SymbolicName
+import org.jetbrains.kotlin.formver.viper.parseRequiredScope
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.utils.addToStdlib.ifFalse
 
-sealed interface NameScope {
-    val parent: NameScope?
-
-    val mangledScopeName: NameExpr?
-}
-
+val SymbolicName.fullScope: NameExpr?
+    get() = mangledScope?.fullSymbolName
+val SymbolicName.requiredScope: NameExpr?
+    get() = fullScope?.let {parseRequiredScope(it)}
 // Includes the scope itself.
 val NameScope.parentScopes: Sequence<NameScope>
     get() = sequence {
@@ -43,7 +41,7 @@ val NameScope.fullSymbolName: Join?
 val NameScope.packageNameIfAny: FqName?
     get() = allParentScopes.filterIsInstance<PackageScope>().lastOrNull()?.packageName
 
-val NameScope.classNameIfAny: ClassKotlinName?
+val NameScope.classNameIfAny: ScopedKotlinName?
     get() = allParentScopes.filterIsInstance<ClassScope>().lastOrNull()?.className
 
 data class PackageScope(val packageName: FqName) : NameScope {
@@ -53,7 +51,8 @@ data class PackageScope(val packageName: FqName) : NameScope {
         get() = packageName.isRoot.ifFalse { Lit("pkg\$${packageName.asViperString()}") }
 }
 
-data class ClassScope(override val parent: NameScope, val className: ClassKotlinName) : NameScope {
+data class ClassScope(val className: ScopedKotlinName) : NameScope {
+    override val parent: NameScope? = className.scope
     override val mangledScopeName: NameExpr
         get() = SymbolVal(className)
 }

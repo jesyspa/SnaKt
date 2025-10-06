@@ -1,12 +1,12 @@
 /loop_invariants.kt:(146,168): info: Generated Viper text for dynamicLambdaInvariant:
-method root_dynamicLambdaInvariant(f: Ref) returns (ret_0: Ref)
+method dynamicLambdaInvariant(f: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var anon_0: Ref
   inhale df_isSubtype(df_typeOf(f), df_functionType())
   label lbl_continue_0
     invariant df_isSubtype(df_typeOf(f), df_functionType())
-  anon_0 := root_returnsBoolean()
+  anon_0 := returnsBoolean()
   if (df_boolFromRef(anon_0)) {
     var anon_1: Ref
     inhale df_isSubtype(df_typeOf(anon_1), df_intType())
@@ -18,12 +18,12 @@ method root_dynamicLambdaInvariant(f: Ref) returns (ret_0: Ref)
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
-method root_returnsBoolean() returns (ret: Ref)
+method returnsBoolean() returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_boolType())
 
 
 /loop_invariants.kt:(241,259): info: Generated Viper text for functionAssignment:
-method root_functionAssignment(f: Ref) returns (ret_0: Ref)
+method functionAssignment(f: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var g: Ref
@@ -33,7 +33,7 @@ method root_functionAssignment(f: Ref) returns (ret_0: Ref)
   label lbl_continue_0
     invariant df_isSubtype(df_typeOf(g), df_functionType())
     invariant df_isSubtype(df_typeOf(f), df_functionType())
-  anon_0 := root_returnsBoolean()
+  anon_0 := returnsBoolean()
   if (df_boolFromRef(anon_0)) {
     var anon_1: Ref
     inhale df_isSubtype(df_typeOf(anon_1), df_intType())
@@ -46,12 +46,12 @@ method root_functionAssignment(f: Ref) returns (ret_0: Ref)
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
-method root_returnsBoolean() returns (ret: Ref)
+method returnsBoolean() returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_boolType())
 
 
 /loop_invariants.kt:(346,375): info: Generated Viper text for conditionalFunctionAssignment:
-method root_conditionalFunctionAssignment(b: Ref, f: Ref, h: Ref)
+method conditionalFunctionAssignment(b: Ref, f: Ref, h: Ref)
   returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
@@ -69,7 +69,7 @@ method root_conditionalFunctionAssignment(b: Ref, f: Ref, h: Ref)
     invariant df_isSubtype(df_typeOf(b), df_boolType())
     invariant df_isSubtype(df_typeOf(f), df_functionType())
     invariant df_isSubtype(df_typeOf(h), df_functionType())
-  anon_0 := root_returnsBoolean()
+  anon_0 := returnsBoolean()
   if (df_boolFromRef(anon_0)) {
     var anon_1: Ref
     inhale df_isSubtype(df_typeOf(anon_1), df_intType())
@@ -84,5 +84,5 @@ method root_conditionalFunctionAssignment(b: Ref, f: Ref, h: Ref)
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
-method root_returnsBoolean() returns (ret: Ref)
+method returnsBoolean() returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_boolType())

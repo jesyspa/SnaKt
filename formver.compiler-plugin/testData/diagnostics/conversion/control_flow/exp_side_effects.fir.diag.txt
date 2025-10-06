@@ -1,16 +1,16 @@
 /exp_side_effects.kt:(185,189): info: Generated Viper text for test:
-field root_x: Ref
+field x: Ref
 
-method root_getFoo() returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_root_Foo())
-  ensures acc(Foo_shared(ret), wildcard)
+method getFoo() returns (ret: Ref)
+  ensures df_isSubtype(df_typeOf(ret), df_c_Foo())
+  ensures acc(c_Foo_shared(ret), wildcard)
 
 
-method root_sideEffect() returns (ret: Ref)
+method sideEffect() returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_intType())
 
 
-method root_test() returns (ret_0: Ref)
+method test() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var anon_0: Ref
@@ -19,17 +19,17 @@ method root_test() returns (ret_0: Ref)
   var anon_2: Ref
   var anon_3: Ref
   var anon_4: Ref
-  anon_0 := root_getFoo()
-  anon_1 := root_sideEffect()
-  inhale acc(anon_0.root_x, write)
-  anon_0.root_x := anon_1
-  exhale acc(anon_0.root_x, write)
-  anon_3 := root_getFoo()
-  inhale acc(anon_3.root_x, write)
-  anon_2 := anon_3.root_x
-  exhale acc(anon_3.root_x, write)
+  anon_0 := getFoo()
+  anon_1 := sideEffect()
+  inhale acc(anon_0.x, write)
+  anon_0.x := anon_1
+  exhale acc(anon_0.x, write)
+  anon_3 := getFoo()
+  inhale acc(anon_3.x, write)
+  anon_2 := anon_3.x
+  exhale acc(anon_3.x, write)
   inhale df_isSubtype(df_typeOf(anon_2), df_intType())
-  anon_4 := root_sideEffect()
+  anon_4 := sideEffect()
   y := sp_plusInts(anon_2, anon_4)
   label lbl_0
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())

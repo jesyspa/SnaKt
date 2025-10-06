@@ -1,9 +1,10 @@
 /custom_list.kt:(168,171): info: Generated Viper text for get:
-field CustomList_value: Ref
+field bf_c_CustomList_value: Ref
 
 field sp_size: Ref
 
-method CustomList_get(this$dispatch: Ref, index: Ref) returns (ret_0: Ref)
+method c_CustomList_get(this$dispatch: Ref, index: Ref)
+  returns (ret_0: Ref)
   requires acc(this$dispatch.sp_size, write)
   requires df_intFromRef(this$dispatch.sp_size) >= 0
   requires df_intFromRef(index) >= 0
@@ -14,29 +15,29 @@ method CustomList_get(this$dispatch: Ref, index: Ref) returns (ret_0: Ref)
   ensures df_intFromRef(this$dispatch.sp_size) ==
     old(df_intFromRef(this$dispatch.sp_size))
 {
-  inhale df_isSubtype(df_typeOf(this$dispatch), df_c_root_CustomList())
-  inhale acc(CustomList_shared(this$dispatch), wildcard)
+  inhale df_isSubtype(df_typeOf(this$dispatch), df_c_CustomList())
+  inhale acc(c_CustomList_shared(this$dispatch), wildcard)
   inhale df_isSubtype(df_typeOf(index), df_intType())
-  unfold acc(CustomList_shared(this$dispatch), wildcard)
-  ret_0 := this$dispatch.CustomList_value
+  unfold acc(c_CustomList_shared(this$dispatch), wildcard)
+  ret_0 := this$dispatch.bf_c_CustomList_value
   goto lbl_0
   label lbl_0
 }
 
 /custom_list.kt:(248,252): info: Generated Viper text for test:
-field CustomList_value: Ref
+field bf_c_CustomList_value: Ref
 
 field sp_size: Ref
 
-method CustomList_Int_Int(size: Ref, value: Ref) returns (ret: Ref)
-  ensures df_isSubtype(df_typeOf(ret), df_c_root_CustomList())
+method c_CustomList_Int_Int(size: Ref, value: Ref) returns (ret: Ref)
+  ensures df_isSubtype(df_typeOf(ret), df_c_CustomList())
   ensures acc(ret.sp_size, write)
   ensures df_intFromRef(ret.sp_size) >= 0
-  ensures acc(CustomList_shared(ret), wildcard)
-  ensures acc(CustomList_unique(ret), write)
+  ensures acc(c_CustomList_shared(ret), wildcard)
+  ensures acc(c_CustomList_unique(ret), write)
 
 
-method CustomList_get(this$dispatch: Ref, index: Ref) returns (ret: Ref)
+method c_CustomList_get(this$dispatch: Ref, index: Ref) returns (ret: Ref)
   requires acc(this$dispatch.sp_size, write)
   requires df_intFromRef(this$dispatch.sp_size) >= 0
   requires df_intFromRef(index) >= 0
@@ -48,7 +49,7 @@ method CustomList_get(this$dispatch: Ref, index: Ref) returns (ret: Ref)
     old(df_intFromRef(this$dispatch.sp_size))
 
 
-method CustomList_isEmpty(this$dispatch: Ref) returns (ret: Ref)
+method c_CustomList_isEmpty(this$dispatch: Ref) returns (ret: Ref)
   requires acc(this$dispatch.sp_size, write)
   requires df_intFromRef(this$dispatch.sp_size) >= 0
   ensures acc(this$dispatch.sp_size, write)
@@ -60,22 +61,22 @@ method CustomList_isEmpty(this$dispatch: Ref) returns (ret: Ref)
   ensures !df_boolFromRef(ret) ==> df_intFromRef(this$dispatch.sp_size) > 0
 
 
-method root_test(n: Ref) returns (ret_0: Ref)
+method test(n: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var customList: Ref
   var anon_0: Ref
   inhale df_isSubtype(df_typeOf(n), df_intType())
-  customList := CustomList_Int_Int(n, df_intToRef(0))
-  anon_0 := CustomList_isEmpty(customList)
+  customList := c_CustomList_Int_Int(n, df_intToRef(0))
+  anon_0 := c_CustomList_isEmpty(customList)
   if (!df_boolFromRef(anon_0)) {
     var anon_1: Ref
     var anon_2: Ref
     var anon_3: Ref
     anon_2 := customList.sp_size
     inhale df_isSubtype(df_typeOf(anon_2), df_intType())
-    anon_1 := CustomList_get(customList, sp_minusInts(anon_2, df_intToRef(1)))
-    anon_3 := CustomList_get(customList, df_intToRef(0))
+    anon_1 := c_CustomList_get(customList, sp_minusInts(anon_2, df_intToRef(1)))
+    anon_3 := c_CustomList_get(customList, df_intToRef(0))
   }
   label lbl_0
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())

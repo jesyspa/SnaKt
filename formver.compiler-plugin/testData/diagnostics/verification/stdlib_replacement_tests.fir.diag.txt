@@ -1,5 +1,5 @@
 /stdlib_replacement_tests.kt:(104,113): info: Generated Viper text for useChecks:
-method root_useChecks() returns (ret_0: Ref)
+method useChecks() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var ret_1: Ref
@@ -17,9 +17,9 @@ method root_useChecks() returns (ret_0: Ref)
 }
 
 /stdlib_replacement_tests.kt:(298,305): info: Generated Viper text for useRuns:
-field root_size: Ref
+field size: Ref
 
-method root_useRuns(x: Ref) returns (ret_0: Ref)
+method useRuns(x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var cond1: Ref
@@ -72,9 +72,9 @@ method root_useRuns(x: Ref) returns (ret_0: Ref)
 }
 
 /stdlib_replacement_tests.kt:(459,466): info: Generated Viper text for useAlso:
-field root_size: Ref
+field size: Ref
 
-method root_useAlso(x: Ref) returns (ret_0: Ref)
+method useAlso(x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var anon_2: Ref
@@ -102,9 +102,9 @@ method root_useAlso(x: Ref) returns (ret_0: Ref)
 }
 
 /stdlib_replacement_tests.kt:(531,537): info: Generated Viper text for useLet:
-field root_size: Ref
+field size: Ref
 
-method root_useLet(x: Ref) returns (ret_0: Ref)
+method useLet(x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var cond1: Ref
@@ -138,9 +138,9 @@ method root_useLet(x: Ref) returns (ret_0: Ref)
 }
 
 /stdlib_replacement_tests.kt:(621,628): info: Generated Viper text for useWith:
-field root_size: Ref
+field size: Ref
 
-method root_useWith(x: Ref) returns (ret_0: Ref)
+method useWith(x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var anon_2: Ref
@@ -171,9 +171,9 @@ method root_useWith(x: Ref) returns (ret_0: Ref)
 }
 
 /stdlib_replacement_tests.kt:(694,702): info: Generated Viper text for useApply:
-field root_size: Ref
+field size: Ref
 
-method root_useApply(x: Ref) returns (ret_0: Ref)
+method useApply(x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var anon_2: Ref

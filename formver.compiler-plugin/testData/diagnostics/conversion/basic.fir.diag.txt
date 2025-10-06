@@ -1,5 +1,5 @@
 /basic.kt:(23,33): info: Generated Viper text for returnUnit:
-method root_returnUnit() returns (ret_0: Ref)
+method returnUnit() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   label lbl_0
@@ -7,7 +7,7 @@ method root_returnUnit() returns (ret_0: Ref)
 }
 
 /basic.kt:(43,52): info: Generated Viper text for returnInt:
-method root_returnInt() returns (ret_0: Ref)
+method returnInt() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   ret_0 := df_intToRef(0)
@@ -16,7 +16,7 @@ method root_returnInt() returns (ret_0: Ref)
 }
 
 /basic.kt:(77,94): info: Generated Viper text for takeIntReturnUnit:
-method root_takeIntReturnUnit(x: Ref) returns (ret_0: Ref)
+method takeIntReturnUnit(x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   inhale df_isSubtype(df_typeOf(x), df_intType())
@@ -25,7 +25,7 @@ method root_takeIntReturnUnit(x: Ref) returns (ret_0: Ref)
 }
 
 /basic.kt:(140,156): info: Generated Viper text for takeIntReturnInt:
-method root_takeIntReturnInt(x: Ref) returns (ret_0: Ref)
+method takeIntReturnInt(x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   inhale df_isSubtype(df_typeOf(x), df_intType())
@@ -35,7 +35,7 @@ method root_takeIntReturnInt(x: Ref) returns (ret_0: Ref)
 }
 
 /basic.kt:(187,207): info: Generated Viper text for takeIntReturnIntExpr:
-method root_takeIntReturnIntExpr(x: Ref) returns (ret_0: Ref)
+method takeIntReturnIntExpr(x: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   inhale df_isSubtype(df_typeOf(x), df_intType())
@@ -45,7 +45,7 @@ method root_takeIntReturnIntExpr(x: Ref) returns (ret_0: Ref)
 }
 
 /basic.kt:(229,247): info: Generated Viper text for withIntDeclaration:
-method root_withIntDeclaration() returns (ret_0: Ref)
+method withIntDeclaration() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   var x: Ref
@@ -56,7 +56,7 @@ method root_withIntDeclaration() returns (ret_0: Ref)
 }
 
 /basic.kt:(290,303): info: Generated Viper text for intAssignment:
-method root_intAssignment() returns (ret_0: Ref)
+method intAssignment() returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var x: Ref
