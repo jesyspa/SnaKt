@@ -1,213 +1,211 @@
 /while.kt:(254,264): info: Generated Viper text for test_while:
-field bf$field: Ref
+field bf_field: Ref
 
-field bf$size: Ref
+field size: Ref
 
-method con$c$ClassWithField$T$Int(p$field: Ref) returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$ClassWithField())
-  ensures acc(p$c$ClassWithField$shared(ret), wildcard)
-  ensures acc(p$c$ClassWithField$unique(ret), write)
-  ensures df$rt$intFromRef((unfolding acc(p$c$ClassWithField$shared(ret), wildcard) in
-      ret.bf$field)) ==
-    df$rt$intFromRef(p$field)
-
-
-method f$pkg$kotlin$c$Int$unaryMinus$TF$T$Int(this$dispatch: Ref)
-  returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$intType())
+method c_ClassWithField_T_Int(p_field: Ref) returns (ret: Ref)
+  ensures df_isSubtype(df_typeOf(ret), df_c_ClassWithField())
+  ensures acc(c_ClassWithField_shared(ret), wildcard)
+  ensures acc(c_ClassWithField_unique(ret), write)
+  ensures df_intFromRef((unfolding acc(c_ClassWithField_shared(ret), wildcard) in
+      ret.bf_field)) ==
+    df_intFromRef(p_field)
 
 
-method f$test_while$TF$T$ClassWithField(p$param: Ref) returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method c_Int_unaryMinus(this$dispatch: Ref) returns (ret: Ref)
+  ensures df_isSubtype(df_typeOf(ret), df_intType())
+
+
+method test_while(param: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  var l0$c: Ref
-  var l0$initParamField: Ref
-  var l0$iteration: Ref
-  var anon$1: Ref
-  var l0$cond1: Ref
-  var anon$2: Ref
-  var l0$cond2: Ref
-  var anon$3: Ref
-  inhale df$rt$isSubtype(df$rt$typeOf(p$param), df$rt$c$ClassWithField())
-  inhale acc(p$c$ClassWithField$shared(p$param), wildcard)
-  l0$c := con$c$ClassWithField$T$Int(df$rt$intToRef(13))
-  unfold acc(p$c$ClassWithField$shared(p$param), wildcard)
-  l0$initParamField := p$param.bf$field
-  if (df$rt$intFromRef(l0$initParamField) > 0) {
-    l0$iteration := df$rt$intToRef(0)
+  var c: Ref
+  var initParamField: Ref
+  var iteration: Ref
+  var anon_1: Ref
+  var cond1: Ref
+  var anon_2: Ref
+  var cond2: Ref
+  var anon_3: Ref
+  inhale df_isSubtype(df_typeOf(param), df_c_ClassWithField())
+  inhale acc(c_ClassWithField_shared(param), wildcard)
+  c := c_ClassWithField_T_Int(df_intToRef(13))
+  unfold acc(c_ClassWithField_shared(param), wildcard)
+  initParamField := param.bf_field
+  if (df_intFromRef(initParamField) > 0) {
+    iteration := df_intToRef(0)
   } else {
-    var l3$intermediate: Ref
-    var anon$0: Ref
-    anon$0 := f$pkg$kotlin$c$Int$unaryMinus$TF$T$Int(l0$initParamField)
-    l3$intermediate := sp$plusInts(anon$0, df$rt$intToRef(1))
-    l0$iteration := sp$timesInts(l3$intermediate, l3$intermediate)
+    var intermediate: Ref
+    var anon_0: Ref
+    anon_0 := c_Int_unaryMinus(initParamField)
+    intermediate := sp_plusInts(anon_0, df_intToRef(1))
+    iteration := sp_timesInts(intermediate, intermediate)
   }
-  label lbl$continue$0
-    invariant acc(p$c$ClassWithField$shared(l0$c), wildcard)
-    invariant df$rt$isSubtype(df$rt$typeOf(l0$c), df$rt$c$ClassWithField())
-    invariant df$rt$isSubtype(df$rt$typeOf(l0$initParamField), df$rt$intType())
-    invariant df$rt$isSubtype(df$rt$typeOf(l0$iteration), df$rt$intType())
-    invariant acc(p$c$ClassWithField$shared(p$param), wildcard)
-    invariant df$rt$isSubtype(df$rt$typeOf(p$param), df$rt$c$ClassWithField())
-  anon$1 := sp$ltInts(l0$iteration, df$rt$intToRef(10))
-  if (df$rt$boolFromRef(anon$1)) {
-    var l4$field: Ref
-    var l4$paramField: Ref
-    unfold acc(p$c$ClassWithField$shared(l0$c), wildcard)
-    l4$field := l0$c.bf$field
-    unfold acc(p$c$ClassWithField$shared(p$param), wildcard)
-    l4$paramField := p$param.bf$field
-    l0$iteration := sp$plusInts(l0$iteration, df$rt$intToRef(1))
-    goto lbl$continue$0
+  label lbl_continue_0
+    invariant acc(c_ClassWithField_shared(c), wildcard)
+    invariant df_isSubtype(df_typeOf(c), df_c_ClassWithField())
+    invariant df_isSubtype(df_typeOf(initParamField), df_intType())
+    invariant df_isSubtype(df_typeOf(iteration), df_intType())
+    invariant acc(c_ClassWithField_shared(param), wildcard)
+    invariant df_isSubtype(df_typeOf(param), df_c_ClassWithField())
+  anon_1 := sp_ltInts(iteration, df_intToRef(10))
+  if (df_boolFromRef(anon_1)) {
+    var l4_field: Ref
+    var paramField: Ref
+    unfold acc(c_ClassWithField_shared(c), wildcard)
+    l4_field := c.bf_field
+    unfold acc(c_ClassWithField_shared(param), wildcard)
+    paramField := param.bf_field
+    iteration := sp_plusInts(iteration, df_intToRef(1))
+    goto lbl_continue_0
   }
-  label lbl$break$0
-  assert acc(p$c$ClassWithField$shared(l0$c), wildcard)
-  assert df$rt$isSubtype(df$rt$typeOf(l0$c), df$rt$c$ClassWithField())
-  assert df$rt$isSubtype(df$rt$typeOf(l0$initParamField), df$rt$intType())
-  assert df$rt$isSubtype(df$rt$typeOf(l0$iteration), df$rt$intType())
-  assert acc(p$c$ClassWithField$shared(p$param), wildcard)
-  assert df$rt$isSubtype(df$rt$typeOf(p$param), df$rt$c$ClassWithField())
-  unfold acc(p$c$ClassWithField$shared(l0$c), wildcard)
-  anon$2 := l0$c.bf$field
-  l0$cond1 := df$rt$boolToRef(df$rt$intFromRef(anon$2) == 13)
-  unfold acc(p$c$ClassWithField$shared(p$param), wildcard)
-  anon$3 := p$param.bf$field
-  l0$cond2 := df$rt$boolToRef(df$rt$intFromRef(l0$initParamField) ==
-    df$rt$intFromRef(anon$3))
-  assert df$rt$boolFromRef(l0$cond1)
-  assert df$rt$boolFromRef(l0$cond2)
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  label lbl_break_0
+  assert acc(c_ClassWithField_shared(c), wildcard)
+  assert df_isSubtype(df_typeOf(c), df_c_ClassWithField())
+  assert df_isSubtype(df_typeOf(initParamField), df_intType())
+  assert df_isSubtype(df_typeOf(iteration), df_intType())
+  assert acc(c_ClassWithField_shared(param), wildcard)
+  assert df_isSubtype(df_typeOf(param), df_c_ClassWithField())
+  unfold acc(c_ClassWithField_shared(c), wildcard)
+  anon_2 := c.bf_field
+  cond1 := df_boolToRef(df_intFromRef(anon_2) == 13)
+  unfold acc(c_ClassWithField_shared(param), wildcard)
+  anon_3 := param.bf_field
+  cond2 := df_boolToRef(df_intFromRef(initParamField) ==
+    df_intFromRef(anon_3))
+  assert df_boolFromRef(cond1)
+  assert df_boolFromRef(cond2)
+  label lbl_ret_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /while.kt:(899,923): info: Generated Viper text for test_while_with_inlining:
-field bf$field: Ref
+field bf_field: Ref
 
-field bf$size: Ref
+field size: Ref
 
-method con$c$ClassWithField$T$Int(p$field: Ref) returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$ClassWithField())
-  ensures acc(p$c$ClassWithField$shared(ret), wildcard)
-  ensures acc(p$c$ClassWithField$unique(ret), write)
-  ensures df$rt$intFromRef((unfolding acc(p$c$ClassWithField$shared(ret), wildcard) in
-      ret.bf$field)) ==
-    df$rt$intFromRef(p$field)
+method c_ClassWithField_Int(p_field: Ref) returns (ret: Ref)
+  ensures df_isSubtype(df_typeOf(ret), df_c_ClassWithField())
+  ensures acc(c_ClassWithField_shared(ret), wildcard)
+  ensures acc(c_ClassWithField_unique(ret), write)
+  ensures df_intFromRef((unfolding acc(c_ClassWithField_shared(ret), wildcard) in
+      ret.bf_field)) ==
+    df_intFromRef(p_field)
 
 
-method f$test_while_with_inlining$TF$T$ClassWithField(p$param: Ref)
-  returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method test_while_with_inlining(param: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  var l0$local: Ref
-  var anon$2: Ref
-  var anon$3: Ref
-  var ret$1: Ref
-  var anon$0: Ref
-  var anon$4: Ref
-  var anon$5: Ref
-  var ret$2: Ref
-  var anon$1: Ref
-  var l2$iteration: Ref
-  var anon$6: Ref
-  var anon$7: Ref
-  var anon$8: Ref
-  inhale df$rt$isSubtype(df$rt$typeOf(p$param), df$rt$c$ClassWithField())
-  inhale acc(p$c$ClassWithField$shared(p$param), wildcard)
-  l0$local := con$c$ClassWithField$T$Int(df$rt$intToRef(13))
-  anon$4 := con$c$ClassWithField$T$Int(df$rt$intToRef(42))
-  anon$0 := anon$4
-  inhale df$rt$isSubtype(df$rt$typeOf(anon$0), df$rt$nullable(df$rt$anyType()))
-  inhale df$rt$isSubtype(df$rt$typeOf(anon$0), df$rt$c$ClassWithField())
-  inhale acc(p$c$ClassWithField$shared(anon$0), wildcard)
-  anon$1 := anon$0
-  l2$iteration := df$rt$intToRef(0)
-  label lbl$continue$0
-    invariant df$rt$isSubtype(df$rt$typeOf(l2$iteration), df$rt$intType())
-    invariant acc(p$c$ClassWithField$shared(anon$1), wildcard)
-    invariant df$rt$isSubtype(df$rt$typeOf(anon$1), df$rt$c$ClassWithField())
-    invariant acc(p$c$ClassWithField$shared(l0$local), wildcard)
-    invariant df$rt$isSubtype(df$rt$typeOf(l0$local), df$rt$c$ClassWithField())
-    invariant acc(p$c$ClassWithField$shared(p$param), wildcard)
-    invariant df$rt$isSubtype(df$rt$typeOf(p$param), df$rt$c$ClassWithField())
-  anon$6 := sp$ltInts(l2$iteration, df$rt$intToRef(10))
-  if (df$rt$boolFromRef(anon$6)) {
-    var l3$paramField: Ref
-    var l3$localField: Ref
-    var l3$thisField: Ref
-    unfold acc(p$c$ClassWithField$shared(p$param), wildcard)
-    l3$paramField := p$param.bf$field
-    unfold acc(p$c$ClassWithField$shared(l0$local), wildcard)
-    l3$localField := l0$local.bf$field
-    unfold acc(p$c$ClassWithField$shared(anon$1), wildcard)
-    l3$thisField := anon$1.bf$field
-    l2$iteration := sp$plusInts(l2$iteration, df$rt$intToRef(1))
-    goto lbl$continue$0
+  var local: Ref
+  var anon_2: Ref
+  var anon_3: Ref
+  var ret_1: Ref
+  var anon_0: Ref
+  var anon_4: Ref
+  var anon_5: Ref
+  var ret_2: Ref
+  var anon_1: Ref
+  var iteration: Ref
+  var anon_6: Ref
+  var anon_7: Ref
+  var anon_8: Ref
+  inhale df_isSubtype(df_typeOf(param), df_c_ClassWithField())
+  inhale acc(c_ClassWithField_shared(param), wildcard)
+  local := c_ClassWithField_Int(df_intToRef(13))
+  anon_4 := c_ClassWithField_Int(df_intToRef(42))
+  anon_0 := anon_4
+  inhale df_isSubtype(df_typeOf(anon_0), df_nullable(df_anyType()))
+  inhale df_isSubtype(df_typeOf(anon_0), df_c_ClassWithField())
+  inhale acc(c_ClassWithField_shared(anon_0), wildcard)
+  anon_1 := anon_0
+  iteration := df_intToRef(0)
+  label lbl_continue_0
+    invariant df_isSubtype(df_typeOf(iteration), df_intType())
+    invariant acc(c_ClassWithField_shared(anon_1), wildcard)
+    invariant df_isSubtype(df_typeOf(anon_1), df_c_ClassWithField())
+    invariant acc(c_ClassWithField_shared(local), wildcard)
+    invariant df_isSubtype(df_typeOf(local), df_c_ClassWithField())
+    invariant acc(c_ClassWithField_shared(param), wildcard)
+    invariant df_isSubtype(df_typeOf(param), df_c_ClassWithField())
+  anon_6 := sp_ltInts(iteration, df_intToRef(10))
+  if (df_boolFromRef(anon_6)) {
+    var paramField: Ref
+    var localField: Ref
+    var thisField: Ref
+    unfold acc(c_ClassWithField_shared(param), wildcard)
+    paramField := param.bf_field
+    unfold acc(c_ClassWithField_shared(local), wildcard)
+    localField := local.bf_field
+    unfold acc(c_ClassWithField_shared(anon_1), wildcard)
+    thisField := anon_1.bf_field
+    iteration := sp_plusInts(iteration, df_intToRef(1))
+    goto lbl_continue_0
   }
-  label lbl$break$0
-  assert df$rt$isSubtype(df$rt$typeOf(l2$iteration), df$rt$intType())
-  assert acc(p$c$ClassWithField$shared(anon$1), wildcard)
-  assert df$rt$isSubtype(df$rt$typeOf(anon$1), df$rt$c$ClassWithField())
-  assert acc(p$c$ClassWithField$shared(l0$local), wildcard)
-  assert df$rt$isSubtype(df$rt$typeOf(l0$local), df$rt$c$ClassWithField())
-  assert acc(p$c$ClassWithField$shared(p$param), wildcard)
-  assert df$rt$isSubtype(df$rt$typeOf(p$param), df$rt$c$ClassWithField())
-  unfold acc(p$c$ClassWithField$shared(anon$1), wildcard)
-  anon$7 := anon$1.bf$field
-  assert df$rt$intFromRef(anon$7) == 42
-  unfold acc(p$c$ClassWithField$shared(l0$local), wildcard)
-  anon$8 := l0$local.bf$field
-  assert df$rt$intFromRef(anon$8) == 13
-  label lbl$ret$2
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$2), df$rt$unitType())
-  anon$5 := ret$2
-  ret$1 := anon$5
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$1), df$rt$nullable(df$rt$anyType()))
-  goto lbl$ret$1
-  label lbl$ret$1
-  anon$3 := ret$1
-  anon$2 := anon$3
-  inhale df$rt$isSubtype(df$rt$typeOf(anon$2), df$rt$unitType())
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  label lbl_break_0
+  assert df_isSubtype(df_typeOf(iteration), df_intType())
+  assert acc(c_ClassWithField_shared(anon_1), wildcard)
+  assert df_isSubtype(df_typeOf(anon_1), df_c_ClassWithField())
+  assert acc(c_ClassWithField_shared(local), wildcard)
+  assert df_isSubtype(df_typeOf(local), df_c_ClassWithField())
+  assert acc(c_ClassWithField_shared(param), wildcard)
+  assert df_isSubtype(df_typeOf(param), df_c_ClassWithField())
+  unfold acc(c_ClassWithField_shared(anon_1), wildcard)
+  anon_7 := anon_1.bf_field
+  assert df_intFromRef(anon_7) == 42
+  unfold acc(c_ClassWithField_shared(local), wildcard)
+  anon_8 := local.bf_field
+  assert df_intFromRef(anon_8) == 13
+  label lbl_2
+  inhale df_isSubtype(df_typeOf(ret_2), df_unitType())
+  anon_5 := ret_2
+  ret_1 := anon_5
+  inhale df_isSubtype(df_typeOf(ret_1), df_nullable(df_anyType()))
+  goto lbl_1
+  label lbl_1
+  anon_3 := ret_1
+  anon_2 := anon_3
+  inhale df_isSubtype(df_typeOf(anon_2), df_unitType())
+  label lbl_ret_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /while.kt:(1311,1336): info: Generated Viper text for test_while_with_smartcast:
-field bf$field: Ref
+field bf_field: Ref
 
-method f$test_while_with_smartcast$TF$T$Any$T$Any(p$param: Ref, p$innerParam: Ref)
-  returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method test_while_with_smartcast(param: Ref, innerParam: Ref)
+  returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(p$param), df$rt$anyType())
-  inhale df$rt$isSubtype(df$rt$typeOf(p$innerParam), df$rt$anyType())
-  if (df$rt$isSubtype(df$rt$typeOf(p$param), df$rt$c$ClassWithField())) {
-    var l2$iteration: Ref
-    var anon$0: Ref
-    l2$iteration := df$rt$intToRef(0)
-    label lbl$continue$0
-      invariant df$rt$isSubtype(df$rt$typeOf(l2$iteration), df$rt$intType())
-      invariant df$rt$isSubtype(df$rt$typeOf(p$param), df$rt$anyType())
-      invariant df$rt$isSubtype(df$rt$typeOf(p$innerParam), df$rt$anyType())
-    anon$0 := sp$ltInts(l2$iteration, df$rt$intToRef(10))
-    if (df$rt$boolFromRef(anon$0)) {
-      var l3$paramField: Ref
-      inhale acc(p$c$ClassWithField$shared(p$param), wildcard)
-      unfold acc(p$c$ClassWithField$shared(p$param), wildcard)
-      l3$paramField := p$param.bf$field
-      if (df$rt$isSubtype(df$rt$typeOf(p$innerParam), df$rt$c$ClassWithField())) {
-        var l5$innerParamField: Ref
-        inhale acc(p$c$ClassWithField$shared(p$innerParam), wildcard)
-        unfold acc(p$c$ClassWithField$shared(p$innerParam), wildcard)
-        l5$innerParamField := p$innerParam.bf$field
+  inhale df_isSubtype(df_typeOf(param), df_anyType())
+  inhale df_isSubtype(df_typeOf(innerParam), df_anyType())
+  if (df_isSubtype(df_typeOf(param), df_c_ClassWithField())) {
+    var iteration: Ref
+    var anon_0: Ref
+    iteration := df_intToRef(0)
+    label lbl_continue_0
+      invariant df_isSubtype(df_typeOf(iteration), df_intType())
+      invariant df_isSubtype(df_typeOf(param), df_anyType())
+      invariant df_isSubtype(df_typeOf(innerParam), df_anyType())
+    anon_0 := sp_ltInts(iteration, df_intToRef(10))
+    if (df_boolFromRef(anon_0)) {
+      var paramField: Ref
+      inhale acc(c_ClassWithField_shared(param), wildcard)
+      unfold acc(c_ClassWithField_shared(param), wildcard)
+      paramField := param.bf_field
+      if (df_isSubtype(df_typeOf(innerParam), df_c_ClassWithField())) {
+        var innerParamField: Ref
+        inhale acc(c_ClassWithField_shared(innerParam), wildcard)
+        unfold acc(c_ClassWithField_shared(innerParam), wildcard)
+        innerParamField := innerParam.bf_field
       }
-      l2$iteration := sp$plusInts(l2$iteration, df$rt$intToRef(1))
-      goto lbl$continue$0
+      iteration := sp_plusInts(iteration, df_intToRef(1))
+      goto lbl_continue_0
     }
-    label lbl$break$0
-    assert df$rt$isSubtype(df$rt$typeOf(l2$iteration), df$rt$intType())
-    assert df$rt$isSubtype(df$rt$typeOf(p$param), df$rt$anyType())
-    assert df$rt$isSubtype(df$rt$typeOf(p$innerParam), df$rt$anyType())
+    label lbl_break_0
+    assert df_isSubtype(df_typeOf(iteration), df_intType())
+    assert df_isSubtype(df_typeOf(param), df_anyType())
+    assert df_isSubtype(df_typeOf(innerParam), df_anyType())
   }
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  label lbl_ret_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }

@@ -1,105 +1,97 @@
 /string_iterations.kt:(71,83): info: Generated Viper text for firstAtLeast:
-method f$firstAtLeast$TF$T$String$T$Char(this$extension: Ref, p$c: Ref)
-  returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
-  ensures 0 <= df$rt$intFromRef(ret$0) &&
-    df$rt$intFromRef(ret$0) <= |df$rt$stringFromRef(this$extension)|
-  ensures (forall anon$builtin$2: Int ::0 <= anon$builtin$2 &&
-      anon$builtin$2 < df$rt$intFromRef(ret$0) ==>
-      df$rt$stringFromRef(this$extension)[anon$builtin$2] <
-      df$rt$charFromRef(p$c))
-  ensures !(df$rt$intFromRef(ret$0) ==
-    |df$rt$stringFromRef(this$extension)|) ==>
-    df$rt$stringFromRef(this$extension)[df$rt$intFromRef(ret$0)] >=
-    df$rt$charFromRef(p$c)
+method firstAtLeast(this$extension: Ref, c: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
+  ensures 0 <= df_intFromRef(ret_0) &&
+    df_intFromRef(ret_0) <= |df_stringFromRef(this$extension)|
+  ensures (forall anon$builtin_4: Int ::0 <= anon$builtin_4 &&
+      anon$builtin_4 < df_intFromRef(ret_0) ==>
+      df_stringFromRef(this$extension)[anon$builtin_4] < df_charFromRef(c))
+  ensures !(df_intFromRef(ret_0) == |df_stringFromRef(this$extension)|) ==>
+    df_stringFromRef(this$extension)[df_intFromRef(ret_0)] >=
+    df_charFromRef(c)
 {
-  var l0$i: Ref
-  var anon$0: Ref
-  inhale df$rt$isSubtype(df$rt$typeOf(this$extension), df$rt$stringType())
-  inhale df$rt$isSubtype(df$rt$typeOf(p$c), df$rt$charType())
-  l0$i := df$rt$intToRef(0)
-  label lbl$continue$0
-    invariant df$rt$isSubtype(df$rt$typeOf(l0$i), df$rt$intType())
-    invariant df$rt$isSubtype(df$rt$typeOf(p$c), df$rt$charType())
-    invariant 0 <= df$rt$intFromRef(l0$i) &&
-      df$rt$intFromRef(l0$i) <= |df$rt$stringFromRef(this$extension)|
-    invariant (forall anon$builtin$1: Int ::0 <= anon$builtin$1 &&
-        anon$builtin$1 < df$rt$intFromRef(l0$i) ==>
-        df$rt$stringFromRef(this$extension)[anon$builtin$1] <
-        df$rt$charFromRef(p$c))
-  anon$0 := sp$ltInts(l0$i, sp$stringLength(this$extension))
-  if (df$rt$boolFromRef(anon$0)) {
-    if (df$rt$stringFromRef(this$extension)[df$rt$intFromRef(l0$i)] >=
-    df$rt$charFromRef(p$c)) {
-      goto lbl$break$0
+  var i: Ref
+  var anon_0: Ref
+  inhale df_isSubtype(df_typeOf(this$extension), df_stringType())
+  inhale df_isSubtype(df_typeOf(c), df_charType())
+  i := df_intToRef(0)
+  label lbl_continue_0
+    invariant df_isSubtype(df_typeOf(i), df_intType())
+    invariant df_isSubtype(df_typeOf(c), df_charType())
+    invariant 0 <= df_intFromRef(i) &&
+      df_intFromRef(i) <= |df_stringFromRef(this$extension)|
+    invariant (forall anon$builtin_1: Int ::0 <= anon$builtin_1 &&
+        anon$builtin_1 < df_intFromRef(i) ==>
+        df_stringFromRef(this$extension)[anon$builtin_1] <
+        df_charFromRef(c))
+  anon_0 := sp_ltInts(i, sp_stringLength(this$extension))
+  if (df_boolFromRef(anon_0)) {
+    if (df_stringFromRef(this$extension)[df_intFromRef(i)] >=
+    df_charFromRef(c)) {
+      goto lbl_break_0
     }
-    l0$i := sp$plusInts(l0$i, df$rt$intToRef(1))
-    goto lbl$continue$0
+    i := sp_plusInts(i, df_intToRef(1))
+    goto lbl_continue_0
   }
-  label lbl$break$0
-  assert df$rt$isSubtype(df$rt$typeOf(l0$i), df$rt$intType())
-  assert df$rt$isSubtype(df$rt$typeOf(p$c), df$rt$charType())
-  assert 0 <= df$rt$intFromRef(l0$i) &&
-    df$rt$intFromRef(l0$i) <= |df$rt$stringFromRef(this$extension)|
-  assert (forall anon$builtin$1: Int ::0 <= anon$builtin$1 &&
-      anon$builtin$1 < df$rt$intFromRef(l0$i) ==>
-      df$rt$stringFromRef(this$extension)[anon$builtin$1] <
-      df$rt$charFromRef(p$c))
-  ret$0 := l0$i
-  goto lbl$ret$0
-  label lbl$ret$0
+  label lbl_break_0
+  assert df_isSubtype(df_typeOf(i), df_intType())
+  assert df_isSubtype(df_typeOf(c), df_charType())
+  assert 0 <= df_intFromRef(i) &&
+    df_intFromRef(i) <= |df_stringFromRef(this$extension)|
+  assert (forall anon$builtin_1: Int ::0 <= anon$builtin_1 &&
+      anon$builtin_1 < df_intFromRef(i) ==>
+      df_stringFromRef(this$extension)[anon$builtin_1] < df_charFromRef(c))
+  ret_0 := i
+  goto lbl_ret_0
+  label lbl_ret_0
 }
 
 /string_iterations.kt:(606,614): info: Generated Viper text for lastLess:
-method f$lastLess$TF$T$String$T$Char(this$extension: Ref, p$c: Ref)
-  returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
-  ensures -1 <= df$rt$intFromRef(ret$0) &&
-    df$rt$intFromRef(ret$0) <= |df$rt$stringFromRef(this$extension)| - 1
-  ensures (forall anon$builtin$2: Int ::df$rt$intFromRef(ret$0) <
-      anon$builtin$2 &&
-      anon$builtin$2 < |df$rt$stringFromRef(this$extension)| ==>
-      df$rt$stringFromRef(this$extension)[anon$builtin$2] >=
-      df$rt$charFromRef(p$c))
-  ensures !(df$rt$intFromRef(ret$0) == -1) ==>
-    df$rt$stringFromRef(this$extension)[df$rt$intFromRef(ret$0)] <
-    df$rt$charFromRef(p$c)
+method lastLess(this$extension: Ref, c: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_intType())
+  ensures -1 <= df_intFromRef(ret_0) &&
+    df_intFromRef(ret_0) <= |df_stringFromRef(this$extension)| - 1
+  ensures (forall anon$builtin_4: Int ::df_intFromRef(ret_0) <
+      anon$builtin_4 &&
+      anon$builtin_4 < |df_stringFromRef(this$extension)| ==>
+      df_stringFromRef(this$extension)[anon$builtin_4] >= df_charFromRef(c))
+  ensures !(df_intFromRef(ret_0) == -1) ==>
+    df_stringFromRef(this$extension)[df_intFromRef(ret_0)] <
+    df_charFromRef(c)
 {
-  var l0$i: Ref
-  var anon$0: Ref
-  inhale df$rt$isSubtype(df$rt$typeOf(this$extension), df$rt$stringType())
-  inhale df$rt$isSubtype(df$rt$typeOf(p$c), df$rt$charType())
-  l0$i := sp$minusInts(sp$stringLength(this$extension), df$rt$intToRef(1))
-  label lbl$continue$0
-    invariant df$rt$isSubtype(df$rt$typeOf(l0$i), df$rt$intType())
-    invariant df$rt$isSubtype(df$rt$typeOf(p$c), df$rt$charType())
-    invariant -1 <= df$rt$intFromRef(l0$i) &&
-      df$rt$intFromRef(l0$i) < |df$rt$stringFromRef(this$extension)|
-    invariant (forall anon$builtin$1: Int ::df$rt$intFromRef(l0$i) <
-        anon$builtin$1 &&
-        anon$builtin$1 < |df$rt$stringFromRef(this$extension)| ==>
-        df$rt$stringFromRef(this$extension)[anon$builtin$1] >=
-        df$rt$charFromRef(p$c))
-  anon$0 := sp$gtInts(l0$i, df$rt$intToRef(-1))
-  if (df$rt$boolFromRef(anon$0)) {
-    if (df$rt$stringFromRef(this$extension)[df$rt$intFromRef(l0$i)] <
-    df$rt$charFromRef(p$c)) {
-      goto lbl$break$0
+  var i: Ref
+  var anon_0: Ref
+  inhale df_isSubtype(df_typeOf(this$extension), df_stringType())
+  inhale df_isSubtype(df_typeOf(c), df_charType())
+  i := sp_minusInts(sp_stringLength(this$extension), df_intToRef(1))
+  label lbl_continue_0
+    invariant df_isSubtype(df_typeOf(i), df_intType())
+    invariant df_isSubtype(df_typeOf(c), df_charType())
+    invariant -1 <= df_intFromRef(i) &&
+      df_intFromRef(i) < |df_stringFromRef(this$extension)|
+    invariant (forall anon$builtin_1: Int ::df_intFromRef(i) <
+        anon$builtin_1 &&
+        anon$builtin_1 < |df_stringFromRef(this$extension)| ==>
+        df_stringFromRef(this$extension)[anon$builtin_1] >=
+        df_charFromRef(c))
+  anon_0 := sp_gtInts(i, df_intToRef(-1))
+  if (df_boolFromRef(anon_0)) {
+    if (df_stringFromRef(this$extension)[df_intFromRef(i)] <
+    df_charFromRef(c)) {
+      goto lbl_break_0
     }
-    l0$i := sp$minusInts(l0$i, df$rt$intToRef(1))
-    goto lbl$continue$0
+    i := sp_minusInts(i, df_intToRef(1))
+    goto lbl_continue_0
   }
-  label lbl$break$0
-  assert df$rt$isSubtype(df$rt$typeOf(l0$i), df$rt$intType())
-  assert df$rt$isSubtype(df$rt$typeOf(p$c), df$rt$charType())
-  assert -1 <= df$rt$intFromRef(l0$i) &&
-    df$rt$intFromRef(l0$i) < |df$rt$stringFromRef(this$extension)|
-  assert (forall anon$builtin$1: Int ::df$rt$intFromRef(l0$i) <
-      anon$builtin$1 &&
-      anon$builtin$1 < |df$rt$stringFromRef(this$extension)| ==>
-      df$rt$stringFromRef(this$extension)[anon$builtin$1] >=
-      df$rt$charFromRef(p$c))
-  ret$0 := l0$i
-  goto lbl$ret$0
-  label lbl$ret$0
+  label lbl_break_0
+  assert df_isSubtype(df_typeOf(i), df_intType())
+  assert df_isSubtype(df_typeOf(c), df_charType())
+  assert -1 <= df_intFromRef(i) &&
+    df_intFromRef(i) < |df_stringFromRef(this$extension)|
+  assert (forall anon$builtin_1: Int ::df_intFromRef(i) < anon$builtin_1 &&
+      anon$builtin_1 < |df_stringFromRef(this$extension)| ==>
+      df_stringFromRef(this$extension)[anon$builtin_1] >= df_charFromRef(c))
+  ret_0 := i
+  goto lbl_ret_0
+  label lbl_ret_0
 }

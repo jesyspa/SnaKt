@@ -1,128 +1,120 @@
 /returns_booleans.kt:(121,133): info: Generated Viper text for returns_true:
-method f$returns_true$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
+method returns_true() returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
   ensures true
-  ensures df$rt$boolFromRef(ret$0) == true
+  ensures df_boolFromRef(ret_0) == true
 {
-  ret$0 := df$rt$boolToRef(true)
-  goto lbl$ret$0
-  label lbl$ret$0
+  ret_0 := df_boolToRef(true)
+  goto lbl_0
+  label lbl_0
 }
 
 /returns_booleans.kt:(268,281): info: Generated Viper text for returns_false:
-method f$returns_false$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
+method returns_false() returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
   ensures true
-  ensures df$rt$boolFromRef(ret$0) == false
+  ensures df_boolFromRef(ret_0) == false
 {
-  ret$0 := df$rt$boolToRef(false)
-  goto lbl$ret$0
-  label lbl$ret$0
+  ret_0 := df_boolToRef(false)
+  goto lbl_0
+  label lbl_0
 }
 
 /returns_booleans.kt:(418,435): info: Generated Viper text for conditional_basic:
-method f$conditional_basic$TF$T$Boolean(p$b: Ref) returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
-  ensures df$rt$boolFromRef(ret$0) == true ==> true
-  ensures df$rt$boolFromRef(ret$0) == false ==> df$rt$boolFromRef(p$b)
+method conditional_basic(b: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
+  ensures df_boolFromRef(ret_0) == true ==> true
+  ensures df_boolFromRef(ret_0) == false ==> df_boolFromRef(b)
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
-  ret$0 := df$rt$boolToRef(true)
-  goto lbl$ret$0
-  label lbl$ret$0
+  inhale df_isSubtype(df_typeOf(b), df_boolType())
+  ret_0 := df_boolToRef(true)
+  goto lbl_0
+  label lbl_0
 }
 
 /returns_booleans.kt:(612,636): info: Generated Viper text for binary_logic_expressions:
-method f$binary_logic_expressions$TF$T$Boolean$T$Boolean(p$a: Ref, p$b: Ref)
-  returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
-  ensures df$rt$boolFromRef(ret$0) == false ==>
-    df$rt$boolFromRef(p$b) && false
-  ensures df$rt$boolFromRef(ret$0) == true ==>
-    (true || df$rt$boolFromRef(p$a)) && (df$rt$boolFromRef(p$b) || true)
+method binary_logic_expressions(a: Ref, b: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
+  ensures df_boolFromRef(ret_0) == false ==> df_boolFromRef(b) && false
+  ensures df_boolFromRef(ret_0) == true ==>
+    (true || df_boolFromRef(a)) && (df_boolFromRef(b) || true)
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(p$a), df$rt$boolType())
-  inhale df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
-  ret$0 := df$rt$boolToRef(true)
-  goto lbl$ret$0
-  label lbl$ret$0
+  inhale df_isSubtype(df_typeOf(a), df_boolType())
+  inhale df_isSubtype(df_typeOf(b), df_boolType())
+  ret_0 := df_boolToRef(true)
+  goto lbl_0
+  label lbl_0
 }
 
 /returns_booleans.kt:(855,866): info: Generated Viper text for logical_not:
-method f$logical_not$TF$T$Boolean(p$b: Ref) returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
-  ensures df$rt$boolFromRef(ret$0) == true ==>
-    !df$rt$boolFromRef(p$b) && df$rt$boolFromRef(p$b)
-  ensures df$rt$boolFromRef(ret$0) == false ==>
-    df$rt$boolFromRef(p$b) || !df$rt$boolFromRef(p$b)
+method logical_not(b: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
+  ensures df_boolFromRef(ret_0) == true ==>
+    !df_boolFromRef(b) && df_boolFromRef(b)
+  ensures df_boolFromRef(ret_0) == false ==>
+    df_boolFromRef(b) || !df_boolFromRef(b)
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
-  ret$0 := df$rt$boolToRef(false)
-  goto lbl$ret$0
-  label lbl$ret$0
+  inhale df_isSubtype(df_typeOf(b), df_boolType())
+  ret_0 := df_boolToRef(false)
+  goto lbl_0
+  label lbl_0
 }
 
 /returns_booleans.kt:(1052,1075): info: Generated Viper text for call_fun_with_contracts:
-method f$binary_logic_expressions$TF$T$Boolean$T$Boolean(p$a: Ref, p$b: Ref)
-  returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$boolType())
-  ensures df$rt$boolFromRef(ret) == false ==>
-    df$rt$boolFromRef(p$b) && false
-  ensures df$rt$boolFromRef(ret) == true ==>
-    (true || df$rt$boolFromRef(p$a)) && (df$rt$boolFromRef(p$b) || true)
+method binary_logic_expressions(p_a: Ref, b: Ref) returns (ret: Ref)
+  ensures df_isSubtype(df_typeOf(ret), df_boolType())
+  ensures df_boolFromRef(ret) == false ==> df_boolFromRef(b) && false
+  ensures df_boolFromRef(ret) == true ==>
+    (true || df_boolFromRef(p_a)) && (df_boolFromRef(b) || true)
 
 
-method f$call_fun_with_contracts$TF$T$Boolean(p$b: Ref)
-  returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
-  ensures df$rt$boolFromRef(ret$0) == true
+method call_fun_with_contracts(b: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
+  ensures df_boolFromRef(ret_0) == true
 {
-  var l0$a: Ref
-  inhale df$rt$isSubtype(df$rt$typeOf(p$b), df$rt$boolType())
-  l0$a := f$binary_logic_expressions$TF$T$Boolean$T$Boolean(p$b, p$b)
-  ret$0 := l0$a
-  goto lbl$ret$0
-  label lbl$ret$0
+  var l0_a: Ref
+  inhale df_isSubtype(df_typeOf(b), df_boolType())
+  l0_a := binary_logic_expressions(b, b)
+  ret_0 := l0_a
+  goto lbl_0
+  label lbl_0
 }
 
 /returns_booleans.kt:(1268,1281): info: Generated Viper text for isNullOrEmpty:
-field sp$size: Ref
+field sp_size: Ref
 
-method f$isNullOrEmpty$TF$NT$Collection(this$extension: Ref)
-  returns (ret$0: Ref)
-  requires this$extension != df$rt$nullValue() ==>
-    acc(this$extension.sp$size, write)
-  requires this$extension != df$rt$nullValue() ==>
-    df$rt$intFromRef(this$extension.sp$size) >= 0
-  ensures this$extension != df$rt$nullValue() ==>
-    acc(this$extension.sp$size, write)
-  ensures this$extension != df$rt$nullValue() ==>
-    df$rt$intFromRef(this$extension.sp$size) >= 0
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
-  ensures df$rt$boolFromRef(ret$0) == false ==>
-    this$extension != df$rt$nullValue()
+method c_Collection_isEmpty(this$dispatch: Ref) returns (ret: Ref)
+  requires acc(this$dispatch.sp_size, write)
+  requires df_intFromRef(this$dispatch.sp_size) >= 0
+  ensures acc(this$dispatch.sp_size, write)
+  ensures df_intFromRef(this$dispatch.sp_size) >= 0
+  ensures df_isSubtype(df_typeOf(ret), df_boolType())
+  ensures df_intFromRef(this$dispatch.sp_size) ==
+    old(df_intFromRef(this$dispatch.sp_size))
+  ensures df_boolFromRef(ret) ==> df_intFromRef(this$dispatch.sp_size) == 0
+  ensures !df_boolFromRef(ret) ==> df_intFromRef(this$dispatch.sp_size) > 0
+
+
+method isNullOrEmpty(this$extension: Ref) returns (ret_0: Ref)
+  requires this$extension != df_nullValue() ==>
+    acc(this$extension.sp_size, write)
+  requires this$extension != df_nullValue() ==>
+    df_intFromRef(this$extension.sp_size) >= 0
+  ensures this$extension != df_nullValue() ==>
+    acc(this$extension.sp_size, write)
+  ensures this$extension != df_nullValue() ==>
+    df_intFromRef(this$extension.sp_size) >= 0
+  ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
+  ensures df_boolFromRef(ret_0) == false ==>
+    this$extension != df_nullValue()
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(this$extension), df$rt$nullable(df$rt$c$pkg$kotlin_collections$Collection()))
-  inhale this$extension != df$rt$nullValue() ==>
-    acc(p$pkg$kotlin_collections$c$Collection$shared(this$extension), wildcard)
-  if (this$extension == df$rt$nullValue()) {
-    ret$0 := df$rt$boolToRef(true)
+  inhale df_isSubtype(df_typeOf(this$extension), df_nullable(df_c_Collection()))
+  inhale this$extension != df_nullValue() ==>
+    acc(c_Collection_shared(this$extension), wildcard)
+  if (this$extension == df_nullValue()) {
+    ret_0 := df_boolToRef(true)
   } else {
-    ret$0 := f$pkg$kotlin_collections$c$Collection$isEmpty$TF$T$Collection(this$extension)}
-  goto lbl$ret$0
-  label lbl$ret$0
+    ret_0 := c_Collection_isEmpty(this$extension)}
+  goto lbl_0
+  label lbl_0
 }
-
-method f$pkg$kotlin_collections$c$Collection$isEmpty$TF$T$Collection(this$dispatch: Ref)
-  returns (ret: Ref)
-  requires acc(this$dispatch.sp$size, write)
-  requires df$rt$intFromRef(this$dispatch.sp$size) >= 0
-  ensures acc(this$dispatch.sp$size, write)
-  ensures df$rt$intFromRef(this$dispatch.sp$size) >= 0
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$boolType())
-  ensures df$rt$intFromRef(this$dispatch.sp$size) ==
-    old(df$rt$intFromRef(this$dispatch.sp$size))
-  ensures df$rt$boolFromRef(ret) ==>
-    df$rt$intFromRef(this$dispatch.sp$size) == 0
-  ensures !df$rt$boolFromRef(ret) ==>
-    df$rt$intFromRef(this$dispatch.sp$size) > 0
