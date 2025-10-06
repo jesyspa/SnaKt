@@ -10,14 +10,14 @@ import org.jetbrains.kotlin.formver.viper.Lit
 import org.jetbrains.kotlin.formver.viper.NameExpr
 import org.jetbrains.kotlin.formver.viper.SEPARATOR
 import org.jetbrains.kotlin.formver.viper.SymbolVal
-import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.parseRequiredScope
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.utils.addToStdlib.ifFalse
 
-val MangledName.fullScope: NameExpr?
+val SymbolicName.fullScope: NameExpr?
     get() = mangledScope?.fullSymbolName
-val MangledName.requiredScope: NameExpr?
+val SymbolicName.requiredScope: NameExpr?
     get() = fullScope?.let {parseRequiredScope(it)}
 // Includes the scope itself.
 val NameScope.parentScopes: Sequence<NameScope>

@@ -6,11 +6,11 @@
 package org.jetbrains.kotlin.formver.core.embeddings.callables
 
 import org.jetbrains.kotlin.fir.symbols.impl.FirFunctionSymbol
-import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.ast.*
 
 interface NamedFunctionSignature : FunctionSignature {
-    val name: MangledName
+    val name: SymbolicName
 
     val symbol: FirFunctionSymbol<*>
 

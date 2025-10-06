@@ -309,7 +309,7 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
     //endregion
 
     data class LocalVar(
-        val name: MangledName,
+        val name: SymbolicName,
         override val type: Type,
         val pos: Position = Position.NoPosition,
         val info: Info = Info.NoInfo,
@@ -345,7 +345,7 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
     }
 
     data class FuncApp(
-        val functionName: MangledName,
+        val functionName: SymbolicName,
         val args: List<Exp>,
         override val type: Type,
         val pos: Position = Position.NoPosition,
@@ -521,7 +521,7 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
     }
 
     data class PredicateAccess(
-        val predicateName: MangledName,
+        val predicateName: SymbolicName,
         val formalArgs: List<Exp>,
         val perm: PermExp,
         val pos: Position = Position.NoPosition,

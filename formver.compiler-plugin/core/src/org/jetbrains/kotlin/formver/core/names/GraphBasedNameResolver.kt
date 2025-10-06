@@ -1,7 +1,7 @@
 package org.jetbrains.kotlin.formver.core.names
 
 import org.jetbrains.kotlin.formver.viper.Lit
-import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.NameExpr
 import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.joinExprs
@@ -20,7 +20,7 @@ data class Candidate(val expr: NameExpr) {
             when (part) {
                 is NameExpr.Part.Lit -> stringRepresentation.append(part.value)
                 is NameExpr.Part.SymbolVal -> {
-                    stringRepresentation.append(nameResolver.resolve(part.mangledName))
+                    stringRepresentation.append(nameResolver.resolve(part.symbolicName))
                 }
             }
         }
@@ -28,7 +28,7 @@ data class Candidate(val expr: NameExpr) {
     }
 }
 
-data class NameBuilder(val name: MangledName) {
+data class NameBuilder(val name: SymbolicName) {
     companion object {
         var currentSuffix = 0
     }
@@ -87,28 +87,28 @@ data class NameBuilder(val name: MangledName) {
 }
 
 class GraphBasedNameResolver : NameResolver {
-    private val builderMap: MutableMap<MangledName, NameBuilder> = mutableMapOf()
-    override fun resolve(name: MangledName): String {
+    private val builderMap: MutableMap<SymbolicName, NameBuilder> = mutableMapOf()
+    override fun resolve(name: SymbolicName): String {
         if (name !in builderMap) register(name)
         return builderMap[name]?.currentCandidate() ?: error("Incorrect name: $name.")
     }
 
-    override fun register(name: MangledName) {
+    override fun register(name: SymbolicName) {
         if (name in builderMap) return
         builderMap[name] = NameBuilder(name)
         builderMap[name]!!.buildCandidates()
     }
-    fun chooseNamesForFix(): Set<MangledName> {
-        val stringRepresentations = mutableMapOf<String, MutableList<MangledName>>()
+    fun chooseNamesForFix(): Set<SymbolicName> {
+        val stringRepresentations = mutableMapOf<String, MutableList<SymbolicName>>()
         for ((name, builder) in builderMap) {
             val s = builder.currentCandidate()
             stringRepresentations.getOrPut(s) { mutableListOf() }.add(name)
         }
 
-        val collisions: List<MangledName> =
+        val collisions: List<SymbolicName> =
             stringRepresentations.values.filter { it.size > 1 }.flatten()
 
-        val collisionsWithReservedNames: List<MangledName> =
+        val collisionsWithReservedNames: List<SymbolicName> =
             stringRepresentations.filterKeys { it in reservedViperNames }
                 .values.flatten()
 
