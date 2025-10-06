@@ -1,6 +1,6 @@
 # SnaKt: Kotlin Formal Verification Plugin
 
-[SnaKt](https://github.com/jesyspa/SnaKt) is a plugin for `kotlinc`
+SnaKt is a plugin for [`kotlinc`](https://github.com/JetBrains/kotlin)
 that performs formal verification of Kotlin code by translating it to
 [Viper](https://www.pm.inf.ethz.ch/research/viper.html).
 

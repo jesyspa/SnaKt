@@ -5,8 +5,11 @@
 
 package org.jetbrains.kotlin.formver.core.names
 
+import NameScope
+import SimpleScope
+import org.jetbrains.kotlin.formver.viper.Lit
+import org.jetbrains.kotlin.formver.viper.NameExpr
 import org.jetbrains.kotlin.formver.viper.MangledName
-import org.jetbrains.kotlin.formver.viper.NameResolver
 
 /* This file contains mangled names for constructs introduced during the conversion to Viper.
  *
@@ -21,70 +24,71 @@ data class AnonymousName(val n: Int) : MangledName {
     override val mangledType: String
         get() = "anon"
 
-    context(nameResolver: NameResolver)
-    override val mangledBaseName: String
-        get() = n.toString()
+    override val mangledBaseName: NameExpr
+        get() = Lit(n.toString())
+
+    override val requiresType = true
 }
 
 data class AnonymousBuiltinName(val n: Int) : MangledName {
-
     override val mangledType: String
         get() = $$"anon$builtin"
 
-    context(nameResolver: NameResolver)
-    override val mangledBaseName: String
-        get() = n.toString()
+    override val mangledBaseName: NameExpr
+        get() = Lit(n.toString())
+
+    override val requiresType = true
 }
 
 /**
  * Name for return variable that should *only* be used in signatures of methods without a body.
  */
 data object PlaceholderReturnVariableName : MangledName {
-    context(nameResolver: NameResolver)
-    override val mangledBaseName: String
-        get() = "ret"
+    override val mangledBaseName: NameExpr
+        get() = Lit("ret")
+
+    override val requiresType = true
 }
 
 data class ReturnVariableName(val n: Int) : MangledName {
     override val mangledType: String
         get() = "ret"
 
-    context(nameResolver: NameResolver)
-    override val mangledBaseName: String
-        get() = n.toString()
+    override val mangledBaseName: NameExpr
+        get() = Lit(n.toString())
+
+    override val requiresType = true
 }
 
 data object DispatchReceiverName : MangledName {
-    context(nameResolver: NameResolver)
-    override val mangledBaseName: String
-        get() = $$"this$dispatch"
+    override val mangledBaseName: NameExpr
+        get() = Lit($$"this$dispatch")
 }
 
 data object ExtensionReceiverName : MangledName {
-    context(nameResolver: NameResolver)
-    override val mangledBaseName: String
-        get() = $$"this$extension"
+    override val mangledBaseName: NameExpr
+        get() = Lit($$"this$extension")
 }
 
 data class SpecialName(val baseName: String) : MangledName {
-    context(nameResolver: NameResolver)
-    override val mangledBaseName: String
-        get() = baseName
+    override val mangledBaseName: NameExpr
+        get() = Lit(baseName)
     override val mangledType: String
         get() = "sp"
+    override val requiresType = true
 }
 
 abstract class NumberedLabelName(val scope: String, val originalN: Int) : MangledName {
     override val mangledType: String
         get() = "lbl"
 
-    context(nameResolver: NameResolver)
-    override val mangledBaseName: String
-        get() = originalN.toString()
+    override val mangledBaseName: NameExpr
+        get() = Lit(originalN.toString())
 
-    context(nameResolver: NameResolver)
-    override val mangledScope: String?
-        get() = scope
+    override val mangledScope: NameScope
+        get() = SimpleScope(Lit(scope))
+
+    override val requiresType = true
 }
 
 data class ReturnLabelName(val scopeDepth: Int) : NumberedLabelName("ret", scopeDepth)
@@ -95,13 +99,13 @@ data class TryExitLabelName(val n: Int) : NumberedLabelName("try_exit", n)
 
 
 data class PlaceholderArgumentName(val n: Int) : MangledName {
-    context(nameResolver: NameResolver)
-    override val mangledBaseName: String
-        get() = "arg$n"
+    override val mangledBaseName: NameExpr
+        get() = Lit("arg$n")
+
+    override val requiresType = true
 }
 
 data class DomainFuncParameterName(val baseName: String) : MangledName {
-    context(nameResolver: NameResolver)
-    override val mangledBaseName: String
-        get() = baseName
+    override val mangledBaseName: NameExpr
+        get() = Lit(baseName)
 }

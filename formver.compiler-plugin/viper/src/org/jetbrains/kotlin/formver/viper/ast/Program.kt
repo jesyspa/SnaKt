@@ -92,7 +92,9 @@ private fun Program.registerSeqnNames(seqn: Stmt.Seqn) {
             is Stmt.Label -> nameResolver.register(stmt.name)
             is Stmt.Seqn -> registerSeqnNames(stmt)
             is Stmt.Goto -> nameResolver.register(stmt.name)
-            is Stmt.MethodCall -> nameResolver.register(stmt.methodName)
+            is Stmt.MethodCall -> {
+                nameResolver.register(stmt.methodName)
+            }
             is Stmt.If -> {
                 registerSeqnNames(stmt.then)
                 stmt.els?.let { registerSeqnNames(it) }
@@ -101,7 +103,7 @@ private fun Program.registerSeqnNames(seqn: Stmt.Seqn) {
             is Stmt.LocalVarAssign -> nameResolver.register(stmt.lhs.name)
             is Stmt.Fold -> nameResolver.register(stmt.acc.predicateName)
             is Stmt.Unfold -> nameResolver.register(stmt.acc.predicateName)
-            else -> { }
+            else -> {}
         }
     }
 }
@@ -112,9 +114,12 @@ fun Program.registerAllNames() {
         nameResolver.register(domain.name)
         domain.functions.forEach { function ->
             nameResolver.register(function.name)
-            function.formalArgs.forEach { arg -> nameResolver.register(arg.name) }
+            function.formalArgs.forEach {
+                    arg -> nameResolver.register(arg.name)
+            }
         }
     }
+
     fields.forEach { nameResolver.register(it.name) }
 
     functions.forEach { function ->

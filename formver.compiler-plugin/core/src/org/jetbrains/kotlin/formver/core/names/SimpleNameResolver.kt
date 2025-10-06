@@ -1,5 +1,6 @@
 package org.jetbrains.kotlin.formver.names
 
+import org.jetbrains.kotlin.formver.core.names.fullScope
 import org.jetbrains.kotlin.formver.viper.MangledName
 import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.SEPARATOR
@@ -18,6 +19,6 @@ import org.jetbrains.kotlin.formver.viper.SEPARATOR
  */
 class SimpleNameResolver : NameResolver {
     override fun resolve(name: MangledName): String =
-        listOfNotNull(name.mangledType, name.mangledScope, name.mangledBaseName).joinToString(SEPARATOR)
+        listOfNotNull(name.mangledType, name.fullScope, name.mangledBaseName).joinToString(SEPARATOR)
     override fun register(name: MangledName) {}
 }

@@ -7,10 +7,8 @@ package org.jetbrains.kotlin.formver.core.domains
 
 import org.jetbrains.kotlin.formver.core.embeddings.types.ClassTypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.embedClassTypeFunc
-import org.jetbrains.kotlin.formver.core.names.SimpleKotlinName
 import org.jetbrains.kotlin.formver.viper.MangledName
 import org.jetbrains.kotlin.formver.viper.ast.*
-import org.jetbrains.kotlin.name.Name
 
 
 const val RUNTIME_TYPE_DOMAIN_NAME = "rt"

@@ -5,30 +5,97 @@
 
 package org.jetbrains.kotlin.formver.viper
 
+import NameScope
+
 /**
  * Represents a Kotlin name with its Viper equivalent.
  *
  * We could directly convert names and pass them around as strings, but this
  * approach makes it easier to see where they came from during debugging.
  */
-const val SEPARATOR = "$"
+const val SEPARATOR = "_"
 interface MangledName {
     val mangledType: String?
         get() = null
-    context(nameResolver: NameResolver)
-    val mangledScope: String?
+    val mangledScope: NameScope?
         get() = null
-    context(nameResolver: NameResolver)
-    val mangledBaseName: String
+    val mangledBaseName: NameExpr
+
+    // needed for fresh names (see FreshNames.kt)
+    val requiresType: Boolean
+        get() = false
 }
 
 context(nameResolver: NameResolver)
 val MangledName.mangled: String
     get() = nameResolver.resolve(this)
 
-val MangledName.debugMangled: String
-    get() {
-        val debugResolver = DebugNameResolver()
-        return debugResolver.resolve(this)
+sealed interface NameExpr {
+    fun toParts(): List<Part> = emptyList()
+
+    sealed interface Part: NameExpr {
+        data class Lit(val value: String?) : Part {
+            override fun toParts(): List<Part> {
+                return if (value.equals("")) emptyList()
+                else listOf(this)
+            }
+        }
+        data class SymbolVal(val mangledName: MangledName) : Part {
+            override fun toParts(): List<Part> = listOf(this)
+        }
+    }
+}
+
+data class Lit(val text: String?) : NameExpr {
+    override fun toParts(): List<NameExpr.Part> {
+        return if (text.equals("") || text==null) emptyList()
+        else listOf(NameExpr.Part.Lit(text))
+    }
+}
+data class SymbolVal(val mangledName: MangledName) : NameExpr {
+    override fun toParts() = listOf(NameExpr.Part.SymbolVal(mangledName))
+}
+
+data class Join(val items: List<NameExpr>, val sep: String = SEPARATOR) : NameExpr {
+    override fun toParts(): List<NameExpr.Part> {
+        if (items.isEmpty()) return emptyList()
+        val out = mutableListOf<NameExpr.Part>()
+        items.mapNotNull { item ->
+            item.toParts().takeIf { it.isNotEmpty() }
+        }.forEachIndexed { i, parts ->
+            out += parts
+            if (i < items.count { !it.toParts().isEmpty() } - 1) {
+                out += NameExpr.Part.Lit(sep)
+            }
+        }
+        return out
+    }
+}
+
+fun joinExprs(vararg segs: NameExpr?): NameExpr {
+    val items = segs
+        .filterNotNull()
+    return when (items.size) {
+        0 -> Lit("")
+        1 -> items[0]
+        else -> Join(items, SEPARATOR)
+    }
+}
+
+fun parseRequiredScope(scope: NameExpr): NameExpr? {
+    val parts = scope.toParts()
+    if (parts.isEmpty()) return null
+
+    val requiredParts = parts.mapNotNull { part ->
+        when (part) {
+            is NameExpr.Part.SymbolVal -> part
+            is NameExpr.Part.Lit -> null
+        }
     }
 
+    return when {
+        requiredParts.isEmpty() -> Lit("")
+        requiredParts.size == 1 -> requiredParts[0]
+        else -> Join(requiredParts, SEPARATOR)
+    }
+}
