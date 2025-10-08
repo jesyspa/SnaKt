@@ -14,11 +14,11 @@ val reservedViperNames = setOf(
     "package", "unique", "derives"
 )
 
-data class Candidate(val expr: NameExpr) {
+data class Candidate(val expr: NameExpr?) {
     context(nameResolver: GraphBasedNameResolver)
     fun getStringRepresentation(): String {
         val stringRepresentation = StringBuilder()
-        expr.toParts().forEach { part ->
+        expr?.toParts()?.forEach { part ->
             when (part) {
                 is NameExpr.Part.Lit -> stringRepresentation.append(part.value)
                 is NameExpr.Part.SymbolVal -> {

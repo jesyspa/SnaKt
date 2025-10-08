@@ -5,6 +5,7 @@
 
 package org.jetbrains.kotlin.formver.core.conversion
 
+import DebugNameResolver
 import debugMangled
 import org.jetbrains.kotlin.KtSourceElement
 import org.jetbrains.kotlin.descriptors.Visibilities
@@ -79,7 +80,7 @@ class ProgramConverter(
     override val anonVarProducer = FreshEntityProducer(::AnonymousVariableEmbedding)
     override val anonBuiltinVarProducer = FreshEntityProducer(::AnonymousBuiltinVariableEmbedding)
     override val returnTargetProducer = FreshEntityProducer(::ReturnTarget)
-    override val nameResolver = GraphBasedNameResolver()
+    override val nameResolver = DebugNameResolver()
     val program: Program
         get() = Program(
             domains = listOf(RuntimeTypeDomain(classes.values.toList())),

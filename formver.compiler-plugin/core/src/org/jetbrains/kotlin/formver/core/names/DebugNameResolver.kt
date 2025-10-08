@@ -9,9 +9,6 @@ import org.jetbrains.kotlin.formver.viper.SymbolicName
 
 class DebugNameResolver : NameResolver {
     override fun resolve(name: SymbolicName): String {
-        if (name is ScopedKotlinName) {
-            val x = 1
-        }
         val components = mutableListOf<String>()
 
         name.mangledType?.let { components.add(it) }

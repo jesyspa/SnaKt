@@ -57,26 +57,19 @@ data class SymbolVal(val symbolicName: SymbolicName) : NameExpr {
 }
 
 data class Join(val items: List<NameExpr>, val sep: String = SEPARATOR) : NameExpr {
-    override fun toParts(): List<NameExpr.Part> {
-        if (items.isEmpty()) return emptyList()
-        val out = mutableListOf<NameExpr.Part>()
-        items.mapNotNull { item ->
-            item.toParts().takeIf { it.isNotEmpty() }
-        }.forEachIndexed { i, parts ->
-            out += parts
-            if (i < items.count { !it.toParts().isEmpty() } - 1) {
-                out += NameExpr.Part.Lit(sep)
-            }
+    override fun toParts(): List<NameExpr.Part> = buildList {
+        items.forEach { item ->
+            val parts = item.toParts()
+            if (parts.isNotEmpty()) addAll(parts)
         }
-        return out
     }
 }
 
-fun joinExprs(vararg segs: NameExpr?): NameExpr {
+fun joinExprs(vararg segs: NameExpr?): NameExpr? {
     val items = segs
         .filterNotNull()
     return when (items.size) {
-        0 -> Lit("")
+        0 -> null
         1 -> items[0]
         else -> Join(items, SEPARATOR)
     }
@@ -94,7 +87,7 @@ fun parseRequiredScope(scope: NameExpr): NameExpr? {
     }
 
     return when {
-        requiredParts.isEmpty() -> Lit("")
+        requiredParts.isEmpty() -> null
         requiredParts.size == 1 -> requiredParts[0]
         else -> Join(requiredParts, SEPARATOR)
     }
