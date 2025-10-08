@@ -30,5 +30,5 @@ data class FunctionTypeEmbedding(
     val formalArgTypes: List<TypeEmbedding>
         get() = listOfNotNull(dispatchReceiverType, extensionReceiverType) + paramTypes
 
-    override val name = PretypeName(Join(formalArgTypes.map { it -> SymbolVal(it.name) }, SEPARATOR))
+    override val name = PretypeName(Join(formalArgTypes.map { it -> SymbolVal(it.name) }))
 }

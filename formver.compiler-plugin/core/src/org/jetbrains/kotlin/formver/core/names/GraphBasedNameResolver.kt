@@ -6,6 +6,7 @@ import org.jetbrains.kotlin.formver.viper.Lit
 import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.NameExpr
 import org.jetbrains.kotlin.formver.viper.NameResolver
+import org.jetbrains.kotlin.formver.viper.SEPARATOR
 import org.jetbrains.kotlin.formver.viper.joinExprs
 
 val reservedViperNames = setOf(
@@ -17,16 +18,24 @@ val reservedViperNames = setOf(
 data class Candidate(val expr: NameExpr?) {
     context(nameResolver: GraphBasedNameResolver)
     fun getStringRepresentation(): String {
-        val stringRepresentation = StringBuilder()
-        expr?.toParts()?.forEach { part ->
+        val stringRepresentation = mutableListOf<String?>()
+        val exr = expr?.toParts()?.map { part ->
             when (part) {
-                is NameExpr.Part.Lit -> stringRepresentation.append(part.value)
+                is NameExpr.Part.Lit -> part.value
                 is NameExpr.Part.SymbolVal -> {
-                    stringRepresentation.append(nameResolver.resolve(part.symbolicName))
+                    nameResolver.resolve(part.symbolicName)
                 }
             }
         }
-        return stringRepresentation.toString()
+        expr?.toParts()?.forEach { part ->
+            when (part) {
+                is NameExpr.Part.Lit -> stringRepresentation.add(part.value)
+                is NameExpr.Part.SymbolVal -> {
+                    stringRepresentation.add(nameResolver.resolve(part.symbolicName))
+                }
+            }
+        }
+        return stringRepresentation.filterNotNull().joinToString(SEPARATOR)
     }
 }
 

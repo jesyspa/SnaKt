@@ -80,7 +80,7 @@ class ProgramConverter(
     override val anonVarProducer = FreshEntityProducer(::AnonymousVariableEmbedding)
     override val anonBuiltinVarProducer = FreshEntityProducer(::AnonymousBuiltinVariableEmbedding)
     override val returnTargetProducer = FreshEntityProducer(::ReturnTarget)
-    override val nameResolver = DebugNameResolver()
+    override val nameResolver = GraphBasedNameResolver()
     val program: Program
         get() = Program(
             domains = listOf(RuntimeTypeDomain(classes.values.toList())),

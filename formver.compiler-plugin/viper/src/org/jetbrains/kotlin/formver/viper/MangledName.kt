@@ -36,7 +36,7 @@ sealed interface NameExpr {
     sealed interface Part: NameExpr {
         data class Lit(val value: String?) : Part {
             override fun toParts(): List<Part> {
-                return if (value.equals("")) emptyList()
+                return if (value==null) emptyList()
                 else listOf(this)
             }
         }
@@ -48,7 +48,7 @@ sealed interface NameExpr {
 
 data class Lit(val text: String?) : NameExpr {
     override fun toParts(): List<NameExpr.Part> {
-        return if (text.equals("") || text==null) emptyList()
+        return if (text==null) emptyList()
         else listOf(NameExpr.Part.Lit(text))
     }
 }
@@ -56,7 +56,7 @@ data class SymbolVal(val symbolicName: SymbolicName) : NameExpr {
     override fun toParts() = listOf(NameExpr.Part.SymbolVal(symbolicName))
 }
 
-data class Join(val items: List<NameExpr>, val sep: String = SEPARATOR) : NameExpr {
+data class Join(val items: List<NameExpr>) : NameExpr {
     override fun toParts(): List<NameExpr.Part> = buildList {
         items.forEach { item ->
             val parts = item.toParts()
@@ -71,7 +71,7 @@ fun joinExprs(vararg segs: NameExpr?): NameExpr? {
     return when (items.size) {
         0 -> null
         1 -> items[0]
-        else -> Join(items, SEPARATOR)
+        else -> Join(items)
     }
 }
 
@@ -89,6 +89,6 @@ fun parseRequiredScope(scope: NameExpr): NameExpr? {
     return when {
         requiredParts.isEmpty() -> null
         requiredParts.size == 1 -> requiredParts[0]
-        else -> Join(requiredParts, SEPARATOR)
+        else -> Join(requiredParts)
     }
 }

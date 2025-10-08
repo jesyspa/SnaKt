@@ -35,7 +35,7 @@ val NameScope.allParentScopes: Sequence<NameScope>
 val NameScope.fullSymbolName: Join?
     get() {
         val scopes = parentScopes.mapNotNull { it.mangledScopeName }.toList()
-        return if (scopes.isEmpty()) null else Join(scopes, SEPARATOR)
+        return if (scopes.isEmpty()) null else Join(scopes)
     }
 
 val NameScope.packageNameIfAny: FqName?
