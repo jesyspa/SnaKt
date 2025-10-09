@@ -5,6 +5,8 @@
 
 package org.jetbrains.kotlin.formver.viper.ast
 
+import NameScope
+import SimpleScope
 import org.jetbrains.kotlin.formver.viper.*
 import viper.silver.ast.AnonymousDomainAxiom
 import viper.silver.ast.NamedDomainAxiom
@@ -14,28 +16,24 @@ import viper.silver.ast.NamedDomainAxiom
  * they have to be globally unique as well.
  */
 
-data class DomainName(val baseName: String) : MangledName {
+data class DomainName(val baseName: String) : SymbolicName {
     override val mangledType: String
         get() = "d"
-    context(nameResolver: NameResolver)
-    override val mangledBaseName: String
-        get() = baseName
+    override val mangledBaseName: NameExpr
+        get() = Lit(baseName)
 }
-data class UnqualifiedDomainFuncName(val baseName: String) : MangledName {
-    context(nameResolver: NameResolver)
-    override val mangledBaseName: String
-        get() = baseName
+data class UnqualifiedDomainFuncName(val baseName: String) : SymbolicName {
+    override val mangledBaseName: NameExpr
+        get() = Lit(baseName)
 }
 
-data class QualifiedDomainFuncName(val domainName: DomainName, val funcName: MangledName) : MangledName {
+data class QualifiedDomainFuncName(val domainName: DomainName, val funcName: SymbolicName) : SymbolicName {
     override val mangledType: String
         get() = "df"
-    context(nameResolver: NameResolver)
-    override val mangledScope: String
-        get() = domainName.mangledBaseName
-    context(nameResolver: NameResolver)
-    override val mangledBaseName: String
-        get() = funcName.mangled
+    override val mangledScope: NameScope
+        get() = SimpleScope(domainName.mangledBaseName)
+    override val mangledBaseName: NameExpr
+        get() = SymbolVal(funcName)
 }
 
 /** Represents the name of a possible anonymous axiom.
@@ -48,14 +46,11 @@ sealed interface OptionalDomainAxiomLabel {
 }
 
 data class NamedDomainAxiomLabel(override val domainName: DomainName, val baseName: String) :
-    OptionalDomainAxiomLabel, MangledName {
-    context(nameResolver: NameResolver)
-    override val mangledScope: String
-        get() = domainName.mangledBaseName
-
-    context(nameResolver: NameResolver)
-    override val mangledBaseName: String
-        get() = baseName
+    OptionalDomainAxiomLabel, SymbolicName {
+    override val mangledScope: NameScope?
+        get() = SimpleScope(domainName.mangledBaseName)
+    override val mangledBaseName: NameExpr
+        get() = Lit(baseName)
 }
 
 data class AnonymousDomainAxiomLabel(override val domainName: DomainName) : OptionalDomainAxiomLabel
@@ -147,7 +142,7 @@ abstract class Domain(
     fun toType(typeParamSubst: Map<Type.TypeVar, Type> = typeVars.associateWith { it }): Type.Domain =
         Type.Domain(name, typeVars, typeParamSubst)
 
-    fun createDomainFunc(funcName: MangledName, args: List<Declaration.LocalVarDecl>, type: Type, unique: Boolean = false) =
+    fun createDomainFunc(funcName: SymbolicName, args: List<Declaration.LocalVarDecl>, type: Type, unique: Boolean = false) =
         DomainFunc(QualifiedDomainFuncName(this.name, funcName), args, typeVars, type, unique)
 
     fun createNamedDomainAxiom(axiomName: String, exp: Exp): DomainAxiom =

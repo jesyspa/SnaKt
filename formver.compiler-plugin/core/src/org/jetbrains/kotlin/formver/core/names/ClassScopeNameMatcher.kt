@@ -5,24 +5,24 @@
 
 package org.jetbrains.kotlin.formver.core.names
 
-import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 
-internal sealed class NameMatcher(val name: MangledName) {
+internal sealed class NameMatcher(val name: SymbolicName) {
     companion object {
-        inline fun matchClassScope(name: MangledName, action: ClassScopeNameMatcher.() -> Nothing): Nothing {
+        inline fun matchClassScope(name: SymbolicName, action: ClassScopeNameMatcher.() -> Nothing): Nothing {
             ClassScopeNameMatcher(name).action()
         }
 
-        inline fun matchGlobalScope(name: MangledName, action: GlobalScopeNameMatcher.() -> Nothing): Nothing {
+        inline fun matchGlobalScope(name: SymbolicName, action: GlobalScopeNameMatcher.() -> Nothing): Nothing {
             GlobalScopeNameMatcher(name).action()
         }
     }
 
     protected val scopedName = name as? ScopedKotlinName
     protected val packageName = scopedName?.scope?.packageNameIfAny
-    protected abstract val className: ClassKotlinName?
+    protected abstract val className: ScopedKotlinName?
 
     inline fun ifPackageName(matched: List<String>, action: NameMatcher.() -> Unit) {
         if (packageName == FqName.fromSegments(matched))
@@ -34,7 +34,7 @@ internal sealed class NameMatcher(val name: MangledName) {
     }
 
     inline fun ifClassName(vararg segments: String, action: NameMatcher.() -> Unit) {
-        if (className == ClassKotlinName(segments.toList()))
+        if (className?.name == ClassKotlinName(segments.toList()))
             this.action()
     }
 
@@ -48,8 +48,8 @@ internal sealed class NameMatcher(val name: MangledName) {
 
 }
 
-internal class ClassScopeNameMatcher(name: MangledName) : NameMatcher(name) {
-    override val className = (scopedName?.scope as? ClassScope)?.className
+internal class ClassScopeNameMatcher(name: SymbolicName) : NameMatcher(name) {
+    override val className = if (scopedName?.name is ClassKotlinName) scopedName else null
 
     inline fun ifNoReceiver(action: NameMatcher.() -> Unit) {
         if (className == null)
@@ -68,6 +68,6 @@ internal class ClassScopeNameMatcher(name: MangledName) : NameMatcher(name) {
     }
 }
 
-internal class GlobalScopeNameMatcher(name: MangledName) : NameMatcher(name) {
-    override val className = scopedName?.name as ClassKotlinName?
+internal class GlobalScopeNameMatcher(name: SymbolicName) : NameMatcher(name) {
+    override val className = scopedName
 }

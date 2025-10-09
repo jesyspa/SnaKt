@@ -1,62 +1,60 @@
 /as_type_contract.kt:(152,162): info: Generated Viper text for asOperator:
-method f$asOperator$TF$T$Foo(p$foo: Ref) returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$c$Bar())
-  ensures acc(p$c$Bar$shared(ret$0), wildcard)
-  ensures true ==> df$rt$isSubtype(df$rt$typeOf(p$foo), df$rt$c$Bar())
+method asOperator(foo: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_c_Bar())
+  ensures acc(c_Bar_shared(ret_0), wildcard)
+  ensures true ==> df_isSubtype(df_typeOf(foo), df_c_Bar())
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(p$foo), df$rt$c$Foo())
-  inhale acc(p$c$Foo$shared(p$foo), wildcard)
-  inhale df$rt$isSubtype(df$rt$typeOf(p$foo), df$rt$c$Bar())
-  inhale acc(p$c$Bar$shared(p$foo), wildcard)
-  ret$0 := p$foo
-  goto lbl$ret$0
-  label lbl$ret$0
+  inhale df_isSubtype(df_typeOf(foo), df_c_Foo())
+  inhale acc(c_Foo_shared(foo), wildcard)
+  inhale df_isSubtype(df_typeOf(foo), df_c_Bar())
+  inhale acc(c_Bar_shared(foo), wildcard)
+  ret_0 := foo
+  goto lbl_0
+  label lbl_0
 }
 
 /as_type_contract.kt:(307,321): info: Generated Viper text for safeAsOperator:
-method f$safeAsOperator$TF$T$Foo(p$foo: Ref) returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$nullable(df$rt$c$Bar()))
-  ensures ret$0 != df$rt$nullValue() ==>
-    acc(p$c$Bar$shared(ret$0), wildcard)
-  ensures ret$0 != df$rt$nullValue() ==>
-    df$rt$isSubtype(df$rt$typeOf(p$foo), df$rt$c$Bar())
+method safeAsOperator(foo: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_nullable(df_c_Bar()))
+  ensures ret_0 != df_nullValue() ==> acc(c_Bar_shared(ret_0), wildcard)
+  ensures ret_0 != df_nullValue() ==>
+    df_isSubtype(df_typeOf(foo), df_c_Bar())
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(p$foo), df$rt$c$Foo())
-  inhale acc(p$c$Foo$shared(p$foo), wildcard)
-  inhale df$rt$isSubtype(df$rt$typeOf(p$foo), df$rt$nullable(df$rt$c$Bar()))
-  inhale p$foo != df$rt$nullValue() ==>
-    acc(p$c$Bar$shared(p$foo), wildcard)
-  ret$0 := p$foo
-  goto lbl$ret$0
-  label lbl$ret$0
+  inhale df_isSubtype(df_typeOf(foo), df_c_Foo())
+  inhale acc(c_Foo_shared(foo), wildcard)
+  inhale df_isSubtype(df_typeOf(foo), df_nullable(df_c_Bar()))
+  inhale foo != df_nullValue() ==> acc(c_Bar_shared(foo), wildcard)
+  ret_0 := foo
+  goto lbl_0
+  label lbl_0
 }
 
 /as_type_contract.kt:(504,508): info: Generated Viper text for getX:
-field bf$x: Ref
+field x: Ref
 
-method f$getX$TF$T$Any(p$a: Ref) returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$nullable(df$rt$intType()))
-  ensures ret$0 != df$rt$nullValue() ==>
-    df$rt$isSubtype(df$rt$typeOf(p$a), df$rt$c$IntHolder())
-  ensures ret$0 == df$rt$nullValue() ==>
-    !df$rt$isSubtype(df$rt$typeOf(p$a), df$rt$c$IntHolder())
+method getX(a: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_nullable(df_intType()))
+  ensures ret_0 != df_nullValue() ==>
+    df_isSubtype(df_typeOf(a), df_c_IntHolder())
+  ensures ret_0 == df_nullValue() ==>
+    !df_isSubtype(df_typeOf(a), df_c_IntHolder())
 {
-  var anon$0: Ref
-  inhale df$rt$isSubtype(df$rt$typeOf(p$a), df$rt$anyType())
-  if (df$rt$isSubtype(df$rt$typeOf(p$a), df$rt$c$IntHolder())) {
-    anon$0 := p$a
+  var anon_0: Ref
+  inhale df_isSubtype(df_typeOf(a), df_anyType())
+  if (df_isSubtype(df_typeOf(a), df_c_IntHolder())) {
+    anon_0 := a
   } else {
-    anon$0 := df$rt$nullValue()}
-  inhale df$rt$isSubtype(df$rt$typeOf(anon$0), df$rt$nullable(df$rt$c$IntHolder()))
-  inhale anon$0 != df$rt$nullValue() ==>
-    acc(p$c$IntHolder$shared(anon$0), wildcard)
-  if (anon$0 != df$rt$nullValue()) {
-    var anon$1: Ref
-    unfold acc(p$c$IntHolder$shared(anon$0), wildcard)
-    anon$1 := anon$0.bf$x
-    ret$0 := anon$1
+    anon_0 := df_nullValue()}
+  inhale df_isSubtype(df_typeOf(anon_0), df_nullable(df_c_IntHolder()))
+  inhale anon_0 != df_nullValue() ==>
+    acc(c_IntHolder_shared(anon_0), wildcard)
+  if (anon_0 != df_nullValue()) {
+    var anon_1: Ref
+    unfold acc(c_IntHolder_shared(anon_0), wildcard)
+    anon_1 := anon_0.x
+    ret_0 := anon_1
   } else {
-    ret$0 := df$rt$nullValue()}
-  goto lbl$ret$0
-  label lbl$ret$0
+    ret_0 := df_nullValue()}
+  goto lbl_0
+  label lbl_0
 }

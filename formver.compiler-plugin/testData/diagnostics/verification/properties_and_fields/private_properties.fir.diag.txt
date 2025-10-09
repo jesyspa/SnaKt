@@ -1,93 +1,88 @@
 /private_properties.kt:(222,237): info: Generated Viper text for getBooleanField:
-method f$c$A$getBooleanField$TF$T$A(this$dispatch: Ref)
-  returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
+method c_A_getBooleanField(this_dispatch: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
 {
-  var anon$0: Ref
-  inhale df$rt$isSubtype(df$rt$typeOf(this$dispatch), df$rt$c$A())
-  inhale acc(p$c$A$shared(this$dispatch), wildcard)
-  anon$0 := pg$c$A$private$field(this$dispatch)
-  ret$0 := anon$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
-  goto lbl$ret$0
-  label lbl$ret$0
+  var anon_0: Ref
+  inhale df_isSubtype(df_typeOf(this_dispatch), df_c_A())
+  inhale acc(c_A_shared(this_dispatch), wildcard)
+  anon_0 := pg_c_A_field(this_dispatch)
+  ret_0 := anon_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_boolType())
+  goto lbl_0
+  label lbl_0
 }
 
-method pg$c$A$private$field(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_A_field(this_dispatch: Ref) returns (ret: Ref)
 
 
-method ps$c$A$private$field(this$dispatch: Ref, anon$0: Ref)
-  returns (ret: Ref)
+method ps_c_A_field(this_dispatch: Ref, anon_0: Ref) returns (ret: Ref)
 
 
 /private_properties.kt:(316,330): info: Generated Viper text for getStringField:
-field bf$c$B$private$field: Ref
+field bf_c_B_field: Ref
 
-method f$c$B$getStringField$TF$T$B(this$dispatch: Ref) returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$stringType())
+method c_B_getStringField(this_dispatch: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_stringType())
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(this$dispatch), df$rt$c$B())
-  inhale acc(p$c$B$shared(this$dispatch), wildcard)
-  unfold acc(p$c$B$shared(this$dispatch), wildcard)
-  ret$0 := this$dispatch.bf$c$B$private$field
-  goto lbl$ret$0
-  label lbl$ret$0
+  inhale df_isSubtype(df_typeOf(this_dispatch), df_c_B())
+  inhale acc(c_B_shared(this_dispatch), wildcard)
+  unfold acc(c_B_shared(this_dispatch), wildcard)
+  ret_0 := this_dispatch.bf_c_B_field
+  goto lbl_0
+  label lbl_0
 }
 
-method pg$c$A$private$field(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_A_field(this_dispatch: Ref) returns (ret: Ref)
 
 
-method ps$c$A$private$field(this$dispatch: Ref, anon$0: Ref)
-  returns (ret: Ref)
+method ps_c_A_field(this_dispatch: Ref, anon_0: Ref) returns (ret: Ref)
 
 
 /private_properties.kt:(475,488): info: Generated Viper text for extractPublic:
-field bf$c$B$private$field: Ref
+field bf_c_B_field: Ref
 
-field bf$field: Ref
+field bf_field: Ref
 
-field bf$size: Ref
+field size: Ref
 
-method con$c$C$() returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$C())
-  ensures acc(p$c$C$shared(ret), wildcard)
-  ensures acc(p$c$C$unique(ret), write)
-
-
-method con$c$D$() returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$D())
-  ensures acc(p$c$D$shared(ret), wildcard)
-  ensures acc(p$c$D$unique(ret), write)
+method con_c_C() returns (ret: Ref)
+  ensures df_isSubtype(df_typeOf(ret), df_c_C())
+  ensures acc(c_C_shared(ret), wildcard)
+  ensures acc(c_C_unique(ret), write)
 
 
-method f$extractPublic$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method con_c_D() returns (ret: Ref)
+  ensures df_isSubtype(df_typeOf(ret), df_c_D())
+  ensures acc(c_D_shared(ret), wildcard)
+  ensures acc(c_D_unique(ret), write)
+
+
+method extractPublic() returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  var l0$cond1: Ref
-  var anon$0: Ref
-  var anon$1: Ref
-  var l0$cond2: Ref
-  var anon$2: Ref
-  var anon$3: Ref
-  anon$1 := con$c$C$()
-  inhale acc(anon$1.bf$field, write)
-  anon$0 := anon$1.bf$field
-  exhale acc(anon$1.bf$field, write)
-  inhale df$rt$isSubtype(df$rt$typeOf(anon$0), df$rt$intType())
-  l0$cond1 := df$rt$boolToRef(df$rt$isSubtype(df$rt$typeOf(anon$0), df$rt$intType()))
-  anon$3 := con$c$D$()
-  unfold acc(p$c$D$shared(anon$3), wildcard)
-  anon$2 := anon$3.bf$field
-  l0$cond2 := df$rt$boolToRef(df$rt$isSubtype(df$rt$typeOf(anon$2), df$rt$intType()))
-  assert df$rt$boolFromRef(l0$cond1)
-  assert df$rt$boolFromRef(l0$cond2)
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  var cond1: Ref
+  var anon_0: Ref
+  var anon_1: Ref
+  var cond2: Ref
+  var anon_2: Ref
+  var anon_3: Ref
+  anon_1 := con_c_C()
+  inhale acc(anon_1.bf_field, write)
+  anon_0 := anon_1.bf_field
+  exhale acc(anon_1.bf_field, write)
+  inhale df_isSubtype(df_typeOf(anon_0), df_intType())
+  cond1 := df_boolToRef(df_isSubtype(df_typeOf(anon_0), df_intType()))
+  anon_3 := con_c_D()
+  unfold acc(c_D_shared(anon_3), wildcard)
+  anon_2 := anon_3.bf_field
+  cond2 := df_boolToRef(df_isSubtype(df_typeOf(anon_2), df_intType()))
+  assert df_boolFromRef(cond1)
+  assert df_boolFromRef(cond2)
+  label lbl_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
-method pg$c$A$private$field(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_A_field(this_dispatch: Ref) returns (ret: Ref)
 
 
-method ps$c$A$private$field(this$dispatch: Ref, anon$0: Ref)
-  returns (ret: Ref)
-
+method ps_c_A_field(this_dispatch: Ref, anon_0: Ref) returns (ret: Ref)

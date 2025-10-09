@@ -5,6 +5,8 @@
 
 package org.jetbrains.kotlin.formver.core.conversion
 
+import DebugNameResolver
+import debugMangled
 import org.jetbrains.kotlin.KtSourceElement
 import org.jetbrains.kotlin.descriptors.Visibilities
 import org.jetbrains.kotlin.descriptors.isInterface
@@ -33,14 +35,13 @@ import org.jetbrains.kotlin.formver.core.isCustom
 import org.jetbrains.kotlin.formver.core.isUnique
 import org.jetbrains.kotlin.formver.core.names.*
 import org.jetbrains.kotlin.formver.core.shouldBeInlined
-import org.jetbrains.kotlin.formver.names.SimpleNameResolver
-import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.SymbolicName
+import org.jetbrains.kotlin.formver.viper.ast.NamedDomainAxiomLabel
 import org.jetbrains.kotlin.formver.viper.ast.Program
-import org.jetbrains.kotlin.formver.viper.debugMangled
-import org.jetbrains.kotlin.formver.viper.mangled
 import org.jetbrains.kotlin.utils.addIfNotNull
 import org.jetbrains.kotlin.utils.addToStdlib.ifFalse
 import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
+import viper.silver.ast.NamedDomainAxiom
 
 /**
  * Tracks the top-level information about the program.
@@ -54,22 +55,21 @@ class ProgramConverter(
     override val errorCollector: ErrorCollector
 ) :
     ProgramConversionContext {
-    private val methods: MutableMap<MangledName, FunctionEmbedding> =
+    private val methods: MutableMap<SymbolicName, FunctionEmbedding> =
         buildMap {
             putAll(SpecialKotlinFunctions.byName)
             putAll(PartiallySpecialKotlinFunctions.generateAllByName())
         }.toMutableMap()
-    private val classes: MutableMap<MangledName, ClassTypeEmbedding> = mutableMapOf()
-    private val properties: MutableMap<MangledName, PropertyEmbedding> = mutableMapOf()
+    private val classes: MutableMap<SymbolicName, ClassTypeEmbedding> = mutableMapOf()
+    private val properties: MutableMap<SymbolicName, PropertyEmbedding> = mutableMapOf()
     private val fields: MutableSet<FieldEmbedding> = mutableSetOf()
-
     // Cast is valid since we check that values are not null. We specify the type for `filterValues` explicitly to ensure there's no
     // loss of type information earlier.
     @Suppress("UNCHECKED_CAST")
-    val debugExpEmbeddings: Map<MangledName, ExpEmbedding>
+    val debugExpEmbeddings: Map<SymbolicName, ExpEmbedding>
         get() = methods
             .mapValues { (it.value as? UserFunctionEmbedding)?.body?.debugExpEmbedding }
-            .filterValues { value: ExpEmbedding? -> value != null } as Map<MangledName, ExpEmbedding>
+            .filterValues { value: ExpEmbedding? -> value != null } as Map<SymbolicName, ExpEmbedding>
 
     override val whileIndexProducer = indexProducer()
     override val catchLabelNameProducer = simpleFreshEntityProducer(::CatchLabelName)
@@ -80,26 +80,49 @@ class ProgramConverter(
     override val anonVarProducer = FreshEntityProducer(::AnonymousVariableEmbedding)
     override val anonBuiltinVarProducer = FreshEntityProducer(::AnonymousBuiltinVariableEmbedding)
     override val returnTargetProducer = FreshEntityProducer(::ReturnTarget)
-    override val nameResolver = SimpleNameResolver()
-
+    override val nameResolver = GraphBasedNameResolver()
     val program: Program
         get() = Program(
             domains = listOf(RuntimeTypeDomain(classes.values.toList())),
             // We need to deduplicate fields since public fields with the same name are represented differently
             // at `FieldEmbedding` level but map to the same Viper.
             fields = SpecialFields.all.map { it.toViper() } +
-                     fields.distinctBy { it.name.debugMangled }.map { it.toViper() } ,
+                    fields.distinctBy { it.name.debugMangled }.map { it.toViper() } ,
             functions = SpecialFunctions.all,
             methods = SpecialMethods.all +
-                methods.values.mapNotNull { it.viperMethod }.distinctBy { it.name.debugMangled},
+                    methods.values.mapNotNull { it.viperMethod }.distinctBy { it.name.debugMangled},
             predicates = classes.values.flatMap {
-                    listOf(
-                        it.details.sharedPredicate,
-                        it.details.uniquePredicate
-                    )
-                },
+                listOf(
+                    it.details.sharedPredicate,
+                    it.details.uniquePredicate
+                )
+            },
         )
-
+    fun registerTypes() {
+        program.domains.forEach {
+                domain ->
+            (domain as? RuntimeTypeDomain)?.builtinTypes?.forEach {
+                nameResolver.register(it.name)
+            }
+            (domain as? RuntimeTypeDomain)?.nonNullableTypes?.forEach { nameResolver.register(it.name) }
+            (domain as? RuntimeTypeDomain)?.classTypes?.forEach { nameResolver.register(it.value.name) }
+            (domain as? RuntimeTypeDomain)?.functions?.forEach { func ->
+                nameResolver.register(func.name.funcName)
+            }
+            (domain as? RuntimeTypeDomain)?.axioms?.forEach { axiom ->
+                if (axiom.name is NamedDomainAxiomLabel) nameResolver.register(axiom.name as SymbolicName)
+            }
+        }
+        fields.forEach {
+            nameResolver.register(it.name)
+        }
+        methods.values.forEach { method ->
+            method.viperMethod?.let { nameResolver.register(it.name) }
+        }
+        properties.keys.forEach { it ->
+            nameResolver.register(it)
+        }
+    }
     fun registerForVerification(declaration: FirSimpleFunction) {
         val signature = embedFullSignature(declaration.symbol)
         val returnTarget = returnTargetProducer.getFresh(signature.callableType.returnType)
@@ -124,6 +147,7 @@ class ProgramConverter(
         embedUserFunction(declaration.symbol, signature).apply {
             body = stmtCtx.convertMethodWithBody(declaration, signature, returnTarget)
         }
+        registerTypes()
     }
 
     fun embedUserFunction(symbol: FirFunctionSymbol<*>, signature: FullNamedFunctionSignature): UserFunctionEmbedding {
@@ -225,13 +249,20 @@ class ProgramConverter(
         return embedding
     }
 
-    override fun embedType(type: ConeKotlinType): TypeEmbedding = buildType { embedTypeWithBuilder(type) }
-
-    // Note: keep in mind that this function is necessary to resolve the name of the function!
-    override fun embedFunctionPretype(symbol: FirFunctionSymbol<*>): FunctionTypeEmbedding = buildFunctionPretype {
-        embedFunctionPretypeWithBuilder(symbol)
+    override fun embedType(type: ConeKotlinType): TypeEmbedding {
+        val typeEmbedding = buildType { embedTypeWithBuilder(type) }
+        //nameResolver.register(typeEmbedding.name)
+        return typeEmbedding
     }
 
+    // Note: keep in mind that this function is necessary to resolve the name of the function!
+    override fun embedFunctionPretype(symbol: FirFunctionSymbol<*>): FunctionTypeEmbedding {
+        val functionEmbedding = buildFunctionPretype {
+            embedFunctionPretypeWithBuilder(symbol)
+        }
+        //nameResolver.register(functionEmbedding.name)
+        return functionEmbedding
+    }
     override fun embedProperty(symbol: FirPropertySymbol): PropertyEmbedding = if (symbol.isExtension) {
         embedCustomProperty(symbol)
     } else {
@@ -270,7 +301,6 @@ class ProgramConverter(
         val isExtensionReceiverBorrowed = symbol.receiverParameterSymbol?.isBorrowed(session) ?: false
         return object : FunctionSignature {
             override val callableType: FunctionTypeEmbedding = embedFunctionPretype(symbol)
-
             // TODO: figure out whether we want a symbol here and how to get it.
             override val dispatchReceiver = dispatchReceiverType?.let {
                 PlaceholderVariableEmbedding(
