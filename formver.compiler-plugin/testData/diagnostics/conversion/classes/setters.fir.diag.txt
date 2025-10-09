@@ -39,10 +39,10 @@ method testReferenceFieldSetter(rf: Ref) returns (ret_0: Ref)
 }
 
 /setters.kt:(427,454): info: Generated Viper text for testPrimitivePropertySetter:
-method pg_c_PrimitiveProperty_aProp(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_PrimitiveProperty_aProp(this_dispatch: Ref) returns (ret: Ref)
 
 
-method ps_c_PrimitiveProperty_aProp(this$dispatch: Ref, anon_0: Ref)
+method ps_c_PrimitiveProperty_aProp(this_dispatch: Ref, anon_0: Ref)
   returns (ret: Ref)
 
 
@@ -64,17 +64,17 @@ method con_c_PrimitiveProperty() returns (ret: Ref)
   ensures acc(c_PrimitiveProperty_unique(ret), write)
 
 
-method pg_c_PrimitiveProperty_aProp(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_PrimitiveProperty_aProp(this_dispatch: Ref) returns (ret: Ref)
 
 
-method pg_c_ReferenceProperty_ppProp(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_ReferenceProperty_ppProp(this_dispatch: Ref) returns (ret: Ref)
 
 
-method ps_c_PrimitiveProperty_aProp(this$dispatch: Ref, anon_0: Ref)
+method ps_c_PrimitiveProperty_aProp(this_dispatch: Ref, anon_0: Ref)
   returns (ret: Ref)
 
 
-method ps_c_ReferenceProperty_ppProp(this$dispatch: Ref, anon_0: Ref)
+method ps_c_ReferenceProperty_ppProp(this_dispatch: Ref, anon_0: Ref)
   returns (ret: Ref)
 
 

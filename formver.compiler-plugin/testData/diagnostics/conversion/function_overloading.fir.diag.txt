@@ -1,9 +1,9 @@
 /function_overloading.kt:(49,52): info: Generated Viper text for baz:
-method c_Bar_baz(this$dispatch: Ref, f: Ref) returns (ret_0: Ref)
+method c_Bar_baz(this_dispatch: Ref, f: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  inhale df_isSubtype(df_typeOf(this$dispatch), df_c_Bar())
-  inhale acc(c_Bar_shared(this$dispatch), wildcard)
+  inhale df_isSubtype(df_typeOf(this_dispatch), df_c_Bar())
+  inhale acc(c_Bar_shared(this_dispatch), wildcard)
   inhale df_isSubtype(df_typeOf(f), df_c_Foo())
   inhale acc(c_Foo_shared(f), wildcard)
   label lbl_0
@@ -11,11 +11,11 @@ method c_Bar_baz(this$dispatch: Ref, f: Ref) returns (ret_0: Ref)
 }
 
 /function_overloading.kt:(74,77): info: Generated Viper text for baz:
-method c_Bar_baz(this$dispatch: Ref, b: Ref) returns (ret_0: Ref)
+method c_Bar_baz(this_dispatch: Ref, b: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  inhale df_isSubtype(df_typeOf(this$dispatch), df_c_Bar())
-  inhale acc(c_Bar_shared(this$dispatch), wildcard)
+  inhale df_isSubtype(df_typeOf(this_dispatch), df_c_Bar())
+  inhale acc(c_Bar_shared(this_dispatch), wildcard)
   inhale df_isSubtype(df_typeOf(b), df_c_Bar())
   inhale acc(c_Bar_shared(b), wildcard)
   label lbl_0
@@ -139,11 +139,11 @@ method con_c_Foo() returns (ret: Ref)
   ensures acc(c_Foo_unique(ret), write)
 
 
-method f_c_Bar_baz_Bar_Bar(this$dispatch: Ref, p_b: Ref) returns (ret: Ref)
+method f_c_Bar_baz_Bar_Bar(this_dispatch: Ref, p_b: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_unitType())
 
 
-method f_c_Bar_baz_Bar_Foo(this$dispatch: Ref, f: Ref) returns (ret: Ref)
+method f_c_Bar_baz_Bar_Foo(this_dispatch: Ref, f: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_unitType())
 
 

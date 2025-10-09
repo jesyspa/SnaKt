@@ -1,5 +1,5 @@
 /property_getters.kt:(102,129): info: Generated Viper text for testPrimitivePropertyGetter:
-method pg_c_PrimitiveProperty_nProp(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_PrimitiveProperty_nProp(this_dispatch: Ref) returns (ret: Ref)
 
 
 method testPrimitivePropertyGetter(pp: Ref) returns (ret_0: Ref)
@@ -16,10 +16,10 @@ method testPrimitivePropertyGetter(pp: Ref) returns (ret_0: Ref)
 }
 
 /property_getters.kt:(286,313): info: Generated Viper text for testReferencePropertyGetter:
-method pg_c_PrimitiveProperty_nProp(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_PrimitiveProperty_nProp(this_dispatch: Ref) returns (ret: Ref)
 
 
-method pg_c_ReferenceProperty_rProp(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_ReferenceProperty_rProp(this_dispatch: Ref) returns (ret: Ref)
 
 
 method testReferencePropertyGetter(rp: Ref) returns (ret_0: Ref)
@@ -43,10 +43,10 @@ method testReferencePropertyGetter(rp: Ref) returns (ret_0: Ref)
 }
 
 /property_getters.kt:(391,418): info: Generated Viper text for testCascadingPropertyGetter:
-method pg_c_PrimitiveProperty_nProp(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_PrimitiveProperty_nProp(this_dispatch: Ref) returns (ret: Ref)
 
 
-method pg_c_ReferenceProperty_rProp(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_ReferenceProperty_rProp(this_dispatch: Ref) returns (ret: Ref)
 
 
 method testCascadingPropertyGetter(rp: Ref) returns (ret_0: Ref)

@@ -1,7 +1,7 @@
 /safe_call.kt:(142,154): info: Generated Viper text for testSafeCall:
 field x: Ref
 
-method c_Foo_f(this$dispatch: Ref) returns (ret: Ref)
+method c_Foo_f(this_dispatch: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_unitType())
 
 
@@ -23,7 +23,7 @@ method testSafeCall(foo: Ref) returns (ret_0: Ref)
 /safe_call.kt:(217,240): info: Generated Viper text for testSafeCallNonNullable:
 field x: Ref
 
-method c_Foo_f(this$dispatch: Ref) returns (ret: Ref)
+method c_Foo_f(this_dispatch: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_unitType())
 
 
@@ -83,7 +83,7 @@ method testSafeCallPropertyNonNullable(foo: Ref) returns (ret_0: Ref)
 /safe_call.kt:(493,506): info: Generated Viper text for safeCallChain:
 field bf_v: Ref
 
-method c_Rec_nullable(this$dispatch: Ref) returns (ret: Ref)
+method c_Rec_nullable(this_dispatch: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_nullable(df_c_Rec()))
   ensures ret != df_nullValue() ==> acc(c_Rec_shared(ret), wildcard)
 

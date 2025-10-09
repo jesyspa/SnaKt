@@ -7,44 +7,44 @@ field y: Ref
 
 field z: Ref
 
-predicate c_Foo_shared(this$dispatch: Ref) {
-  acc(this$dispatch.w, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.w), df_intType()) &&
-  acc(this$dispatch.y, wildcard) &&
-  acc(c_T_shared(this$dispatch.y), wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.y), df_c_T()) &&
-  acc(c_S_shared(this$dispatch), wildcard)
+predicate c_Foo_shared(this_dispatch: Ref) {
+  acc(this_dispatch.w, wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.w), df_intType()) &&
+  acc(this_dispatch.y, wildcard) &&
+  acc(c_T_shared(this_dispatch.y), wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.y), df_c_T()) &&
+  acc(c_S_shared(this_dispatch), wildcard)
 }
 
-predicate c_Foo_unique(this$dispatch: Ref) {
-  acc(this$dispatch.w, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.w), df_intType()) &&
-  acc(this$dispatch.x, write) &&
-  df_isSubtype(df_typeOf(this$dispatch.x), df_intType()) &&
-  acc(this$dispatch.y, wildcard) &&
-  acc(c_T_shared(this$dispatch.y), wildcard) &&
-  acc(c_T_unique(this$dispatch.y), write) &&
-  df_isSubtype(df_typeOf(this$dispatch.y), df_c_T()) &&
-  acc(this$dispatch.z, write) &&
-  acc(c_T_shared(this$dispatch.z), wildcard) &&
-  acc(c_T_unique(this$dispatch.z), write) &&
-  df_isSubtype(df_typeOf(this$dispatch.z), df_c_T()) &&
-  acc(c_S_unique(this$dispatch), write)
+predicate c_Foo_unique(this_dispatch: Ref) {
+  acc(this_dispatch.w, wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.w), df_intType()) &&
+  acc(this_dispatch.x, write) &&
+  df_isSubtype(df_typeOf(this_dispatch.x), df_intType()) &&
+  acc(this_dispatch.y, wildcard) &&
+  acc(c_T_shared(this_dispatch.y), wildcard) &&
+  acc(c_T_unique(this_dispatch.y), write) &&
+  df_isSubtype(df_typeOf(this_dispatch.y), df_c_T()) &&
+  acc(this_dispatch.z, write) &&
+  acc(c_T_shared(this_dispatch.z), wildcard) &&
+  acc(c_T_unique(this_dispatch.z), write) &&
+  df_isSubtype(df_typeOf(this_dispatch.z), df_c_T()) &&
+  acc(c_S_unique(this_dispatch), write)
 }
 
-predicate c_S_shared(this$dispatch: Ref) {
+predicate c_S_shared(this_dispatch: Ref) {
   true
 }
 
-predicate c_S_unique(this$dispatch: Ref) {
+predicate c_S_unique(this_dispatch: Ref) {
   true
 }
 
-predicate c_T_shared(this$dispatch: Ref) {
+predicate c_T_shared(this_dispatch: Ref) {
   true
 }
 
-predicate c_T_unique(this$dispatch: Ref) {
+predicate c_T_unique(this_dispatch: Ref) {
   true
 }
 
@@ -59,11 +59,11 @@ method unique_foo_arg(foo: Ref) returns (ret_0: Ref)
 }
 
 /unique_predicates.kt:(310,329): info: Generated Viper text for nullable_unique_arg:
-predicate c_T_shared(this$dispatch: Ref) {
+predicate c_T_shared(this_dispatch: Ref) {
   true
 }
 
-predicate c_T_unique(this$dispatch: Ref) {
+predicate c_T_unique(this_dispatch: Ref) {
   true
 }
 
@@ -78,11 +78,11 @@ method nullable_unique_arg(p_t: Ref) returns (ret_0: Ref)
 }
 
 /unique_predicates.kt:(353,372): info: Generated Viper text for borrowed_unique_arg:
-predicate c_T_shared(this$dispatch: Ref) {
+predicate c_T_shared(this_dispatch: Ref) {
   true
 }
 
-predicate c_T_unique(this$dispatch: Ref) {
+predicate c_T_unique(this_dispatch: Ref) {
   true
 }
 
@@ -98,50 +98,50 @@ method borrowed_unique_arg(p_t: Ref) returns (ret_0: Ref)
 }
 
 /unique_predicates.kt:(424,439): info: Generated Viper text for unique_receiver:
-predicate c_T_shared(this$dispatch: Ref) {
+predicate c_T_shared(this_dispatch: Ref) {
   true
 }
 
-predicate c_T_unique(this$dispatch: Ref) {
+predicate c_T_unique(this_dispatch: Ref) {
   true
 }
 
-method unique_receiver(this$extension: Ref) returns (ret_0: Ref)
-  requires acc(c_T_unique(this$extension), write)
+method unique_receiver(this_extension: Ref) returns (ret_0: Ref)
+  requires acc(c_T_unique(this_extension), write)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  inhale df_isSubtype(df_typeOf(this$extension), df_c_T())
-  inhale acc(c_T_shared(this$extension), wildcard)
+  inhale df_isSubtype(df_typeOf(this_extension), df_c_T())
+  inhale acc(c_T_shared(this_extension), wildcard)
   label lbl_0
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /unique_predicates.kt:(488,512): info: Generated Viper text for borrowed_unique_receiver:
-predicate c_T_shared(this$dispatch: Ref) {
+predicate c_T_shared(this_dispatch: Ref) {
   true
 }
 
-predicate c_T_unique(this$dispatch: Ref) {
+predicate c_T_unique(this_dispatch: Ref) {
   true
 }
 
-method borrowed_unique_receiver(this$extension: Ref) returns (ret_0: Ref)
-  requires acc(c_T_unique(this$extension), write)
-  ensures acc(c_T_unique(this$extension), write)
+method borrowed_unique_receiver(this_extension: Ref) returns (ret_0: Ref)
+  requires acc(c_T_unique(this_extension), write)
+  ensures acc(c_T_unique(this_extension), write)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  inhale df_isSubtype(df_typeOf(this$extension), df_c_T())
-  inhale acc(c_T_shared(this$extension), wildcard)
+  inhale df_isSubtype(df_typeOf(this_extension), df_c_T())
+  inhale acc(c_T_shared(this_extension), wildcard)
   label lbl_0
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /unique_predicates.kt:(531,544): info: Generated Viper text for unique_result:
-predicate c_T_shared(this$dispatch: Ref) {
+predicate c_T_shared(this_dispatch: Ref) {
   true
 }
 
-predicate c_T_unique(this$dispatch: Ref) {
+predicate c_T_unique(this_dispatch: Ref) {
   true
 }
 
@@ -162,11 +162,11 @@ method unique_result() returns (ret_0: Ref)
 }
 
 /unique_predicates.kt:(579,601): info: Generated Viper text for unique_nullable_result:
-predicate c_T_shared(this$dispatch: Ref) {
+predicate c_T_shared(this_dispatch: Ref) {
   true
 }
 
-predicate c_T_unique(this$dispatch: Ref) {
+predicate c_T_unique(this_dispatch: Ref) {
   true
 }
 

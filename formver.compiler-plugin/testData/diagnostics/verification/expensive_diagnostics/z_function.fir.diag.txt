@@ -62,7 +62,7 @@ method zFuncHelper(s: Ref, res: Ref, i: Ref, checkedLeft: Ref, checkedRight: Ref
 }
 
 /z_function.kt:(1389,1398): info: Generated Viper text for zFunction:
-method String_plus(this$dispatch: Ref, other: Ref) returns (ret: Ref)
+method String_plus(this_dispatch: Ref, other: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_stringType())
 
 
@@ -104,23 +104,23 @@ method zFuncHelper(s: Ref, p_res: Ref, p_i: Ref, p_checkedLeft: Ref, p_checkedRi
       df_stringFromRef(s)[anon$builtin_28])
 
 
-method zFunction(this$extension: Ref) returns (ret_0: Ref)
+method zFunction(this_extension: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_stringType())
-  ensures |df_stringFromRef(ret_0)| == |df_stringFromRef(this$extension)|
+  ensures |df_stringFromRef(ret_0)| == |df_stringFromRef(this_extension)|
   ensures (forall anon$builtin_23: Int ::0 <= anon$builtin_23 &&
-      anon$builtin_23 < |df_stringFromRef(this$extension)| ==>
+      anon$builtin_23 < |df_stringFromRef(this_extension)| ==>
       48 <= df_stringFromRef(ret_0)[anon$builtin_23] &&
       df_stringFromRef(ret_0)[anon$builtin_23] <=
-      48 + |df_stringFromRef(this$extension)| - anon$builtin_23 &&
+      48 + |df_stringFromRef(this_extension)| - anon$builtin_23 &&
       (forall anon$builtin_24: Int ::0 <= anon$builtin_24 &&
         anon$builtin_24 < df_stringFromRef(ret_0)[anon$builtin_23] - 48 ==>
-        df_stringFromRef(this$extension)[anon$builtin_24] ==
-        df_stringFromRef(this$extension)[anon$builtin_23 + anon$builtin_24]) &&
+        df_stringFromRef(this_extension)[anon$builtin_24] ==
+        df_stringFromRef(this_extension)[anon$builtin_23 + anon$builtin_24]) &&
       (df_stringFromRef(ret_0)[anon$builtin_23] - 48 ==
-      |df_stringFromRef(this$extension)| - anon$builtin_23 ||
-      !(df_stringFromRef(this$extension)[anon$builtin_23 +
+      |df_stringFromRef(this_extension)| - anon$builtin_23 ||
+      !(df_stringFromRef(this_extension)[anon$builtin_23 +
       (df_stringFromRef(ret_0)[anon$builtin_23] - 48)] ==
-      df_stringFromRef(this$extension)[df_stringFromRef(ret_0)[anon$builtin_23] -
+      df_stringFromRef(this_extension)[df_stringFromRef(ret_0)[anon$builtin_23] -
       48])))
 {
   var l0_i: Ref
@@ -128,14 +128,14 @@ method zFunction(this$extension: Ref) returns (ret_0: Ref)
   var l0_checkedLeft: Ref
   var l0_checkedRight: Ref
   var anon_0: Ref
-  inhale df_isSubtype(df_typeOf(this$extension), df_stringType())
-  if (|df_stringFromRef(this$extension)| == 0) {
-    ret_0 := this$extension
+  inhale df_isSubtype(df_typeOf(this_extension), df_stringType())
+  if (|df_stringFromRef(this_extension)| == 0) {
+    ret_0 := this_extension
     goto lbl_ret_0
   }
   l0_i := df_intToRef(1)
   l0_res := sp_addStringChar(df_stringToRef(Seq[Int]()), sp_addCharInt(df_charToRef(48),
-    sp_stringLength(this$extension)))
+    sp_stringLength(this_extension)))
   l0_checkedLeft := df_intToRef(0)
   l0_checkedRight := df_intToRef(0)
   label lbl_continue_0
@@ -145,37 +145,37 @@ method zFunction(this$extension: Ref) returns (ret_0: Ref)
     invariant df_isSubtype(df_typeOf(l0_checkedRight), df_intType())
     invariant |df_stringFromRef(l0_res)| == df_intFromRef(l0_i)
     invariant 1 <= df_intFromRef(l0_i) &&
-      df_intFromRef(l0_i) <= |df_stringFromRef(this$extension)|
+      df_intFromRef(l0_i) <= |df_stringFromRef(this_extension)|
     invariant (forall anon$builtin_2: Int ::0 <= anon$builtin_2 &&
         anon$builtin_2 < df_intFromRef(l0_i) ==>
         48 <= df_stringFromRef(l0_res)[anon$builtin_2] &&
         df_stringFromRef(l0_res)[anon$builtin_2] <=
-        48 + |df_stringFromRef(this$extension)| - anon$builtin_2 &&
+        48 + |df_stringFromRef(this_extension)| - anon$builtin_2 &&
         (forall anon$builtin_3: Int ::0 <= anon$builtin_3 &&
           anon$builtin_3 < df_stringFromRef(l0_res)[anon$builtin_2] - 48 ==>
-          df_stringFromRef(this$extension)[anon$builtin_3] ==
-          df_stringFromRef(this$extension)[anon$builtin_2 + anon$builtin_3]) &&
+          df_stringFromRef(this_extension)[anon$builtin_3] ==
+          df_stringFromRef(this_extension)[anon$builtin_2 + anon$builtin_3]) &&
         (df_stringFromRef(l0_res)[anon$builtin_2] - 48 ==
-        |df_stringFromRef(this$extension)| - anon$builtin_2 ||
-        !(df_stringFromRef(this$extension)[anon$builtin_2 +
+        |df_stringFromRef(this_extension)| - anon$builtin_2 ||
+        !(df_stringFromRef(this_extension)[anon$builtin_2 +
         (df_stringFromRef(l0_res)[anon$builtin_2] - 48)] ==
-        df_stringFromRef(this$extension)[df_stringFromRef(l0_res)[anon$builtin_2] -
+        df_stringFromRef(this_extension)[df_stringFromRef(l0_res)[anon$builtin_2] -
         48])))
     invariant 0 <= df_intFromRef(l0_checkedLeft) &&
       df_intFromRef(l0_checkedLeft) <= df_intFromRef(l0_checkedRight) &&
-      df_intFromRef(l0_checkedRight) <= |df_stringFromRef(this$extension)|
+      df_intFromRef(l0_checkedRight) <= |df_stringFromRef(this_extension)|
     invariant df_intFromRef(l0_checkedLeft) < df_intFromRef(l0_i)
     invariant (forall anon$builtin_4: Int ::0 <= anon$builtin_4 &&
         anon$builtin_4 <
         df_intFromRef(l0_checkedRight) - df_intFromRef(l0_checkedLeft) ==>
-        df_stringFromRef(this$extension)[df_intFromRef(l0_checkedLeft) +
+        df_stringFromRef(this_extension)[df_intFromRef(l0_checkedLeft) +
         anon$builtin_4] ==
-        df_stringFromRef(this$extension)[anon$builtin_4])
-  anon_0 := sp_ltInts(l0_i, sp_stringLength(this$extension))
+        df_stringFromRef(this_extension)[anon$builtin_4])
+  anon_0 := sp_ltInts(l0_i, sp_stringLength(this_extension))
   if (df_boolFromRef(anon_0)) {
     var j: Ref
     var anon_1: Ref
-    j := zFuncHelper(this$extension, l0_res, l0_i, l0_checkedLeft, l0_checkedRight)
+    j := zFuncHelper(this_extension, l0_res, l0_i, l0_checkedLeft, l0_checkedRight)
     label lbl_continue_1
       invariant df_isSubtype(df_typeOf(j), df_intType())
       invariant df_isSubtype(df_typeOf(l0_i), df_intType())
@@ -183,23 +183,23 @@ method zFunction(this$extension: Ref) returns (ret_0: Ref)
       invariant df_isSubtype(df_typeOf(l0_checkedLeft), df_intType())
       invariant df_isSubtype(df_typeOf(l0_checkedRight), df_intType())
       invariant df_intFromRef(l0_i) <= df_intFromRef(j) &&
-        df_intFromRef(j) <= |df_stringFromRef(this$extension)|
+        df_intFromRef(j) <= |df_stringFromRef(this_extension)|
       invariant (forall anon$builtin_9: Int ::df_intFromRef(l0_checkedLeft) <=
           anon$builtin_9 &&
           anon$builtin_9 < df_intFromRef(l0_checkedRight) ==>
-          df_stringFromRef(this$extension)[anon$builtin_9 -
+          df_stringFromRef(this_extension)[anon$builtin_9 -
           df_intFromRef(l0_checkedLeft)] ==
-          df_stringFromRef(this$extension)[anon$builtin_9])
+          df_stringFromRef(this_extension)[anon$builtin_9])
       invariant (forall anon$builtin_10: Int ::df_intFromRef(l0_i) <=
           anon$builtin_10 &&
           anon$builtin_10 < df_intFromRef(j) ==>
-          df_stringFromRef(this$extension)[anon$builtin_10 -
+          df_stringFromRef(this_extension)[anon$builtin_10 -
           df_intFromRef(l0_i)] ==
-          df_stringFromRef(this$extension)[anon$builtin_10])
-    if (df_intFromRef(j) < |df_stringFromRef(this$extension)|) {
-      anon_1 := df_boolToRef(df_stringFromRef(this$extension)[df_intFromRef(j) -
+          df_stringFromRef(this_extension)[anon$builtin_10])
+    if (df_intFromRef(j) < |df_stringFromRef(this_extension)|) {
+      anon_1 := df_boolToRef(df_stringFromRef(this_extension)[df_intFromRef(j) -
         df_intFromRef(l0_i)] ==
-        df_stringFromRef(this$extension)[df_intFromRef(j)])
+        df_stringFromRef(this_extension)[df_intFromRef(j)])
     } else {
       anon_1 := df_boolToRef(false)}
     if (df_boolFromRef(anon_1)) {
@@ -213,19 +213,19 @@ method zFunction(this$extension: Ref) returns (ret_0: Ref)
     assert df_isSubtype(df_typeOf(l0_checkedLeft), df_intType())
     assert df_isSubtype(df_typeOf(l0_checkedRight), df_intType())
     assert df_intFromRef(l0_i) <= df_intFromRef(j) &&
-      df_intFromRef(j) <= |df_stringFromRef(this$extension)|
+      df_intFromRef(j) <= |df_stringFromRef(this_extension)|
     assert (forall anon$builtin_9: Int ::df_intFromRef(l0_checkedLeft) <=
         anon$builtin_9 &&
         anon$builtin_9 < df_intFromRef(l0_checkedRight) ==>
-        df_stringFromRef(this$extension)[anon$builtin_9 -
+        df_stringFromRef(this_extension)[anon$builtin_9 -
         df_intFromRef(l0_checkedLeft)] ==
-        df_stringFromRef(this$extension)[anon$builtin_9])
+        df_stringFromRef(this_extension)[anon$builtin_9])
     assert (forall anon$builtin_10: Int ::df_intFromRef(l0_i) <=
         anon$builtin_10 &&
         anon$builtin_10 < df_intFromRef(j) ==>
-        df_stringFromRef(this$extension)[anon$builtin_10 -
+        df_stringFromRef(this_extension)[anon$builtin_10 -
         df_intFromRef(l0_i)] ==
-        df_stringFromRef(this$extension)[anon$builtin_10])
+        df_stringFromRef(this_extension)[anon$builtin_10])
     l0_res := sp_addStringChar(l0_res, sp_addCharInt(df_charToRef(48), sp_minusInts(j,
       l0_i)))
     if (df_intFromRef(j) > df_intFromRef(l0_checkedRight)) {
@@ -242,94 +242,94 @@ method zFunction(this$extension: Ref) returns (ret_0: Ref)
   assert df_isSubtype(df_typeOf(l0_checkedRight), df_intType())
   assert |df_stringFromRef(l0_res)| == df_intFromRef(l0_i)
   assert 1 <= df_intFromRef(l0_i) &&
-    df_intFromRef(l0_i) <= |df_stringFromRef(this$extension)|
+    df_intFromRef(l0_i) <= |df_stringFromRef(this_extension)|
   assert (forall anon$builtin_2: Int ::0 <= anon$builtin_2 &&
       anon$builtin_2 < df_intFromRef(l0_i) ==>
       48 <= df_stringFromRef(l0_res)[anon$builtin_2] &&
       df_stringFromRef(l0_res)[anon$builtin_2] <=
-      48 + |df_stringFromRef(this$extension)| - anon$builtin_2 &&
+      48 + |df_stringFromRef(this_extension)| - anon$builtin_2 &&
       (forall anon$builtin_3: Int ::0 <= anon$builtin_3 &&
         anon$builtin_3 < df_stringFromRef(l0_res)[anon$builtin_2] - 48 ==>
-        df_stringFromRef(this$extension)[anon$builtin_3] ==
-        df_stringFromRef(this$extension)[anon$builtin_2 + anon$builtin_3]) &&
+        df_stringFromRef(this_extension)[anon$builtin_3] ==
+        df_stringFromRef(this_extension)[anon$builtin_2 + anon$builtin_3]) &&
       (df_stringFromRef(l0_res)[anon$builtin_2] - 48 ==
-      |df_stringFromRef(this$extension)| - anon$builtin_2 ||
-      !(df_stringFromRef(this$extension)[anon$builtin_2 +
+      |df_stringFromRef(this_extension)| - anon$builtin_2 ||
+      !(df_stringFromRef(this_extension)[anon$builtin_2 +
       (df_stringFromRef(l0_res)[anon$builtin_2] - 48)] ==
-      df_stringFromRef(this$extension)[df_stringFromRef(l0_res)[anon$builtin_2] -
+      df_stringFromRef(this_extension)[df_stringFromRef(l0_res)[anon$builtin_2] -
       48])))
   assert 0 <= df_intFromRef(l0_checkedLeft) &&
     df_intFromRef(l0_checkedLeft) <= df_intFromRef(l0_checkedRight) &&
-    df_intFromRef(l0_checkedRight) <= |df_stringFromRef(this$extension)|
+    df_intFromRef(l0_checkedRight) <= |df_stringFromRef(this_extension)|
   assert df_intFromRef(l0_checkedLeft) < df_intFromRef(l0_i)
   assert (forall anon$builtin_4: Int ::0 <= anon$builtin_4 &&
       anon$builtin_4 <
       df_intFromRef(l0_checkedRight) - df_intFromRef(l0_checkedLeft) ==>
-      df_stringFromRef(this$extension)[df_intFromRef(l0_checkedLeft) +
+      df_stringFromRef(this_extension)[df_intFromRef(l0_checkedLeft) +
       anon$builtin_4] ==
-      df_stringFromRef(this$extension)[anon$builtin_4])
+      df_stringFromRef(this_extension)[anon$builtin_4])
   ret_0 := l0_res
   goto lbl_ret_0
   label lbl_ret_0
 }
 
 /z_function.kt:(3481,3495): info: Generated Viper text for zFunctionNaive:
-method String_plus(this$dispatch: Ref, other: Ref) returns (ret: Ref)
+method String_plus(this_dispatch: Ref, other: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_stringType())
 
 
-method zFunctionNaive(this$extension: Ref) returns (ret_0: Ref)
+method zFunctionNaive(this_extension: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_stringType())
-  ensures |df_stringFromRef(ret_0)| == |df_stringFromRef(this$extension)|
+  ensures |df_stringFromRef(ret_0)| == |df_stringFromRef(this_extension)|
   ensures (forall anon$builtin_9: Int ::0 <= anon$builtin_9 &&
-      anon$builtin_9 < |df_stringFromRef(this$extension)| ==>
+      anon$builtin_9 < |df_stringFromRef(this_extension)| ==>
       48 <= df_stringFromRef(ret_0)[anon$builtin_9] &&
       df_stringFromRef(ret_0)[anon$builtin_9] <=
-      48 + |df_stringFromRef(this$extension)| - anon$builtin_9 &&
+      48 + |df_stringFromRef(this_extension)| - anon$builtin_9 &&
       (forall anon$builtin_10: Int ::0 <= anon$builtin_10 &&
         anon$builtin_10 < df_stringFromRef(ret_0)[anon$builtin_9] - 48 ==>
-        df_stringFromRef(this$extension)[anon$builtin_10] ==
-        df_stringFromRef(this$extension)[anon$builtin_9 + anon$builtin_10]) &&
+        df_stringFromRef(this_extension)[anon$builtin_10] ==
+        df_stringFromRef(this_extension)[anon$builtin_9 + anon$builtin_10]) &&
       (df_stringFromRef(ret_0)[anon$builtin_9] - 48 ==
-      |df_stringFromRef(this$extension)| - anon$builtin_9 ||
-      !(df_stringFromRef(this$extension)[anon$builtin_9 +
+      |df_stringFromRef(this_extension)| - anon$builtin_9 ||
+      !(df_stringFromRef(this_extension)[anon$builtin_9 +
       (df_stringFromRef(ret_0)[anon$builtin_9] - 48)] ==
-      df_stringFromRef(this$extension)[df_stringFromRef(ret_0)[anon$builtin_9] -
+      df_stringFromRef(this_extension)[df_stringFromRef(ret_0)[anon$builtin_9] -
       48])))
 {
   var i: Ref
   var res: Ref
   var anon_0: Ref
-  inhale df_isSubtype(df_typeOf(this$extension), df_stringType())
-  if (|df_stringFromRef(this$extension)| == 0) {
-    ret_0 := this$extension
+  inhale df_isSubtype(df_typeOf(this_extension), df_stringType())
+  if (|df_stringFromRef(this_extension)| == 0) {
+    ret_0 := this_extension
     goto lbl_ret_0
   }
   i := df_intToRef(1)
   res := sp_addStringChar(df_stringToRef(Seq[Int]()), sp_addCharInt(df_charToRef(48),
-    sp_stringLength(this$extension)))
+    sp_stringLength(this_extension)))
   label lbl_continue_0
     invariant df_isSubtype(df_typeOf(i), df_intType())
     invariant df_isSubtype(df_typeOf(res), df_stringType())
     invariant |df_stringFromRef(res)| == df_intFromRef(i)
     invariant 0 <= df_intFromRef(i) &&
-      df_intFromRef(i) <= |df_stringFromRef(this$extension)|
+      df_intFromRef(i) <= |df_stringFromRef(this_extension)|
     invariant (forall anon$builtin_2: Int ::0 <= anon$builtin_2 &&
         anon$builtin_2 < df_intFromRef(i) ==>
         48 <= df_stringFromRef(res)[anon$builtin_2] &&
         df_stringFromRef(res)[anon$builtin_2] <=
-        48 + |df_stringFromRef(this$extension)| - anon$builtin_2 &&
+        48 + |df_stringFromRef(this_extension)| - anon$builtin_2 &&
         (forall anon$builtin_3: Int ::0 <= anon$builtin_3 &&
           anon$builtin_3 < df_stringFromRef(res)[anon$builtin_2] - 48 ==>
-          df_stringFromRef(this$extension)[anon$builtin_3] ==
-          df_stringFromRef(this$extension)[anon$builtin_2 + anon$builtin_3]) &&
+          df_stringFromRef(this_extension)[anon$builtin_3] ==
+          df_stringFromRef(this_extension)[anon$builtin_2 + anon$builtin_3]) &&
         (df_stringFromRef(res)[anon$builtin_2] - 48 ==
-        |df_stringFromRef(this$extension)| - anon$builtin_2 ||
-        !(df_stringFromRef(this$extension)[anon$builtin_2 +
+        |df_stringFromRef(this_extension)| - anon$builtin_2 ||
+        !(df_stringFromRef(this_extension)[anon$builtin_2 +
         (df_stringFromRef(res)[anon$builtin_2] - 48)] ==
-        df_stringFromRef(this$extension)[df_stringFromRef(res)[anon$builtin_2] -
+        df_stringFromRef(this_extension)[df_stringFromRef(res)[anon$builtin_2] -
         48])))
-  anon_0 := sp_ltInts(i, sp_stringLength(this$extension))
+  anon_0 := sp_ltInts(i, sp_stringLength(this_extension))
   if (df_boolFromRef(anon_0)) {
     var j: Ref
     var anon_1: Ref
@@ -339,16 +339,16 @@ method zFunctionNaive(this$extension: Ref) returns (ret_0: Ref)
       invariant df_isSubtype(df_typeOf(i), df_intType())
       invariant df_isSubtype(df_typeOf(res), df_stringType())
       invariant df_intFromRef(i) <= df_intFromRef(j) &&
-        df_intFromRef(j) <= |df_stringFromRef(this$extension)|
+        df_intFromRef(j) <= |df_stringFromRef(this_extension)|
       invariant (forall anon$builtin_4: Int ::0 <= anon$builtin_4 &&
           anon$builtin_4 < df_intFromRef(j) - df_intFromRef(i) ==>
-          df_stringFromRef(this$extension)[df_intFromRef(i) +
+          df_stringFromRef(this_extension)[df_intFromRef(i) +
           anon$builtin_4] ==
-          df_stringFromRef(this$extension)[anon$builtin_4])
-    if (df_intFromRef(j) < |df_stringFromRef(this$extension)|) {
-      anon_1 := df_boolToRef(df_stringFromRef(this$extension)[df_intFromRef(j) -
+          df_stringFromRef(this_extension)[anon$builtin_4])
+    if (df_intFromRef(j) < |df_stringFromRef(this_extension)|) {
+      anon_1 := df_boolToRef(df_stringFromRef(this_extension)[df_intFromRef(j) -
         df_intFromRef(i)] ==
-        df_stringFromRef(this$extension)[df_intFromRef(j)])
+        df_stringFromRef(this_extension)[df_intFromRef(j)])
     } else {
       anon_1 := df_boolToRef(false)}
     if (df_boolFromRef(anon_1)) {
@@ -360,11 +360,11 @@ method zFunctionNaive(this$extension: Ref) returns (ret_0: Ref)
     assert df_isSubtype(df_typeOf(i), df_intType())
     assert df_isSubtype(df_typeOf(res), df_stringType())
     assert df_intFromRef(i) <= df_intFromRef(j) &&
-      df_intFromRef(j) <= |df_stringFromRef(this$extension)|
+      df_intFromRef(j) <= |df_stringFromRef(this_extension)|
     assert (forall anon$builtin_4: Int ::0 <= anon$builtin_4 &&
         anon$builtin_4 < df_intFromRef(j) - df_intFromRef(i) ==>
-        df_stringFromRef(this$extension)[df_intFromRef(i) + anon$builtin_4] ==
-        df_stringFromRef(this$extension)[anon$builtin_4])
+        df_stringFromRef(this_extension)[df_intFromRef(i) + anon$builtin_4] ==
+        df_stringFromRef(this_extension)[anon$builtin_4])
     res := sp_addStringChar(res, sp_addCharInt(df_charToRef(48), sp_minusInts(j,
       i)))
     i := sp_plusInts(i, df_intToRef(1))
@@ -375,21 +375,21 @@ method zFunctionNaive(this$extension: Ref) returns (ret_0: Ref)
   assert df_isSubtype(df_typeOf(res), df_stringType())
   assert |df_stringFromRef(res)| == df_intFromRef(i)
   assert 0 <= df_intFromRef(i) &&
-    df_intFromRef(i) <= |df_stringFromRef(this$extension)|
+    df_intFromRef(i) <= |df_stringFromRef(this_extension)|
   assert (forall anon$builtin_2: Int ::0 <= anon$builtin_2 &&
       anon$builtin_2 < df_intFromRef(i) ==>
       48 <= df_stringFromRef(res)[anon$builtin_2] &&
       df_stringFromRef(res)[anon$builtin_2] <=
-      48 + |df_stringFromRef(this$extension)| - anon$builtin_2 &&
+      48 + |df_stringFromRef(this_extension)| - anon$builtin_2 &&
       (forall anon$builtin_3: Int ::0 <= anon$builtin_3 &&
         anon$builtin_3 < df_stringFromRef(res)[anon$builtin_2] - 48 ==>
-        df_stringFromRef(this$extension)[anon$builtin_3] ==
-        df_stringFromRef(this$extension)[anon$builtin_2 + anon$builtin_3]) &&
+        df_stringFromRef(this_extension)[anon$builtin_3] ==
+        df_stringFromRef(this_extension)[anon$builtin_2 + anon$builtin_3]) &&
       (df_stringFromRef(res)[anon$builtin_2] - 48 ==
-      |df_stringFromRef(this$extension)| - anon$builtin_2 ||
-      !(df_stringFromRef(this$extension)[anon$builtin_2 +
+      |df_stringFromRef(this_extension)| - anon$builtin_2 ||
+      !(df_stringFromRef(this_extension)[anon$builtin_2 +
       (df_stringFromRef(res)[anon$builtin_2] - 48)] ==
-      df_stringFromRef(this$extension)[df_stringFromRef(res)[anon$builtin_2] -
+      df_stringFromRef(this_extension)[df_stringFromRef(res)[anon$builtin_2] -
       48])))
   ret_0 := res
   goto lbl_ret_0

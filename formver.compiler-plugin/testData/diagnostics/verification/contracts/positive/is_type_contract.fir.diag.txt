@@ -11,13 +11,13 @@ method isString(x: Ref) returns (ret_0: Ref)
 }
 
 /is_type_contract.kt:(322,330): info: Generated Viper text for isString:
-method isString(this$extension: Ref) returns (ret_0: Ref)
+method isString(this_extension: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
   ensures df_boolFromRef(ret_0) == true ==>
-    df_isSubtype(df_typeOf(this$extension), df_stringType())
+    df_isSubtype(df_typeOf(this_extension), df_stringType())
 {
-  inhale df_isSubtype(df_typeOf(this$extension), df_anyType())
-  ret_0 := df_boolToRef(df_isSubtype(df_typeOf(this$extension), df_stringType()))
+  inhale df_isSubtype(df_typeOf(this_extension), df_anyType())
+  ret_0 := df_boolToRef(df_isSubtype(df_typeOf(this_extension), df_stringType()))
   goto lbl_0
   label lbl_0
 }

@@ -5,13 +5,13 @@ field x: Ref
 
 field y: Ref
 
-method c_Foo_getY(this$dispatch: Ref) returns (ret_0: Ref)
+method c_Foo_getY(this_dispatch: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
-  inhale df_isSubtype(df_typeOf(this$dispatch), df_c_Foo())
-  inhale acc(c_Foo_shared(this$dispatch), wildcard)
-  unfold acc(c_Foo_shared(this$dispatch), wildcard)
-  ret_0 := this$dispatch.y
+  inhale df_isSubtype(df_typeOf(this_dispatch), df_c_Foo())
+  inhale acc(c_Foo_shared(this_dispatch), wildcard)
+  unfold acc(c_Foo_shared(this_dispatch), wildcard)
+  ret_0 := this_dispatch.y
   goto lbl_0
   label lbl_0
 }
@@ -25,18 +25,18 @@ field y: Ref
 
 field z: Ref
 
-method c_Bar_sum(this$dispatch: Ref) returns (ret_0: Ref)
+method c_Bar_sum(this_dispatch: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
   var anon_0: Ref
   var anon_1: Ref
-  inhale df_isSubtype(df_typeOf(this$dispatch), df_c_Bar())
-  inhale acc(c_Bar_shared(this$dispatch), wildcard)
-  unfold acc(c_Bar_shared(this$dispatch), wildcard)
-  unfold acc(c_Foo_shared(this$dispatch), wildcard)
-  anon_0 := this$dispatch.x
-  unfold acc(c_Bar_shared(this$dispatch), wildcard)
-  anon_1 := this$dispatch.z
+  inhale df_isSubtype(df_typeOf(this_dispatch), df_c_Bar())
+  inhale acc(c_Bar_shared(this_dispatch), wildcard)
+  unfold acc(c_Bar_shared(this_dispatch), wildcard)
+  unfold acc(c_Foo_shared(this_dispatch), wildcard)
+  anon_0 := this_dispatch.x
+  unfold acc(c_Bar_shared(this_dispatch), wildcard)
+  anon_1 := this_dispatch.z
   ret_0 := sp_plusInts(anon_0, anon_1)
   goto lbl_0
   label lbl_0
@@ -51,7 +51,7 @@ field y: Ref
 
 field z: Ref
 
-method c_Foo_getY(this$dispatch: Ref) returns (ret: Ref)
+method c_Foo_getY(this_dispatch: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_intType())
 
 
@@ -116,7 +116,7 @@ field y: Ref
 
 field z: Ref
 
-method c_Bar_sum(this$dispatch: Ref) returns (ret: Ref)
+method c_Bar_sum(this_dispatch: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_intType())
 
 

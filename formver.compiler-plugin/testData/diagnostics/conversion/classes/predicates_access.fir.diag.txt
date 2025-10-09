@@ -7,52 +7,52 @@ field x: Ref
 
 field y: Ref
 
-predicate c_A_shared(this$dispatch: Ref) {
-  acc(this$dispatch.a, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.a), df_intType())
+predicate c_A_shared(this_dispatch: Ref) {
+  acc(this_dispatch.a, wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.a), df_intType())
 }
 
-predicate c_A_unique(this$dispatch: Ref) {
-  acc(this$dispatch.a, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.a), df_intType())
+predicate c_A_unique(this_dispatch: Ref) {
+  acc(this_dispatch.a, wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.a), df_intType())
 }
 
-predicate c_B_shared(this$dispatch: Ref) {
-  acc(this$dispatch.b, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.b), df_intType()) &&
-  acc(c_A_shared(this$dispatch), wildcard)
+predicate c_B_shared(this_dispatch: Ref) {
+  acc(this_dispatch.b, wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.b), df_intType()) &&
+  acc(c_A_shared(this_dispatch), wildcard)
 }
 
-predicate c_B_unique(this$dispatch: Ref) {
-  acc(this$dispatch.b, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.b), df_intType()) &&
-  acc(c_A_unique(this$dispatch), write)
+predicate c_B_unique(this_dispatch: Ref) {
+  acc(this_dispatch.b, wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.b), df_intType()) &&
+  acc(c_A_unique(this_dispatch), write)
 }
 
-predicate c_C_shared(this$dispatch: Ref) {
-  acc(this$dispatch.x, wildcard) &&
-  acc(c_A_shared(this$dispatch.x), wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.x), df_c_A()) &&
-  acc(c_D_shared(this$dispatch), wildcard) &&
-  acc(c_B_shared(this$dispatch), wildcard)
+predicate c_C_shared(this_dispatch: Ref) {
+  acc(this_dispatch.x, wildcard) &&
+  acc(c_A_shared(this_dispatch.x), wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.x), df_c_A()) &&
+  acc(c_D_shared(this_dispatch), wildcard) &&
+  acc(c_B_shared(this_dispatch), wildcard)
 }
 
-predicate c_C_unique(this$dispatch: Ref) {
-  acc(this$dispatch.x, wildcard) &&
-  acc(c_A_shared(this$dispatch.x), wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.x), df_c_A()) &&
-  acc(this$dispatch.y, write) &&
-  acc(c_A_shared(this$dispatch.y), wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.y), df_c_A()) &&
-  acc(c_D_unique(this$dispatch), write) &&
-  acc(c_B_unique(this$dispatch), write)
+predicate c_C_unique(this_dispatch: Ref) {
+  acc(this_dispatch.x, wildcard) &&
+  acc(c_A_shared(this_dispatch.x), wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.x), df_c_A()) &&
+  acc(this_dispatch.y, write) &&
+  acc(c_A_shared(this_dispatch.y), wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.y), df_c_A()) &&
+  acc(c_D_unique(this_dispatch), write) &&
+  acc(c_B_unique(this_dispatch), write)
 }
 
-predicate c_D_shared(this$dispatch: Ref) {
+predicate c_D_shared(this_dispatch: Ref) {
   true
 }
 
-predicate c_D_unique(this$dispatch: Ref) {
+predicate c_D_unique(this_dispatch: Ref) {
   true
 }
 
@@ -70,7 +70,7 @@ method accessSuperTypeProperty(c: Ref) returns (ret_0: Ref)
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
-method pg_c_D_d(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_D_d(this_dispatch: Ref) returns (ret: Ref)
 
 
 /predicates_access.kt:(306,318): info: Generated Viper text for accessNested:
@@ -82,52 +82,52 @@ field x: Ref
 
 field y: Ref
 
-predicate c_A_shared(this$dispatch: Ref) {
-  acc(this$dispatch.a, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.a), df_intType())
+predicate c_A_shared(this_dispatch: Ref) {
+  acc(this_dispatch.a, wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.a), df_intType())
 }
 
-predicate c_A_unique(this$dispatch: Ref) {
-  acc(this$dispatch.a, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.a), df_intType())
+predicate c_A_unique(this_dispatch: Ref) {
+  acc(this_dispatch.a, wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.a), df_intType())
 }
 
-predicate c_B_shared(this$dispatch: Ref) {
-  acc(this$dispatch.b, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.b), df_intType()) &&
-  acc(c_A_shared(this$dispatch), wildcard)
+predicate c_B_shared(this_dispatch: Ref) {
+  acc(this_dispatch.b, wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.b), df_intType()) &&
+  acc(c_A_shared(this_dispatch), wildcard)
 }
 
-predicate c_B_unique(this$dispatch: Ref) {
-  acc(this$dispatch.b, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.b), df_intType()) &&
-  acc(c_A_unique(this$dispatch), write)
+predicate c_B_unique(this_dispatch: Ref) {
+  acc(this_dispatch.b, wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.b), df_intType()) &&
+  acc(c_A_unique(this_dispatch), write)
 }
 
-predicate c_C_shared(this$dispatch: Ref) {
-  acc(this$dispatch.x, wildcard) &&
-  acc(c_A_shared(this$dispatch.x), wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.x), df_c_A()) &&
-  acc(c_D_shared(this$dispatch), wildcard) &&
-  acc(c_B_shared(this$dispatch), wildcard)
+predicate c_C_shared(this_dispatch: Ref) {
+  acc(this_dispatch.x, wildcard) &&
+  acc(c_A_shared(this_dispatch.x), wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.x), df_c_A()) &&
+  acc(c_D_shared(this_dispatch), wildcard) &&
+  acc(c_B_shared(this_dispatch), wildcard)
 }
 
-predicate c_C_unique(this$dispatch: Ref) {
-  acc(this$dispatch.x, wildcard) &&
-  acc(c_A_shared(this$dispatch.x), wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.x), df_c_A()) &&
-  acc(this$dispatch.y, write) &&
-  acc(c_A_shared(this$dispatch.y), wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.y), df_c_A()) &&
-  acc(c_D_unique(this$dispatch), write) &&
-  acc(c_B_unique(this$dispatch), write)
+predicate c_C_unique(this_dispatch: Ref) {
+  acc(this_dispatch.x, wildcard) &&
+  acc(c_A_shared(this_dispatch.x), wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.x), df_c_A()) &&
+  acc(this_dispatch.y, write) &&
+  acc(c_A_shared(this_dispatch.y), wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.y), df_c_A()) &&
+  acc(c_D_unique(this_dispatch), write) &&
+  acc(c_B_unique(this_dispatch), write)
 }
 
-predicate c_D_shared(this$dispatch: Ref) {
+predicate c_D_shared(this_dispatch: Ref) {
   true
 }
 
-predicate c_D_unique(this$dispatch: Ref) {
+predicate c_D_unique(this_dispatch: Ref) {
   true
 }
 
@@ -146,20 +146,20 @@ method accessNested(c: Ref) returns (ret_0: Ref)
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
-method pg_c_D_d(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_D_d(this_dispatch: Ref) returns (ret: Ref)
 
 
 /predicates_access.kt:(354,368): info: Generated Viper text for accessNullable:
 field a: Ref
 
-predicate c_A_shared(this$dispatch: Ref) {
-  acc(this$dispatch.a, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.a), df_intType())
+predicate c_A_shared(this_dispatch: Ref) {
+  acc(this_dispatch.a, wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.a), df_intType())
 }
 
-predicate c_A_unique(this$dispatch: Ref) {
-  acc(this$dispatch.a, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.a), df_intType())
+predicate c_A_unique(this_dispatch: Ref) {
+  acc(this_dispatch.a, wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.a), df_intType())
 }
 
 method accessNullable(x: Ref) returns (ret_0: Ref)
@@ -181,26 +181,26 @@ field a: Ref
 
 field b: Ref
 
-predicate c_A_shared(this$dispatch: Ref) {
-  acc(this$dispatch.a, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.a), df_intType())
+predicate c_A_shared(this_dispatch: Ref) {
+  acc(this_dispatch.a, wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.a), df_intType())
 }
 
-predicate c_A_unique(this$dispatch: Ref) {
-  acc(this$dispatch.a, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.a), df_intType())
+predicate c_A_unique(this_dispatch: Ref) {
+  acc(this_dispatch.a, wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.a), df_intType())
 }
 
-predicate c_B_shared(this$dispatch: Ref) {
-  acc(this$dispatch.b, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.b), df_intType()) &&
-  acc(c_A_shared(this$dispatch), wildcard)
+predicate c_B_shared(this_dispatch: Ref) {
+  acc(this_dispatch.b, wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.b), df_intType()) &&
+  acc(c_A_shared(this_dispatch), wildcard)
 }
 
-predicate c_B_unique(this$dispatch: Ref) {
-  acc(this$dispatch.b, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.b), df_intType()) &&
-  acc(c_A_unique(this$dispatch), write)
+predicate c_B_unique(this_dispatch: Ref) {
+  acc(this_dispatch.b, wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.b), df_intType()) &&
+  acc(c_A_unique(this_dispatch), write)
 }
 
 method accessCast(x: Ref) returns (ret_0: Ref)
@@ -222,26 +222,26 @@ field a: Ref
 
 field b: Ref
 
-predicate c_A_shared(this$dispatch: Ref) {
-  acc(this$dispatch.a, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.a), df_intType())
+predicate c_A_shared(this_dispatch: Ref) {
+  acc(this_dispatch.a, wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.a), df_intType())
 }
 
-predicate c_A_unique(this$dispatch: Ref) {
-  acc(this$dispatch.a, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.a), df_intType())
+predicate c_A_unique(this_dispatch: Ref) {
+  acc(this_dispatch.a, wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.a), df_intType())
 }
 
-predicate c_B_shared(this$dispatch: Ref) {
-  acc(this$dispatch.b, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.b), df_intType()) &&
-  acc(c_A_shared(this$dispatch), wildcard)
+predicate c_B_shared(this_dispatch: Ref) {
+  acc(this_dispatch.b, wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.b), df_intType()) &&
+  acc(c_A_shared(this_dispatch), wildcard)
 }
 
-predicate c_B_unique(this$dispatch: Ref) {
-  acc(this$dispatch.b, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.b), df_intType()) &&
-  acc(c_A_unique(this$dispatch), write)
+predicate c_B_unique(this_dispatch: Ref) {
+  acc(this_dispatch.b, wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.b), df_intType()) &&
+  acc(c_A_unique(this_dispatch), write)
 }
 
 method accessSafeCast(x: Ref) returns (ret_0: Ref)
@@ -271,26 +271,26 @@ field a: Ref
 
 field b: Ref
 
-predicate c_A_shared(this$dispatch: Ref) {
-  acc(this$dispatch.a, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.a), df_intType())
+predicate c_A_shared(this_dispatch: Ref) {
+  acc(this_dispatch.a, wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.a), df_intType())
 }
 
-predicate c_A_unique(this$dispatch: Ref) {
-  acc(this$dispatch.a, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.a), df_intType())
+predicate c_A_unique(this_dispatch: Ref) {
+  acc(this_dispatch.a, wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.a), df_intType())
 }
 
-predicate c_B_shared(this$dispatch: Ref) {
-  acc(this$dispatch.b, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.b), df_intType()) &&
-  acc(c_A_shared(this$dispatch), wildcard)
+predicate c_B_shared(this_dispatch: Ref) {
+  acc(this_dispatch.b, wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.b), df_intType()) &&
+  acc(c_A_shared(this_dispatch), wildcard)
 }
 
-predicate c_B_unique(this$dispatch: Ref) {
-  acc(this$dispatch.b, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.b), df_intType()) &&
-  acc(c_A_unique(this$dispatch), write)
+predicate c_B_unique(this_dispatch: Ref) {
+  acc(this_dispatch.b, wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.b), df_intType()) &&
+  acc(c_A_unique(this_dispatch), write)
 }
 
 method accessSmartCast(x: Ref) returns (ret_0: Ref)

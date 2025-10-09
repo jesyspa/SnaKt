@@ -131,7 +131,7 @@ method c_WithVar_Int(e: Ref) returns (ret: Ref)
   ensures acc(c_WithVar_unique(ret), write)
 
 
-method c_WithVar_doSomething(this$dispatch: Ref) returns (ret: Ref)
+method c_WithVar_doSomething(this_dispatch: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_boolType())
 
 

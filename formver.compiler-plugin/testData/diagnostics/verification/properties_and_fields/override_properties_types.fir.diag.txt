@@ -44,12 +44,12 @@ method extractInt(base: Ref, returnNull: Ref) returns (ret_0: Ref)
   label lbl_0
 }
 
-method pg_c_Base_field(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_Base_field(this_dispatch: Ref) returns (ret: Ref)
 
 
-method pg_c_OpenClassOpenFieldVarDerived_field(this$dispatch: Ref)
+method pg_c_OpenClassOpenFieldVarDerived_field(this_dispatch: Ref)
   returns (ret: Ref)
 
 
-method ps_c_OpenClassOpenFieldVarDerived_field(this$dispatch: Ref, anon_0: Ref)
+method ps_c_OpenClassOpenFieldVarDerived_field(this_dispatch: Ref, anon_0: Ref)
   returns (ret: Ref)

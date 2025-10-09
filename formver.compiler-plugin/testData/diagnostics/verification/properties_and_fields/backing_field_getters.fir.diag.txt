@@ -263,4 +263,4 @@ method con_c_Z() returns (ret: Ref)
   ensures acc(c_Z_unique(ret), write)
 
 
-method pg_c_ClassI_z(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_ClassI_z(this_dispatch: Ref) returns (ret: Ref)

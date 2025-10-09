@@ -3,23 +3,23 @@ field bf_c_CustomList_value: Ref
 
 field sp_size: Ref
 
-method c_CustomList_get(this$dispatch: Ref, index: Ref)
+method c_CustomList_get(this_dispatch: Ref, index: Ref)
   returns (ret_0: Ref)
-  requires acc(this$dispatch.sp_size, write)
-  requires df_intFromRef(this$dispatch.sp_size) >= 0
+  requires acc(this_dispatch.sp_size, write)
+  requires df_intFromRef(this_dispatch.sp_size) >= 0
   requires df_intFromRef(index) >= 0
-  requires df_intFromRef(this$dispatch.sp_size) > df_intFromRef(index)
-  ensures acc(this$dispatch.sp_size, write)
-  ensures df_intFromRef(this$dispatch.sp_size) >= 0
+  requires df_intFromRef(this_dispatch.sp_size) > df_intFromRef(index)
+  ensures acc(this_dispatch.sp_size, write)
+  ensures df_intFromRef(this_dispatch.sp_size) >= 0
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
-  ensures df_intFromRef(this$dispatch.sp_size) ==
-    old(df_intFromRef(this$dispatch.sp_size))
+  ensures df_intFromRef(this_dispatch.sp_size) ==
+    old(df_intFromRef(this_dispatch.sp_size))
 {
-  inhale df_isSubtype(df_typeOf(this$dispatch), df_c_CustomList())
-  inhale acc(c_CustomList_shared(this$dispatch), wildcard)
+  inhale df_isSubtype(df_typeOf(this_dispatch), df_c_CustomList())
+  inhale acc(c_CustomList_shared(this_dispatch), wildcard)
   inhale df_isSubtype(df_typeOf(index), df_intType())
-  unfold acc(c_CustomList_shared(this$dispatch), wildcard)
-  ret_0 := this$dispatch.bf_c_CustomList_value
+  unfold acc(c_CustomList_shared(this_dispatch), wildcard)
+  ret_0 := this_dispatch.bf_c_CustomList_value
   goto lbl_0
   label lbl_0
 }
@@ -37,28 +37,28 @@ method c_CustomList_Int_Int(size: Ref, value: Ref) returns (ret: Ref)
   ensures acc(c_CustomList_unique(ret), write)
 
 
-method c_CustomList_get(this$dispatch: Ref, index: Ref) returns (ret: Ref)
-  requires acc(this$dispatch.sp_size, write)
-  requires df_intFromRef(this$dispatch.sp_size) >= 0
+method c_CustomList_get(this_dispatch: Ref, index: Ref) returns (ret: Ref)
+  requires acc(this_dispatch.sp_size, write)
+  requires df_intFromRef(this_dispatch.sp_size) >= 0
   requires df_intFromRef(index) >= 0
-  requires df_intFromRef(this$dispatch.sp_size) > df_intFromRef(index)
-  ensures acc(this$dispatch.sp_size, write)
-  ensures df_intFromRef(this$dispatch.sp_size) >= 0
+  requires df_intFromRef(this_dispatch.sp_size) > df_intFromRef(index)
+  ensures acc(this_dispatch.sp_size, write)
+  ensures df_intFromRef(this_dispatch.sp_size) >= 0
   ensures df_isSubtype(df_typeOf(ret), df_intType())
-  ensures df_intFromRef(this$dispatch.sp_size) ==
-    old(df_intFromRef(this$dispatch.sp_size))
+  ensures df_intFromRef(this_dispatch.sp_size) ==
+    old(df_intFromRef(this_dispatch.sp_size))
 
 
-method c_CustomList_isEmpty(this$dispatch: Ref) returns (ret: Ref)
-  requires acc(this$dispatch.sp_size, write)
-  requires df_intFromRef(this$dispatch.sp_size) >= 0
-  ensures acc(this$dispatch.sp_size, write)
-  ensures df_intFromRef(this$dispatch.sp_size) >= 0
+method c_CustomList_isEmpty(this_dispatch: Ref) returns (ret: Ref)
+  requires acc(this_dispatch.sp_size, write)
+  requires df_intFromRef(this_dispatch.sp_size) >= 0
+  ensures acc(this_dispatch.sp_size, write)
+  ensures df_intFromRef(this_dispatch.sp_size) >= 0
   ensures df_isSubtype(df_typeOf(ret), df_boolType())
-  ensures df_intFromRef(this$dispatch.sp_size) ==
-    old(df_intFromRef(this$dispatch.sp_size))
-  ensures df_boolFromRef(ret) ==> df_intFromRef(this$dispatch.sp_size) == 0
-  ensures !df_boolFromRef(ret) ==> df_intFromRef(this$dispatch.sp_size) > 0
+  ensures df_intFromRef(this_dispatch.sp_size) ==
+    old(df_intFromRef(this_dispatch.sp_size))
+  ensures df_boolFromRef(ret) ==> df_intFromRef(this_dispatch.sp_size) == 0
+  ensures !df_boolFromRef(ret) ==> df_intFromRef(this_dispatch.sp_size) > 0
 
 
 method test(n: Ref) returns (ret_0: Ref)

@@ -34,10 +34,10 @@ method createB() returns (ret_0: Ref)
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
-method pg_c_A_fieldOverride(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_A_fieldOverride(this_dispatch: Ref) returns (ret: Ref)
 
 
-method pg_c_B_fieldOverride(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_B_fieldOverride(this_dispatch: Ref) returns (ret: Ref)
 
 
 /inheritance_fields.kt:(699,715): info: Generated Viper text for createBFsAndNoBF:
@@ -90,10 +90,10 @@ method createBFsAndNoBF() returns (ret_0: Ref)
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
-method pg_c_FirstBackingFieldClass_x(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_FirstBackingFieldClass_x(this_dispatch: Ref) returns (ret: Ref)
 
 
-method pg_c_NoBackingFieldClass_x(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_NoBackingFieldClass_x(this_dispatch: Ref) returns (ret: Ref)
 
 
 /inheritance_fields.kt:(1038,1045): info: Generated Viper text for createY:

@@ -83,38 +83,38 @@ method call_fun_with_contracts(b: Ref) returns (ret_0: Ref)
 /returns_booleans.kt:(1268,1281): info: Generated Viper text for isNullOrEmpty:
 field sp_size: Ref
 
-method c_Collection_isEmpty(this$dispatch: Ref) returns (ret: Ref)
-  requires acc(this$dispatch.sp_size, write)
-  requires df_intFromRef(this$dispatch.sp_size) >= 0
-  ensures acc(this$dispatch.sp_size, write)
-  ensures df_intFromRef(this$dispatch.sp_size) >= 0
+method c_Collection_isEmpty(this_dispatch: Ref) returns (ret: Ref)
+  requires acc(this_dispatch.sp_size, write)
+  requires df_intFromRef(this_dispatch.sp_size) >= 0
+  ensures acc(this_dispatch.sp_size, write)
+  ensures df_intFromRef(this_dispatch.sp_size) >= 0
   ensures df_isSubtype(df_typeOf(ret), df_boolType())
-  ensures df_intFromRef(this$dispatch.sp_size) ==
-    old(df_intFromRef(this$dispatch.sp_size))
-  ensures df_boolFromRef(ret) ==> df_intFromRef(this$dispatch.sp_size) == 0
-  ensures !df_boolFromRef(ret) ==> df_intFromRef(this$dispatch.sp_size) > 0
+  ensures df_intFromRef(this_dispatch.sp_size) ==
+    old(df_intFromRef(this_dispatch.sp_size))
+  ensures df_boolFromRef(ret) ==> df_intFromRef(this_dispatch.sp_size) == 0
+  ensures !df_boolFromRef(ret) ==> df_intFromRef(this_dispatch.sp_size) > 0
 
 
-method isNullOrEmpty(this$extension: Ref) returns (ret_0: Ref)
-  requires this$extension != df_nullValue() ==>
-    acc(this$extension.sp_size, write)
-  requires this$extension != df_nullValue() ==>
-    df_intFromRef(this$extension.sp_size) >= 0
-  ensures this$extension != df_nullValue() ==>
-    acc(this$extension.sp_size, write)
-  ensures this$extension != df_nullValue() ==>
-    df_intFromRef(this$extension.sp_size) >= 0
+method isNullOrEmpty(this_extension: Ref) returns (ret_0: Ref)
+  requires this_extension != df_nullValue() ==>
+    acc(this_extension.sp_size, write)
+  requires this_extension != df_nullValue() ==>
+    df_intFromRef(this_extension.sp_size) >= 0
+  ensures this_extension != df_nullValue() ==>
+    acc(this_extension.sp_size, write)
+  ensures this_extension != df_nullValue() ==>
+    df_intFromRef(this_extension.sp_size) >= 0
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
   ensures df_boolFromRef(ret_0) == false ==>
-    this$extension != df_nullValue()
+    this_extension != df_nullValue()
 {
-  inhale df_isSubtype(df_typeOf(this$extension), df_nullable(df_c_Collection()))
-  inhale this$extension != df_nullValue() ==>
-    acc(c_Collection_shared(this$extension), wildcard)
-  if (this$extension == df_nullValue()) {
+  inhale df_isSubtype(df_typeOf(this_extension), df_nullable(df_c_Collection()))
+  inhale this_extension != df_nullValue() ==>
+    acc(c_Collection_shared(this_extension), wildcard)
+  if (this_extension == df_nullValue()) {
     ret_0 := df_boolToRef(true)
   } else {
-    ret_0 := c_Collection_isEmpty(this$extension)}
+    ret_0 := c_Collection_isEmpty(this_extension)}
   goto lbl_0
   label lbl_0
 }

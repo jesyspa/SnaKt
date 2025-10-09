@@ -3,7 +3,7 @@ field delta: Ref
 
 field size: Ref
 
-method c_ClassWithExtension_applyDelta(this$dispatch: Ref, this$extension: Ref)
+method c_ClassWithExtension_applyDelta(this_dispatch: Ref, this_extension: Ref)
   returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
@@ -11,15 +11,15 @@ method c_ClassWithExtension_applyDelta(this$dispatch: Ref, this$extension: Ref)
   var anon_0: Ref
   var withLabels: Ref
   var anon_1: Ref
-  inhale df_isSubtype(df_typeOf(this$dispatch), df_c_ClassWithExtension())
-  inhale acc(c_ClassWithExtension_shared(this$dispatch), wildcard)
-  inhale df_isSubtype(df_typeOf(this$extension), df_intType())
-  unfold acc(c_ClassWithExtension_shared(this$dispatch), wildcard)
-  anon_0 := this$dispatch.delta
-  withoutLabels := sp_plusInts(this$extension, anon_0)
-  unfold acc(c_ClassWithExtension_shared(this$dispatch), wildcard)
-  anon_1 := this$dispatch.delta
-  withLabels := sp_plusInts(anon_1, this$extension)
+  inhale df_isSubtype(df_typeOf(this_dispatch), df_c_ClassWithExtension())
+  inhale acc(c_ClassWithExtension_shared(this_dispatch), wildcard)
+  inhale df_isSubtype(df_typeOf(this_extension), df_intType())
+  unfold acc(c_ClassWithExtension_shared(this_dispatch), wildcard)
+  anon_0 := this_dispatch.delta
+  withoutLabels := sp_plusInts(this_extension, anon_0)
+  unfold acc(c_ClassWithExtension_shared(this_dispatch), wildcard)
+  anon_1 := this_dispatch.delta
+  withLabels := sp_plusInts(anon_1, this_extension)
   assert df_intFromRef(withoutLabels) == df_intFromRef(withLabels)
   label lbl_0
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
@@ -28,14 +28,14 @@ method c_ClassWithExtension_applyDelta(this$dispatch: Ref, this$extension: Ref)
 /multiple_receivers.kt:(531,542): info: Generated Viper text for returnDelta:
 field delta: Ref
 
-method c_ClassWithExtension_returnDelta(this$dispatch: Ref)
+method c_ClassWithExtension_returnDelta(this_dispatch: Ref)
   returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
-  inhale df_isSubtype(df_typeOf(this$dispatch), df_c_ClassWithExtension())
-  inhale acc(c_ClassWithExtension_shared(this$dispatch), wildcard)
-  unfold acc(c_ClassWithExtension_shared(this$dispatch), wildcard)
-  ret_0 := this$dispatch.delta
+  inhale df_isSubtype(df_typeOf(this_dispatch), df_c_ClassWithExtension())
+  inhale acc(c_ClassWithExtension_shared(this_dispatch), wildcard)
+  unfold acc(c_ClassWithExtension_shared(this_dispatch), wildcard)
+  ret_0 := this_dispatch.delta
   goto lbl_0
   label lbl_0
 }
@@ -43,13 +43,13 @@ method c_ClassWithExtension_returnDelta(this$dispatch: Ref)
 /multiple_receivers.kt:(579,599): info: Generated Viper text for extensionReturnDelta:
 field delta: Ref
 
-method extensionReturnDelta(this$extension: Ref) returns (ret_0: Ref)
+method extensionReturnDelta(this_extension: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_intType())
 {
-  inhale df_isSubtype(df_typeOf(this$extension), df_c_ClassWithExtension())
-  inhale acc(c_ClassWithExtension_shared(this$extension), wildcard)
-  unfold acc(c_ClassWithExtension_shared(this$extension), wildcard)
-  ret_0 := this$extension.delta
+  inhale df_isSubtype(df_typeOf(this_extension), df_c_ClassWithExtension())
+  inhale acc(c_ClassWithExtension_shared(this_extension), wildcard)
+  unfold acc(c_ClassWithExtension_shared(this_extension), wildcard)
+  ret_0 := this_extension.delta
   goto lbl_0
   label lbl_0
 }
@@ -68,12 +68,12 @@ method c_ClassWithExtension_Int(delta: Ref) returns (ret: Ref)
     df_intFromRef(delta)
 
 
-method c_ClassWithExtension_applyDelta(this$dispatch: Ref, this$extension: Ref)
+method c_ClassWithExtension_applyDelta(this_dispatch: Ref, this_extension: Ref)
   returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_unitType())
 
 
-method c_ClassWithExtension_returnDelta(this$dispatch: Ref)
+method c_ClassWithExtension_returnDelta(this_dispatch: Ref)
   returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_intType())
 
@@ -127,5 +127,5 @@ method checkClassWithExtension() returns (ret_0: Ref)
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
-method extensionReturnDelta(this$extension: Ref) returns (ret: Ref)
+method extensionReturnDelta(this_extension: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_intType())

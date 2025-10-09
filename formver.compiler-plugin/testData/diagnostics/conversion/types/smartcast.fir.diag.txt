@@ -36,4 +36,4 @@ method isNullOrEmptyWrong(seq: Ref) returns (ret_0: Ref)
   label lbl_0
 }
 
-method pg_c_CharSequence_length(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_CharSequence_length(this_dispatch: Ref) returns (ret: Ref)

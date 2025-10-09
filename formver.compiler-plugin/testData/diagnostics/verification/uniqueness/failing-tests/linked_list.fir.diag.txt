@@ -3,22 +3,22 @@ field data: Ref
 
 field next: Ref
 
-predicate c_Link_shared(this$dispatch: Ref) {
-  acc(this$dispatch.next, wildcard) &&
-  (this$dispatch.next != df_nullValue() ==>
-  acc(c_Link_shared(this$dispatch.next), wildcard)) &&
-  df_isSubtype(df_typeOf(this$dispatch.next), df_nullable(df_c_Link()))
+predicate c_Link_shared(this_dispatch: Ref) {
+  acc(this_dispatch.next, wildcard) &&
+  (this_dispatch.next != df_nullValue() ==>
+  acc(c_Link_shared(this_dispatch.next), wildcard)) &&
+  df_isSubtype(df_typeOf(this_dispatch.next), df_nullable(df_c_Link()))
 }
 
-predicate c_Link_unique(this$dispatch: Ref) {
-  acc(this$dispatch.data, write) &&
-  df_isSubtype(df_typeOf(this$dispatch.data), df_intType()) &&
-  acc(this$dispatch.next, wildcard) &&
-  (this$dispatch.next != df_nullValue() ==>
-  acc(c_Link_shared(this$dispatch.next), wildcard)) &&
-  (this$dispatch.next != df_nullValue() ==>
-  acc(c_Link_unique(this$dispatch.next), write)) &&
-  df_isSubtype(df_typeOf(this$dispatch.next), df_nullable(df_c_Link()))
+predicate c_Link_unique(this_dispatch: Ref) {
+  acc(this_dispatch.data, write) &&
+  df_isSubtype(df_typeOf(this_dispatch.data), df_intType()) &&
+  acc(this_dispatch.next, wildcard) &&
+  (this_dispatch.next != df_nullValue() ==>
+  acc(c_Link_shared(this_dispatch.next), wildcard)) &&
+  (this_dispatch.next != df_nullValue() ==>
+  acc(c_Link_unique(this_dispatch.next), write)) &&
+  df_isSubtype(df_typeOf(this_dispatch.next), df_nullable(df_c_Link()))
 }
 
 method getVal(l: Ref) returns (ret_0: Ref)
@@ -50,51 +50,51 @@ field bf_next: Ref
 
 field size: Ref
 
-predicate c_BooleanArray_shared(this$dispatch: Ref) {
-  acc(this$dispatch.size, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.size), df_intType()) &&
-  acc(c_Cloneable_shared(this$dispatch), wildcard) &&
-  acc(c_Serializable_shared(this$dispatch), wildcard)
+predicate c_BooleanArray_shared(this_dispatch: Ref) {
+  acc(this_dispatch.size, wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.size), df_intType()) &&
+  acc(c_Cloneable_shared(this_dispatch), wildcard) &&
+  acc(c_Serializable_shared(this_dispatch), wildcard)
 }
 
-predicate c_BooleanArray_unique(this$dispatch: Ref) {
-  acc(this$dispatch.size, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.size), df_intType()) &&
-  acc(c_Cloneable_unique(this$dispatch), write) &&
-  acc(c_Serializable_unique(this$dispatch), write)
+predicate c_BooleanArray_unique(this_dispatch: Ref) {
+  acc(this_dispatch.size, wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.size), df_intType()) &&
+  acc(c_Cloneable_unique(this_dispatch), write) &&
+  acc(c_Serializable_unique(this_dispatch), write)
 }
 
-predicate c_Cloneable_shared(this$dispatch: Ref) {
+predicate c_Cloneable_shared(this_dispatch: Ref) {
   true
 }
 
-predicate c_Cloneable_unique(this$dispatch: Ref) {
+predicate c_Cloneable_unique(this_dispatch: Ref) {
   true
 }
 
-predicate c_Link_shared(this$dispatch: Ref) {
-  acc(this$dispatch.bf_next, wildcard) &&
-  (this$dispatch.bf_next != df_nullValue() ==>
-  acc(c_Link_shared(this$dispatch.bf_next), wildcard)) &&
-  df_isSubtype(df_typeOf(this$dispatch.bf_next), df_nullable(df_c_Link()))
+predicate c_Link_shared(this_dispatch: Ref) {
+  acc(this_dispatch.bf_next, wildcard) &&
+  (this_dispatch.bf_next != df_nullValue() ==>
+  acc(c_Link_shared(this_dispatch.bf_next), wildcard)) &&
+  df_isSubtype(df_typeOf(this_dispatch.bf_next), df_nullable(df_c_Link()))
 }
 
-predicate c_Link_unique(this$dispatch: Ref) {
-  acc(this$dispatch.bf_data, write) &&
-  df_isSubtype(df_typeOf(this$dispatch.bf_data), df_intType()) &&
-  acc(this$dispatch.bf_next, wildcard) &&
-  (this$dispatch.bf_next != df_nullValue() ==>
-  acc(c_Link_shared(this$dispatch.bf_next), wildcard)) &&
-  (this$dispatch.bf_next != df_nullValue() ==>
-  acc(c_Link_unique(this$dispatch.bf_next), write)) &&
-  df_isSubtype(df_typeOf(this$dispatch.bf_next), df_nullable(df_c_Link()))
+predicate c_Link_unique(this_dispatch: Ref) {
+  acc(this_dispatch.bf_data, write) &&
+  df_isSubtype(df_typeOf(this_dispatch.bf_data), df_intType()) &&
+  acc(this_dispatch.bf_next, wildcard) &&
+  (this_dispatch.bf_next != df_nullValue() ==>
+  acc(c_Link_shared(this_dispatch.bf_next), wildcard)) &&
+  (this_dispatch.bf_next != df_nullValue() ==>
+  acc(c_Link_unique(this_dispatch.bf_next), write)) &&
+  df_isSubtype(df_typeOf(this_dispatch.bf_next), df_nullable(df_c_Link()))
 }
 
-predicate c_Serializable_shared(this$dispatch: Ref) {
+predicate c_Serializable_shared(this_dispatch: Ref) {
   true
 }
 
-predicate c_Serializable_unique(this$dispatch: Ref) {
+predicate c_Serializable_unique(this_dispatch: Ref) {
   true
 }
 

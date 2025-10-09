@@ -55,7 +55,7 @@ method returnNewString() returns (ret_0: Ref)
 }
 
 /strings_in_conditions.kt:(672,689): info: Generated Viper text for addCharacterTimes:
-method String_plus(this$dispatch: Ref, other: Ref) returns (ret: Ref)
+method String_plus(this_dispatch: Ref, other: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_stringType())
 
 

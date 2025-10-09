@@ -21,14 +21,14 @@ method extensionGetterProperty() returns (ret_0: Ref)
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
-method intValProp(this$dispatch: Ref) returns (ret: Ref)
+method intValProp(this_dispatch: Ref) returns (ret: Ref)
 
 
 /extension_properties.kt:(210,233): info: Generated Viper text for extensionSetterProperty:
-method eg_intVarProp(this$dispatch: Ref) returns (ret: Ref)
+method eg_intVarProp(this_dispatch: Ref) returns (ret: Ref)
 
 
-method es_intVarProp(this$dispatch: Ref, anon_0: Ref) returns (ret: Ref)
+method es_intVarProp(this_dispatch: Ref, anon_0: Ref) returns (ret: Ref)
 
 
 method extensionSetterProperty() returns (ret_0: Ref)
@@ -58,16 +58,16 @@ method extensionGetterPropertyUserDefinedClass(pf: Ref)
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
-method pfValProp(this$dispatch: Ref) returns (ret: Ref)
+method pfValProp(this_dispatch: Ref) returns (ret: Ref)
 
 
 /extension_properties.kt:(508,547): info: Generated Viper text for extensionSetterPropertyUserDefinedClass:
 field x: Ref
 
-method eg_pfVarProp(this$dispatch: Ref) returns (ret: Ref)
+method eg_pfVarProp(this_dispatch: Ref) returns (ret: Ref)
 
 
-method es_pfVarProp(this$dispatch: Ref, anon_0: Ref) returns (ret: Ref)
+method es_pfVarProp(this_dispatch: Ref, anon_0: Ref) returns (ret: Ref)
 
 
 method extensionSetterPropertyUserDefinedClass(pf: Ref)

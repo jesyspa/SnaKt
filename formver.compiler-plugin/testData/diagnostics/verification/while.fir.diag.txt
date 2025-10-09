@@ -12,7 +12,7 @@ method c_ClassWithField_T_Int(p_field: Ref) returns (ret: Ref)
     df_intFromRef(p_field)
 
 
-method c_Int_unaryMinus(this$dispatch: Ref) returns (ret: Ref)
+method c_Int_unaryMinus(this_dispatch: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_intType())
 
 

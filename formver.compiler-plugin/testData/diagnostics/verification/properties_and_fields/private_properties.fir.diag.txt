@@ -1,41 +1,41 @@
 /private_properties.kt:(222,237): info: Generated Viper text for getBooleanField:
-method c_A_getBooleanField(this$dispatch: Ref) returns (ret_0: Ref)
+method c_A_getBooleanField(this_dispatch: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
 {
   var anon_0: Ref
-  inhale df_isSubtype(df_typeOf(this$dispatch), df_c_A())
-  inhale acc(c_A_shared(this$dispatch), wildcard)
-  anon_0 := pg_c_A_field(this$dispatch)
+  inhale df_isSubtype(df_typeOf(this_dispatch), df_c_A())
+  inhale acc(c_A_shared(this_dispatch), wildcard)
+  anon_0 := pg_c_A_field(this_dispatch)
   ret_0 := anon_0
   inhale df_isSubtype(df_typeOf(ret_0), df_boolType())
   goto lbl_0
   label lbl_0
 }
 
-method pg_c_A_field(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_A_field(this_dispatch: Ref) returns (ret: Ref)
 
 
-method ps_c_A_field(this$dispatch: Ref, anon_0: Ref) returns (ret: Ref)
+method ps_c_A_field(this_dispatch: Ref, anon_0: Ref) returns (ret: Ref)
 
 
 /private_properties.kt:(316,330): info: Generated Viper text for getStringField:
 field bf_c_B_field: Ref
 
-method c_B_getStringField(this$dispatch: Ref) returns (ret_0: Ref)
+method c_B_getStringField(this_dispatch: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_stringType())
 {
-  inhale df_isSubtype(df_typeOf(this$dispatch), df_c_B())
-  inhale acc(c_B_shared(this$dispatch), wildcard)
-  unfold acc(c_B_shared(this$dispatch), wildcard)
-  ret_0 := this$dispatch.bf_c_B_field
+  inhale df_isSubtype(df_typeOf(this_dispatch), df_c_B())
+  inhale acc(c_B_shared(this_dispatch), wildcard)
+  unfold acc(c_B_shared(this_dispatch), wildcard)
+  ret_0 := this_dispatch.bf_c_B_field
   goto lbl_0
   label lbl_0
 }
 
-method pg_c_A_field(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_A_field(this_dispatch: Ref) returns (ret: Ref)
 
 
-method ps_c_A_field(this$dispatch: Ref, anon_0: Ref) returns (ret: Ref)
+method ps_c_A_field(this_dispatch: Ref, anon_0: Ref) returns (ret: Ref)
 
 
 /private_properties.kt:(475,488): info: Generated Viper text for extractPublic:
@@ -82,7 +82,7 @@ method extractPublic() returns (ret_0: Ref)
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
-method pg_c_A_field(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_A_field(this_dispatch: Ref) returns (ret: Ref)
 
 
-method ps_c_A_field(this$dispatch: Ref, anon_0: Ref) returns (ret: Ref)
+method ps_c_A_field(this_dispatch: Ref, anon_0: Ref) returns (ret: Ref)

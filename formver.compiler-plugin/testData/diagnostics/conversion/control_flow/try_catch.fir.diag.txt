@@ -3,10 +3,10 @@ method call(x: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_unitType())
 
 
-method pg_c_Throwable_cause(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_Throwable_cause(this_dispatch: Ref) returns (ret: Ref)
 
 
-method pg_c_Throwable_message(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_Throwable_message(this_dispatch: Ref) returns (ret: Ref)
 
 
 method tryCatch() returns (ret_0: Ref)
@@ -79,10 +79,10 @@ method nestedTryCatch() returns (ret_0: Ref)
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
-method pg_c_Throwable_cause(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_Throwable_cause(this_dispatch: Ref) returns (ret: Ref)
 
 
-method pg_c_Throwable_message(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_Throwable_message(this_dispatch: Ref) returns (ret: Ref)
 
 
 /try_catch.kt:(574,592): info: Generated Viper text for tryCatchWithInline:
@@ -90,10 +90,10 @@ method call(x: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_unitType())
 
 
-method pg_c_Throwable_cause(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_Throwable_cause(this_dispatch: Ref) returns (ret: Ref)
 
 
-method pg_c_Throwable_message(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_Throwable_message(this_dispatch: Ref) returns (ret: Ref)
 
 
 method tryCatchWithInline() returns (ret_0: Ref)
@@ -126,10 +126,10 @@ method tryCatchWithInline() returns (ret_0: Ref)
 }
 
 /try_catch.kt:(685,702): info: Generated Viper text for tryCatchShadowing:
-method pg_c_Throwable_cause(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_Throwable_cause(this_dispatch: Ref) returns (ret: Ref)
 
 
-method pg_c_Throwable_message(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_Throwable_message(this_dispatch: Ref) returns (ret: Ref)
 
 
 method tryCatchShadowing() returns (ret_0: Ref)
@@ -202,10 +202,10 @@ method multipleCatches() returns (ret_0: Ref)
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
-method pg_c_Throwable_cause(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_Throwable_cause(this_dispatch: Ref) returns (ret: Ref)
 
 
-method pg_c_Throwable_message(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_Throwable_message(this_dispatch: Ref) returns (ret: Ref)
 
 
 /try_catch.kt:(1044,1056): info: Generated Viper text for useException:
@@ -217,10 +217,10 @@ method ignore(p_e: Ref) returns (ret: Ref)
   ensures df_isSubtype(df_typeOf(ret), df_unitType())
 
 
-method pg_c_Throwable_cause(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_Throwable_cause(this_dispatch: Ref) returns (ret: Ref)
 
 
-method pg_c_Throwable_message(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_Throwable_message(this_dispatch: Ref) returns (ret: Ref)
 
 
 method useException() returns (ret_0: Ref)

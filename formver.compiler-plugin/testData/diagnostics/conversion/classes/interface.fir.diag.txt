@@ -1,11 +1,11 @@
 /interface.kt:(84,98): info: Generated Viper text for testProperties:
-method pg_c_Foo_valProp(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_Foo_valProp(this_dispatch: Ref) returns (ret: Ref)
 
 
-method pg_c_Foo_varProp(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_Foo_varProp(this_dispatch: Ref) returns (ret: Ref)
 
 
-method ps_c_Foo_varProp(this$dispatch: Ref, anon_0: Ref) returns (ret: Ref)
+method ps_c_Foo_varProp(this_dispatch: Ref, anon_0: Ref) returns (ret: Ref)
 
 
 method testProperties(foo: Ref) returns (ret_0: Ref)
@@ -55,7 +55,7 @@ method createImpl() returns (ret_0: Ref)
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
-method pg_c_First_number(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_First_number(this_dispatch: Ref) returns (ret: Ref)
 
 
-method pg_c_Second_number(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_Second_number(this_dispatch: Ref) returns (ret: Ref)

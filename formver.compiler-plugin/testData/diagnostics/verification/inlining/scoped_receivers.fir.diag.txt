@@ -1,7 +1,7 @@
 /scoped_receivers.kt:(407,433): info: Generated Viper text for with_run_extension_labeled:
 field size: Ref
 
-method with_run_extension_labeled(this$extension: Ref) returns (ret_0: Ref)
+method with_run_extension_labeled(this_extension: Ref) returns (ret_0: Ref)
   ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
   var cond1: Ref
@@ -54,8 +54,8 @@ method with_run_extension_labeled(this$extension: Ref) returns (ret_0: Ref)
   var anon_33: Ref
   var ret_17: Ref
   var anon_12: Ref
-  inhale df_isSubtype(df_typeOf(this$extension), df_nullable(df_intType()))
-  ret_1 := df_boolToRef(this$extension == df_nullValue())
+  inhale df_isSubtype(df_typeOf(this_extension), df_nullable(df_intType()))
+  ret_1 := df_boolToRef(this_extension == df_nullValue())
   goto lbl_1
   label lbl_1
   anon_13 := ret_1
@@ -63,7 +63,7 @@ method with_run_extension_labeled(this$extension: Ref) returns (ret_0: Ref)
     cond1 := df_boolToRef(true)
   } else {
     var ret_2: Ref
-    ret_2 := sp_notBool(df_boolToRef(this$extension == df_nullValue()))
+    ret_2 := sp_notBool(df_boolToRef(this_extension == df_nullValue()))
     goto lbl_2
     label lbl_2
     cond1 := ret_2
@@ -117,7 +117,7 @@ method with_run_extension_labeled(this$extension: Ref) returns (ret_0: Ref)
   assert !df_boolFromRef(anon_8)
   assert !df_boolFromRef(anon_8)
   assert df_boolFromRef(anon_1)
-  ret_12 := df_boolToRef(this$extension == df_nullValue())
+  ret_12 := df_boolToRef(this_extension == df_nullValue())
   goto lbl_12
   label lbl_12
   anon_27 := ret_12
@@ -125,7 +125,7 @@ method with_run_extension_labeled(this$extension: Ref) returns (ret_0: Ref)
     anon_26 := df_boolToRef(true)
   } else {
     var ret_13: Ref
-    ret_13 := sp_notBool(df_boolToRef(this$extension == df_nullValue()))
+    ret_13 := sp_notBool(df_boolToRef(this_extension == df_nullValue()))
     goto lbl_13
     label lbl_13
     anon_26 := ret_13

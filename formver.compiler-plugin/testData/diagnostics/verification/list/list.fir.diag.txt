@@ -59,42 +59,42 @@ method add_get(l: Ref) returns (ret_0: Ref)
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
-method c_MutableList_add(this$dispatch: Ref, element: Ref)
+method c_MutableList_add(this_dispatch: Ref, element: Ref)
   returns (ret: Ref)
-  requires acc(this$dispatch.sp_size, write)
-  requires df_intFromRef(this$dispatch.sp_size) >= 0
-  ensures acc(this$dispatch.sp_size, write)
-  ensures df_intFromRef(this$dispatch.sp_size) >= 0
+  requires acc(this_dispatch.sp_size, write)
+  requires df_intFromRef(this_dispatch.sp_size) >= 0
+  ensures acc(this_dispatch.sp_size, write)
+  ensures df_intFromRef(this_dispatch.sp_size) >= 0
   ensures df_isSubtype(df_typeOf(ret), df_boolType())
-  ensures df_intFromRef(this$dispatch.sp_size) ==
-    old(df_intFromRef(this$dispatch.sp_size)) + 1
+  ensures df_intFromRef(this_dispatch.sp_size) ==
+    old(df_intFromRef(this_dispatch.sp_size)) + 1
 
 
-method c_MutableList_get(this$dispatch: Ref, index: Ref) returns (ret: Ref)
-  requires acc(this$dispatch.sp_size, write)
-  requires df_intFromRef(this$dispatch.sp_size) >= 0
+method c_MutableList_get(this_dispatch: Ref, index: Ref) returns (ret: Ref)
+  requires acc(this_dispatch.sp_size, write)
+  requires df_intFromRef(this_dispatch.sp_size) >= 0
   requires df_intFromRef(index) >= 0
-  requires df_intFromRef(this$dispatch.sp_size) > df_intFromRef(index)
-  ensures acc(this$dispatch.sp_size, write)
-  ensures df_intFromRef(this$dispatch.sp_size) >= 0
+  requires df_intFromRef(this_dispatch.sp_size) > df_intFromRef(index)
+  ensures acc(this_dispatch.sp_size, write)
+  ensures df_intFromRef(this_dispatch.sp_size) >= 0
   ensures df_isSubtype(df_typeOf(ret), df_intType())
-  ensures df_intFromRef(this$dispatch.sp_size) ==
-    old(df_intFromRef(this$dispatch.sp_size))
+  ensures df_intFromRef(this_dispatch.sp_size) ==
+    old(df_intFromRef(this_dispatch.sp_size))
 
 
 /list.kt:(379,391): info: Generated Viper text for last_or_null:
 field sp_size: Ref
 
-method c_List_get(this$dispatch: Ref, index: Ref) returns (ret: Ref)
-  requires acc(this$dispatch.sp_size, write)
-  requires df_intFromRef(this$dispatch.sp_size) >= 0
+method c_List_get(this_dispatch: Ref, index: Ref) returns (ret: Ref)
+  requires acc(this_dispatch.sp_size, write)
+  requires df_intFromRef(this_dispatch.sp_size) >= 0
   requires df_intFromRef(index) >= 0
-  requires df_intFromRef(this$dispatch.sp_size) > df_intFromRef(index)
-  ensures acc(this$dispatch.sp_size, write)
-  ensures df_intFromRef(this$dispatch.sp_size) >= 0
+  requires df_intFromRef(this_dispatch.sp_size) > df_intFromRef(index)
+  ensures acc(this_dispatch.sp_size, write)
+  ensures df_intFromRef(this_dispatch.sp_size) >= 0
   ensures df_isSubtype(df_typeOf(ret), df_intType())
-  ensures df_intFromRef(this$dispatch.sp_size) ==
-    old(df_intFromRef(this$dispatch.sp_size))
+  ensures df_intFromRef(this_dispatch.sp_size) ==
+    old(df_intFromRef(this_dispatch.sp_size))
 
 
 method last_or_null(l: Ref) returns (ret_0: Ref)
@@ -124,28 +124,28 @@ method last_or_null(l: Ref) returns (ret_0: Ref)
 /list.kt:(545,553): info: Generated Viper text for is_empty:
 field sp_size: Ref
 
-method c_List_get(this$dispatch: Ref, index: Ref) returns (ret: Ref)
-  requires acc(this$dispatch.sp_size, write)
-  requires df_intFromRef(this$dispatch.sp_size) >= 0
+method c_List_get(this_dispatch: Ref, index: Ref) returns (ret: Ref)
+  requires acc(this_dispatch.sp_size, write)
+  requires df_intFromRef(this_dispatch.sp_size) >= 0
   requires df_intFromRef(index) >= 0
-  requires df_intFromRef(this$dispatch.sp_size) > df_intFromRef(index)
-  ensures acc(this$dispatch.sp_size, write)
-  ensures df_intFromRef(this$dispatch.sp_size) >= 0
+  requires df_intFromRef(this_dispatch.sp_size) > df_intFromRef(index)
+  ensures acc(this_dispatch.sp_size, write)
+  ensures df_intFromRef(this_dispatch.sp_size) >= 0
   ensures df_isSubtype(df_typeOf(ret), df_intType())
-  ensures df_intFromRef(this$dispatch.sp_size) ==
-    old(df_intFromRef(this$dispatch.sp_size))
+  ensures df_intFromRef(this_dispatch.sp_size) ==
+    old(df_intFromRef(this_dispatch.sp_size))
 
 
-method c_List_isEmpty(this$dispatch: Ref) returns (ret: Ref)
-  requires acc(this$dispatch.sp_size, write)
-  requires df_intFromRef(this$dispatch.sp_size) >= 0
-  ensures acc(this$dispatch.sp_size, write)
-  ensures df_intFromRef(this$dispatch.sp_size) >= 0
+method c_List_isEmpty(this_dispatch: Ref) returns (ret: Ref)
+  requires acc(this_dispatch.sp_size, write)
+  requires df_intFromRef(this_dispatch.sp_size) >= 0
+  ensures acc(this_dispatch.sp_size, write)
+  ensures df_intFromRef(this_dispatch.sp_size) >= 0
   ensures df_isSubtype(df_typeOf(ret), df_boolType())
-  ensures df_intFromRef(this$dispatch.sp_size) ==
-    old(df_intFromRef(this$dispatch.sp_size))
-  ensures df_boolFromRef(ret) ==> df_intFromRef(this$dispatch.sp_size) == 0
-  ensures !df_boolFromRef(ret) ==> df_intFromRef(this$dispatch.sp_size) > 0
+  ensures df_intFromRef(this_dispatch.sp_size) ==
+    old(df_intFromRef(this_dispatch.sp_size))
+  ensures df_boolFromRef(ret) ==> df_intFromRef(this_dispatch.sp_size) == 0
+  ensures !df_boolFromRef(ret) ==> df_intFromRef(this_dispatch.sp_size) > 0
 
 
 method is_empty(l: Ref) returns (ret_0: Ref)
@@ -170,28 +170,28 @@ method is_empty(l: Ref) returns (ret_0: Ref)
 /list.kt:(670,683): info: Generated Viper text for nullable_list:
 field sp_size: Ref
 
-method c_List_get(this$dispatch: Ref, index: Ref) returns (ret: Ref)
-  requires acc(this$dispatch.sp_size, write)
-  requires df_intFromRef(this$dispatch.sp_size) >= 0
+method c_List_get(this_dispatch: Ref, index: Ref) returns (ret: Ref)
+  requires acc(this_dispatch.sp_size, write)
+  requires df_intFromRef(this_dispatch.sp_size) >= 0
   requires df_intFromRef(index) >= 0
-  requires df_intFromRef(this$dispatch.sp_size) > df_intFromRef(index)
-  ensures acc(this$dispatch.sp_size, write)
-  ensures df_intFromRef(this$dispatch.sp_size) >= 0
+  requires df_intFromRef(this_dispatch.sp_size) > df_intFromRef(index)
+  ensures acc(this_dispatch.sp_size, write)
+  ensures df_intFromRef(this_dispatch.sp_size) >= 0
   ensures df_isSubtype(df_typeOf(ret), df_intType())
-  ensures df_intFromRef(this$dispatch.sp_size) ==
-    old(df_intFromRef(this$dispatch.sp_size))
+  ensures df_intFromRef(this_dispatch.sp_size) ==
+    old(df_intFromRef(this_dispatch.sp_size))
 
 
-method c_List_isEmpty(this$dispatch: Ref) returns (ret: Ref)
-  requires acc(this$dispatch.sp_size, write)
-  requires df_intFromRef(this$dispatch.sp_size) >= 0
-  ensures acc(this$dispatch.sp_size, write)
-  ensures df_intFromRef(this$dispatch.sp_size) >= 0
+method c_List_isEmpty(this_dispatch: Ref) returns (ret: Ref)
+  requires acc(this_dispatch.sp_size, write)
+  requires df_intFromRef(this_dispatch.sp_size) >= 0
+  ensures acc(this_dispatch.sp_size, write)
+  ensures df_intFromRef(this_dispatch.sp_size) >= 0
   ensures df_isSubtype(df_typeOf(ret), df_boolType())
-  ensures df_intFromRef(this$dispatch.sp_size) ==
-    old(df_intFromRef(this$dispatch.sp_size))
-  ensures df_boolFromRef(ret) ==> df_intFromRef(this$dispatch.sp_size) == 0
-  ensures !df_boolFromRef(ret) ==> df_intFromRef(this$dispatch.sp_size) > 0
+  ensures df_intFromRef(this_dispatch.sp_size) ==
+    old(df_intFromRef(this_dispatch.sp_size))
+  ensures df_boolFromRef(ret) ==> df_intFromRef(this_dispatch.sp_size) == 0
+  ensures !df_boolFromRef(ret) ==> df_intFromRef(this_dispatch.sp_size) > 0
 
 
 method nullable_list(l: Ref) returns (ret_0: Ref)

@@ -1,5 +1,5 @@
 /multiple_interfaces.kt:(799,804): info: Generated Viper text for take1:
-method pg_c_InterfaceWithImplementation1_field(this$dispatch: Ref)
+method pg_c_InterfaceWithImplementation1_field(this_dispatch: Ref)
   returns (ret: Ref)
 
 
@@ -18,7 +18,7 @@ method take1(obj: Ref) returns (ret_0: Ref)
 }
 
 /multiple_interfaces.kt:(863,868): info: Generated Viper text for take2:
-method pg_c_InterfaceWithoutImplementation2_field(this$dispatch: Ref)
+method pg_c_InterfaceWithoutImplementation2_field(this_dispatch: Ref)
   returns (ret: Ref)
 
 
@@ -49,7 +49,7 @@ method take3(obj: Ref) returns (ret_0: Ref)
 }
 
 /multiple_interfaces.kt:(998,1003): info: Generated Viper text for take4:
-method pg_c_AbstractWithOpenImplementation4_field(this$dispatch: Ref)
+method pg_c_AbstractWithOpenImplementation4_field(this_dispatch: Ref)
   returns (ret: Ref)
 
 
@@ -209,26 +209,26 @@ method createImpls() returns (ret_0: Ref)
   inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
-method pg_c_AbstractWithOpenImplementation4_field(this$dispatch: Ref)
+method pg_c_AbstractWithOpenImplementation4_field(this_dispatch: Ref)
   returns (ret: Ref)
 
 
-method pg_c_AnyInterfaceWithoutImplementation5_field(this$dispatch: Ref)
+method pg_c_AnyInterfaceWithoutImplementation5_field(this_dispatch: Ref)
   returns (ret: Ref)
 
 
-method pg_c_Impl24_field(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_Impl24_field(this_dispatch: Ref) returns (ret: Ref)
 
 
-method pg_c_InheritingInterfaceWithoutImplementation6_field(this$dispatch: Ref)
+method pg_c_InheritingInterfaceWithoutImplementation6_field(this_dispatch: Ref)
   returns (ret: Ref)
 
 
-method pg_c_InterfaceWithImplementation1_field(this$dispatch: Ref)
+method pg_c_InterfaceWithImplementation1_field(this_dispatch: Ref)
   returns (ret: Ref)
 
 
-method pg_c_InterfaceWithoutImplementation2_field(this$dispatch: Ref)
+method pg_c_InterfaceWithoutImplementation2_field(this_dispatch: Ref)
   returns (ret: Ref)
 
 

@@ -389,14 +389,14 @@ function sp_timesInts(arg1: Ref, arg2: Ref): Ref
     df_intFromRef(arg1) * df_intFromRef(arg2)
 
 
-predicate c_Foo_shared(this$dispatch: Ref) {
-  acc(this$dispatch.bf_x, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.bf_x), df_intType())
+predicate c_Foo_shared(this_dispatch: Ref) {
+  acc(this_dispatch.bf_x, wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.bf_x), df_intType())
 }
 
-predicate c_Foo_unique(this$dispatch: Ref) {
-  acc(this$dispatch.bf_x, wildcard) &&
-  df_isSubtype(df_typeOf(this$dispatch.bf_x), df_intType())
+predicate c_Foo_unique(this_dispatch: Ref) {
+  acc(this_dispatch.bf_x, wildcard) &&
+  df_isSubtype(df_typeOf(this_dispatch.bf_x), df_intType())
 }
 
 method c_Foo_Int(x: Ref) returns (ret: Ref)

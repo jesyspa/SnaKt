@@ -5,13 +5,13 @@ method con_c_D() returns (ret: Ref)
   ensures acc(c_D_unique(ret), write)
 
 
-method pg_c_A_field(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_A_field(this_dispatch: Ref) returns (ret: Ref)
 
 
-method pg_c_C_field(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_C_field(this_dispatch: Ref) returns (ret: Ref)
 
 
-method pg_c_D_field(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_D_field(this_dispatch: Ref) returns (ret: Ref)
 
 
 method testDiamond() returns (ret_0: Ref)
@@ -40,31 +40,31 @@ method con_c_I() returns (ret: Ref)
   ensures acc(c_I_unique(ret), write)
 
 
-method pg_c_E_field(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_E_field(this_dispatch: Ref) returns (ret: Ref)
 
 
-method pg_c_F_field(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_F_field(this_dispatch: Ref) returns (ret: Ref)
 
 
-method pg_c_G_field(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_G_field(this_dispatch: Ref) returns (ret: Ref)
 
 
-method pg_c_H_field(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_H_field(this_dispatch: Ref) returns (ret: Ref)
 
 
-method pg_c_I_field(this$dispatch: Ref) returns (ret: Ref)
+method pg_c_I_field(this_dispatch: Ref) returns (ret: Ref)
 
 
-method ps_c_F_field(this$dispatch: Ref, anon_0: Ref) returns (ret: Ref)
+method ps_c_F_field(this_dispatch: Ref, anon_0: Ref) returns (ret: Ref)
 
 
-method ps_c_G_field(this$dispatch: Ref, anon_0: Ref) returns (ret: Ref)
+method ps_c_G_field(this_dispatch: Ref, anon_0: Ref) returns (ret: Ref)
 
 
-method ps_c_H_field(this$dispatch: Ref, anon_0: Ref) returns (ret: Ref)
+method ps_c_H_field(this_dispatch: Ref, anon_0: Ref) returns (ret: Ref)
 
 
-method ps_c_I_field(this$dispatch: Ref, anon_0: Ref) returns (ret: Ref)
+method ps_c_I_field(this_dispatch: Ref, anon_0: Ref) returns (ret: Ref)
 
 
 method testVarVal() returns (ret_0: Ref)
