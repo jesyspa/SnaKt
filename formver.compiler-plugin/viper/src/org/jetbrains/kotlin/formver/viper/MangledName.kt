@@ -46,17 +46,15 @@ sealed interface NameExpr {
     }
 }
 
-data class Lit(val text: String?) : NameExpr {
-    override fun toParts(): List<NameExpr.Part> {
-        return if (text==null) emptyList()
-        else listOf(NameExpr.Part.Lit(text))
-    }
+data class Lit(val text: String) : NameExpr {
+    override fun toParts(): List<NameExpr.Part> = listOf(NameExpr.Part.Lit(text))
 }
 data class SymbolVal(val symbolicName: SymbolicName) : NameExpr {
     override fun toParts() = listOf(NameExpr.Part.SymbolVal(symbolicName))
 }
 
 data class Join(val items: List<NameExpr>) : NameExpr {
+    constructor (vararg items: NameExpr) : this(items.toList())
     override fun toParts(): List<NameExpr.Part> = buildList {
         items.forEach { item ->
             val parts = item.toParts()

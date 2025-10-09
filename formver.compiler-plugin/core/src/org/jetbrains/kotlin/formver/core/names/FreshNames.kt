@@ -7,6 +7,7 @@ package org.jetbrains.kotlin.formver.core.names
 
 import NameScope
 import SimpleScope
+import org.jetbrains.kotlin.formver.viper.Join
 import org.jetbrains.kotlin.formver.viper.Lit
 import org.jetbrains.kotlin.formver.viper.NameExpr
 import org.jetbrains.kotlin.formver.viper.SymbolicName
@@ -62,12 +63,12 @@ data class ReturnVariableName(val n: Int) : SymbolicName {
 
 data object DispatchReceiverName : SymbolicName {
     override val mangledBaseName: NameExpr
-        get() = Lit($$"this$dispatch")
+        get() = Join(Lit("this"), Lit("dispatch"))
 }
 
 data object ExtensionReceiverName : SymbolicName {
     override val mangledBaseName: NameExpr
-        get() = Lit($$"this$extension")
+        get() = Join(Lit("this"),Lit("extension"))
 }
 
 data class SpecialName(val baseName: String) : SymbolicName {

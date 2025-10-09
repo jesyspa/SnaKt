@@ -51,7 +51,7 @@ data class NameBuilder(val name: SymbolicName) {
 
         val requiredScope: NameExpr? = name.requiredScope
         val fullScope: NameExpr? = name.fullScope
-        val typeName: NameExpr = Lit(name.mangledType)
+        val typeName: NameExpr? = name.mangledType?.let {Lit(it)}
 
         if (!name.requiresType) {
             addCandidate(
