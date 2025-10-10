@@ -66,7 +66,7 @@ sealed interface Stmt : IntoSilver<viper.silver.ast.Stmt> {
     }
 
     data class MethodCall(
-        val methodName: MangledName,
+        val methodName: SymbolicName,
         val args: List<Exp>,
         val targets: List<Exp.LocalVar>,
         val position: Position = Position.NoPosition,
@@ -185,7 +185,7 @@ sealed interface Stmt : IntoSilver<viper.silver.ast.Stmt> {
     }
 
     data class Label(
-        val name: MangledName,
+        val name: SymbolicName,
         val invariants: List<Exp>,
         val position: Position = Position.NoPosition,
         val info: Info = Info.NoInfo,
@@ -202,7 +202,7 @@ sealed interface Stmt : IntoSilver<viper.silver.ast.Stmt> {
     }
 
     data class Goto(
-        val name: MangledName,
+        val name: SymbolicName,
         val position: Position = Position.NoPosition,
         val info: Info = Info.NoInfo,
         val trafos: Trafos = Trafos.NoTrafos,

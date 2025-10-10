@@ -14,7 +14,7 @@ import NameScope
  * approach makes it easier to see where they came from during debugging.
  */
 const val SEPARATOR = "_"
-interface MangledName {
+interface SymbolicName {
     val mangledType: String?
         get() = null
     val mangledScope: NameScope?
@@ -27,7 +27,7 @@ interface MangledName {
 }
 
 context(nameResolver: NameResolver)
-val MangledName.mangled: String
+val SymbolicName.mangled: String
     get() = nameResolver.resolve(this)
 
 sealed interface NameExpr {
@@ -40,7 +40,7 @@ sealed interface NameExpr {
                 else listOf(this)
             }
         }
-        data class SymbolVal(val mangledName: MangledName) : Part {
+        data class SymbolVal(val symbolicName: SymbolicName) : Part {
             override fun toParts(): List<Part> = listOf(this)
         }
     }
@@ -49,8 +49,8 @@ sealed interface NameExpr {
 data class Lit(val text: String) : NameExpr {
     override fun toParts(): List<NameExpr.Part> = listOf(NameExpr.Part.Lit(text))
 }
-data class SymbolVal(val mangledName: MangledName) : NameExpr {
-    override fun toParts() = listOf(NameExpr.Part.SymbolVal(mangledName))
+data class SymbolVal(val symbolicName: SymbolicName) : NameExpr {
+    override fun toParts() = listOf(NameExpr.Part.SymbolVal(symbolicName))
 }
 
 data class Join(val items: List<NameExpr>) : NameExpr {

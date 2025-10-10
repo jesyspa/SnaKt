@@ -8,7 +8,7 @@ package org.jetbrains.kotlin.formver.viper.ast
 import org.jetbrains.kotlin.formver.viper.*
 
 abstract class Method(
-    val name: MangledName,
+    val name: SymbolicName,
     val pos: Position = Position.NoPosition,
     val info: Info = Info.NoInfo,
     val trafos: Trafos = Trafos.NoTrafos,
@@ -43,7 +43,7 @@ abstract class Method(
 }
 
 class UserMethod(
-    name: MangledName,
+    name: SymbolicName,
     override val formalArgs: List<Declaration.LocalVarDecl>,
     returnVar: Declaration.LocalVarDecl,
     override val pres: List<Exp>,
@@ -57,7 +57,7 @@ class UserMethod(
 }
 
 abstract class BuiltInMethod(
-    name: MangledName,
+    name: SymbolicName,
     pos: Position = Position.NoPosition,
     info: Info = Info.NoInfo,
     trafos: Trafos = Trafos.NoTrafos,

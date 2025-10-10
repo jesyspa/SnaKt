@@ -9,13 +9,13 @@ import org.jetbrains.kotlin.formver.core.asPosition
 import org.jetbrains.kotlin.formver.core.embeddings.expression.ExpEmbedding
 import org.jetbrains.kotlin.formver.core.linearization.LinearizationContext
 import org.jetbrains.kotlin.formver.core.linearization.pureToViper
-import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.ast.Label
 import org.jetbrains.kotlin.formver.viper.ast.Stmt
 
-data class LabelLink(val name: MangledName)
+data class LabelLink(val name: SymbolicName)
 
-data class LabelEmbedding(val name: MangledName, val invariants: List<ExpEmbedding> = emptyList())
+data class LabelEmbedding(val name: SymbolicName, val invariants: List<ExpEmbedding> = emptyList())
 
 fun LabelEmbedding.toLink() = LabelLink(name)
 

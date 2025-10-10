@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.formver.core.embeddings.expression.OperatorExpEmbedd
 import org.jetbrains.kotlin.formver.core.embeddings.types.buildFunctionPretype
 import org.jetbrains.kotlin.formver.core.embeddings.types.equalToType
 import org.jetbrains.kotlin.formver.core.embeddings.types.nullableAny
-import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.SymbolicName
 
 /**
  * Base class for implementations of `PartiallySpecialKotlinFunction`s.
@@ -56,7 +56,7 @@ class StringPlusAnyFunction : AbstractPartiallySpecialKotlinFunction("kotlin", c
  * but those functions are generated once per run anyway.
  */
 object PartiallySpecialKotlinFunctions {
-    fun generateAllByName(): Map<MangledName, FunctionEmbedding> =
+    fun generateAllByName(): Map<SymbolicName, FunctionEmbedding> =
         buildList {
             add(StringPlusAnyFunction())
         }.associateBy { it.embedName() }
