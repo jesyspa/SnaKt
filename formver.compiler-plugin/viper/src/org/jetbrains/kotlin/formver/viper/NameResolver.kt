@@ -1,7 +1,5 @@
 package org.jetbrains.kotlin.formver.viper
 
-import org.jetbrains.kotlin.formver.viper.MangledName
-
 /**
  * Interface defining a strategy for converting a [ScopedKotlinName]
  * into an internal Viper identifier ([MangledName]).
@@ -13,9 +11,4 @@ import org.jetbrains.kotlin.formver.viper.MangledName
 interface NameResolver {
     fun resolve(name: MangledName): String
     fun register(name: MangledName)
-}
-
-class DebugNameResolver : NameResolver {
-    override fun resolve(name: MangledName): String = listOfNotNull(name.mangledType, name.mangledScope, name.mangledBaseName).joinToString(SEPARATOR)
-    override fun register(name: MangledName) {}
 }

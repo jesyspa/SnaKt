@@ -5,6 +5,7 @@
 
 package org.jetbrains.kotlin.formver.core.names
 
+import NameScope
 import org.jetbrains.kotlin.name.FqName
 
 class ScopedKotlinNameBuilder {
@@ -27,7 +28,7 @@ class ScopedKotlinNameBuilder {
 
     fun classScope(className: ClassKotlinName) {
         require(scope != null) { "Class scope cannot be top-level" }
-        scope = ClassScope(scope!!, className)
+        scope = ClassScope(ScopedKotlinName(scope!!, className))
     }
 
     fun publicScope() {
