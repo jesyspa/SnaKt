@@ -1,163 +1,162 @@
 /simple_loop.kt:(239,243): info: Generated Viper text for test:
-field bf$size: Ref
+field size: Ref
 
-method f$test$TF$T$Int(p$n: Ref) returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method test(n: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  var l0$it: Ref
-  var l0$holds: Ref
-  var anon$0: Ref
-  inhale df$rt$isSubtype(df$rt$typeOf(p$n), df$rt$intType())
-  l0$it := df$rt$intToRef(0)
-  l0$holds := df$rt$boolToRef(true)
-  label lbl$continue$0
-    invariant df$rt$isSubtype(df$rt$typeOf(l0$it), df$rt$intType())
-    invariant df$rt$isSubtype(df$rt$typeOf(l0$holds), df$rt$boolType())
-    invariant df$rt$isSubtype(df$rt$typeOf(p$n), df$rt$intType())
-    invariant df$rt$intFromRef(l0$it) <= 10
-    invariant df$rt$boolFromRef(l0$holds)
-  anon$0 := sp$ltInts(l0$it, df$rt$intToRef(10))
-  if (df$rt$boolFromRef(anon$0)) {
-    l0$it := sp$plusInts(l0$it, df$rt$intToRef(1))
-    goto lbl$continue$0
+  var it: Ref
+  var holds: Ref
+  var anon_0: Ref
+  inhale df_isSubtype(df_typeOf(n), df_intType())
+  it := df_intToRef(0)
+  holds := df_boolToRef(true)
+  label lbl_continue_0
+    invariant df_isSubtype(df_typeOf(it), df_intType())
+    invariant df_isSubtype(df_typeOf(holds), df_boolType())
+    invariant df_isSubtype(df_typeOf(n), df_intType())
+    invariant df_intFromRef(it) <= 10
+    invariant df_boolFromRef(holds)
+  anon_0 := sp_ltInts(it, df_intToRef(10))
+  if (df_boolFromRef(anon_0)) {
+    it := sp_plusInts(it, df_intToRef(1))
+    goto lbl_continue_0
   }
-  label lbl$break$0
-  assert df$rt$isSubtype(df$rt$typeOf(l0$it), df$rt$intType())
-  assert df$rt$isSubtype(df$rt$typeOf(l0$holds), df$rt$boolType())
-  assert df$rt$isSubtype(df$rt$typeOf(p$n), df$rt$intType())
-  assert df$rt$intFromRef(l0$it) <= 10
-  assert df$rt$boolFromRef(l0$holds)
-  assert df$rt$intFromRef(l0$it) == 10
-  if (df$rt$intFromRef(l0$it) <= df$rt$intFromRef(p$n)) {
-    var anon$1: Ref
-    label lbl$continue$1
-      invariant df$rt$isSubtype(df$rt$typeOf(l0$it), df$rt$intType())
-      invariant df$rt$isSubtype(df$rt$typeOf(l0$holds), df$rt$boolType())
-      invariant df$rt$isSubtype(df$rt$typeOf(p$n), df$rt$intType())
-      invariant df$rt$intFromRef(l0$it) <= df$rt$intFromRef(p$n)
-      invariant df$rt$boolFromRef(l0$holds)
-    anon$1 := sp$ltInts(l0$it, p$n)
-    if (df$rt$boolFromRef(anon$1)) {
-      l0$it := sp$plusInts(l0$it, df$rt$intToRef(1))
-      goto lbl$continue$1
+  label lbl_break_0
+  assert df_isSubtype(df_typeOf(it), df_intType())
+  assert df_isSubtype(df_typeOf(holds), df_boolType())
+  assert df_isSubtype(df_typeOf(n), df_intType())
+  assert df_intFromRef(it) <= 10
+  assert df_boolFromRef(holds)
+  assert df_intFromRef(it) == 10
+  if (df_intFromRef(it) <= df_intFromRef(n)) {
+    var anon_1: Ref
+    label lbl_continue_1
+      invariant df_isSubtype(df_typeOf(it), df_intType())
+      invariant df_isSubtype(df_typeOf(holds), df_boolType())
+      invariant df_isSubtype(df_typeOf(n), df_intType())
+      invariant df_intFromRef(it) <= df_intFromRef(n)
+      invariant df_boolFromRef(holds)
+    anon_1 := sp_ltInts(it, n)
+    if (df_boolFromRef(anon_1)) {
+      it := sp_plusInts(it, df_intToRef(1))
+      goto lbl_continue_1
     }
-    label lbl$break$1
-    assert df$rt$isSubtype(df$rt$typeOf(l0$it), df$rt$intType())
-    assert df$rt$isSubtype(df$rt$typeOf(l0$holds), df$rt$boolType())
-    assert df$rt$isSubtype(df$rt$typeOf(p$n), df$rt$intType())
-    assert df$rt$intFromRef(l0$it) <= df$rt$intFromRef(p$n)
-    assert df$rt$boolFromRef(l0$holds)
-    assert df$rt$intFromRef(l0$it) == df$rt$intFromRef(p$n)
+    label lbl_break_1
+    assert df_isSubtype(df_typeOf(it), df_intType())
+    assert df_isSubtype(df_typeOf(holds), df_boolType())
+    assert df_isSubtype(df_typeOf(n), df_intType())
+    assert df_intFromRef(it) <= df_intFromRef(n)
+    assert df_boolFromRef(holds)
+    assert df_intFromRef(it) == df_intFromRef(n)
   }
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  label lbl_ret_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /simple_loop.kt:(652,666): info: Generated Viper text for loopInsideLoop:
-method f$loopInsideLoop$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method loopInsideLoop() returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  var l0$i: Ref
-  var anon$0: Ref
-  l0$i := df$rt$intToRef(0)
-  label lbl$continue$0
-    invariant df$rt$isSubtype(df$rt$typeOf(l0$i), df$rt$intType())
-    invariant df$rt$intFromRef(l0$i) <= 10
-  anon$0 := sp$ltInts(l0$i, df$rt$intToRef(10))
-  if (df$rt$boolFromRef(anon$0)) {
-    var l1$j: Ref
-    var anon$1: Ref
-    l1$j := sp$plusInts(l0$i, df$rt$intToRef(1))
-    label lbl$continue$1
-      invariant df$rt$isSubtype(df$rt$typeOf(l1$j), df$rt$intType())
-      invariant df$rt$isSubtype(df$rt$typeOf(l0$i), df$rt$intType())
-      invariant df$rt$intFromRef(l0$i) < df$rt$intFromRef(l1$j)
-      invariant df$rt$intFromRef(l1$j) <= 10
-    anon$1 := sp$ltInts(l1$j, df$rt$intToRef(10))
-    if (df$rt$boolFromRef(anon$1)) {
-      l1$j := sp$plusInts(l1$j, df$rt$intToRef(1))
-      goto lbl$continue$1
+  var i: Ref
+  var anon_0: Ref
+  i := df_intToRef(0)
+  label lbl_continue_0
+    invariant df_isSubtype(df_typeOf(i), df_intType())
+    invariant df_intFromRef(i) <= 10
+  anon_0 := sp_ltInts(i, df_intToRef(10))
+  if (df_boolFromRef(anon_0)) {
+    var j: Ref
+    var anon_1: Ref
+    j := sp_plusInts(i, df_intToRef(1))
+    label lbl_continue_1
+      invariant df_isSubtype(df_typeOf(j), df_intType())
+      invariant df_isSubtype(df_typeOf(i), df_intType())
+      invariant df_intFromRef(i) < df_intFromRef(j)
+      invariant df_intFromRef(j) <= 10
+    anon_1 := sp_ltInts(j, df_intToRef(10))
+    if (df_boolFromRef(anon_1)) {
+      j := sp_plusInts(j, df_intToRef(1))
+      goto lbl_continue_1
     }
-    label lbl$break$1
-    assert df$rt$isSubtype(df$rt$typeOf(l1$j), df$rt$intType())
-    assert df$rt$isSubtype(df$rt$typeOf(l0$i), df$rt$intType())
-    assert df$rt$intFromRef(l0$i) < df$rt$intFromRef(l1$j)
-    assert df$rt$intFromRef(l1$j) <= 10
-    l0$i := sp$plusInts(l0$i, df$rt$intToRef(1))
-    goto lbl$continue$0
+    label lbl_break_1
+    assert df_isSubtype(df_typeOf(j), df_intType())
+    assert df_isSubtype(df_typeOf(i), df_intType())
+    assert df_intFromRef(i) < df_intFromRef(j)
+    assert df_intFromRef(j) <= 10
+    i := sp_plusInts(i, df_intToRef(1))
+    goto lbl_continue_0
   }
-  label lbl$break$0
-  assert df$rt$isSubtype(df$rt$typeOf(l0$i), df$rt$intType())
-  assert df$rt$intFromRef(l0$i) <= 10
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  label lbl_break_0
+  assert df_isSubtype(df_typeOf(i), df_intType())
+  assert df_intFromRef(i) <= 10
+  label lbl_ret_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /simple_loop.kt:(974,983): info: Generated Viper text for withBreak:
-field bf$size: Ref
+field size: Ref
 
-method f$withBreak$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method withBreak() returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  var l0$i: Ref
-  var anon$0: Ref
-  l0$i := df$rt$intToRef(0)
-  label lbl$continue$0
-    invariant df$rt$isSubtype(df$rt$typeOf(l0$i), df$rt$intType())
-    invariant df$rt$intFromRef(l0$i) <= 10
-  anon$0 := df$rt$boolToRef(true)
-  if (df$rt$boolFromRef(anon$0)) {
-    if (df$rt$intFromRef(l0$i) >= 10) {
-      goto lbl$break$0
+  var i: Ref
+  var anon_0: Ref
+  i := df_intToRef(0)
+  label lbl_continue_0
+    invariant df_isSubtype(df_typeOf(i), df_intType())
+    invariant df_intFromRef(i) <= 10
+  anon_0 := df_boolToRef(true)
+  if (df_boolFromRef(anon_0)) {
+    if (df_intFromRef(i) >= 10) {
+      goto lbl_break_0
     }
-    goto lbl$continue$0
+    goto lbl_continue_0
   }
-  label lbl$break$0
-  assert df$rt$isSubtype(df$rt$typeOf(l0$i), df$rt$intType())
-  assert df$rt$intFromRef(l0$i) <= 10
-  assert df$rt$intFromRef(l0$i) == 10
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  label lbl_break_0
+  assert df_isSubtype(df_typeOf(i), df_intType())
+  assert df_intFromRef(i) <= 10
+  assert df_intFromRef(i) == 10
+  label lbl_ret_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /simple_loop.kt:(1230,1256): info: Generated Viper text for test_boolean_postcondition:
-field bf$e: Ref
+field bf_e: Ref
 
-field bf$size: Ref
+field size: Ref
 
-method con$c$WithVar$T$Int(p$e: Ref) returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$WithVar())
-  ensures acc(p$c$WithVar$shared(ret), wildcard)
-  ensures acc(p$c$WithVar$unique(ret), write)
-
-
-method f$c$WithVar$doSomething$TF$T$WithVar(this$dispatch: Ref)
-  returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$boolType())
+method c_WithVar_Int(e: Ref) returns (ret: Ref)
+  ensures df_isSubtype(df_typeOf(ret), df_c_WithVar())
+  ensures acc(c_WithVar_shared(ret), wildcard)
+  ensures acc(c_WithVar_unique(ret), write)
 
 
-method f$test_boolean_postcondition$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method c_WithVar_doSomething(this_dispatch: Ref) returns (ret: Ref)
+  ensures df_isSubtype(df_typeOf(ret), df_boolType())
+
+
+method test_boolean_postcondition() returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  var l0$withVar: Ref
-  var l0$boolean: Ref
-  var anon$0: Ref
-  l0$withVar := con$c$WithVar$T$Int(df$rt$intToRef(42))
-  l0$boolean := df$rt$boolToRef(true)
-  label lbl$continue$0
-    invariant acc(p$c$WithVar$shared(l0$withVar), wildcard)
-    invariant df$rt$isSubtype(df$rt$typeOf(l0$withVar), df$rt$c$WithVar())
-    invariant df$rt$isSubtype(df$rt$typeOf(l0$boolean), df$rt$boolType())
-  anon$0 := l0$boolean
-  if (df$rt$boolFromRef(anon$0)) {
-    l0$boolean := f$c$WithVar$doSomething$TF$T$WithVar(l0$withVar)
-    goto lbl$continue$0
+  var withVar: Ref
+  var boolean: Ref
+  var anon_0: Ref
+  withVar := c_WithVar_Int(df_intToRef(42))
+  boolean := df_boolToRef(true)
+  label lbl_continue_0
+    invariant acc(c_WithVar_shared(withVar), wildcard)
+    invariant df_isSubtype(df_typeOf(withVar), df_c_WithVar())
+    invariant df_isSubtype(df_typeOf(boolean), df_boolType())
+  anon_0 := boolean
+  if (df_boolFromRef(anon_0)) {
+    boolean := c_WithVar_doSomething(withVar)
+    goto lbl_continue_0
   }
-  label lbl$break$0
-  assert acc(p$c$WithVar$shared(l0$withVar), wildcard)
-  assert df$rt$isSubtype(df$rt$typeOf(l0$withVar), df$rt$c$WithVar())
-  assert df$rt$isSubtype(df$rt$typeOf(l0$boolean), df$rt$boolType())
-  assert !df$rt$boolFromRef(l0$boolean)
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  label lbl_break_0
+  assert acc(c_WithVar_shared(withVar), wildcard)
+  assert df_isSubtype(df_typeOf(withVar), df_c_WithVar())
+  assert df_isSubtype(df_typeOf(boolean), df_boolType())
+  assert !df_boolFromRef(boolean)
+  label lbl_ret_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }

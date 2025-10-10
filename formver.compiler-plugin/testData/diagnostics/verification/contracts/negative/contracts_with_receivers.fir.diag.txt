@@ -1,47 +1,47 @@
 /contracts_with_receivers.kt:(148,151): info: Generated Viper text for is2:
-method f$c$Class$is2$TF$T$Class(this$dispatch: Ref) returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
-  ensures df$rt$boolFromRef(ret$0) == true ==>
-    df$rt$isSubtype(df$rt$typeOf(this$dispatch), df$rt$c$Impl1())
+method c_Class_is2(this_dispatch: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
+  ensures df_boolFromRef(ret_0) == true ==>
+    df_isSubtype(df_typeOf(this_dispatch), df_c_Impl1())
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(this$dispatch), df$rt$c$Class())
-  inhale acc(p$c$Class$shared(this$dispatch), wildcard)
-  ret$0 := df$rt$boolToRef(df$rt$isSubtype(df$rt$typeOf(this$dispatch), df$rt$c$Impl2()))
-  goto lbl$ret$0
-  label lbl$ret$0
+  inhale df_isSubtype(df_typeOf(this_dispatch), df_c_Class())
+  inhale acc(c_Class_shared(this_dispatch), wildcard)
+  ret_0 := df_boolToRef(df_isSubtype(df_typeOf(this_dispatch), df_c_Impl2()))
+  goto lbl_0
+  label lbl_0
 }
 
 /contracts_with_receivers.kt:(196,239): warning: Cannot verify that if a true value is returned then this is Impl1.
 
 /contracts_with_receivers.kt:(341,359): info: Generated Viper text for is1butWithDispatch:
-method f$c$Class$is1butWithDispatch$TF$T$Class$T$Class(this$dispatch: Ref, this$extension: Ref)
-  returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
-  ensures df$rt$boolFromRef(ret$0) == true ==>
-    df$rt$isSubtype(df$rt$typeOf(this$extension), df$rt$c$Impl2())
+method c_Class_is1butWithDispatch(this_dispatch: Ref, this_extension: Ref)
+  returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
+  ensures df_boolFromRef(ret_0) == true ==>
+    df_isSubtype(df_typeOf(this_extension), df_c_Impl2())
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(this$dispatch), df$rt$c$Class())
-  inhale acc(p$c$Class$shared(this$dispatch), wildcard)
-  inhale df$rt$isSubtype(df$rt$typeOf(this$extension), df$rt$c$Class())
-  inhale acc(p$c$Class$shared(this$extension), wildcard)
-  ret$0 := df$rt$boolToRef(df$rt$isSubtype(df$rt$typeOf(this$extension), df$rt$c$Impl1()))
-  goto lbl$ret$0
-  label lbl$ret$0
+  inhale df_isSubtype(df_typeOf(this_dispatch), df_c_Class())
+  inhale acc(c_Class_shared(this_dispatch), wildcard)
+  inhale df_isSubtype(df_typeOf(this_extension), df_c_Class())
+  inhale acc(c_Class_shared(this_extension), wildcard)
+  ret_0 := df_boolToRef(df_isSubtype(df_typeOf(this_extension), df_c_Impl1()))
+  goto lbl_0
+  label lbl_0
 }
 
 /contracts_with_receivers.kt:(404,460): warning: Cannot verify that if a true value is returned then this is Impl2.
 
 /contracts_with_receivers.kt:(618,621): info: Generated Viper text for is1:
-method f$is1$TF$T$Class(this$extension: Ref) returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$boolType())
-  ensures df$rt$boolFromRef(ret$0) == true ==>
-    df$rt$isSubtype(df$rt$typeOf(this$extension), df$rt$c$Impl2())
+method is1(this_extension: Ref) returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_boolType())
+  ensures df_boolFromRef(ret_0) == true ==>
+    df_isSubtype(df_typeOf(this_extension), df_c_Impl2())
 {
-  inhale df$rt$isSubtype(df$rt$typeOf(this$extension), df$rt$c$Class())
-  inhale acc(p$c$Class$shared(this$extension), wildcard)
-  ret$0 := df$rt$boolToRef(df$rt$isSubtype(df$rt$typeOf(this$extension), df$rt$c$Impl1()))
-  goto lbl$ret$0
-  label lbl$ret$0
+  inhale df_isSubtype(df_typeOf(this_extension), df_c_Class())
+  inhale acc(c_Class_shared(this_extension), wildcard)
+  ret_0 := df_boolToRef(df_isSubtype(df_typeOf(this_extension), df_c_Impl1()))
+  goto lbl_0
+  label lbl_0
 }
 
 /contracts_with_receivers.kt:(658,699): warning: Cannot verify that if a true value is returned then this is Impl2.
