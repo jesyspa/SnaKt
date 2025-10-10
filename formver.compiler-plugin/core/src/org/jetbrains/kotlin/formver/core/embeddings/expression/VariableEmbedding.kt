@@ -23,13 +23,13 @@ import org.jetbrains.kotlin.formver.core.embeddings.types.fillHoles
 import org.jetbrains.kotlin.formver.core.embeddings.types.injectionOrNull
 import org.jetbrains.kotlin.formver.core.names.AnonymousBuiltinName
 import org.jetbrains.kotlin.formver.core.names.AnonymousName
-import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.*
 import org.jetbrains.kotlin.formver.viper.mangled
 
 sealed interface VariableEmbedding : PureExpEmbedding, PropertyAccessEmbedding {
-    val name: MangledName
+    val name: SymbolicName
     override val type: TypeEmbedding
     val isUnique: Boolean
         get() = false
@@ -75,7 +75,7 @@ sealed interface VariableEmbedding : PureExpEmbedding, PropertyAccessEmbedding {
  * in a type signature.
  */
 class PlaceholderVariableEmbedding(
-    override val name: MangledName,
+    override val name: SymbolicName,
     override val type: TypeEmbedding,
     override val isUnique: Boolean = false,
     override val isBorrowed: Boolean = false,
@@ -85,11 +85,11 @@ class PlaceholderVariableEmbedding(
  * Embedding of an anonymous variable.
  */
 class AnonymousVariableEmbedding(n: Int, override val type: TypeEmbedding) : VariableEmbedding {
-    override val name: MangledName = AnonymousName(n)
+    override val name: SymbolicName = AnonymousName(n)
 }
 
 class AnonymousBuiltinVariableEmbedding(n: Int, override val type: TypeEmbedding) : VariableEmbedding {
-    override val name: MangledName = AnonymousBuiltinName(n)
+    override val name: SymbolicName = AnonymousBuiltinName(n)
     private val injection: Injection? = type.injectionOrNull
     override fun toViper(source: KtSourceElement?): Exp {
         val inner = Exp.LocalVar(name, injection.viperType, source.asPosition, sourceRole.asInfo)
@@ -110,7 +110,7 @@ class AnonymousBuiltinVariableEmbedding(n: Int, override val type: TypeEmbedding
  * Embedding of a variable that comes from some FIR element.
  */
 class FirVariableEmbedding(
-    override val name: MangledName,
+    override val name: SymbolicName,
     override val type: TypeEmbedding,
     val symbol: FirBasedSymbol<*>,
     override val isUnique: Boolean = false,
@@ -125,7 +125,7 @@ class FirVariableEmbedding(
  *
  * This can still correspond to an earlier variable, but it no longer carries any interesting information.
  */
-class LinearizationVariableEmbedding(override val name: MangledName, override val type: TypeEmbedding) :
+class LinearizationVariableEmbedding(override val name: SymbolicName, override val type: TypeEmbedding) :
     VariableEmbedding
 
 val ExpEmbedding.underlyingVariable

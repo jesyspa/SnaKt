@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.formver.core.embeddings.properties.UserFieldEmbeddin
 import org.jetbrains.kotlin.formver.core.linearization.pureToViper
 import org.jetbrains.kotlin.formver.core.names.DispatchReceiverName
 import org.jetbrains.kotlin.formver.core.names.SimpleKotlinName
-import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.PermExp
 import org.jetbrains.kotlin.formver.viper.ast.Predicate
@@ -24,7 +24,7 @@ internal class ClassPredicateBuilder private constructor(private val details: Cl
 
     companion object {
         fun build(
-            classType: ClassEmbeddingDetails, predicateName: MangledName,
+            classType: ClassEmbeddingDetails, predicateName: SymbolicName,
             action: ClassPredicateBuilder.() -> Unit,
         ): Predicate {
             val builder = ClassPredicateBuilder(classType)

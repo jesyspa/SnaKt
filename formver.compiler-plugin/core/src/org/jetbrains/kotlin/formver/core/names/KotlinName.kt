@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.FunctionTypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.PretypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.asTypeEmbedding
-import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.SEPARATOR
 import org.jetbrains.kotlin.formver.viper.mangled
@@ -22,7 +22,7 @@ import org.jetbrains.kotlin.name.Name
  * This is a little more general than the `Name` type in Kotlin: we also use this
  * to represent getters and setters, for example.
  */
-sealed interface KotlinName : MangledName
+sealed interface KotlinName : SymbolicName
 
 data class SimpleKotlinName(val name: Name) : KotlinName {
     context(nameResolver: NameResolver)
@@ -98,7 +98,7 @@ data class PretypeName(val name: String) : KotlinName {
         get() = name
 }
 
-data class SetOfNames(val names: List<MangledName>) : KotlinName {
+data class SetOfNames(val names: List<SymbolicName>) : KotlinName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = names.joinToString(SEPARATOR) { it.mangled }
