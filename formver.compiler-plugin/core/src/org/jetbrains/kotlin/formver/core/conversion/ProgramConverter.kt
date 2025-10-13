@@ -35,7 +35,7 @@ import org.jetbrains.kotlin.formver.core.isCustom
 import org.jetbrains.kotlin.formver.core.isUnique
 import org.jetbrains.kotlin.formver.core.names.*
 import org.jetbrains.kotlin.formver.core.shouldBeInlined
-import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.ast.NamedDomainAxiomLabel
 import org.jetbrains.kotlin.formver.viper.ast.Program
 import org.jetbrains.kotlin.utils.addIfNotNull
@@ -54,21 +54,21 @@ class ProgramConverter(
     override val errorCollector: ErrorCollector
 ) :
     ProgramConversionContext {
-    private val methods: MutableMap<MangledName, FunctionEmbedding> =
+    private val methods: MutableMap<SymbolicName, FunctionEmbedding> =
         buildMap {
             putAll(SpecialKotlinFunctions.byName)
             putAll(PartiallySpecialKotlinFunctions.generateAllByName())
         }.toMutableMap()
-    private val classes: MutableMap<MangledName, ClassTypeEmbedding> = mutableMapOf()
-    private val properties: MutableMap<MangledName, PropertyEmbedding> = mutableMapOf()
+    private val classes: MutableMap<SymbolicName, ClassTypeEmbedding> = mutableMapOf()
+    private val properties: MutableMap<SymbolicName, PropertyEmbedding> = mutableMapOf()
     private val fields: MutableSet<FieldEmbedding> = mutableSetOf()
     // Cast is valid since we check that values are not null. We specify the type for `filterValues` explicitly to ensure there's no
     // loss of type information earlier.
     @Suppress("UNCHECKED_CAST")
-    val debugExpEmbeddings: Map<MangledName, ExpEmbedding>
+    val debugExpEmbeddings: Map<SymbolicName, ExpEmbedding>
         get() = methods
             .mapValues { (it.value as? UserFunctionEmbedding)?.body?.debugExpEmbedding }
-            .filterValues { value: ExpEmbedding? -> value != null } as Map<MangledName, ExpEmbedding>
+            .filterValues { value: ExpEmbedding? -> value != null } as Map<SymbolicName, ExpEmbedding>
 
     override val whileIndexProducer = indexProducer()
     override val catchLabelNameProducer = simpleFreshEntityProducer(::CatchLabelName)
@@ -109,7 +109,7 @@ class ProgramConverter(
                 nameResolver.register(func.name.funcName)
             }
             (domain as? RuntimeTypeDomain)?.axioms?.forEach { axiom ->
-                if (axiom.name is NamedDomainAxiomLabel) nameResolver.register(axiom.name as MangledName)
+                if (axiom.name is NamedDomainAxiomLabel) nameResolver.register(axiom.name as SymbolicName)
             }
         }
         fields.forEach {

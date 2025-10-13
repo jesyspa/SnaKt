@@ -22,7 +22,7 @@ import org.jetbrains.kotlin.formver.core.embeddings.expression.toBlock
 import org.jetbrains.kotlin.formver.core.embeddings.types.buildFunctionPretype
 import org.jetbrains.kotlin.formver.core.embeddings.types.nullableAny
 import org.jetbrains.kotlin.formver.core.names.*
-import org.jetbrains.kotlin.formver.viper.MangledName
+import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
@@ -52,7 +52,7 @@ object SpecialKotlinFunctions {
         ClassKotlinName(listOf("InvariantBuilder"))
     }
 
-    val byName: Map<MangledName, FunctionEmbedding> = buildFullySpecialFunctions {
+    val byName: Map<SymbolicName, FunctionEmbedding> = buildFullySpecialFunctions {
         val intIntToIntType = buildFunctionPretype {
             withDispatchReceiver { int() }
             withParam { int() }
