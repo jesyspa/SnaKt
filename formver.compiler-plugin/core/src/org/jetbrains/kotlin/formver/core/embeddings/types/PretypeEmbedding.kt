@@ -36,39 +36,39 @@ interface PretypeEmbedding : RuntimeTypeHolder, TypeInvariantHolder {
 
 data object UnitTypeEmbedding : PretypeEmbedding {
     override val runtimeType = RuntimeTypeDomain.unitType()
-    override val name = PretypeName(Lit("Unit"))
+    override val name = PretypeName("Unit")
 }
 
 data object NothingTypeEmbedding : PretypeEmbedding {
     override val runtimeType = RuntimeTypeDomain.nothingType()
-    override val name = PretypeName(Lit("Nothing"))
+    override val name = PretypeName("Nothing")
 
     override fun pureInvariants(): List<TypeInvariantEmbedding> = listOf(FalseTypeInvariant)
 }
 
 data object AnyTypeEmbedding : PretypeEmbedding {
     override val runtimeType = RuntimeTypeDomain.anyType()
-    override val name = PretypeName(Lit("Any"))
+    override val name = PretypeName("Any")
 }
 
 data object IntTypeEmbedding : PretypeEmbedding {
     override val runtimeType = RuntimeTypeDomain.intType()
-    override val name = PretypeName(Lit("Int"))
+    override val name = PretypeName("Int")
 }
 
 data object BooleanTypeEmbedding : PretypeEmbedding {
     override val runtimeType = RuntimeTypeDomain.boolType()
-    override val name = PretypeName(Lit("Boolean"))
+    override val name = PretypeName("Boolean")
 }
 
 data object CharTypeEmbedding : PretypeEmbedding {
     override val runtimeType = RuntimeTypeDomain.charType()
-    override val name = PretypeName(Lit("Char"))
+    override val name = PretypeName("Char")
 }
 
 data object StringTypeEmbedding : PretypeEmbedding {
     override val runtimeType = RuntimeTypeDomain.stringType()
-    override val name = PretypeName(Lit("String"))
+    override val name = PretypeName("String")
 }
 
 fun PretypeEmbedding.asTypeEmbedding() = TypeEmbedding(this, TypeEmbeddingFlags(nullable = false))

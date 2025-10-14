@@ -87,7 +87,9 @@ data class PredicateKotlinName(val name: String) : KotlinName {
         get() = "p"
 }
 
-data class PretypeName(override val mangledBaseName: NameExpr) : KotlinName
+data class PretypeName(override val mangledBaseName: NameExpr) : KotlinName {
+    constructor(baseName: String) : this(Lit(baseName))
+}
 
 data class TypeName(val pretype: PretypeEmbedding, val nullable: Boolean) : KotlinName {
     override val mangledBaseName: NameExpr
