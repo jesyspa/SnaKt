@@ -98,18 +98,9 @@ class ProgramConverter(
             },
         )
     fun registerTypes() {
-        program.domains.forEach {
-                domain ->
-            (domain as? RuntimeTypeDomain)?.builtinTypes?.forEach {
-                nameResolver.register(it.name)
-            }
-            (domain as? RuntimeTypeDomain)?.nonNullableTypes?.forEach { nameResolver.register(it.name) }
-            (domain as? RuntimeTypeDomain)?.classTypes?.forEach { nameResolver.register(it.value.name) }
-            (domain as? RuntimeTypeDomain)?.functions?.forEach { func ->
-                nameResolver.register(func.name.funcName)
-            }
-            (domain as? RuntimeTypeDomain)?.axioms?.forEach { axiom ->
-                if (axiom.name is NamedDomainAxiomLabel) nameResolver.register(axiom.name as SymbolicName)
+        program.domains.forEach { domain ->
+            with(nameResolver) {
+                (domain as? RuntimeTypeDomain)?.registerDomain()
             }
         }
         fields.forEach {
