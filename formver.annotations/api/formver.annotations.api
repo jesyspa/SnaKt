@@ -26,6 +26,9 @@ public abstract interface annotation class org/jetbrains/kotlin/formver/plugin/N
 public abstract interface annotation class org/jetbrains/kotlin/formver/plugin/NeverVerify : java/lang/annotation/Annotation {
 }
 
+public abstract interface annotation class org/jetbrains/kotlin/formver/plugin/Pure : java/lang/annotation/Annotation {
+}
+
 public abstract interface annotation class org/jetbrains/kotlin/formver/plugin/Unique : java/lang/annotation/Annotation {
 }
 

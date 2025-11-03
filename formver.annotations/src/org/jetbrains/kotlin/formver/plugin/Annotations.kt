@@ -16,3 +16,6 @@ annotation class Unique
 
 @Target(AnnotationTarget.VALUE_PARAMETER)
 annotation class Borrowed
+
+@Target(AnnotationTarget.FUNCTION)
+annotation class Pure
