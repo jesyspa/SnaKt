@@ -7,6 +7,7 @@ package org.jetbrains.kotlin.formver.core.domains
 
 import org.jetbrains.kotlin.formver.core.embeddings.types.ClassTypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.embedClassTypeFunc
+import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.ast.*
 
@@ -410,6 +411,20 @@ class RuntimeTypeDomain(val classes: List<ClassTypeEmbedding>) : BuiltinDomain(R
                     }
                 }
             }
+        }
+    }
+    context(nameResolver: NameResolver)
+    fun registerDomain() {
+        builtinTypes.forEach {
+            nameResolver.register(it.name)
+        }
+        nonNullableTypes.forEach { nameResolver.register(it.name) }
+        classTypes.forEach { nameResolver.register(it.value.name) }
+        functions.forEach { func ->
+            nameResolver.register(func.name.funcName)
+        }
+        axioms.forEach { axiom ->
+            if (axiom.name is NamedDomainAxiomLabel) nameResolver.register(axiom.name as SymbolicName)
         }
     }
 }

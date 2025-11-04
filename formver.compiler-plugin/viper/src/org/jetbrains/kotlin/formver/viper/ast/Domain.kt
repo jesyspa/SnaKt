@@ -5,6 +5,8 @@
 
 package org.jetbrains.kotlin.formver.viper.ast
 
+import NameScope
+import SimpleScope
 import org.jetbrains.kotlin.formver.viper.*
 import viper.silver.ast.AnonymousDomainAxiom
 import viper.silver.ast.NamedDomainAxiom
@@ -17,25 +19,21 @@ import viper.silver.ast.NamedDomainAxiom
 data class DomainName(val baseName: String) : SymbolicName {
     override val mangledType: String
         get() = "d"
-    context(nameResolver: NameResolver)
-    override val mangledBaseName: String
-        get() = baseName
+    override val mangledBaseName: NameExpr
+        get() = Lit(baseName)
 }
 data class UnqualifiedDomainFuncName(val baseName: String) : SymbolicName {
-    context(nameResolver: NameResolver)
-    override val mangledBaseName: String
-        get() = baseName
+    override val mangledBaseName: NameExpr
+        get() = Lit(baseName)
 }
 
 data class QualifiedDomainFuncName(val domainName: DomainName, val funcName: SymbolicName) : SymbolicName {
     override val mangledType: String
         get() = "df"
-    context(nameResolver: NameResolver)
-    override val mangledScope: String
-        get() = domainName.mangledBaseName
-    context(nameResolver: NameResolver)
-    override val mangledBaseName: String
-        get() = funcName.mangled
+    override val mangledScope: NameScope
+        get() = SimpleScope(domainName.mangledBaseName)
+    override val mangledBaseName: NameExpr
+        get() = SymbolVal(funcName)
 }
 
 /** Represents the name of a possible anonymous axiom.
@@ -49,13 +47,10 @@ sealed interface OptionalDomainAxiomLabel {
 
 data class NamedDomainAxiomLabel(override val domainName: DomainName, val baseName: String) :
     OptionalDomainAxiomLabel, SymbolicName {
-    context(nameResolver: NameResolver)
-    override val mangledScope: String
-        get() = domainName.mangledBaseName
-
-    context(nameResolver: NameResolver)
-    override val mangledBaseName: String
-        get() = baseName
+    override val mangledScope: NameScope?
+        get() = SimpleScope(domainName.mangledBaseName)
+    override val mangledBaseName: NameExpr
+        get() = Lit(baseName)
 }
 
 data class AnonymousDomainAxiomLabel(override val domainName: DomainName) : OptionalDomainAxiomLabel

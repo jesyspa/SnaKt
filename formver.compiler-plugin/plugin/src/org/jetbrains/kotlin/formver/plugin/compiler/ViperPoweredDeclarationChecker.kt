@@ -58,6 +58,7 @@ class ViperPoweredDeclarationChecker(private val session: FirSession, private va
             with(programConversionContext.nameResolver) {
                 program.registerAllNames()
             }
+
             getProgramForLogging(program)?.let {
                 reporter.reportOn(
                     declaration.source,

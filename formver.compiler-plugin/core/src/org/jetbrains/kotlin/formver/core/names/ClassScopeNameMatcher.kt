@@ -22,7 +22,7 @@ internal sealed class NameMatcher(val name: SymbolicName) {
 
     protected val scopedName = name as? ScopedKotlinName
     protected val packageName = scopedName?.scope?.packageNameIfAny
-    protected abstract val className: ClassKotlinName?
+    protected abstract val className: ScopedKotlinName?
 
     inline fun ifPackageName(matched: List<String>, action: NameMatcher.() -> Unit) {
         if (packageName == FqName.fromSegments(matched))
@@ -34,7 +34,7 @@ internal sealed class NameMatcher(val name: SymbolicName) {
     }
 
     inline fun ifClassName(vararg segments: String, action: NameMatcher.() -> Unit) {
-        if (className == ClassKotlinName(segments.toList()))
+        if (className?.name == ClassKotlinName(segments.toList()))
             this.action()
     }
 
@@ -49,7 +49,7 @@ internal sealed class NameMatcher(val name: SymbolicName) {
 }
 
 internal class ClassScopeNameMatcher(name: SymbolicName) : NameMatcher(name) {
-    override val className = (scopedName?.scope as? ClassScope)?.className
+    override val className = if (scopedName?.name is ClassKotlinName) scopedName else null
 
     inline fun ifNoReceiver(action: NameMatcher.() -> Unit) {
         if (className == null)
@@ -69,5 +69,5 @@ internal class ClassScopeNameMatcher(name: SymbolicName) : NameMatcher(name) {
 }
 
 internal class GlobalScopeNameMatcher(name: SymbolicName) : NameMatcher(name) {
-    override val className = scopedName?.name as ClassKotlinName?
+    override val className = scopedName
 }
