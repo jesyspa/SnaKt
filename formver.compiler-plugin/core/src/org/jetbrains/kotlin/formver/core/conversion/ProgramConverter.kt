@@ -58,6 +58,7 @@ class ProgramConverter(
             putAll(SpecialKotlinFunctions.byName)
             putAll(PartiallySpecialKotlinFunctions.generateAllByName())
         }.toMutableMap()
+    private val functions: MutableMap<SymbolicName, PureFunctionEmbedding> = mutableMapOf()
     private val classes: MutableMap<SymbolicName, ClassTypeEmbedding> = mutableMapOf()
     private val properties: MutableMap<SymbolicName, PropertyEmbedding> = mutableMapOf()
     private val fields: MutableSet<FieldEmbedding> = mutableSetOf()
@@ -88,7 +89,8 @@ class ProgramConverter(
             // at `FieldEmbedding` level but map to the same Viper.
             fields = SpecialFields.all.map { it.toViper() } +
                      fields.distinctBy { it.name.debugMangled }.map { it.toViper() } ,
-            functions = SpecialFunctions.all,
+            functions = SpecialFunctions.all +
+                     functions.values.mapNotNull { it.viperFunction }.distinctBy { it.name.debugMangled },
             methods = SpecialMethods.all +
                 methods.values.mapNotNull { it.viperMethod }.distinctBy { it.name.debugMangled},
             predicates = classes.values.flatMap {
@@ -120,9 +122,16 @@ class ProgramConverter(
 
         // Note: it is important that `body` is only set after `embedUserFunction` is complete, as we need to
         // place the embedding in the map before processing the body.
-        embedUserFunction(declaration.symbol, signature).apply {
-            body = stmtCtx.convertMethodWithBody(declaration, signature, returnTarget)
+        embedPureUserFunction(declaration.symbol, signature).apply {
+            body = stmtCtx.convertFunctionWithBody(declaration, signature, returnTarget)
         }
+    }
+
+    fun embedPureUserFunction(symbol: FirFunctionSymbol<*>, signature: FullNamedFunctionSignature): PureUserFunctionEmbedding {
+        (functions[signature.name] as? PureUserFunctionEmbedding)?.also { return it }
+        val new = PureUserFunctionEmbedding(processCallable(symbol, signature))
+        functions[signature.name] = new
+        return new
     }
 
     fun embedUserFunction(symbol: FirFunctionSymbol<*>, signature: FullNamedFunctionSignature): UserFunctionEmbedding {

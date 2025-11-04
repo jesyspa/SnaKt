@@ -5,6 +5,7 @@
 
 package org.jetbrains.kotlin.formver.core.embeddings.callables
 
+import org.jetbrains.kotlin.formver.viper.ast.Function
 import org.jetbrains.kotlin.formver.viper.ast.Method
 
 /**
@@ -23,4 +24,9 @@ interface RichCallableEmbedding : CallableEmbedding, FullNamedFunctionSignature 
      * Produces a method header (i.e. method without body) corresponding to this function if necessary.
      */
     fun toViperMethodHeader(): Method?
+
+    /**
+     * Produces a function header (i.e. a function without a body) corresponding to this function if necessary.
+     */
+    fun toViperFunctionHeader(): Function?
 }

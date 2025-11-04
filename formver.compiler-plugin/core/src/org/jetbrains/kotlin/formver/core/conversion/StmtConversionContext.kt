@@ -18,6 +18,7 @@ import org.jetbrains.kotlin.fir.types.isBoolean
 import org.jetbrains.kotlin.fir.types.resolvedType
 import org.jetbrains.kotlin.formver.core.embeddings.FunctionBodyEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.LabelEmbedding
+import org.jetbrains.kotlin.formver.core.embeddings.PureFunctionBodyEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.callables.FullNamedFunctionSignature
 import org.jetbrains.kotlin.formver.core.embeddings.callables.FunctionSignature
 import org.jetbrains.kotlin.formver.core.embeddings.expression.*
@@ -31,6 +32,7 @@ import org.jetbrains.kotlin.formver.core.linearization.SeqnBuilder
 import org.jetbrains.kotlin.formver.core.linearization.SharedLinearizationState
 import org.jetbrains.kotlin.formver.core.purity.checkValidity
 import org.jetbrains.kotlin.formver.viper.SymbolicName
+import org.jetbrains.kotlin.formver.viper.ast.Exp
 import org.jetbrains.kotlin.utils.addIfNotNull
 import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
 import org.jetbrains.kotlin.utils.filterIsInstanceAnd
@@ -253,6 +255,19 @@ fun StmtConversionContext.convertMethodWithBody(
     // TODO: Terminate conversion if purity check fails
     body.checkValidity(declaration.source, errorCollector)
     return FunctionBodyEmbedding(seqnBuilder.block, returnTarget, bodyExp)
+}
+
+fun StmtConversionContext.convertFunctionWithBody(
+    declaration: FirSimpleFunction,
+    signature: FullNamedFunctionSignature,
+    returnTarget: ReturnTarget,
+): PureFunctionBodyEmbedding? {
+    val firBody = declaration.body ?: return null
+    val body = convert(firBody)
+    val bodyExp = FunctionExp(signature, body, returnTarget.label)
+    return PureFunctionBodyEmbedding(
+        Exp.Add(Exp.IntLit(42), Exp.IntLit(42)), returnTarget, bodyExp
+    )
 }
 
 private const val INVALID_STATEMENT_MSG =

@@ -7,8 +7,11 @@ package org.jetbrains.kotlin.formver.core.embeddings
 
 import org.jetbrains.kotlin.formver.core.conversion.ReturnTarget
 import org.jetbrains.kotlin.formver.core.embeddings.callables.FullNamedFunctionSignature
+import org.jetbrains.kotlin.formver.core.embeddings.callables.toViperFunction
 import org.jetbrains.kotlin.formver.core.embeddings.callables.toViperMethod
 import org.jetbrains.kotlin.formver.core.embeddings.expression.ExpEmbedding
+import org.jetbrains.kotlin.formver.viper.ast.Exp
+import org.jetbrains.kotlin.formver.viper.ast.Function
 import org.jetbrains.kotlin.formver.viper.ast.Method
 import org.jetbrains.kotlin.formver.viper.ast.Stmt
 
@@ -19,4 +22,13 @@ data class FunctionBodyEmbedding(
 ) {
     fun toViperMethod(signature: FullNamedFunctionSignature): Method =
         signature.toViperMethod(viperBody, returnTarget.variable)
+}
+
+data class PureFunctionBodyEmbedding(
+    val viperBody: Exp,
+    val returnTarget: ReturnTarget,
+    val debugExpEmbedding: ExpEmbedding? = null
+) {
+    fun toViperFunction(signature: FullNamedFunctionSignature): Function =
+        signature.toViperFunction(viperBody, returnTarget.variable)
 }
