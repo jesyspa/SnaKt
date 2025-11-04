@@ -1,37 +1,37 @@
 /increment.kt:(23,34): info: Generated Viper text for test_simple:
-method f$test_simple$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method test_simple() returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  var l0$x: Ref
-  l0$x := df$rt$intToRef(10)
-  l0$x := sp$plusInts(l0$x, df$rt$intToRef(5))
-  l0$x := sp$minusInts(l0$x, df$rt$intToRef(1))
-  l0$x := sp$minusInts(l0$x, df$rt$intToRef(3))
-  l0$x := sp$plusInts(l0$x, df$rt$intToRef(1))
-  l0$x := sp$timesInts(l0$x, df$rt$intToRef(2))
-  l0$x := sp$divInts(l0$x, df$rt$intToRef(4))
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  var x: Ref
+  x := df_intToRef(10)
+  x := sp_plusInts(x, df_intToRef(5))
+  x := sp_minusInts(x, df_intToRef(1))
+  x := sp_minusInts(x, df_intToRef(3))
+  x := sp_plusInts(x, df_intToRef(1))
+  x := sp_timesInts(x, df_intToRef(2))
+  x := sp_divInts(x, df_intToRef(4))
+  label lbl_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }
 
 /increment.kt:(121,140): info: Generated Viper text for test_postincvrement:
-method f$test_postincvrement$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+method test_postincvrement() returns (ret_0: Ref)
+  ensures df_isSubtype(df_typeOf(ret_0), df_unitType())
 {
-  var l0$x: Ref
-  var l0$first: Ref
-  var anon$0: Ref
-  var l0$second: Ref
-  var anon$1: Ref
-  var l0$unary: Ref
-  l0$x := df$rt$intToRef(10)
-  anon$0 := l0$x
-  l0$x := sp$plusInts(anon$0, df$rt$intToRef(1))
-  l0$first := anon$0
-  anon$1 := l0$x
-  l0$x := sp$minusInts(anon$1, df$rt$intToRef(1))
-  l0$second := anon$1
-  l0$unary := l0$x
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+  var x: Ref
+  var first: Ref
+  var anon_0: Ref
+  var second: Ref
+  var anon_1: Ref
+  var unary: Ref
+  x := df_intToRef(10)
+  anon_0 := x
+  x := sp_plusInts(anon_0, df_intToRef(1))
+  first := anon_0
+  anon_1 := x
+  x := sp_minusInts(anon_1, df_intToRef(1))
+  second := anon_1
+  unary := x
+  label lbl_0
+  inhale df_isSubtype(df_typeOf(ret_0), df_unitType())
 }

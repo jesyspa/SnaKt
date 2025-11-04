@@ -12,8 +12,3 @@ interface NameResolver {
     fun resolve(name: SymbolicName): String
     fun register(name: SymbolicName)
 }
-
-class DebugNameResolver : NameResolver {
-    override fun resolve(name: SymbolicName): String = listOfNotNull(name.mangledType, name.mangledScope, name.mangledBaseName).joinToString(SEPARATOR)
-    override fun register(name: SymbolicName) {}
-}

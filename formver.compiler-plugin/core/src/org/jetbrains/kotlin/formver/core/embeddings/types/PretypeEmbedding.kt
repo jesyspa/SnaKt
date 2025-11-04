@@ -9,6 +9,7 @@ import org.jetbrains.kotlin.formver.core.domains.RuntimeTypeDomain
 import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.PlaintextLeaf
 import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.TreeView
 import org.jetbrains.kotlin.formver.core.names.PretypeName
+import org.jetbrains.kotlin.formver.viper.Lit
 import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.mangled
@@ -35,39 +36,39 @@ interface PretypeEmbedding : RuntimeTypeHolder, TypeInvariantHolder {
 
 data object UnitTypeEmbedding : PretypeEmbedding {
     override val runtimeType = RuntimeTypeDomain.unitType()
-    override val name = PretypeName("Unit")
+    override val name = PretypeName(Lit("Unit"))
 }
 
 data object NothingTypeEmbedding : PretypeEmbedding {
     override val runtimeType = RuntimeTypeDomain.nothingType()
-    override val name = PretypeName("Nothing")
+    override val name = PretypeName(Lit("Nothing"))
 
     override fun pureInvariants(): List<TypeInvariantEmbedding> = listOf(FalseTypeInvariant)
 }
 
 data object AnyTypeEmbedding : PretypeEmbedding {
     override val runtimeType = RuntimeTypeDomain.anyType()
-    override val name = PretypeName("Any")
+    override val name = PretypeName(Lit("Any"))
 }
 
 data object IntTypeEmbedding : PretypeEmbedding {
     override val runtimeType = RuntimeTypeDomain.intType()
-    override val name = PretypeName("Int")
+    override val name = PretypeName(Lit("Int"))
 }
 
 data object BooleanTypeEmbedding : PretypeEmbedding {
     override val runtimeType = RuntimeTypeDomain.boolType()
-    override val name = PretypeName("Boolean")
+    override val name = PretypeName(Lit("Boolean"))
 }
 
 data object CharTypeEmbedding : PretypeEmbedding {
     override val runtimeType = RuntimeTypeDomain.charType()
-    override val name = PretypeName("Char")
+    override val name = PretypeName(Lit("Char"))
 }
 
 data object StringTypeEmbedding : PretypeEmbedding {
     override val runtimeType = RuntimeTypeDomain.stringType()
-    override val name = PretypeName("String")
+    override val name = PretypeName(Lit("String"))
 }
 
 fun PretypeEmbedding.asTypeEmbedding() = TypeEmbedding(this, TypeEmbeddingFlags(nullable = false))
