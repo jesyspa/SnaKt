@@ -257,19 +257,6 @@ fun StmtConversionContext.convertMethodWithBody(
     return FunctionBodyEmbedding(seqnBuilder.block, returnTarget, bodyExp)
 }
 
-fun StmtConversionContext.convertFunctionWithBody(
-    declaration: FirSimpleFunction,
-    signature: FullNamedFunctionSignature,
-    returnTarget: ReturnTarget,
-): PureFunctionBodyEmbedding? {
-    val firBody = declaration.body ?: return null
-    val body = convert(firBody)
-    val bodyExp = FunctionExp(signature, body, returnTarget.label)
-    return PureFunctionBodyEmbedding(
-        Exp.Add(Exp.IntLit(42), Exp.IntLit(42)), returnTarget, bodyExp
-    )
-}
-
 private const val INVALID_STATEMENT_MSG =
     "Every statement in invariant block must be a pure boolean invariant."
 

@@ -104,7 +104,7 @@ fun FullNamedFunctionSignature.toViperFunction(
     formalArgs.map { it.toLocalVarDecl() },
     Type.Int,
     getPreconditions().pureToViper(toBuiltin = true),
-    getPostconditions(returnVariable).pureToViper(toBuiltin = true),
+    emptyList(),
     body,
     declarationSource.asPosition
 )

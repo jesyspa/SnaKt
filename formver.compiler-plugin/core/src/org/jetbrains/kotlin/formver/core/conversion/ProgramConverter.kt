@@ -24,17 +24,20 @@ import org.jetbrains.kotlin.formver.common.ErrorCollector
 import org.jetbrains.kotlin.formver.common.PluginConfiguration
 import org.jetbrains.kotlin.formver.common.UnsupportedFeatureBehaviour
 import org.jetbrains.kotlin.formver.core.domains.RuntimeTypeDomain
+import org.jetbrains.kotlin.formver.core.embeddings.PureFunctionBodyEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.callables.*
 import org.jetbrains.kotlin.formver.core.embeddings.expression.*
 import org.jetbrains.kotlin.formver.core.embeddings.properties.*
 import org.jetbrains.kotlin.formver.core.embeddings.types.*
 import org.jetbrains.kotlin.formver.core.isBorrowed
 import org.jetbrains.kotlin.formver.core.isCustom
+import org.jetbrains.kotlin.formver.core.isPure
 import org.jetbrains.kotlin.formver.core.isUnique
 import org.jetbrains.kotlin.formver.core.names.*
 import org.jetbrains.kotlin.formver.core.shouldBeInlined
 import org.jetbrains.kotlin.formver.names.SimpleNameResolver
 import org.jetbrains.kotlin.formver.viper.SymbolicName
+import org.jetbrains.kotlin.formver.viper.ast.Exp
 import org.jetbrains.kotlin.formver.viper.ast.Program
 import org.jetbrains.kotlin.formver.viper.debugMangled
 import org.jetbrains.kotlin.utils.addIfNotNull
@@ -122,9 +125,16 @@ class ProgramConverter(
 
         // Note: it is important that `body` is only set after `embedUserFunction` is complete, as we need to
         // place the embedding in the map before processing the body.
-        embedPureUserFunction(declaration.symbol, signature).apply {
-            body = stmtCtx.convertFunctionWithBody(declaration, signature, returnTarget)
+        if (declaration.symbol.isPure(session)) {
+            embedPureUserFunction(declaration.symbol, signature).apply {
+                body = PureFunctionBodyEmbedding(Exp.IntLit(42), returnTarget)
+            }
+        } else {
+            embedUserFunction(declaration.symbol, signature).apply {
+                body = stmtCtx.convertMethodWithBody(declaration, signature, returnTarget)
+            }
         }
+
     }
 
     fun embedPureUserFunction(symbol: FirFunctionSymbol<*>, signature: FullNamedFunctionSignature): PureUserFunctionEmbedding {
