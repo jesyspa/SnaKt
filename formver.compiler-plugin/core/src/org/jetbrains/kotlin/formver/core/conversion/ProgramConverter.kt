@@ -134,7 +134,6 @@ class ProgramConverter(
                 body = stmtCtx.convertMethodWithBody(declaration, signature, returnTarget)
             }
         }
-
     }
 
     fun embedPureUserFunction(symbol: FirFunctionSymbol<*>, signature: FullNamedFunctionSignature): PureUserFunctionEmbedding {
@@ -196,6 +195,23 @@ class ProgramConverter(
             else -> existing
         }
     }
+
+    override fun embedPureFunction(symbol: FirFunctionSymbol<*>): PureFunctionEmbedding {
+        val lookupName = symbol.embedName(this)
+        return when (val existing = functions[lookupName]) {
+            null -> {
+                val signature = embedFullSignature(symbol)
+                val callable = processCallable(symbol, signature)
+                PureUserFunctionEmbedding(callable).also {
+                    functions[lookupName] = it
+                }
+            }
+
+            else -> existing
+        }
+    }
+
+    override fun isPureFunction(symbol: FirFunctionSymbol<*>): Boolean = symbol.isPure(session)
 
     /**
      * Returns an embedding of the class type, with details set.
@@ -528,7 +544,7 @@ class ProgramConverter(
             // We generate a dummy method header here to ensure all required types are processed already. If we skip this, any types
             // that are used only in contracts cause an error because they are not processed until too late.
             // TODO: fit this into the flow in some logical way instead.
-            NonInlineNamedFunction(signature).also { it.toViperMethodHeader() }
+            NonInlineNamedFunction(signature).also { if (symbol.isPure(session)) it.toViperFunctionHeader() else it.toViperMethodHeader() }
         }
     }
 

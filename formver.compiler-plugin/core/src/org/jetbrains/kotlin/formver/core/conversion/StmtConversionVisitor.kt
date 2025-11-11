@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.formver.common.SnaktInternalException
 import org.jetbrains.kotlin.formver.common.UnsupportedFeatureBehaviour
 import org.jetbrains.kotlin.formver.core.embeddings.LabelLink
 import org.jetbrains.kotlin.formver.core.embeddings.callables.FunctionEmbedding
+import org.jetbrains.kotlin.formver.core.embeddings.callables.PureFunctionEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.callables.insertCall
 import org.jetbrains.kotlin.formver.core.embeddings.callables.isVerifyFunction
 import org.jetbrains.kotlin.formver.core.embeddings.expression.*
@@ -40,6 +41,7 @@ import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.equalToType
 import org.jetbrains.kotlin.formver.core.functionCallArguments
 import org.jetbrains.kotlin.formver.core.isInvariantBuilderFunctionNamed
+import org.jetbrains.kotlin.formver.core.isPure
 import org.jetbrains.kotlin.text
 import org.jetbrains.kotlin.types.ConstantValueKind
 import org.jetbrains.kotlin.utils.addIfNotNull
@@ -281,18 +283,37 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
             }
         }
 
+    private fun List<FirExpression>.withPureVarargsHandled(data: StmtConversionContext, function: PureFunctionEmbedding) =
+        flatMap { arg ->
+            when (arg) {
+                is FirVarargArgumentsExpression -> {
+                    arg.arguments.map(data::convert)
+                }
+
+                else -> listOf(data.convert(arg))
+            }
+        }
     override fun visitFunctionCall(functionCall: FirFunctionCall, data: StmtConversionContext): ExpEmbedding {
         val symbol = functionCall.toResolvedCallableSymbol() as? FirFunctionSymbol<*>
             ?: throw NotImplementedError("Only functions are expected as callables of function calls, got ${functionCall.toResolvedCallableSymbol()}")
 
         when (val forAllLambda = functionCall.extractFormverFirBlock { isInvariantBuilderFunctionNamed("forAll") }) {
             null -> {
-                val callee = data.embedFunction(symbol)
-                return callee.insertCall(
-                    functionCall.functionCallArguments.withVarargsHandled(data, callee),
-                    data,
-                    data.embedType(functionCall.resolvedType),
-                )
+                if (data.isPureFunction(symbol)) {
+                    val callee = data.embedPureFunction(symbol)
+                    return callee.insertCall(
+                        functionCall.functionCallArguments.withPureVarargsHandled(data, callee),
+                        data,
+                        data.embedType(functionCall.resolvedType)
+                    )
+                } else {
+                    val callee = data.embedFunction(symbol)
+                    return callee.insertCall(
+                        functionCall.functionCallArguments.withVarargsHandled(data, callee),
+                        data,
+                        data.embedType(functionCall.resolvedType),
+                    )
+                }
             }
 
             else -> {
