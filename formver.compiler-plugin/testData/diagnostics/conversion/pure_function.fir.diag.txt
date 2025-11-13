@@ -1,13 +1,18 @@
-/pure_function.kt:(114,127): info: Generated Viper text for emptyFunction:
+/pure_function.kt:(53,66): info: Generated Viper text for emptyFunction:
+function f$emptyAnnotatedFunction$TF$(): Ref
+
+
 method f$emptyFunction$TF$() returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
+  var anon$0: Ref
+  anon$0 := f$emptyAnnotatedFunction$TF$()
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }
 
-/pure_function.kt:(145,167): info: Generated Viper text for emptyAnnotatedFunction:
-function f$emptyAnnotatedFunction$TF$(): Int
+/pure_function.kt:(109,131): info: Generated Viper text for emptyAnnotatedFunction:
+function f$emptyAnnotatedFunction$TF$(): Ref
 {
-  42
+  null
 }

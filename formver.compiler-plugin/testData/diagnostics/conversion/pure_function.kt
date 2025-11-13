@@ -1,7 +1,6 @@
 import org.jetbrains.kotlin.formver.plugin.Pure
-import org.jetbrains.kotlin.formver.plugin.DumpExpEmbeddings
 
-fun <!VIPER_TEXT!>emptyFunction<!>() { }
+fun <!VIPER_TEXT!>emptyFunction<!>() { emptyAnnotatedFunction() }
 
 @Pure
-fun <!VIPER_TEXT!>emptyAnnotatedFunction<!>() { }
+fun <!VIPER_TEXT!>emptyAnnotatedFunction<!>(): Int? { return null }

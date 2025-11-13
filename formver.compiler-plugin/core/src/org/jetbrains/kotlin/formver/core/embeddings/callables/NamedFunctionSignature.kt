@@ -25,3 +25,11 @@ fun NamedFunctionSignature.toMethodCall(
     info: Info = Info.NoInfo,
     trafos: Trafos = Trafos.NoTrafos,
 ) = Stmt.MethodCall(name, parameters, listOf(target), pos, info, trafos)
+
+fun NamedFunctionSignature.toFunctionCall(
+    parameters: List<Exp>,
+    target: Exp.LocalVar,
+    pos: Position = Position.NoPosition,
+    info: Info = Info.NoInfo,
+    trafos: Trafos = Trafos.NoTrafos
+) = Exp.FuncApp(name, parameters, Type.Ref, pos, info, trafos)

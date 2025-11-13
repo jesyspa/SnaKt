@@ -25,8 +25,5 @@ interface RichCallableEmbedding : CallableEmbedding, FullNamedFunctionSignature 
      */
     fun toViperMethodHeader(): Method?
 
-    /**
-     * Produces a function header (i.e. a function without a body) corresponding to this function if necessary.
-     */
     fun toViperFunctionHeader(): Function?
 }
