@@ -6,9 +6,7 @@ method f$emptyFunction$TF$() returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var l0$x: Ref
-  var anon$0: Ref
-  inhale df$rt$isSubtype(df$rt$typeOf(anon$0), df$rt$nullable(df$rt$intType()))
-  l0$x := anon$0
+  l0$x := f$emptyAnnotatedFunction$TF$()
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }
