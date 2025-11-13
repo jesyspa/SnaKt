@@ -81,7 +81,6 @@ class UserFunction(
     override val includeInDumpPolicy: IncludeInDumpPolicy = IncludeInDumpPolicy.ALWAYS
 }
 
-
 abstract class BuiltinFunction(
     override val name: SymbolicName,
     override val pos: Position = Position.NoPosition,
@@ -90,7 +89,6 @@ abstract class BuiltinFunction(
 ) : Function {
     override val includeInDumpPolicy: IncludeInDumpPolicy = IncludeInDumpPolicy.ONLY_IN_FULL_DUMP
 }
-
 
 /**
  * These are function-like classes which are not translated to Viper as function calls but as arithmetic and/or boolean operations.

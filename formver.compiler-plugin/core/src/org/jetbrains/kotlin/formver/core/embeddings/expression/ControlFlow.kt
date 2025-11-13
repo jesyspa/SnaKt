@@ -224,7 +224,6 @@ data class MethodCall(val method: NamedFunctionSignature, val args: List<ExpEmbe
 }
 
 data class FunctionCall(val function: NamedFunctionSignature, val args: List<ExpEmbedding>) : DirectResultExpEmbedding {
-
     override val type: TypeEmbedding = function.callableType.returnType
 
     override val subexpressions: List<ExpEmbedding>
@@ -236,8 +235,7 @@ data class FunctionCall(val function: NamedFunctionSignature, val args: List<Exp
     )
 
     override fun <R> accept(v: ExpVisitor<R>): R =
-        v.visitFunctionCall(this) // or however your visitor is set up
-
+        v.visitFunctionCall(this)
 }
 
 /**
