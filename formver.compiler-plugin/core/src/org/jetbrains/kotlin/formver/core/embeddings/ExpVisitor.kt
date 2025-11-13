@@ -16,6 +16,7 @@ interface ExpVisitor<R> {
     fun visitElvis(e: Elvis): R
     fun visitLambdaExp(e: LambdaExp): R
     fun visitMethodCall(e: MethodCall): R
+    fun visitFunctionCall(e: FunctionCall): R
     fun visitSafeCast(e: SafeCast): R
     fun visitShared(e: Shared): R
     fun visitAssert(e: Assert): R

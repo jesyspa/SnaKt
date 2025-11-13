@@ -41,7 +41,6 @@ import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.equalToType
 import org.jetbrains.kotlin.formver.core.functionCallArguments
 import org.jetbrains.kotlin.formver.core.isInvariantBuilderFunctionNamed
-import org.jetbrains.kotlin.formver.core.isPure
 import org.jetbrains.kotlin.text
 import org.jetbrains.kotlin.types.ConstantValueKind
 import org.jetbrains.kotlin.utils.addIfNotNull
@@ -222,9 +221,10 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
             comparisonExpression.compareToCall.dispatchReceiver ?: throw SnaktInternalException(
                 comparisonExpression.compareToCall.source, "found 'compareTo' call with null receiver"
             )
-        val arg = comparisonExpression.compareToCall.argumentList.arguments.firstOrNull() ?: throw SnaktInternalException(
-            comparisonExpression.compareToCall.source, "found `compareTo` call with no argument at position 0"
-        )
+        val arg =
+            comparisonExpression.compareToCall.argumentList.arguments.firstOrNull() ?: throw SnaktInternalException(
+                comparisonExpression.compareToCall.source, "found `compareTo` call with no argument at position 0"
+            )
         val left = data.convert(dispatchReceiver)
         val right = data.convert(arg)
 
@@ -283,7 +283,9 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
             }
         }
 
-    private fun List<FirExpression>.withPureVarargsHandled(data: StmtConversionContext, function: PureFunctionEmbedding) =
+    private fun List<FirExpression>.withPureVarargsHandled(
+        data: StmtConversionContext
+    ) =
         flatMap { arg ->
             when (arg) {
                 is FirVarargArgumentsExpression -> {
@@ -293,6 +295,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
                 else -> listOf(data.convert(arg))
             }
         }
+
     override fun visitFunctionCall(functionCall: FirFunctionCall, data: StmtConversionContext): ExpEmbedding {
         val symbol = functionCall.toResolvedCallableSymbol() as? FirFunctionSymbol<*>
             ?: throw NotImplementedError("Only functions are expected as callables of function calls, got ${functionCall.toResolvedCallableSymbol()}")
@@ -302,7 +305,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
                 if (data.isPureFunction(symbol)) {
                     val callee = data.embedPureFunction(symbol)
                     return callee.insertCall(
-                        functionCall.functionCallArguments.withPureVarargsHandled(data, callee),
+                        functionCall.functionCallArguments.withPureVarargsHandled(data),
                         data,
                         data.embedType(functionCall.resolvedType)
                     )
@@ -335,9 +338,11 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         implicitInvokeCall: FirImplicitInvokeCall,
         data: StmtConversionContext,
     ): ExpEmbedding {
-        val receiver = implicitInvokeCall.dispatchReceiver as? FirPropertyAccessExpression ?: throw SnaktInternalException(
-            implicitInvokeCall.source, "Implicit invoke calls only support a limited range of receivers at the moment."
-        )
+        val receiver =
+            implicitInvokeCall.dispatchReceiver as? FirPropertyAccessExpression ?: throw SnaktInternalException(
+                implicitInvokeCall.source,
+                "Implicit invoke calls only support a limited range of receivers at the moment."
+            )
         val returnType = data.embedType(implicitInvokeCall.resolvedType)
         val receiverSymbol = receiver.calleeReference.toResolvedSymbol<FirBasedSymbol<*>>()!!
         val args = implicitInvokeCall.argumentList.arguments.withVarargsHandled(data, function = null)

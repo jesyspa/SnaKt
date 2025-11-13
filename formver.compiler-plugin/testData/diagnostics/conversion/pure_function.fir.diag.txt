@@ -1,31 +1,18 @@
-/pure_function.kt:(133,146): info: Generated Viper text for emptyFunction:
-function f$emptyFunctionAsWell$TF$(): Int
+/pure_function.kt:(53,66): info: Generated Viper text for emptyFunction:
+function f$emptyAnnotatedFunction$TF$(): Ref
 
 
 method f$emptyFunction$TF$() returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
   var anon$0: Ref
-  anon$0 := f$emptyFunctionAsWell$TF$()
+  anon$0 := f$emptyAnnotatedFunction$TF$()
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }
 
-/pure_function.kt:(133,146): info: Generated ExpEmbedding for f$emptyFunction$TF$:
-Function(name = f$emptyFunction$TF$, { MethodCall(callee = f$emptyFunctionAsWell$TF$) }, return = lbl$ret$0)
-
-/pure_function.kt:(151,172): error: An internal error has occurred.
-Details: Consistency error: No matching identifier f$emptyFunctionAsWell$TF$ found of type Method, instead found of type Function. (<wrapped value>)
-Please report this at https://github.com/jesyspa/kotlin
-
-/pure_function.kt:(186,205): info: Generated Viper text for emptyFunctionAsWell:
-function f$emptyFunctionAsWell$TF$(): Int
+/pure_function.kt:(109,131): info: Generated Viper text for emptyAnnotatedFunction:
+function f$emptyAnnotatedFunction$TF$(): Ref
 {
-  42
-}
-
-/pure_function.kt:(238,260): info: Generated Viper text for emptyAnnotatedFunction:
-function f$emptyAnnotatedFunction$TF$(): Int
-{
-  42
+  null
 }

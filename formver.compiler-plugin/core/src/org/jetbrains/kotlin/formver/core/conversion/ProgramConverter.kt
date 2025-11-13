@@ -23,18 +23,13 @@ import org.jetbrains.kotlin.fir.types.*
 import org.jetbrains.kotlin.formver.common.ErrorCollector
 import org.jetbrains.kotlin.formver.common.PluginConfiguration
 import org.jetbrains.kotlin.formver.common.UnsupportedFeatureBehaviour
+import org.jetbrains.kotlin.formver.core.*
 import org.jetbrains.kotlin.formver.core.domains.RuntimeTypeDomain
-import org.jetbrains.kotlin.formver.core.embeddings.PureFunctionBodyEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.callables.*
 import org.jetbrains.kotlin.formver.core.embeddings.expression.*
 import org.jetbrains.kotlin.formver.core.embeddings.properties.*
 import org.jetbrains.kotlin.formver.core.embeddings.types.*
-import org.jetbrains.kotlin.formver.core.isBorrowed
-import org.jetbrains.kotlin.formver.core.isCustom
-import org.jetbrains.kotlin.formver.core.isPure
-import org.jetbrains.kotlin.formver.core.isUnique
 import org.jetbrains.kotlin.formver.core.names.*
-import org.jetbrains.kotlin.formver.core.shouldBeInlined
 import org.jetbrains.kotlin.formver.names.SimpleNameResolver
 import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.ast.Exp
@@ -91,17 +86,17 @@ class ProgramConverter(
             // We need to deduplicate fields since public fields with the same name are represented differently
             // at `FieldEmbedding` level but map to the same Viper.
             fields = SpecialFields.all.map { it.toViper() } +
-                     fields.distinctBy { it.name.debugMangled }.map { it.toViper() } ,
+                    fields.distinctBy { it.name.debugMangled }.map { it.toViper() },
             functions = SpecialFunctions.all +
-                     functions.values.mapNotNull { it.viperFunction }.distinctBy { it.name.debugMangled },
+                    functions.values.mapNotNull { it.viperFunction }.distinctBy { it.name.debugMangled },
             methods = SpecialMethods.all +
-                methods.values.mapNotNull { it.viperMethod }.distinctBy { it.name.debugMangled},
+                    methods.values.mapNotNull { it.viperMethod }.distinctBy { it.name.debugMangled },
             predicates = classes.values.flatMap {
-                    listOf(
-                        it.details.sharedPredicate,
-                        it.details.uniquePredicate
-                    )
-                },
+                listOf(
+                    it.details.sharedPredicate,
+                    it.details.uniquePredicate
+                )
+            },
         )
 
     fun registerForVerification(declaration: FirSimpleFunction) {
@@ -126,8 +121,9 @@ class ProgramConverter(
         // Note: it is important that `body` is only set after `embedUserFunction` is complete, as we need to
         // place the embedding in the map before processing the body.
         if (declaration.symbol.isPure(session)) {
+            // TODO: Replace the empty body with the actual expression representation of the function body
             embedPureUserFunction(declaration.symbol, signature).apply {
-                body = PureFunctionBodyEmbedding(Exp.IntLit(42), returnTarget)
+                body = Exp.NullLit()
             }
         } else {
             embedUserFunction(declaration.symbol, signature).apply {
@@ -136,7 +132,10 @@ class ProgramConverter(
         }
     }
 
-    fun embedPureUserFunction(symbol: FirFunctionSymbol<*>, signature: FullNamedFunctionSignature): PureUserFunctionEmbedding {
+    fun embedPureUserFunction(
+        symbol: FirFunctionSymbol<*>,
+        signature: FullNamedFunctionSignature
+    ): PureUserFunctionEmbedding {
         (functions[signature.name] as? PureUserFunctionEmbedding)?.also { return it }
         val new = PureUserFunctionEmbedding(processCallable(symbol, signature))
         functions[signature.name] = new

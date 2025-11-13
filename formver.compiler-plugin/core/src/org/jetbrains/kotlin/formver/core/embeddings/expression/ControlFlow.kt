@@ -9,6 +9,7 @@ import org.jetbrains.kotlin.formver.core.asPosition
 import org.jetbrains.kotlin.formver.core.embeddings.*
 import org.jetbrains.kotlin.formver.core.embeddings.callables.FullNamedFunctionSignature
 import org.jetbrains.kotlin.formver.core.embeddings.callables.NamedFunctionSignature
+import org.jetbrains.kotlin.formver.core.embeddings.callables.toFunctionCall
 import org.jetbrains.kotlin.formver.core.embeddings.callables.toMethodCall
 import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.*
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
@@ -17,8 +18,8 @@ import org.jetbrains.kotlin.formver.core.linearization.LinearizationContext
 import org.jetbrains.kotlin.formver.core.linearization.addLabel
 import org.jetbrains.kotlin.formver.core.linearization.freshAnonVar
 import org.jetbrains.kotlin.formver.core.linearization.pureToViper
-import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.NameResolver
+import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 import org.jetbrains.kotlin.formver.viper.ast.Stmt
 
@@ -220,6 +221,34 @@ data class MethodCall(val method: NamedFunctionSignature, val args: List<ExpEmbe
 
     override fun children(): Sequence<ExpEmbedding> = args.asSequence()
     override fun <R> accept(v: ExpVisitor<R>): R = v.visitMethodCall(this)
+}
+
+data class FunctionCall(val function: NamedFunctionSignature, val args: List<ExpEmbedding>) : StoredResultExpEmbedding {
+    override val type: TypeEmbedding = function.callableType.returnType
+
+    override fun toViperStoringIn(result: VariableEmbedding, ctx: LinearizationContext) {
+        ctx.addStatement {
+            Stmt.assign(
+                result.toViper(ctx), function.toFunctionCall(
+                    args.map { it.toViper(ctx) },
+                    result.toLocalVarUse(ctx.source.asPosition),
+                    ctx.source.asPosition
+                )
+            )
+        }
+    }
+
+    context(nameResolver: NameResolver)
+    override val debugTreeView: TreeView
+        get() = NamedBranchingNode(
+            "FunctionCall",
+            buildList {
+                add(function.nameAsDebugTreeView.withDesignation("callee"))
+                addAll(args.map { it.debugTreeView })
+            })
+
+    override fun children(): Sequence<ExpEmbedding> = args.asSequence()
+    override fun <R> accept(v: ExpVisitor<R>): R = v.visitFunctionCall(this)
 }
 
 /**

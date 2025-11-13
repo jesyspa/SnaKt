@@ -6,7 +6,7 @@
 package org.jetbrains.kotlin.formver.core.embeddings.callables
 
 import org.jetbrains.kotlin.formver.core.embeddings.FunctionBodyEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.PureFunctionBodyEmbedding
+import org.jetbrains.kotlin.formver.viper.ast.Exp
 import org.jetbrains.kotlin.formver.viper.ast.Function
 import org.jetbrains.kotlin.formver.viper.ast.Method
 
@@ -14,7 +14,7 @@ interface FunctionEmbedding : CallableEmbedding {
     val viperMethod: Method?
 }
 
-interface PureFunctionEmbedding: CallableEmbedding {
+interface PureFunctionEmbedding : CallableEmbedding {
     val viperFunction: Function?
 }
 
@@ -37,10 +37,10 @@ class UserFunctionEmbedding(private val callable: RichCallableEmbedding) : Funct
  * An embedding of a user-defined pure function
  */
 class PureUserFunctionEmbedding(private val callable: RichCallableEmbedding) : PureFunctionEmbedding,
-        CallableEmbedding by callable {
+    CallableEmbedding by callable {
 
-    var body: PureFunctionBodyEmbedding? = null
+    var body: Exp? = null
 
-    override val viperFunction: Function?
-        get() = body?.toViperFunction(callable) ?: callable.toViperFunctionHeader()
+    override val viperFunction: Function
+        get() = callable.toViperFunction(body)
 }
