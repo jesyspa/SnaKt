@@ -210,7 +210,13 @@ class ProgramConverter(
         }
     }
 
-    override fun isPureFunction(symbol: FirFunctionSymbol<*>): Boolean = symbol.isPure(session)
+    override fun embedAnyFunction(symbol: FirFunctionSymbol<*>): CallableEmbedding {
+        return if (symbol.isPure(session)) {
+            embedPureFunction(symbol)
+        } else {
+            embedFunction(symbol)
+        }
+    }
 
     /**
      * Returns an embedding of the class type, with details set.
@@ -543,7 +549,11 @@ class ProgramConverter(
             // We generate a dummy method header here to ensure all required types are processed already. If we skip this, any types
             // that are used only in contracts cause an error because they are not processed until too late.
             // TODO: fit this into the flow in some logical way instead.
-            NonInlineNamedFunction(signature).also { if (symbol.isPure(session)) it.toViperFunctionHeader() else it.toViperMethodHeader() }
+            // TODO: We should inline the function here instead of creating an empty header for functions
+            NonInlineNamedFunction(
+                signature,
+                symbol.isPure(session)
+            ).also { if (symbol.isPure(session)) it.toViperFunctionHeader() else it.toViperMethodHeader() }
         }
     }
 

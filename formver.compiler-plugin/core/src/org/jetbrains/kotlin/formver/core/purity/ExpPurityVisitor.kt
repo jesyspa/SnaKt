@@ -13,7 +13,7 @@ internal object ExprPurityVisitor : ExpVisitor<Boolean> {
     /* ————— pure nodes ————— */
     override fun visitPureExpEmbedding(e: PureExpEmbedding) = true
     override fun visitUnitLit(e: UnitLit) = true
-    override fun visitFunctionCall(e: FunctionCall): Boolean = true
+    override fun visitFunctionCall(e: FunctionCall) = true
 
     /* ————— structural nodes without side effects ————— */
     override fun visitBlock(e: Block) = e.allChildrenPure(this)

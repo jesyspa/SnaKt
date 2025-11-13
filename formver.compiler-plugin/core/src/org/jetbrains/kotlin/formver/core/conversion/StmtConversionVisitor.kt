@@ -22,8 +22,8 @@ import org.jetbrains.kotlin.fir.visitors.FirVisitor
 import org.jetbrains.kotlin.formver.common.SnaktInternalException
 import org.jetbrains.kotlin.formver.common.UnsupportedFeatureBehaviour
 import org.jetbrains.kotlin.formver.core.embeddings.LabelLink
+import org.jetbrains.kotlin.formver.core.embeddings.callables.CallableEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.callables.FunctionEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.callables.PureFunctionEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.callables.insertCall
 import org.jetbrains.kotlin.formver.core.embeddings.callables.isVerifyFunction
 import org.jetbrains.kotlin.formver.core.embeddings.expression.*
@@ -267,28 +267,16 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         }
     }
 
-    private fun List<FirExpression>.withVarargsHandled(data: StmtConversionContext, function: FunctionEmbedding?) =
+    private fun List<FirExpression>.withVarargsHandled(data: StmtConversionContext, function: CallableEmbedding?) =
         flatMap { arg ->
             when (arg) {
                 is FirVarargArgumentsExpression -> {
-                    if (function == null || !function.isVerifyFunction) {
+                    // Short circuit as isVerifyFunction property only exists on embedding of type FunctionEmbedding
+                    if (function == null || function is FunctionEmbedding && !function.isVerifyFunction) {
                         throw SnaktInternalException(
                             arg.source, "Vararg arguments are currently supported for `verify` function only."
                         )
                     }
-                    arg.arguments.map(data::convert)
-                }
-
-                else -> listOf(data.convert(arg))
-            }
-        }
-
-    private fun List<FirExpression>.withPureVarargsHandled(
-        data: StmtConversionContext
-    ) =
-        flatMap { arg ->
-            when (arg) {
-                is FirVarargArgumentsExpression -> {
                     arg.arguments.map(data::convert)
                 }
 
@@ -302,21 +290,12 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
 
         when (val forAllLambda = functionCall.extractFormverFirBlock { isInvariantBuilderFunctionNamed("forAll") }) {
             null -> {
-                if (data.isPureFunction(symbol)) {
-                    val callee = data.embedPureFunction(symbol)
-                    return callee.insertCall(
-                        functionCall.functionCallArguments.withPureVarargsHandled(data),
-                        data,
-                        data.embedType(functionCall.resolvedType)
-                    )
-                } else {
-                    val callee = data.embedFunction(symbol)
-                    return callee.insertCall(
-                        functionCall.functionCallArguments.withVarargsHandled(data, callee),
-                        data,
-                        data.embedType(functionCall.resolvedType),
-                    )
-                }
+                val callee = data.embedAnyFunction(symbol)
+                return callee.insertCall(
+                    functionCall.functionCallArguments.withVarargsHandled(data, callee),
+                    data,
+                    data.embedType(functionCall.resolvedType),
+                )
             }
 
             else -> {

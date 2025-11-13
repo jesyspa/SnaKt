@@ -5,13 +5,15 @@ function f$emptyAnnotatedFunction$TF$(): Ref
 method f$emptyFunction$TF$() returns (ret$0: Ref)
   ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 {
+  var l0$x: Ref
   var anon$0: Ref
-  anon$0 := f$emptyAnnotatedFunction$TF$()
+  inhale df$rt$isSubtype(df$rt$typeOf(anon$0), df$rt$nullable(df$rt$intType()))
+  l0$x := anon$0
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }
 
-/pure_function.kt:(109,131): info: Generated Viper text for emptyAnnotatedFunction:
+/pure_function.kt:(117,139): info: Generated Viper text for emptyAnnotatedFunction:
 function f$emptyAnnotatedFunction$TF$(): Ref
 {
   null
