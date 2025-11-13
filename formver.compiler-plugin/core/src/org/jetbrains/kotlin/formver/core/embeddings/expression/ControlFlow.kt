@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.formver.core.asPosition
 import org.jetbrains.kotlin.formver.core.embeddings.*
 import org.jetbrains.kotlin.formver.core.embeddings.callables.FullNamedFunctionSignature
 import org.jetbrains.kotlin.formver.core.embeddings.callables.NamedFunctionSignature
-import org.jetbrains.kotlin.formver.core.embeddings.callables.toFunctionCall
+import org.jetbrains.kotlin.formver.core.embeddings.callables.toFuncApp
 import org.jetbrains.kotlin.formver.core.embeddings.callables.toMethodCall
 import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.*
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
@@ -223,32 +223,21 @@ data class MethodCall(val method: NamedFunctionSignature, val args: List<ExpEmbe
     override fun <R> accept(v: ExpVisitor<R>): R = v.visitMethodCall(this)
 }
 
-data class FunctionCall(val function: NamedFunctionSignature, val args: List<ExpEmbedding>) : StoredResultExpEmbedding {
+data class FunctionCall(val function: NamedFunctionSignature, val args: List<ExpEmbedding>) : DirectResultExpEmbedding {
+
     override val type: TypeEmbedding = function.callableType.returnType
 
-    override fun toViperStoringIn(result: VariableEmbedding, ctx: LinearizationContext) {
-        ctx.addStatement {
-            Stmt.assign(
-                result.toViper(ctx), function.toFunctionCall(
-                    args.map { it.toViper(ctx) },
-                    result.toLocalVarUse(ctx.source.asPosition),
-                    ctx.source.asPosition
-                )
-            )
-        }
-    }
+    override val subexpressions: List<ExpEmbedding>
+        get() = args
 
-    context(nameResolver: NameResolver)
-    override val debugTreeView: TreeView
-        get() = NamedBranchingNode(
-            "FunctionCall",
-            buildList {
-                add(function.nameAsDebugTreeView.withDesignation("callee"))
-                addAll(args.map { it.debugTreeView })
-            })
+    override fun toViper(ctx: LinearizationContext): Exp = function.toFuncApp(
+        args.map { it.toViper(ctx) },
+        ctx.source.asPosition
+    )
 
-    override fun children(): Sequence<ExpEmbedding> = args.asSequence()
-    override fun <R> accept(v: ExpVisitor<R>): R = v.visitFunctionCall(this)
+    override fun <R> accept(v: ExpVisitor<R>): R =
+        v.visitFunctionCall(this) // or however your visitor is set up
+
 }
 
 /**
