@@ -19,8 +19,7 @@ import org.jetbrains.kotlin.formver.core.embeddings.types.nullableAny
 import org.jetbrains.kotlin.formver.core.linearization.pureToViper
 import org.jetbrains.kotlin.formver.core.names.DispatchReceiverName
 import org.jetbrains.kotlin.formver.viper.SymbolicName
-import org.jetbrains.kotlin.formver.viper.ast.Stmt
-import org.jetbrains.kotlin.formver.viper.ast.UserMethod
+import org.jetbrains.kotlin.formver.viper.ast.*
 
 interface FullNamedFunctionSignature : NamedFunctionSignature {
     /**
@@ -89,6 +88,19 @@ fun FullNamedFunctionSignature.toViperMethod(
     returnVariable.toLocalVarDecl(),
     getPreconditions().pureToViper(toBuiltin = true),
     getPostconditions(returnVariable).pureToViper(toBuiltin = true),
+    body,
+    declarationSource.asPosition
+)
+
+fun FullNamedFunctionSignature.toViperFunction(
+    body: Exp?,
+) = UserFunction(
+    name,
+    formalArgs.map { it.toLocalVarDecl() },
+    // TODO: Be explicit about the return types of functions instead of boxing them into a Ref
+    Type.Ref,
+    getPreconditions().pureToViper(toBuiltin = true),
+    emptyList(),
     body,
     declarationSource.asPosition
 )

@@ -13,6 +13,7 @@ internal object ExprPurityVisitor : ExpVisitor<Boolean> {
     /* ————— pure nodes ————— */
     override fun visitPureExpEmbedding(e: PureExpEmbedding) = true
     override fun visitUnitLit(e: UnitLit) = true
+    override fun visitFunctionCall(e: FunctionCall) = true
 
     /* ————— structural nodes without side effects ————— */
     override fun visitBlock(e: Block) = e.allChildrenPure(this)
@@ -36,7 +37,7 @@ internal object ExprPurityVisitor : ExpVisitor<Boolean> {
 
 
     /* ————— impure nodes ————— */
-    override fun visitMethodCall(e: MethodCall) = false   // TODO: Whitelist for annotated methods?
+    override fun visitMethodCall(e: MethodCall) = false// TODO: Whitelist for annotated methods?
     override fun visitFunctionExp(e: FunctionExp) = false
     override fun visitLambdaExp(e: LambdaExp) = false
     override fun visitInvokeFunctionObject(e: InvokeFunctionObject) = false

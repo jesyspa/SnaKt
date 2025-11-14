@@ -67,6 +67,20 @@ interface Function : IntoSilver<viper.silver.ast.Function>, Applicable {
     ): Exp.FuncApp = Exp.FuncApp(name, args, retType, pos, info, trafos)
 }
 
+class UserFunction(
+    override val name: SymbolicName,
+    override val formalArgs: List<Declaration.LocalVarDecl>,
+    override val retType: Type,
+    override val pres: List<Exp>,
+    override val posts: List<Exp>,
+    override val body: Exp?,
+    override val pos: Position = Position.NoPosition,
+    override val info: Info = Info.NoInfo,
+    override val trafos: Trafos = Trafos.NoTrafos,
+) : Function {
+    override val includeInDumpPolicy: IncludeInDumpPolicy = IncludeInDumpPolicy.ALWAYS
+}
+
 abstract class BuiltinFunction(
     override val name: SymbolicName,
     override val pos: Position = Position.NoPosition,
@@ -75,7 +89,6 @@ abstract class BuiltinFunction(
 ) : Function {
     override val includeInDumpPolicy: IncludeInDumpPolicy = IncludeInDumpPolicy.ONLY_IN_FULL_DUMP
 }
-
 
 /**
  * These are function-like classes which are not translated to Viper as function calls but as arithmetic and/or boolean operations.

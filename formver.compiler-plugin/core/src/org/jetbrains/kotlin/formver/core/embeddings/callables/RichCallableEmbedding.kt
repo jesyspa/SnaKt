@@ -5,6 +5,7 @@
 
 package org.jetbrains.kotlin.formver.core.embeddings.callables
 
+import org.jetbrains.kotlin.formver.viper.ast.Function
 import org.jetbrains.kotlin.formver.viper.ast.Method
 
 /**
@@ -13,7 +14,9 @@ import org.jetbrains.kotlin.formver.viper.ast.Method
  * This interface does not quite fit along any line that we usually draw, hence the unspecific name. This interface is really two things
  * rolled into one:
  * - A callable with full information about the signature.
- * - A callable which knows how to generate a method header for itself (if it needs one).
+ * - A callable which knows how to generate a method header and a function header for itself (if it needs one).
+ *
+ * TODO: The Function header will likely be removed as it makes no sense to emit a function header on its own - Consider this a placeholder
  *
  * These are not fundamentally related, but providing two interfaces would mean having to deal with diamond-shaped inheritance
  * in a number of classes that would be quite inconvenient. We thus force users to implement both at once.
@@ -23,4 +26,9 @@ interface RichCallableEmbedding : CallableEmbedding, FullNamedFunctionSignature 
      * Produces a method header (i.e. method without body) corresponding to this function if necessary.
      */
     fun toViperMethodHeader(): Method?
+
+    /**
+     * Produces a function header (i.e. function without body) corresponding to this function if necessary.
+     */
+    fun toViperFunctionHeader(): Function?
 }

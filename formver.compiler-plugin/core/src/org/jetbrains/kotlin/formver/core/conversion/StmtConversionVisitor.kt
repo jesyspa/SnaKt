@@ -22,6 +22,7 @@ import org.jetbrains.kotlin.fir.visitors.FirVisitor
 import org.jetbrains.kotlin.formver.common.SnaktInternalException
 import org.jetbrains.kotlin.formver.common.UnsupportedFeatureBehaviour
 import org.jetbrains.kotlin.formver.core.embeddings.LabelLink
+import org.jetbrains.kotlin.formver.core.embeddings.callables.CallableEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.callables.FunctionEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.callables.insertCall
 import org.jetbrains.kotlin.formver.core.embeddings.callables.isVerifyFunction
@@ -220,9 +221,10 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
             comparisonExpression.compareToCall.dispatchReceiver ?: throw SnaktInternalException(
                 comparisonExpression.compareToCall.source, "found 'compareTo' call with null receiver"
             )
-        val arg = comparisonExpression.compareToCall.argumentList.arguments.firstOrNull() ?: throw SnaktInternalException(
-            comparisonExpression.compareToCall.source, "found `compareTo` call with no argument at position 0"
-        )
+        val arg =
+            comparisonExpression.compareToCall.argumentList.arguments.firstOrNull() ?: throw SnaktInternalException(
+                comparisonExpression.compareToCall.source, "found `compareTo` call with no argument at position 0"
+            )
         val left = data.convert(dispatchReceiver)
         val right = data.convert(arg)
 
@@ -265,11 +267,12 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         }
     }
 
-    private fun List<FirExpression>.withVarargsHandled(data: StmtConversionContext, function: FunctionEmbedding?) =
+    private fun List<FirExpression>.withVarargsHandled(data: StmtConversionContext, function: CallableEmbedding?) =
         flatMap { arg ->
             when (arg) {
                 is FirVarargArgumentsExpression -> {
-                    if (function == null || !function.isVerifyFunction) {
+                    // Short circuit as isVerifyFunction property only exists on embedding of type FunctionEmbedding
+                    if (function == null || function is FunctionEmbedding && !function.isVerifyFunction) {
                         throw SnaktInternalException(
                             arg.source, "Vararg arguments are currently supported for `verify` function only."
                         )
@@ -287,7 +290,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
 
         when (val forAllLambda = functionCall.extractFormverFirBlock { isInvariantBuilderFunctionNamed("forAll") }) {
             null -> {
-                val callee = data.embedFunction(symbol)
+                val callee = data.embedAnyFunction(symbol)
                 return callee.insertCall(
                     functionCall.functionCallArguments.withVarargsHandled(data, callee),
                     data,
@@ -314,9 +317,11 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         implicitInvokeCall: FirImplicitInvokeCall,
         data: StmtConversionContext,
     ): ExpEmbedding {
-        val receiver = implicitInvokeCall.dispatchReceiver as? FirPropertyAccessExpression ?: throw SnaktInternalException(
-            implicitInvokeCall.source, "Implicit invoke calls only support a limited range of receivers at the moment."
-        )
+        val receiver =
+            implicitInvokeCall.dispatchReceiver as? FirPropertyAccessExpression ?: throw SnaktInternalException(
+                implicitInvokeCall.source,
+                "Implicit invoke calls only support a limited range of receivers at the moment."
+            )
         val returnType = data.embedType(implicitInvokeCall.resolvedType)
         val receiverSymbol = receiver.calleeReference.toResolvedSymbol<FirBasedSymbol<*>>()!!
         val args = implicitInvokeCall.argumentList.arguments.withVarargsHandled(data, function = null)

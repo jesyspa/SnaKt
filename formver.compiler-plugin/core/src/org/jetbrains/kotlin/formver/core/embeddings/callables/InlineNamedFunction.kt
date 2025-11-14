@@ -30,4 +30,6 @@ class InlineNamedFunction(
     }
 
     override fun toViperMethodHeader(): Nothing? = null
+
+    override fun toViperFunctionHeader(): Nothing? = null
 }
