@@ -67,7 +67,12 @@ fun sumUpTo(n: Int): Int {
 }
 ```
 
-Invariants must hold before the loop, after each iteration, and at exit.
+The rules are as follows:
+- Loop invariant must hold when the loop is entered.
+- The loop body may assume the condition holds.
+- Loop invariant must hold after each iteration.
+- Loop invariant must hold when the loop is exited.
+- Code after the loop may assume the condition fails.
 
 ## Universal Quantification
 
@@ -76,11 +81,12 @@ Use `forAll<T>` for quantified formulas:
 ```kotlin
 @AlwaysVerify
 fun example(arr: IntArray): Unit {
-    loopInvariants {
+    preconditions {
         forAll<Int> { j ->
-            (0 <= j && j < i) implies (arr[j] > 0)
+            (0 <= j && j < arr.size()) implies (arr[j] > 0)
         }
     }
+    // ...
 }
 ```
 
