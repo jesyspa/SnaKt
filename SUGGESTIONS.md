@@ -4,6 +4,12 @@ This document identifies **structural issues and missing capabilities** in the S
 
 **Note:** This analysis excludes known work-in-progress areas (purity checking, uniqueness typing) and focuses on core architectural issues rather than TODO comments.
 
+**Important Context:** SnaKt runs as a K2 compiler plugin **after** the Kotlin type checker. This means:
+- Only type-correct code reaches the verifier
+- Type safety is guaranteed by Kotlin, not re-checked by SnaKt
+- The verifier focuses on proving user-specified properties (pre/postconditions, invariants)
+- See `DESIGN_NOTES.md` for detailed explanations of design decisions
+
 ---
 
 ## Table of Contents
@@ -21,11 +27,11 @@ This document identifies **structural issues and missing capabilities** in the S
 
 These issues can cause the verifier to accept incorrect programs or reject correct ones.
 
-### 1.1 Type Parameter Erasure Causes Unsound Verification
+### 1.1 Limited Support for Type-Dependent Specifications
 
 **File:** `formver.compiler-plugin/core/src/org/jetbrains/kotlin/formver/core/conversion/ProgramConverter.kt:561-563`
 
-**Issue:** Type parameters are completely erased to `Any?`, destroying type information.
+**Issue:** Type parameters are erased to `Any?` in the Viper encoding.
 
 ```kotlin
 type is ConeTypeParameterType -> {
@@ -33,28 +39,32 @@ type is ConeTypeParameterType -> {
 }
 ```
 
-**Soundness Impact:** A generic function like this:
+**Why This Is Sound (for now):**
+- The Kotlin type checker runs first and rejects type-incorrect code
+- Code like `broken("hello", 42)` won't compile, so verifier never sees it
+- Type safety is guaranteed by Kotlin, not re-checked by SnaKt
+
+**Actual Limitation:** Cannot express **type-dependent specifications**:
 
 ```kotlin
-fun <T> broken(x: T, y: T): Boolean {
-    preconditions { x != null && y != null }
-    return x == y
+fun <T : Comparable<T>> max(x: T, y: T): T {
+    // CANNOT specify: result >= x && result >= y
+    // because >= depends on T being Comparable
+    postconditions<T> { result -> /* ??? how to use Comparable */ }
+    return if (x > y) x else y
 }
-
-// Verification will succeed, but this crashes at runtime:
-broken("hello", 42)  // String and Int both become Any?
 ```
 
-The verifier treats both arguments as `Any?`, accepting code where `T` could be bound to different types at different call sites.
+**Also Cannot Verify:**
+- Generic class invariants that depend on type parameters
+- Properties of collections with specific element types
+- Relationships between type parameters in multi-parameter generics
 
 **Related:** `ClassTypeEmbedding.kt:14` - class type parameters also not incorporated.
 
-**Fix Required:** Encode type parameters properly in Viper:
-- Option 1: Monomorphization (generate separate verification for each instantiation)
-- Option 2: Encode types as domain values with axioms for instantiation constraints
-- Option 3: Require explicit type bounds that can be verified
+**Impact:** ⚠️ **Limits expressiveness**, not a soundness issue. Generic code can be verified for type-independent properties only.
 
-**Priority:** 🔴 **CRITICAL** - Fundamental soundness issue affecting all generic code.
+**Priority:** **MEDIUM** - Important for verifying generic abstractions, but workarounds exist (verify concrete instantiations).
 
 ---
 
@@ -160,60 +170,7 @@ For data classes and custom types, this gives wrong results.
 
 These issues significantly limit what can be verified but don't necessarily cause unsoundness.
 
-### 2.1 Loop Invariants Degraded to Assertions
-
-**File:** `formver.compiler-plugin/core/src/org/jetbrains/kotlin/formver/core/embeddings/expression/ControlFlow.kt:107-112`
-
-**Issue:** Loop invariants are checked but NOT used for verification.
-
-```kotlin
-// TODO: this logic can be rewritten back to invariants once the version of Viper is updated
-invariants.forEach {
-    ctx.addStatement {
-        Stmt.Assert(it.pureToViper(toBuiltin = true))
-    }
-}
-```
-
-**Impact:** This completely defeats the purpose of loop invariants! They should be:
-1. Checked before entering the loop
-2. **Assumed** at the start of each iteration
-3. Checked at the end of each iteration
-
-But currently they're only **checked** (asserted), not **assumed**. This means:
-
-```kotlin
-@AlwaysVerify
-fun sumUpTo(n: Int): Int {
-    preconditions { n >= 0 }
-    postconditions<Int> { result -> result == n * (n + 1) / 2 }
-
-    var sum = 0
-    var i = 0
-    while (i <= n) {
-        loopInvariants {
-            i <= n + 1
-            sum == i * (i - 1) / 2  // NOT assumed in loop body!
-        }
-        sum += i
-        i++
-    }
-    return sum
-}
-```
-
-**The verification will fail** because the invariant isn't assumed, so the verifier can't prove the postcondition.
-
-**Fix Required:**
-- Update Viper version if that's the blocker
-- Or emit proper `while` statements with invariants in Viper AST
-- This is fundamental to loop verification
-
-**Priority:** ⚠️ **CRITICAL for loops** - Loops cannot be properly verified currently.
-
----
-
-### 2.2 No Field Access in Specifications
+### 2.1 No Field Access in Specifications
 
 **File:** `formver.compiler-plugin/core/src/org/jetbrains/kotlin/formver/core/purity/ExpPurityVisitor.kt:52-53`
 
@@ -250,7 +207,7 @@ This is a **major limitation** - most useful specifications need to reference fi
 
 ---
 
-### 2.3 Smart Cast Inhales Too Many Invariants
+### 2.2 Smart Cast Inhales Too Many Invariants
 
 **File:** `formver.compiler-plugin/core/src/org/jetbrains/kotlin/formver/core/conversion/StmtConversionVisitor.kt:427`
 
@@ -283,7 +240,7 @@ if (obj is Counter) {
 
 ---
 
-### 2.4 No User-Defined Predicates
+### 2.3 No User-Defined Predicates
 
 **File:** `formver.compiler-plugin/viper/src/org/jetbrains/kotlin/formver/viper/ast/Predicate.kt`
 
@@ -555,21 +512,7 @@ forAll { x: Int -> x * 0 == 0 }
 
 ---
 
-### 4.3 Limited Old Expressions
-
-**File:** `formver.compiler-plugin/core/src/org/jetbrains/kotlin/formver/core/embeddings/expression/Invariant.kt:14-21`
-
-**Status:** `old()` works for simple expressions.
-
-**Limitation:** What about `old(obj.field)` vs `old(obj).field`?
-- First: old value of the field
-- Second: field of old version of object
-
-Need to verify this is handled correctly and document semantics.
-
----
-
-### 4.4 No Magic Wands
+### 4.3 No Magic Wands
 
 **Evidence:** Magic wands exist in Viper AST but not exposed to users.
 
@@ -587,7 +530,7 @@ This is advanced, but some verification scenarios need it.
 
 ---
 
-### 4.5 No Fold/Unfold Exposed
+### 4.4 No Fold/Unfold Exposed
 
 **Evidence:** Predicates managed implicitly.
 
@@ -723,36 +666,35 @@ Limited permission reasoning - no special fields defined.
 
 ### 🔴 Critical (Must Fix for Soundness)
 
-1. **Type parameter erasure** (Section 1.1) - Allows invalid programs to verify
-2. **Shared expression bug** (Section 1.2) - Causes incorrect results
-3. **Unchecked casts** (Section 1.3) - Type safety violation
-4. **Wrong equality semantics** (Section 1.4) - Incorrect behavior
+1. **Shared expression bug** (Section 1.2) - Causes incorrect verification results
+2. **Unchecked casts** (Section 1.3) - Type safety violation
+3. **Wrong equality semantics** (Section 1.4) - Incorrect behavior for custom types
 
 ### ⚠️ High Priority (Severely Limits Usefulness)
 
-5. **Loop invariants don't work** (Section 2.1) - Can't verify loops properly
-6. **No field access in specs** (Section 2.2) - Can't write useful contracts
-7. **No user predicates** (Section 2.4) - Can't verify recursive structures
-8. **Data classes not supported** (Section 3.1) - Very common in Kotlin
-9. **Collections not supported** (Section 3.7) - Essential data structures
+4. **No field access in specs** (Section 2.1) - Can't write contracts referencing object state
+5. **No user predicates** (Section 2.3) - Can't verify recursive structures
+6. **Data classes not supported** (Section 3.1) - Very common in Kotlin
+7. **Collections not supported** (Section 3.7) - Essential data structures
 
 ### 📋 Medium Priority (Expand Capabilities)
 
-10. Smart cast over-approximation (Section 2.3)
-11. Sealed classes (Section 3.2)
-12. Operator overloading (Section 3.4)
-13. Multi-variable quantifiers (Section 4.1)
-14. User triggers for quantifiers (Section 4.2)
-15. Type variance (Section 5.2)
-16. User-defined domains (Section 6.1)
+8. **Type-dependent specifications** (Section 1.1) - Can't verify generic type constraints
+9. Smart cast over-approximation (Section 2.2)
+10. Sealed classes (Section 3.2)
+11. Operator overloading (Section 3.4)
+12. Multi-variable quantifiers (Section 4.1)
+13. User triggers for quantifiers (Section 4.2)
+14. Type variance (Section 5.2)
+15. User-defined domains (Section 6.1)
 
 ### 📝 Low Priority (Nice to Have)
 
-17. Companion objects (Section 3.3)
-18. Property delegation (Section 3.5)
-19. Type aliases (Section 3.6)
-20. Magic wands (Section 4.4)
-21. Explicit fold/unfold (Section 4.5)
+16. Companion objects (Section 3.3)
+17. Property delegation (Section 3.5)
+18. Type aliases (Section 3.6)
+19. Magic wands (Section 4.3)
+20. Explicit fold/unfold (Section 4.4)
 
 ---
 
@@ -764,9 +706,16 @@ This analysis was based on:
 - Comparison with Kotlin language specification
 - Review of Viper AST vs exposed user features
 - Tracing through example scenarios to identify gaps
+- Corrections from maintainer feedback on initial findings
 
 ---
 
-**Document Version:** 2.0
+**Document Version:** 3.0 (Corrected)
 **Date:** 2025-11-18
 **Focus:** Structural issues and missing capabilities (excluding WIP: purity, uniqueness)
+
+**Corrections Applied:**
+- Loop invariants work correctly via continue label mechanism (Section 2.1 removed)
+- Type parameter erasure is not a soundness issue given Kotlin type checker guarantee (Section 1.1 updated)
+- `old()` expressions work correctly in current model (Section 4.3 removed)
+- See `DESIGN_NOTES.md` for detailed explanations of design decisions

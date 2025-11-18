@@ -79,6 +79,26 @@ data class If(
     override fun <R> accept(v: ExpVisitor<R>): R = v.visitIf(this)
 }
 
+/**
+ * While loop with invariants.
+ *
+ * Loop invariants are correctly implemented by attaching them to the continueLabel.
+ * This ensures:
+ * 1. Invariants are checked on each jump to the label (before and after each iteration)
+ * 2. Invariants are assumed when execution reaches the label (available in loop body)
+ * 3. Proper initialization/preservation verification flow
+ *
+ * The generated Viper structure is:
+ *   continueLabel: (with invariants)
+ *     if (condition) {
+ *       <body>
+ *       goto continueLabel  // Checks invariants hold after iteration
+ *     }
+ *   breakLabel:
+ *   assert invariants  // Final check after loop exit
+ *
+ * See DESIGN_NOTES.md for detailed explanation of this mechanism.
+ */
 data class While(
     val condition: ExpEmbedding,
     val body: ExpEmbedding,
