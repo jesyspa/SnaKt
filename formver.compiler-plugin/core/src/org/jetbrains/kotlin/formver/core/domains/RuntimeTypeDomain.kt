@@ -412,4 +412,24 @@ class RuntimeTypeDomain(val classes: List<ClassTypeEmbedding>) : BuiltinDomain(R
             }
         }
     }
+
+    context(nameResolver: NameResolver)
+    override fun registerDomainSpecificNames() {
+        // Register all type functions (builtin types, class types, etc.)
+        builtinTypes.forEach {
+            nameResolver.register(it.name)
+        }
+        nonNullableTypes.forEach { nameResolver.register(it.name) }
+        classTypes.forEach { nameResolver.register(it.value.name) }
+
+        // Register all domain functions
+        functions.forEach { func ->
+            nameResolver.register(func.name.funcName)
+        }
+
+        // Register named axioms
+        axioms.forEach { axiom ->
+            if (axiom.name is NamedDomainAxiomLabel) nameResolver.register(axiom.name as SymbolicName)
+        }
+    }
 }

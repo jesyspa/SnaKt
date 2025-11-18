@@ -109,14 +109,14 @@ private fun Program.registerSeqnNames(seqn: Stmt.Seqn) {
 context(nameResolver: NameResolver)
 fun Program.registerAllNames() {
     domains.forEach { domain ->
-        // Call specialized registration for domains that implement it (e.g., RuntimeTypeDomain)
-        (domain as? org.jetbrains.kotlin.formver.core.domains.RuntimeTypeDomain)?.registerDomain()
-
         nameResolver.register(domain.name)
         domain.functions.forEach { function ->
             nameResolver.register(function.name)
             function.formalArgs.forEach { arg -> nameResolver.register(arg.name) }
         }
+
+        // Allow domains to register additional domain-specific names
+        domain.registerDomainSpecificNames()
     }
     fields.forEach { nameResolver.register(it.name) }
 

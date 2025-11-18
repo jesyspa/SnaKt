@@ -128,6 +128,16 @@ abstract class Domain(
     abstract val typeVars: List<Type.TypeVar>
     abstract val functions: List<DomainFunc>
     abstract val axioms: List<DomainAxiom>
+
+    /**
+     * Hook for domains to register additional names beyond the standard domain structure.
+     * Override this method to register domain-specific names (e.g., class types, axioms).
+     * The default implementation does nothing.
+     */
+    context(nameResolver: NameResolver)
+    open fun registerDomainSpecificNames() {
+        // Default: no additional registration needed
+    }
     context(nameResolver: NameResolver)
     override fun toSilver(): viper.silver.ast.Domain =
         viper.silver.ast.Domain(
