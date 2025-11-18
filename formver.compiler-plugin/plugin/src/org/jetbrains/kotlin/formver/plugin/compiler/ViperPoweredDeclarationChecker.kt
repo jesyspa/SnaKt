@@ -27,8 +27,8 @@ import org.jetbrains.kotlin.formver.viper.Verifier
 import org.jetbrains.kotlin.formver.viper.ast.Program
 import org.jetbrains.kotlin.formver.viper.ast.registerAllNames
 import org.jetbrains.kotlin.formver.viper.ast.unwrapOr
+import org.jetbrains.kotlin.formver.viper.debugMangled
 import org.jetbrains.kotlin.formver.viper.errors.VerifierError
-import org.jetbrains.kotlin.formver.viper.mangled
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
@@ -63,20 +63,18 @@ class ViperPoweredDeclarationChecker(private val session: FirSession, private va
                     declaration.source,
                     PluginErrors.VIPER_TEXT,
                     declaration.name.asString(),
-                    with(programConversionContext.nameResolver) { it.toDebugOutput() }
+                    it.toDebugOutput()
                 )
             }
 
             if (shouldDumpExpEmbeddings(declaration)) {
-                with(programConversionContext.nameResolver) {
-                    for ((name, embedding) in programConversionContext.debugExpEmbeddings) {
-                        reporter.reportOn(
-                            declaration.source,
-                            PluginErrors.EXP_EMBEDDING,
-                            name.mangled,
-                            embedding.debugTreeView.print()
-                        )
-                    }
+                for ((name, embedding) in programConversionContext.debugExpEmbeddings) {
+                    reporter.reportOn(
+                        declaration.source,
+                        PluginErrors.EXP_EMBEDDING,
+                        name.debugMangled,
+                        embedding.debugTreeView.print()
+                    )
                 }
             }
 

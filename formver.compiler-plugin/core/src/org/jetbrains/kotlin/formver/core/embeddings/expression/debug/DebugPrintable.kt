@@ -5,9 +5,12 @@
 
 package org.jetbrains.kotlin.formver.core.embeddings.expression.debug
 
-import org.jetbrains.kotlin.formver.viper.NameResolver
-
+/**
+ * Interface for objects that can be converted to a debug tree view.
+ *
+ * Debug output uses `debugMangled` for name resolution and does NOT require
+ * name registration. This is intended for diagnostics, logging, and debugging only.
+ */
 interface DebugPrintable {
-    context(nameResolver: NameResolver)
     val debugTreeView: TreeView
 }

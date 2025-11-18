@@ -47,8 +47,17 @@ data class Program(
         functions = functions.filter { it.includeInDumpPolicy == IncludeInDumpPolicy.ALWAYS }
     )
 
-    context(nameResolver: NameResolver)
-    fun toDebugOutput(): String = toSilver().toString()
+    /**
+     * Converts this program to a debug string representation.
+     *
+     * This uses DebugNameResolver and does NOT require name registration.
+     * Use this for debug output, logging, and diagnostics.
+     *
+     * For production conversion, use `toSilver()` with a registered SimpleNameResolver.
+     */
+    fun toDebugOutput(): String = with(DebugNameResolver()) {
+        toSilver().toString()
+    }
 }
 context(nameResolver: NameResolver)
 private fun registerExpNames(exp: Exp) {

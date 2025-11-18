@@ -505,10 +505,9 @@ data class PredicateAccessPermissions(val predicateName: SymbolicName, val args:
     override val subexpressions: List<ExpEmbedding>
         get() = args
 
-    context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = NamedBranchingNode("PredicateAccess", buildList {
-            add(PlaintextLeaf(predicateName.mangled).withDesignation("name"))
+            add(PlaintextLeaf(predicateName.debugMangled).withDesignation("name"))
             addAll(args.map { it.debugTreeView })
         })
 
