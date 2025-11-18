@@ -14,5 +14,19 @@ method f$emptyFunction$TF$() returns (ret$0: Ref)
 /pure_function.kt:(117,139): info: Generated Viper text for emptyAnnotatedFunction:
 function f$emptyAnnotatedFunction$TF$(): Ref
 {
-  null
+  df$rt$nullValue()
+}
+
+/pure_function.kt:(175,197): info: Generated Viper text for annotatedLiteralReturn:
+function f$annotatedLiteralReturn$TF$(): Ref
+{
+  df$rt$boolToRef(true)
+}
+
+/pure_function.kt:(240,263): info: Generated Viper text for annotatedVariableReturn:
+function f$annotatedVariableReturn$TF$(): Ref
+{
+  (let l0$x ==
+    (df$rt$intToRef(5)) in
+    l0$x)
 }

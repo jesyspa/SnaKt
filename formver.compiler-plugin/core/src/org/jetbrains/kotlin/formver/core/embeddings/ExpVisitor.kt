@@ -10,6 +10,7 @@ import org.jetbrains.kotlin.formver.core.embeddings.expression.*
 interface ExpVisitor<R> {
     fun visitPureExpEmbedding(e: PureExpEmbedding): R
     fun visitBlock(e: Block): R
+    fun visitPureBlock(e: PureBlock): R
     fun visitFunctionExp(e: FunctionExp): R
     fun visitGotoChainNode(e: GotoChainNode): R
     fun visitIf(e: If): R

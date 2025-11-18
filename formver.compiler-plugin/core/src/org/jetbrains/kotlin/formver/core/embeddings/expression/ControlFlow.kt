@@ -5,6 +5,7 @@
 
 package org.jetbrains.kotlin.formver.core.embeddings.expression
 
+import org.jetbrains.kotlin.formver.common.SnaktInternalException
 import org.jetbrains.kotlin.formver.core.asPosition
 import org.jetbrains.kotlin.formver.core.embeddings.*
 import org.jetbrains.kotlin.formver.core.embeddings.callables.FullNamedFunctionSignature
@@ -25,9 +26,13 @@ import org.jetbrains.kotlin.formver.viper.ast.Stmt
 
 private data class BlockImpl(override val exps: List<ExpEmbedding>) : Block
 
+private data class PureBlockImpl(override val exps: List<ExpEmbedding>) : PureBlock
+
 fun blockOf(vararg exps: ExpEmbedding): Block = BlockImpl(exps.toList())
 
 fun List<ExpEmbedding>.toBlock(): Block = BlockImpl(this)
+
+fun List<ExpEmbedding>.toPureBlock(): PureBlock = PureBlockImpl(this)
 
 fun Block(actions: MutableList<ExpEmbedding>.() -> Unit): Block = BlockImpl(buildList {
     actions()
@@ -55,6 +60,38 @@ sealed interface Block : OptionalResultExpEmbedding {
     override fun <R> accept(v: ExpVisitor<R>): R = v.visitBlock(this)
 }
 
+/**
+ * A block of expressions that is to be translated into a chain of let-bindings
+ */
+sealed interface PureBlock : OnlyToViperExpEmbedding {
+    val exps: List<ExpEmbedding>
+    override val type: TypeEmbedding
+        get() = exps.lastOrNull()?.type ?: buildType { unit() }
+
+    override fun toViper(ctx: LinearizationContext): Exp {
+        if (exps.isEmpty()) return Exp.NullLit()
+
+        // TODO: This is very experimental
+        return exps.take(exps.size - 1).foldRight(exps.last().toViper(ctx)) { exp, acc ->
+            if (exp is WithPosition && exp.inner is Declare) {
+                Exp.LetBinding(
+                    exp.inner.variable.toLocalVarDecl(),
+                    exp.inner.initializer?.toViper(ctx) ?: Exp.NullLit(),
+                    acc
+                )
+            } else {
+                // TODO: Consider this a placeholder - we have to be way more expressive here
+                throw SnaktInternalException(ctx.source, "Found invalid embedding in pure block")
+            }
+        }
+    }
+
+    override fun <R> accept(v: ExpVisitor<R>): R = v.visitPureBlock(this)
+
+    context(nameResolver: NameResolver)
+    override val debugTreeView: TreeView
+        get() = BlockNode(exps.map { it.debugTreeView })
+}
 
 data class If(
     val condition: ExpEmbedding,

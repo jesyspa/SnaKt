@@ -36,6 +36,9 @@ data class StmtConverter(
     override fun convert(stmt: FirStatement): ExpEmbedding =
         stmt.accept(StmtConversionVisitor, this).withPosition(stmt.source)
 
+    override fun convertPure(stmt: FirStatement): ExpEmbedding =
+        stmt.accept(StmtPureConversionVisitor, this).withPosition(stmt.source)
+
     override fun <R> withNewScope(action: StmtConversionContext.() -> R): R = withNewScopeImpl { action() }
     override fun <R> withNoScope(action: StmtConversionContext.() -> R): R =
         withNewScopeImpl(needsScope = false, action)

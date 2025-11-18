@@ -29,8 +29,10 @@ import org.jetbrains.kotlin.formver.core.isCustom
 import org.jetbrains.kotlin.formver.core.linearization.Linearizer
 import org.jetbrains.kotlin.formver.core.linearization.SeqnBuilder
 import org.jetbrains.kotlin.formver.core.linearization.SharedLinearizationState
+import org.jetbrains.kotlin.formver.core.linearization.pureToViper
 import org.jetbrains.kotlin.formver.core.purity.checkValidity
 import org.jetbrains.kotlin.formver.viper.SymbolicName
+import org.jetbrains.kotlin.formver.viper.ast.Exp
 import org.jetbrains.kotlin.utils.addIfNotNull
 import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
 import org.jetbrains.kotlin.utils.filterIsInstanceAnd
@@ -57,6 +59,7 @@ interface StmtConversionContext : MethodConversionContext {
     fun breakLabelName(targetName: String? = null): SymbolicName
     fun addLoopName(targetName: String)
     fun convert(stmt: FirStatement): ExpEmbedding
+    fun convertPure(stmt: FirStatement): ExpEmbedding
 
     fun <R> withNewScope(action: StmtConversionContext.() -> R): R
     fun <R> withNoScope(action: StmtConversionContext.() -> R): R
@@ -145,6 +148,21 @@ fun StmtConversionContext.embedPropertyAccess(accessExpression: FirPropertyAcces
             error("Property access symbol $calleeSymbol has unsupported type.")
     }
 
+fun StmtConversionContext.embedPurePropertyAccess(accessExpression: FirPropertyAccessExpression): PropertyAccessEmbedding =
+    when (val calleeSymbol = accessExpression.calleeReference.symbol) {
+        is FirValueParameterSymbol -> embedParameter(calleeSymbol).asPropertyAccess()
+        is FirPropertySymbol -> {
+            when {
+                accessExpression.dispatchReceiver == null && accessExpression.extensionReceiver == null ->
+                    embedLocalProperty(calleeSymbol)
+
+                else -> error("Property access symbol $calleeSymbol is used in a pure context, but does not access a local property")
+            }
+        }
+
+        else ->
+            error("Property access symbol $calleeSymbol has unsupported type.")
+    }
 
 fun StmtConversionContext.argumentDeclaration(
     arg: ExpEmbedding,
@@ -253,6 +271,14 @@ fun StmtConversionContext.convertMethodWithBody(
     // TODO: Terminate conversion if purity check fails
     body.checkValidity(declaration.source, errorCollector)
     return FunctionBodyEmbedding(seqnBuilder.block, returnTarget, bodyExp)
+}
+
+fun StmtConversionContext.convertFunctionWithBody(
+    declaration: FirSimpleFunction
+): Exp {
+    val firBody = declaration.body ?: return Exp.NullLit()
+    val body = convertPure(firBody)
+    return body.pureToViper(false)
 }
 
 private const val INVALID_STATEMENT_MSG =
