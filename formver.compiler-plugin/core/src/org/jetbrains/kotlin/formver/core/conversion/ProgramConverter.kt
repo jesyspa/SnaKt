@@ -400,6 +400,17 @@ class ProgramConverter(
             ).statementCtxt()
         }
 
+        // Convert FIR preconditions to ExpEmbedding explicitly, rather than lazily in getPreconditions
+        val firPreconditions: List<ExpEmbedding> = firSpec?.precond?.let {
+            createCtx().collectInvariants(it)
+        } ?: emptyList()
+
+        // Helper function to convert FIR postconditions to ExpEmbedding
+        fun convertFirPostconditions(returnVariable: VariableEmbedding): List<ExpEmbedding> =
+            firSpec?.postcond?.let {
+                createCtx(returnVariable).collectInvariants(it)
+            } ?: emptyList()
+
         return object : FullNamedFunctionSignature, NamedFunctionSignature by subSignature {
             // TODO (inhale vs require) Decide if `predicateAccessInvariant` should be required rather than inhaled in the beginning of the body.
             override fun getPreconditions() = buildList {
@@ -411,12 +422,7 @@ class ProgramConverter(
                     }
                 }
                 addAll(subSignature.stdLibPreconditions())
-                // We create a separate context to embed the preconditions here.
-                // Hence, some parts of FIR are translated later than the other and less explicitly.
-                // TODO: this process should be a separate step in the conversion.
-                firSpec?.precond?.let {
-                    addAll(createCtx().collectInvariants(it))
-                }
+                addAll(firPreconditions)
             }
 
             override fun getPostconditions(returnVariable: VariableEmbedding) = buildList {
@@ -435,10 +441,7 @@ class ProgramConverter(
                 addAll(contractVisitor.getPostconditions(ContractVisitorContext(returnVariable, symbol)))
                 addAll(subSignature.stdLibPostconditions(returnVariable))
                 addIfNotNull(primaryConstructorInvariants(returnVariable))
-                // TODO: this process should be a separate step in the conversion (see above)
-                firSpec?.postcond?.let {
-                    addAll(createCtx(returnVariable).collectInvariants(it))
-                }
+                addAll(convertFirPostconditions(returnVariable))
             }
 
             fun primaryConstructorInvariants(returnVariable: VariableEmbedding): ExpEmbedding? {
