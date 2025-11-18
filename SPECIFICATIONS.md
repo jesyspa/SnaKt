@@ -2,9 +2,15 @@
 
 SnaKt allows you to write formal specifications for your Kotlin code using preconditions, postconditions, loop invariants, and quantifiers. These specifications are verified using the Viper framework.
 
-## Basic Annotations
+## Controlling Verification
 
-To enable verification for a function, annotate it with `@AlwaysVerify`:
+By default, SnaKt verifies functions that have specifications (preconditions, postconditions, or loop invariants). You can control which functions are verified using annotations or plugin configuration.
+
+### Verification Annotations
+
+- `@AlwaysVerify`: Force verification of this function even without specifications
+- `@NeverVerify`: Skip verification even if the function has specifications
+- `@NeverConvert`: Skip conversion to Viper entirely (implies `@NeverVerify`)
 
 ```kotlin
 import org.jetbrains.kotlin.formver.plugin.*
@@ -16,7 +22,46 @@ fun increment(x: Int): Int {
     }
     return x + 1
 }
+
+// This function will also be verified because of @AlwaysVerify,
+// even though it has no specifications
+@AlwaysVerify
+fun noSpecs(): Int = 42
 ```
+
+### Plugin Configuration
+
+You can configure verification behavior globally using the gradle plugin:
+
+```kotlin
+formver {
+    // Control which functions to verify (default: targets_with_contract)
+    verificationTargetsSelection("all_targets")         // Verify all functions
+    verificationTargetsSelection("targets_with_contract") // Only verify functions with specifications
+    verificationTargetsSelection("no_targets")          // Don't verify any functions
+
+    // Control which functions to convert to Viper (default: targets_with_contract)
+    conversionTargetsSelection("all_targets")
+    conversionTargetsSelection("targets_with_contract")
+    conversionTargetsSelection("no_targets")
+
+    // Control error reporting style (default: user_friendly)
+    errorStyle("user_friendly")  // Show user-friendly error messages
+    errorStyle("original_viper") // Show raw Viper error messages
+    errorStyle("both")           // Show both formats
+
+    // Control logging verbosity (default: only_warnings)
+    logLevel("only_warnings")      // Only show warnings and errors
+    logLevel("short_viper_dump")   // Include short Viper program dump
+    logLevel("full_viper_dump")    // Include full Viper program dump (use --info flag)
+
+    // Control behavior when unsupported features are encountered (default: throw_exception)
+    unsupportedFeatureBehaviour("throw_exception")   // Stop compilation with error
+    unsupportedFeatureBehaviour("assume_unreachable") // Assume unreachable and continue
+}
+```
+
+**Note:** Annotations like `@AlwaysVerify` override the plugin configuration. For example, a function with `@AlwaysVerify` will always be verified, even if `verificationTargetsSelection` is set to `"no_targets"`.
 
 ## Preconditions
 
