@@ -314,6 +314,11 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         }
     }
 
+    override fun visitComponentCall(componentCall: FirComponentCall, data: StmtConversionContext): ExpEmbedding {
+        // Component calls (component1(), component2(), etc.) used in destructuring are treated as regular function calls
+        return visitFunctionCall(componentCall, data)
+    }
+
     override fun visitImplicitInvokeCall(
         implicitInvokeCall: FirImplicitInvokeCall,
         data: StmtConversionContext,
