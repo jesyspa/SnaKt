@@ -14,7 +14,6 @@ internal object ExprPurityVisitor : ExpVisitor<Boolean> {
     override fun visitPureExpEmbedding(e: PureExpEmbedding) = true
     override fun visitUnitLit(e: UnitLit) = true
     override fun visitFunctionCall(e: FunctionCall) = true
-
     // TODO: We probably want to check the block here (regardless of us assuming that it is pure)
     override fun visitPureBlock(e: PureBlock) = true
 
