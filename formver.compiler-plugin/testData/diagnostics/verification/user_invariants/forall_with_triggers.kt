@@ -1,6 +1,5 @@
 import org.jetbrains.kotlin.formver.plugin.*
 
-@AlwaysVerify
 fun <!VIPER_TEXT!>forAllWithSimpleTrigger<!>(): Int {
     postconditions<Int> { res ->
         forAll<Int> {
@@ -13,7 +12,6 @@ fun <!VIPER_TEXT!>forAllWithSimpleTrigger<!>(): Int {
     return 0
 }
 
-@AlwaysVerify
 fun <!VIPER_TEXT!>forAllWithMultipleTriggers<!>(): Int {
     postconditions<Int> { res ->
         forAll<Int> {
@@ -25,7 +23,6 @@ fun <!VIPER_TEXT!>forAllWithMultipleTriggers<!>(): Int {
     return 1
 }
 
-@AlwaysVerify
 fun <!VIPER_TEXT!>forAllWithTriggersInLoop<!>(str: String): Int {
     var res = 0
     var i = 10
@@ -42,7 +39,6 @@ fun <!VIPER_TEXT!>forAllWithTriggersInLoop<!>(str: String): Int {
     return res
 }
 
-@AlwaysVerify
 fun <!VIPER_TEXT!>forAllWithoutTriggers<!>(): Int {
     postconditions<Int> { res ->
         forAll<Int> {

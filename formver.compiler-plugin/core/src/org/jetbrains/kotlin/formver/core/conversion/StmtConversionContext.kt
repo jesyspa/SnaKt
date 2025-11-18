@@ -280,15 +280,15 @@ fun StmtConversionContext.collectInvariantsAndTriggers(block: FirBlock): Invaria
     val triggers = mutableListOf<ExpEmbedding>()
 
     block.statements.forEach { stmt ->
-        // Check if this is a triggers() function call
         if (stmt is FirFunctionCall) {
             val symbol = stmt.toResolvedCallableSymbol() as? FirFunctionSymbol<*>
             if (symbol?.isInvariantBuilderFunctionNamed("triggers") == true) {
-                // Extract trigger arguments
-                stmt.arguments.forEach { arg ->
-                    if (arg is FirExpression) {
-                        triggers.add(arg.accept(StmtConversionVisitor, this))
-                    }
+                val varargs = stmt.arguments.firstOrNull() as? FirVarargArgumentsExpression ?:
+                    throw IllegalArgumentException("triggers() function must have a single varargs parameter.")
+
+                // TODO: check whether trigger is valid in Viper.
+                varargs.arguments.forEach { expr ->
+                    triggers.add(expr.accept(StmtConversionVisitor, this))
                 }
                 return@forEach
             }

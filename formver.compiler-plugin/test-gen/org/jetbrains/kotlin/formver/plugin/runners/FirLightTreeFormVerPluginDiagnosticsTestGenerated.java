@@ -802,6 +802,12 @@ public class FirLightTreeFormVerPluginDiagnosticsTestGenerated extends AbstractF
       }
 
       @Test
+      @TestMetadata("forall_with_triggers.kt")
+      public void testForall_with_triggers() {
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/forall_with_triggers.kt");
+      }
+
+      @Test
       @TestMetadata("simple_forall.kt")
       public void testSimple_forall() {
         runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/simple_forall.kt");
