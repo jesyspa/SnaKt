@@ -13,6 +13,7 @@ import org.jetbrains.kotlin.fir.expressions.*
 import org.jetbrains.kotlin.fir.expressions.impl.FirElseIfTrueCondition
 import org.jetbrains.kotlin.fir.expressions.impl.FirUnitExpression
 import org.jetbrains.kotlin.fir.references.toResolvedSymbol
+import org.jetbrains.kotlin.fir.declarations.FirVariable
 import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.*
 import org.jetbrains.kotlin.fir.types.coneType
@@ -349,6 +350,12 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
 
         val type = data.embedType(symbol.resolvedReturnType)
         return data.declareLocalProperty(symbol, property.initializer?.let { data.convert(it).withType(type) })
+    }
+
+    override fun visitVariable(variable: FirVariable, data: StmtConversionContext): ExpEmbedding {
+        val symbol = variable.symbol
+        val type = data.embedType(symbol.resolvedReturnType)
+        return data.declareLocalVariable(symbol, variable.initializer?.let { data.convert(it).withType(type) })
     }
 
     override fun visitWhileLoop(whileLoop: FirWhileLoop, data: StmtConversionContext): ExpEmbedding {
