@@ -578,7 +578,6 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
         context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.Let =
             Let(variable.toSilver(), varExp.toSilver(), body.toSilver(), pos.toSilver(), info.toSilver(), trafos.toSilver())
-
     }
 
     // We can't pass all the available position, info, and trafos information here.

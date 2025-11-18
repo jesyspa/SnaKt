@@ -16,7 +16,8 @@ import org.jetbrains.kotlin.text
 import org.jetbrains.kotlin.types.ConstantValueKind
 
 /**
- * A restrictive version of the StmtConversionVisitor, which is used to embed pure functions
+ * A restrictive version of the StmtConversionVisitor, which is used to embed functions annotated as pure
+ * into an ExpEmbedding representation that reflects their pure aspects better and makes linearization easier
  */
 object StmtPureConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>() {
     override fun visitElement(element: FirElement, data: StmtConversionContext): ExpEmbedding =
