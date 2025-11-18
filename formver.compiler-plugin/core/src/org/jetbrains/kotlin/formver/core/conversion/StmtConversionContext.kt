@@ -275,23 +275,34 @@ fun StmtConversionContext.collectInvariants(block: FirBlock) = buildList {
     }
 }
 
+/**
+ * Attempts to extract trigger expressions from a triggers() function call.
+ * Returns the list of trigger expressions if this is a triggers() call, or null otherwise.
+ */
+private fun StmtConversionContext.tryExtractTriggers(stmt: FirStatement): List<ExpEmbedding>? {
+    if (stmt !is FirFunctionCall) return null
+
+    val symbol = stmt.toResolvedCallableSymbol() as? FirFunctionSymbol<*>
+    if (symbol?.isInvariantBuilderFunctionNamed("triggers") != true) return null
+
+    val varargs = stmt.arguments.firstOrNull() as? FirVarargArgumentsExpression
+        ?: throw IllegalArgumentException("triggers() function must have a single varargs parameter.")
+
+    // TODO: check whether trigger is valid in Viper.
+    return varargs.arguments.map { expr ->
+        expr.accept(StmtConversionVisitor, this)
+    }
+}
+
 fun StmtConversionContext.collectInvariantsAndTriggers(block: FirBlock): InvariantsAndTriggers {
     val invariants = mutableListOf<ExpEmbedding>()
     val triggers = mutableListOf<ExpEmbedding>()
 
     block.statements.forEach { stmt ->
-        if (stmt is FirFunctionCall) {
-            val symbol = stmt.toResolvedCallableSymbol() as? FirFunctionSymbol<*>
-            if (symbol?.isInvariantBuilderFunctionNamed("triggers") == true) {
-                val varargs = stmt.arguments.firstOrNull() as? FirVarargArgumentsExpression ?:
-                    throw IllegalArgumentException("triggers() function must have a single varargs parameter.")
-
-                // TODO: check whether trigger is valid in Viper.
-                varargs.arguments.forEach { expr ->
-                    triggers.add(expr.accept(StmtConversionVisitor, this))
-                }
-                return@forEach
-            }
+        val extractedTriggers = tryExtractTriggers(stmt)
+        if (extractedTriggers != null) {
+            triggers.addAll(extractedTriggers)
+            return@forEach
         }
 
         // Otherwise, treat as invariant
