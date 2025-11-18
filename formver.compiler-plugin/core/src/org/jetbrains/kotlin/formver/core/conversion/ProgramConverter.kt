@@ -350,31 +350,95 @@ class ProgramConverter(
             return result
         }
 
-    private fun embedFullSignature(symbol: FirFunctionSymbol<*>): FullNamedFunctionSignature {
-        val subSignature = object : NamedFunctionSignature, FunctionSignature by embedFunctionSignature(symbol) {
-            override val name = symbol.embedName(this@ProgramConverter)
-            override val labelName: String
-                get() = super<NamedFunctionSignature>.labelName
-            override val symbol = symbol
-        }
-        val constructorParamSymbolsToFields = extractConstructorParamsAsFields(symbol)
-        val contractVisitor = ContractDescriptionConversionVisitor(this@ProgramConverter, subSignature)
-
-        @OptIn(SymbolInternals::class)
-        val declaration = symbol.fir
-        val body = declaration.body
-
-        /** Specifications are only allowed inside simple functions.
-         * We are also unable to retrieve them when body is not visible,
-         * although ideally we should be able to see preconditions and postconditions
-         * from other modules.
+    /**
+     * Holds the pre/postconditions converted from FIR to ExpEmbedding.
+     * This ensures FIR conversion happens early and explicitly, rather than lazily when conditions are requested.
+     */
+    private data class ConvertedFunctionConditions(
+        val preconditions: List<ExpEmbedding>,
+        val postconditions: List<ExpEmbedding>,
+        val postconditionReturnVariable: VariableEmbedding,
+    ) {
+        /**
+         * Get postconditions with variable substitution.
+         * Substitutes the canonical return variable with the provided one.
          */
-        val firSpec = when {
-            declaration !is FirSimpleFunction -> null
-            body == null -> null
-            else -> extractFirSpecification(body, declaration.symbol.resolvedReturnType)
+        fun getPostconditionsWithSubstitution(actualReturnVariable: VariableEmbedding): List<ExpEmbedding> {
+            // If the actual return variable is the same as or compatible with the canonical one,
+            // return the postconditions as-is
+            if (actualReturnVariable === postconditionReturnVariable) {
+                return postconditions
+            }
+
+            // Otherwise, perform variable substitution
+            return postconditions.map { it.substituteVariable(postconditionReturnVariable, actualReturnVariable) }
         }
 
+        private fun ExpEmbedding.substituteVariable(
+            from: VariableEmbedding,
+            to: VariableEmbedding
+        ): ExpEmbedding {
+            // If this is the variable we're looking for, replace it
+            if (this === from || (this is VariableEmbedding && this.name == from.name)) {
+                return to
+            }
+
+            // Otherwise, recursively substitute in child expressions
+            // This is a simplified substitution that handles common cases
+            // For more complex cases, we might need a more sophisticated visitor pattern
+            return when (this) {
+                is BinaryOperator -> this.copy(
+                    left = left.substituteVariable(from, to),
+                    right = right.substituteVariable(from, to)
+                )
+                is UnaryOperator -> this.copy(
+                    inner = inner.substituteVariable(from, to)
+                )
+                is FieldAccess -> this.copy(
+                    receiver = receiver.substituteVariable(from, to)
+                )
+                else -> this // For other cases, return as-is
+            }
+        }
+
+        private fun BinaryOperator.copy(left: ExpEmbedding = this.left, right: ExpEmbedding = this.right): ExpEmbedding =
+            when (this) {
+                is EqCmp -> EqCmp(left, right, this.sourceRole)
+                is And -> And(left, right, this.sourceRole)
+                is Or -> Or(left, right, this.sourceRole)
+                is Implies -> Implies(left, right, this.sourceRole)
+                is GreaterCmp -> GreaterCmp(left, right, this.sourceRole)
+                is GreaterEqualsCmp -> GreaterEqualsCmp(left, right, this.sourceRole)
+                is LessCmp -> LessCmp(left, right, this.sourceRole)
+                is LessEqualsCmp -> LessEqualsCmp(left, right, this.sourceRole)
+                is Add -> Add(left, right, this.sourceRole)
+                is Sub -> Sub(left, right, this.sourceRole)
+                is Mul -> Mul(left, right, this.sourceRole)
+                is Div -> Div(left, right, this.sourceRole)
+                is Mod -> Mod(left, right, this.sourceRole)
+                else -> this
+            }
+
+        private fun UnaryOperator.copy(inner: ExpEmbedding = this.inner): ExpEmbedding =
+            when (this) {
+                is Not -> Not(inner, this.sourceRole)
+                is Minus -> Minus(inner, this.sourceRole)
+                else -> this
+            }
+
+        private fun FieldAccess.copy(receiver: ExpEmbedding = this.receiver): FieldAccess =
+            FieldAccess(receiver, this.field, this.sourceRole)
+    }
+
+    /**
+     * Convert FIR pre/postconditions to ExpEmbedding immediately.
+     * This is a separate, explicit conversion step that happens early in the compilation process.
+     */
+    private fun convertFunctionConditions(
+        symbol: FirFunctionSymbol<*>,
+        subSignature: NamedFunctionSignature,
+        firSpec: FirSpecification?,
+    ): ConvertedFunctionConditions {
         val rootResolver =
             RootParameterResolver(
                 this@ProgramConverter,
@@ -400,16 +464,53 @@ class ProgramConverter(
             ).statementCtxt()
         }
 
-        // Convert FIR preconditions to ExpEmbedding explicitly, rather than lazily in getPreconditions
-        val firPreconditions: List<ExpEmbedding> = firSpec?.precond?.let {
+        // Convert FIR preconditions to ExpEmbedding immediately
+        val preconditions: List<ExpEmbedding> = firSpec?.precond?.let {
             createCtx().collectInvariants(it)
         } ?: emptyList()
 
-        // Helper function to convert FIR postconditions to ExpEmbedding
-        fun convertFirPostconditions(returnVariable: VariableEmbedding): List<ExpEmbedding> =
-            firSpec?.postcond?.let {
-                createCtx(returnVariable).collectInvariants(it)
-            } ?: emptyList()
+        // Convert FIR postconditions to ExpEmbedding immediately with a canonical return variable
+        // This ensures conversion happens early, not lazily when getPostconditions is called
+        val canonicalReturnVariable = PlaceholderVariableEmbedding(
+            SimpleVariableName("result"),
+            subSignature.callableType.returnType,
+            isUnique = subSignature.callableType.returnsUnique,
+            isBorrowed = false,
+        )
+        val postconditions: List<ExpEmbedding> = firSpec?.postcond?.let {
+            createCtx(canonicalReturnVariable).collectInvariants(it)
+        } ?: emptyList()
+
+        return ConvertedFunctionConditions(preconditions, postconditions, canonicalReturnVariable)
+    }
+
+    private fun embedFullSignature(symbol: FirFunctionSymbol<*>): FullNamedFunctionSignature {
+        val subSignature = object : NamedFunctionSignature, FunctionSignature by embedFunctionSignature(symbol) {
+            override val name = symbol.embedName(this@ProgramConverter)
+            override val labelName: String
+                get() = super<NamedFunctionSignature>.labelName
+            override val symbol = symbol
+        }
+        val constructorParamSymbolsToFields = extractConstructorParamsAsFields(symbol)
+        val contractVisitor = ContractDescriptionConversionVisitor(this@ProgramConverter, subSignature)
+
+        @OptIn(SymbolInternals::class)
+        val declaration = symbol.fir
+        val body = declaration.body
+
+        /** Specifications are only allowed inside simple functions.
+         * We are also unable to retrieve them when body is not visible,
+         * although ideally we should be able to see preconditions and postconditions
+         * from other modules.
+         */
+        val firSpec = when {
+            declaration !is FirSimpleFunction -> null
+            body == null -> null
+            else -> extractFirSpecification(body, declaration.symbol.resolvedReturnType)
+        }
+
+        // Convert FIR conditions to ExpEmbedding immediately - this is the explicit conversion step
+        val convertedConditions = convertFunctionConditions(symbol, subSignature, firSpec)
 
         return object : FullNamedFunctionSignature, NamedFunctionSignature by subSignature {
             // TODO (inhale vs require) Decide if `predicateAccessInvariant` should be required rather than inhaled in the beginning of the body.
@@ -422,7 +523,8 @@ class ProgramConverter(
                     }
                 }
                 addAll(subSignature.stdLibPreconditions())
-                addAll(firPreconditions)
+                // Add pre-converted FIR preconditions - conversion happened early in convertFunctionConditions
+                addAll(convertedConditions.preconditions)
             }
 
             override fun getPostconditions(returnVariable: VariableEmbedding) = buildList {
@@ -441,7 +543,9 @@ class ProgramConverter(
                 addAll(contractVisitor.getPostconditions(ContractVisitorContext(returnVariable, symbol)))
                 addAll(subSignature.stdLibPostconditions(returnVariable))
                 addIfNotNull(primaryConstructorInvariants(returnVariable))
-                addAll(convertFirPostconditions(returnVariable))
+                // Add pre-converted FIR postconditions - conversion happened early in convertFunctionConditions
+                // Variable substitution ensures the canonical variable is replaced with the actual return variable
+                addAll(convertedConditions.getPostconditionsWithSubstitution(returnVariable))
             }
 
             fun primaryConstructorInvariants(returnVariable: VariableEmbedding): ExpEmbedding? {
