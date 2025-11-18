@@ -1,0 +1,262 @@
+/destructuring_test.kt:(163,187): info: Generated Viper text for copy:
+field bf$x: Ref
+
+field bf$y: Ref
+
+method f$c$Point$copy$TF$T$Point$T$Int$T$Int(this$dispatch: Ref, p$x: Ref, p$y: Ref)
+  returns (ret: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$Point())
+  ensures acc(p$c$Point$shared(ret), wildcard)
+
+
+/destructuring_test.kt:(168,169): info: Generated Viper text for component1:
+field bf$x: Ref
+
+field bf$y: Ref
+
+method f$c$Point$component1$TF$T$Point(this$dispatch: Ref)
+  returns (ret: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$intType())
+
+
+/destructuring_test.kt:(180,181): info: Generated Viper text for component2:
+field bf$x: Ref
+
+field bf$y: Ref
+
+method f$c$Point$component2$TF$T$Point(this$dispatch: Ref)
+  returns (ret: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$intType())
+
+
+/destructuring_test.kt:(206,242): info: Generated Viper text for copy:
+field bf$a: Ref
+
+field bf$b: Ref
+
+field bf$c: Ref
+
+method f$c$Triple$copy$TF$T$Triple$T$Int$T$Int$T$Int(this$dispatch: Ref, p$a: Ref,
+  p$b: Ref, p$c: Ref)
+  returns (ret: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$Triple())
+  ensures acc(p$c$Triple$shared(ret), wildcard)
+
+
+/destructuring_test.kt:(211,212): info: Generated Viper text for component1:
+field bf$a: Ref
+
+field bf$b: Ref
+
+field bf$c: Ref
+
+method f$c$Triple$component1$TF$T$Triple(this$dispatch: Ref)
+  returns (ret: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$intType())
+
+
+/destructuring_test.kt:(223,224): info: Generated Viper text for component2:
+field bf$a: Ref
+
+field bf$b: Ref
+
+field bf$c: Ref
+
+method f$c$Triple$component2$TF$T$Triple(this$dispatch: Ref)
+  returns (ret: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$intType())
+
+
+/destructuring_test.kt:(235,236): info: Generated Viper text for component3:
+field bf$a: Ref
+
+field bf$b: Ref
+
+field bf$c: Ref
+
+method f$c$Triple$component3$TF$T$Triple(this$dispatch: Ref)
+  returns (ret: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$intType())
+
+
+/destructuring_test.kt:(262,285): info: Generated Viper text for testSimpleDestructuring:
+field bf$size: Ref
+
+field bf$x: Ref
+
+field bf$y: Ref
+
+method con$c$Point$T$Int$T$Int(p$x: Ref, p$y: Ref) returns (ret: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$Point())
+  ensures acc(p$c$Point$shared(ret), wildcard)
+  ensures acc(p$c$Point$unique(ret), write)
+  ensures df$rt$intFromRef((unfolding acc(p$c$Point$shared(ret), wildcard) in
+      ret.bf$x)) ==
+    df$rt$intFromRef(p$x) &&
+    df$rt$intFromRef((unfolding acc(p$c$Point$shared(ret), wildcard) in
+      ret.bf$y)) ==
+    df$rt$intFromRef(p$y)
+
+
+method f$c$Point$component1$TF$T$Point(this$dispatch: Ref)
+  returns (ret: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$intType())
+
+
+method f$c$Point$component2$TF$T$Point(this$dispatch: Ref)
+  returns (ret: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$intType())
+
+
+method f$testSimpleDestructuring$TF$() returns (ret$0: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+{
+  var l0$point: Ref
+  var anon$0: Ref
+  var l0$x: Ref
+  var l0$y: Ref
+  l0$point := con$c$Point$T$Int$T$Int(df$rt$intToRef(3), df$rt$intToRef(4))
+  anon$0 := l0$point
+  l0$x := f$c$Point$component1$TF$T$Point(anon$0)
+  l0$y := f$c$Point$component2$TF$T$Point(anon$0)
+  assert df$rt$intFromRef(l0$x) == 3
+  assert df$rt$intFromRef(l0$y) == 4
+  label lbl$ret$0
+  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+}
+
+/destructuring_test.kt:(352,358): warning: Viper verification error: Assert might fail. Assertion df$rt$intFromRef(l0$x) == 3 might not hold.
+
+/destructuring_test.kt:(400,423): info: Generated Viper text for testTripleDestructuring:
+field bf$a: Ref
+
+field bf$b: Ref
+
+field bf$c: Ref
+
+field bf$size: Ref
+
+method con$c$Triple$T$Int$T$Int$T$Int(p$a: Ref, p$b: Ref, p$c: Ref)
+  returns (ret: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$Triple())
+  ensures acc(p$c$Triple$shared(ret), wildcard)
+  ensures acc(p$c$Triple$unique(ret), write)
+  ensures df$rt$intFromRef((unfolding acc(p$c$Triple$shared(ret), wildcard) in
+      ret.bf$a)) ==
+    df$rt$intFromRef(p$a) &&
+    df$rt$intFromRef((unfolding acc(p$c$Triple$shared(ret), wildcard) in
+      ret.bf$b)) ==
+    df$rt$intFromRef(p$b) &&
+    df$rt$intFromRef((unfolding acc(p$c$Triple$shared(ret), wildcard) in
+      ret.bf$c)) ==
+    df$rt$intFromRef(p$c)
+
+
+method f$c$Triple$component1$TF$T$Triple(this$dispatch: Ref)
+  returns (ret: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$intType())
+
+
+method f$c$Triple$component2$TF$T$Triple(this$dispatch: Ref)
+  returns (ret: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$intType())
+
+
+method f$c$Triple$component3$TF$T$Triple(this$dispatch: Ref)
+  returns (ret: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$intType())
+
+
+method f$testTripleDestructuring$TF$() returns (ret$0: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+{
+  var l0$triple: Ref
+  var anon$0: Ref
+  var l0$a: Ref
+  var l0$b: Ref
+  var l0$c: Ref
+  var l0$sum: Ref
+  l0$triple := con$c$Triple$T$Int$T$Int$T$Int(df$rt$intToRef(1), df$rt$intToRef(2),
+    df$rt$intToRef(3))
+  anon$0 := l0$triple
+  l0$a := f$c$Triple$component1$TF$T$Triple(anon$0)
+  l0$b := f$c$Triple$component2$TF$T$Triple(anon$0)
+  l0$c := f$c$Triple$component3$TF$T$Triple(anon$0)
+  l0$sum := sp$plusInts(sp$plusInts(l0$a, l0$b), l0$c)
+  assert df$rt$intFromRef(l0$sum) == 6
+  label lbl$ret$0
+  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+}
+
+/destructuring_test.kt:(523,531): warning: Viper verification error: Assert might fail. Assertion df$rt$intFromRef(l0$sum) == 6 might not hold.
+
+/destructuring_test.kt:(554,577): info: Generated Viper text for testDestructuringInLoop:
+field bf$size: Ref
+
+field bf$x: Ref
+
+field bf$y: Ref
+
+method con$c$Point$T$Int$T$Int(p$x: Ref, p$y: Ref) returns (ret: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$c$Point())
+  ensures acc(p$c$Point$shared(ret), wildcard)
+  ensures acc(p$c$Point$unique(ret), write)
+  ensures df$rt$intFromRef((unfolding acc(p$c$Point$shared(ret), wildcard) in
+      ret.bf$x)) ==
+    df$rt$intFromRef(p$x) &&
+    df$rt$intFromRef((unfolding acc(p$c$Point$shared(ret), wildcard) in
+      ret.bf$y)) ==
+    df$rt$intFromRef(p$y)
+
+
+method f$c$Point$component1$TF$T$Point(this$dispatch: Ref)
+  returns (ret: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$intType())
+
+
+method f$c$Point$component2$TF$T$Point(this$dispatch: Ref)
+  returns (ret: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$intType())
+
+
+method f$testDestructuringInLoop$TF$() returns (ret$0: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+{
+  var l0$point: Ref
+  var anon$0: Ref
+  var l0$x: Ref
+  var l0$y: Ref
+  var l0$counter: Ref
+  var anon$1: Ref
+  l0$point := con$c$Point$T$Int$T$Int(df$rt$intToRef(5), df$rt$intToRef(10))
+  anon$0 := l0$point
+  l0$x := f$c$Point$component1$TF$T$Point(anon$0)
+  l0$y := f$c$Point$component2$TF$T$Point(anon$0)
+  l0$counter := df$rt$intToRef(0)
+  label lbl$continue$0
+    invariant acc(p$c$Point$shared(l0$point), wildcard)
+    invariant df$rt$isSubtype(df$rt$typeOf(l0$point), df$rt$c$Point())
+    invariant acc(p$c$Point$shared(anon$0), wildcard)
+    invariant df$rt$isSubtype(df$rt$typeOf(anon$0), df$rt$c$Point())
+    invariant df$rt$isSubtype(df$rt$typeOf(l0$x), df$rt$intType())
+    invariant df$rt$isSubtype(df$rt$typeOf(l0$y), df$rt$intType())
+    invariant df$rt$isSubtype(df$rt$typeOf(l0$counter), df$rt$intType())
+  anon$1 := sp$ltInts(l0$counter, l0$x)
+  if (df$rt$boolFromRef(anon$1)) {
+    l0$counter := sp$plusInts(l0$counter, df$rt$intToRef(1))
+    goto lbl$continue$0
+  }
+  label lbl$break$0
+  assert acc(p$c$Point$shared(l0$point), wildcard)
+  assert df$rt$isSubtype(df$rt$typeOf(l0$point), df$rt$c$Point())
+  assert acc(p$c$Point$shared(anon$0), wildcard)
+  assert df$rt$isSubtype(df$rt$typeOf(anon$0), df$rt$c$Point())
+  assert df$rt$isSubtype(df$rt$typeOf(l0$x), df$rt$intType())
+  assert df$rt$isSubtype(df$rt$typeOf(l0$y), df$rt$intType())
+  assert df$rt$isSubtype(df$rt$typeOf(l0$counter), df$rt$intType())
+  assert df$rt$intFromRef(l0$counter) == 5
+  label lbl$ret$0
+  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
+}
+
+/destructuring_test.kt:(727,739): warning: Viper verification error: Assert might fail. Assertion df$rt$intFromRef(l0$counter) == 5 might not hold.

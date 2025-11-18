@@ -37,6 +37,12 @@ public class FirLightTreeFormVerPluginDiagnosticsTestGenerated extends AbstractF
     }
 
     @Test
+    @TestMetadata("destructuring_test.kt")
+    public void testDestructuring_test() {
+      runTest("formver.compiler-plugin/testData/diagnostics/conversion/destructuring_test.kt");
+    }
+
+    @Test
     @TestMetadata("do_not_verify.kt")
     public void testDo_not_verify() {
       runTest("formver.compiler-plugin/testData/diagnostics/conversion/do_not_verify.kt");
