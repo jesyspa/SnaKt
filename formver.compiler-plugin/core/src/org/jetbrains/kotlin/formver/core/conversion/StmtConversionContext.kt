@@ -10,6 +10,7 @@ import org.jetbrains.kotlin.fir.declarations.FirSimpleFunction
 import org.jetbrains.kotlin.fir.declarations.utils.isFinal
 import org.jetbrains.kotlin.fir.expressions.*
 import org.jetbrains.kotlin.fir.references.symbol
+import org.jetbrains.kotlin.fir.symbols.impl.FirFunctionSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirIntersectionOverridePropertySymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirPropertySymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirValueParameterSymbol
@@ -26,6 +27,7 @@ import org.jetbrains.kotlin.formver.core.embeddings.properties.PropertyAccessEmb
 import org.jetbrains.kotlin.formver.core.embeddings.properties.asPropertyAccess
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.isCustom
+import org.jetbrains.kotlin.formver.core.isInvariantBuilderFunctionNamed
 import org.jetbrains.kotlin.formver.core.linearization.Linearizer
 import org.jetbrains.kotlin.formver.core.linearization.SeqnBuilder
 import org.jetbrains.kotlin.formver.core.linearization.SharedLinearizationState
@@ -230,7 +232,8 @@ fun StmtConversionContext.insertForAllFunctionCall(
     )
     return withNoScope {
         withMethodCtx(methodCtxFactory) {
-            ForAllEmbedding(anonVar, collectInvariants(block))
+            val (invariants, triggers) = collectInvariantsAndTriggers(block)
+            ForAllEmbedding(anonVar, invariants, triggers)
         }
     }
 }
@@ -258,6 +261,11 @@ fun StmtConversionContext.convertMethodWithBody(
 private const val INVALID_STATEMENT_MSG =
     "Every statement in invariant block must be a pure boolean invariant."
 
+data class InvariantsAndTriggers(
+    val invariants: List<ExpEmbedding>,
+    val triggers: List<ExpEmbedding>
+)
+
 fun StmtConversionContext.collectInvariants(block: FirBlock) = buildList {
     block.statements.forEach { stmt ->
         check(stmt is FirExpression && stmt.resolvedType.isBoolean) {
@@ -265,5 +273,34 @@ fun StmtConversionContext.collectInvariants(block: FirBlock) = buildList {
         }
         add(stmt.accept(StmtConversionVisitor, this@collectInvariants))
     }
+}
+
+fun StmtConversionContext.collectInvariantsAndTriggers(block: FirBlock): InvariantsAndTriggers {
+    val invariants = mutableListOf<ExpEmbedding>()
+    val triggers = mutableListOf<ExpEmbedding>()
+
+    block.statements.forEach { stmt ->
+        // Check if this is a triggers() function call
+        if (stmt is FirFunctionCall) {
+            val symbol = stmt.toResolvedCallableSymbol() as? FirFunctionSymbol<*>
+            if (symbol?.isInvariantBuilderFunctionNamed("triggers") == true) {
+                // Extract trigger arguments
+                stmt.arguments.forEach { arg ->
+                    if (arg is FirExpression) {
+                        triggers.add(arg.accept(StmtConversionVisitor, this))
+                    }
+                }
+                return@forEach
+            }
+        }
+
+        // Otherwise, treat as invariant
+        check(stmt is FirExpression && stmt.resolvedType.isBoolean) {
+            INVALID_STATEMENT_MSG
+        }
+        invariants.add(stmt.accept(StmtConversionVisitor, this))
+    }
+
+    return InvariantsAndTriggers(invariants, triggers)
 }
 

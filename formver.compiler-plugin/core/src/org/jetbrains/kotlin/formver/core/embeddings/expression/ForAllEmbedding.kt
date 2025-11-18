@@ -19,14 +19,17 @@ class ForAllEmbedding(
     // TODO: support multiple variables
     val variable: VariableEmbedding,
     conditions: List<ExpEmbedding>,
+    val triggerExpressions: List<ExpEmbedding> = emptyList(),
 ) : OnlyToBuiltinTypeExpEmbedding {
 
     override fun toViperBuiltinType(ctx: LinearizationContext): Exp {
         val conjunction = subexpressions.map { it.toViperBuiltinType(ctx) }.toConjunction()
+        val viperTriggers = triggerExpressions.map { triggerExpr ->
+            Exp.Trigger(listOf(triggerExpr.toViperBuiltinType(ctx)))
+        }
         return Exp.Forall(
             variables = listOf(variable.toLocalVarDecl()),
-            // TODO: right now we hope that Viper will infer triggers successfully, later we might enable user triggers here
-            triggers = emptyList(),
+            triggers = viperTriggers,
             exp =
                 if (variable.isOriginallyRef) Exp.Implies(
                     variable.toViper(ctx).isOf(variable.type.runtimeType),

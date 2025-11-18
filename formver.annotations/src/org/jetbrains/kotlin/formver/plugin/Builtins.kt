@@ -29,4 +29,12 @@ fun <T> postconditions(@Suppress("UNUSED_PARAMETER") body: InvariantBuilder.(T) 
 class InvariantBuilder {
     fun <T> forAll(@Suppress("UNUSED_PARAMETER") body: (T) -> Unit): Boolean =
         throw FormverFunctionCalledInRuntimeException("forAll")
+
+    /**
+     * Specifies trigger expressions for quantifiers.
+     * This function should be called within a `forAll` block to provide user-defined triggers
+     * for SMT solver guidance.
+     */
+    fun triggers(@Suppress("UNUSED_PARAMETER") vararg expressions: Any?): Unit =
+        throw FormverFunctionCalledInRuntimeException("triggers")
 }
