@@ -5,6 +5,7 @@
 
 package org.jetbrains.kotlin.formver.core.conversion
 
+import org.jetbrains.kotlin.KtSourceElement
 import org.jetbrains.kotlin.fir.FirLabel
 import org.jetbrains.kotlin.fir.declarations.FirSimpleFunction
 import org.jetbrains.kotlin.fir.declarations.utils.isFinal
@@ -265,23 +266,30 @@ fun StmtConversionContext.convertFunctionWithBody(
     )
     val bodyWithPosition = convert(firBody)
     // TODO: Clean this up
-    val body = mapToInnerExpression(bodyWithPosition)
+    val body = extractReturnedExprFromPureFunctionBody(bodyWithPosition, declaration.source)
     val pureLinearizer = PureLinearizer(declaration.source)
-
-    if (body !is Return) throw SnaktInternalException(
-        declaration.source,
-        "Pure functions currently only support literal returns! Got body $body"
-    )
 
     // TODO: Hook in purity check here
     return body.returnExp.toViper(pureLinearizer)
 }
 
-private fun mapToInnerExpression(body: ExpEmbedding): ExpEmbedding = when (body) {
-    is WithPosition -> mapToInnerExpression(body.inner)
-    is Block -> mapToInnerExpression(body.exps.first())
-    else -> body
-}
+private fun extractReturnedExprFromPureFunctionBody(body: ExpEmbedding, source: KtSourceElement?): Return =
+    when (body) {
+        is WithPosition -> extractReturnedExprFromPureFunctionBody(body.inner, source)
+        is Block -> {
+            if (body.exps.size != 1) throw SnaktInternalException(
+                source,
+                "The body of a pure function may only contain a block with one expression! Got body $body"
+            )
+            extractReturnedExprFromPureFunctionBody(body.exps.first(), source)
+        }
+
+        is Return -> body
+        else -> throw SnaktInternalException(
+            source,
+            "Pure functions currently only support literal returns! Got body $body"
+        )
+    }
 
 private const val INVALID_STATEMENT_MSG =
     "Every statement in invariant block must be a pure boolean invariant."

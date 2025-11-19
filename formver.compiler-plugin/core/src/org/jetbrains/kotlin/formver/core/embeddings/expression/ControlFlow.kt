@@ -330,20 +330,21 @@ data class Elvis(val left: ExpEmbedding, val right: ExpEmbedding, override val t
 data class Return(
     val returnExp: ExpEmbedding, val target: ReturnTarget
 ) : OptionalResultExpEmbedding {
-    override val type = buildType { unit() }
+    override val type = buildType { nothing() }
 
     override fun toViperMaybeStoringIn(result: VariableEmbedding?, ctx: LinearizationContext) {
-        asBlock().toViperMaybeStoringIn(target.variable, ctx)
+        Assign(target.variable, returnExp).toViperUnusedResult(ctx)
+        Goto(target.label.toLink()).toViperMaybeStoringIn(result, ctx)
     }
 
     context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
-        get() = asBlock().debugTreeView
-
-    // TODO: Instead of converting to a block, you can also directly translate from assignment and Goto
-    private fun asBlock(): Block = blockOf(
-        Assign(target.variable, returnExp), Goto(target.label.toLink())
-    )
+        get() = BlockNode(
+            listOf(
+                Assign(target.variable, returnExp).debugTreeView,
+                Goto(target.label.toLink()).debugTreeView
+            )
+        )
 
     override fun <R> accept(v: ExpVisitor<R>): R = v.visitReturn(this)
 }
