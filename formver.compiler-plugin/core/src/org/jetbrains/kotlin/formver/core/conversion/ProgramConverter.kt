@@ -32,7 +32,6 @@ import org.jetbrains.kotlin.formver.core.embeddings.types.*
 import org.jetbrains.kotlin.formver.core.names.*
 import org.jetbrains.kotlin.formver.names.SimpleNameResolver
 import org.jetbrains.kotlin.formver.viper.SymbolicName
-import org.jetbrains.kotlin.formver.viper.ast.Exp
 import org.jetbrains.kotlin.formver.viper.ast.Program
 import org.jetbrains.kotlin.formver.viper.debugMangled
 import org.jetbrains.kotlin.utils.addIfNotNull
@@ -121,9 +120,8 @@ class ProgramConverter(
         // Note: it is important that `body` is only set after `embedUserFunction` is complete, as we need to
         // place the embedding in the map before processing the body.
         if (declaration.symbol.isPure(session)) {
-            // TODO: Replace the empty body with the actual expression representation of the function body
             embedPureUserFunction(declaration.symbol, signature).apply {
-                body = Exp.NullLit()
+                body = stmtCtx.convertFunctionWithBody(declaration)
             }
         } else {
             embedUserFunction(declaration.symbol, signature).apply {

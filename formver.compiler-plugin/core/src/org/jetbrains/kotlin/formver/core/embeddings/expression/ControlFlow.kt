@@ -6,6 +6,7 @@
 package org.jetbrains.kotlin.formver.core.embeddings.expression
 
 import org.jetbrains.kotlin.formver.core.asPosition
+import org.jetbrains.kotlin.formver.core.conversion.ReturnTarget
 import org.jetbrains.kotlin.formver.core.embeddings.*
 import org.jetbrains.kotlin.formver.core.embeddings.callables.FullNamedFunctionSignature
 import org.jetbrains.kotlin.formver.core.embeddings.callables.NamedFunctionSignature
@@ -324,4 +325,25 @@ data class Elvis(val left: ExpEmbedding, val right: ExpEmbedding, override val t
 
     override fun children(): Sequence<ExpEmbedding> = sequenceOf(left, right)
     override fun <R> accept(v: ExpVisitor<R>): R = v.visitElvis(this)
+}
+
+data class Return(
+    val returnExp: ExpEmbedding, val target: ReturnTarget
+) : OptionalResultExpEmbedding {
+    override val type = buildType { unit() }
+
+    override fun toViperMaybeStoringIn(result: VariableEmbedding?, ctx: LinearizationContext) {
+        asBlock().toViperMaybeStoringIn(target.variable, ctx)
+    }
+
+    context(nameResolver: NameResolver)
+    override val debugTreeView: TreeView
+        get() = asBlock().debugTreeView
+
+    // TODO: Instead of converting to a block, you can also directly translate from assignment and Goto
+    private fun asBlock(): Block = blockOf(
+        Assign(target.variable, returnExp), Goto(target.label.toLink())
+    )
+
+    override fun <R> accept(v: ExpVisitor<R>): R = v.visitReturn(this)
 }

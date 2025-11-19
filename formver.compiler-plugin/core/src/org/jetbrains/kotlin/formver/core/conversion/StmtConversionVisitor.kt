@@ -75,9 +75,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         // returnTarget is null when it is the implicit return of a lambda
         val returnTargetName = returnExpression.target.labelName
         val target = data.resolveReturnTarget(returnTargetName)
-        return blockOf(
-            Assign(target.variable, expr), Goto(target.label.toLink())
-        )
+        return Return(expr, target)
     }
 
     override fun visitResolvedQualifier(

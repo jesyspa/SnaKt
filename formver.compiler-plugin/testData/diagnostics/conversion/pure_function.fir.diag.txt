@@ -14,5 +14,29 @@ method f$emptyFunction$TF$() returns (ret$0: Ref)
 /pure_function.kt:(117,139): info: Generated Viper text for emptyAnnotatedFunction:
 function f$emptyAnnotatedFunction$TF$(): Ref
 {
-  null
+  df$rt$nullValue()
+}
+
+/pure_function.kt:(175,196): info: Generated Viper text for annotatedIntLitReturn:
+function f$annotatedIntLitReturn$TF$(): Ref
+{
+  df$rt$intToRef(42)
+}
+
+/pure_function.kt:(229,251): info: Generated Viper text for annotatedBoolLitReturn:
+function f$annotatedBoolLitReturn$TF$(): Ref
+{
+  df$rt$boolToRef(true)
+}
+
+/pure_function.kt:(290,312): info: Generated Viper text for annotatedCharLitReturn:
+function f$annotatedCharLitReturn$TF$(): Ref
+{
+  df$rt$charToRef(65)
+}
+
+/pure_function.kt:(347,371): info: Generated Viper text for annotatedStringLitReturn:
+function f$annotatedStringLitReturn$TF$(): Ref
+{
+  df$rt$stringToRef(Seq(72, 101, 108, 108, 111, 32, 83, 110, 97, 75, 116))
 }

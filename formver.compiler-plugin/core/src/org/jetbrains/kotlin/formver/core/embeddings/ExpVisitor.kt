@@ -14,6 +14,7 @@ interface ExpVisitor<R> {
     fun visitGotoChainNode(e: GotoChainNode): R
     fun visitIf(e: If): R
     fun visitElvis(e: Elvis): R
+    fun visitReturn(e: Return): R
     fun visitLambdaExp(e: LambdaExp): R
     fun visitMethodCall(e: MethodCall): R
     fun visitFunctionCall(e: FunctionCall): R
