@@ -5,6 +5,7 @@
 
 package org.jetbrains.kotlin.formver.core.embeddings.expression
 
+import org.jetbrains.kotlin.formver.common.SnaktInternalException
 import org.jetbrains.kotlin.formver.core.asPosition
 import org.jetbrains.kotlin.formver.core.conversion.ReturnTarget
 import org.jetbrains.kotlin.formver.core.embeddings.*
@@ -333,16 +334,23 @@ data class Return(
     override val type = buildType { nothing() }
 
     override fun toViperMaybeStoringIn(result: VariableEmbedding?, ctx: LinearizationContext) {
-        Assign(target.variable, returnExp).toViperUnusedResult(ctx)
-        Goto(target.label.toLink()).toViperMaybeStoringIn(result, ctx)
+        val retVarViper = target.variable.toViper(ctx)
+        if (retVarViper !is Exp.LocalVar) throw SnaktInternalException(
+            ctx.source,
+            "Translated return variable of function must be a local variable. Got: $retVarViper"
+        )
+        returnExp.withType(target.variable.type)
+            .toViperStoringIn(LinearizationVariableEmbedding(retVarViper.name, returnExp.type), ctx)
+        ctx.addStatement { target.label.toLink().toViperGoto(ctx) }
     }
 
     context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
-        get() = BlockNode(
+        get() = NamedBranchingNode(
+            "Return",
             listOf(
-                Assign(target.variable, returnExp).debugTreeView,
-                Goto(target.label.toLink()).debugTreeView
+                target.variable.debugTreeView,
+                returnExp.debugTreeView
             )
         )
 
