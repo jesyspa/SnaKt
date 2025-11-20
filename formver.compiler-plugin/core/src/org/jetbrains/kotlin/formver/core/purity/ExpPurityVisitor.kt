@@ -14,6 +14,8 @@ internal object ExprPurityVisitor : ExpVisitor<Boolean> {
     override fun visitPureExpEmbedding(e: PureExpEmbedding) = true
     override fun visitUnitLit(e: UnitLit) = true
     override fun visitFunctionCall(e: FunctionCall) = true
+    // TODO: This is not true depending on the return expression
+    override fun visitReturn(e: Return) = true
 
     /* ————— structural nodes without side effects ————— */
     override fun visitBlock(e: Block) = e.allChildrenPure(this)

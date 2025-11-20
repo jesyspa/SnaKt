@@ -5,18 +5,16 @@
 
 package org.jetbrains.kotlin.formver.core.conversion
 
+import org.jetbrains.kotlin.KtSourceElement
 import org.jetbrains.kotlin.fir.FirLabel
 import org.jetbrains.kotlin.fir.declarations.FirSimpleFunction
 import org.jetbrains.kotlin.fir.declarations.utils.isFinal
 import org.jetbrains.kotlin.fir.expressions.*
 import org.jetbrains.kotlin.fir.references.symbol
-import org.jetbrains.kotlin.fir.symbols.impl.FirFunctionSymbol
-import org.jetbrains.kotlin.fir.symbols.impl.FirIntersectionOverridePropertySymbol
-import org.jetbrains.kotlin.fir.symbols.impl.FirPropertySymbol
-import org.jetbrains.kotlin.fir.symbols.impl.FirValueParameterSymbol
-import org.jetbrains.kotlin.fir.symbols.impl.FirVariableSymbol
+import org.jetbrains.kotlin.fir.symbols.impl.*
 import org.jetbrains.kotlin.fir.types.isBoolean
 import org.jetbrains.kotlin.fir.types.resolvedType
+import org.jetbrains.kotlin.formver.common.SnaktInternalException
 import org.jetbrains.kotlin.formver.core.embeddings.FunctionBodyEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.LabelEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.callables.FullNamedFunctionSignature
@@ -29,10 +27,12 @@ import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.isCustom
 import org.jetbrains.kotlin.formver.core.isInvariantBuilderFunctionNamed
 import org.jetbrains.kotlin.formver.core.linearization.Linearizer
+import org.jetbrains.kotlin.formver.core.linearization.PureLinearizer
 import org.jetbrains.kotlin.formver.core.linearization.SeqnBuilder
 import org.jetbrains.kotlin.formver.core.linearization.SharedLinearizationState
 import org.jetbrains.kotlin.formver.core.purity.checkValidity
 import org.jetbrains.kotlin.formver.viper.SymbolicName
+import org.jetbrains.kotlin.formver.viper.ast.Exp
 import org.jetbrains.kotlin.utils.addIfNotNull
 import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
 import org.jetbrains.kotlin.utils.filterIsInstanceAnd
@@ -253,10 +253,43 @@ fun StmtConversionContext.convertMethodWithBody(
     // as we may not encounter any `return` statement in the body
     returnTarget.variable.withIsUnitInvariantIfUnit().toViperUnusedResult(linearizer)
 
-    // TODO: Terminate conversion if purity check fails
     body.checkValidity(declaration.source, errorCollector)
     return FunctionBodyEmbedding(seqnBuilder.block, returnTarget, bodyExp)
 }
+
+fun StmtConversionContext.convertFunctionWithBody(
+    declaration: FirSimpleFunction
+): Exp {
+    val firBody = declaration.body ?: throw SnaktInternalException(
+        declaration.source,
+        "Pure functions expect a function body to exist"
+    )
+    val bodyWithPosition = convert(firBody)
+    // TODO: Clean this up
+    val body = extractReturnedExprFromPureFunctionBody(bodyWithPosition, declaration.source)
+    val pureLinearizer = PureLinearizer(declaration.source)
+
+    // TODO: Hook in purity check here
+    return body.returnExp.toViper(pureLinearizer)
+}
+
+private fun extractReturnedExprFromPureFunctionBody(body: ExpEmbedding, source: KtSourceElement?): Return =
+    when (body) {
+        is WithPosition -> extractReturnedExprFromPureFunctionBody(body.inner, source)
+        is Block -> {
+            if (body.exps.size != 1) throw SnaktInternalException(
+                source,
+                "The body of a pure function may only contain a block with one expression! Got body $body"
+            )
+            extractReturnedExprFromPureFunctionBody(body.exps.first(), source)
+        }
+
+        is Return -> body
+        else -> throw SnaktInternalException(
+            source,
+            "Pure functions currently only support literal returns! Got body $body"
+        )
+    }
 
 private const val INVALID_STATEMENT_MSG =
     "Every statement in invariant block must be a pure boolean invariant."

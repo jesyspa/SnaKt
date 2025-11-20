@@ -5,7 +5,9 @@
 
 package org.jetbrains.kotlin.formver.core.embeddings.expression
 
+import org.jetbrains.kotlin.formver.common.SnaktInternalException
 import org.jetbrains.kotlin.formver.core.asPosition
+import org.jetbrains.kotlin.formver.core.conversion.ReturnTarget
 import org.jetbrains.kotlin.formver.core.embeddings.*
 import org.jetbrains.kotlin.formver.core.embeddings.callables.FullNamedFunctionSignature
 import org.jetbrains.kotlin.formver.core.embeddings.callables.NamedFunctionSignature
@@ -324,4 +326,33 @@ data class Elvis(val left: ExpEmbedding, val right: ExpEmbedding, override val t
 
     override fun children(): Sequence<ExpEmbedding> = sequenceOf(left, right)
     override fun <R> accept(v: ExpVisitor<R>): R = v.visitElvis(this)
+}
+
+data class Return(
+    val returnExp: ExpEmbedding, val target: ReturnTarget
+) : OptionalResultExpEmbedding {
+    override val type = buildType { nothing() }
+
+    override fun toViperMaybeStoringIn(result: VariableEmbedding?, ctx: LinearizationContext) {
+        val retVarViper = target.variable.toViper(ctx)
+        if (retVarViper !is Exp.LocalVar) throw SnaktInternalException(
+            ctx.source,
+            "Translated return variable of function must be a local variable. Got: $retVarViper"
+        )
+        returnExp.withType(target.variable.type)
+            .toViperStoringIn(LinearizationVariableEmbedding(retVarViper.name, returnExp.type), ctx)
+        ctx.addStatement { target.label.toLink().toViperGoto(ctx) }
+    }
+
+    context(nameResolver: NameResolver)
+    override val debugTreeView: TreeView
+        get() = NamedBranchingNode(
+            "Return",
+            listOf(
+                target.variable.debugTreeView,
+                returnExp.debugTreeView
+            )
+        )
+
+    override fun <R> accept(v: ExpVisitor<R>): R = v.visitReturn(this)
 }
