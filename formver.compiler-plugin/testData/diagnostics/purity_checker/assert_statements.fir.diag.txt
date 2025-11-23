@@ -1,27 +1,9 @@
 /assert_statements.kt:(63,67): info: Generated Viper text for test:
 field bf$size: Ref
 
-method f$test$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
-{
-  var l0$x: Ref
-  var anon$1: Ref
-  var anon$0: Ref
-  var anon$2: Ref
-  l0$x := df$rt$intToRef(42)
-  assert true
-  assert false
-  assert 2 <= df$rt$intFromRef(l0$x)
-  anon$0 := l0$x
-  l0$x := sp$plusInts(anon$0, df$rt$intToRef(1))
-  anon$1 := anon$0
-  assert df$rt$intFromRef(anon$1) < 43
-  l0$x := sp$plusInts(l0$x, df$rt$intToRef(1))
-  anon$2 := l0$x
-  assert df$rt$intFromRef(anon$2) < 43
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
-}
+method f$test$TF$() returns (ret: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$unitType())
+
 
 /assert_statements.kt:(160,166): error: Assert condition is impure
 
@@ -30,17 +12,8 @@ method f$test$TF$() returns (ret$0: Ref)
 /assert_statements.kt:(196,206): info: Generated Viper text for testImpure:
 field bf$size: Ref
 
-method f$testImpure$TF$() returns (ret$0: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
-{
-  var l0$x: Ref
-  var anon$0: Ref
-  l0$x := df$rt$intToRef(42)
-  l0$x := sp$plusInts(l0$x, df$rt$intToRef(1))
-  anon$0 := l0$x
-  assert df$rt$intFromRef(anon$0) < 43
-  label lbl$ret$0
-  inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
-}
+method f$testImpure$TF$() returns (ret: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$unitType())
+
 
 /assert_statements.kt:(237,243): error: Assert condition is impure

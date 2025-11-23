@@ -30,7 +30,8 @@ import org.jetbrains.kotlin.formver.core.linearization.Linearizer
 import org.jetbrains.kotlin.formver.core.linearization.PureLinearizer
 import org.jetbrains.kotlin.formver.core.linearization.SeqnBuilder
 import org.jetbrains.kotlin.formver.core.linearization.SharedLinearizationState
-import org.jetbrains.kotlin.formver.core.purity.checkValidity
+import org.jetbrains.kotlin.formver.core.purity.allNodesSatisfyPurityRequirements
+import org.jetbrains.kotlin.formver.core.purity.isPure
 import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 import org.jetbrains.kotlin.utils.addIfNotNull
@@ -253,7 +254,8 @@ fun StmtConversionContext.convertMethodWithBody(
     // as we may not encounter any `return` statement in the body
     returnTarget.variable.withIsUnitInvariantIfUnit().toViperUnusedResult(linearizer)
 
-    body.checkValidity(declaration.source, errorCollector)
+    if (!body.allNodesSatisfyPurityRequirements(declaration.source, errorCollector)) return null
+
     return FunctionBodyEmbedding(seqnBuilder.block, returnTarget, bodyExp)
 }
 
@@ -269,7 +271,10 @@ fun StmtConversionContext.convertFunctionWithBody(
     val body = extractReturnedExprFromPureFunctionBody(bodyWithPosition, declaration.source)
     val pureLinearizer = PureLinearizer(declaration.source)
 
-    // TODO: Hook in purity check here
+    if (!body.isPure()) throw SnaktInternalException(
+        declaration.source,
+        "Non-Pure function body detected in pure function"
+    )
     return body.returnExp.toViper(pureLinearizer)
 }
 

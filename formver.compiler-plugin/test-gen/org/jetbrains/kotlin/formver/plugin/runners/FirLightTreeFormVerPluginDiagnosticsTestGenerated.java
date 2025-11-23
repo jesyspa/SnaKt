@@ -377,6 +377,12 @@ public class FirLightTreeFormVerPluginDiagnosticsTestGenerated extends AbstractF
     public void testAssert_statements() {
       runTest("formver.compiler-plugin/testData/diagnostics/purity_checker/assert_statements.kt");
     }
+
+    @Test
+    @TestMetadata("wrongly_annotated.kt")
+    public void testWrongly_annotated() {
+      runTest("formver.compiler-plugin/testData/diagnostics/purity_checker/wrongly_annotated.kt");
+    }
   }
 
   @Nested
