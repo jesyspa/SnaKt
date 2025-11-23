@@ -8,5 +8,5 @@ method f$iAmAMethod$TF$() returns (ret$0: Ref)
 }
 
 /wrongly_annotated.kt:(91,162): error: An internal error has occurred.
-Details: newVar
+Details: Non-Pure function body detected in pure function
 Please report this at https://github.com/jesyspa/kotlin

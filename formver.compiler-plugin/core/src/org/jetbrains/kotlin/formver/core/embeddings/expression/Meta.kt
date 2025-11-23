@@ -29,6 +29,8 @@ data class WithPosition(override val inner: ExpEmbedding, val source: KtSourceEl
     context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = inner.debugTreeView
+
+    override fun children(): Sequence<ExpEmbedding> = sequenceOf(inner)
 }
 
 fun ExpEmbedding.withPosition(source: KtSourceElement?): ExpEmbedding =
