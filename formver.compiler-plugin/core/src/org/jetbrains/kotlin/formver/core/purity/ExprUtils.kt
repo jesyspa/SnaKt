@@ -41,6 +41,11 @@ fun ExpEmbedding.checkValidity(source: KtSourceElement?, errorCollector: ErrorCo
         }
 
 /**
+ * Runs the purity check on a provided embedding
+ */
+fun ExpEmbedding.isPure(): Boolean = this.accept(ExprPurityVisitor)
+
+/**
  * Returns the `KtSourceElement` of the outermost `WithPosition`
  * inside this expression; returns [fallback] if none is found.
  */

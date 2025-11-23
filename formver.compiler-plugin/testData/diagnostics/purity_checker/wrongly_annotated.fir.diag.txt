@@ -1,0 +1,12 @@
+/wrongly_annotated.kt:(54,64): info: Generated Viper text for iAmAMethod:
+method f$iAmAMethod$TF$() returns (ret$0: Ref)
+  ensures df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$intType())
+{
+  ret$0 := df$rt$intToRef(1)
+  goto lbl$ret$0
+  label lbl$ret$0
+}
+
+/wrongly_annotated.kt:(91,162): error: An internal error has occurred.
+Details: Impure function body detected in pure function
+Please report this at https://github.com/jesyspa/kotlin

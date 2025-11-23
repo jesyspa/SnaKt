@@ -15,11 +15,7 @@ import org.jetbrains.kotlin.fir.contracts.FirResolvedContractDescription
 import org.jetbrains.kotlin.fir.declarations.FirContractDescriptionOwner
 import org.jetbrains.kotlin.fir.declarations.FirSimpleFunction
 import org.jetbrains.kotlin.fir.declarations.hasAnnotation
-import org.jetbrains.kotlin.formver.common.ErrorCollector
-import org.jetbrains.kotlin.formver.common.LogLevel
-import org.jetbrains.kotlin.formver.common.PluginConfiguration
-import org.jetbrains.kotlin.formver.common.TargetsSelection
-import org.jetbrains.kotlin.formver.common.SnaktInternalException
+import org.jetbrains.kotlin.formver.common.*
 import org.jetbrains.kotlin.formver.core.conversion.ProgramConverter
 import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.print
 import org.jetbrains.kotlin.formver.plugin.compiler.reporting.reportVerifierError
@@ -79,7 +75,6 @@ class ViperPoweredDeclarationChecker(private val session: FirSession, private va
                     }
                 }
             }
-
             errorCollector.forEachPurityError { source, errorMessage ->
                 reporter.reportOn(source, PluginErrors.PURITY_VIOLATION, errorMessage)
             }

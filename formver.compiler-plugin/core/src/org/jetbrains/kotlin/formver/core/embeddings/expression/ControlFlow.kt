@@ -355,4 +355,6 @@ data class Return(
         )
 
     override fun <R> accept(v: ExpVisitor<R>): R = v.visitReturn(this)
+
+    override fun children(): Sequence<ExpEmbedding> = sequenceOf(returnExp)
 }
