@@ -89,7 +89,7 @@ sealed interface ExpEmbedding : DebugPrintable {
 
     fun children(): Sequence<ExpEmbedding> = emptySequence()
     fun <R> accept(v: ExpVisitor<R>): R
-    fun satisfiesPurityRequirements(ctx: PurityContext): Boolean = true
+    fun isValid(ctx: PurityContext): Boolean = true
 }
 
 sealed class ToViperBuiltinMisuseError(msg: String) : RuntimeException(msg)

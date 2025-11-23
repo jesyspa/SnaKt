@@ -1,19 +1,13 @@
-/assert_statements.kt:(63,67): info: Generated Viper text for test:
-field bf$size: Ref
-
-method f$test$TF$() returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$unitType())
-
+/assert_statements.kt:(46,177): error: An internal error has occurred.
+Details: Function body is not valid
+Please report this at https://github.com/jesyspa/kotlin
 
 /assert_statements.kt:(160,166): error: Assert condition is impure
 
 /assert_statements.kt:(168,174): error: Assert condition is impure
 
-/assert_statements.kt:(196,206): info: Generated Viper text for testImpure:
-field bf$size: Ref
-
-method f$testImpure$TF$() returns (ret: Ref)
-  ensures df$rt$isSubtype(df$rt$typeOf(ret), df$rt$unitType())
-
+/assert_statements.kt:(179,246): error: An internal error has occurred.
+Details: Function body is not valid
+Please report this at https://github.com/jesyspa/kotlin
 
 /assert_statements.kt:(237,243): error: Assert condition is impure

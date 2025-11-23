@@ -30,14 +30,14 @@ fun ExpEmbedding.preorder(currentSource: KtSourceElement? = null): Sequence<Pair
  * Validates all nodes using the isValid function.
  * Avoids `all` to prevent short-circuiting, ensuring all errors are reported.
  */
-fun ExpEmbedding.allNodesSatisfyPurityRequirements(source: KtSourceElement?, errorCollector: ErrorCollector): Boolean =
+fun ExpEmbedding.checkValidity(source: KtSourceElement?, errorCollector: ErrorCollector): Boolean =
     preorder(source)
         .exhaustiveAll {
             val embedding = it.first
             val source = checkNotNull(it.second) {
                 "Purity-check expected a KtSourceElement, but none was present"
             }
-            embedding.satisfiesPurityRequirements(DefaultPurityContext(source, errorCollector))
+            embedding.isValid(DefaultPurityContext(source, errorCollector))
         }
 
 /**
