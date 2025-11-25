@@ -61,7 +61,6 @@ sealed interface Block : OptionalResultExpEmbedding {
     }
 }
 
-
 data class If(
     val condition: ExpEmbedding,
     val thenBranch: ExpEmbedding,
