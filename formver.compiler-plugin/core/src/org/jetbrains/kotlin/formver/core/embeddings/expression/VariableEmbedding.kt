@@ -50,6 +50,8 @@ sealed interface VariableEmbedding : PureExpEmbedding, PropertyAccessEmbedding {
     ): Exp.LocalVar = Exp.LocalVar(name, Type.Ref, pos, info, trafos)
 
     override fun toViper(source: KtSourceElement?): Exp = when (name) {
+        // This translates the special 'result' placeholder, which represents the return of a function, to Viper. We represent this special case as a VariableEmbedding
+        // as this allows us to easily infer postconditions of a function similar to how it is done for methods and their corresponding return targets.
         is FunctionResultVariableName -> Exp.Result(Type.Ref, source.asPosition, sourceRole.asInfo)
         else -> Exp.LocalVar(name, Type.Ref, source.asPosition, sourceRole.asInfo)
     }

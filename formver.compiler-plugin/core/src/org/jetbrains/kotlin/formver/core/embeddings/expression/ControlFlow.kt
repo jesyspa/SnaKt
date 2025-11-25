@@ -55,10 +55,6 @@ sealed interface Block : OptionalResultExpEmbedding {
 
     override fun children(): Sequence<ExpEmbedding> = exps.asSequence()
     override fun <R> accept(v: ExpVisitor<R>): R = v.visitBlock(this)
-
-    override fun ignoringMetaNodes(): Block {
-        return BlockImpl(exps.filter { !(it is UnitLit || it is WithPosition && it.inner is UnitLit) })
-    }
 }
 
 data class If(
