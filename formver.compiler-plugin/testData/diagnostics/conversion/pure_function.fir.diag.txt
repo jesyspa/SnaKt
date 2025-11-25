@@ -1,5 +1,6 @@
 /pure_function.kt:(53,66): info: Generated Viper text for emptyFunction:
 function f$emptyAnnotatedFunction$TF$(): Ref
+  ensures df$rt$isSubtype(df$rt$typeOf(result), df$rt$nullable(df$rt$intType()))
 
 
 method f$emptyFunction$TF$() returns (ret$0: Ref)
@@ -13,30 +14,35 @@ method f$emptyFunction$TF$() returns (ret$0: Ref)
 
 /pure_function.kt:(117,139): info: Generated Viper text for emptyAnnotatedFunction:
 function f$emptyAnnotatedFunction$TF$(): Ref
+  ensures df$rt$isSubtype(df$rt$typeOf(result), df$rt$nullable(df$rt$intType()))
 {
   df$rt$nullValue()
 }
 
 /pure_function.kt:(175,196): info: Generated Viper text for annotatedIntLitReturn:
 function f$annotatedIntLitReturn$TF$(): Ref
+  ensures df$rt$isSubtype(df$rt$typeOf(result), df$rt$intType())
 {
   df$rt$intToRef(42)
 }
 
 /pure_function.kt:(229,251): info: Generated Viper text for annotatedBoolLitReturn:
 function f$annotatedBoolLitReturn$TF$(): Ref
+  ensures df$rt$isSubtype(df$rt$typeOf(result), df$rt$boolType())
 {
   df$rt$boolToRef(true)
 }
 
 /pure_function.kt:(290,312): info: Generated Viper text for annotatedCharLitReturn:
 function f$annotatedCharLitReturn$TF$(): Ref
+  ensures df$rt$isSubtype(df$rt$typeOf(result), df$rt$charType())
 {
   df$rt$charToRef(65)
 }
 
 /pure_function.kt:(347,371): info: Generated Viper text for annotatedStringLitReturn:
 function f$annotatedStringLitReturn$TF$(): Ref
+  ensures df$rt$isSubtype(df$rt$typeOf(result), df$rt$stringType())
 {
   df$rt$stringToRef(Seq(72, 101, 108, 108, 111, 32, 83, 110, 97, 75, 116))
 }

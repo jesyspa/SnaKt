@@ -5,8 +5,8 @@
 
 package org.jetbrains.kotlin.formver.core.names
 
-import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.NameResolver
+import org.jetbrains.kotlin.formver.viper.SymbolicName
 
 /* This file contains mangled names for constructs introduced during the conversion to Viper.
  *
@@ -52,6 +52,16 @@ data class ReturnVariableName(val n: Int) : SymbolicName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = n.toString()
+}
+
+/**
+ * Name for return variable that should *only* be used in signatures of pure functions
+ * This variable will be translated into the special result variable in Kotlin
+ */
+data object ResultVariableName : SymbolicName {
+    context(nameResolver: NameResolver)
+    override val mangledBaseName: String
+        get() = "result"
 }
 
 data object DispatchReceiverName : SymbolicName {

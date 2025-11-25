@@ -23,8 +23,9 @@ import org.jetbrains.kotlin.formver.core.embeddings.types.fillHoles
 import org.jetbrains.kotlin.formver.core.embeddings.types.injectionOrNull
 import org.jetbrains.kotlin.formver.core.names.AnonymousBuiltinName
 import org.jetbrains.kotlin.formver.core.names.AnonymousName
-import org.jetbrains.kotlin.formver.viper.SymbolicName
+import org.jetbrains.kotlin.formver.core.names.ResultVariableName
 import org.jetbrains.kotlin.formver.viper.NameResolver
+import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.ast.*
 import org.jetbrains.kotlin.formver.viper.mangled
 
@@ -48,8 +49,10 @@ sealed interface VariableEmbedding : PureExpEmbedding, PropertyAccessEmbedding {
         trafos: Trafos = Trafos.NoTrafos,
     ): Exp.LocalVar = Exp.LocalVar(name, Type.Ref, pos, info, trafos)
 
-    override fun toViper(source: KtSourceElement?): Exp =
-        Exp.LocalVar(name, Type.Ref, source.asPosition, sourceRole.asInfo)
+    override fun toViper(source: KtSourceElement?): Exp = when (name) {
+        is ResultVariableName -> Exp.Result(Type.Ref, source.asPosition, sourceRole.asInfo)
+        else -> Exp.LocalVar(name, Type.Ref, source.asPosition, sourceRole.asInfo)
+    }
 
     val isOriginallyRef: Boolean
         get() = true
