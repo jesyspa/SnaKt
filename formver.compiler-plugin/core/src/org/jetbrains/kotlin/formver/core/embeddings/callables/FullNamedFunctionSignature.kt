@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.formver.core.embeddings.types.buildType
 import org.jetbrains.kotlin.formver.core.embeddings.types.nullableAny
 import org.jetbrains.kotlin.formver.core.linearization.pureToViper
 import org.jetbrains.kotlin.formver.core.names.DispatchReceiverName
-import org.jetbrains.kotlin.formver.core.names.ResultVariableName
+import org.jetbrains.kotlin.formver.core.names.FunctionResultVariableName
 import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.ast.*
 
@@ -101,7 +101,12 @@ fun FullNamedFunctionSignature.toViperFunction(
     // TODO: Be explicit about the return types of functions instead of boxing them into a Ref
     Type.Ref,
     getPreconditions().pureToViper(toBuiltin = true),
-    getPostconditions(PlaceholderVariableEmbedding(ResultVariableName, this.callableType.returnType)).pureToViper(toBuiltin = true),
+    getPostconditions(
+        PlaceholderVariableEmbedding(
+            FunctionResultVariableName,
+            this.callableType.returnType
+        )
+    ).pureToViper(toBuiltin = true),
     body,
     declarationSource.asPosition
 )

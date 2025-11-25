@@ -56,9 +56,9 @@ data class ReturnVariableName(val n: Int) : SymbolicName {
 
 /**
  * Name for return variable that should *only* be used in signatures of pure functions
- * This variable will be translated into the special result variable in Kotlin
+ * This variable will be translated into the special result variable in Viper
  */
-data object ResultVariableName : SymbolicName {
+data object FunctionResultVariableName : SymbolicName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = "result"

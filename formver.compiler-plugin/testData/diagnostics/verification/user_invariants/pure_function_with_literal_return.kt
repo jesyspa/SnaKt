@@ -2,12 +2,17 @@ import org.jetbrains.kotlin.formver.plugin.*
 
 @AlwaysVerify
 @Pure
-fun <!VIPER_TEXT!>annotatedIntLitReturn<!>(): Int {
+fun <!VIPER_TEXT!>annotatedIntLitReturn<!>(arg: Int): Int {
+    preconditions {
+        true
+        arg >= 42
+        arg <= 42
+    }
     postconditions<Int> { result ->
         result == 42
         forAll<Int> {
             triggers (it == result)
-            (it == result) implies (it == 42)
+            (it == result) implies (it == arg)
         }
     }
     return 42
@@ -15,16 +20,24 @@ fun <!VIPER_TEXT!>annotatedIntLitReturn<!>(): Int {
 
 @AlwaysVerify
 @Pure
-fun <!VIPER_TEXT!>annotatedBoolLitReturn<!>(): Boolean {
+fun <!VIPER_TEXT!>annotatedBoolLitReturn<!>(arg: Int): Boolean {
+    preconditions {
+        arg <= 0
+        arg >= 0
+    }
     postconditions<Boolean> { result ->
         result
+        arg == 0
     }
     return true
 }
 
 @AlwaysVerify
 @Pure
-fun <!VIPER_TEXT!>annotatedCharLitReturn<!>(): Char {
+fun <!VIPER_TEXT!>annotatedCharLitReturn<!>(arg: String): Char {
+    preconditions {
+        arg == "Hello SnaKt"
+    }
     postconditions<Char> { result ->
         result == 'A'
     }
@@ -33,7 +46,10 @@ fun <!VIPER_TEXT!>annotatedCharLitReturn<!>(): Char {
 
 @AlwaysVerify
 @Pure
-fun <!VIPER_TEXT!>annotatedStringLitReturn<!>(): String {
+fun <!VIPER_TEXT!>annotatedStringLitReturn<!>(arg: Boolean): String {
+    preconditions {
+        arg
+    }
     postconditions<String> { result ->
         result == "Hello SnaKt"
     }

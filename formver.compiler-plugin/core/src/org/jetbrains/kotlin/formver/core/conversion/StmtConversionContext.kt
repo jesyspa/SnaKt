@@ -283,12 +283,12 @@ private fun extractReturnedExprFromPureFunctionBody(body: ExpEmbedding, source: 
     when (body) {
         is WithPosition -> extractReturnedExprFromPureFunctionBody(body.inner, source)
         is Block -> {
-            val relevantExps = expsListWithoutUnitLit(body.exps)
-            if (relevantExps.size != 1) throw SnaktInternalException(
+            val relevantBody = body.ignoringMetaNodes()
+            if (relevantBody.exps.size != 1) throw SnaktInternalException(
                 source,
                 "The body of a pure function may only contain a block with one expression! Got body $body"
             )
-            extractReturnedExprFromPureFunctionBody(relevantExps.first(), source)
+            extractReturnedExprFromPureFunctionBody(relevantBody.exps.single(), source)
         }
 
         is Return -> body
@@ -297,19 +297,6 @@ private fun extractReturnedExprFromPureFunctionBody(body: ExpEmbedding, source: 
             "Pure functions currently only support literal returns! Got body $body"
         )
     }
-
-/**
- * This helper removes any UnitLit appearances (with or without position) from a list of ExpEmbeddings
- * Those ExpEmbeddings occur if the user specifies a condition
- */
-private fun expsListWithoutUnitLit(exps: List<ExpEmbedding>): List<ExpEmbedding> = when {
-    exps.isEmpty() -> emptyList()
-    exps.first().let { first ->
-        first is UnitLit || (first is WithPosition && first.inner is UnitLit)
-    } -> expsListWithoutUnitLit(exps.drop(1))
-
-    else -> exps
-}
 
 private const val INVALID_STATEMENT_MSG =
     "Every statement in invariant block must be a pure boolean invariant."

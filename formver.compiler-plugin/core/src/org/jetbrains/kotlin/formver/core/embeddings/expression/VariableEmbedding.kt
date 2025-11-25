@@ -23,7 +23,7 @@ import org.jetbrains.kotlin.formver.core.embeddings.types.fillHoles
 import org.jetbrains.kotlin.formver.core.embeddings.types.injectionOrNull
 import org.jetbrains.kotlin.formver.core.names.AnonymousBuiltinName
 import org.jetbrains.kotlin.formver.core.names.AnonymousName
-import org.jetbrains.kotlin.formver.core.names.ResultVariableName
+import org.jetbrains.kotlin.formver.core.names.FunctionResultVariableName
 import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.ast.*
@@ -50,7 +50,7 @@ sealed interface VariableEmbedding : PureExpEmbedding, PropertyAccessEmbedding {
     ): Exp.LocalVar = Exp.LocalVar(name, Type.Ref, pos, info, trafos)
 
     override fun toViper(source: KtSourceElement?): Exp = when (name) {
-        is ResultVariableName -> Exp.Result(Type.Ref, source.asPosition, sourceRole.asInfo)
+        is FunctionResultVariableName -> Exp.Result(Type.Ref, source.asPosition, sourceRole.asInfo)
         else -> Exp.LocalVar(name, Type.Ref, source.asPosition, sourceRole.asInfo)
     }
 
