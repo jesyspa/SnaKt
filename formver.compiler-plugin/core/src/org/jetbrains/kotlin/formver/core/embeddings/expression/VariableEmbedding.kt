@@ -29,6 +29,13 @@ import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.ast.*
 import org.jetbrains.kotlin.formver.viper.mangled
 
+/**
+ * Embedding of a variable.
+ *
+ * Special Case: The special 'result' value in Viper is treated as a VariableEmbedding because our existing functions for constructing postconditions
+ *               expect a VariableEmbedding and on the ExpEmbedding level it behaves similar enough to a general VariableEmbedding.
+ *               In Viper however, this special case is not treated as a variable, which is why there is a case distinction in .toViper().
+ */
 sealed interface VariableEmbedding : PureExpEmbedding, PropertyAccessEmbedding {
     val name: SymbolicName
     override val type: TypeEmbedding
@@ -50,8 +57,6 @@ sealed interface VariableEmbedding : PureExpEmbedding, PropertyAccessEmbedding {
     ): Exp.LocalVar = Exp.LocalVar(name, Type.Ref, pos, info, trafos)
 
     override fun toViper(source: KtSourceElement?): Exp = when (name) {
-        // This translates the special 'result' placeholder, which represents the return of a function, to Viper. We represent this special case as a VariableEmbedding
-        // as this allows us to easily infer postconditions of a function similar to how it is done for methods and their corresponding return targets.
         is FunctionResultVariableName -> Exp.Result(Type.Ref, source.asPosition, sourceRole.asInfo)
         else -> Exp.LocalVar(name, Type.Ref, source.asPosition, sourceRole.asInfo)
     }
