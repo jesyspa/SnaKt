@@ -283,11 +283,12 @@ private fun extractReturnedExprFromPureFunctionBody(body: ExpEmbedding, source: 
     when (body) {
         is WithPosition -> extractReturnedExprFromPureFunctionBody(body.inner, source)
         is Block -> {
-            if (body.exps.size != 1) throw SnaktInternalException(
+            val relevantExps = filterUnitExp(body.exps)
+            if (relevantExps.size != 1) throw SnaktInternalException(
                 source,
                 "The body of a pure function may only contain a block with one expression! Got body $body"
             )
-            extractReturnedExprFromPureFunctionBody(body.exps.first(), source)
+            extractReturnedExprFromPureFunctionBody(relevantExps.single(), source)
         }
 
         is Return -> body
@@ -296,6 +297,8 @@ private fun extractReturnedExprFromPureFunctionBody(body: ExpEmbedding, source: 
             "Pure functions currently only support literal returns! Got body $body"
         )
     }
+
+private fun filterUnitExp(exps: List<ExpEmbedding>) = exps.filter { it.ignoringMetaNodes() !is UnitLit }
 
 private const val INVALID_STATEMENT_MSG =
     "Every statement in invariant block must be a pure boolean invariant."

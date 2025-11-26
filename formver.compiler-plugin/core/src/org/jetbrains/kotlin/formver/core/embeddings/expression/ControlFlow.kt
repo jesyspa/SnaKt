@@ -57,7 +57,6 @@ sealed interface Block : OptionalResultExpEmbedding {
     override fun <R> accept(v: ExpVisitor<R>): R = v.visitBlock(this)
 }
 
-
 data class If(
     val condition: ExpEmbedding,
     val thenBranch: ExpEmbedding,

@@ -1,0 +1,45 @@
+/pure_function_with_literal_return.kt:(70,91): info: Generated Viper text for annotatedIntLitReturn:
+function f$annotatedIntLitReturn$TF$T$Int(p$arg: Ref): Ref
+  requires true
+  requires df$rt$intFromRef(p$arg) >= 42
+  requires df$rt$intFromRef(p$arg) <= 42
+  ensures df$rt$isSubtype(df$rt$typeOf(result), df$rt$intType())
+  ensures df$rt$intFromRef(result) == 42
+  ensures (forall anon$builtin$1: Int ::
+      { anon$builtin$1 == df$rt$intFromRef(result) }
+      anon$builtin$1 == df$rt$intFromRef(result) ==>
+      anon$builtin$1 == df$rt$intFromRef(p$arg))
+{
+  df$rt$intToRef(42)
+}
+
+/pure_function_with_literal_return.kt:(403,425): info: Generated Viper text for annotatedBoolLitReturn:
+function f$annotatedBoolLitReturn$TF$T$Int(p$arg: Ref): Ref
+  requires df$rt$intFromRef(p$arg) <= 0
+  requires df$rt$intFromRef(p$arg) >= 0
+  ensures df$rt$isSubtype(df$rt$typeOf(result), df$rt$boolType())
+  ensures df$rt$boolFromRef(result)
+  ensures df$rt$intFromRef(p$arg) == 0
+{
+  df$rt$boolToRef(true)
+}
+
+/pure_function_with_literal_return.kt:(628,650): info: Generated Viper text for annotatedCharLitReturn:
+function f$annotatedCharLitReturn$TF$T$String(p$arg: Ref): Ref
+  requires df$rt$stringFromRef(p$arg) ==
+    Seq(72, 101, 108, 108, 111, 32, 83, 110, 97, 75, 116)
+  ensures df$rt$isSubtype(df$rt$typeOf(result), df$rt$charType())
+  ensures df$rt$charFromRef(result) == 65
+{
+  df$rt$charToRef(65)
+}
+
+/pure_function_with_literal_return.kt:(834,858): info: Generated Viper text for annotatedStringLitReturn:
+function f$annotatedStringLitReturn$TF$T$Boolean(p$arg: Ref): Ref
+  requires df$rt$boolFromRef(p$arg)
+  ensures df$rt$isSubtype(df$rt$typeOf(result), df$rt$stringType())
+  ensures df$rt$stringFromRef(result) ==
+    Seq(72, 101, 108, 108, 111, 32, 83, 110, 97, 75, 116)
+{
+  df$rt$stringToRef(Seq(72, 101, 108, 108, 111, 32, 83, 110, 97, 75, 116))
+}

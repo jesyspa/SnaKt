@@ -23,11 +23,19 @@ import org.jetbrains.kotlin.formver.core.embeddings.types.fillHoles
 import org.jetbrains.kotlin.formver.core.embeddings.types.injectionOrNull
 import org.jetbrains.kotlin.formver.core.names.AnonymousBuiltinName
 import org.jetbrains.kotlin.formver.core.names.AnonymousName
-import org.jetbrains.kotlin.formver.viper.SymbolicName
+import org.jetbrains.kotlin.formver.core.names.FunctionResultVariableName
 import org.jetbrains.kotlin.formver.viper.NameResolver
+import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.ast.*
 import org.jetbrains.kotlin.formver.viper.mangled
 
+/**
+ * Embedding of a variable.
+ *
+ * Special Case: The special 'result' value in Viper is treated as a VariableEmbedding because our existing functions for constructing postconditions
+ *               expect a VariableEmbedding and on the ExpEmbedding level it behaves similar enough to a general VariableEmbedding.
+ *               In Viper however, this special case is not treated as a variable, which is why there is a case distinction in .toViper().
+ */
 sealed interface VariableEmbedding : PureExpEmbedding, PropertyAccessEmbedding {
     val name: SymbolicName
     override val type: TypeEmbedding
@@ -48,8 +56,10 @@ sealed interface VariableEmbedding : PureExpEmbedding, PropertyAccessEmbedding {
         trafos: Trafos = Trafos.NoTrafos,
     ): Exp.LocalVar = Exp.LocalVar(name, Type.Ref, pos, info, trafos)
 
-    override fun toViper(source: KtSourceElement?): Exp =
-        Exp.LocalVar(name, Type.Ref, source.asPosition, sourceRole.asInfo)
+    override fun toViper(source: KtSourceElement?): Exp = when (name) {
+        is FunctionResultVariableName -> Exp.Result(Type.Ref, source.asPosition, sourceRole.asInfo)
+        else -> Exp.LocalVar(name, Type.Ref, source.asPosition, sourceRole.asInfo)
+    }
 
     val isOriginallyRef: Boolean
         get() = true

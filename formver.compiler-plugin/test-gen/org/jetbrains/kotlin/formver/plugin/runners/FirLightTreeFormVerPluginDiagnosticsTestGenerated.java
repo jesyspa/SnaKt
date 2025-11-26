@@ -814,6 +814,12 @@ public class FirLightTreeFormVerPluginDiagnosticsTestGenerated extends AbstractF
       }
 
       @Test
+      @TestMetadata("pure_function_with_literal_return.kt")
+      public void testPure_function_with_literal_return() {
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/pure_function_with_literal_return.kt");
+      }
+
+      @Test
       @TestMetadata("simple_forall.kt")
       public void testSimple_forall() {
         runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/simple_forall.kt");
