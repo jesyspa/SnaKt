@@ -8,6 +8,9 @@ package org.jetbrains.kotlin.formver.core.linearization
 import org.jetbrains.kotlin.KtSourceElement
 import org.jetbrains.kotlin.formver.core.asPosition
 import org.jetbrains.kotlin.formver.core.embeddings.expression.AnonymousVariableEmbedding
+import org.jetbrains.kotlin.formver.core.embeddings.expression.If
+import org.jetbrains.kotlin.formver.core.embeddings.expression.VariableEmbedding
+import org.jetbrains.kotlin.formver.core.embeddings.expression.withType
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.viper.ast.Declaration
 import org.jetbrains.kotlin.formver.viper.ast.Position
@@ -62,5 +65,12 @@ data class Linearizer(
 
     override fun addModifier(mod: StmtModifier) {
         stmtModifierTracker?.add(mod) ?: error("Not in a statement")
+    }
+
+    override fun emitIf(e: If, result: VariableEmbedding?) = addStatement {
+        val condViper = e.condition.toViperBuiltinType(this)
+        val thenViper = asBlock { e.thenBranch.withType(e.type).toViperMaybeStoringIn(result, this) }
+        val elseViper = asBlock { e.elseBranch.withType(e.type).toViperMaybeStoringIn(result, this) }
+        Stmt.If(condViper, thenViper, elseViper, source.asPosition)
     }
 }

@@ -6,7 +6,11 @@
 package org.jetbrains.kotlin.formver.core.linearization
 
 import org.jetbrains.kotlin.KtSourceElement
+import org.jetbrains.kotlin.formver.common.SnaktInternalException
 import org.jetbrains.kotlin.formver.core.embeddings.expression.AnonymousVariableEmbedding
+import org.jetbrains.kotlin.formver.core.embeddings.expression.ExpEmbedding
+import org.jetbrains.kotlin.formver.core.embeddings.expression.If
+import org.jetbrains.kotlin.formver.core.embeddings.expression.VariableEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.PretypeBuilder
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeBuilder
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
@@ -44,6 +48,14 @@ interface LinearizationContext {
     fun addDeclaration(decl: Declaration)
 
     fun addModifier(mod: StmtModifier)
+
+    // Note that the type specification here is not correct but needed for the other emit functions to compile
+    fun emitDefault(e: ExpEmbedding): Unit = throw SnaktInternalException(
+        source,
+        "Unspported embedding passed to linearizer"
+    )
+
+    fun emitIf(e: If, result: VariableEmbedding?) = emitDefault(e)
 }
 
 fun LinearizationContext.freshAnonVar(init: TypeBuilder.() -> PretypeBuilder): AnonymousVariableEmbedding =

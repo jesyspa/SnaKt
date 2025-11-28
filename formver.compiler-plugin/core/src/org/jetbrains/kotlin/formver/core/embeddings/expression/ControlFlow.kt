@@ -65,12 +65,7 @@ data class If(
 ) :
     OptionalResultExpEmbedding, DefaultDebugTreeViewImplementation {
     override fun toViperMaybeStoringIn(result: VariableEmbedding?, ctx: LinearizationContext) {
-        ctx.addStatement {
-            val condViper = condition.toViperBuiltinType(ctx)
-            val thenViper = ctx.asBlock { thenBranch.withType(type).toViperMaybeStoringIn(result, this) }
-            val elseViper = ctx.asBlock { elseBranch.withType(type).toViperMaybeStoringIn(result, this) }
-            Stmt.If(condViper, thenViper, elseViper, ctx.source.asPosition)
-        }
+        ctx.emitIf(this, result)
     }
 
     override val debugAnonymousSubexpressions: List<ExpEmbedding>
