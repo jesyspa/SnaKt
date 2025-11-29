@@ -519,17 +519,12 @@ data class PredicateAccessPermissions(
     override fun <R> accept(v: ExpVisitor<R>): R = v.visitPredicateAccessPermissions(this)
 }
 
-data class Assign(val lhs: ExpEmbedding, val rhs: ExpEmbedding) : UnitResultExpEmbedding {
+data class Assign(val lhs: ExpEmbedding, val rhs: ExpEmbedding) : OnlyToViperExpEmbedding {
     override val type: TypeEmbedding = lhs.type
 
-    override fun toViperSideEffects(ctx: LinearizationContext) {
-        val lhsViper = lhs.toViper(ctx)
-        if (lhsViper is Exp.LocalVar) {
-            rhs.withType(lhs.type).toViperStoringIn(LinearizationVariableEmbedding(lhsViper.name, lhs.type), ctx)
-        } else {
-            val rhsViper = rhs.withType(lhs.type).toViper(ctx)
-            ctx.addStatement { Stmt.assign(lhsViper, rhsViper, ctx.source.asPosition) }
-        }
+    override fun toViper(ctx: LinearizationContext): Exp {
+        val result = ctx.emitAssignment(lhs, rhs)
+        return result ?: RuntimeTypeDomain.unitValue(pos = ctx.source.asPosition)
     }
 
     context(nameResolver: NameResolver)
