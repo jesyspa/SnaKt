@@ -7,6 +7,7 @@ package org.jetbrains.kotlin.formver.core.linearization
 
 import org.jetbrains.kotlin.KtSourceElement
 import org.jetbrains.kotlin.formver.core.embeddings.expression.AnonymousVariableEmbedding
+import org.jetbrains.kotlin.formver.core.embeddings.expression.ExpEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.PretypeBuilder
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeBuilder
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
@@ -42,6 +43,7 @@ interface LinearizationContext {
 
     fun addStatement(buildStmt: LinearizationContext.() -> Stmt)
     fun addDeclaration(decl: Declaration)
+    fun addAssignment(lhs: ExpEmbedding, rhs: ExpEmbedding)
 
     fun addModifier(mod: StmtModifier)
 }

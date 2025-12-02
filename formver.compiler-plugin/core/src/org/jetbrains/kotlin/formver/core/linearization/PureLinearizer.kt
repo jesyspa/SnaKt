@@ -50,6 +50,10 @@ class PureLinearizer(override val source: KtSourceElement?) : LinearizationConte
         throw PureLinearizerMisuseException("addDeclaration")
     }
 
+    override fun addAssignment(lhs: ExpEmbedding, rhs: ExpEmbedding) {
+        throw PureLinearizerMisuseException("addAssignment")
+    }
+
     override fun addModifier(mod: StmtModifier) {
         throw PureLinearizerMisuseException("addModifier")
     }
@@ -62,7 +66,8 @@ fun ExpEmbedding.pureToViper(toBuiltin: Boolean, source: KtSourceElement? = null
     } catch (e: PureLinearizerMisuseException) {
         val catchNameResolver = SimpleNameResolver()
         val debugView = with(catchNameResolver) { debugTreeView.print() }
-        val msg = "PureLinearizer used to convert non-pure ExpEmbedding; operation ${e.offendingFunction} is not supported in a pure context.\nEmbedding debug view:\n${debugView}"
+        val msg =
+            "PureLinearizer used to convert non-pure ExpEmbedding; operation ${e.offendingFunction} is not supported in a pure context.\nEmbedding debug view:\n${debugView}"
         throw IllegalStateException(msg)
     }
 }
