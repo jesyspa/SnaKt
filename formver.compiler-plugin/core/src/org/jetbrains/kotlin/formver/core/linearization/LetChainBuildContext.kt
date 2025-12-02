@@ -5,6 +5,7 @@ import org.jetbrains.kotlin.formver.viper.ast.Exp
 
 interface LetChainBuildContext {
     // We have return type Exp here as if no assignments are present the body expression is returned
-    fun asLetChain(body: Exp): Exp
+    fun asLetChain(): Exp
     fun addAssignment(decl: Declaration.LocalVarDecl, varExp: Exp)
+    fun addBody(body: Exp)
 }

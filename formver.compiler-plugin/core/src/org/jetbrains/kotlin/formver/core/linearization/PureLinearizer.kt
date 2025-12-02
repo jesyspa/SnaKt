@@ -7,6 +7,7 @@ package org.jetbrains.kotlin.formver.core.linearization
 
 import org.jetbrains.kotlin.KtSourceElement
 import org.jetbrains.kotlin.formver.common.SnaktInternalException
+import org.jetbrains.kotlin.formver.core.conversion.ReturnTarget
 import org.jetbrains.kotlin.formver.core.embeddings.expression.AnonymousVariableEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.expression.ExpEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.expression.VariableEmbedding
@@ -26,8 +27,9 @@ class PureLinearizerMisuseException(val offendingFunction: String) : IllegalStat
  * processing preconditions, postconditions, and invariants. In those cases, generating statements
  * would be an error.
  */
-class PureLinearizer(override val source: KtSourceElement?, val letChainBuilder: LetChainBuilder) :
+class PureLinearizer(override val source: KtSourceElement?) :
     LinearizationContext {
+    private val letChainBuilder = LetChainBuilder(source)
     override val unfoldPolicy: UnfoldPolicy
         get() = UnfoldPolicy.UNFOLDING_IN
 
@@ -35,7 +37,7 @@ class PureLinearizer(override val source: KtSourceElement?, val letChainBuilder:
         get() = LogicOperatorPolicy.CONVERT_TO_EXPRESSION
 
     override fun <R> withPosition(newSource: KtSourceElement, action: LinearizationContext.() -> R): R =
-        PureLinearizer(newSource, letChainBuilder).action()
+        PureLinearizer(newSource).action()
 
     override fun freshAnonVar(type: TypeEmbedding): AnonymousVariableEmbedding {
         throw PureLinearizerMisuseException("newVar")
@@ -64,15 +66,20 @@ class PureLinearizer(override val source: KtSourceElement?, val letChainBuilder:
         )
     }
 
+    override fun addReturn(returnExp: ExpEmbedding, target: ReturnTarget) {
+        letChainBuilder.addBody(returnExp.toViper(this))
+    }
+
     override fun addModifier(mod: StmtModifier) {
         throw PureLinearizerMisuseException("addModifier")
     }
+
+    fun asLetChain() = letChainBuilder.asLetChain()
 }
 
 fun ExpEmbedding.pureToViper(toBuiltin: Boolean, source: KtSourceElement? = null): Exp {
     try {
-        val letChainBuilder = LetChainBuilder(source)
-        val linearizer = PureLinearizer(source, letChainBuilder)
+        val linearizer = PureLinearizer(source)
         return if (toBuiltin) toViperBuiltinType(linearizer) else toViper(linearizer)
     } catch (e: PureLinearizerMisuseException) {
         val catchNameResolver = SimpleNameResolver()

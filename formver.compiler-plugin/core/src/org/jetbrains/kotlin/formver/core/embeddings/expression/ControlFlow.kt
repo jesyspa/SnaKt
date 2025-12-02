@@ -333,14 +333,7 @@ data class Return(
     override val type = buildType { nothing() }
 
     override fun toViperMaybeStoringIn(result: VariableEmbedding?, ctx: LinearizationContext) {
-        val retVarViper = target.variable.toViper(ctx)
-        if (retVarViper !is Exp.LocalVar) throw SnaktInternalException(
-            ctx.source,
-            "Translated return variable of function must be a local variable. Got: $retVarViper"
-        )
-        returnExp.withType(target.variable.type)
-            .toViperStoringIn(LinearizationVariableEmbedding(retVarViper.name, returnExp.type), ctx)
-        ctx.addStatement { target.label.toLink().toViperGoto(ctx) }
+        ctx.addReturn(returnExp, target)
     }
 
     context(nameResolver: NameResolver)

@@ -6,11 +6,15 @@
 package org.jetbrains.kotlin.formver.core.linearization
 
 import org.jetbrains.kotlin.KtSourceElement
+import org.jetbrains.kotlin.formver.common.SnaktInternalException
 import org.jetbrains.kotlin.formver.core.asPosition
+import org.jetbrains.kotlin.formver.core.conversion.ReturnTarget
 import org.jetbrains.kotlin.formver.core.embeddings.expression.AnonymousVariableEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.expression.ExpEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.expression.LinearizationVariableEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.expression.withType
+import org.jetbrains.kotlin.formver.core.embeddings.toLink
+import org.jetbrains.kotlin.formver.core.embeddings.toViperGoto
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.viper.ast.Declaration
 import org.jetbrains.kotlin.formver.viper.ast.Exp
@@ -72,6 +76,17 @@ data class Linearizer(
             val rhsViper = rhs.withType(lhs.type).toViper(this)
             addStatement { Stmt.assign(lhsViper, rhsViper, source.asPosition) }
         }
+    }
+
+    override fun addReturn(returnExp: ExpEmbedding, target: ReturnTarget) {
+        val retVarViper = target.variable.toViper(this)
+        if (retVarViper !is Exp.LocalVar) throw SnaktInternalException(
+            source,
+            "Translated return variable of function must be a local variable. Got: $retVarViper"
+        )
+        returnExp.withType(target.variable.type)
+            .toViperStoringIn(LinearizationVariableEmbedding(retVarViper.name, returnExp.type), this)
+        addStatement { target.label.toLink().toViperGoto(this) }
     }
 
     override fun addModifier(mod: StmtModifier) {
