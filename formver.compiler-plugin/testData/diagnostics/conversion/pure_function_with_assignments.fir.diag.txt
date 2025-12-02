@@ -1,0 +1,32 @@
+/pure_function_with_assignments.kt:(59,74): info: Generated Viper text for returnNumberVal:
+function f$returnNumberVal$TF$(): Ref
+  ensures df$rt$isSubtype(df$rt$typeOf(result), df$rt$intType())
+{
+  (let l0$x ==
+    (df$rt$intToRef(42)) in
+    l0$x)
+}
+
+/pure_function_with_assignments.kt:(125,140): info: Generated Viper text for returnNumberVar:
+function f$returnNumberVar$TF$(): Ref
+  ensures df$rt$isSubtype(df$rt$typeOf(result), df$rt$intType())
+{
+  (let l0$x ==
+    (df$rt$intToRef(42)) in
+    l0$x)
+}
+
+/pure_function_with_assignments.kt:(191,225): info: Generated Viper text for multipleAssignmentsOfDifferentType:
+function f$multipleAssignmentsOfDifferentType$TF$(): Ref
+  ensures df$rt$isSubtype(df$rt$typeOf(result), df$rt$boolType())
+{
+  (let l0$a ==
+    (df$rt$intToRef(42)) in
+    (let l0$b ==
+      (df$rt$stringToRef(Seq(72, 101, 108, 108, 111, 32, 83, 110, 97, 75, 116))) in
+      (let l0$c ==
+        (df$rt$boolToRef(true)) in
+        (let l0$d ==
+          (df$rt$charToRef(65)) in
+          l0$c))))
+}

@@ -6,8 +6,10 @@
 package org.jetbrains.kotlin.formver.core.linearization
 
 import org.jetbrains.kotlin.KtSourceElement
+import org.jetbrains.kotlin.formver.common.SnaktInternalException
 import org.jetbrains.kotlin.formver.core.embeddings.expression.AnonymousVariableEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.expression.ExpEmbedding
+import org.jetbrains.kotlin.formver.core.embeddings.expression.VariableEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.print
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.names.SimpleNameResolver
@@ -24,7 +26,8 @@ class PureLinearizerMisuseException(val offendingFunction: String) : IllegalStat
  * processing preconditions, postconditions, and invariants. In those cases, generating statements
  * would be an error.
  */
-class PureLinearizer(override val source: KtSourceElement?) : LinearizationContext {
+class PureLinearizer(override val source: KtSourceElement?, val letChainBuilder: LetChainBuilder) :
+    LinearizationContext {
     override val unfoldPolicy: UnfoldPolicy
         get() = UnfoldPolicy.UNFOLDING_IN
 
@@ -32,7 +35,7 @@ class PureLinearizer(override val source: KtSourceElement?) : LinearizationConte
         get() = LogicOperatorPolicy.CONVERT_TO_EXPRESSION
 
     override fun <R> withPosition(newSource: KtSourceElement, action: LinearizationContext.() -> R): R =
-        PureLinearizer(newSource).action()
+        PureLinearizer(newSource, letChainBuilder).action()
 
     override fun freshAnonVar(type: TypeEmbedding): AnonymousVariableEmbedding {
         throw PureLinearizerMisuseException("newVar")
@@ -46,12 +49,19 @@ class PureLinearizer(override val source: KtSourceElement?) : LinearizationConte
         throw PureLinearizerMisuseException("addStatement")
     }
 
-    override fun addDeclaration(decl: Declaration) {
-        throw PureLinearizerMisuseException("addDeclaration")
-    }
+    // Nothing to do here, as an assignment is also added
+    override fun addDeclaration(decl: Declaration) {}
 
     override fun addAssignment(lhs: ExpEmbedding, rhs: ExpEmbedding) {
-        throw PureLinearizerMisuseException("addAssignment")
+        // TODO: Move this to purity check
+        if (lhs.ignoringMetaNodes() !is VariableEmbedding) throw SnaktInternalException(
+            source,
+            "A pure expression expects the lhs of an assignment to be a variable. Offending embedidng: $lhs"
+        )
+        letChainBuilder.addAssignment(
+            (lhs.ignoringMetaNodes() as VariableEmbedding).toLocalVarDecl(),
+            rhs.toViper(this)
+        )
     }
 
     override fun addModifier(mod: StmtModifier) {
@@ -61,7 +71,8 @@ class PureLinearizer(override val source: KtSourceElement?) : LinearizationConte
 
 fun ExpEmbedding.pureToViper(toBuiltin: Boolean, source: KtSourceElement? = null): Exp {
     try {
-        val linearizer = PureLinearizer(source)
+        val letChainBuilder = LetChainBuilder(source)
+        val linearizer = PureLinearizer(source, letChainBuilder)
         return if (toBuiltin) toViperBuiltinType(linearizer) else toViper(linearizer)
     } catch (e: PureLinearizerMisuseException) {
         val catchNameResolver = SimpleNameResolver()

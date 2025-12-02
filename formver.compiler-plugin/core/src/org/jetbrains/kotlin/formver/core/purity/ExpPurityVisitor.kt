@@ -14,6 +14,7 @@ internal object ExprPurityVisitor : ExpVisitor<Boolean> {
     override fun visitPureExpEmbedding(e: PureExpEmbedding) = true
     override fun visitUnitLit(e: UnitLit) = true
     override fun visitFunctionCall(e: FunctionCall) = true
+    override fun visitDeclare(e: Declare) = e.initializer != null
 
     /* ————— structural nodes without side effects ————— */
     override fun visitReturn(e: Return) = e.allChildrenPure(this)
@@ -43,7 +44,6 @@ internal object ExprPurityVisitor : ExpVisitor<Boolean> {
     override fun visitLambdaExp(e: LambdaExp) = false
     override fun visitInvokeFunctionObject(e: InvokeFunctionObject) = false
     override fun visitShared(e: Shared) = false
-    override fun visitDeclare(e: Declare) = false
     override fun visitInhaleDirect(e: InhaleDirect): Boolean = false
     override fun visitErrorExp(e: ErrorExp) = false
 
