@@ -523,13 +523,7 @@ data class Assign(val lhs: ExpEmbedding, val rhs: ExpEmbedding) : UnitResultExpE
     override val type: TypeEmbedding = lhs.type
 
     override fun toViperSideEffects(ctx: LinearizationContext) {
-        val lhsViper = lhs.toViper(ctx)
-        if (lhsViper is Exp.LocalVar) {
-            rhs.withType(lhs.type).toViperStoringIn(LinearizationVariableEmbedding(lhsViper.name, lhs.type), ctx)
-        } else {
-            val rhsViper = rhs.withType(lhs.type).toViper(ctx)
-            ctx.addStatement { Stmt.assign(lhsViper, rhsViper, ctx.source.asPosition) }
-        }
+        ctx.addAssignment(lhs, rhs)
     }
 
     context(nameResolver: NameResolver)
