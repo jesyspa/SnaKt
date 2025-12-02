@@ -30,3 +30,18 @@ function f$multipleAssignmentsOfDifferentType$TF$(): Ref
           (df$rt$charToRef(65)) in
           l0$c))))
 }
+
+/pure_function_with_assignments.kt:(339,375): info: Generated Viper text for multipleAssignmentsWithLiteralReturn:
+function f$multipleAssignmentsWithLiteralReturn$TF$(): Ref
+  ensures df$rt$isSubtype(df$rt$typeOf(result), df$rt$intType())
+{
+  (let l0$a ==
+    (df$rt$intToRef(42)) in
+    (let l0$b ==
+      (df$rt$stringToRef(Seq(72, 101, 108, 108, 111, 32, 83, 110, 97, 75, 116))) in
+      (let l0$c ==
+        (df$rt$boolToRef(true)) in
+        (let l0$d ==
+          (df$rt$charToRef(65)) in
+          df$rt$intToRef(42)))))
+}

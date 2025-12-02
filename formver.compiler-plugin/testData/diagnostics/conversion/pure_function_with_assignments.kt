@@ -15,9 +15,17 @@ fun <!VIPER_TEXT!>returnNumberVar<!>(): Int {
 @Pure
 fun <!VIPER_TEXT!>multipleAssignmentsOfDifferentType<!>(): Boolean {
     val a = 42
-    a = 43
     val b = "Hello SnaKt"
     val c = true
     val d = 'A'
     return c
+}
+
+@Pure
+fun <!VIPER_TEXT!>multipleAssignmentsWithLiteralReturn<!>(): Int {
+    val a = 42
+    val b = "Hello SnaKt"
+    val c = true
+    val d = 'A'
+    return 42
 }
