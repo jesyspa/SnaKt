@@ -285,7 +285,7 @@ private fun extractFunctionBlockFromPureFunctionBody(body: ExpEmbedding, source:
         is Block -> body.ignoringMetaNodes() as Block
         else -> throw SnaktInternalException(
             source,
-            "Pure functions currently only support literal returns! Got body $body"
+            "Pure functions currently only support a block as body! Got body $body"
         )
     }
 
