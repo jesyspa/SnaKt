@@ -239,9 +239,7 @@ sealed interface BinaryDirectResultExpEmbedding : DirectResultExpEmbedding {
  */
 sealed interface BaseStoredResultExpEmbedding : ExpEmbedding, DefaultToBuiltinExpEmbedding {
     override fun toViper(ctx: LinearizationContext): Exp {
-        val variable = ctx.freshAnonVar(type)
-        toViperStoringIn(variable, ctx)
-        return variable.toViper(ctx)
+        return ctx.addBaseStoredResultExpEmbedding(this)
     }
 }
 

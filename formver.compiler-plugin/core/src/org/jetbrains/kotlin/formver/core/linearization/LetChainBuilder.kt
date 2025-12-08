@@ -5,11 +5,11 @@ import org.jetbrains.kotlin.formver.common.SnaktInternalException
 import org.jetbrains.kotlin.formver.viper.ast.Declaration
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 
-class LetChainBuilder(val source: KtSourceElement? = null) : LetChainBuildContext {
+class LetChainBuilder(val source: KtSourceElement? = null) {
     private val assignments: MutableMap<Declaration.LocalVarDecl, Exp> = mutableMapOf()
     private var body: Exp? = null
 
-    override fun asLetChain(): Exp {
+    fun asLetChain(): Exp {
         if (body == null) throw SnaktInternalException(
             source,
             "Empty body cannot be converted into let chain"
@@ -19,7 +19,7 @@ class LetChainBuilder(val source: KtSourceElement? = null) : LetChainBuildContex
         }
     }
 
-    override fun addAssignment(decl: Declaration.LocalVarDecl, varExp: Exp) {
+    fun addAssignment(decl: Declaration.LocalVarDecl, varExp: Exp) {
         // TODO: Allow this case using SSA transformation
         if (assignments.containsKey(decl)) throw SnaktInternalException(
             source,
@@ -28,7 +28,7 @@ class LetChainBuilder(val source: KtSourceElement? = null) : LetChainBuildContex
         assignments[decl] = varExp
     }
 
-    override fun addBody(body: Exp) {
+    fun addBody(body: Exp) {
         this.body = body
     }
 }

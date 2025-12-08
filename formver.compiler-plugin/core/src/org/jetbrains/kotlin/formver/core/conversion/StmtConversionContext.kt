@@ -5,7 +5,6 @@
 
 package org.jetbrains.kotlin.formver.core.conversion
 
-import org.jetbrains.kotlin.KtSourceElement
 import org.jetbrains.kotlin.fir.FirLabel
 import org.jetbrains.kotlin.fir.declarations.FirSimpleFunction
 import org.jetbrains.kotlin.fir.declarations.utils.isFinal
@@ -267,27 +266,15 @@ fun StmtConversionContext.convertFunctionWithBody(
         declaration.source,
         "Pure functions expect a function body to exist"
     )
-    val bodyWithPosition = convert(firBody)
-    // TODO: Clean this up
-    val body = extractFunctionBlockFromPureFunctionBody(bodyWithPosition, declaration.source)
+    val body = convert(firBody)
     val pureLinearizer = PureLinearizer(declaration.source)
 
     if (!body.isPure()) throw SnaktInternalException(
         declaration.source,
         "Impure function body detected in pure function"
     )
-    body.exps.forEach { it.ignoringMetaNodes().toViperUnusedResult(pureLinearizer) }
-    return pureLinearizer.asLetChain()
+    return body.toViper(pureLinearizer)
 }
-
-private fun extractFunctionBlockFromPureFunctionBody(body: ExpEmbedding, source: KtSourceElement?): Block =
-    when (body.ignoringMetaNodes()) {
-        is Block -> body.ignoringMetaNodes() as Block
-        else -> throw SnaktInternalException(
-            source,
-            "Pure functions currently only support a block as body! Got body $body"
-        )
-    }
 
 private const val INVALID_STATEMENT_MSG =
     "Every statement in invariant block must be a pure boolean invariant."
