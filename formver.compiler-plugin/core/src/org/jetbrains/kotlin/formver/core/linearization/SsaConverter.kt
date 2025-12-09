@@ -5,7 +5,7 @@ import org.jetbrains.kotlin.formver.common.SnaktInternalException
 import org.jetbrains.kotlin.formver.viper.ast.Declaration
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 
-class LetChainBuilder(val source: KtSourceElement? = null) {
+class SsaConverter(val source: KtSourceElement? = null) {
     private val assignments: MutableMap<Declaration.LocalVarDecl, Exp> = mutableMapOf()
     private var body: Exp? = null
 

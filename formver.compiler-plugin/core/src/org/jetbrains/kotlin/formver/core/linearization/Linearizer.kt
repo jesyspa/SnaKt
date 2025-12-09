@@ -9,7 +9,10 @@ import org.jetbrains.kotlin.KtSourceElement
 import org.jetbrains.kotlin.formver.common.SnaktInternalException
 import org.jetbrains.kotlin.formver.core.asPosition
 import org.jetbrains.kotlin.formver.core.conversion.ReturnTarget
-import org.jetbrains.kotlin.formver.core.embeddings.expression.*
+import org.jetbrains.kotlin.formver.core.embeddings.expression.AnonymousVariableEmbedding
+import org.jetbrains.kotlin.formver.core.embeddings.expression.ExpEmbedding
+import org.jetbrains.kotlin.formver.core.embeddings.expression.LinearizationVariableEmbedding
+import org.jetbrains.kotlin.formver.core.embeddings.expression.withType
 import org.jetbrains.kotlin.formver.core.embeddings.toLink
 import org.jetbrains.kotlin.formver.core.embeddings.toViperGoto
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
@@ -76,20 +79,21 @@ data class Linearizer(
     }
 
     override fun addReturn(returnExp: ExpEmbedding, target: ReturnTarget) {
+        returnExp.withType(target.variable.type)
+            .toViperStoringIn(convertReturnTargetToLinearizationVariableEmbedding(target, returnExp.type), this)
+        addStatement { target.label.toLink().toViperGoto(this) }
+    }
+
+    private fun convertReturnTargetToLinearizationVariableEmbedding(
+        target: ReturnTarget,
+        type: TypeEmbedding
+    ): LinearizationVariableEmbedding {
         val retVarViper = target.variable.toViper(this)
         if (retVarViper !is Exp.LocalVar) throw SnaktInternalException(
             source,
             "Translated return variable of function must be a local variable. Got: $retVarViper"
         )
-        returnExp.withType(target.variable.type)
-            .toViperStoringIn(LinearizationVariableEmbedding(retVarViper.name, returnExp.type), this)
-        addStatement { target.label.toLink().toViperGoto(this) }
-    }
-
-    override fun addBaseStoredResultExpEmbedding(embedding: BaseStoredResultExpEmbedding): Exp {
-        val variable = freshAnonVar(embedding.type)
-        embedding.toViperStoringIn(variable, this)
-        return variable.toViper(this)
+        return LinearizationVariableEmbedding(retVarViper.name, type)
     }
 
     override fun addModifier(mod: StmtModifier) {

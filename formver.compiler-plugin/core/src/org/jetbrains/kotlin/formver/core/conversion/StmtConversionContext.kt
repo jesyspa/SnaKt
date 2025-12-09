@@ -25,10 +25,7 @@ import org.jetbrains.kotlin.formver.core.embeddings.properties.asPropertyAccess
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.isCustom
 import org.jetbrains.kotlin.formver.core.isInvariantBuilderFunctionNamed
-import org.jetbrains.kotlin.formver.core.linearization.Linearizer
-import org.jetbrains.kotlin.formver.core.linearization.PureLinearizer
-import org.jetbrains.kotlin.formver.core.linearization.SeqnBuilder
-import org.jetbrains.kotlin.formver.core.linearization.SharedLinearizationState
+import org.jetbrains.kotlin.formver.core.linearization.*
 import org.jetbrains.kotlin.formver.core.purity.checkValidity
 import org.jetbrains.kotlin.formver.core.purity.isPure
 import org.jetbrains.kotlin.formver.viper.SymbolicName
@@ -267,13 +264,15 @@ fun StmtConversionContext.convertFunctionWithBody(
         "Pure functions expect a function body to exist"
     )
     val body = convert(firBody)
-    val pureLinearizer = PureLinearizer(declaration.source)
+    val ssaConverter = SsaConverter(declaration.source)
+    val pureLinearizer = PureLinearizer(declaration.source, ssaConverter)
 
     if (!body.isPure()) throw SnaktInternalException(
         declaration.source,
         "Impure function body detected in pure function"
     )
-    return body.toViper(pureLinearizer)
+    body.toViperUnusedResult(pureLinearizer)
+    return ssaConverter.asLetChain()
 }
 
 private const val INVALID_STATEMENT_MSG =
