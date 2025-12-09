@@ -9,7 +9,7 @@ class SsaConverter(val source: KtSourceElement? = null) {
     private val assignments: MutableMap<Declaration.LocalVarDecl, Exp> = mutableMapOf()
     private var body: Exp? = null
 
-    fun asLetChain(): Exp {
+    fun asExp(): Exp {
         if (body == null) throw SnaktInternalException(
             source,
             "Empty body cannot be converted into let chain"

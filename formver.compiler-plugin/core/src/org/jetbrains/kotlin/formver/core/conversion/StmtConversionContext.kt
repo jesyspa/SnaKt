@@ -264,15 +264,15 @@ fun StmtConversionContext.convertFunctionWithBody(
         "Pure functions expect a function body to exist"
     )
     val body = convert(firBody)
-    val ssaConverter = SsaConverter(declaration.source)
-    val pureLinearizer = PureLinearizer(declaration.source, ssaConverter)
-
     if (!body.isPure()) throw SnaktInternalException(
         declaration.source,
         "Impure function body detected in pure function"
     )
+    
+    val ssaConverter = SsaConverter(declaration.source)
+    val pureLinearizer = PureLinearizer(declaration.source, ssaConverter)
     body.toViperUnusedResult(pureLinearizer)
-    return ssaConverter.asLetChain()
+    return ssaConverter.asExp()
 }
 
 private const val INVALID_STATEMENT_MSG =

@@ -56,6 +56,7 @@ data class PureLinearizer(
     override fun addDeclaration(decl: Declaration) {}
 
     override fun addAssignment(lhs: ExpEmbedding, rhs: ExpEmbedding) {
+        // It would be nicer to constraint this a bit further as this is a very special case
         ssaConverter.addAssignment(
             (lhs.ignoringMetaNodes() as VariableEmbedding).toLocalVarDecl(),
             rhs.toViper(this)

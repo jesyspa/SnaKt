@@ -80,7 +80,7 @@ data class Linearizer(
 
     override fun addReturn(returnExp: ExpEmbedding, target: ReturnTarget) {
         returnExp.withType(target.variable.type)
-            .toViperStoringIn(convertReturnTargetToLinearizationVariableEmbedding(target, returnExp.type), this)
+            .toViperStoringIn(target.variable, this)
         addStatement { target.label.toLink().toViperGoto(this) }
     }
 
