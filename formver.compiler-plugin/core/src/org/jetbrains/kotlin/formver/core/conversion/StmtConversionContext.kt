@@ -5,7 +5,6 @@
 
 package org.jetbrains.kotlin.formver.core.conversion
 
-import org.jetbrains.kotlin.KtSourceElement
 import org.jetbrains.kotlin.fir.FirLabel
 import org.jetbrains.kotlin.fir.declarations.FirSimpleFunction
 import org.jetbrains.kotlin.fir.declarations.utils.isFinal
@@ -26,10 +25,7 @@ import org.jetbrains.kotlin.formver.core.embeddings.properties.asPropertyAccess
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.isCustom
 import org.jetbrains.kotlin.formver.core.isInvariantBuilderFunctionNamed
-import org.jetbrains.kotlin.formver.core.linearization.Linearizer
-import org.jetbrains.kotlin.formver.core.linearization.PureLinearizer
-import org.jetbrains.kotlin.formver.core.linearization.SeqnBuilder
-import org.jetbrains.kotlin.formver.core.linearization.SharedLinearizationState
+import org.jetbrains.kotlin.formver.core.linearization.*
 import org.jetbrains.kotlin.formver.core.purity.checkValidity
 import org.jetbrains.kotlin.formver.core.purity.isPure
 import org.jetbrains.kotlin.formver.viper.SymbolicName
@@ -267,38 +263,17 @@ fun StmtConversionContext.convertFunctionWithBody(
         declaration.source,
         "Pure functions expect a function body to exist"
     )
-    val bodyWithPosition = convert(firBody)
-    // TODO: Clean this up
-    val body = extractReturnedExprFromPureFunctionBody(bodyWithPosition, declaration.source)
-    val pureLinearizer = PureLinearizer(declaration.source)
-
+    val body = convert(firBody)
     if (!body.isPure()) throw SnaktInternalException(
         declaration.source,
         "Impure function body detected in pure function"
     )
-    return body.returnExp.toViper(pureLinearizer)
+    
+    val ssaConverter = SsaConverter(declaration.source)
+    val pureLinearizer = PureLinearizer(declaration.source, ssaConverter)
+    body.toViperUnusedResult(pureLinearizer)
+    return ssaConverter.asExp()
 }
-
-private fun extractReturnedExprFromPureFunctionBody(body: ExpEmbedding, source: KtSourceElement?): Return =
-    when (body) {
-        is WithPosition -> extractReturnedExprFromPureFunctionBody(body.inner, source)
-        is Block -> {
-            val relevantExps = filterUnitExp(body.exps)
-            if (relevantExps.size != 1) throw SnaktInternalException(
-                source,
-                "The body of a pure function may only contain a block with one expression! Got body $body"
-            )
-            extractReturnedExprFromPureFunctionBody(relevantExps.single(), source)
-        }
-
-        is Return -> body
-        else -> throw SnaktInternalException(
-            source,
-            "Pure functions currently only support literal returns! Got body $body"
-        )
-    }
-
-private fun filterUnitExp(exps: List<ExpEmbedding>) = exps.filter { it.ignoringMetaNodes() !is UnitLit }
 
 private const val INVALID_STATEMENT_MSG =
     "Every statement in invariant block must be a pure boolean invariant."
