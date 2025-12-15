@@ -5,13 +5,13 @@
 
 package org.jetbrains.kotlin.formver.core.embeddings.expression
 
-import org.jetbrains.kotlin.KtSourceElement
 import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
 import org.jetbrains.kotlin.formver.core.asPosition
 import org.jetbrains.kotlin.formver.core.asSourceRole
 import org.jetbrains.kotlin.formver.core.conversion.StmtConversionContext
 import org.jetbrains.kotlin.formver.core.domains.Injection
 import org.jetbrains.kotlin.formver.core.domains.viperType
+import org.jetbrains.kotlin.formver.core.embeddings.ExpVisitor
 import org.jetbrains.kotlin.formver.core.embeddings.SourceRole
 import org.jetbrains.kotlin.formver.core.embeddings.asInfo
 import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.NamedBranchingNode
@@ -21,6 +21,7 @@ import org.jetbrains.kotlin.formver.core.embeddings.properties.PropertyAccessEmb
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.fillHoles
 import org.jetbrains.kotlin.formver.core.embeddings.types.injectionOrNull
+import org.jetbrains.kotlin.formver.core.linearization.LinearizationContext
 import org.jetbrains.kotlin.formver.core.names.AnonymousBuiltinName
 import org.jetbrains.kotlin.formver.core.names.AnonymousName
 import org.jetbrains.kotlin.formver.core.names.FunctionResultVariableName
@@ -36,7 +37,7 @@ import org.jetbrains.kotlin.formver.viper.mangled
  *               expect a VariableEmbedding and on the ExpEmbedding level it behaves similar enough to a general VariableEmbedding.
  *               In Viper however, this special case is not treated as a variable, which is why there is a case distinction in .toViper().
  */
-sealed interface VariableEmbedding : PureExpEmbedding, PropertyAccessEmbedding {
+sealed interface VariableEmbedding : NullaryDirectResultExpEmbedding, PropertyAccessEmbedding {
     val name: SymbolicName
     override val type: TypeEmbedding
     val isUnique: Boolean
@@ -56,9 +57,9 @@ sealed interface VariableEmbedding : PureExpEmbedding, PropertyAccessEmbedding {
         trafos: Trafos = Trafos.NoTrafos,
     ): Exp.LocalVar = Exp.LocalVar(name, Type.Ref, pos, info, trafos)
 
-    override fun toViper(source: KtSourceElement?): Exp = when (name) {
-        is FunctionResultVariableName -> Exp.Result(Type.Ref, source.asPosition, sourceRole.asInfo)
-        else -> Exp.LocalVar(name, Type.Ref, source.asPosition, sourceRole.asInfo)
+    override fun toViper(ctx: LinearizationContext): Exp = when (name) {
+        is FunctionResultVariableName -> Exp.Result(Type.Ref, ctx.source.asPosition, sourceRole.asInfo)
+        else -> Exp.LocalVar(name, Type.Ref, ctx.source.asPosition, sourceRole.asInfo)
     }
 
     val isOriginallyRef: Boolean
@@ -78,6 +79,8 @@ sealed interface VariableEmbedding : PureExpEmbedding, PropertyAccessEmbedding {
     context(nameResolver: NameResolver)
     override val debugTreeView: TreeView
         get() = NamedBranchingNode("Var", PlaintextLeaf(name.mangled))
+
+    override fun <R> accept(v: ExpVisitor<R>): R = v.visitVariableEmbedding(this)
 }
 
 /**
@@ -101,8 +104,8 @@ class AnonymousVariableEmbedding(n: Int, override val type: TypeEmbedding) : Var
 class AnonymousBuiltinVariableEmbedding(n: Int, override val type: TypeEmbedding) : VariableEmbedding {
     override val name: SymbolicName = AnonymousBuiltinName(n)
     private val injection: Injection? = type.injectionOrNull
-    override fun toViper(source: KtSourceElement?): Exp {
-        val inner = Exp.LocalVar(name, injection.viperType, source.asPosition, sourceRole.asInfo)
+    override fun toViper(ctx: LinearizationContext): Exp {
+        val inner = Exp.LocalVar(name, injection.viperType, ctx.source.asPosition, sourceRole.asInfo)
         return injection?.let { it.toRef(inner) } ?: inner
     }
 
