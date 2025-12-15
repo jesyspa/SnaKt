@@ -20,19 +20,21 @@ import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 import org.jetbrains.kotlin.formver.viper.ast.viperLiteral
 
-interface LiteralEmbedding : PureExpEmbedding {
+interface LiteralEmbedding : NullaryDirectResultExpEmbedding {
     val value: Any?
 
     context(nameResolver: NameResolver)
     override val debugExtraSubtrees: List<TreeView>
         get() = listOf(PlaintextLeaf(value.toString()))
 
-    override fun toViper(source: KtSourceElement?): Exp =
+    override fun toViper(ctx: LinearizationContext): Exp =
         type.injection.toRef(
-            value.viperLiteral(source.asPosition, sourceRole.asInfo),
-            pos = source.asPosition,
+            value.viperLiteral(ctx.source.asPosition, sourceRole.asInfo),
+            pos = ctx.source.asPosition,
             info = sourceRole.asInfo,
         )
+
+    override fun <R> accept(v: ExpVisitor<R>): R = v.visitLiteralEmbedding(this)
 }
 
 data object UnitLit : LiteralEmbedding, UnitResultExpEmbedding {
@@ -86,8 +88,8 @@ data object NullLit : LiteralEmbedding {
     override val value = null
 
     override val type = buildType { isNullable = true; nothing() }
-    override fun toViper(source: KtSourceElement?): Exp =
-        RuntimeTypeDomain.nullValue(pos = source.asPosition)
+    override fun toViper(ctx: LinearizationContext): Exp =
+        RuntimeTypeDomain.nullValue(pos = ctx.source.asPosition)
 
     override val debugName = "Null"
 }

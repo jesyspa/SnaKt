@@ -5,7 +5,6 @@
 
 package org.jetbrains.kotlin.formver.core.embeddings.expression
 
-import org.jetbrains.kotlin.KtSourceElement
 import org.jetbrains.kotlin.formver.core.asPosition
 import org.jetbrains.kotlin.formver.core.embeddings.ExpVisitor
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
@@ -21,8 +20,9 @@ import org.jetbrains.kotlin.formver.viper.ast.Stmt
  * We will eventually want to solve this somehow, but there are still open design questions there, so for now this wrapper will
  * do the job.
  */
-data class ExpWrapper(val value: Exp, override val type: TypeEmbedding) : PureExpEmbedding {
-    override fun toViper(source: KtSourceElement?): Exp = value
+data class ExpWrapper(val value: Exp, override val type: TypeEmbedding) : NullaryDirectResultExpEmbedding {
+    override fun toViper(ctx: LinearizationContext): Exp = value
+    override fun <R> accept(v: ExpVisitor<R>): R = v.visitExpWrapper(this)
 }
 
 data object ErrorExp : NoResultExpEmbedding, DefaultDebugTreeViewImplementation {

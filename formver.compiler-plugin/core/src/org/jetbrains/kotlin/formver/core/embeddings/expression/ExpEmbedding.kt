@@ -5,7 +5,6 @@
 
 package org.jetbrains.kotlin.formver.core.embeddings.expression
 
-import org.jetbrains.kotlin.KtSourceElement
 import org.jetbrains.kotlin.formver.core.asPosition
 import org.jetbrains.kotlin.formver.core.domains.RuntimeTypeDomain
 import org.jetbrains.kotlin.formver.core.embeddings.ExpVisitor
@@ -269,18 +268,6 @@ sealed interface NoResultExpEmbedding : DefaultMaybeStoringInExpEmbedding, Defau
         toViperUnusedResult(ctx)
         return RuntimeTypeDomain.unitValue(pos = ctx.source.asPosition)
     }
-}
-
-/**
- * `ExpEmbedding` that can be converted to an `Exp` without any linearization context.
- *
- * Note that such an expression of course cannot have (non-pure) subexpressions, since otherwise they would have to be linearized as well.
- */
-sealed interface PureExpEmbedding : NullaryDirectResultExpEmbedding {
-    fun toViper(source: KtSourceElement? = null): Exp
-    override fun toViper(ctx: LinearizationContext): Exp = toViper(ctx.source)
-
-    override fun <R> accept(v: ExpVisitor<R>): R = v.visitPureExpEmbedding(this)
 }
 
 /**

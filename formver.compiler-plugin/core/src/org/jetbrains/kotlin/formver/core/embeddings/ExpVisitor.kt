@@ -8,7 +8,6 @@ package org.jetbrains.kotlin.formver.core.embeddings
 import org.jetbrains.kotlin.formver.core.embeddings.expression.*
 
 interface ExpVisitor<R> {
-    fun visitPureExpEmbedding(e: PureExpEmbedding): R
     fun visitBlock(e: Block): R
     fun visitFunctionExp(e: FunctionExp): R
     fun visitGotoChainNode(e: GotoChainNode): R
@@ -51,4 +50,7 @@ interface ExpVisitor<R> {
     fun visitSharingContext(e: SharingContext): R
     fun visitWithPosition(e: WithPosition): R
     fun visitDefault(e: ExpEmbedding): R
+    fun visitLiteralEmbedding(e: LiteralEmbedding): R
+    fun visitExpWrapper(e: ExpWrapper): R
+    fun visitVariableEmbedding(e: VariableEmbedding): R
 }

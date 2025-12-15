@@ -11,10 +11,12 @@ import org.jetbrains.kotlin.formver.core.embeddings.expression.*
 internal object ExprPurityVisitor : ExpVisitor<Boolean> {
 
     /* ————— pure nodes ————— */
-    override fun visitPureExpEmbedding(e: PureExpEmbedding) = true
     override fun visitUnitLit(e: UnitLit) = true
     override fun visitFunctionCall(e: FunctionCall) = true
     override fun visitDeclare(e: Declare) = e.initializer != null
+    override fun visitLiteralEmbedding(e: LiteralEmbedding) = true
+    override fun visitExpWrapper(e: ExpWrapper) = true
+    override fun visitVariableEmbedding(e: VariableEmbedding) = true
 
     /* ————— structural nodes without side effects ————— */
     override fun visitReturn(e: Return) = e.allChildrenPure(this)
