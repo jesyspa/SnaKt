@@ -38,7 +38,7 @@ sealed interface ExpEmbedding : DebugPrintable {
 
 
     val isUnique: Boolean
-        get() = false
+        get() = true
 
 
     /**
@@ -409,7 +409,7 @@ data class FieldAccess(val receiver: ExpEmbedding, val field: FieldEmbedding) : 
         if (field.unfoldToAccess) unfoldHierarchy(receiverWrapper, ctx)
 
         if (field.isUnique) {
-            // unfoldHierarchy(receiverWrapper, ctx)
+            unfoldHierarchy(receiverWrapper, ctx)
             val fieldAccess = PrimitiveFieldAccess(receiver, field)
             val invariant = uniquePredicateAccessInvariant()?.fillHole(receiver)
                 ?.pureToViper(toBuiltin = true, ctx.source) as? Exp.PredicateAccess
