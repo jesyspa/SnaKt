@@ -572,7 +572,7 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
         val info: Info = Info.NoInfo,
         val trafos: Trafos = Trafos.NoTrafos,
     ) : Exp {
-        override val type = field.type
+        override val type = Type.Bool
 
         context(nameResolver: NameResolver)
         override fun toSilver(): FieldAccessPredicate {

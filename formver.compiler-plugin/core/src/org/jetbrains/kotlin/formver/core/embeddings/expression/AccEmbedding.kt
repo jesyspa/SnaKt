@@ -22,7 +22,6 @@ enum class PermOption{
 }
 
 class AccEmbedding(
-
     val field: FieldEmbedding,
     val access: ExpEmbedding,
     val perm: PermOption,
@@ -33,7 +32,7 @@ class AccEmbedding(
             field.toViper(),
             ctx.source.asPosition,
         )
-        val permission = if (perm == PermOption.READ) PermExp.EpsilonPerm() else PermExp.FullPerm()
+        val permission = if (perm == PermOption.READ) PermExp.WildcardPerm() else PermExp.FullPerm()
         return Exp.Acc(
             field = field,
             perm = permission,
