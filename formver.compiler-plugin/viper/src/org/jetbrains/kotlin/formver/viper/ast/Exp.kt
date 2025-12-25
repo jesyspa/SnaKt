@@ -565,6 +565,27 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
             Unfolding(predicateAccess.toSilver(), body.toSilver(), pos.toSilver(), info.toSilver(), trafos.toSilver())
     }
 
+    data class Acc(
+        val field: FieldAccess,
+        val perm: PermExp,
+        val pos: Position = Position.NoPosition,
+        val info: Info = Info.NoInfo,
+        val trafos: Trafos = Trafos.NoTrafos,
+    ) : Exp {
+        override val type = field.type
+
+        context(nameResolver: NameResolver)
+        override fun toSilver(): FieldAccessPredicate {
+            return FieldAccessPredicate(
+                field.toSilver(),
+                perm.toSilver(),
+                pos.toSilver(),
+                info.toSilver(),
+                trafos.toSilver(),
+            )
+        }
+    }
+
     data class LetBinding(
         val variable: Declaration.LocalVarDecl,
         val varExp: Exp,
