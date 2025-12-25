@@ -22,6 +22,7 @@ enum class PermOption{
 }
 
 class AccEmbedding(
+
     val field: FieldEmbedding,
     val access: ExpEmbedding,
     val perm: PermOption,

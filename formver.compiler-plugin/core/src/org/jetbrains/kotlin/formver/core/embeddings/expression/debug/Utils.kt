@@ -33,6 +33,7 @@ val PermExp.debugTreeView: TreeView
     get() = when (this) {
         is PermExp.WildcardPerm -> PlaintextLeaf("wildcard")
         is PermExp.FullPerm -> PlaintextLeaf("write")
+        is PermExp.EpsilonPerm -> PlaintextLeaf("read")
     }
 
 fun TreeView.withDesignation(name: String) = designatedNode(name, this)
