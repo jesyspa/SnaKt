@@ -53,4 +53,5 @@ interface ExpVisitor<R> {
     fun visitLiteralEmbedding(e: LiteralEmbedding): R
     fun visitExpWrapper(e: ExpWrapper): R
     fun visitVariableEmbedding(e: VariableEmbedding): R
+    fun visitAccEmbedding(e: AccEmbedding): R
 }

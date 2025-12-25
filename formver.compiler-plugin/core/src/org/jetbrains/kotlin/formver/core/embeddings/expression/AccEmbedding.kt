@@ -5,32 +5,46 @@
 
 package org.jetbrains.kotlin.formver.core.embeddings.expression
 
+import org.jetbrains.kotlin.backend.jvm.AccessType
 import org.jetbrains.kotlin.formver.core.asPosition
 import org.jetbrains.kotlin.formver.core.embeddings.ExpVisitor
 import org.jetbrains.kotlin.formver.core.embeddings.asInfo
+import org.jetbrains.kotlin.formver.core.embeddings.properties.FieldEmbedding
+import org.jetbrains.kotlin.formver.core.embeddings.types.FieldAccessTypeInvariantEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
+import org.jetbrains.kotlin.formver.core.embeddings.types.buildType
 import org.jetbrains.kotlin.formver.core.linearization.LinearizationContext
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 import org.jetbrains.kotlin.formver.viper.ast.PermExp
 
-class AccEmbedding(
-    val field: Exp.FieldAccess,
-    val perm: PermExp,
-) : OnlyToBuiltinTypeExpEmbedding {
+enum class PermOption{
+    READ, WRITE
+}
 
+class AccEmbedding(
+    val field: FieldEmbedding,
+    val access: ExpEmbedding,
+    val perm: PermOption,
+) : OnlyToBuiltinTypeExpEmbedding {
     override fun toViperBuiltinType(ctx: LinearizationContext): Exp {
+        val field = Exp.FieldAccess(
+            access.toViper(ctx),
+            field.toViper(),
+            ctx.source.asPosition,
+        )
+        val permission = if (perm == PermOption.READ) PermExp.EpsilonPerm() else PermExp.FullPerm()
         return Exp.Acc(
             field = field,
-            perm = perm,
+            perm = permission,
             pos = ctx.source.asPosition,
             info = sourceRole.asInfo,
         )
     }
 
-    override val subexpressions: List<ExpEmbedding> = TODO()
+    override val subexpressions: List<ExpEmbedding> = listOf(access)
 
     override val type: TypeEmbedding
-        get() = TODO()
+        get() = buildType { boolean() }
 
-    override fun <R> accept(v: ExpVisitor<R>): R = TODO()
+    override fun <R> accept(v: ExpVisitor<R>): R = v.visitAccEmbedding(this)
 }
