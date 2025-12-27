@@ -63,6 +63,8 @@ internal object ExprPurityVisitor : ExpVisitor<Boolean> {
     override fun visitPredicateAccessPermissions(e: PredicateAccessPermissions): Boolean = false
     override fun visitLabelExp(e: LabelExp): Boolean = false
 
+    override fun visitAccEmbedding(e: AccEmbedding): Boolean = false
+
     override fun visitDefault(e: ExpEmbedding): Boolean = false
 }
 
