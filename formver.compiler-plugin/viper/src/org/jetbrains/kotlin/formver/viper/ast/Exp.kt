@@ -575,15 +575,13 @@ sealed interface Exp : IntoSilver<viper.silver.ast.Exp> {
         override val type = Type.Bool
 
         context(nameResolver: NameResolver)
-        override fun toSilver(): FieldAccessPredicate {
-            return FieldAccessPredicate(
+        override fun toSilver() = FieldAccessPredicate(
                 field.toSilver(),
                 perm.toSilver(),
                 pos.toSilver(),
                 info.toSilver(),
                 trafos.toSilver(),
             )
-        }
     }
 
     data class LetBinding(

@@ -17,14 +17,10 @@ import org.jetbrains.kotlin.formver.core.linearization.LinearizationContext
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 import org.jetbrains.kotlin.formver.viper.ast.PermExp
 
-enum class PermOption{
-    READ, WRITE
-}
-
 class AccEmbedding(
     val field: FieldEmbedding,
     val access: ExpEmbedding,
-    val perm: PermOption,
+    val perm: PermExp,
 ) : OnlyToBuiltinTypeExpEmbedding {
     override fun toViperBuiltinType(ctx: LinearizationContext): Exp {
         val field = Exp.FieldAccess(
@@ -32,10 +28,9 @@ class AccEmbedding(
             field.toViper(),
             ctx.source.asPosition,
         )
-        val permission = if (perm == PermOption.READ) PermExp.WildcardPerm() else PermExp.FullPerm()
         return Exp.Acc(
             field = field,
-            perm = permission,
+            perm = perm,
             pos = ctx.source.asPosition,
             info = sourceRole.asInfo,
         )
