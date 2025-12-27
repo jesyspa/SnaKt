@@ -17,6 +17,7 @@ internal object ExprPurityVisitor : ExpVisitor<Boolean> {
     override fun visitLiteralEmbedding(e: LiteralEmbedding) = true
     override fun visitExpWrapper(e: ExpWrapper) = true
     override fun visitVariableEmbedding(e: VariableEmbedding) = true
+    override fun visitAssign(e: Assign): Boolean = true
 
     /* ————— structural nodes without side effects ————— */
     override fun visitReturn(e: Return) = e.allChildrenPure(this)
@@ -50,7 +51,6 @@ internal object ExprPurityVisitor : ExpVisitor<Boolean> {
     override fun visitErrorExp(e: ErrorExp) = false
 
     override fun visitAssert(e: Assert): Boolean = false
-    override fun visitAssign(e: Assign): Boolean = false
     override fun visitFieldModification(e: FieldModification): Boolean = false
     override fun visitFieldAccess(e: FieldAccess): Boolean = false // TODO
     override fun visitPrimitiveFieldAccess(e: PrimitiveFieldAccess): Boolean = false // TODO

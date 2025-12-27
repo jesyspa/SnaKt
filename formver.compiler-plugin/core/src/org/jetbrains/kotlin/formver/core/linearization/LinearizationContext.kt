@@ -13,6 +13,7 @@ import org.jetbrains.kotlin.formver.core.embeddings.types.PretypeBuilder
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeBuilder
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.buildType
+import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.ast.Declaration
 import org.jetbrains.kotlin.formver.viper.ast.Label
 import org.jetbrains.kotlin.formver.viper.ast.Stmt
@@ -48,6 +49,8 @@ interface LinearizationContext {
     fun addReturn(returnExp: ExpEmbedding, target: ReturnTarget)
 
     fun addModifier(mod: StmtModifier)
+
+    fun resolveVariableName(name: SymbolicName): SymbolicName
 }
 
 fun LinearizationContext.freshAnonVar(init: TypeBuilder.() -> PretypeBuilder): AnonymousVariableEmbedding =
