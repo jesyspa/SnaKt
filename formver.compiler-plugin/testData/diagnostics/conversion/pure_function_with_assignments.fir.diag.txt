@@ -2,37 +2,37 @@
 function f$returnNumberVal$TF$(): Ref
   ensures df$rt$isSubtype(df$rt$typeOf(result), df$rt$intType())
 {
-  (let l0$x ==
+  (let l0$x$0 ==
     (df$rt$intToRef(42)) in
-    l0$x)
+    l0$x$0)
 }
 
 /pure_function_with_assignments.kt:(125,159): info: Generated Viper text for multipleAssignmentsOfDifferentType:
 function f$multipleAssignmentsOfDifferentType$TF$(): Ref
   ensures df$rt$isSubtype(df$rt$typeOf(result), df$rt$boolType())
 {
-  (let l0$a ==
+  (let l0$a$0 ==
     (df$rt$intToRef(42)) in
-    (let l0$b ==
+    (let l0$b$0 ==
       (df$rt$stringToRef(Seq(72, 101, 108, 108, 111, 32, 83, 110, 97, 75, 116))) in
-      (let l0$c ==
+      (let l0$c$0 ==
         (df$rt$boolToRef(true)) in
-        (let l0$d ==
+        (let l0$d$0 ==
           (df$rt$charToRef(65)) in
-          l0$c))))
+          l0$c$0))))
 }
 
 /pure_function_with_assignments.kt:(273,309): info: Generated Viper text for multipleAssignmentsWithLiteralReturn:
 function f$multipleAssignmentsWithLiteralReturn$TF$(): Ref
   ensures df$rt$isSubtype(df$rt$typeOf(result), df$rt$intType())
 {
-  (let l0$a ==
+  (let l0$a$0 ==
     (df$rt$intToRef(42)) in
-    (let l0$b ==
+    (let l0$b$0 ==
       (df$rt$stringToRef(Seq(72, 101, 108, 108, 111, 32, 83, 110, 97, 75, 116))) in
-      (let l0$c ==
+      (let l0$c$0 ==
         (df$rt$boolToRef(true)) in
-        (let l0$d ==
+        (let l0$d$0 ==
           (df$rt$charToRef(65)) in
           df$rt$intToRef(42)))))
 }
@@ -41,24 +41,24 @@ function f$multipleAssignmentsWithLiteralReturn$TF$(): Ref
 function f$laterInitializersCanRelyOnPrevious$TF$(): Ref
   ensures df$rt$isSubtype(df$rt$typeOf(result), df$rt$intType())
 {
-  (let l0$a ==
+  (let l0$a$0 ==
     (df$rt$intToRef(40)) in
-    (let l0$b ==
-      (sp$plusInts(l0$a, df$rt$intToRef(2))) in
-      (let l0$c ==
-        (sp$timesInts(l0$b, df$rt$intToRef(2))) in
-        l0$c)))
+    (let l0$b$0 ==
+      (sp$plusInts(l0$a$0, df$rt$intToRef(2))) in
+      (let l0$c$0 ==
+        (sp$timesInts(l0$b$0, df$rt$intToRef(2))) in
+        l0$c$0)))
 }
 
 /pure_function_with_assignments.kt:(541,572): info: Generated Viper text for initializersCanRelyOnParameters:
 function f$initializersCanRelyOnParameters$TF$T$Int$T$Int(p$x: Ref, p$y: Ref): Ref
   ensures df$rt$isSubtype(df$rt$typeOf(result), df$rt$intType())
 {
-  (let l0$sum ==
+  (let l0$sum$0 ==
     (sp$plusInts(p$x, p$y)) in
-    (let l0$diff ==
+    (let l0$diff$0 ==
       (sp$minusInts(p$x, p$y)) in
-      (let l0$res ==
-        (sp$timesInts(l0$sum, l0$diff)) in
-        l0$res)))
+      (let l0$res$0 ==
+        (sp$timesInts(l0$sum$0, l0$diff$0)) in
+        l0$res$0)))
 }
