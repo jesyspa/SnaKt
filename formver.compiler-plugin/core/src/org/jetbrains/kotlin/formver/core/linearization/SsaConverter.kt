@@ -25,7 +25,8 @@ class SsaConverter(
     }
 
     fun addAssignment(decl: Declaration.LocalVarDecl, varExp: Exp) {
-        val ssaIdx = (variableIndex[decl.name]?.plus(1) ?: 0).also { variableIndex[decl.name] = it }
+        val ssaIdx = (variableIndex[decl.name]?.plus(1) ?: 0)
+        variableIndex[decl.name] = ssaIdx
         assignments.add(SsaAssignment(decl, ssaIdx, varExp))
     }
 
