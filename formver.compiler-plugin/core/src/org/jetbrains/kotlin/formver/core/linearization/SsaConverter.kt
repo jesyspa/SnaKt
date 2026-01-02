@@ -36,10 +36,10 @@ class SsaConverter(
 
     /**
      * Resolves the symbolic name to its most recent SSA definition.
-     * If no local assignment is found, we assume the name refers to a function parameter
+     * If no local assignment is found, we assume the provided name is valid
      */
     fun resolveVariableName(name: SymbolicName): SymbolicName =
-        // TODO: Fall back to global value numbering before falling back to parameter
+        // TODO: Fall back to global value numbering before falling back to provided name
         assignments.lastOrNull { it.declaration.name == name }?.let { SsaVariableName(name, it.ssaIdx) } ?: name
 }
 
