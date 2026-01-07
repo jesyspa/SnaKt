@@ -13,6 +13,7 @@ import org.jetbrains.kotlin.formver.core.embeddings.expression.VariableEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.print
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.names.SimpleNameResolver
+import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.ast.Declaration
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 import org.jetbrains.kotlin.formver.viper.ast.Stmt
@@ -70,6 +71,8 @@ data class PureLinearizer(
     override fun addModifier(mod: StmtModifier) {
         throw PureLinearizerMisuseException("addModifier")
     }
+
+    override fun resolveVariableName(name: SymbolicName): SymbolicName = ssaConverter.resolveVariableName(name)
 }
 
 fun ExpEmbedding.pureToViper(toBuiltin: Boolean, source: KtSourceElement? = null): Exp {

@@ -2,33 +2,45 @@ package org.jetbrains.kotlin.formver.core.linearization
 
 import org.jetbrains.kotlin.KtSourceElement
 import org.jetbrains.kotlin.formver.common.SnaktInternalException
+import org.jetbrains.kotlin.formver.core.names.SsaVariableName
+import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.ast.Declaration
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 
-class SsaConverter(val source: KtSourceElement? = null) {
-    private val assignments: MutableMap<Declaration.LocalVarDecl, Exp> = mutableMapOf()
+class SsaConverter(
+    val source: KtSourceElement? = null,
+    val variableIndex: MutableMap<SymbolicName, Int> = mutableMapOf()
+) {
+    private val assignments: MutableList<SsaAssignment> = mutableListOf()
     private var body: Exp? = null
 
     fun asExp(): Exp {
-        if (body == null) throw SnaktInternalException(
+        val bodyExp = body ?: throw SnaktInternalException(
             source,
             "Empty body cannot be converted into let chain"
         )
-        return assignments.entries.toList().foldRight(body as Exp) { (decl, expr), acc ->
-            Exp.LetBinding(decl, expr, acc)
+        return assignments.foldRight(bodyExp) { (decl, ssaIdx, expr), acc ->
+            Exp.LetBinding(decl.copy(name = SsaVariableName(decl.name, ssaIdx)), expr, acc)
         }
     }
 
     fun addAssignment(decl: Declaration.LocalVarDecl, varExp: Exp) {
-        // TODO: Allow this case using SSA transformation
-        if (assignments.containsKey(decl)) throw SnaktInternalException(
-            source,
-            "Found duplicate variable declaration while constructing a let-chain. Declaration is $decl"
-        )
-        assignments[decl] = varExp
+        val ssaIdx = (variableIndex[decl.name]?.plus(1) ?: 0)
+        variableIndex[decl.name] = ssaIdx
+        assignments.add(SsaAssignment(decl, ssaIdx, varExp))
     }
 
     fun addBody(body: Exp) {
         this.body = body
     }
+
+    /**
+     * Resolves the symbolic name to its most recent SSA definition.
+     * If no local assignment is found, we assume the provided name is valid
+     */
+    fun resolveVariableName(name: SymbolicName): SymbolicName =
+        // TODO: Fall back to global value numbering before falling back to provided name
+        assignments.lastOrNull { it.declaration.name == name }?.let { SsaVariableName(name, it.ssaIdx) } ?: name
 }
+
+data class SsaAssignment(val declaration: Declaration.LocalVarDecl, val ssaIdx: Int, val exp: Exp)

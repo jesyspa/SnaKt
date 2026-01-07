@@ -59,7 +59,7 @@ sealed interface VariableEmbedding : NullaryDirectResultExpEmbedding, PropertyAc
 
     override fun toViper(ctx: LinearizationContext): Exp = when (name) {
         is FunctionResultVariableName -> Exp.Result(Type.Ref, ctx.source.asPosition, sourceRole.asInfo)
-        else -> Exp.LocalVar(name, Type.Ref, ctx.source.asPosition, sourceRole.asInfo)
+        else -> Exp.LocalVar(ctx.resolveVariableName(name), Type.Ref, ctx.source.asPosition, sourceRole.asInfo)
     }
 
     val isOriginallyRef: Boolean

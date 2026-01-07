@@ -7,6 +7,7 @@ package org.jetbrains.kotlin.formver.core.names
 
 import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.SymbolicName
+import org.jetbrains.kotlin.formver.viper.mangled
 
 /* This file contains mangled names for constructs introduced during the conversion to Viper.
  *
@@ -114,4 +115,10 @@ data class DomainFuncParameterName(val baseName: String) : SymbolicName {
     context(nameResolver: NameResolver)
     override val mangledBaseName: String
         get() = baseName
+}
+
+data class SsaVariableName(val baseName: SymbolicName, val ssaIndex: Int) : SymbolicName {
+    context(nameResolver: NameResolver)
+    override val mangledBaseName: String
+        get() = "${baseName.mangled}$$ssaIndex"
 }

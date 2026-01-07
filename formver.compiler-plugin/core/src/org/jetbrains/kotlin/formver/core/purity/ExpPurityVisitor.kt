@@ -8,15 +8,23 @@ package org.jetbrains.kotlin.formver.core.purity
 import org.jetbrains.kotlin.formver.core.embeddings.ExpVisitor
 import org.jetbrains.kotlin.formver.core.embeddings.expression.*
 
-internal object ExprPurityVisitor : ExpVisitor<Boolean> {
+internal class ExprPurityVisitor(val declaredVariables: MutableSet<VariableEmbedding> = mutableSetOf()) :
+    ExpVisitor<Boolean> {
 
     /* ————— pure nodes ————— */
     override fun visitUnitLit(e: UnitLit) = true
     override fun visitFunctionCall(e: FunctionCall) = true
-    override fun visitDeclare(e: Declare) = e.initializer != null
+    override fun visitDeclare(e: Declare): Boolean {
+        val pure = e.initializer != null
+        if (pure) declaredVariables.add(e.variable)
+        return pure
+    }
+
     override fun visitLiteralEmbedding(e: LiteralEmbedding) = true
     override fun visitExpWrapper(e: ExpWrapper) = true
     override fun visitVariableEmbedding(e: VariableEmbedding) = true
+    override fun visitAssign(e: Assign): Boolean =
+        e.lhs.ignoringMetaNodes() is VariableEmbedding && declaredVariables.contains(e.lhs.ignoringMetaNodes())
 
     /* ————— structural nodes without side effects ————— */
     override fun visitReturn(e: Return) = e.allChildrenPure(this)
@@ -50,7 +58,6 @@ internal object ExprPurityVisitor : ExpVisitor<Boolean> {
     override fun visitErrorExp(e: ErrorExp) = false
 
     override fun visitAssert(e: Assert): Boolean = false
-    override fun visitAssign(e: Assign): Boolean = false
     override fun visitFieldModification(e: FieldModification): Boolean = false
     override fun visitFieldAccess(e: FieldAccess): Boolean = false // TODO
     override fun visitPrimitiveFieldAccess(e: PrimitiveFieldAccess): Boolean = false // TODO

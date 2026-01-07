@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.formver.core.embeddings.expression.withType
 import org.jetbrains.kotlin.formver.core.embeddings.toLink
 import org.jetbrains.kotlin.formver.core.embeddings.toViperGoto
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
+import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.ast.Declaration
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 import org.jetbrains.kotlin.formver.viper.ast.Position
@@ -86,4 +87,6 @@ data class Linearizer(
     override fun addModifier(mod: StmtModifier) {
         stmtModifierTracker?.add(mod) ?: error("Not in a statement")
     }
+
+    override fun resolveVariableName(name: SymbolicName): SymbolicName = name
 }

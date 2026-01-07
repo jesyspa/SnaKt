@@ -1,0 +1,64 @@
+/pure_function_with_reassignments.kt:(59,74): info: Generated Viper text for doubleIncrement:
+function f$doubleIncrement$TF$(): Ref
+  ensures df$rt$isSubtype(df$rt$typeOf(result), df$rt$intType())
+{
+  (let l0$x$0 ==
+    (df$rt$intToRef(1)) in
+    (let l0$x$1 ==
+      (sp$plusInts(l0$x$0, df$rt$intToRef(1))) in
+      (let l0$x$2 ==
+        (sp$plusInts(l0$x$1, df$rt$intToRef(1))) in
+        l0$x$2)))
+}
+
+/pure_function_with_reassignments.kt:(152,175): info: Generated Viper text for updateThenReadIntoOther:
+function f$updateThenReadIntoOther$TF$(): Ref
+  ensures df$rt$isSubtype(df$rt$typeOf(result), df$rt$intType())
+{
+  (let l0$x$0 ==
+    (df$rt$intToRef(3)) in
+    (let l0$x$1 ==
+      (sp$plusInts(l0$x$0, df$rt$intToRef(4))) in
+      (let l0$y$0 ==
+        (sp$plusInts(l0$x$1, df$rt$intToRef(1))) in
+        l0$y$0)))
+}
+
+/pure_function_with_reassignments.kt:(257,281): info: Generated Viper text for readOldValueBeforeUpdate:
+function f$readOldValueBeforeUpdate$TF$(): Ref
+  ensures df$rt$isSubtype(df$rt$typeOf(result), df$rt$intType())
+{
+  (let l0$x$0 ==
+    (df$rt$intToRef(10)) in
+    (let l0$y$0 ==
+      (sp$plusInts(l0$x$0, df$rt$intToRef(1))) in
+      (let l0$x$1 ==
+        (sp$plusInts(l0$x$0, df$rt$intToRef(5))) in
+        (let l0$x$2 ==
+          (sp$plusInts(l0$y$0, l0$x$1)) in
+          l0$x$2))))
+}
+
+/pure_function_with_reassignments.kt:(379,395): info: Generated Viper text for chainThroughTemp:
+function f$chainThroughTemp$TF$(): Ref
+  ensures df$rt$isSubtype(df$rt$typeOf(result), df$rt$intType())
+{
+  (let l0$x$0 ==
+    (df$rt$intToRef(2)) in
+    (let l0$t$0 ==
+      (sp$plusInts(l0$x$0, df$rt$intToRef(3))) in
+      (let l0$x$1 ==
+        (sp$plusInts(l0$t$0, df$rt$intToRef(4))) in
+        l0$x$1)))
+}
+
+/pure_function_with_reassignments.kt:(477,504): info: Generated Viper text for overwriteNotSelfReferential:
+function f$overwriteNotSelfReferential$TF$(): Ref
+  ensures df$rt$isSubtype(df$rt$typeOf(result), df$rt$intType())
+{
+  (let l0$x$0 ==
+    (df$rt$intToRef(7)) in
+    (let l0$x$1 ==
+      (df$rt$intToRef(100)) in
+      l0$x$1))
+}
