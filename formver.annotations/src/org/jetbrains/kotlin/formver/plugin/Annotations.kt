@@ -19,3 +19,6 @@ annotation class Borrowed
 
 @Target(AnnotationTarget.FUNCTION)
 annotation class Pure
+
+@Target(AnnotationTarget.FUNCTION)
+annotation class ManualPermission

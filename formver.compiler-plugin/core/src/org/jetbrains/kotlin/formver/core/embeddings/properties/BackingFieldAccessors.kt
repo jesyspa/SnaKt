@@ -12,20 +12,25 @@ import org.jetbrains.kotlin.formver.core.embeddings.expression.FieldAccess
 import org.jetbrains.kotlin.formver.core.embeddings.expression.FieldModification
 import org.jetbrains.kotlin.formver.core.embeddings.expression.withInvariants
 
-class BackingFieldGetter(val field: FieldEmbedding) : GetterEmbedding {
+class BackingFieldGetter(val field: FieldEmbedding, val manual: Boolean) : GetterEmbedding {
     override fun getValue(receiver: ExpEmbedding, ctx: StmtConversionContext): ExpEmbedding {
         return if (field.accessPolicy == AccessPolicy.ALWAYS_READABLE) {
             FieldAccess(receiver, field)
         } else {
-            FieldAccess(receiver, field).withInvariants {
-                proven = true
-                access = true
+            if (manual) {
+                // TODO: figure out how to pass in programmer specified permissions
+                FieldAccess(receiver, field)
+            } else {
+                FieldAccess(receiver, field).withInvariants {
+                    proven = true
+                    access = true
+                }
             }
         }
     }
 }
 
-class BackingFieldSetter(val field: FieldEmbedding) : SetterEmbedding {
+class BackingFieldSetter(val field: FieldEmbedding, val manual: Boolean) : SetterEmbedding {
     override fun setValue(receiver: ExpEmbedding, value: ExpEmbedding, ctx: StmtConversionContext): ExpEmbedding =
         FieldModification(receiver, field, value)
 }
