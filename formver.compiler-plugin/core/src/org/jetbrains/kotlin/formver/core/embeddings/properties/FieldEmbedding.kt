@@ -40,6 +40,9 @@ interface FieldEmbedding {
     val includeInShortDump: Boolean
     val symbol: FirPropertySymbol?
         get() = null
+    //If this is true, programmer wants to manually control permissions
+    val isManual: Boolean
+        get() = false
 
     fun toViper(): Field = Field(name, viperType, includeInShortDump)
 
@@ -48,13 +51,13 @@ interface FieldEmbedding {
     fun accessInvariantsForParameter(): List<TypeInvariantEmbedding> =
         when (accessPolicy) {
             AccessPolicy.ALWAYS_WRITEABLE -> listOf(FieldAccessTypeInvariantEmbedding(this, PermExp.FullPerm()))
-            AccessPolicy.ALWAYS_INHALE_EXHALE, AccessPolicy.ALWAYS_READABLE -> listOf()
+            AccessPolicy.ALWAYS_INHALE_EXHALE, AccessPolicy.ALWAYS_READABLE , AccessPolicy.MANUAL-> listOf()
         } + extraAccessInvariantsForParameter()
 
     fun accessInvariantForAccess(): TypeInvariantEmbedding? =
         when (accessPolicy) {
             AccessPolicy.ALWAYS_INHALE_EXHALE -> FieldAccessTypeInvariantEmbedding(this, PermExp.FullPerm())
-            AccessPolicy.ALWAYS_READABLE, AccessPolicy.ALWAYS_WRITEABLE -> null
+            AccessPolicy.ALWAYS_READABLE, AccessPolicy.ALWAYS_WRITEABLE, AccessPolicy.MANUAL -> null
         }
 }
 
@@ -64,10 +67,11 @@ class UserFieldEmbedding(
     override val symbol: FirPropertySymbol,
     override val isUnique: Boolean,
     override val containingClass: ClassTypeEmbedding,
+    override val isManual: Boolean
 ) : FieldEmbedding {
     override val viperType = Type.Ref
     override val accessPolicy: AccessPolicy =
-        if (symbol.isVal) AccessPolicy.ALWAYS_READABLE else AccessPolicy.ALWAYS_INHALE_EXHALE
+        if (symbol.isVal) AccessPolicy.ALWAYS_READABLE else if (isManual) AccessPolicy.MANUAL else AccessPolicy.ALWAYS_INHALE_EXHALE
     override val unfoldToAccess: Boolean
         get() = accessPolicy == AccessPolicy.ALWAYS_READABLE
     override val includeInShortDump: Boolean = true

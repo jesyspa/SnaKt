@@ -124,6 +124,12 @@ public class FirLightTreeFormVerPluginDiagnosticsTestGenerated extends AbstractF
       }
 
       @Test
+      @TestMetadata("manual_permissions.kt")
+      public void testManual_permissions() {
+        runTest("formver.compiler-plugin/testData/diagnostics/conversion/classes/manual_permissions.kt");
+      }
+
+      @Test
       @TestMetadata("member_functions.kt")
       public void testMember_functions() {
         runTest("formver.compiler-plugin/testData/diagnostics/conversion/classes/member_functions.kt");

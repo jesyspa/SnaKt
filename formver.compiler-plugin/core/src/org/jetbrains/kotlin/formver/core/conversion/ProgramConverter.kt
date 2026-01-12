@@ -490,6 +490,7 @@ class ProgramConverter(
                 symbol,
                 symbol.isUnique(session),
                 embedding,
+                symbol.isManual(session)
             )
         }
         return backingField?.let { unscopedName to it }
@@ -523,14 +524,14 @@ class ProgramConverter(
 
     private fun embedGetter(symbol: FirPropertySymbol, backingField: FieldEmbedding?): GetterEmbedding =
         if (backingField != null) {
-            BackingFieldGetter(backingField)
+            BackingFieldGetter(backingField, symbol.isManual(session))
         } else {
             CustomGetter(embedGetterFunction(symbol))
         }
 
     private fun embedSetter(symbol: FirPropertySymbol, backingField: FieldEmbedding?): SetterEmbedding =
         if (backingField != null) {
-            BackingFieldSetter(backingField)
+            BackingFieldSetter(backingField, symbol.isManual(session))
         } else {
             CustomSetter(embedSetterFunction(symbol))
         }
