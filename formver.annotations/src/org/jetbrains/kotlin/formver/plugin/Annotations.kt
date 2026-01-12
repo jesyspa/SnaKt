@@ -21,4 +21,4 @@ annotation class Borrowed
 annotation class Pure
 
 @Target(AnnotationTarget.PROPERTY)
-annotation class ManualPermission
+annotation class Manual
