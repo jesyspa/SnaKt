@@ -6,5 +6,5 @@
 package org.jetbrains.kotlin.formver.core.conversion
 
 enum class AccessPolicy {
-    ALWAYS_INHALE_EXHALE, ALWAYS_READABLE, ALWAYS_WRITEABLE;
+    ALWAYS_INHALE_EXHALE, ALWAYS_READABLE, ALWAYS_WRITEABLE, MANUAL;
 }

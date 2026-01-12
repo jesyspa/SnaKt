@@ -490,6 +490,7 @@ class ProgramConverter(
                 symbol,
                 symbol.isUnique(session),
                 embedding,
+                symbol.isManual(session)
             )
         }
         return backingField?.let { unscopedName to it }

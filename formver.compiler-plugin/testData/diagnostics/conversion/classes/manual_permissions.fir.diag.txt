@@ -13,9 +13,7 @@ method f$testManualPermissionFieldGetter$TF$T$ManualPermissionFields(p$mpf: Ref)
   inhale acc(p$c$ManualPermissionFields$shared(p$mpf), wildcard)
   unfold acc(p$c$ManualPermissionFields$shared(p$mpf), wildcard)
   l0$a := p$mpf.bf$a
-  inhale acc(p$mpf.bf$b, write)
   l0$b := p$mpf.bf$b
-  exhale acc(p$mpf.bf$b, write)
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }
@@ -31,9 +29,7 @@ method f$testManualPermissionFieldSetter$TF$T$ManualPermissionFields(p$mpf: Ref)
 {
   inhale df$rt$isSubtype(df$rt$typeOf(p$mpf), df$rt$c$ManualPermissionFields())
   inhale acc(p$c$ManualPermissionFields$shared(p$mpf), wildcard)
-  inhale acc(p$mpf.bf$b, write)
   p$mpf.bf$b := df$rt$intToRef(123)
-  exhale acc(p$mpf.bf$b, write)
   label lbl$ret$0
   inhale df$rt$isSubtype(df$rt$typeOf(ret$0), df$rt$unitType())
 }

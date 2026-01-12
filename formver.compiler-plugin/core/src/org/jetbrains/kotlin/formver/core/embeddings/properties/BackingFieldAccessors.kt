@@ -19,7 +19,10 @@ class BackingFieldGetter(val field: FieldEmbedding, val manual: Boolean) : Gette
         } else {
             if (manual) {
                 // TODO: figure out how to pass in programmer specified permissions
-                FieldAccess(receiver, field)
+                FieldAccess(receiver, field).withInvariants {
+                    proven = false
+                    access = false
+                }
             } else {
                 FieldAccess(receiver, field).withInvariants {
                     proven = true
