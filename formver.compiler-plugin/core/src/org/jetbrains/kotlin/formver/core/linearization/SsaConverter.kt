@@ -38,7 +38,13 @@ class SsaConverter(
             condition,
             this
         )
-        head = SsaBlockNode(joinNode, splitPoint.fullBranchingCondition)
+        val branchCondition = when {
+            thenResultHead.returns && head.returns -> Exp.BoolLit(false)
+            thenResultHead.returns -> head.fullBranchingCondition
+            head.returns -> thenResultHead.fullBranchingCondition
+            else -> splitPoint.fullBranchingCondition
+        }
+        head = SsaBlockNode(joinNode, branchCondition)
     }
 
     fun constructExpression(): Exp {
@@ -92,6 +98,7 @@ class SsaConverter(
     }
 
     fun addReturn(returnExp: Exp) {
+        head.returns = true
         returnExpressions.add(head.fullBranchingCondition to returnExp)
     }
 

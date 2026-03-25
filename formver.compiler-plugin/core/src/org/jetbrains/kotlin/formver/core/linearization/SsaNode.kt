@@ -23,9 +23,10 @@ class SsaStartNode : SsaNode {
 
 class SsaBlockNode(
     private val predecessor: SsaNode,
-    val fullBranchingCondition: Exp
+    val fullBranchingCondition: Exp,
 ) : SsaNode {
     val latestName: MutableMap<SymbolicName, SsaVariableName> = mutableMapOf()
+    var returns: Boolean = false
 
     fun generateBranchingBlockNodeFromThisNode(condition: Exp): SsaBlockNode =
         SsaBlockNode(
