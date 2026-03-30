@@ -141,17 +141,26 @@ function nestedConditionalAssignment(a: Ref, b: Ref): Ref
     (let anon_2_0 ==
       ((boolFromRef(a) && !boolFromRef(b) ? intToRef(3) : null)) in
       (let anon_0_0 ==
-        ((boolFromRef(a) ? (boolFromRef(b) ? anon_1_0 : anon_2_0) : null)) in
+        ((boolFromRef(a) && boolFromRef(b) ||
+        boolFromRef(a) && !boolFromRef(b) ?
+          (boolFromRef(b) ? anon_1_0 : anon_2_0) :
+          null)) in
         (let anon_4_0 ==
           ((!boolFromRef(a) && boolFromRef(b) ? intToRef(2) : null)) in
           (let anon_5_0 ==
             ((!boolFromRef(a) && !boolFromRef(b) ? intToRef(1) : null)) in
             (let anon_3_0 ==
-              ((!boolFromRef(a) ?
+              ((!boolFromRef(a) && boolFromRef(b) ||
+              !boolFromRef(a) && !boolFromRef(b) ?
                 (boolFromRef(b) ? anon_4_0 : anon_5_0) :
                 null)) in
               (let x_0 ==
-                ((boolFromRef(a) ? anon_0_0 : anon_3_0)) in
+                ((boolFromRef(a) && boolFromRef(b) ||
+                boolFromRef(a) && !boolFromRef(b) ||
+                (!boolFromRef(a) && boolFromRef(b) ||
+                !boolFromRef(a) && !boolFromRef(b)) ?
+                  (boolFromRef(a) ? anon_0_0 : anon_3_0) :
+                  null)) in
                 x_0)))))))
 }
 
@@ -166,13 +175,23 @@ function blockConditionalAssignment(a: Ref, b: Ref): Ref
     (let anon_2_0 ==
       ((boolFromRef(a) && !boolFromRef(b) ? intToRef(20) : null)) in
       (let y_0 ==
-        ((boolFromRef(a) ? (boolFromRef(b) ? anon_1_0 : anon_2_0) : null)) in
+        ((boolFromRef(a) && boolFromRef(b) ||
+        boolFromRef(a) && !boolFromRef(b) ?
+          (boolFromRef(b) ? anon_1_0 : anon_2_0) :
+          null)) in
         (let anon_0_0 ==
-          ((boolFromRef(a) ? plusInts(y_0, intToRef(1)) : null)) in
+          ((boolFromRef(a) && boolFromRef(b) ||
+          boolFromRef(a) && !boolFromRef(b) ?
+            plusInts(y_0, intToRef(1)) :
+            null)) in
           (let anon_3_0 ==
             ((!boolFromRef(a) ? intToRef(30) : null)) in
             (let x_0 ==
-              ((boolFromRef(a) ? anon_0_0 : anon_3_0)) in
+              ((boolFromRef(a) && boolFromRef(b) ||
+              boolFromRef(a) && !boolFromRef(b) ||
+              !boolFromRef(a) ?
+                (boolFromRef(a) ? anon_0_0 : anon_3_0) :
+                null)) in
               x_0))))))
 }
 
@@ -191,7 +210,8 @@ function whenAssignment(a: Ref, b: Ref): Ref
           intToRef(3) :
           null)) in
         (let anon_1_0 ==
-          ((intFromRef(anon_0_0) == 1 ?
+          ((intFromRef(anon_0_0) == 1 && boolFromRef(b) ||
+          intFromRef(anon_0_0) == 1 && !boolFromRef(b) ?
             (boolFromRef(b) ? anon_2_0 : anon_3_0) :
             null)) in
           (let anon_5_0 ==
@@ -204,10 +224,19 @@ function whenAssignment(a: Ref, b: Ref): Ref
                 intToRef(5) :
                 null)) in
               (let anon_4_0 ==
-                ((!(intFromRef(anon_0_0) == 1) ?
+                ((!(intFromRef(anon_0_0) == 1) && intFromRef(anon_0_0) == 2 ||
+                !(intFromRef(anon_0_0) == 1) &&
+                !(intFromRef(anon_0_0) == 2) ?
                   (intFromRef(anon_0_0) == 2 ? anon_5_0 : anon_6_0) :
                   null)) in
                 (let x_0 ==
-                  ((intFromRef(anon_0_0) == 1 ? anon_1_0 : anon_4_0)) in
+                  ((intFromRef(anon_0_0) == 1 && boolFromRef(b) ||
+                  intFromRef(anon_0_0) == 1 && !boolFromRef(b) ||
+                  (!(intFromRef(anon_0_0) == 1) &&
+                  intFromRef(anon_0_0) == 2 ||
+                  !(intFromRef(anon_0_0) == 1) &&
+                  !(intFromRef(anon_0_0) == 2)) ?
+                    (intFromRef(anon_0_0) == 1 ? anon_1_0 : anon_4_0) :
+                    null)) in
                   x_0))))))))
 }

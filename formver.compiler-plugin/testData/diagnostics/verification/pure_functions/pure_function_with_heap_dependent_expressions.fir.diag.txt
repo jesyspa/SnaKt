@@ -22,9 +22,16 @@ function getSafeNextValue(node: Ref): Ref
   ensures isSubtype(typeOf(result), intType())
 {
   (let anon_1_0 ==
-    ((next(node) != nullValue() ? value(next(node)) : nullValue())) in
+    ((next(node) != nullValue() || !(next(node) != nullValue()) ?
+      (next(node) != nullValue() ? value(next(node)) : nullValue()) :
+      null)) in
     (let anon_0_0 ==
-      ((anon_1_0 != nullValue() ? anon_1_0 : intToRef(-1))) in
+      (((next(node) != nullValue() || !(next(node) != nullValue())) &&
+      anon_1_0 != nullValue() ||
+      (next(node) != nullValue() || !(next(node) != nullValue())) &&
+      !(anon_1_0 != nullValue()) ?
+        (anon_1_0 != nullValue() ? anon_1_0 : intToRef(-1)) :
+        null)) in
       anon_0_0))
 }
 
@@ -44,11 +51,29 @@ function getSafeNextNextValue(node: Ref): Ref
   ensures isSubtype(typeOf(result), intType())
 {
   (let anon_2_0 ==
-    ((next(node) != nullValue() ? next(next(node)) : nullValue())) in
+    ((next(node) != nullValue() || !(next(node) != nullValue()) ?
+      (next(node) != nullValue() ? next(next(node)) : nullValue()) :
+      null)) in
     (let anon_1_0 ==
-      ((anon_2_0 != nullValue() ? value(anon_2_0) : nullValue())) in
+      (((next(node) != nullValue() || !(next(node) != nullValue())) &&
+      anon_2_0 != nullValue() ||
+      (next(node) != nullValue() || !(next(node) != nullValue())) &&
+      !(anon_2_0 != nullValue()) ?
+        (anon_2_0 != nullValue() ? value(anon_2_0) : nullValue()) :
+        null)) in
       (let anon_0_0 ==
-        ((anon_1_0 != nullValue() ? anon_1_0 : intToRef(0))) in
+        ((((next(node) != nullValue() || !(next(node) != nullValue())) &&
+        anon_2_0 != nullValue() ||
+        (next(node) != nullValue() || !(next(node) != nullValue())) &&
+        !(anon_2_0 != nullValue())) &&
+        anon_1_0 != nullValue() ||
+        ((next(node) != nullValue() || !(next(node) != nullValue())) &&
+        anon_2_0 != nullValue() ||
+        (next(node) != nullValue() || !(next(node) != nullValue())) &&
+        !(anon_2_0 != nullValue())) &&
+        !(anon_1_0 != nullValue()) ?
+          (anon_1_0 != nullValue() ? anon_1_0 : intToRef(0)) :
+          null)) in
         anon_0_0)))
 }
 
@@ -81,7 +106,9 @@ function sumFirstTwoNodes(node: Ref): Ref
       (let anon_2_0 ==
         ((!!(nextNode_0 == nullValue()) ? value(node) : null)) in
         (let anon_0_0 ==
-          ((!(nextNode_0 == nullValue()) ? anon_1_0 : anon_2_0)) in
+          ((!(nextNode_0 == nullValue()) || !!(nextNode_0 == nullValue()) ?
+            (!(nextNode_0 == nullValue()) ? anon_1_0 : anon_2_0) :
+            null)) in
           anon_0_0))))
 }
 
@@ -122,7 +149,9 @@ function length(node: Ref): Ref
           plusInts(intToRef(1), length(nextNode_0)) :
           null)) in
         (let anon_0_0 ==
-          ((nextNode_0 == nullValue() ? anon_1_0 : anon_2_0)) in
+          ((nextNode_0 == nullValue() || !(nextNode_0 == nullValue()) ?
+            (nextNode_0 == nullValue() ? anon_1_0 : anon_2_0) :
+            null)) in
           anon_0_0))))
 }
 
@@ -155,7 +184,9 @@ function sumAllNodes(node: Ref): Ref
           plusInts(value(node), sumAllNodes(nextNode_0)) :
           null)) in
         (let anon_0_0 ==
-          ((nextNode_0 == nullValue() ? anon_1_0 : anon_2_0)) in
+          ((nextNode_0 == nullValue() || !(nextNode_0 == nullValue()) ?
+            (nextNode_0 == nullValue() ? anon_1_0 : anon_2_0) :
+            null)) in
           anon_0_0))))
 }
 
@@ -171,15 +202,24 @@ function containsValue(node: Ref, target: Ref): Ref
   ensures isSubtype(typeOf(result), boolType())
 {
   (let nextNode_0 ==
-    (next(node)) in
+    ((!(intFromRef(value(node)) == intFromRef(target)) ? next(node) : null)) in
     (let anon_1_0 ==
-      ((!(nextNode_0 == nullValue()) ?
+      ((!(intFromRef(value(node)) == intFromRef(target)) &&
+      !(nextNode_0 == nullValue()) ?
         containsValue(nextNode_0, target) :
         null)) in
       (let anon_2_0 ==
-        ((!!(nextNode_0 == nullValue()) ? boolToRef(false) : null)) in
+        ((!(intFromRef(value(node)) == intFromRef(target)) &&
+        !!(nextNode_0 == nullValue()) ?
+          boolToRef(false) :
+          null)) in
         (let anon_0_0 ==
-          ((!(nextNode_0 == nullValue()) ? anon_1_0 : anon_2_0)) in
+          ((!(intFromRef(value(node)) == intFromRef(target)) &&
+          !(nextNode_0 == nullValue()) ||
+          !(intFromRef(value(node)) == intFromRef(target)) &&
+          !!(nextNode_0 == nullValue()) ?
+            (!(nextNode_0 == nullValue()) ? anon_1_0 : anon_2_0) :
+            null)) in
           (intFromRef(value(node)) == intFromRef(target) ?
             boolToRef(true) :
             anon_0_0)))))
@@ -209,9 +249,11 @@ function aliasAndReassign(node: Ref): Ref
         (let fallbackValue_1 ==
           ((!(alias2_0 == nullValue()) ? value(alias2_0) : null)) in
           (let fallbackValue_2 ==
-            ((!(alias2_0 == nullValue()) ?
-              fallbackValue_1 :
-              fallbackValue_0)) in
+            ((!(alias2_0 == nullValue()) || !!(alias2_0 == nullValue()) ?
+              (!(alias2_0 == nullValue()) ?
+                fallbackValue_1 :
+                fallbackValue_0) :
+              null)) in
             fallbackValue_2)))))
 }
 
@@ -263,9 +305,16 @@ function useIdentityFunction(node: Ref): Ref
   (let sameNode_0 ==
     (id(node)) in
     (let anon_1_0 ==
-      ((sameNode_0 != nullValue() ? value(sameNode_0) : nullValue())) in
+      ((sameNode_0 != nullValue() || !(sameNode_0 != nullValue()) ?
+        (sameNode_0 != nullValue() ? value(sameNode_0) : nullValue()) :
+        null)) in
       (let anon_0_0 ==
-        ((anon_1_0 != nullValue() ? anon_1_0 : intToRef(0))) in
+        (((sameNode_0 != nullValue() || !(sameNode_0 != nullValue())) &&
+        anon_1_0 != nullValue() ||
+        (sameNode_0 != nullValue() || !(sameNode_0 != nullValue())) &&
+        !(anon_1_0 != nullValue()) ?
+          (anon_1_0 != nullValue() ? anon_1_0 : intToRef(0)) :
+          null)) in
         anon_0_0)))
 }
 
@@ -286,7 +335,9 @@ function getNextValueUsingId(node: Ref): Ref
       (let anon_2_0 ==
         ((!(nextNode_0 == nullValue()) ? value(nextNode_0) : null)) in
         (let anon_0_0 ==
-          ((nextNode_0 == nullValue() ? anon_1_0 : anon_2_0)) in
+          ((nextNode_0 == nullValue() || !(nextNode_0 == nullValue()) ?
+            (nextNode_0 == nullValue() ? anon_1_0 : anon_2_0) :
+            null)) in
           anon_0_0))))
 }
 
