@@ -12,4 +12,7 @@ object FormalVerificationPluginNames {
     const val UNSUPPORTED_FEATURE_BEHAVIOUR_OPTION_NAME = "unsupported_feature_behaviour"
     const val CONVERSION_TARGETS_SELECTION_OPTION_NAME = "conversion_targets_selection"
     const val VERIFICATION_TARGETS_SELECTION_OPTION_NAME = "verification_targets_selection"
+    const val CHECK_UNIQUENESS_OPTION_NAME = "check_uniqueness"
+    const val CHECK_LOCALITY_OPTION_NAME = "check_locality"
+    const val DUMP_UNIQUENESS_CFG_OPTION_NAME = "dump_uniqueness_cfg"
 }

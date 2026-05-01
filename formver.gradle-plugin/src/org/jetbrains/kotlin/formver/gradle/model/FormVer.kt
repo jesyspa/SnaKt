@@ -55,4 +55,25 @@ interface FormVer {
      * @return the choice of targets
      */
     val verificationTargetsSelection: String?
+
+    /**
+     * Whether the uniqueness checker (`@Unique` / `@Borrowed`) is enabled.
+     *
+     * @return the configured value, or null if unset
+     */
+    val checkUniqueness: Boolean?
+
+    /**
+     * Whether the locality checker is enabled.
+     *
+     * @return the configured value, or null if unset
+     */
+    val checkLocality: Boolean?
+
+    /**
+     * Whether to dump the uniqueness CFG augmented with flow information.
+     *
+     * @return the configured value, or null if unset
+     */
+    val dumpUniquenessCFG: Boolean?
 }
