@@ -34,6 +34,7 @@ internal class ExprPurityVisitor(val declaredVariables: MutableSet<VariableEmbed
     override fun visitSequentialOr(e: SequentialOr) = e.allChildrenPure(this)
     override fun visitEqCmp(e: EqCmp) = e.allChildrenPure(this)
     override fun visitNeCmp(e: NeCmp) = e.allChildrenPure(this)
+    override fun visitIdentityCmp(e: IdentityCmp) = e.allChildrenPure(this)
     override fun visitUnaryOperatorExpEmbedding(e: UnaryOperatorExpEmbedding) = e.allChildrenPure(this)
     override fun visitWithPosition(e: WithPosition) = e.allChildrenPure(this)
     override fun visitInjectionBasedExpEmbedding(e: InjectionBasedExpEmbedding) = e.allChildrenPure(this)

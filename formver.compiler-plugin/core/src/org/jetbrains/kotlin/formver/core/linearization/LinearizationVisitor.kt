@@ -17,6 +17,7 @@ import org.jetbrains.kotlin.formver.core.embeddings.expression.*
 import org.jetbrains.kotlin.formver.core.embeddings.types.ClassTypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.fillHoles
 import org.jetbrains.kotlin.formver.core.embeddings.types.injection
+import org.jetbrains.kotlin.formver.viper.ast.EqAny
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 import org.jetbrains.kotlin.formver.viper.ast.Exp.Companion.toConjunction
 import org.jetbrains.kotlin.formver.viper.ast.Stmt
@@ -345,6 +346,23 @@ data class LinearizationVisitor(
 
     override fun visitEqCmp(e: EqCmp): Linearizable = comparisonLinearizable(e)
     override fun visitNeCmp(e: NeCmp): Linearizable = comparisonLinearizable(e)
+
+    override fun visitIdentityCmp(e: IdentityCmp): Linearizable = object : DirectResultLinearizable(e, this@LinearizationVisitor) {
+        override fun toViper(ctx: LinearizationContext): Exp =
+            RuntimeTypeDomain.boolInjection.toRef(
+                toViperBuiltinType(ctx),
+                pos = ctx.source.asPosition,
+                info = e.sourceRole.asInfo
+            )
+
+        override fun toViperBuiltinType(ctx: LinearizationContext): Exp =
+            EqAny(
+                e.left.linearize().toViper(ctx),
+                e.right.linearize().toViper(ctx),
+                pos = ctx.source.asPosition,
+                info = e.sourceRole.asInfo
+            )
+    }
 
     private fun comparisonLinearizable(e: AnyComparisonExpression): Linearizable = object : DirectResultLinearizable(e, this@LinearizationVisitor) {
         override fun toViper(ctx: LinearizationContext): Exp =

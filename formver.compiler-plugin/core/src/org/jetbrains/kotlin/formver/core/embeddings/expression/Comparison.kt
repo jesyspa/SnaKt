@@ -43,4 +43,24 @@ data class NeCmp(
     override fun <R> accept(v: ExpVisitor<R>): R = v.visitNeCmp(this)
 }
 
+/**
+ * Reference equality (Kotlin `===`).
+ *
+ * Unlike [EqCmp], this never unwraps to a builtin type — operands are compared
+ * as Viper `Ref`s, so two distinct boxed values are not identified even when
+ * their unwrapped representations match.
+ */
+data class IdentityCmp(
+    val left: ExpEmbedding,
+    val right: ExpEmbedding,
+    override val sourceRole: SourceRole? = null,
+) : ExpEmbedding {
+    override val type
+        get() = buildType { boolean() }
+
+    override fun children(): Sequence<ExpEmbedding> = sequenceOf(left, right)
+
+    override fun <R> accept(v: ExpVisitor<R>): R = v.visitIdentityCmp(this)
+}
+
 fun ExpEmbedding.notNullCmp(): ExpEmbedding = NeCmp(this, NullLit)
