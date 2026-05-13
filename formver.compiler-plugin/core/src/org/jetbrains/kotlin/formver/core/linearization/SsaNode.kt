@@ -27,6 +27,11 @@ class SsaBlockNode(
 ) : SsaNode {
     val latestName: MutableMap<SymbolicName, SsaVariableName> = mutableMapOf()
     var returns: Boolean = false
+        private set
+
+    fun markAsReturning() {
+        returns = true
+    }
 
     fun generateBranchingBlockNodeFromThisNode(condition: Exp): SsaBlockNode =
         SsaBlockNode(

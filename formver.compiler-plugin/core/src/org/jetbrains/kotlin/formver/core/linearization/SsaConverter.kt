@@ -7,7 +7,6 @@ import org.jetbrains.kotlin.formver.core.names.SsaVariableName
 import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.ast.Declaration
 import org.jetbrains.kotlin.formver.viper.ast.Exp
-import org.jetbrains.kotlin.formver.viper.ast.Exp.Companion.toDisjunction
 import org.jetbrains.kotlin.formver.viper.ast.Type
 
 class SsaConverter(
@@ -39,11 +38,14 @@ class SsaConverter(
             condition,
             this
         )
+        // The branching condition of the join is "under what condition is code after the
+        // if-else reachable". A branch that ends in `return` contributes no reachable
+        // continuation, so we drop its side of the disjunction.
         val branchCondition = when {
             thenResultHead.returns && head.returns -> Exp.BoolLit(false)
             thenResultHead.returns -> head.fullBranchingCondition
             head.returns -> thenResultHead.fullBranchingCondition
-            else -> listOf(thenResultHead.fullBranchingCondition, head.fullBranchingCondition).toDisjunction()
+            else -> Exp.Or(thenResultHead.fullBranchingCondition, head.fullBranchingCondition)
         }
         head = SsaBlockNode(joinNode, branchCondition)
     }
@@ -99,7 +101,7 @@ class SsaConverter(
     }
 
     fun addReturn(returnExp: Exp) {
-        head.returns = true
+        head.markAsReturning()
         returnExpressions.add(head.fullBranchingCondition to returnExp)
     }
 
