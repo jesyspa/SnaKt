@@ -103,9 +103,7 @@ data class PureFunBodyLinearizer(
             source,
             "Invalid receiver encountered in pure function"
         )
-        val accessInvariants =
-            typeResolver.hierarchyPathTo(receiverType.pretype, field)
-                .map { hierarchyPredicateAccess(viperReceiver, it, source) }.toList()
+        val accessInvariants = hierarchyPredicateAccesses(viperReceiver, receiverType, field).toList()
         val primitiveAccess: Exp = Exp.FieldAccess(viperReceiver, field.toViper(), source.asPosition)
         ssaConverter.addAssignment(result.name, primitiveAccess, accessInvariants)
     }

@@ -82,9 +82,8 @@ data class PureExpLinearizer(
     override fun addFieldAccess(receiver: Linearizable, receiverType: TypeEmbedding, field: FieldEmbedding): Exp {
         val receiverViper = receiver.toViper(this)
         val primitiveAccess: Exp = Exp.FieldAccess(receiverViper, field.toViper(), source.asPosition)
-        return typeResolver.hierarchyPathTo(receiverType.pretype, field).toList().foldRight(primitiveAccess) { classOnPath, acc ->
-            Exp.Unfolding(hierarchyPredicateAccess(receiverViper, classOnPath, source), acc)
-        }
+        return hierarchyPredicateAccesses(receiverViper, receiverType, field).toList()
+            .foldRight(primitiveAccess) { predicateAccess, acc -> Exp.Unfolding(predicateAccess, acc) }
     }
 
     override fun addModifier(mod: StmtModifier) {
