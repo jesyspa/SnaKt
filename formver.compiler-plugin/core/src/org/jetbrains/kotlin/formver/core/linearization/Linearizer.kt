@@ -124,12 +124,7 @@ data class Linearizer(
                     // If the field access is not replaced with havoc,
                     // we might need to unfold some predicate to access it.
                     if (field.unfoldToAccess && !accessIsManual) {
-                        val lowering = FieldAccessLowering(typeResolver, source)
-                        for (classOnPath in lowering.pathTo(receiverType, field)) {
-                            addStatement {
-                                Stmt.Unfold(lowering.predicateAccessFor(receiverViper, classOnPath), source.asPosition)
-                            }
-                        }
+                        unfoldHierarchyPredicates(receiverViper, receiverType, field)
                     }
                     Stmt.assign(
                         result.toLocalVarUse(), Exp.FieldAccess(receiverViper, field.toViper(), source.asPosition)

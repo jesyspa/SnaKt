@@ -7,37 +7,36 @@ package org.jetbrains.kotlin.formver.core.linearization
 
 import org.jetbrains.kotlin.KtSourceElement
 import org.jetbrains.kotlin.formver.core.asPosition
-import org.jetbrains.kotlin.formver.core.conversion.TypeResolver
 import org.jetbrains.kotlin.formver.core.embeddings.properties.FieldEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.ClassTypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 import org.jetbrains.kotlin.formver.viper.ast.PermExp
+import org.jetbrains.kotlin.formver.viper.ast.Stmt
 
 /**
- * Owns the path-and-predicate computation for a [FieldAccess][org.jetbrains.kotlin.formver.core.embeddings.expression.FieldAccess]
- * on a class hierarchy.
- *
- * To reach a field declared on a superclass we must walk the chain of unique-predicates
- * from the receiver's runtime type down to the declaring class, and for each class on
- * that path emit one predicate-access expression. The three linearizers consume that
- * sequence in their preferred shape:
- *  - imperative linearization emits a `Stmt.Unfold` per access;
- *  - SSA linearization collects them as invariants on the assignment;
- *  - pure-expression linearization nests them as `Exp.Unfolding` around the body.
+ * The unique-predicate access on [classOnPath] that must be unfolded to reach a field on a superclass
+ * through [receiver]. Takes a raw [Exp] rather than going through `fillHole`/`pureToViper`.
  */
-class FieldAccessLowering(
-    private val typeResolver: TypeResolver,
-    private val source: KtSourceElement?,
-) {
-    fun pathTo(receiverType: TypeEmbedding, field: FieldEmbedding): Sequence<ClassTypeEmbedding> =
-        typeResolver.hierarchyPathTo(receiverType.pretype, field)
+fun hierarchyPredicateAccess(
+    receiver: Exp,
+    classOnPath: ClassTypeEmbedding,
+    source: KtSourceElement?,
+): Exp.PredicateAccess =
+    Exp.PredicateAccess(
+        classOnPath.uniquePredicateName,
+        listOf(receiver),
+        PermExp.FullPerm(),
+        source.asPosition,
+    )
 
-    fun predicateAccessFor(receiverViper: Exp, classOnPath: ClassTypeEmbedding): Exp.PredicateAccess =
-        Exp.PredicateAccess(
-            classOnPath.uniquePredicateName,
-            listOf(receiverViper),
-            PermExp.FullPerm(),
-            source.asPosition,
-        )
+/**
+ * Emits a `Stmt.Unfold` for each unique-predicate on the hierarchy path from [receiverType]
+ * down to the class declaring [field]. Shared by the imperative linearizer and the
+ * `FieldModification` visitor; both want the same imperative unfold shape.
+ */
+fun LinearizationContext.unfoldHierarchyPredicates(receiver: Exp, receiverType: TypeEmbedding, field: FieldEmbedding) {
+    for (classOnPath in typeResolver.hierarchyPathTo(receiverType.pretype, field)) {
+        addStatement { Stmt.Unfold(hierarchyPredicateAccess(receiver, classOnPath, source), source.asPosition) }
+    }
 }
