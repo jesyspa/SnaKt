@@ -140,6 +140,7 @@ class ViperPoweredDeclarationChecker(private val session: FirSession, private va
         // Prevent compiler-derived or library functions from being verified
         declaration.origin != FirDeclarationOrigin.Source -> false
         declaration.hasAnnotation(neverConvertId, session) -> false
+        declaration.hasAnnotation(alwaysVerifyId, session) -> true
         else -> conversionSelection.applicable(declaration)
     }
 
