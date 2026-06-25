@@ -1,7 +1,0 @@
-/return.kt: error: Return locality contract mismatch: expected '[local]', actual '[global]'.
-
-/return.kt: error: Return locality contract mismatch: expected '[local]', actual '[global]'.
-
-/return.kt: error: Return locality contract mismatch: expected '[local]', actual '[global]'.
-
-/return.kt: error: Return locality contract mismatch: expected '[] -> [local]', actual '[] -> [global]'.

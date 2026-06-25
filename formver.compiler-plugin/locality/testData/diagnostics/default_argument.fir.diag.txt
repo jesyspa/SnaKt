@@ -1,3 +1,0 @@
-/default_argument.kt: error: Initializer locality mismatch: expected 'global', actual 'local'.
-
-/default_argument.kt: error: Initializer locality mismatch: expected 'global', actual 'local'.
