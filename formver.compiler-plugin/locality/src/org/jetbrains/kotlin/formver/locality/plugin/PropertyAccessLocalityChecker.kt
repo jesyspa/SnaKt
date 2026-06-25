@@ -14,14 +14,10 @@ import org.jetbrains.kotlin.fir.analysis.checkers.expression.FirPropertyAccessEx
 import org.jetbrains.kotlin.fir.declarations.FirAnonymousFunction
 import org.jetbrains.kotlin.fir.declarations.FirFunction
 import org.jetbrains.kotlin.fir.declarations.FirProperty
-import org.jetbrains.kotlin.fir.expressions.FirAnonymousFunctionExpression
 import org.jetbrains.kotlin.fir.expressions.FirCall
-import org.jetbrains.kotlin.fir.expressions.FirExpression
 import org.jetbrains.kotlin.fir.expressions.FirPropertyAccessExpression
 import org.jetbrains.kotlin.fir.expressions.FirQualifiedAccessExpression
-import org.jetbrains.kotlin.fir.expressions.resolvedArgumentMapping
 import org.jetbrains.kotlin.fir.expressions.toResolvedCallableSymbol
-import org.jetbrains.kotlin.fir.expressions.unwrapExpression
 import org.jetbrains.kotlin.fir.references.symbol
 import org.jetbrains.kotlin.fir.resolve.dfa.controlFlowGraph
 import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
@@ -30,84 +26,91 @@ import org.jetbrains.kotlin.fir.symbols.impl.FirFunctionSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirLocalPropertySymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirReceiverParameterSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirValueParameterSymbol
-import org.jetbrains.kotlin.formver.type.plugin.collectTails
-import org.jetbrains.kotlin.formver.type.plugin.removeCast
 
-object PropertyAccessLocalityChecker : FirPropertyAccessExpressionChecker(MppCheckerKind.Common) {
-    context(context: CheckerContext)
-    private fun FirFunctionSymbol<*>.declares(propertySymbol: FirBasedSymbol<*>): Boolean =
-        when (propertySymbol) {
-            is FirReceiverParameterSymbol ->
-                propertySymbol.containingDeclarationSymbol == this
-            is FirValueParameterSymbol ->
-                propertySymbol.containingDeclarationSymbol == this
-            is FirLocalPropertySymbol -> {
-                val graph = resolvedControlFlowGraphReference?.controlFlowGraph ?: return false
+context(context: CheckerContext)
+private fun FirFunctionSymbol<*>.declares(propertySymbol: FirBasedSymbol<*>): Boolean =
+    when (propertySymbol) {
+        is FirReceiverParameterSymbol ->
+            propertySymbol.containingDeclarationSymbol == this
+        is FirValueParameterSymbol ->
+            propertySymbol.containingDeclarationSymbol == this
+        is FirLocalPropertySymbol -> {
+            val graph = resolvedControlFlowGraphReference?.controlFlowGraph ?: return false
 
-                propertySymbol in graph.resolveLocalPropertySymbols()
-            }
-            else -> false
+            propertySymbol in graph.resolveLocalPropertySymbols()
         }
-
-    private fun FirExpression.tailLambdas(): Sequence<FirAnonymousFunction> {
-        val expression = unwrapExpression().removeCast()
-        val tails = expression.collectTails()
-        return if (tails.none())
-            listOfNotNull((expression as? FirAnonymousFunctionExpression)?.anonymousFunction).asSequence()
-        else
-            tails.flatMap { it.tailLambdas() }
+        else -> false
     }
 
-    context(context: CheckerContext)
-    private fun FirAnonymousFunction.bindingLocality(ancestors: List<FirElement>): Locality {
-        val lambda = this
-        for (ancestor in ancestors) {
-            when (ancestor) {
-                is FirProperty ->
-                    if (ancestor.initializer?.tailLambdas()?.any { it === lambda } == true)
-                        return ancestor.symbol.resolveLocality()
-                is FirCall -> {
-                    val parameter = ancestor.resolvedArgumentMapping?.entries
-                        ?.firstOrNull { (argument, _) -> argument.tailLambdas().any { it === lambda } }
-                        ?.value
-                    if (parameter != null) return parameter.symbol.resolveLocality()
+context(context: CheckerContext)
+private fun FirAnonymousFunction.lookupBoundLocality(ancestors: List<FirElement>): Locality {
+    for (ancestor in ancestors) {
+        when (ancestor) {
+            is FirProperty -> {
+                val initializer = ancestor.initializer ?: continue
 
-                    if (ancestor is FirQualifiedAccessExpression &&
-                        ancestor.extensionReceiver?.tailLambdas()?.any { it === lambda } == true
-                    ) {
-                        ancestor.toResolvedCallableSymbol()?.receiverParameterSymbol
-                            ?.let { return it.resolveLocality() }
+                if (initializer.resolveLambdas().contains(this)) {
+                    return ancestor.symbol.resolveLocality()
+                }
+            }
+            is FirCall -> {
+                for ((expression, locality) in CallArgumentLocalitiesMapper.mapArgumentTypeFactsOf(ancestor)) {
+                    if (this in expression.resolveLambdas()) {
+                        return locality
                     }
                 }
-                is FirFunction -> return Locality.Global
-                else -> {}
+
+                if (ancestor is FirQualifiedAccessExpression) {
+                    // NOTE: As of now, only extension receivers can be specified as local. It is not possible to
+                    // specify other receiver kinds.
+                    val extensionReceiver = ancestor.extensionReceiver
+
+                    if (extensionReceiver != null && extensionReceiver.resolveLambdas().contains(this)) {
+                        return ancestor.toResolvedCallableSymbol()
+                            ?.receiverParameterSymbol?.resolveLocality() ?: Locality.Global
+                    }
+                }
             }
+            is FirFunction -> return Locality.Global
+            else -> continue
         }
-        return Locality.Global
     }
 
+    return Locality.Global
+}
+
+fun CheckerContext.lookupLocalDeclarations(): Sequence<FirFunctionSymbol<*>> {
+    val elements = containingElements.asReversed()
+
+    return sequence {
+        for ((index, element) in elements.withIndex()) {
+            if (element !is FirFunction) continue
+
+            yield(element.symbol)
+
+            if (element is FirAnonymousFunction) {
+                val boundLocality = element.lookupBoundLocality(elements.subList(index + 1, elements.size))
+
+                if (boundLocality != Locality.Local) break
+            }
+        }
+    }
+}
+
+object PropertyAccessLocalityChecker : FirPropertyAccessExpressionChecker(MppCheckerKind.Common) {
     context(context: CheckerContext, reporter: DiagnosticReporter)
     override fun check(expression: FirPropertyAccessExpression) {
         val accessSymbol = expression.calleeReference.symbol ?: return
 
         if (expression.resolveLocality() == Locality.Global) return
 
-        val elements = context.containingElements.asReversed()
-        var innermostFunction: FirFunctionSymbol<*>? = null
-
-        for ((index, element) in elements.withIndex()) {
-            if (element !is FirFunction) continue
-            if (innermostFunction == null) innermostFunction = element.symbol
-            if (element.symbol.declares(accessSymbol)) return
-            val crossingIsLocalLambda = element is FirAnonymousFunction &&
-                    element.bindingLocality(elements.subList(index + 1, elements.size)) == Locality.Local
-            if (!crossingIsLocalLambda) break
-        }
+        val localDeclarations = context.lookupLocalDeclarations()
+        if (localDeclarations.any { it.declares(accessSymbol) }) return
 
         reporter.reportOn(
             expression.source,
             LocalityErrors.INVALID_LOCALITY_CAPTURE,
-            innermostFunction ?: FirErrorFunctionSymbol()
+            localDeclarations.firstOrNull() ?: FirErrorFunctionSymbol()
         )
     }
 }

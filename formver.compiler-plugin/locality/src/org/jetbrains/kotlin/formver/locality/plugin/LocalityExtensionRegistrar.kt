@@ -26,6 +26,7 @@ class LocalityExtensionRegistrar(
         registerDiagnosticContainers(LocalityErrors)
         registerDiagnosticContainers(LocalityContractErrors)
         +LocalityAttributeExtension.getFactory(localityAnnotationId)
+        +ExpressionLambdasResolver.getFactory()
         +ExpressionLocalityContractResolver.getFactory()
         +ExpressionLocalityResolver.getFactory()
         +GraphLocalPropertySymbolsResolver.getFactory()

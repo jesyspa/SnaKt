@@ -26,7 +26,7 @@ import kotlin.collections.orEmpty
  */
 fun interface InvokeParameterTypeFactsResolver<TypeFact> {
     context(context: CheckerContext)
-    fun resolveInvokeParameters(receiver: FirExpression): List<TypeFact>?
+    fun resolveInvokeParametersOf(receiver: FirExpression): List<TypeFact>?
 }
 
 private val FirCall.invokeDispatchReceiver: FirExpression?
@@ -58,7 +58,7 @@ class CallArgumentTypeFactsMapper<TypeFact>(
         val invokeReceiver = call.invokeDispatchReceiver
 
         if (invokeReceiver != null) {
-            val invokeParameterTypeFacts = invokeParameterTypeFactsResolver.resolveInvokeParameters(invokeReceiver)
+            val invokeParameterTypeFacts = invokeParameterTypeFactsResolver.resolveInvokeParametersOf(invokeReceiver)
 
             if (invokeParameterTypeFacts != null) {
                 // NOTE: In invoke calls context and receiver arguments are actually passed as explicit normal
