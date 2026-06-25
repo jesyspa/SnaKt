@@ -76,7 +76,7 @@ object ThrowExceptionLocalityResolver : ThrowExceptionTypeFactResolver<Locality>
 
 object InvokeParametersLocalityResolver : InvokeParameterTypeFactsResolver<Locality> {
     context(context: CheckerContext)
-    override fun resolveInvokeParameters(receiver: FirExpression): List<Locality>? =
+    override fun resolveInvokeParametersOf(receiver: FirExpression): List<Locality>? =
         receiver.resolveLocalityContract()?.parameterTypeFacts?.map { it.typeFact }
 }
 
