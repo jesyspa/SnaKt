@@ -25,9 +25,12 @@ private object LocalityAttributeTargetJudgment : AttributeTargetJudgment {
 
         return when (containerElement) {
             is FirFunctionTypeRef ->
-                currentElement == containerElement.receiverTypeRef || currentElement in containerElement.contextParameterTypeRefs
+                currentElement == containerElement.receiverTypeRef
+                        || currentElement in containerElement.contextParameterTypeRefs
+
             is FirFunctionTypeParameter -> {
-                val functionTypeRef = parents.getOrNull(2) as? FirFunctionTypeRef? ?: return false
+                val functionTypeRef = parents.getOrNull(2) as? FirFunctionTypeRef?
+                    ?: return false
 
                 containerElement in functionTypeRef.parameters
             }

@@ -28,45 +28,48 @@ import org.jetbrains.kotlin.fir.symbols.impl.FirReceiverParameterSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirValueParameterSymbol
 
 context(context: CheckerContext)
-private fun FirFunctionSymbol<*>.declares(propertySymbol: FirBasedSymbol<*>): Boolean =
-    when (propertySymbol) {
+private fun FirFunctionSymbol<*>.declares(symbol: FirBasedSymbol<*>): Boolean =
+    when (symbol) {
         is FirReceiverParameterSymbol ->
-            propertySymbol.containingDeclarationSymbol == this
+            symbol.containingDeclarationSymbol == this
         is FirValueParameterSymbol ->
-            propertySymbol.containingDeclarationSymbol == this
+            symbol.containingDeclarationSymbol == this
         is FirLocalPropertySymbol -> {
-            val graph = resolvedControlFlowGraphReference?.controlFlowGraph ?: return false
+            val graph = resolvedControlFlowGraphReference?.controlFlowGraph
+                ?: return false
 
-            propertySymbol in graph.resolveLocalPropertySymbols()
+            symbol in graph.resolveLocalPropertySymbols()
         }
         else -> false
     }
 
 context(context: CheckerContext)
-private fun FirAnonymousFunction.lookupBoundLocality(ancestors: List<FirElement>): Locality {
-    for (ancestor in ancestors) {
-        when (ancestor) {
+private fun FirAnonymousFunction.lookupBoundLocality(parentElements: List<FirElement>): Locality {
+    for (parentElement in parentElements) {
+        when (parentElement) {
             is FirProperty -> {
-                val initializer = ancestor.initializer ?: continue
+                val initializer = parentElement.initializer ?: continue
 
                 if (initializer.resolveLambdas().contains(this)) {
-                    return ancestor.symbol.resolveLocality()
+                    return parentElement.symbol.resolveLocality()
                 }
             }
             is FirCall -> {
-                for ((expression, locality) in CallArgumentLocalitiesMapper.mapArgumentTypeFactsOf(ancestor)) {
+                val argumentLocalities = CallArgumentLocalitiesMapper.mapArgumentTypeFactsOf(parentElement)
+
+                for ((expression, locality) in argumentLocalities) {
                     if (this in expression.resolveLambdas()) {
                         return locality
                     }
                 }
 
-                if (ancestor is FirQualifiedAccessExpression) {
+                if (parentElement is FirQualifiedAccessExpression) {
                     // NOTE: As of now, only extension receivers can be specified as local. It is not possible to
                     // specify other receiver kinds.
-                    val extensionReceiver = ancestor.extensionReceiver
+                    val extensionReceiver = parentElement.extensionReceiver
 
                     if (extensionReceiver != null && extensionReceiver.resolveLambdas().contains(this)) {
-                        return ancestor.toResolvedCallableSymbol()
+                        return parentElement.toResolvedCallableSymbol()
                             ?.receiverParameterSymbol?.resolveLocality() ?: Locality.Global
                     }
                 }
@@ -79,23 +82,28 @@ private fun FirAnonymousFunction.lookupBoundLocality(ancestors: List<FirElement>
     return Locality.Global
 }
 
-fun CheckerContext.lookupLocalDeclarations(): Sequence<FirFunctionSymbol<*>> {
-    val elements = containingElements.asReversed()
+private val CheckerContext.localDeclarations: Sequence<FirFunctionSymbol<*>>
+    get() {
+        val parentElements = containingElements.asReversed()
 
-    return sequence {
-        for ((index, element) in elements.withIndex()) {
-            if (element !is FirFunction) continue
+        return sequence {
+            for ((parentIndex, parentElement) in parentElements.withIndex()) {
+                if (parentElement !is FirFunction) continue
 
-            yield(element.symbol)
+                yield(parentElement.symbol)
 
-            if (element is FirAnonymousFunction) {
-                val boundLocality = element.lookupBoundLocality(elements.subList(index + 1, elements.size))
+                if (parentElement is FirAnonymousFunction) {
+                    val currentParentElements = parentElements.subList(parentIndex + 1, parentElements.size)
+                    val boundLocality = parentElement.lookupBoundLocality(currentParentElements)
 
-                if (boundLocality != Locality.Local) break
+                    if (boundLocality != Locality.Local) break
+                }
             }
         }
     }
-}
+
+private fun CheckerContext.declaresInLocalScope(symbol: FirBasedSymbol<*>): Boolean =
+    localDeclarations.any { declarationSymbol -> declarationSymbol.declares(symbol) }
 
 object PropertyAccessLocalityChecker : FirPropertyAccessExpressionChecker(MppCheckerKind.Common) {
     context(context: CheckerContext, reporter: DiagnosticReporter)
@@ -104,8 +112,9 @@ object PropertyAccessLocalityChecker : FirPropertyAccessExpressionChecker(MppChe
 
         if (expression.resolveLocality() == Locality.Global) return
 
-        val localDeclarations = context.lookupLocalDeclarations()
-        if (localDeclarations.any { it.declares(accessSymbol) }) return
+        val localDeclarations = context.localDeclarations
+
+        if (context.declaresInLocalScope(accessSymbol)) return
 
         reporter.reportOn(
             expression.source,
