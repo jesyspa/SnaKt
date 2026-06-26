@@ -11,7 +11,12 @@ import org.jetbrains.kotlin.fir.caches.firCachesFactory
 import org.jetbrains.kotlin.fir.extensions.FirExtensionSessionComponent
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.ControlFlowGraph
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.VariableDeclarationNode
+import org.jetbrains.kotlin.fir.resolve.dfa.controlFlowGraph
+import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
+import org.jetbrains.kotlin.fir.symbols.impl.FirFunctionSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirLocalPropertySymbol
+import org.jetbrains.kotlin.fir.symbols.impl.FirReceiverParameterSymbol
+import org.jetbrains.kotlin.fir.symbols.impl.FirValueParameterSymbol
 
 class GraphLocalPropertySymbolsResolver(session: FirSession) : FirExtensionSessionComponent(session) {
     companion object {
@@ -41,5 +46,21 @@ private val FirSession.graphLocalPropertySymbolsResolver: GraphLocalPropertySymb
         by FirSession.sessionComponentAccessor()
 
 context(context: CheckerContext)
-fun ControlFlowGraph.resolveLocalPropertySymbols(): Set<FirLocalPropertySymbol> =
+fun ControlFlowGraph.resolveLocalProperties(): Set<FirLocalPropertySymbol> =
     context.session.graphLocalPropertySymbolsResolver.resolveLocalPropertiesOf(this)
+
+context(context: CheckerContext)
+fun FirFunctionSymbol<*>.declares(symbol: FirBasedSymbol<*>): Boolean =
+    when (symbol) {
+        is FirReceiverParameterSymbol ->
+            symbol.containingDeclarationSymbol == this
+        is FirValueParameterSymbol ->
+            symbol.containingDeclarationSymbol == this
+        is FirLocalPropertySymbol -> {
+            val graph = resolvedControlFlowGraphReference?.controlFlowGraph
+                ?: return false
+
+            symbol in graph.resolveLocalProperties()
+        }
+        else -> false
+    }
