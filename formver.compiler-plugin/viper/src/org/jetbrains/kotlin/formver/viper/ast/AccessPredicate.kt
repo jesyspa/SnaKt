@@ -15,8 +15,8 @@ sealed interface AccessPredicate : Exp {
     data class FieldAccessPredicate(
         val access: Exp.FieldAccess,
         val perm: PermExp,
-        val pos: Position = Position.NoPosition,
-        val info: Info = Info.NoInfo,
+        override val pos: Position = Position.NoPosition,
+        override val info: Info = Info.NoInfo,
     ) : AccessPredicate {
         override val type: Type.Bool = Type.Bool
 
@@ -29,5 +29,8 @@ sealed interface AccessPredicate : Exp {
                 info.toSilver(),
                 silverNoTrafos
             )
+
+        context(nameResolver: NameResolver)
+        override fun registerNames() {}
     }
 }

@@ -52,140 +52,6 @@ data class Program(
 }
 
 context(nameResolver: NameResolver)
-private fun registerExpNames(exp: Exp) {
-    when (exp) {
-        is Exp.LocalVar -> nameResolver.register(exp.name)
-        is Exp.FieldAccess -> {
-            nameResolver.register(exp.field.name)
-            registerExpNames(exp.rcv)
-        }
-
-        is Exp.PredicateAccess -> {
-            nameResolver.register(exp.predicateName)
-            exp.formalArgs.forEach { registerExpNames(it) }
-        }
-
-        is BinaryExp -> {
-            registerExpNames(exp.left)
-            registerExpNames(exp.right)
-        }
-
-        is Exp.FuncApp -> {
-            nameResolver.register(exp.functionName)
-            exp.args.forEach { registerExpNames(it) }
-        }
-
-        is Exp.DomainFuncApp -> {
-            nameResolver.register(exp.function.name)
-            exp.function.formalArgs.forEach { arg -> nameResolver.register(arg.name) }
-            exp.args.forEach { registerExpNames(it) }
-        }
-
-        is Exp.Forall -> {
-            exp.variables.forEach { nameResolver.register(it.name) }
-            registerExpNames(exp.exp)
-        }
-
-        is Exp.Exists -> {
-            exp.variables.forEach { nameResolver.register(it.name) }
-            registerExpNames(exp.exp)
-        }
-
-        is Exp.LetBinding -> {
-            nameResolver.register(exp.variable.name)
-            registerExpNames(exp.body)
-        }
-
-        is Exp.Old -> registerExpNames(exp.exp)
-        is Exp.TernaryExp -> {
-            registerExpNames(exp.thenExp)
-            registerExpNames(exp.elseExp)
-        }
-
-        is AccessPredicate.FieldAccessPredicate -> {}
-        is Exp.Acc -> registerExpNames(exp.field)
-        is Exp.ExplicitSeq -> exp.args.forEach { registerExpNames(it) }
-        is Exp.Minus -> registerExpNames(exp.arg)
-        is Exp.Not -> registerExpNames(exp.arg)
-        is Exp.SeqIndex -> {
-            registerExpNames(exp.seq)
-            registerExpNames(exp.idx)
-        }
-
-        is Exp.SeqLength -> registerExpNames(exp.seq)
-        is Exp.SeqTake -> {
-            registerExpNames(exp.seq)
-            registerExpNames(exp.idx)
-        }
-
-        is Exp.Unfolding -> {
-            registerExpNames(exp.predicateAccess)
-            registerExpNames(exp.body)
-        }
-        is Exp.AdtConstructorApp -> {
-            nameResolver.register(exp.constructor.name)
-            exp.args.forEach { registerExpNames(it) }
-        }
-        // no else branch to make decisions explicit.
-        is Exp.Result, is Exp.BoolLit, is Exp.EmptySeq, is Exp.IntLit, is Exp.NullLit -> {}
-    }
-}
-
-context(nameResolver: NameResolver)
-private fun Program.registerStmtNames(stmt: Stmt) = when (stmt) {
-    is Stmt.Label -> {
-        nameResolver.register(stmt.name)
-        stmt.invariants.forEach { registerExpNames(it) }
-    }
-
-    is Stmt.Seqn -> registerSeqnNames(stmt)
-    is Stmt.Goto -> nameResolver.register(stmt.name)
-    is Stmt.MethodCall -> {
-        stmt.args.forEach { registerExpNames(it) }
-        stmt.targets.forEach { registerExpNames(it) }
-        nameResolver.register(stmt.methodName)
-    }
-
-    is Stmt.If -> {
-        registerExpNames(stmt.cond)
-        registerSeqnNames(stmt.then)
-        stmt.els?.let { registerSeqnNames(it) }
-    }
-
-    is Stmt.While -> {
-        registerExpNames(stmt.cond)
-        registerSeqnNames(stmt.body)
-        stmt.invariants.forEach { registerExpNames(it) }
-    }
-
-    is Stmt.LocalVarAssign -> {
-        nameResolver.register(stmt.lhs.name)
-        registerExpNames(stmt.rhs)
-    }
-
-    is Stmt.Fold -> nameResolver.register(stmt.acc.predicateName)
-    is Stmt.Unfold -> nameResolver.register(stmt.acc.predicateName)
-    is Stmt.Assert -> registerExpNames(stmt.exp)
-    is Stmt.Exhale -> registerExpNames(stmt.exp)
-    is Stmt.Inhale -> registerExpNames(stmt.exp)
-    is Stmt.FieldAssign -> {
-        registerExpNames(stmt.lhs)
-        registerExpNames(stmt.rhs)
-    }
-}
-
-context(nameResolver: NameResolver)
-private fun Program.registerSeqnNames(seqn: Stmt.Seqn) {
-    seqn.scopedSeqnDeclarations.forEach { decl ->
-        when (decl) {
-            is Declaration.LocalVarDecl -> nameResolver.register(decl.name)
-            is Declaration.LabelDecl -> nameResolver.register(decl.name)
-        }
-    }
-    seqn.stmts.forEach { registerStmtNames(it) }
-}
-
-context(nameResolver: NameResolver)
 fun Program.registerAllNames() {
     domains.forEach { domain ->
         nameResolver.register(domain.name)
@@ -195,7 +61,7 @@ fun Program.registerAllNames() {
         }
         domain.axioms.forEach { axiom ->
             axiom.name?.let { nameResolver.register(it) }
-            registerExpNames(axiom.exp)
+            axiom.exp.registerNames()
         }
     }
     fields.forEach { nameResolver.register(it.name) }
@@ -203,24 +69,24 @@ fun Program.registerAllNames() {
     functions.forEach { function ->
         nameResolver.register(function.name)
         function.formalArgs.forEach { arg -> nameResolver.register(arg.name) }
-        function.pres.forEach { arg -> registerExpNames(arg) }
-        function.posts.forEach { arg -> registerExpNames(arg) }
-        function.body?.let { exp -> registerExpNames(exp) }
+        function.pres.forEach { it.registerNames() }
+        function.posts.forEach { it.registerNames() }
+        function.body?.registerNames()
     }
 
     predicates.forEach { predicate ->
         nameResolver.register(predicate.name)
         predicate.formalArgs.forEach { arg -> nameResolver.register(arg.name) }
-        registerExpNames(predicate.body)
+        predicate.body.registerNames()
     }
 
     methods.forEach { method ->
         nameResolver.register(method.name)
         method.formalArgs.forEach { arg -> nameResolver.register(arg.name) }
         method.formalReturns.forEach { ret -> nameResolver.register(ret.name) }
-        method.pres.forEach { arg -> registerExpNames(arg) }
-        method.posts.forEach { arg -> registerExpNames(arg) }
-        method.body?.let { seqn -> registerSeqnNames(seqn) }
+        method.pres.forEach { it.registerNames() }
+        method.posts.forEach { it.registerNames() }
+        method.body?.registerNames()
     }
 
     adts.forEach { adt ->

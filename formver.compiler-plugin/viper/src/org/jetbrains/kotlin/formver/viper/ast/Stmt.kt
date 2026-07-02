@@ -7,54 +7,74 @@ package org.jetbrains.kotlin.formver.viper.ast
 
 import org.jetbrains.kotlin.formver.viper.*
 
-sealed interface Stmt : IntoSilver<viper.silver.ast.Stmt> {
+sealed interface Stmt : WithSilverMetadata, IntoSilver<viper.silver.ast.Stmt> {
+
+    /**
+     * Registers the [org.jetbrains.kotlin.formver.viper.SymbolicName]s this node and its
+     * descendants introduce or reference, so they receive collision-free Viper identifiers.
+     * Must recurse into exactly the sub-nodes whose names end up in the emitted Viper program.
+     */
+    context(nameResolver: NameResolver)
+    fun registerNames()
 
     data class LocalVarAssign(
         val lhs: Exp.LocalVar,
         val rhs: Exp,
-        val position: Position = Position.NoPosition,
-        val info: Info = Info.NoInfo,
+        override val pos: Position = Position.NoPosition,
+        override val info: Info = Info.NoInfo,
     ) : Stmt {
         context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.LocalVarAssign =
             viper.silver.ast.LocalVarAssign(
                 lhs.toSilver(),
                 rhs.toSilver(),
-                position.toSilver(),
+                pos.toSilver(),
                 info.toSilver(),
                 silverNoTrafos
             )
+
+        context(nameResolver: NameResolver)
+        override fun registerNames() {
+            nameResolver.register(lhs.name)
+            rhs.registerNames()
+        }
     }
 
     data class FieldAssign(
         val lhs: Exp.FieldAccess,
         val rhs: Exp,
-        val position: Position = Position.NoPosition,
-        val info: Info = Info.NoInfo,
+        override val pos: Position = Position.NoPosition,
+        override val info: Info = Info.NoInfo,
     ) : Stmt {
         context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.FieldAssign =
             viper.silver.ast.FieldAssign(
                 lhs.toSilver(),
                 rhs.toSilver(),
-                position.toSilver(),
+                pos.toSilver(),
                 info.toSilver(),
                 silverNoTrafos
             )
+
+        context(nameResolver: NameResolver)
+        override fun registerNames() {
+            lhs.registerNames()
+            rhs.registerNames()
+        }
     }
 
     companion object {
         fun assign(
             lhs: Exp,
             rhs: Exp,
-            position: Position = Position.NoPosition,
+            pos: Position = Position.NoPosition,
             info: Info = Info.NoInfo,
         ): Stmt = when (lhs) {
             is Exp.LocalVar ->
-                LocalVarAssign(lhs, rhs, position, info)
+                LocalVarAssign(lhs, rhs, pos, info)
 
             is Exp.FieldAccess ->
-                FieldAssign(lhs, rhs, position, info)
+                FieldAssign(lhs, rhs, pos, info)
 
             else -> {
                 throw IllegalArgumentException("Expected an lvalue on the left-hand side of an assignment.")
@@ -66,169 +86,232 @@ sealed interface Stmt : IntoSilver<viper.silver.ast.Stmt> {
         val methodName: SymbolicName,
         val args: List<Exp>,
         val targets: List<Exp.LocalVar>,
-        val position: Position = Position.NoPosition,
-        val info: Info = Info.NoInfo,
+        override val pos: Position = Position.NoPosition,
+        override val info: Info = Info.NoInfo,
     ) : Stmt {
         context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.MethodCall = viper.silver.ast.MethodCall(
             methodName.mangled,
             args.map { it.toSilver() }.toScalaSeq(),
             targets.map { it.toSilver() }.toScalaSeq(),
-            position.toSilver(),
+            pos.toSilver(),
             info.toSilver(),
             silverNoTrafos
         )
+
+        context(nameResolver: NameResolver)
+        override fun registerNames() {
+            args.forEach { it.registerNames() }
+            targets.forEach { it.registerNames() }
+            nameResolver.register(methodName)
+        }
     }
 
     data class Exhale(
         val exp: Exp,
-        val position: Position = Position.NoPosition,
-        val info: Info = Info.NoInfo,
+        override val pos: Position = Position.NoPosition,
+        override val info: Info = Info.NoInfo,
     ) : Stmt {
         context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.Exhale = viper.silver.ast.Exhale(
             exp.toSilver(),
-            position.toSilver(),
+            pos.toSilver(),
             info.toSilver(),
             silverNoTrafos
         )
+
+        context(nameResolver: NameResolver)
+        override fun registerNames() {
+            exp.registerNames()
+        }
     }
 
     data class Inhale(
         val exp: Exp,
-        val position: Position = Position.NoPosition,
-        val info: Info = Info.NoInfo,
+        override val pos: Position = Position.NoPosition,
+        override val info: Info = Info.NoInfo,
     ) : Stmt {
         context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.Inhale = viper.silver.ast.Inhale(
             exp.toSilver(),
-            position.toSilver(),
+            pos.toSilver(),
             info.toSilver(),
             silverNoTrafos
         )
+
+        context(nameResolver: NameResolver)
+        override fun registerNames() {
+            exp.registerNames()
+        }
     }
 
     data class Assert(
         val exp: Exp,
-        val position: Position = Position.NoPosition,
-        val info: Info = Info.NoInfo,
+        override val pos: Position = Position.NoPosition,
+        override val info: Info = Info.NoInfo,
     ) : Stmt {
         context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.Assert = viper.silver.ast.Assert(
             exp.toSilver(),
-            position.toSilver(),
+            pos.toSilver(),
             info.toSilver(),
             silverNoTrafos
         )
+
+        context(nameResolver: NameResolver)
+        override fun registerNames() {
+            exp.registerNames()
+        }
     }
 
     data class Seqn(
         val stmts: List<Stmt> = listOf(),
         val scopedSeqnDeclarations: List<Declaration> = listOf(),
-        val position: Position = Position.NoPosition,
-        val info: Info = Info.NoInfo,
+        override val pos: Position = Position.NoPosition,
+        override val info: Info = Info.NoInfo,
     ) : Stmt {
         context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.Seqn = viper.silver.ast.Seqn(
             stmts.toSilver().toScalaSeq(),
             scopedSeqnDeclarations.toSilver().toScalaSeq(),
-            position.toSilver(),
+            pos.toSilver(),
             info.toSilver(),
             silverNoTrafos
         )
+
+        context(nameResolver: NameResolver)
+        override fun registerNames() {
+            scopedSeqnDeclarations.forEach { nameResolver.register(it.name) }
+            stmts.forEach { it.registerNames() }
+        }
     }
 
     data class If(
         val cond: Exp,
         val then: Seqn,
         val els: Seqn?,
-        val position: Position = Position.NoPosition,
-        val info: Info = Info.NoInfo,
+        override val pos: Position = Position.NoPosition,
+        override val info: Info = Info.NoInfo,
     ) : Stmt {
         context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.If = viper.silver.ast.If(
             cond.toSilver(),
             then.toSilver(),
             els?.toSilver() ?: Seqn().toSilver(),
-            position.toSilver(),
+            pos.toSilver(),
             info.toSilver(),
             silverNoTrafos
         )
+
+        context(nameResolver: NameResolver)
+        override fun registerNames() {
+            cond.registerNames()
+            then.registerNames()
+            els?.registerNames()
+        }
     }
 
     data class While(
         val cond: Exp,
         val invariants: List<Exp>,
         val body: Seqn,
-        val position: Position = Position.NoPosition,
-        val info: Info = Info.NoInfo,
+        override val pos: Position = Position.NoPosition,
+        override val info: Info = Info.NoInfo,
     ) : Stmt {
         context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.While = viper.silver.ast.While(
             cond.toSilver(),
             invariants.map { it.toSilver() }.toScalaSeq(),
             body.toSilver(),
-            position.toSilver(),
+            pos.toSilver(),
             info.toSilver(),
             silverNoTrafos
         )
+
+        context(nameResolver: NameResolver)
+        override fun registerNames() {
+            cond.registerNames()
+            body.registerNames()
+            invariants.forEach { it.registerNames() }
+        }
     }
 
     data class Label(
         val name: SymbolicName,
         val invariants: List<Exp>,
-        val position: Position = Position.NoPosition,
-        val info: Info = Info.NoInfo,
+        override val pos: Position = Position.NoPosition,
+        override val info: Info = Info.NoInfo,
     ) : Stmt {
         context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.Label = viper.silver.ast.Label(
             name.mangled,
             invariants.map { it.toSilver() }.toScalaSeq(),
-            position.toSilver(),
+            pos.toSilver(),
             info.toSilver(),
             silverNoTrafos
         )
+
+        context(nameResolver: NameResolver)
+        override fun registerNames() {
+            nameResolver.register(name)
+            invariants.forEach { it.registerNames() }
+        }
     }
 
     data class Goto(
         val name: SymbolicName,
-        val position: Position = Position.NoPosition,
-        val info: Info = Info.NoInfo,
+        override val pos: Position = Position.NoPosition,
+        override val info: Info = Info.NoInfo,
     ) : Stmt {
         context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.Goto = viper.silver.ast.Goto(
             name.mangled,
-            position.toSilver(),
+            pos.toSilver(),
             info.toSilver(),
             silverNoTrafos
         )
+
+        context(nameResolver: NameResolver)
+        override fun registerNames() {
+            nameResolver.register(name)
+        }
     }
 
     data class Fold(
         val acc: Exp.PredicateAccess,
-        val position: Position = Position.NoPosition,
-        val info: Info = Info.NoInfo,
+        override val pos: Position = Position.NoPosition,
+        override val info: Info = Info.NoInfo,
     ) : Stmt {
         context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.Fold = viper.silver.ast.Fold(
             acc.toSilver(),
-            position.toSilver(),
+            pos.toSilver(),
             info.toSilver(),
             silverNoTrafos
         )
+
+        context(nameResolver: NameResolver)
+        override fun registerNames() {
+            nameResolver.register(acc.predicateName)
+        }
     }
 
     data class Unfold(
         val acc: Exp.PredicateAccess,
-        val position: Position = Position.NoPosition,
-        val info: Info = Info.NoInfo,
+        override val pos: Position = Position.NoPosition,
+        override val info: Info = Info.NoInfo,
     ) : Stmt {
         context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.Unfold = viper.silver.ast.Unfold(
             acc.toSilver(),
-            position.toSilver(),
+            pos.toSilver(),
             info.toSilver(),
             silverNoTrafos
         )
+
+        context(nameResolver: NameResolver)
+        override fun registerNames() {
+            nameResolver.register(acc.predicateName)
+        }
     }
 }
