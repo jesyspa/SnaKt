@@ -23,7 +23,6 @@ import org.jetbrains.kotlin.fir.symbols.impl.FirRegularClassSymbol
 import org.jetbrains.kotlin.fir.types.*
 import org.jetbrains.kotlin.formver.common.PluginConfiguration
 import org.jetbrains.kotlin.formver.common.SnaktInternalException
-import org.jetbrains.kotlin.formver.common.UnsupportedFeatureBehaviour
 import org.jetbrains.kotlin.formver.core.*
 import org.jetbrains.kotlin.formver.core.diagnostics.ConversionErrors
 import org.jetbrains.kotlin.formver.core.domains.RuntimeTypeDomain
@@ -376,7 +375,7 @@ class ProgramConverter(
             return Pair(emptyList(), emptyList())
         }
 
-        val firSpec = extractFirSpecification(body, declaration.symbol.resolvedReturnType)
+        val firSpec = extractFirSpecification(body, declaration.symbol.resolvedReturnType, this)
 
 
         val (preconditionContext, postconditionContext) = createContractConversionContext(
@@ -433,9 +432,19 @@ class ProgramConverter(
 
                 val classSymbol = symbol.dispatchReceiverType?.toClassSymbol(session)
 
-                val regularClass = classSymbol as? FirRegularClassSymbol ?: throw SnaktInternalException(
-                    symbol.source, "Properties dispatch receiver is not a regular class"
-                )
+                val regularClass = classSymbol as? FirRegularClassSymbol
+                    ?: return@getOrPutProperty handleUnsupportedFeature(
+                        symbol.source, "Properties dispatch receiver is not a regular class"
+                    ) {
+                        PropertyEmbedding(
+                            getter = null,
+                            setter = null,
+                            hasDefaultBehaviour = false,
+                            isUnique = false,
+                            isVal = symbol.isVal,
+                            type = embedType(symbol.resolvedReturnType),
+                        )
+                    }
 
                 val isDefaultProperty = isGuaranteedDefaultProperty(symbol)
                 val isImmutable = symbol.isVal
@@ -669,14 +678,8 @@ class ProgramConverter(
         returnsUnique = symbol.isUnique(session) || symbol is FirConstructorSymbol
     }
 
-    private fun TypeBuilder.unimplementedTypeEmbedding(type: ConeKotlinType): PretypeBuilder = when (config.behaviour) {
-        UnsupportedFeatureBehaviour.THROW_EXCEPTION -> throw NotImplementedError("The embedding for type $type is not yet implemented.")
-
-        UnsupportedFeatureBehaviour.ASSUME_UNREACHABLE -> {
-            reportMinorInternalError("Requested type $type, for which we do not yet have an embedding.")
-            unit()
-        }
-    }
+    private fun TypeBuilder.unimplementedTypeEmbedding(type: ConeKotlinType): PretypeBuilder =
+        handleUnsupportedFeature(null, "The embedding for type $type is not yet implemented.") { unit() }
 
     // endregion
 }
