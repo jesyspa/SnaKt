@@ -28,6 +28,10 @@ fun <T> forAll(@Suppress("UNUSED_PARAMETER") body: InvariantBuilder.(T) -> Unit)
     throw FormverFunctionCalledInRuntimeException("forAll")
 
 
+fun <T> exists(@Suppress("UNUSED_PARAMETER") body: InvariantBuilder.(T) -> Unit): Boolean =
+    throw FormverFunctionCalledInRuntimeException("exists")
+
+
 fun <T> old(@Suppress("UNUSED_PARAMETER") body: T): T =
     throw FormverFunctionCalledInRuntimeException("old")
 

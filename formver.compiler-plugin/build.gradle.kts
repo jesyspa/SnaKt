@@ -146,6 +146,11 @@ tasks.compileTestKotlin {
     dependsOn(generateTests)
 }
 
+// detekt scans the generated `test-gen` source root, so the generator must run first.
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+    mustRunAfter(generateTests)
+}
+
 fun Test.setLibraryProperty(propName: String, jarName: String) {
     val path = project.configurations
         .testRuntimeClasspath.get()

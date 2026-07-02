@@ -30,6 +30,7 @@ interface ExpVisitor<R> {
     fun visitInjectionBasedExpEmbedding(e: InjectionBasedExpEmbedding): R = visitDefault(e)
     fun visitFieldAccessPermissions(e: FieldAccessPermissions): R = visitDefault(e)
     fun visitForAllEmbedding(e: ForAllEmbedding): R = visitDefault(e)
+    fun visitExistsEmbedding(e: ExistsEmbedding): R = visitDefault(e)
     fun visitPredicateAccessPermissions(e: PredicateAccessPermissions): R = visitDefault(e)
     fun visitCast(e: Cast): R = visitDefault(e)
     fun visitIs(e: Is): R = visitDefault(e)

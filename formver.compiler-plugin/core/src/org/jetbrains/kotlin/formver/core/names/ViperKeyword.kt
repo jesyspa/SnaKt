@@ -37,6 +37,7 @@ object ViperKeywords {
         "ensures",
         "invariant",
         "forall",
+        "exists",
         "forperm",
         "new",
         "lhs",

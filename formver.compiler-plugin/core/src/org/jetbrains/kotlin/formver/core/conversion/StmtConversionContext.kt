@@ -243,6 +243,32 @@ fun StmtConversionContext.insertForAllFunctionCall(
     }
 }
 
+/**
+ * Insert `ExistsEmbedding` where `exists` function call was encountered.
+ */
+fun StmtConversionContext.insertExistsFunctionCall(
+    symbol: FirValueParameterSymbol,
+    block: FirBlock,
+): ExpEmbedding {
+    val anonVar = freshAnonBuiltinVar(embedType(symbol.resolvedReturnType))
+    val methodCtxFactory = MethodContextFactory(
+        signature,
+        InlineParameterResolver(
+            substitutions = mapOf(SubstitutedArgument.ValueParameter(symbol) to anonVar),
+            labelName = null,
+            // TODO: ideally, there shouldn't be a return target since return is prohibited
+            defaultResolvedReturnTarget = defaultResolvedReturnTarget,
+        ),
+        parent = this,
+    )
+    return withNoScope {
+        withMethodCtx(methodCtxFactory) {
+            val (invariants, triggers) = collectInvariantsAndTriggers(block)
+            ExistsEmbedding(anonVar, invariants, triggers)
+        }
+    }
+}
+
 fun StmtConversionContext.convertImpureBody(
     declaration: FirSimpleFunction,
     signature: NamedFunctionSignatureWithContract,

@@ -6,6 +6,7 @@
 package org.jetbrains.kotlin.formver.core.embeddings.callables
 
 import org.jetbrains.kotlin.formver.common.SnaktInternalException
+import org.jetbrains.kotlin.formver.core.conversion.insertExistsFunctionCall
 import org.jetbrains.kotlin.formver.core.conversion.insertForAllFunctionCall
 import org.jetbrains.kotlin.formver.core.embeddings.expression.*
 import org.jetbrains.kotlin.formver.core.embeddings.expression.OperatorExpEmbeddings.AddCharInt
@@ -210,6 +211,20 @@ object SpecialKotlinFunctions {
                 "Lambda body of forAll function must be present."
             )
             ctx.insertForAllFunctionCall(param.symbol, body)
+        }
+
+        addFunction(forAllCallableType, SpecialPackages.formver, name = "exists") { args, ctx ->
+            val arg = args.first()
+            val lambda = arg.ignoringMetaNodes() as? LambdaExp ?: throw SnaktInternalException(
+                null,
+                "First argument of exists function must be a lambda."
+            )
+            val param = lambda.function.valueParameters.first()
+            val body = lambda.function.body ?: throw SnaktInternalException(
+                null,
+                "Lambda body of exists function must be present."
+            )
+            ctx.insertExistsFunctionCall(param.symbol, body)
         }
 
         val permissionCallableType = buildFunctionPretype {

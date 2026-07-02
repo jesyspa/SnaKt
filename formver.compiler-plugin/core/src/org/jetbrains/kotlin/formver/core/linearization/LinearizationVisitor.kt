@@ -500,6 +500,26 @@ data class LinearizationVisitor(
         }
     }
 
+    override fun visitExistsEmbedding(e: ExistsEmbedding): Linearizable = object : OnlyToBuiltinLinearizable(e, this@LinearizationVisitor) {
+        override fun toViperBuiltinType(ctx: LinearizationContext): Exp {
+            val conjunction = e.conditions.pureToViper(true, ctx.typeResolver, ctx.source).toConjunction()
+            val viperTriggers = e.triggerExpressions.map { triggerExpr ->
+                Exp.Trigger(listOf(triggerExpr.linearize().toViperBuiltinType(ctx)))
+            }
+            return Exp.Exists(
+                variables = listOf(e.variable.toLocalVarDecl()),
+                triggers = viperTriggers,
+                exp = if (e.variable.isOriginallyRef) Exp.And(
+                    e.variable.toViperExp(ctx).isOf(e.variable.type.runtimeType),
+                    conjunction
+                )
+                else conjunction,
+                pos = ctx.source.asPosition,
+                info = e.sourceRole.asInfo,
+            )
+        }
+    }
+
     override fun visitAccEmbedding(e: AccEmbedding): Linearizable = object : OnlyToBuiltinLinearizable(e, this@LinearizationVisitor) {
         override fun toViperBuiltinType(ctx: LinearizationContext): Exp {
             val field = Exp.FieldAccess(

@@ -45,6 +45,7 @@ internal class ExprPurityVisitor(val declaredVariables: MutableSet<VariableEmbed
     override fun visitCast(e: Cast): Boolean = e.allChildrenPure(this)
     override fun visitShared(e: Shared) = e.allChildrenPure(this)
     override fun visitForAllEmbedding(e: ForAllEmbedding) = e.allChildrenPure(this)
+    override fun visitExistsEmbedding(e: ExistsEmbedding) = e.allChildrenPure(this)
     override fun visitOld(e: Old) = e.allChildrenPure(this)
 
     /* ————— impure nodes ————— */
