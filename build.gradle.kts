@@ -32,13 +32,14 @@ subprojects {
     tasks.withType<Detekt>().configureEach {
         jvmTarget = "21"
         // Project uses a custom layout (src/ instead of src/main/kotlin) — list the
-        // source roots explicitly so detekt scans them.
+        // source roots explicitly so detekt scans them. test-gen is not listed: it
+        // contains only generated Java test runners (produced by generateTests),
+        // which detekt does not analyze.
         setSource(
             files(
                 "src",
                 "test",
                 "test-fixtures",
-                "test-gen",
             ).filter { it.exists() }
         )
         include("**/*.kt")
