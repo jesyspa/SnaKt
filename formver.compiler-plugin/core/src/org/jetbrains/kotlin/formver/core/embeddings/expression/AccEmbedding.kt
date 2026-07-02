@@ -27,6 +27,6 @@ data class PermissionLit(val perm: PermExp) : ExpEmbedding {
     override val type: TypeEmbedding
         get() = buildType { boolean() }
 
-    override fun <R> accept(v: ExpVisitor<R>): R = v.visitDefault(this)
+    override fun <R> accept(v: ExpVisitor<R>): R = v.visitPermissionLit(this)
     override fun children(): Sequence<ExpEmbedding> = emptySequence()
 }

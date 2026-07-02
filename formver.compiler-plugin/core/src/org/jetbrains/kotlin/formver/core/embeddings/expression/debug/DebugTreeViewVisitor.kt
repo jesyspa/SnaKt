@@ -5,12 +5,12 @@
 
 package org.jetbrains.kotlin.formver.core.embeddings.expression.debug
 
-import org.jetbrains.kotlin.formver.core.embeddings.ExpVisitor
+import org.jetbrains.kotlin.formver.core.embeddings.DefaultingExpVisitor
 import org.jetbrains.kotlin.formver.core.embeddings.expression.*
 import org.jetbrains.kotlin.formver.viper.NameResolver
 import org.jetbrains.kotlin.formver.viper.mangled
 
-class DebugTreeViewVisitor(private val nameResolver: NameResolver) : ExpVisitor<TreeView> {
+class DebugTreeViewVisitor(private val nameResolver: NameResolver) : DefaultingExpVisitor<TreeView> {
 
     private fun ExpEmbedding.tree(): TreeView = accept(this@DebugTreeViewVisitor)
     private fun List<ExpEmbedding>.trees(): List<TreeView> = map { it.tree() }
