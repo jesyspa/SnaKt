@@ -1,0 +1,12 @@
+/exists_double_index.kt: info: Generated Viper text for duplicateIndexExists:
+method duplicateIndexExists(s: Ref, res: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(s), stringType())
+  requires isSubtype(typeOf(res), intType())
+  ensures isSubtype(typeOf(v_ret_0), intType())
+  ensures (exists anon: Int :: 0 <= anon && anon < |stringFromRef(s)| &&
+      stringFromRef(s)[anon] == stringFromRef(s)[intFromRef(res)])
+{
+  v_ret_0 := intToRef(0)
+  goto lbl_ret_0
+  label lbl_ret_0
+}

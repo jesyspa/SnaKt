@@ -828,6 +828,18 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
       }
 
       @Test
+      @TestMetadata("exists_char_bound.kt")
+      public void testExists_char_bound() {
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/exists_char_bound.kt");
+      }
+
+      @Test
+      @TestMetadata("exists_double_index.kt")
+      public void testExists_double_index() {
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/exists_double_index.kt");
+      }
+
+      @Test
       @TestMetadata("factorial.kt")
       public void testFactorial() {
         runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/factorial.kt");
