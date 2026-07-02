@@ -10,7 +10,6 @@ import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.buildType
 
 data class ExistsEmbedding(
-    // TODO: support multiple variables
     val variable: VariableEmbedding,
     val conditions: List<ExpEmbedding>,
     val triggerExpressions: List<ExpEmbedding> = emptyList(),

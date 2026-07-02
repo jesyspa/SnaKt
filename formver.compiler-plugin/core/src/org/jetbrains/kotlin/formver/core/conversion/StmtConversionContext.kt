@@ -256,7 +256,6 @@ fun StmtConversionContext.insertExistsFunctionCall(
         InlineParameterResolver(
             substitutions = mapOf(SubstitutedArgument.ValueParameter(symbol) to anonVar),
             labelName = null,
-            // TODO: ideally, there shouldn't be a return target since return is prohibited
             defaultResolvedReturnTarget = defaultResolvedReturnTarget,
         ),
         parent = this,
