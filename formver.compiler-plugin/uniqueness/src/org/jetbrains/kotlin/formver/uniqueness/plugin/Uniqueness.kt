@@ -20,9 +20,10 @@ enum class Uniqueness {
 }
 
 /**
- * Resolves the uniqueness assumed for values of this type when no parameter-specific rule applies.
+ * Resolves the uniqueness assumed for values of this type in the current scope, when no parameter-specific rule
+ * applies.
  */
-val ConeKotlinType.defaultUniqueness: Uniqueness
+val ConeKotlinType.scopeUniqueness: Uniqueness
     get() =
         when (attributes.uniquenessAttribute) {
             is UniquenessAttribute -> {

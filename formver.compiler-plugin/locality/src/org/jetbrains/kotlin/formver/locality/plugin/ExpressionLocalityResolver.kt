@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.formver.locality.contract.plugin.resolveLocalityCont
 import org.jetbrains.kotlin.formver.type.plugin.CallArgumentTypeFactsMapper
 import org.jetbrains.kotlin.formver.type.plugin.ExpressionTypeFactResolver
 import org.jetbrains.kotlin.formver.type.plugin.InvokeParameterTypeFactsResolver
+import org.jetbrains.kotlin.formver.type.plugin.QualifiedAccessArgumentTypeFactMapper
 import org.jetbrains.kotlin.formver.type.plugin.ReturnResultTypeFactResolver
 import org.jetbrains.kotlin.formver.type.plugin.ThrowExceptionTypeFactResolver
 import org.jetbrains.kotlin.formver.type.plugin.UnifyingExpressionTypeFactResolver
@@ -79,7 +80,12 @@ object InvokeParametersLocalityResolver : InvokeParameterTypeFactsResolver<Local
         receiver.resolveLocalityContract()?.parameterTypeFacts?.map { it.typeFact }
 }
 
-val CallArgumentLocalityMapper = CallArgumentTypeFactsMapper(
+val CallArgumentLocalitiesMapper = CallArgumentTypeFactsMapper(
     VariableLocalityResolver,
     InvokeParametersLocalityResolver
+)
+
+val QualifiedAccessArgumentLocalitiesMapper = QualifiedAccessArgumentTypeFactMapper(
+    ReceiverLocalityResolver,
+    VariableLocalityResolver
 )

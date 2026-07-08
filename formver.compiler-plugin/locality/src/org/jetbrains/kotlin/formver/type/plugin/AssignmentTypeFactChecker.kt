@@ -26,11 +26,12 @@ class AssignmentTypeFactChecker<TypeFact>(
     kind: MppCheckerKind,
     private val typeFactJudgment: TypeFactJudgment<TypeFact>,
     private val expressionTypeFactResolver: ExpressionTypeFactResolver<TypeFact>,
+    private val leftTypeFactResolver: ExpressionTypeFactResolver<TypeFact> = expressionTypeFactResolver,
     private val diagnosticFactory: KtDiagnosticFactory3<String, TypeFact, TypeFact>
 ) : FirVariableAssignmentChecker(kind) {
     context(context: CheckerContext, reporter: DiagnosticReporter)
     override fun check(expression: FirVariableAssignment) {
-        val requiredTypeFact = expressionTypeFactResolver.resolveTypeFactOf(expression.lValue)
+        val requiredTypeFact = leftTypeFactResolver.resolveTypeFactOf(expression.lValue)
         val actualTypeFact = expressionTypeFactResolver.resolveTypeFactOf(expression.rValue)
 
         if (typeFactJudgment.satisfies(requiredTypeFact, actualTypeFact)) return

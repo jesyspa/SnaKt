@@ -28,7 +28,7 @@ import org.jetbrains.kotlin.formver.type.plugin.UnifyingExpressionTypeFactResolv
  * Resolves uniqueness from the access paths referenced by [this], or [Uniqueness.Shared] if it references no path.
  */
 context(context: CheckerContext)
-private fun FirExpression.resolveAccessUniqueness(): Uniqueness {
+fun FirExpression.resolveAccessUniqueness(): Uniqueness {
     val accessState = resolveAccessState()
 
     return if (accessState == EmptyAccessState) {
@@ -50,7 +50,7 @@ fun FirExpression.resolveTerminalUniqueness(): Uniqueness {
             if (calleeReference.symbol is FirConstructorSymbol) {
                 Uniqueness.Unique
             } else {
-                resolvedType.defaultUniqueness
+                resolvedType.scopeUniqueness
             }
         }
 
@@ -74,6 +74,7 @@ fun FirExpression.resolveTerminalUniqueness(): Uniqueness {
         else -> {
             val resolvedType = resolvedType
 
+            // Resolve `null` and primitive values as unique
             if (resolvedType.isNothingOrNullableNothing || resolvedType.isPrimitive) {
                 Uniqueness.Unique
             } else {
@@ -119,4 +120,4 @@ fun FirExpression.resolveUniqueness(): Uniqueness =
  * Resolves the uniqueness expected for the result of [this] return expression.
  */
 fun FirReturnExpression.resolveResultUniqueness(): Uniqueness =
-    target.labeledElement.returnTypeRef.coneType.defaultUniqueness
+    target.labeledElement.returnTypeRef.coneType.scopeUniqueness
