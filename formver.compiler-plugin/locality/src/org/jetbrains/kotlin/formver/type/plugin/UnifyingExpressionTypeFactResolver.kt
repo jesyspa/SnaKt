@@ -9,6 +9,7 @@ import org.jetbrains.kotlin.fir.analysis.checkers.context.CheckerContext
 import org.jetbrains.kotlin.fir.caches.FirCachesFactory
 import org.jetbrains.kotlin.fir.expressions.FirBlock
 import org.jetbrains.kotlin.fir.expressions.FirCatch
+import org.jetbrains.kotlin.fir.expressions.FirElvisExpression
 import org.jetbrains.kotlin.fir.expressions.FirExpression
 import org.jetbrains.kotlin.fir.expressions.FirOperation
 import org.jetbrains.kotlin.fir.expressions.FirTryExpression
@@ -42,6 +43,11 @@ fun FirExpression.collectTails(): Sequence<FirExpression> =
         is FirWhenExpression ->
             sequence {
                 yieldAll(expression.branches.map(FirWhenBranch::result))
+            }
+        is FirElvisExpression ->
+            sequence {
+                yield(expression.lhs)
+                yield(expression.rhs)
             }
         is FirTryExpression ->
             sequence {

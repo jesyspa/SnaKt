@@ -19,6 +19,7 @@ import org.jetbrains.kotlin.formver.plugin.services.FormVerDirectives.NEVER_VALI
 import org.jetbrains.kotlin.formver.plugin.services.FormVerDirectives.RENDER_PREDICATES
 import org.jetbrains.kotlin.formver.plugin.services.FormVerDirectives.REPLACE_STDLIB_EXTENSIONS
 import org.jetbrains.kotlin.formver.plugin.services.FormVerDirectives.UNIQUE_CHECK_ONLY
+import org.jetbrains.kotlin.formver.uniqueness.plugin.UniquenessExtensionRegistrar
 import org.jetbrains.kotlin.test.directives.model.DirectivesContainer
 import org.jetbrains.kotlin.test.directives.model.RegisteredDirectives
 import org.jetbrains.kotlin.test.directives.model.SimpleDirectivesContainer
@@ -61,9 +62,9 @@ class ExtensionRegistrarConfigurator(testServices: TestServices) : EnvironmentCo
             else -> TargetsSelection.ALL_TARGETS
         }
         val checkUniqueness = uniquenessOnly
-        // TODO: Eventually turn on locality checking together with uniqueness checking once the latter will be able to
-        //  leverage locality information.
-        val checkLocality = localityOnly // || checkUniqueness
+        // Locality must run before uniqueness in tests.
+        // UNIQUE_CHECK_ONLY enables both checkers (in this order), while LOCALITY_CHECK_ONLY keeps uniqueness off.
+        val checkLocality = localityOnly || checkUniqueness
         val config = PluginConfiguration(
             logLevel,
             errorStyle,
@@ -77,6 +78,9 @@ class ExtensionRegistrarConfigurator(testServices: TestServices) : EnvironmentCo
         FirExtensionRegistrarAdapter.registerExtension(FormalVerificationPluginExtensionRegistrar(config))
         if (config.checkLocality) {
             FirExtensionRegistrarAdapter.registerExtension(LocalityExtensionRegistrar())
+        }
+        if (config.checkUniqueness) {
+            FirExtensionRegistrarAdapter.registerExtension(UniquenessExtensionRegistrar())
         }
     }
 }
@@ -95,7 +99,7 @@ object FormVerDirectives : SimpleDirectivesContainer() {
     )
 
     val UNIQUE_CHECK_ONLY by directive(
-        description = "Do uniqueness checking"
+        description = "Do uniqueness checking (and run locality first)"
     )
 
     val LOCALITY_CHECK_ONLY by directive(

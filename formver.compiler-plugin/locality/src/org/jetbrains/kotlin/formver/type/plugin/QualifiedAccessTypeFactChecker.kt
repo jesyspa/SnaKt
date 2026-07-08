@@ -5,6 +5,7 @@
 
 package org.jetbrains.kotlin.formver.type.plugin
 
+import org.jetbrains.kotlin.KtFakeSourceElementKind
 import org.jetbrains.kotlin.config.LanguageFeature
 import org.jetbrains.kotlin.diagnostics.DiagnosticReporter
 import org.jetbrains.kotlin.diagnostics.KtDiagnosticFactory3
@@ -15,11 +16,9 @@ import org.jetbrains.kotlin.fir.analysis.checkers.expression.FirQualifiedAccessE
 import org.jetbrains.kotlin.fir.expressions.FirFunctionCall
 import org.jetbrains.kotlin.fir.expressions.FirPropertyAccessExpression
 import org.jetbrains.kotlin.fir.expressions.FirQualifiedAccessExpression
-import org.jetbrains.kotlin.fir.expressions.toResolvedCallableSymbol
 import org.jetbrains.kotlin.fir.isEnabled
-import org.jetbrains.kotlin.fir.symbols.impl.FirReceiverParameterSymbol
-import org.jetbrains.kotlin.fir.symbols.impl.FirVariableSymbol
 import org.jetbrains.kotlin.fir.types.ConeKotlinType
+import org.jetbrains.kotlin.fir.types.resolvedType
 
 /**
  * Checker for type-fact compatibility in qualified access expressions.
@@ -28,8 +27,8 @@ import org.jetbrains.kotlin.fir.types.ConeKotlinType
  * @param typeFactJudgment the type-fact judgment to use for checking type-fact compatibility.
  * @param expressionTypeFactResolver the resolver for resolving the actual type fact of the receiver and context
  *  arguments.
- * @param receiverTypeFactResolver the resolver for resolving the declared type fact of the receiver.
- * @param variableTypeFactResolver the resolver for resolving the declared type fact of the context arguments.
+ * @param qualifiedAccessArgumentTypeFactMapper the mapper for resolving declared type facts of qualified-access
+ *  receiver and context arguments.
  * @param receiverDiagnosticFactory the diagnostic factory to use for reporting a type-fact mismatch in the receiver.
  * @param contextArgumentDiagnosticFactory the diagnostic factory to use for reporting type-fact mismatch in the context
  *  arguments.
@@ -38,8 +37,7 @@ class QualifiedAccessTypeFactChecker<TypeFact>(
     kind: MppCheckerKind,
     private val typeFactJudgment: TypeFactJudgment<TypeFact>,
     private val expressionTypeFactResolver: ExpressionTypeFactResolver<TypeFact>,
-    private val receiverTypeFactResolver: SymbolTypeFactResolver<TypeFact, FirReceiverParameterSymbol>,
-    private val variableTypeFactResolver: SymbolTypeFactResolver<TypeFact, FirVariableSymbol<*>>,
+    private val qualifiedAccessArgumentTypeFactMapper: QualifiedAccessArgumentTypeFactMapper<TypeFact>,
     private val receiverDiagnosticFactory: KtDiagnosticFactory3<String, TypeFact, TypeFact>,
     private val contextArgumentDiagnosticFactory: KtDiagnosticFactory3<ConeKotlinType, TypeFact, TypeFact>,
 ) : FirQualifiedAccessExpressionChecker(kind) {
@@ -47,47 +45,28 @@ class QualifiedAccessTypeFactChecker<TypeFact>(
     override fun check(expression: FirQualifiedAccessExpression) {
         if (expression !is FirFunctionCall && expression !is FirPropertyAccessExpression) return
 
-        val callableSymbol = expression.toResolvedCallableSymbol() ?: return
+        for ((argument, requiredTypeFact) in qualifiedAccessArgumentTypeFactMapper.mapArgumentTypeFactsOf(expression)) {
+            val actualTypeFact = expressionTypeFactResolver.resolveTypeFactOf(argument)
 
-        val receiverSymbol = callableSymbol.receiverParameterSymbol
-        val receiver = expression.extensionReceiver
+            if (typeFactJudgment.satisfies(requiredTypeFact, actualTypeFact)) continue
 
-        if (receiver != null && receiverSymbol != null) {
-            val requiredTypeFact = receiverTypeFactResolver.resolveTypeFactOf(receiverSymbol)
-            val actualTypeFact = expressionTypeFactResolver.resolveTypeFactOf(receiver)
-
-            if (!typeFactJudgment.satisfies(requiredTypeFact, actualTypeFact)) {
+            if (argument in expression.contextArguments) {
                 reporter.reportOn(
-                    receiver.source ?: expression.source,
+                    expression.source,
+                    contextArgumentDiagnosticFactory,
+                    argument.resolvedType,
+                    requiredTypeFact,
+                    actualTypeFact
+                )
+            } else {
+                reporter.reportOn(
+                    argument.source ?: expression.source,
                     receiverDiagnosticFactory,
                     "Receiver",
                     requiredTypeFact,
                     actualTypeFact
                 )
             }
-        }
-
-        if (!LanguageFeature.ContextReceivers.isEnabled() &&
-            !LanguageFeature.ContextParameters.isEnabled()
-        ) {
-            return
-        }
-
-        val contextArgumentMappings = expression.contextArguments.zip(callableSymbol.contextParameterSymbols)
-
-        for ((argument, argumentSymbol) in contextArgumentMappings) {
-            val requiredTypeFact = variableTypeFactResolver.resolveTypeFactOf(argumentSymbol)
-            val actualTypeFact = expressionTypeFactResolver.resolveTypeFactOf(argument)
-
-            if (typeFactJudgment.satisfies(requiredTypeFact, actualTypeFact)) continue
-
-            reporter.reportOn(
-                argument.source ?: expression.source,
-                contextArgumentDiagnosticFactory,
-                argumentSymbol.resolvedReturnType,
-                requiredTypeFact,
-                actualTypeFact
-            )
         }
     }
 }
