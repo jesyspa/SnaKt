@@ -217,12 +217,10 @@ fun StmtConversionContext.insertInlineFunctionCall(
     }
 }
 
-/**
- * Insert `ForAllEmbedding` where `forAll` function call was encountered.
- */
-fun StmtConversionContext.insertForAllFunctionCall(
+private fun StmtConversionContext.insertQuantifierFunctionCall(
     symbol: FirValueParameterSymbol,
     block: FirBlock,
+    buildEmbedding: (VariableEmbedding, List<ExpEmbedding>, List<ExpEmbedding>) -> ExpEmbedding,
 ): ExpEmbedding {
     val anonVar = freshAnonBuiltinVar(embedType(symbol.resolvedReturnType))
     val methodCtxFactory = MethodContextFactory(
@@ -238,35 +236,20 @@ fun StmtConversionContext.insertForAllFunctionCall(
     return withNoScope {
         withMethodCtx(methodCtxFactory) {
             val (invariants, triggers) = collectInvariantsAndTriggers(block)
-            ForAllEmbedding(anonVar, invariants, triggers)
+            buildEmbedding(anonVar, invariants, triggers)
         }
     }
 }
 
-/**
- * Insert `ExistsEmbedding` where `exists` function call was encountered.
- */
+fun StmtConversionContext.insertForAllFunctionCall(
+    symbol: FirValueParameterSymbol,
+    block: FirBlock,
+): ExpEmbedding = insertQuantifierFunctionCall(symbol, block, ::ForAllEmbedding)
+
 fun StmtConversionContext.insertExistsFunctionCall(
     symbol: FirValueParameterSymbol,
     block: FirBlock,
-): ExpEmbedding {
-    val anonVar = freshAnonBuiltinVar(embedType(symbol.resolvedReturnType))
-    val methodCtxFactory = MethodContextFactory(
-        signature,
-        InlineParameterResolver(
-            substitutions = mapOf(SubstitutedArgument.ValueParameter(symbol) to anonVar),
-            labelName = null,
-            defaultResolvedReturnTarget = defaultResolvedReturnTarget,
-        ),
-        parent = this,
-    )
-    return withNoScope {
-        withMethodCtx(methodCtxFactory) {
-            val (invariants, triggers) = collectInvariantsAndTriggers(block)
-            ExistsEmbedding(anonVar, invariants, triggers)
-        }
-    }
-}
+): ExpEmbedding = insertQuantifierFunctionCall(symbol, block, ::ExistsEmbedding)
 
 fun StmtConversionContext.convertImpureBody(
     declaration: FirSimpleFunction,

@@ -64,6 +64,12 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
       }
 
       @Test
+      @TestMetadata("max_character.kt")
+      public void testMax_character() {
+        runTest("formver.compiler-plugin/testData/diagnostics/expensive_verification/algorithms/max_character.kt");
+      }
+
+      @Test
       @TestMetadata("z_function.kt")
       public void testZ_function() {
         runTest("formver.compiler-plugin/testData/diagnostics/expensive_verification/algorithms/z_function.kt");
@@ -825,12 +831,6 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
       @TestMetadata("exists.kt")
       public void testExists() {
         runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/exists.kt");
-      }
-
-      @Test
-      @TestMetadata("exists_char_bound.kt")
-      public void testExists_char_bound() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/exists_char_bound.kt");
       }
 
       @Test

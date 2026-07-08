@@ -9,6 +9,20 @@ import org.jetbrains.kotlin.formver.core.embeddings.ExpVisitor
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.buildType
 
+data class ForAllEmbedding(
+    // TODO: support multiple variables
+    val variable: VariableEmbedding,
+    val conditions: List<ExpEmbedding>,
+    val triggerExpressions: List<ExpEmbedding> = emptyList(),
+) : ExpEmbedding {
+
+    override val type: TypeEmbedding
+        get() = buildType { boolean() }
+
+    override fun children(): Sequence<ExpEmbedding> = conditions.asSequence()
+    override fun <R> accept(v: ExpVisitor<R>): R = v.visitForAllEmbedding(this)
+}
+
 data class ExistsEmbedding(
     val variable: VariableEmbedding,
     val conditions: List<ExpEmbedding>,
