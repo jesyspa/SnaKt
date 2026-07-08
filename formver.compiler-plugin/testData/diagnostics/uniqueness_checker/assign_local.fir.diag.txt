@@ -1,25 +1,31 @@
-/assign_local.kt: error: Argument uniqueness mismatch: expected 'unique global', actual 'shared global'.
+/assign_local.kt: error: Argument uniqueness mismatch: expected 'unique', actual 'shared'.
 
-/assign_local.kt: error: Argument uniqueness mismatch: expected 'unique global', actual 'shared local'.
+/assign_local.kt: error: Argument locality mismatch: expected 'global', actual 'local'.
 
-/assign_local.kt: error: Argument uniqueness mismatch: expected 'unique global', actual 'unique local'.
+/assign_local.kt: error: Argument uniqueness mismatch: expected 'unique', actual 'unknown'.
 
-/assign_local.kt: error: Argument uniqueness mismatch: expected 'unique global', actual 'shared global'.
+/assign_local.kt: error: Argument locality mismatch: expected 'global', actual 'local'.
 
-/assign_local.kt: error: Argument uniqueness mismatch: expected 'unique global', actual 'shared local'.
+/assign_local.kt: error: Argument uniqueness mismatch: expected 'unique', actual 'shared'.
 
-/assign_local.kt: error: Argument uniqueness mismatch: expected 'unique global', actual 'shared global'.
+/assign_local.kt: error: Argument locality mismatch: expected 'global', actual 'local'.
 
-/assign_local.kt: error: Argument uniqueness mismatch: expected 'unique global', actual 'shared local'.
+/assign_local.kt: error: Argument uniqueness mismatch: expected 'unique', actual 'unknown'.
 
-/assign_local.kt: error: Argument uniqueness mismatch: expected 'unique global', actual 'unique local'.
+/assign_local.kt: error: Argument locality mismatch: expected 'global', actual 'local'.
 
-/assign_local.kt: error: Argument uniqueness mismatch: expected 'unique global', actual 'shared global'.
+/assign_local.kt: error: Argument uniqueness mismatch: expected 'unique', actual 'unknown'.
 
-/assign_local.kt: error: Argument uniqueness mismatch: expected 'unique global', actual 'shared local'.
+/assign_local.kt: error: Argument locality mismatch: expected 'global', actual 'local'.
 
-/assign_local.kt: error: Argument uniqueness mismatch: expected 'unique global', actual 'unique local'.
+/assign_local.kt: error: Argument uniqueness mismatch: expected 'unique', actual 'shared'.
 
-/assign_local.kt: error: Argument uniqueness mismatch: expected 'unique global', actual 'shared global'.
+/assign_local.kt: error: Argument locality mismatch: expected 'global', actual 'local'.
 
-/assign_local.kt: error: Assignment uniqueness mismatch: expected 'unique global', actual 'moved'.
+/assign_local.kt: error: Argument uniqueness mismatch: expected 'unique', actual 'unknown'.
+
+/assign_local.kt: error: Argument locality mismatch: expected 'global', actual 'local'.
+
+/assign_local.kt: error: Argument uniqueness mismatch: expected 'unique', actual 'shared'.
+
+/assign_local.kt: error: Invalid access to moved reference.

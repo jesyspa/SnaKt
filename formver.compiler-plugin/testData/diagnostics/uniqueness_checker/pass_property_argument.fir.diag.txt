@@ -1,1 +1,0 @@
-/pass_property_argument.kt: error: Argument uniqueness mismatch: partial type 'moved' is inconsistent with parent type 'unique global'.

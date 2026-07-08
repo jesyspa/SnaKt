@@ -1,0 +1,17 @@
+/loop.kt: error: Invalid access to moved reference.
+
+/loop.kt: error: Invalid access to moved reference.
+
+/loop.kt: error: Invalid access to moved reference.
+
+/loop.kt: error: Invalid access to moved reference.
+
+/loop.kt: error: Invalid access to moved reference.
+
+/loop.kt: error: Invalid access to moved reference.
+
+/loop.kt: error: Escaping value has moved field: 'b.y.x'.
+
+/loop.kt: error: Invalid access to moved reference.
+
+/loop.kt: error: Invalid access to moved reference.

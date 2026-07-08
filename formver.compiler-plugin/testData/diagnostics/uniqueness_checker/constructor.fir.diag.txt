@@ -1,0 +1,9 @@
+/constructor.kt: error: Invalid access to moved reference.
+
+/constructor.kt: error: Invalid access to moved reference.
+
+/constructor.kt: error: Invalid access to moved reference.
+
+/constructor.kt: error: Invalid access to moved reference.
+
+/constructor.kt: error: Invalid access to moved reference.

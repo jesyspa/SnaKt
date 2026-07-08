@@ -53,12 +53,12 @@ object UniquenessErrorMessages : BaseDiagnosticRendererFactory() {
                 )
                 map.put(
                     UniquenessErrors.INVALID_DUPLICATE_UNIQUE_ARGUMENT,
-                    "Invalid attempt to pass the same unique argument ''{0}'' twice.",
+                    "Attempt to pass the same unique argument ''{0}'' twice.",
                     PathRenderer
                 )
                 map.put(
                     UniquenessErrors.INVALID_OVERLAPPING_UNIQUE_ARGUMENTS,
-                    "Invalid attempt to pass unique argument ''{0}'' with overlapping unique argument ''{1}''.",
+                    "Attempt to pass unique argument ''{0}'' with overlapping unique argument ''{1}''.",
                     PathRenderer,
                     PathRenderer
                 )

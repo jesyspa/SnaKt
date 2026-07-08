@@ -1,0 +1,23 @@
+/receiver.kt: error: Invalid access to moved reference.
+
+/receiver.kt: error: Invalid access to moved reference.
+
+/receiver.kt: error: Receiver uniqueness mismatch: expected 'unique', actual 'shared'.
+
+/receiver.kt: error: Receiver uniqueness mismatch: expected 'unique', actual 'shared'.
+
+/receiver.kt: error: Invalid access to moved reference.
+
+/receiver.kt: error: Invalid access to moved reference.
+
+/receiver.kt: error: Invalid access to moved reference.
+
+/receiver.kt: error: Invalid access to moved reference.
+
+/receiver.kt: error: Attempt to pass the same unique argument 'a' twice.
+
+/receiver.kt: error: Attempt to pass the same unique argument 'a' twice.
+
+/receiver.kt: error: Invalid access to moved reference.
+
+/receiver.kt: error: Borrowed local value has moved field at exit: 'this.x'.

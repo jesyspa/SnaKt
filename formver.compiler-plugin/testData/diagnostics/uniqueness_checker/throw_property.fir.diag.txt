@@ -1,3 +1,0 @@
-/throw_property.kt: error: Throw uniqueness mismatch: cannot throw a 'shared local' value
-
-/throw_property.kt: error: Throw uniqueness mismatch: cannot throw a 'unique local' value

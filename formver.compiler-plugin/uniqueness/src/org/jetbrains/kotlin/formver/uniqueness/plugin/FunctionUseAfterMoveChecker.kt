@@ -15,8 +15,11 @@ import org.jetbrains.kotlin.formver.uniqueness.plugin.UniquenessErrors.INVALID_M
 
 /**
  * Resolves expressions that read paths from the uniqueness state at this CFG node.
+ *
+ * Currently the expressions are extracted from either [QualifiedAccessNode] and [ExitSafeCallNode], as both node types
+ * may represent a field access.
  */
-fun CFGNode<*>.resolveAccesses(): Sequence<FirExpression> =
+private fun CFGNode<*>.resolveAccesses(): Sequence<FirExpression> =
     when (this) {
         is QualifiedAccessNode -> sequenceOf(fir)
         is ExitSafeCallNode -> sequenceOf(fir)

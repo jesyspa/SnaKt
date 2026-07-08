@@ -7,7 +7,12 @@ fun nondet(): Boolean {
     return false
 }
 
-fun consume(@Unique x: Any) {}
+fun consume(x: @Unique Any) {}
+
+fun `assign local after accessing it as statement`(x: @Unique Any) {
+    x
+    val y: @Unique Any = x
+}
 
 // Var assignments
 
@@ -16,31 +21,31 @@ fun `assign shared`(x: Any) {
 
     y = x
 
-    consume(<!UNIQUENESS_VIOLATION!>y<!>)
+    consume(<!UNIQUENESS_MISMATCH!>y<!>)
 }
 
-fun `assign borrowed`(@Borrowed x: Any) {
-    @Borrowed var y: Any
+fun `assign borrowed`(x: @Borrowed Any) {
+    var y: @Borrowed Any
 
     y = x
 
-    consume(<!UNIQUENESS_VIOLATION!>y<!>)
+    consume(<!LOCALITY_MISMATCH, UNIQUENESS_MISMATCH!>y<!>)
 }
 
-fun `assign unique`(@Unique x: Any) {
-    @Unique var y: Any
+fun `assign unique`(x: @Unique Any) {
+    var y: @Unique Any
 
     y = x
 
     consume(y)
 }
 
-fun `assign unique-borrowed`(@Unique @Borrowed x: Any) {
-    @Unique @Borrowed var y: Any
+fun `assign unique-borrowed`(x: @Unique @Borrowed Any) {
+    var y: @Unique @Borrowed Any
 
     y = x
 
-    consume(<!UNIQUENESS_VIOLATION!>y<!>)
+    consume(<!LOCALITY_MISMATCH!>y<!>)
 }
 
 // Var declarations
@@ -48,37 +53,37 @@ fun `assign unique-borrowed`(@Unique @Borrowed x: Any) {
 fun `assign shared in declaration`(x: Any) {
     var y = x
 
-    consume(<!UNIQUENESS_VIOLATION!>y<!>)
+    consume(<!UNIQUENESS_MISMATCH!>y<!>)
 }
 
-fun `assign borrowed in declaration`(@Borrowed x: Any) {
-    @Borrowed var y = x
+fun `assign borrowed in declaration`(x: @Borrowed Any) {
+    var y: @Borrowed Any = x
 
-    consume(<!UNIQUENESS_VIOLATION!>y<!>)
+    consume(<!LOCALITY_MISMATCH, UNIQUENESS_MISMATCH!>y<!>)
 }
 
-fun `assign unique in unique declaration`(@Unique x: Any) {
-    @Unique var y = x
+fun `assign unique in unique declaration`(x: @Unique Any) {
+    var y: @Unique Any = x
 
     consume(y)
 }
 
-fun `assign unique in shared declaration`(@Unique x: Any) {
+fun `assign unique in shared declaration`(x: @Unique Any) {
     var y = x
 
-    consume(<!UNIQUENESS_VIOLATION!>y<!>)
+    consume(y)
 }
 
-fun `assign unique-borrowed in borrowed declaration`(@Unique @Borrowed x: Any) {
-    @Borrowed var y = x
+fun `assign unique-borrowed in borrowed declaration`(x: @Unique @Borrowed Any) {
+    var y: @Borrowed Any = x
 
-    consume(<!UNIQUENESS_VIOLATION!>y<!>)
+    consume(<!LOCALITY_MISMATCH, UNIQUENESS_MISMATCH!>y<!>)
 }
 
-fun `assign unique-borrowed in unique-borrowed declaration`(@Unique @Borrowed x: Any) {
-    @Unique @Borrowed var y = x
+fun `assign unique-borrowed in unique-borrowed declaration`(x: @Unique @Borrowed Any) {
+    var y: @Unique @Borrowed Any = x
 
-    consume(<!UNIQUENESS_VIOLATION!>y<!>)
+    consume(<!LOCALITY_MISMATCH!>y<!>)
 }
 
 // Assignment chaining
@@ -90,22 +95,22 @@ fun `chain shared assignments`(x: Any) {
     y = x
     z = y
 
-    consume(<!UNIQUENESS_VIOLATION!>z<!>)
+    consume(<!UNIQUENESS_MISMATCH!>z<!>)
 }
 
-fun `chain borrowed assignments`(@Borrowed x: Any) {
-    @Borrowed var y: Any
-    @Borrowed var z: Any
+fun `chain borrowed assignments`(x: @Borrowed Any) {
+    var y: @Borrowed Any
+    var z: @Borrowed Any
 
     y = x
     z = y
 
-    consume(<!UNIQUENESS_VIOLATION!>z<!>)
+    consume(<!LOCALITY_MISMATCH, UNIQUENESS_MISMATCH!>z<!>)
 }
 
-fun `chain unique assignments`(@Unique x: Any) {
-    @Unique var y: Any
-    @Unique var z: Any
+fun `chain unique assignments`(x: @Unique Any) {
+    var y: @Unique Any
+    var z: @Unique Any
 
     y = x
     z = y
@@ -113,19 +118,19 @@ fun `chain unique assignments`(@Unique x: Any) {
     consume(z)
 }
 
-fun `chain unique-borrowed assignments`(@Unique @Borrowed x: Any) {
-    @Unique @Borrowed var y: Any
-    @Unique @Borrowed var z: Any
+fun `chain unique-borrowed assignments`(x: @Unique @Borrowed Any) {
+    var y: @Unique @Borrowed Any
+    var z: @Unique @Borrowed Any
 
     y = x
     z = y
 
-    consume(<!UNIQUENESS_VIOLATION!>z<!>)
+    consume(<!LOCALITY_MISMATCH!>z<!>)
 }
 
 // Conditional assignments
 
-fun `assign unique or shared`(@Unique x: Any, y: Any) {
+fun `assign unique or shared`(x: @Unique Any, y: Any) {
     var z: Any;
 
     if (nondet()) {
@@ -134,17 +139,33 @@ fun `assign unique or shared`(@Unique x: Any, y: Any) {
         z = y
     }
 
-    consume(<!UNIQUENESS_VIOLATION!>z<!>)
+    consume(<!UNIQUENESS_MISMATCH!>z<!>)
+}
+
+fun `move unique and then reassign`(x: @Unique Any) {
+    var y = x
+    var z = y
+    y = 1
+    consume(y)
 }
 
 // Looping assignments
 
-fun `assign unique to shared in loop`(@Unique x: Any, @Unique y: Any) {
-    @Unique var z: Any = y;
+fun `assign unique to shared in loop`(x: @Unique Any, y: @Unique Any) {
+    var z = y;
 
     while (nondet()) {
-        z = <!UNIQUENESS_VIOLATION!>x<!>
+        z = <!INVALID_MOVED_ACCESS!>x<!>
     }
 
     consume(z)
+}
+
+fun `assign local in if`(x: @Unique Any) {
+    val y: @Unique Any = if (false) {
+        val y: @Unique Any = x
+        y
+    } else {
+        x
+    }
 }

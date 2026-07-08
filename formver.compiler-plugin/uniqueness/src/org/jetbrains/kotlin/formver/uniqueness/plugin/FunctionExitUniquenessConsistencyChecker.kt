@@ -32,6 +32,8 @@ val FirBasedSymbol<*>.locality: Locality
 
 /**
  * Checks that local roots do not contain moved paths when a function exits.
+ *
+ * TODO: Do not consider locally caught `throw`s as exit operations.
  */
 object FunctionExitUniquenessConsistencyChecker : FirFunctionChecker( MppCheckerKind.Common) {
     context(context: CheckerContext, reporter: DiagnosticReporter)

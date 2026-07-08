@@ -36,10 +36,10 @@ digraph test {
 
     subgraph cluster_0 {
         color=red
-        0 [label=< <TABLE BORDER="0"><TR><TD>Enter function test</TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">Initial:<BR/>null<BR/></TD></TR></TABLE> > style="filled" fillcolor=red];
+        0 [label=< <TABLE BORDER="0"><TR><TD>Enter function test</TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">Before:<BR/>null<BR/><BR/>After:<BR/>a unique<BR/></TD></TR></TABLE> > style="filled" fillcolor=red];
         subgraph cluster_1 {
             color=blue
-            1 [label=< <TABLE BORDER="0"><TR><TD>Enter block</TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">Before:<BR/>null<BR/><BR/>After:<BR/>a unique global<BR/>    first unique global<BR/>    second unique global<BR/></TD></TR></TABLE> >];
+            1 [label="Enter block"];
             subgraph cluster_2 {
                 color=blue
                 2 [label="Enter when"];
@@ -66,7 +66,7 @@ digraph test {
                     12 [label="Enter block"];
                     13 [label="Access variable R|<local>/a|"];
                     14 [label="Access variable R|/A.second|"];
-                    15 [label=< <TABLE BORDER="0"><TR><TD>Variable declaration: lvar y: R|B|</TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">Before:<BR/>a unique global<BR/>    first unique global<BR/>    second unique global<BR/><BR/>After:<BR/>a unique global<BR/>    first unique global<BR/>    second moved<BR/>y unique global<BR/></TD></TR></TABLE> >];
+                    15 [label=< <TABLE BORDER="0"><TR><TD>Variable declaration: lvar y: R|UniquenessAttribute B|</TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">Before:<BR/>a unique<BR/><BR/>After:<BR/>a unique<BR/>    second moved<BR/>y unique<BR/></TD></TR></TABLE> >];
                     16 [label="Exit block"];
                 }
                 17 [label="Exit when branch result"];
@@ -76,18 +76,18 @@ digraph test {
                     19 [label="Enter block"];
                     20 [label="Access variable R|<local>/a|"];
                     21 [label="Access variable R|/A.first|"];
-                    22 [label=< <TABLE BORDER="0"><TR><TD>Variable declaration: lvar x: R|B|</TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">Before:<BR/>a unique global<BR/>    first unique global<BR/>    second unique global<BR/><BR/>After:<BR/>x shared global<BR/>a unique global<BR/>    first moved<BR/></TD></TR></TABLE> >];
+                    22 [label=< <TABLE BORDER="0"><TR><TD>Variable declaration: lvar x: R|UniquenessAttribute B|</TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">Before:<BR/>a unique<BR/><BR/>After:<BR/>a unique<BR/>    first moved<BR/>x unique<BR/></TD></TR></TABLE> >];
                     23 [label="Exit block"];
                 }
                 24 [label="Exit when branch result"];
-                25 [label=< <TABLE BORDER="0"><TR><TD>Exit when</TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">Merge:<BR/>x shared global<BR/>a unique global<BR/>    first moved<BR/>    second moved<BR/>y unique global<BR/></TD></TR></TABLE> >];
+                25 [label=< <TABLE BORDER="0"><TR><TD>Exit when</TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">Merge:<BR/>a unique<BR/>    first moved<BR/>    second moved<BR/>x unique<BR/>y unique<BR/></TD></TR></TABLE> >];
             }
             26 [label="Access variable R|<local>/a|"];
-            27 [label="Jump: ^test R|<local>/a|"];
+            27 [label=< <TABLE BORDER="0"><TR><TD>Jump: ^test R|&lt;local&gt;/a|</TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">Before:<BR/>a unique<BR/>    first moved<BR/>    second moved<BR/>x unique<BR/>y unique<BR/><BR/>After:<BR/>a moved<BR/>    first moved<BR/>    second moved<BR/>x unique<BR/>y unique<BR/></TD></TR></TABLE> >];
             28 [label="Stub" style="filled" fillcolor=gray];
             29 [label="Exit block" style="filled" fillcolor=gray];
         }
-        30 [label=< <TABLE BORDER="0"><TR><TD>Exit function test</TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">Final:<BR/>x shared global<BR/>a unique global<BR/>    first moved<BR/>    second moved<BR/>y unique global<BR/></TD></TR></TABLE> > style="filled" fillcolor=red];
+        30 [label=< <TABLE BORDER="0"><TR><TD>Exit function test</TD></TR><TR><TD ALIGN="LEFT" BALIGN="LEFT">Final:<BR/>a moved<BR/>    first moved<BR/>    second moved<BR/>x unique<BR/>y unique<BR/></TD></TR></TABLE> > style="filled" fillcolor=red];
     }
     0 -> {1};
     1 -> {2};
@@ -122,3 +122,8 @@ digraph test {
     29 -> {30} [style=dotted];
 
 }
+
+
+/dump_cfg.kt: error: Escaping value has moved field: 'a.first'.
+
+/dump_cfg.kt: error: Escaping value has moved field: 'a.second'.

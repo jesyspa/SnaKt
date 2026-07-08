@@ -1,0 +1,7 @@
+/leak.kt: error: Borrowed local value has moved field at exit: 'x.x'.
+
+/leak.kt: error: Borrowed local value has moved field at exit: 'x.x'.
+
+/leak.kt: error: Borrowed local value has moved field at exit: 'x.w'.
+
+/leak.kt: error: Borrowed local value has moved field at exit: 'x.w'.

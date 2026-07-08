@@ -1,0 +1,15 @@
+/aliasing.kt: error: Invalid access to moved reference.
+
+/aliasing.kt: error: Invalid access to moved reference.
+
+/aliasing.kt: error: Invalid access to moved reference.
+
+/aliasing.kt: error: Invalid access to moved reference.
+
+/aliasing.kt: error: Escaping value has moved field: 'nested.box'.
+
+/aliasing.kt: error: Escaping value has moved field: 'nested.box'.
+
+/aliasing.kt: error: Escaping value has moved field: 'nested.box.item'.
+
+/aliasing.kt: error: Escaping value has moved field: 'box.item'.

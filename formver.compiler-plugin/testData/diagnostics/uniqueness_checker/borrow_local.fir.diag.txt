@@ -1,1 +1,0 @@
-/borrow_local.kt: error: Argument uniqueness mismatch: expected 'shared local', actual 'moved'.
