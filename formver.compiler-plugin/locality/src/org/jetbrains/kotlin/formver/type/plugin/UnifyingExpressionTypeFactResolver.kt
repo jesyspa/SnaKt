@@ -9,6 +9,7 @@ import org.jetbrains.kotlin.fir.analysis.checkers.context.CheckerContext
 import org.jetbrains.kotlin.fir.caches.FirCachesFactory
 import org.jetbrains.kotlin.fir.expressions.FirBlock
 import org.jetbrains.kotlin.fir.expressions.FirCatch
+import org.jetbrains.kotlin.fir.expressions.FirElvisExpression
 import org.jetbrains.kotlin.fir.expressions.FirExpression
 import org.jetbrains.kotlin.fir.expressions.FirOperation
 import org.jetbrains.kotlin.fir.expressions.FirTryExpression
@@ -36,12 +37,21 @@ fun FirExpression.removeCast(): FirExpression =
 /**
  * Collects all the tails of a conditional expression. Note that these tails do not include the expression itself. If
  * the expression is not conditional it returns an empty sequence.
+ *
+ * TODO: Extend this strategy to consider short-circuiting boolean operators as conditional expressions. Currently this
+ *  is not a problem because these kind of operations cannot return references, which is actually what we are interested
+ *  in for our uniqueness and locality analyses.
  */
 fun FirExpression.collectTails(): Sequence<FirExpression> =
     when (val expression = unwrapExpression()) {
         is FirWhenExpression ->
             sequence {
                 yieldAll(expression.branches.map(FirWhenBranch::result))
+            }
+        is FirElvisExpression ->
+            sequence {
+                yield(expression.lhs)
+                yield(expression.rhs)
             }
         is FirTryExpression ->
             sequence {

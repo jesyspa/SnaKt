@@ -15,17 +15,17 @@ import org.jetbrains.kotlin.fir.types.ConeErrorType
 import org.jetbrains.kotlin.formver.type.plugin.SymbolTypeFactResolver
 
 fun FirReceiverParameterSymbol.resolveUniqueness(): Uniqueness =
-    resolvedType.defaultUniqueness
+    resolvedType.scopeUniqueness
 
 context(context: CheckerContext)
 fun FirVariableSymbol<*>.resolveUniqueness(): Uniqueness {
     if (resolvedReturnType is ConeErrorType) return Uniqueness.Shared
 
     if (resolvedReturnTypeRef.source?.kind !is KtFakeSourceElementKind.ImplicitTypeRef) {
-        return resolvedReturnType.defaultUniqueness
+        return resolvedReturnType.scopeUniqueness
     }
 
-    return resolvedInitializer?.resolveUniqueness() ?: Uniqueness.Shared
+    return resolvedInitializer?.resolveAccessUniqueness() ?: Uniqueness.Shared
 }
 
 object ParameterUniquenessResolver: SymbolTypeFactResolver<Uniqueness, FirValueParameterSymbol> {

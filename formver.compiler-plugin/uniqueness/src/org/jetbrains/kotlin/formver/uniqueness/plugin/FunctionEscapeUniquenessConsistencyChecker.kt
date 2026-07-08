@@ -61,7 +61,10 @@ private fun reportEscapeUniquenessInconsistency(
 }
 
 /**
- * Checks that escaping expressions do not contain moved paths.
+ * Checks that escaping references do not contain moved paths.
+ *
+ * An escaping reference can be defined as a reference leaving the scope of the current function. If a subpath of such
+ * reference is moved this represents an inconsistency.
  */
 object FunctionEscapeUniquenessConsistencyChecker : FirFunctionChecker(MppCheckerKind.Common) {
     context(context: CheckerContext, reporter: DiagnosticReporter)
@@ -72,13 +75,15 @@ object FunctionEscapeUniquenessConsistencyChecker : FirFunctionChecker(MppChecke
         for (node in graph.nodes) {
             if (node.isDead) continue
 
-            val inputUniquenessState = uniquenessStateFlows.readInputUniquenessStateOf(node) ?: EmptyUniquenessState
+            val inputUniquenessState = lazy {
+                uniquenessStateFlows.readInputUniquenessStateOf(node) ?: EmptyUniquenessState
+            }
 
             for (escapingExpression in node.resolveEscapes()) {
                 val escapeAccessState = escapingExpression.resolveAccessState()
 
                 for (accessPath in escapeAccessState.enumeratePaths()) {
-                    val uniquenessSubstate = inputUniquenessState.find(accessPath) ?: continue
+                    val uniquenessSubstate = inputUniquenessState.value.find(accessPath) ?: continue
 
                     for (movedPath in uniquenessSubstate.enumerateInconsistentPaths()) {
                         reportEscapeUniquenessInconsistency(
