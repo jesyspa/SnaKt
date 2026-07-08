@@ -60,14 +60,14 @@ class GraphUniquenessStatesAnalyzer(
             leftState.join(rightState)
         }
 
-    private fun UniquenessStateFlow.ensure(): UniquenessState =
+    private fun UniquenessStateFlow.getOrInitialize(): UniquenessState =
         this[Unit] ?: initialState
 
     override fun visitNode(
         node: CFGNode<*>,
         data: PathAwareUniquenessStateFlow
     ): PathAwareUniquenessStateFlow {
-        return data.transformValues { data -> data.put(Unit, data.ensure()) }
+        return data.transformValues { data -> data.put(Unit, data.getOrInitialize()) }
     }
 
     override fun visitVariableDeclarationNode(
@@ -86,7 +86,7 @@ class GraphUniquenessStatesAnalyzer(
             val rightAccessState = initializer?.resolveAccessState() ?: EmptyAccessState
 
             return data.transformValues { data ->
-                val uniquenessState = data.ensure()
+                val uniquenessState = data.getOrInitialize()
                 var newUniquenessState = uniquenessState
 
                 if (initializer != null) {
@@ -118,7 +118,7 @@ class GraphUniquenessStatesAnalyzer(
             val leftAccessState = leftValue.resolveAccessState()
 
             return data.transformValues { data ->
-                var newUniquenessState = data.ensure()
+                var newUniquenessState = data.getOrInitialize()
                 val leftAccessPaths = leftAccessState.enumeratePaths()
                 val rightAccessState = rightValue.resolveAccessState()
 
@@ -144,7 +144,7 @@ class GraphUniquenessStatesAnalyzer(
 
         with(context) {
             return data.transformValues { data ->
-                var newUniquenessState = data.ensure()
+                var newUniquenessState = data.getOrInitialize()
 
                 // NOTE: `allReceiverExpressions` also includes context arguments.
                 for (receiver in call.allReceiverExpressions) {
@@ -168,7 +168,7 @@ class GraphUniquenessStatesAnalyzer(
 
         with(context) {
             return data.transformValues { data ->
-                var newUniquenessState = data.ensure()
+                var newUniquenessState = data.getOrInitialize()
                 val explicitReceiver = call.explicitReceiver
                 val receiverParameterSymbol = call.toResolvedCallableSymbol()?.receiverParameterSymbol
 
@@ -195,7 +195,7 @@ class GraphUniquenessStatesAnalyzer(
             is FirReturnExpression -> {
                 with (context) {
                     data.transformValues { data ->
-                        var newUniquenessState = data.ensure()
+                        var newUniquenessState = data.getOrInitialize()
                         val resultAccessState = jumpExpression.result.resolveAccessState()
                         newUniquenessState = resultAccessState.move(newUniquenessState)
 
@@ -215,7 +215,7 @@ class GraphUniquenessStatesAnalyzer(
 
         return with (context) {
             data.transformValues { data ->
-                var newUniquenessState = data.ensure()
+                var newUniquenessState = data.getOrInitialize()
                 val exceptionAccessState = throwExpression.exception.resolveAccessState()
                 newUniquenessState = exceptionAccessState.move(newUniquenessState)
 
