@@ -1,1 +1,0 @@
-/pass_local_argument.kt: error: Argument uniqueness mismatch: expected 'unique global', actual 'moved'.

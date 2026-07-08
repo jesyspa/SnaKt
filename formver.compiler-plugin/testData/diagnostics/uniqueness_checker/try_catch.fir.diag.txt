@@ -1,0 +1,15 @@
+/try_catch.kt: error: Invalid access to moved reference.
+
+/try_catch.kt: error: Invalid access to moved reference.
+
+/try_catch.kt: error: Invalid access to moved reference.
+
+/try_catch.kt: error: Invalid access to moved reference.
+
+/try_catch.kt: error: Invalid access to moved reference.
+
+/try_catch.kt: error: Invalid access to moved reference.
+
+/try_catch.kt: error: Escaping value has moved field: 'b.y'.
+
+/try_catch.kt: error: Invalid access to moved reference.

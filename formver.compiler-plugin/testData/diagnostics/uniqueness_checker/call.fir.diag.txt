@@ -1,0 +1,69 @@
+/call.kt: error: Invalid attempt to pass unique argument 'a.y' with overlapping unique argument 'a'.
+
+/call.kt: error: Invalid attempt to pass unique argument 'a' with overlapping unique argument 'a.y'.
+
+/call.kt: error: Invalid access to moved reference.
+
+/call.kt: error: Invalid access to moved reference.
+
+/call.kt: error: Argument locality mismatch: expected 'global', actual 'local'.
+
+/call.kt: error: Argument locality mismatch: expected 'global', actual 'local'.
+
+/call.kt: error: Invalid access to moved reference.
+
+/call.kt: error: Invalid access to moved reference.
+
+/call.kt: error: Argument uniqueness mismatch: expected 'unique', actual 'shared'.
+
+/call.kt: error: Argument locality mismatch: expected 'global', actual 'local'.
+
+/call.kt: error: Argument uniqueness mismatch: expected 'unique', actual 'unknown'.
+
+/call.kt: error: Argument locality mismatch: expected 'global', actual 'local'.
+
+/call.kt: error: Argument uniqueness mismatch: expected 'unique', actual 'shared'.
+
+/call.kt: error: Argument locality mismatch: expected 'global', actual 'local'.
+
+/call.kt: error: Argument uniqueness mismatch: expected 'unique', actual 'unknown'.
+
+/call.kt: error: Argument locality mismatch: expected 'global', actual 'local'.
+
+/call.kt: error: Argument locality mismatch: expected 'global', actual 'local'.
+
+/call.kt: error: Invalid attempt to pass the same unique argument 'a' twice.
+
+/call.kt: error: Invalid attempt to pass the same unique argument 'a' twice.
+
+/call.kt: error: Borrowed local value has moved field at exit: 'z.y.x'.
+
+/call.kt: error: Borrowed local value has moved field at exit: 'z.y.x'.
+
+/call.kt: error: Escaping value has moved field: 'z.y'.
+
+/call.kt: error: Escaping value has moved field: 'z.y'.
+
+/call.kt: error: Assignment uniqueness mismatch: expected 'unique', actual 'shared'.
+
+/call.kt: error: Escaping value has moved field: 'z.y'.
+
+/call.kt: error: Escaping value has moved field: 'z.y'.
+
+/call.kt: error: Argument uniqueness mismatch: expected 'unique', actual 'shared'.
+
+/call.kt: error: Borrowed local value has moved field at exit: 'z.y.x'.
+
+/call.kt: error: Argument uniqueness mismatch: expected 'unique', actual 'unknown'.
+
+/call.kt: error: Borrowed local value has moved field at exit: 'z.y.x'.
+
+/call.kt: error: Escaping value has moved field: 'z.y'.
+
+/call.kt: error: Escaping value has moved field: 'z.y'.
+
+/call.kt: error: Escaping value has moved field: 'node.next'.
+
+/call.kt: error: Escaping value has moved field: 'node.next'.
+
+/call.kt: error: Escaping value has moved field: 'node.next'.

@@ -1,0 +1,21 @@
+/receiver.kt: error: Invalid access to moved reference.
+
+/receiver.kt: error: Invalid access to moved reference.
+
+/receiver.kt: error: Receiver uniqueness mismatch: expected 'unique', actual 'shared'.
+
+/receiver.kt: error: Receiver uniqueness mismatch: expected 'unique', actual 'shared'.
+
+/receiver.kt: error: Invalid access to moved reference.
+
+/receiver.kt: error: Invalid access to moved reference.
+
+/receiver.kt: error: Invalid access to moved reference.
+
+/receiver.kt: error: Invalid access to moved reference.
+
+/receiver.kt: error: Invalid attempt to pass the same unique argument 'a' twice.
+
+/receiver.kt: error: Invalid attempt to pass the same unique argument 'a' twice.
+
+/receiver.kt: error: Invalid access to moved reference.

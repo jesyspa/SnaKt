@@ -1,0 +1,19 @@
+/operator.kt: error: Invalid access to moved reference.
+
+/operator.kt: error: Invalid access to moved reference.
+
+/operator.kt: error: Invalid access to moved reference.
+
+/operator.kt: error: Invalid access to moved reference.
+
+/operator.kt: error: Invalid access to moved reference.
+
+/operator.kt: error: Invalid access to moved reference.
+
+/operator.kt: error: Invalid access to moved reference.
+
+/operator.kt: error: Invalid access to moved reference.
+
+/operator.kt: error: Invalid access to moved reference.
+
+/operator.kt: error: Invalid access to moved reference.
