@@ -1,1 +1,0 @@
-/consume_deeply_nested.kt: error: Argument uniqueness mismatch: partial type 'moved' is inconsistent with parent type 'unique global'.

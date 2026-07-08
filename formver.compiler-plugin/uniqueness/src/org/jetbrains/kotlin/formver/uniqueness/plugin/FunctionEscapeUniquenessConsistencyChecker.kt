@@ -65,6 +65,8 @@ private fun reportEscapeUniquenessInconsistency(
  *
  * An escaping reference can be defined as a reference leaving the scope of the current function. If a subpath of such
  * reference is moved this represents an inconsistency.
+ *
+ * TODO: Do not consider locally caught `throw`s as escape operations.
  */
 object FunctionEscapeUniquenessConsistencyChecker : FirFunctionChecker(MppCheckerKind.Common) {
     context(context: CheckerContext, reporter: DiagnosticReporter)

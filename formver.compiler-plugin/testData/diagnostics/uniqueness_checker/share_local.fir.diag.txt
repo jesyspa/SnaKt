@@ -1,3 +1,0 @@
-/share_local.kt: error: Argument uniqueness mismatch: expected 'shared global', actual 'shared local'.
-
-/share_local.kt: error: Argument uniqueness mismatch: expected 'shared global', actual 'unique local'.

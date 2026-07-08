@@ -1,0 +1,11 @@
+/throw.kt: error: Throw locality mismatch: expected 'global', actual 'local'.
+
+/throw.kt: error: Throw locality mismatch: expected 'global', actual 'local'.
+
+/throw.kt: error: Borrowed local value has moved field at exit: 'a.y'.
+
+/throw.kt: error: Borrowed local value has moved field at exit: 'a.y'.
+
+/throw.kt: error: Escaping value has moved field: 'a.y'.
+
+/throw.kt: error: Escaping value has moved field: 'a.y'.
