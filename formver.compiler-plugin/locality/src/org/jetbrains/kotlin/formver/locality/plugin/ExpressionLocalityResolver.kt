@@ -10,12 +10,18 @@ import org.jetbrains.kotlin.fir.analysis.checkers.context.CheckerContext
 import org.jetbrains.kotlin.fir.caches.firCachesFactory
 import org.jetbrains.kotlin.fir.expressions.FirAnonymousFunctionExpression
 import org.jetbrains.kotlin.fir.expressions.FirAnonymousObjectExpression
+import org.jetbrains.kotlin.fir.expressions.FirCall
+import org.jetbrains.kotlin.fir.expressions.FirCallableReferenceAccess
 import org.jetbrains.kotlin.fir.expressions.FirExpression
+import org.jetbrains.kotlin.fir.expressions.FirPropertyAccessExpression
 import org.jetbrains.kotlin.fir.expressions.FirQualifiedAccessExpression
 import org.jetbrains.kotlin.fir.expressions.FirReturnExpression
+import org.jetbrains.kotlin.fir.expressions.FirThisReceiverExpression
 import org.jetbrains.kotlin.fir.expressions.FirThrowExpression
+import org.jetbrains.kotlin.fir.expressions.toResolvedCallableSymbol
 import org.jetbrains.kotlin.fir.extensions.FirExtensionSessionComponent
 import org.jetbrains.kotlin.fir.references.symbol
+import org.jetbrains.kotlin.fir.references.toResolvedCallableSymbol
 import org.jetbrains.kotlin.fir.resolve.dfa.controlFlowGraph
 import org.jetbrains.kotlin.fir.symbols.impl.FirCallableSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirReceiverParameterSymbol
@@ -47,9 +53,13 @@ private object TerminalLocalityResolver : ExpressionTypeFactResolver<Locality> {
             }
 
             is FirQualifiedAccessExpression ->
-                when (val symbol = expression.calleeReference.symbol) {
-                    is FirCallableSymbol<*> -> symbol.resolveDeclaredLocality()
-                    is FirReceiverParameterSymbol -> symbol.resolveDeclaredLocality()
+                when (expression) {
+                    is FirPropertyAccessExpression, is FirThisReceiverExpression, is FirCallableReferenceAccess ->
+                        when (val symbol = expression.calleeReference.symbol) {
+                            is FirCallableSymbol<*> -> symbol.resolveLocality()
+                            is FirReceiverParameterSymbol -> symbol.resolveLocality()
+                            else -> Locality.Global
+                        }
                     else -> Locality.Global
                 }
 

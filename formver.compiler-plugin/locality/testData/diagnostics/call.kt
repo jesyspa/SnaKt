@@ -119,3 +119,14 @@ fun @Borrowed A.`pass local this as explicit local target`() {
 fun `pass local as local argument in local property initializer`(x: @Borrowed A) {
     val y = borrow(x)
 }
+
+fun `capturing local function call result remains global`(x: @Borrowed A) {
+    fun produce(): A {
+        borrow(x)
+        return A()
+    }
+
+    share(produce())
+
+    val y: A = produce()
+}
