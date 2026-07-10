@@ -1,0 +1,29 @@
+/closure_capture.kt: error: Return locality mismatch: expected 'global', actual 'local'.
+
+/closure_capture.kt: error: Initializer locality mismatch: expected 'global', actual 'local'.
+
+/closure_capture.kt: warning: No cast needed.
+
+/closure_capture.kt: error: Receiver locality mismatch: expected 'global', actual 'local'.
+
+/closure_capture.kt: error: Argument locality mismatch: expected 'global', actual 'local'.
+
+/closure_capture.kt: error: Argument locality mismatch: expected 'global', actual 'local'.
+
+/closure_capture.kt: error: Assignment locality mismatch: expected 'global', actual 'local'.
+
+/closure_capture.kt: error: Assignment locality mismatch: expected 'global', actual 'local'.
+
+/closure_capture.kt: error: Initializer locality mismatch: expected 'global', actual 'local'.
+
+/closure_capture.kt: error: Initializer locality mismatch: expected 'global', actual 'local'.
+
+/closure_capture.kt: error: Argument locality mismatch: expected 'global', actual 'local'.
+
+/closure_capture.kt: error: Argument locality mismatch: expected 'global', actual 'local'.
+
+/closure_capture.kt: error: Return locality mismatch: expected 'global', actual 'local'.
+
+/closure_capture.kt: error: Argument locality mismatch: expected 'global', actual 'local'.
+
+/closure_capture.kt: error: Throw locality mismatch: expected 'global', actual 'local'.

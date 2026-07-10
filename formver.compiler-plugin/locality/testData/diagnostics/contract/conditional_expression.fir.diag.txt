@@ -1,0 +1,7 @@
+/conditional_expression.kt: error: Initializer locality contract mismatch: expected '[local]', actual '[global]'.
+
+/conditional_expression.kt: error: Initializer locality contract mismatch: expected '[local, local]', actual '[global, local]'.
+
+/conditional_expression.kt: error: Initializer locality contract mismatch: expected '[local]', actual '[global]'.
+
+/conditional_expression.kt: error: Initializer locality contract mismatch: expected '[local]', actual '[global]'.

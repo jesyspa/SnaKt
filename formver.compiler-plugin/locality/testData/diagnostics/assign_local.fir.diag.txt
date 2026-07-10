@@ -1,51 +1,7 @@
 /assign_local.kt: error: Assignment locality mismatch: expected 'global', actual 'local'.
 
-/assign_local.kt: error: Unable to capture outer local declaration from 'anonymous'.
-
-/assign_local.kt: error: Initializer locality mismatch: expected 'global', actual 'local'.
-
-/assign_local.kt: error: Unable to capture outer local declaration from 'anonymous'.
-
-/assign_local.kt: error: Initializer locality mismatch: expected 'global', actual 'local'.
-
-/assign_local.kt: error: Assignment locality mismatch: expected 'global', actual 'local'.
-
-/assign_local.kt: error: Initializer locality mismatch: expected 'global', actual 'local'.
-
-/assign_local.kt: error: Assignment locality mismatch: expected 'global', actual 'local'.
-
-/assign_local.kt: error: Initializer locality mismatch: expected 'global', actual 'local'.
-
-/assign_local.kt: error: Initializer locality mismatch: expected 'global', actual 'local'.
-
-/assign_local.kt: error: Initializer locality mismatch: expected 'global', actual 'local'.
-
-/assign_local.kt: error: Assignment locality mismatch: expected 'global', actual 'local'.
-
-/assign_local.kt: error: Assignment locality mismatch: expected 'global', actual 'local'.
-
-/assign_local.kt: error: Assignment locality mismatch: expected 'global', actual 'local'.
-
-/assign_local.kt: error: Unable to capture outer local declaration from 'anonymous'.
-
-/assign_local.kt: error: Assignment locality mismatch: expected 'global', actual 'local'.
-
-/assign_local.kt: error: Unable to capture outer local declaration from 'anonymous'.
-
-/assign_local.kt: error: Unable to capture outer local declaration from 'anonymous'.
-
-/assign_local.kt: error: Initializer locality mismatch: expected 'global', actual 'local'.
-
-/assign_local.kt: error: Unable to capture outer local declaration from 'anonymous'.
-
-/assign_local.kt: error: Assignment locality mismatch: expected 'global', actual 'local'.
-
-/assign_local.kt: error: Initializer locality mismatch: expected 'global', actual 'local'.
-
 /assign_local.kt: error: Unresolved reference 'a'.
 
 /assign_local.kt: error: Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
 
 /assign_local.kt: error: Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-
-/assign_local.kt: error: Assignment locality mismatch: expected 'global', actual 'local'.
