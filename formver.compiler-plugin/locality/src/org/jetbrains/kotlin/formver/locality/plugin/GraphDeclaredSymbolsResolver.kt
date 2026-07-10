@@ -11,6 +11,7 @@ import org.jetbrains.kotlin.fir.caches.firCachesFactory
 import org.jetbrains.kotlin.fir.declarations.FirFunction
 import org.jetbrains.kotlin.fir.extensions.FirExtensionSessionComponent
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.ControlFlowGraph
+import org.jetbrains.kotlin.fir.resolve.dfa.cfg.LocalFunctionDeclarationNode
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.VariableDeclarationNode
 import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
 import org.jetbrains.kotlin.utils.addIfNotNull
@@ -33,6 +34,7 @@ class GraphDeclaredSymbolsResolver(session: FirSession) : FirExtensionSessionCom
 
         when (val declaration = graph.declaration) {
             is FirFunction -> {
+                declarations.add(declaration.symbol)
                 declarations.addIfNotNull(declaration.receiverParameter?.symbol)
                 declaration.contextParameters.mapTo(declarations) { it.symbol }
                 declaration.valueParameters.mapTo(declarations) { it.symbol }
@@ -42,7 +44,10 @@ class GraphDeclaredSymbolsResolver(session: FirSession) : FirExtensionSessionCom
         }
 
         graph.nodes
-            .mapNotNull { node -> (node as? VariableDeclarationNode)?.fir?.symbol }
+            .mapNotNull { node ->
+                (node as? VariableDeclarationNode)?.fir?.symbol ?:
+                (node as? LocalFunctionDeclarationNode)?.fir?.symbol
+            }
             .forEach(declarations::add)
 
         return declarations
