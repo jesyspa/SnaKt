@@ -9,8 +9,12 @@ import org.jetbrains.kotlin.fir.FirSession
 import org.jetbrains.kotlin.fir.analysis.checkers.context.CheckerContext
 import org.jetbrains.kotlin.fir.caches.firCachesFactory
 import org.jetbrains.kotlin.fir.extensions.FirExtensionSessionComponent
+import org.jetbrains.kotlin.fir.references.symbol
+import org.jetbrains.kotlin.fir.resolve.dfa.cfg.CallableReferenceNode
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.ControlFlowGraph
+import org.jetbrains.kotlin.fir.resolve.dfa.cfg.QualifiedAccessNode
 import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
+import org.jetbrains.kotlin.utils.addIfNotNull
 
 class GraphCapturedSymbolsResolver(session: FirSession) : FirExtensionSessionComponent(session) {
     companion object {
@@ -29,10 +33,24 @@ class GraphCapturedSymbolsResolver(session: FirSession) : FirExtensionSessionCom
 
     context(context: CheckerContext)
     private fun extractCapturedSymbolsOf(graph: ControlFlowGraph): Set<FirBasedSymbol<*>> {
-        val declaredSymbols = graph.resolveDeclaredSymbols()
-        val usedSymbols = graph.resolveUsedSymbols()
+        val capturedSymbols = mutableSetOf<FirBasedSymbol<*>>()
 
-        return usedSymbols - declaredSymbols
+        for (node in graph.nodes) {
+            when (node) {
+                is QualifiedAccessNode ->
+                    capturedSymbols.addIfNotNull(node.fir.calleeReference.symbol)
+
+                is CallableReferenceNode ->
+                    capturedSymbols.addIfNotNull(node.fir.calleeReference.symbol)
+
+                else -> { }
+            }
+        }
+
+        graph.subGraphs.flatMapTo(capturedSymbols, { it.resolveCapturedSymbols() })
+        val declaredSymbols = graph.resolveDeclaredSymbols()
+
+        return capturedSymbols - declaredSymbols
     }
 }
 
