@@ -52,6 +52,17 @@ class GraphScopeLocalityResolver(session: FirSession) : FirExtensionSessionCompo
 private val FirSession.graphScopeLocalityResolver: GraphScopeLocalityResolver
     by FirSession.sessionComponentAccessor()
 
+/**
+ * Resolves locality of this graph's scope from captured symbols.
+ *
+ * The scope is [Locality.Local] when at least one captured symbol resolves to local locality; otherwise the scope is
+ * [Locality.Global].
+ *
+ * @param context Is for resolving captured symbols with [resolveCapturedSymbols] and for accessing this session's
+ *  [GraphScopeLocalityResolver].
+ *
+ * The result is memoized by a session cache.
+ */
 context(context: CheckerContext)
 fun ControlFlowGraph.resolveScopeLocality(): Locality =
     context.session.graphScopeLocalityResolver.resolveScopeLocalityOf(this, context)

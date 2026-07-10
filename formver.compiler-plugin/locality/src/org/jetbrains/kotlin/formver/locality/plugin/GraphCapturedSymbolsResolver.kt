@@ -16,6 +16,11 @@ import org.jetbrains.kotlin.fir.resolve.dfa.cfg.QualifiedAccessNode
 import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
 import org.jetbrains.kotlin.utils.addIfNotNull
 
+/**
+ * Resolver for the captured symbols of a graph.
+ *
+ * @param session The session argument for initializing the [FirExtensionSessionComponent] and the cache.
+ */
 class GraphCapturedSymbolsResolver(session: FirSession) : FirExtensionSessionComponent(session) {
     companion object {
         fun getFactory(): Factory =
@@ -57,6 +62,18 @@ class GraphCapturedSymbolsResolver(session: FirSession) : FirExtensionSessionCom
 private val FirSession.graphCapturedSymbolsResolver: GraphCapturedSymbolsResolver
     by FirSession.sessionComponentAccessor()
 
+/**
+ * Resolves symbols captured by [this] graph.
+ *
+ * Captures are computed as symbols used by graph accesses (including nested sub-graphs in the current implementation)
+ * minus symbols declared by [resolveDeclaredSymbols].
+ *
+ * @param context Is used for resolving the declared symbols with [resolveDeclaredSymbols] and to access this session's
+ *  [GraphCapturedSymbolsResolver].
+ *
+ * The result is memoized by a session cache bound by the [GraphCapturedSymbolsResolver] corresponding to [context]s
+ * session.
+ */
 context(context: CheckerContext)
 fun ControlFlowGraph.resolveCapturedSymbols(): Set<FirBasedSymbol<*>> =
     context.session.graphCapturedSymbolsResolver.resolveCapturedSymbolsOf(this, context)

@@ -52,6 +52,16 @@ class GraphDeclaredSymbolsResolver(session: FirSession) : FirExtensionSessionCom
 private val FirSession.graphDeclaredSymbolsResolver: GraphDeclaredSymbolsResolver
     by FirSession.sessionComponentAccessor()
 
+/**
+ * Resolves symbols declared directly by [this] graph.
+ *
+ * For function graphs this includes receiver, context, and value parameters, and for all graphs it includes symbols
+ * introduced by [VariableDeclarationNode] entries in the graph nodes.
+ *
+ * @param context Is used to access this session's [GraphDeclaredSymbolsResolver].
+ *
+ * The result is memoized by a session cache.
+ */
 context(context: CheckerContext)
 fun ControlFlowGraph.resolveDeclaredSymbols(): Set<FirBasedSymbol<*>> =
     context.session.graphDeclaredSymbolsResolver.resolveDeclaredSymbolsOf(this)
