@@ -1,0 +1,1 @@
+/exhaustive_when.kt: warning: Viper verification error: Assert might fail. Assertion intFromRef(l0_r) >= 0 might not hold.
