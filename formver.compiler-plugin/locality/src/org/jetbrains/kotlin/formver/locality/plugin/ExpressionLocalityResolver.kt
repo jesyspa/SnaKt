@@ -8,14 +8,17 @@ package org.jetbrains.kotlin.formver.locality.plugin
 import org.jetbrains.kotlin.fir.FirSession
 import org.jetbrains.kotlin.fir.analysis.checkers.context.CheckerContext
 import org.jetbrains.kotlin.fir.caches.firCachesFactory
+import org.jetbrains.kotlin.fir.expressions.FirAnonymousFunctionExpression
+import org.jetbrains.kotlin.fir.expressions.FirAnonymousObjectExpression
 import org.jetbrains.kotlin.fir.expressions.FirExpression
 import org.jetbrains.kotlin.fir.expressions.FirQualifiedAccessExpression
 import org.jetbrains.kotlin.fir.expressions.FirReturnExpression
 import org.jetbrains.kotlin.fir.expressions.FirThrowExpression
 import org.jetbrains.kotlin.fir.extensions.FirExtensionSessionComponent
 import org.jetbrains.kotlin.fir.references.symbol
+import org.jetbrains.kotlin.fir.resolve.dfa.controlFlowGraph
+import org.jetbrains.kotlin.fir.symbols.impl.FirCallableSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirReceiverParameterSymbol
-import org.jetbrains.kotlin.fir.symbols.impl.FirVariableSymbol
 import org.jetbrains.kotlin.formver.locality.contract.plugin.resolveLocalityContract
 import org.jetbrains.kotlin.formver.type.plugin.CallArgumentTypeFactsMapper
 import org.jetbrains.kotlin.formver.type.plugin.ExpressionTypeFactResolver
@@ -29,10 +32,24 @@ private object TerminalLocalityResolver : ExpressionTypeFactResolver<Locality> {
     context(context: CheckerContext)
     override fun resolveTypeFactOf(expression: FirExpression): Locality =
         when (expression) {
+            is FirAnonymousFunctionExpression -> {
+                val graph = expression.anonymousFunction.controlFlowGraphReference?.controlFlowGraph
+                    ?: return Locality.Global
+
+                graph.resolveScopeLocality()
+            }
+
+            is FirAnonymousObjectExpression -> {
+                val graph = expression.anonymousObject.controlFlowGraphReference?.controlFlowGraph
+                    ?: return Locality.Global
+
+                graph.resolveScopeLocality()
+            }
+
             is FirQualifiedAccessExpression ->
                 when (val symbol = expression.calleeReference.symbol) {
-                    is FirVariableSymbol -> symbol.resolveLocality()
-                    is FirReceiverParameterSymbol -> symbol.resolveLocality()
+                    is FirCallableSymbol<*> -> symbol.resolveDeclaredLocality()
+                    is FirReceiverParameterSymbol -> symbol.resolveDeclaredLocality()
                     else -> Locality.Global
                 }
 
