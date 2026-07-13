@@ -10,17 +10,15 @@ import org.jetbrains.kotlin.diagnostics.reportOn
 import org.jetbrains.kotlin.fir.analysis.checkers.MppCheckerKind
 import org.jetbrains.kotlin.fir.analysis.checkers.context.CheckerContext
 import org.jetbrains.kotlin.fir.analysis.checkers.expression.FirPropertyAccessExpressionChecker
-import org.jetbrains.kotlin.fir.declarations.FirAnonymousFunction
-import org.jetbrains.kotlin.fir.declarations.FirAnonymousObject
-import org.jetbrains.kotlin.fir.declarations.FirFunction
-import org.jetbrains.kotlin.fir.declarations.FirRegularClass
 import org.jetbrains.kotlin.fir.declarations.utils.isNonLocal
 import org.jetbrains.kotlin.fir.expressions.FirPropertyAccessExpression
 import org.jetbrains.kotlin.fir.references.symbol
 import org.jetbrains.kotlin.fir.resolve.dfa.controlFlowGraph
 import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
-import org.jetbrains.kotlin.fir.symbols.impl.FirErrorFunctionSymbol
+import org.jetbrains.kotlin.fir.symbols.impl.FirAnonymousFunctionSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirFunctionSymbol
+import org.jetbrains.kotlin.fir.symbols.impl.FirPropertySymbol
+import org.jetbrains.kotlin.fir.symbols.impl.FirValueParameterSymbol
 
 context(context: CheckerContext)
 private fun FirFunctionSymbol<*>.declares(symbol: FirBasedSymbol<*>): Boolean {
@@ -30,8 +28,14 @@ private fun FirFunctionSymbol<*>.declares(symbol: FirBasedSymbol<*>): Boolean {
     return symbol in graph.resolveDeclaredSymbols()
 }
 
-private val FirFunction.supportsLocalityCapture: Boolean
-    get() = this is FirAnonymousFunction || !isNonLocal
+private val FirFunctionSymbol<*>.supportsLocalityCapture: Boolean
+    get() = this is FirAnonymousFunctionSymbol || !isNonLocal
+
+private val FirBasedSymbol<*>.isBoundary: Boolean
+    get() = when (this) {
+        is FirPropertySymbol, is FirValueParameterSymbol -> false
+        else -> true
+    }
 
 object PropertyAccessLocalityChecker : FirPropertyAccessExpressionChecker(MppCheckerKind.Common) {
     context(context: CheckerContext, reporter: DiagnosticReporter)
@@ -40,50 +44,25 @@ object PropertyAccessLocalityChecker : FirPropertyAccessExpressionChecker(MppChe
 
         val capturedSymbol = expression.calleeReference.symbol ?: return
 
-        var crossedFunctionSymbol: FirBasedSymbol<*>? = null
-        var crossedNonFunctionSymbol: FirBasedSymbol<*>? = null
+        for (parentSymbol in context.containingDeclarations.asReversed()) {
+            if (!parentSymbol.isBoundary) continue
 
-        for (element in context.containingElements.asReversed()) {
-            when (element) {
-                is FirFunction -> {
-                    if (element.symbol.declares(capturedSymbol)) {
-                        val crossedBoundarySymbol = crossedNonFunctionSymbol
-                            ?: crossedFunctionSymbol
-                            ?: return
-
-                        reporter.reportOn(
-                            expression.source,
-                            LocalityErrors.INVALID_LOCALITY_CAPTURE,
-                            capturedSymbol,
-                            crossedBoundarySymbol,
-                        )
-                        return
-                    }
-
-                    if (!element.supportsLocalityCapture && crossedFunctionSymbol == null) {
-                        crossedFunctionSymbol = element.symbol
-                    }
-                }
-
-                is FirRegularClass -> {
-                    if (crossedNonFunctionSymbol == null) {
-                        crossedNonFunctionSymbol = element.symbol
-                    }
-                }
-
-                is FirAnonymousObject -> {
-                    if (crossedNonFunctionSymbol == null) {
-                        crossedNonFunctionSymbol = element.symbol
-                    }
+            if (parentSymbol is FirFunctionSymbol) {
+                if (parentSymbol.declares(capturedSymbol)) {
+                    return
+                } else if (parentSymbol.supportsLocalityCapture) {
+                    continue
                 }
             }
-        }
 
-        reporter.reportOn(
-            expression.source,
-            LocalityErrors.INVALID_LOCALITY_CAPTURE,
-            capturedSymbol,
-            crossedNonFunctionSymbol ?: crossedFunctionSymbol ?: FirErrorFunctionSymbol(),
-        )
+            reporter.reportOn(
+                expression.source,
+                LocalityErrors.INVALID_LOCALITY_CAPTURE,
+                capturedSymbol,
+                parentSymbol,
+            )
+
+            return
+        }
     }
 }
