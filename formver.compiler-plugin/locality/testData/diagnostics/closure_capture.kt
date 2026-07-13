@@ -288,23 +288,23 @@ fun `assign merged local owners to global`(x: @Borrowed Any) {
 fun `capture local into local anonymous object`(x: @Borrowed A) {
     val o: @Borrowed Any = object {
         fun run() {
-            borrow(x)
+            borrow(<!INVALID_LOCALITY_CAPTURE!>x<!>)
         }
     }
 }
 
 fun `capture local into global anonymous object`(x: @Borrowed A) {
-    val o: Any = <!LOCALITY_MISMATCH!>object<!> {
+    val o: Any = object {
         fun run() {
-            borrow(x)
+            borrow(<!INVALID_LOCALITY_CAPTURE!>x<!>)
         }
     }
 }
 
 fun `pass capturing anonymous object as global argument`(x: @Borrowed A) {
-    useAny(<!LOCALITY_MISMATCH!>object<!> {
+    useAny(object {
         fun run() {
-            borrow(x)
+            borrow(<!INVALID_LOCALITY_CAPTURE!>x<!>)
         }
     })
 }
@@ -325,4 +325,22 @@ fun `throw local value from lambda`(x: @Borrowed Throwable) {
     run <!LOCALITY_MISMATCH!>{
         throw <!LOCALITY_MISMATCH!>x<!>
     }<!>
+}
+
+fun `capture local in inner class property`(x: @Borrowed Any) {
+    class I {
+        val y = <!INVALID_LOCALITY_CAPTURE!>x<!>
+    }
+
+    val i = I()
+}
+
+fun `capture local in inner class method`(x: @Borrowed Any) {
+    class I {
+        fun g() {
+            val y = <!INVALID_LOCALITY_CAPTURE!>x<!>
+        }
+    }
+
+    val i = I()
 }

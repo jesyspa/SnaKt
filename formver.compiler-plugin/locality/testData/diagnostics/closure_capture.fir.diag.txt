@@ -16,9 +16,11 @@
 
 /closure_capture.kt: error: Initializer locality mismatch: expected 'global', actual 'local'.
 
-/closure_capture.kt: error: Initializer locality mismatch: expected 'global', actual 'local'.
+/closure_capture.kt: error: Unable to capture local x crossing <anonymous>.
 
-/closure_capture.kt: error: Argument locality mismatch: expected 'global', actual 'local'.
+/closure_capture.kt: error: Unable to capture local x crossing <anonymous>.
+
+/closure_capture.kt: error: Unable to capture local x crossing <anonymous>.
 
 /closure_capture.kt: error: Argument locality mismatch: expected 'global', actual 'local'.
 
@@ -27,3 +29,7 @@
 /closure_capture.kt: error: Argument locality mismatch: expected 'global', actual 'local'.
 
 /closure_capture.kt: error: Throw locality mismatch: expected 'global', actual 'local'.
+
+/closure_capture.kt: error: Unable to capture local x crossing I.
+
+/closure_capture.kt: error: Unable to capture local x crossing I.

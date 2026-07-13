@@ -29,7 +29,8 @@ object LocalityErrorMessages : BaseDiagnosticRendererFactory() {
                 )
                 map.put(
                     LocalityErrors.INVALID_LOCALITY_CAPTURE,
-                    "Unable to capture outer local declaration from ''{0}''.",
+                    "Unable to capture local {0} crossing {1}.",
+                    FirDiagnosticRenderers.DECLARATION_NAME,
                     FirDiagnosticRenderers.DECLARATION_NAME,
                 )
                 map.put(

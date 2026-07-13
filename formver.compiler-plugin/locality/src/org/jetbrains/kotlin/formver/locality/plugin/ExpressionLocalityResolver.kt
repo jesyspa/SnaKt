@@ -41,13 +41,6 @@ private object TerminalLocalityResolver : ExpressionTypeFactResolver<Locality> {
                 graph.resolveScopeLocality()
             }
 
-            is FirAnonymousObjectExpression -> {
-                val graph = expression.anonymousObject.controlFlowGraphReference?.controlFlowGraph
-                    ?: return Locality.Global
-
-                graph.resolveScopeLocality()
-            }
-
             is FirQualifiedAccessExpression ->
                 when (expression) {
                     is FirPropertyAccessExpression, is FirThisReceiverExpression, is FirCallableReferenceAccess ->

@@ -45,6 +45,9 @@ class LocalityAdditionalCheckers(session: FirSession) : FirAdditionalCheckersExt
         override val qualifiedAccessExpressionCheckers: Set<FirQualifiedAccessExpressionChecker> =
             setOf(QualifiedAccessLocalityChecker)
 
+        override val propertyAccessExpressionCheckers: Set<FirPropertyAccessExpressionChecker> =
+            setOf(PropertyAccessLocalityChecker)
+
         override val returnExpressionCheckers: Set<FirReturnExpressionChecker> =
             setOf(ReturnLocalityChecker)
 
