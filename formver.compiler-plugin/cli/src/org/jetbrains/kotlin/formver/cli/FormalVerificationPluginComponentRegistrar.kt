@@ -40,15 +40,11 @@ class FormalVerificationPluginComponentRegistrar : CompilerPluginRegistrar() {
             FormalVerificationConfigurationKeys.VERIFICATION_TARGETS_SELECTION,
             TargetsSelection.Companion.defaultBehaviour()
         )
-        val checkUniqueness = false
-        val checkLocality = false
-        val dumpUniquenessCFG = false
         val config = PluginConfiguration(
-            logLevel, errorStyle, behaviour, conversionSelection, verificationSelection,
-            checkLocality, checkUniqueness, dumpUniquenessCFG
+            logLevel, errorStyle, behaviour, conversionSelection, verificationSelection
         )
-        FirExtensionRegistrarAdapter.registerExtension(FormalVerificationPluginExtensionRegistrar(config))
         FirExtensionRegistrarAdapter.registerExtension(LocalityExtensionRegistrar())
         FirExtensionRegistrarAdapter.registerExtension(UniquenessExtensionRegistrar())
+        FirExtensionRegistrarAdapter.registerExtension(FormalVerificationPluginExtensionRegistrar(config))
     }
 }
