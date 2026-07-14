@@ -76,12 +76,8 @@ class ExtensionRegistrarConfigurator(testServices: TestServices) : EnvironmentCo
             checkLocality = checkLocality,
         )
         FirExtensionRegistrarAdapter.registerExtension(FormalVerificationPluginExtensionRegistrar(config))
-        if (config.checkLocality) {
-            FirExtensionRegistrarAdapter.registerExtension(LocalityExtensionRegistrar())
-        }
-        if (config.checkUniqueness) {
-            FirExtensionRegistrarAdapter.registerExtension(UniquenessExtensionRegistrar())
-        }
+        FirExtensionRegistrarAdapter.registerExtension(LocalityExtensionRegistrar())
+        FirExtensionRegistrarAdapter.registerExtension(UniquenessExtensionRegistrar())
     }
 }
 
