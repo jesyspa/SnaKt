@@ -28,7 +28,7 @@ import org.jetbrains.kotlin.formver.type.plugin.UnifyingExpressionTypeFactResolv
  * Resolves uniqueness from the access paths referenced by [this], or [Uniqueness.Shared] if it references no path.
  */
 context(context: CheckerContext)
-private fun FirExpression.resolveAccessUniqueness(): Uniqueness {
+fun FirExpression.resolveAccessUniqueness(): Uniqueness {
     val accessState = resolveAccessState()
 
     return if (accessState == EmptyAccessState) {
