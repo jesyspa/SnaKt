@@ -6,7 +6,6 @@
 package org.jetbrains.kotlin.formver.plugin.compiler
 
 import org.jetbrains.kotlin.fir.FirSession
-import org.jetbrains.kotlin.fir.analysis.checkers.cfa.FirControlFlowChecker
 import org.jetbrains.kotlin.fir.analysis.checkers.declaration.DeclarationCheckers
 import org.jetbrains.kotlin.fir.analysis.checkers.declaration.FirSimpleFunctionChecker
 import org.jetbrains.kotlin.fir.analysis.extensions.FirAdditionalCheckersExtension
@@ -22,9 +21,12 @@ class PluginAdditionalCheckers(session: FirSession, config: PluginConfiguration)
 
     override val declarationCheckers: DeclarationCheckers = object : DeclarationCheckers() {
         override val simpleFunctionCheckers: Set<FirSimpleFunctionChecker>
-            get() = setOf(
-                ViperPoweredDeclarationChecker(session, config),
-                FunctionUniquenessStateRenderingChecker(config)
-            )
+            get() = buildSet {
+                add(ViperPoweredDeclarationChecker(session, config))
+
+                if (config.dumpUniquenessCFG) {
+                    add(FunctionUniquenessStateRenderingChecker)
+                }
+            }
     }
 }
