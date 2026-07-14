@@ -61,23 +61,19 @@ class ExtensionRegistrarConfigurator(testServices: TestServices) : EnvironmentCo
             uniquenessOnly || localityOnly -> TargetsSelection.NO_TARGETS
             else -> TargetsSelection.ALL_TARGETS
         }
-        val checkUniqueness = uniquenessOnly
-        // Locality must run before uniqueness in tests.
-        // UNIQUE_CHECK_ONLY enables both checkers (in this order), while LOCALITY_CHECK_ONLY keeps uniqueness off.
-        val checkLocality = localityOnly || checkUniqueness
+
+        FirExtensionRegistrarAdapter.registerExtension(UniquenessExtensionRegistrar())
+        FirExtensionRegistrarAdapter.registerExtension(LocalityExtensionRegistrar())
+
         val config = PluginConfiguration(
             logLevel,
             errorStyle,
             UnsupportedFeatureBehaviour.THROW_EXCEPTION,
             conversionSelection = conversionSelection,
             verificationSelection = verificationSelection,
-            checkUniqueness = checkUniqueness,
-            dumpUniquenessCFG = dumpUniquenessCFG,
-            checkLocality = checkLocality,
+            dumpUniquenessCFG = dumpUniquenessCFG
         )
         FirExtensionRegistrarAdapter.registerExtension(FormalVerificationPluginExtensionRegistrar(config))
-        FirExtensionRegistrarAdapter.registerExtension(LocalityExtensionRegistrar())
-        FirExtensionRegistrarAdapter.registerExtension(UniquenessExtensionRegistrar())
     }
 }
 

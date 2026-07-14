@@ -47,8 +47,8 @@ class FormalVerificationPluginComponentRegistrar : CompilerPluginRegistrar() {
             logLevel, errorStyle, behaviour, conversionSelection, verificationSelection,
             checkLocality, checkUniqueness, dumpUniquenessCFG
         )
-        FirExtensionRegistrarAdapter.registerExtension(FormalVerificationPluginExtensionRegistrar(config))
         FirExtensionRegistrarAdapter.registerExtension(LocalityExtensionRegistrar())
         FirExtensionRegistrarAdapter.registerExtension(UniquenessExtensionRegistrar())
+        FirExtensionRegistrarAdapter.registerExtension(FormalVerificationPluginExtensionRegistrar(config))
     }
 }
