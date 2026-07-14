@@ -25,7 +25,7 @@ fun FirVariableSymbol<*>.resolveUniqueness(): Uniqueness {
         return resolvedReturnType.defaultUniqueness
     }
 
-    return resolvedInitializer?.resolveUniqueness() ?: Uniqueness.Shared
+    return resolvedInitializer?.resolveAccessUniqueness() ?: Uniqueness.Shared
 }
 
 object ParameterUniquenessResolver: SymbolTypeFactResolver<Uniqueness, FirValueParameterSymbol> {
