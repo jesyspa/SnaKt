@@ -3,11 +3,11 @@ import org.jetbrains.kotlin.formver.plugin.Unique
 class UniquePrimitiveFields(
     val sharedVal: Int,
     var sharedVar: Int,
-    @Unique val uniqueVal: Int,
-    @Unique var uniqueVar: Int
+    val uniqueVal: @Unique Int,
+    var uniqueVar: @Unique Int
 )
 
-fun <!VIPER_TEXT!>testPrimitiveFieldGetterUnique<!>(@Unique pf: UniquePrimitiveFields) {
+fun <!VIPER_TEXT!>testPrimitiveFieldGetterUnique<!>(pf: @Unique UniquePrimitiveFields) {
     val sharedVal = pf.sharedVal
     var sharedVar = pf.sharedVar
     val uniqueVal = pf.uniqueVal
@@ -21,7 +21,7 @@ fun <!VIPER_TEXT!>testPrimitiveFieldGetterShared<!>(pf: UniquePrimitiveFields) {
     var uniqueVar = pf.uniqueVar
 }
 
-fun <!VIPER_TEXT!>testPrimitiveFieldSetterUnique<!>(@Unique pf: UniquePrimitiveFields) {
+fun <!VIPER_TEXT!>testPrimitiveFieldSetterUnique<!>(pf: @Unique UniquePrimitiveFields) {
     pf.sharedVar = 1
     pf.uniqueVar = 2
 }
@@ -34,11 +34,11 @@ fun <!VIPER_TEXT!>testPrimitiveFieldSetterShared<!>(pf: UniquePrimitiveFields) {
 class UniqueReferenceFields(
     val sharedVal: UniquePrimitiveFields,
     var sharedVar: UniquePrimitiveFields,
-    @Unique val uniqueVal: UniquePrimitiveFields,
-    @Unique var uniqueVar: UniquePrimitiveFields
+    val uniqueVal: @Unique UniquePrimitiveFields,
+    var uniqueVar: @Unique UniquePrimitiveFields
 )
 
-fun <!VIPER_TEXT!>testReferenceFieldGetterUnique<!>(@Unique rf: UniqueReferenceFields) {
+fun <!VIPER_TEXT!>testReferenceFieldGetterUnique<!>(rf: @Unique UniqueReferenceFields) {
     val sharedVal = rf.sharedVal
     var sharedVar = rf.sharedVar
     val uniqueVal = rf.uniqueVal
@@ -52,7 +52,7 @@ fun <!VIPER_TEXT!>testReferenceFieldGetterShared<!>(rf: UniqueReferenceFields) {
     var uniqueVar = rf.uniqueVar
 }
 
-fun <!VIPER_TEXT!>testReferenceFieldSetterUnique<!>(@Unique rf: UniqueReferenceFields) {
+fun <!VIPER_TEXT!>testReferenceFieldSetterUnique<!>(rf: @Unique UniqueReferenceFields) {
     rf.sharedVar = UniquePrimitiveFields(5, 6, 7, 8)
     rf.uniqueVar = UniquePrimitiveFields(9, 10, 11, 12)
 }
