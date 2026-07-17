@@ -13,12 +13,6 @@ import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 
-private val defaultLocalityAnnotationId =
-    ClassId(
-        FqName("org.jetbrains.kotlin.formver.plugin"),
-        Name.identifier("Borrowed")
-    )
-
 class LocalityExtensionRegistrar(
     private val localityAnnotationId: ClassId = defaultLocalityAnnotationId
 ) : FirExtensionRegistrar() {
