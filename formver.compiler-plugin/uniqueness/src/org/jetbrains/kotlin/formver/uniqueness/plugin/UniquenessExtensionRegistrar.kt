@@ -10,12 +10,6 @@ import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 
-private val defaultUniquenessAnnotationId =
-    ClassId(
-        FqName("org.jetbrains.kotlin.formver.plugin"),
-        Name.identifier("Unique")
-    )
-
 class UniquenessExtensionRegistrar(
     private val uniquenessAnnotationId: ClassId = defaultUniquenessAnnotationId
 ) : FirExtensionRegistrar() {
