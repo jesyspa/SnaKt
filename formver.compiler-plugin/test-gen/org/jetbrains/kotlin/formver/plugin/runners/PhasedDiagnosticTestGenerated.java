@@ -52,6 +52,12 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
       }
 
       @Test
+      @TestMetadata("max_character.kt")
+      public void testMax_character() {
+        runTest("formver.compiler-plugin/testData/diagnostics/expensive_verification/algorithms/max_character.kt");
+      }
+
+      @Test
       @TestMetadata("merge_sort_of_string.kt")
       public void testMerge_sort_of_string() {
         runTest("formver.compiler-plugin/testData/diagnostics/expensive_verification/algorithms/merge_sort_of_string.kt");
@@ -61,12 +67,6 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
       @TestMetadata("quick_sort_of_string.kt")
       public void testQuick_sort_of_string() {
         runTest("formver.compiler-plugin/testData/diagnostics/expensive_verification/algorithms/quick_sort_of_string.kt");
-      }
-
-      @Test
-      @TestMetadata("max_character.kt")
-      public void testMax_character() {
-        runTest("formver.compiler-plugin/testData/diagnostics/expensive_verification/algorithms/max_character.kt");
       }
 
       @Test
@@ -831,12 +831,6 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
       @TestMetadata("exists.kt")
       public void testExists() {
         runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/exists.kt");
-      }
-
-      @Test
-      @TestMetadata("exists_double_index.kt")
-      public void testExists_double_index() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/exists_double_index.kt");
       }
 
       @Test

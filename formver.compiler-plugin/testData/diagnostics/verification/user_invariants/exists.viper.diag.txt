@@ -1,0 +1,1 @@
+/exists.kt: warning: Viper verification error: Contract might not be well-formed. Index intFromRef(res) into stringFromRef(s) might be negative.

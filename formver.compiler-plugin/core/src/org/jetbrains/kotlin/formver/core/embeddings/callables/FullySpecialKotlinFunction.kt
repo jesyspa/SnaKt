@@ -6,6 +6,9 @@
 package org.jetbrains.kotlin.formver.core.embeddings.callables
 
 import org.jetbrains.kotlin.formver.common.SnaktInternalException
+import org.jetbrains.kotlin.fir.expressions.FirBlock
+import org.jetbrains.kotlin.fir.symbols.impl.FirValueParameterSymbol
+import org.jetbrains.kotlin.formver.core.conversion.StmtConversionContext
 import org.jetbrains.kotlin.formver.core.conversion.insertExistsFunctionCall
 import org.jetbrains.kotlin.formver.core.conversion.insertForAllFunctionCall
 import org.jetbrains.kotlin.formver.core.embeddings.expression.*
@@ -38,6 +41,24 @@ val SpecialKotlinFunction.callableId: CallableId
     get() = CallableId(FqName.fromSegments(packageName), className?.let { FqName(it) }, Name.identifier(name))
 
 fun SpecialKotlinFunction.embedName(): ScopedName = callableId.embedFunctionName(callableType)
+
+private fun insertQuantifierFunctionCall(
+    functionName: String,
+    args: List<ExpEmbedding>,
+    ctx: StmtConversionContext,
+    insertCall: StmtConversionContext.(FirValueParameterSymbol, FirBlock) -> ExpEmbedding,
+): ExpEmbedding {
+    val lambda = args.first().ignoringMetaNodes() as? LambdaExp ?: throw SnaktInternalException(
+        null,
+        "First argument of $functionName function must be a lambda."
+    )
+    val param = lambda.function.valueParameters.first()
+    val body = lambda.function.body ?: throw SnaktInternalException(
+        null,
+        "Lambda body of $functionName function must be present."
+    )
+    return ctx.insertCall(param.symbol, body)
+}
 
 /**
  * We store here all the __Kotlin__ functions that need a (fully) special `ExpEmbedding`.
@@ -200,31 +221,11 @@ object SpecialKotlinFunctions {
         }
 
         addFunction(quantifierCallableType, SpecialPackages.formver, name = "forAll") { args, ctx ->
-            val arg = args.first()
-            val lambda = arg.ignoringMetaNodes() as? LambdaExp ?: throw SnaktInternalException(
-                null,
-                "First argument of forAll function must be a lambda."
-            )
-            val param = lambda.function.valueParameters.first()
-            val body = lambda.function.body ?: throw SnaktInternalException(
-                null,
-                "Lambda body of forAll function must be present."
-            )
-            ctx.insertForAllFunctionCall(param.symbol, body)
+            insertQuantifierFunctionCall("forAll", args, ctx, StmtConversionContext::insertForAllFunctionCall)
         }
 
         addFunction(quantifierCallableType, SpecialPackages.formver, name = "exists") { args, ctx ->
-            val arg = args.first()
-            val lambda = arg.ignoringMetaNodes() as? LambdaExp ?: throw SnaktInternalException(
-                null,
-                "First argument of exists function must be a lambda."
-            )
-            val param = lambda.function.valueParameters.first()
-            val body = lambda.function.body ?: throw SnaktInternalException(
-                null,
-                "Lambda body of exists function must be present."
-            )
-            ctx.insertExistsFunctionCall(param.symbol, body)
+            insertQuantifierFunctionCall("exists", args, ctx, StmtConversionContext::insertExistsFunctionCall)
         }
 
         val permissionCallableType = buildFunctionPretype {
