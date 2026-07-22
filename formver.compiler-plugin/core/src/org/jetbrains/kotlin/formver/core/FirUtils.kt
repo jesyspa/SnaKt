@@ -7,6 +7,7 @@ package org.jetbrains.kotlin.formver.core
 
 import org.jetbrains.kotlin.KtSourceElement
 import org.jetbrains.kotlin.fir.FirSession
+import org.jetbrains.kotlin.fir.analysis.checkers.context.CheckerContext
 import org.jetbrains.kotlin.fir.contracts.FirEffectDeclaration
 import org.jetbrains.kotlin.fir.declarations.FirDeclarationDataKey
 import org.jetbrains.kotlin.fir.declarations.FirDeclarationDataRegistry
@@ -17,6 +18,8 @@ import org.jetbrains.kotlin.fir.declarations.impl.FirDefaultPropertySetter
 import org.jetbrains.kotlin.fir.declarations.utils.isInline
 import org.jetbrains.kotlin.fir.expressions.FirExpression
 import org.jetbrains.kotlin.fir.expressions.FirFunctionCall
+import org.jetbrains.kotlin.fir.expressions.FirStatement
+import org.jetbrains.kotlin.fir.expressions.toResolvedCallableSymbol
 import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
 import org.jetbrains.kotlin.fir.symbols.SymbolInternals
 import org.jetbrains.kotlin.fir.symbols.impl.FirCallableSymbol
@@ -29,7 +32,7 @@ import org.jetbrains.kotlin.formver.core.names.SpecialPackages
 import org.jetbrains.kotlin.formver.locality.plugin.Locality
 import org.jetbrains.kotlin.formver.locality.plugin.locality
 import org.jetbrains.kotlin.formver.uniqueness.plugin.Uniqueness
-import org.jetbrains.kotlin.formver.uniqueness.plugin.defaultUniqueness
+import org.jetbrains.kotlin.formver.uniqueness.plugin.scopeUniqueness
 import org.jetbrains.kotlin.formver.viper.ast.Position
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.ClassId
@@ -79,8 +82,8 @@ fun kotlinCallableId(className: String?, name: String): CallableId = callableId(
 
 val FirBasedSymbol<*>.isUnique: Boolean
     get() = when (this) {
-        is FirReceiverParameterSymbol -> resolvedType.defaultUniqueness == Uniqueness.Unique
-        is FirCallableSymbol<*> -> resolvedReturnType.defaultUniqueness == Uniqueness.Unique
+        is FirReceiverParameterSymbol -> resolvedType.scopeUniqueness == Uniqueness.Unique
+        is FirCallableSymbol<*> -> resolvedReturnType.scopeUniqueness == Uniqueness.Unique
         else -> false
     }
 
@@ -90,6 +93,20 @@ val FirBasedSymbol<*>.isBorrowed: Boolean
         is FirCallableSymbol<*> -> resolvedReturnType.locality == Locality.Local
         else -> false
     }
+
+/**
+ * Returns `true` if [this] function represents one of the following specification functions: `preconditions`,
+ * `postconditions`, `loopInvariants`, `verify`.
+ */
+context(context: CheckerContext)
+private fun FirFunctionSymbol<*>.isSpecificationFunction(): Boolean =
+    hasAnnotation(annotationId("SpecificationHelper"), context.session)
+
+context(context: CheckerContext)
+fun FirStatement.isSpecificationCall(): Boolean =
+    ((this as? FirFunctionCall)
+        ?.toResolvedCallableSymbol() as? FirFunctionSymbol<*>)
+        ?.isSpecificationFunction() ?: false
 
 fun FirBasedSymbol<*>.isPure(session: FirSession) = hasAnnotation(annotationId("Pure"), session)
 
