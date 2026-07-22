@@ -145,7 +145,7 @@ fun `assign unique or shared`(x: @Unique Any, y: Any) {
 fun `move unique and then reassign`(x: @Unique Any) {
     var y = x
     var z = y
-    y = 1
+    y = Any()
     consume(y)
 }
 
