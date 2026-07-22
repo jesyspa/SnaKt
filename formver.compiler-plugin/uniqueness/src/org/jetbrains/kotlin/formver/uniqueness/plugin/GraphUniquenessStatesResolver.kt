@@ -19,10 +19,13 @@ import org.jetbrains.kotlin.formver.locality.plugin.CallArgumentLocalitiesMapper
 /**
  * Session component that caches uniqueness-state flow analysis for control-flow graphs.
  */
-class GraphUniquenessStatesResolver(session: FirSession) : FirExtensionSessionComponent(session) {
+class GraphUniquenessStatesResolver(
+    private val callPurityPredicate: CallPurityPredicate,
+    session: FirSession
+) : FirExtensionSessionComponent(session) {
     companion object {
-        fun getFactory(): Factory {
-            return Factory { session -> GraphUniquenessStatesResolver(session) }
+        fun getFactory(callPurityPredicate: CallPurityPredicate = { false }): Factory {
+            return Factory { session -> GraphUniquenessStatesResolver(callPurityPredicate, session) }
         }
     }
 
@@ -69,7 +72,8 @@ class GraphUniquenessStatesResolver(session: FirSession) : FirExtensionSessionCo
         val analyzer = GraphUniquenessStatesAnalyzer(
             initialState,
             context,
-            CallArgumentLocalitiesMapper
+            CallArgumentLocalitiesMapper,
+            callPurityPredicate
         )
 
         return graph.traverseToFixedPoint(analyzer)

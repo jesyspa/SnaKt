@@ -8,6 +8,7 @@ package org.jetbrains.kotlin.formver.plugin.compiler
 import org.jetbrains.kotlin.fir.extensions.FirExtensionRegistrar
 import org.jetbrains.kotlin.formver.common.PluginConfiguration
 import org.jetbrains.kotlin.formver.core.diagnostics.ConversionErrors
+import org.jetbrains.kotlin.formver.core.isSpecificationCall
 import org.jetbrains.kotlin.formver.locality.contract.plugin.ExpressionLocalityContractResolver
 import org.jetbrains.kotlin.formver.locality.contract.plugin.LocalityContractErrors
 import org.jetbrains.kotlin.formver.locality.plugin.ExpressionLocalityResolver
@@ -31,7 +32,7 @@ class FormalVerificationPluginExtensionRegistrar(private val config: PluginConfi
 
         +ExpressionAccessStateResolver.getFactory()
         +ExpressionUniquenessResolver.getFactory()
-        +GraphUniquenessStatesResolver.getFactory()
+        +GraphUniquenessStatesResolver.getFactory { it.isSpecificationCall() }
         +UniquenessAttributeExtension.getFactory()
 
         +ExpressionLocalityContractResolver.getFactory()

@@ -12,6 +12,7 @@ import org.jetbrains.kotlin.fir.analysis.cfa.util.PathAwareControlFlowInfo
 import org.jetbrains.kotlin.fir.analysis.cfa.util.merge
 import org.jetbrains.kotlin.fir.analysis.cfa.util.transformValues
 import org.jetbrains.kotlin.fir.analysis.checkers.context.CheckerContext
+import org.jetbrains.kotlin.fir.expressions.FirCall
 import org.jetbrains.kotlin.fir.declarations.FirValueParameter
 import org.jetbrains.kotlin.fir.expressions.FirReturnExpression
 import org.jetbrains.kotlin.fir.expressions.allReceiverExpressions
@@ -61,6 +62,14 @@ val ControlFlowGraph.uniquenessAnalysisTargetNodes: Sequence<CFGNode<*>>
     }
 
 /**
+ * Checks whether the call is pure, and hence doesn't modify the analysis state.
+ */
+fun interface CallPurityPredicate {
+    context(context: CheckerContext)
+    fun accepts(call: FirCall): Boolean
+}
+
+/**
  * Data-flow analyzer that tracks the uniqueness state of paths through a CFG.
  *
  * Assignments and declarations initialize their target paths and move their source paths. Function calls move all
@@ -70,6 +79,7 @@ class GraphUniquenessStatesAnalyzer(
     private val initialState: UniquenessState,
     private val context: CheckerContext,
     private val callArgumentLocalitiesMapper: CallArgumentTypeFactsMapper<Locality>,
+    private val callPurityPredicate: CallPurityPredicate
 ) : PathAwareControlFlowGraphVisitor<Unit, UniquenessState>() {
     override fun mergeInfo(
         a: UniquenessStateFlow,
@@ -167,6 +177,8 @@ class GraphUniquenessStatesAnalyzer(
         val call = node.fir
 
         with(context) {
+            if (callPurityPredicate.accepts(call)) return data
+
             return data.transformValues { data ->
                 var newUniquenessState = data.getOrInitialize()
 
@@ -191,6 +203,8 @@ class GraphUniquenessStatesAnalyzer(
         val call = node.fir
 
         with(context) {
+            if (callPurityPredicate.accepts(call)) return data
+
             return data.transformValues { data ->
                 var newUniquenessState = data.getOrInitialize()
                 val explicitReceiver = call.explicitReceiver
