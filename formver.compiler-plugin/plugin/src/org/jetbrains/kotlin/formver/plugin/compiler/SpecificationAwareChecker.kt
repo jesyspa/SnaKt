@@ -10,31 +10,16 @@ import org.jetbrains.kotlin.fir.analysis.checkers.context.CheckerContext
 import org.jetbrains.kotlin.fir.analysis.checkers.declaration.FirDeclarationChecker
 import org.jetbrains.kotlin.fir.analysis.checkers.expression.FirExpressionChecker
 import org.jetbrains.kotlin.fir.declarations.FirDeclaration
-import org.jetbrains.kotlin.fir.expressions.FirFunctionCall
 import org.jetbrains.kotlin.fir.expressions.FirStatement
-import org.jetbrains.kotlin.fir.expressions.toResolvedCallableSymbol
-import org.jetbrains.kotlin.fir.symbols.impl.FirFunctionSymbol
-import org.jetbrains.kotlin.formver.core.isFormverFunctionNamed
+import org.jetbrains.kotlin.formver.core.isSpecificationCall
 
-
-/**
- * Returns `true` if [this] function represents one of the following specification functions: `preconditions`,
- * `postconditions`, `loopInvariants`, `verify`.
- */
-private fun FirFunctionSymbol<*>.isSpecificationFunction(): Boolean =
-    isFormverFunctionNamed("preconditions") ||
-            isFormverFunctionNamed("postconditions") ||
-            isFormverFunctionNamed("loopInvariants") ||
-            isFormverFunctionNamed("verify")
 
 /**
  * Returns `true` if [this] context is in an argument position for a specification function.
  */
 private fun CheckerContext.isInSpecificationContext(): Boolean =
     callsOrAssignments.any { statement ->
-        ((statement as? FirFunctionCall)
-            ?.toResolvedCallableSymbol() as? FirFunctionSymbol<*>)
-            ?.isSpecificationFunction() ?: false
+        statement.isSpecificationCall()
     }
 
 /**
