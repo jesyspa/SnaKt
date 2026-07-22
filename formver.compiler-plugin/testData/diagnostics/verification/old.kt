@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.formver.plugin.*
 
 
 class C(
-    var field: @Unique Int
+    var field: Int
 )
 
 fun <!VIPER_TEXT!>test<!>(c: @Unique @Borrowed C) {

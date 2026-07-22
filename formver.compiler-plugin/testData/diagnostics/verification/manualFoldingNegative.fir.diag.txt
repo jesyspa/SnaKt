@@ -1,12 +1,18 @@
 /manualFoldingNegative.kt: info: Generated Viper text for writeWithoutUnfold:
 field value: Ref
 
+method con() returns (ret_1: Ref)
+  ensures isSubtype(typeOf(ret_1), anyType())
+
+
 method writeWithoutUnfold(c: Ref) returns (v_ret_0: Ref)
   requires isSubtype(typeOf(c), Cell())
   requires acc(Cell_unique(c), write)
   ensures isSubtype(typeOf(v_ret_0), unitType())
 {
-  c.value := intToRef(5)
+  var anon: Ref
+  anon := con()
+  c.value := anon
   label lbl_ret_0
   inhale isSubtype(typeOf(v_ret_0), unitType())
 }
