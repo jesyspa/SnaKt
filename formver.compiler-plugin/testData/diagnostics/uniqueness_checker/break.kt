@@ -3,14 +3,14 @@
 import org.jetbrains.kotlin.formver.plugin.Borrowed
 import org.jetbrains.kotlin.formver.plugin.Unique
 
-fun `continue conforms to unique`() {
+fun `break conforms to unique`() {
     while (true) {
-        val x: @Unique Nothing = continue
+        val x: @Unique Nothing = break
     }
 }
 
-fun `continue conforms to shared`() {
+fun `break conforms to shared`() {
     while (true) {
-        val x: Nothing = continue
+        val x: Nothing = break
     }
 }

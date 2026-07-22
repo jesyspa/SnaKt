@@ -171,6 +171,12 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
     }
 
     @Test
+    @TestMetadata("break.kt")
+    public void testBreak() {
+      runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/break.kt");
+    }
+
+    @Test
     @TestMetadata("call.kt")
     public void testCall() {
       runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/call.kt");
