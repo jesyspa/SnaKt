@@ -51,3 +51,7 @@ fun `return unique-borrowed subproperty`(a: @Unique @Borrowed B): Any {
 fun `return shared from unique function`(a: Any) : @Unique Any {
     return <!UNIQUENESS_MISMATCH!>a<!>
 }
+
+fun `return conforms to unique`() {
+    val x: @Unique Nothing = return
+}

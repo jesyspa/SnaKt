@@ -10,6 +10,7 @@ import org.jetbrains.kotlin.fir.analysis.checkers.context.CheckerContext
 import org.jetbrains.kotlin.fir.caches.firCachesFactory
 import org.jetbrains.kotlin.fir.expressions.FirExpression
 import org.jetbrains.kotlin.fir.expressions.FirFunctionCall
+import org.jetbrains.kotlin.fir.expressions.FirJump
 import org.jetbrains.kotlin.fir.expressions.FirLiteralExpression
 import org.jetbrains.kotlin.fir.expressions.FirPropertyAccessExpression
 import org.jetbrains.kotlin.fir.expressions.FirReturnExpression
@@ -80,7 +81,7 @@ fun FirExpression.resolveTerminalUniqueness(): Uniqueness {
             }
         }
 
-        is FirReturnExpression, is FirThrowExpression -> Uniqueness.Unique
+        is FirJump<*>, is FirThrowExpression -> Uniqueness.Unique
 
         else -> Uniqueness.Shared
     }
