@@ -61,3 +61,7 @@ fun makeUnique(): @Unique Any? = null
 fun `return in elvis conforms to unique`() {
     val x: @Unique Any = makeUnique() ?: return
 }
+
+fun `return in elvis conforms to shared`() {
+    val x: Any = makeUnique() ?: return
+}
