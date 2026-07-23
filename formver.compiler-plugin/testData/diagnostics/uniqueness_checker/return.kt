@@ -55,3 +55,9 @@ fun `return shared from unique function`(a: Any) : @Unique Any {
 fun `return conforms to unique`() {
     val x: @Unique Nothing = return
 }
+
+fun makeUnique(): @Unique Any? = null
+
+fun `return in elvis conforms to unique`() {
+    val x: @Unique Any = makeUnique() ?: return
+}
