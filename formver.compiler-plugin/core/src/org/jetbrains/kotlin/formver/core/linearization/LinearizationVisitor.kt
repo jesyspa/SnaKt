@@ -343,12 +343,20 @@ data class LinearizationVisitor(
 
     // region Comparisons
 
-    override fun visitEqCmp(e: EqCmp): Linearizable = comparisonLinearizable(e)
-    override fun visitNeCmp(e: NeCmp): Linearizable = comparisonLinearizable(e)
+    override fun visitEqCmp(e: EqCmp): Linearizable =
+        comparisonLinearizable(e, ComparisonRepresentation.shared(e.left.type, e.right.type))
 
-    override fun visitIdentityCmp(e: IdentityCmp): Linearizable = comparisonLinearizable(e)
+    override fun visitNeCmp(e: NeCmp): Linearizable =
+        comparisonLinearizable(e, ComparisonRepresentation.shared(e.left.type, e.right.type))
 
-    private fun comparisonLinearizable(e: AnyComparisonExpression): Linearizable = object : DirectResultLinearizable(e, this@LinearizationVisitor) {
+    /** `===` compares references, so its operands are never unwrapped, whatever their types are. */
+    override fun visitIdentityCmp(e: IdentityCmp): Linearizable =
+        comparisonLinearizable(e, ComparisonRepresentation.Refs)
+
+    private fun comparisonLinearizable(
+        e: AnyComparisonExpression,
+        comparedAs: ComparisonRepresentation,
+    ): Linearizable = object : DirectResultLinearizable(e, this@LinearizationVisitor) {
         override fun toViper(ctx: LinearizationContext): Exp =
             RuntimeTypeDomain.boolInjection.toRef(
                 toViperBuiltinType(ctx),
@@ -357,8 +365,7 @@ data class LinearizationVisitor(
             )
 
         override fun toViperBuiltinType(ctx: LinearizationContext): Exp {
-            fun ExpEmbedding.operand(): Exp =
-                if (e.comparesUnwrapped) linearize().toViperBuiltinType(ctx) else linearize().toViper(ctx)
+            fun ExpEmbedding.operand(): Exp = comparedAs.operandToViper(linearize(), type, ctx)
             return e.comparisonOperation(
                 e.left.operand(),
                 e.right.operand(),
