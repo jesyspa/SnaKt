@@ -17,7 +17,6 @@ import org.jetbrains.kotlin.formver.core.embeddings.expression.*
 import org.jetbrains.kotlin.formver.core.embeddings.types.ClassTypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.fillHoles
 import org.jetbrains.kotlin.formver.core.embeddings.types.injection
-import org.jetbrains.kotlin.formver.core.embeddings.types.predicateAccess
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 import org.jetbrains.kotlin.formver.viper.ast.Exp.Companion.toConjunction
 import org.jetbrains.kotlin.formver.viper.ast.Stmt
@@ -430,12 +429,7 @@ data class LinearizationVisitor(
                 else -> {
                     val receiverViper = e.receiver.linearize().toViper(ctx)
                     if (e.field.unfoldToAccess && !accessIsManual) {
-                        val receiverWrapper = ExpWrapper(receiverViper, e.receiver.type)
-                        val hierarchyPath = ctx.typeResolver.hierarchyPathTo(e.receiver.type.pretype, e.field)
-                        hierarchyPath.forEach { classType ->
-                            val predAcc = classType.predicateAccess(receiverWrapper, ctx.typeResolver, ctx.source)
-                            ctx.addStatement { Stmt.Unfold(predAcc) }
-                        }
+                        ctx.unfoldHierarchyPredicates(receiverViper, e.receiver.type, e.field)
                     }
                     val newValueViper = e.newValue.linearize().toViper(ctx)
                     ctx.addStatement {
