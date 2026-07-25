@@ -194,6 +194,8 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         return when (equalityOperatorCall.operation) {
             FirOperation.EQ -> convertEqCmp(left, right)
             FirOperation.NOT_EQ -> Not(convertEqCmp(left, right))
+            FirOperation.IDENTITY -> IdentityCmp(left, right)
+            FirOperation.NOT_IDENTITY -> Not(IdentityCmp(left, right))
             else -> handleUnimplementedElement(
                 equalityOperatorCall.source,
                 "Equality comparison operation ${equalityOperatorCall.operation} not yet implemented.",

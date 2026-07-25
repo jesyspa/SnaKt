@@ -34,6 +34,7 @@ interface ExpVisitor<R> {
     fun visitDeclare(e: Declare): R
     fun visitEqCmp(e: EqCmp): R
     fun visitNeCmp(e: NeCmp): R
+    fun visitIdentityCmp(e: IdentityCmp): R
     fun visitBinaryOperatorExpEmbedding(e: BinaryOperatorExpEmbedding): R
     fun visitSequentialAnd(e: SequentialAnd): R
     fun visitSequentialOr(e: SequentialOr): R
@@ -94,6 +95,7 @@ interface DefaultingExpVisitor<R> : ExpVisitor<R> {
     override fun visitDeclare(e: Declare): R = visitDefault(e)
     override fun visitEqCmp(e: EqCmp): R = visitDefault(e)
     override fun visitNeCmp(e: NeCmp): R = visitDefault(e)
+    override fun visitIdentityCmp(e: IdentityCmp): R = visitDefault(e)
     override fun visitBinaryOperatorExpEmbedding(e: BinaryOperatorExpEmbedding): R = visitDefault(e)
     override fun visitSequentialAnd(e: SequentialAnd): R = visitDefault(e)
     override fun visitSequentialOr(e: SequentialOr): R = visitDefault(e)

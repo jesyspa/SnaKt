@@ -21,6 +21,10 @@ sealed interface AnyComparisonExpression : ExpEmbedding {
 
     val comparisonOperation: Operator
 
+    /** Whether to compare the operands at their builtin type; they are compared as `Ref`s otherwise. */
+    val comparesUnwrapped: Boolean
+        get() = left.type == right.type
+
     override fun children(): Sequence<ExpEmbedding> = sequenceOf(left, right)
 }
 
@@ -41,6 +45,17 @@ data class NeCmp(
 
     override val comparisonOperation = NeAny
     override fun <R> accept(v: ExpVisitor<R>): R = v.visitNeCmp(this)
+}
+
+/** Kotlin reference equality (`===`). */
+data class IdentityCmp(
+    override val left: ExpEmbedding,
+    override val right: ExpEmbedding,
+    override val sourceRole: SourceRole? = null,
+) : AnyComparisonExpression {
+    override val comparisonOperation = EqAny
+    override val comparesUnwrapped = false
+    override fun <R> accept(v: ExpVisitor<R>): R = v.visitIdentityCmp(this)
 }
 
 fun ExpEmbedding.notNullCmp(): ExpEmbedding = NeCmp(this, NullLit)
