@@ -29,7 +29,7 @@ private fun FirFunctionSymbol<*>.declares(symbol: FirBasedSymbol<*>): Boolean {
 }
 
 private val FirFunctionSymbol<*>.supportsLocalityCapture: Boolean
-    get() = this is FirAnonymousFunctionSymbol || !isNonLocal
+    get() = this is FirAnonymousFunctionSymbol || callableId.isLocal
 
 private val FirBasedSymbol<*>.isBoundary: Boolean
     get() = when (this) {
