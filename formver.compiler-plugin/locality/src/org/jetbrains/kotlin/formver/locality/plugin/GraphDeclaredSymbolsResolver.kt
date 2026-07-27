@@ -11,6 +11,7 @@ import org.jetbrains.kotlin.fir.caches.firCachesFactory
 import org.jetbrains.kotlin.fir.declarations.FirFunction
 import org.jetbrains.kotlin.fir.extensions.FirExtensionSessionComponent
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.ControlFlowGraph
+import org.jetbrains.kotlin.fir.resolve.dfa.cfg.LocalClassExitNode
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.LocalFunctionDeclarationNode
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.VariableDeclarationNode
 import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
@@ -46,7 +47,8 @@ class GraphDeclaredSymbolsResolver(session: FirSession) : FirExtensionSessionCom
         graph.nodes
             .mapNotNull { node ->
                 (node as? VariableDeclarationNode)?.fir?.symbol ?:
-                (node as? LocalFunctionDeclarationNode)?.fir?.symbol
+                (node as? LocalFunctionDeclarationNode)?.fir?.symbol ?:
+                (node as? LocalClassExitNode)?.fir?.symbol
             }
             .forEach(declarations::add)
 
