@@ -1,0 +1,1 @@
+/exists_char_bound_contract.kt: warning: Viper verification error: Postcondition of existsCharBelowMin might not hold. Assertion (exists anon: Int :: 0 <= anon && anon < 65536 && anon < 0) might not hold.

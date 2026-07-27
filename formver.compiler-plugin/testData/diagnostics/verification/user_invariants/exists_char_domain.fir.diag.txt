@@ -1,0 +1,19 @@
+/exists_char_domain.kt: info: Generated Viper text for charBelowMinExists:
+method charBelowMinExists() returns (v_ret_0: Ref)
+  ensures isSubtype(typeOf(v_ret_0), intType())
+  ensures (exists anon: Int :: 0 <= anon && anon < 65536 && anon < 0)
+{
+  v_ret_0 := intToRef(0)
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/exists_char_domain.kt: info: Generated Viper text for charAboveMaxExists:
+method charAboveMaxExists() returns (v_ret_0: Ref)
+  ensures isSubtype(typeOf(v_ret_0), intType())
+  ensures (exists anon: Int :: 0 <= anon && anon < 65536 && anon > 65535)
+{
+  v_ret_0 := intToRef(0)
+  goto lbl_ret_0
+  label lbl_ret_0
+}

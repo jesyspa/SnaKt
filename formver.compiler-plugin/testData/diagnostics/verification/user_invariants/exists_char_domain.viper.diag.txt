@@ -1,0 +1,3 @@
+/exists_char_domain.kt: warning: Viper verification error: Postcondition of charBelowMinExists might not hold. Assertion (exists anon: Int :: 0 <= anon && anon < 65536 && anon < 0) might not hold.
+
+/exists_char_domain.kt: warning: Viper verification error: Postcondition of charAboveMaxExists might not hold. Assertion (exists anon: Int :: 0 <= anon && anon < 65536 && anon > 65535) might not hold.

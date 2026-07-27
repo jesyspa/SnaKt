@@ -14,6 +14,7 @@ import org.jetbrains.kotlin.formver.core.embeddings.*
 import org.jetbrains.kotlin.formver.core.embeddings.callables.toFuncApp
 import org.jetbrains.kotlin.formver.core.embeddings.callables.toMethodCall
 import org.jetbrains.kotlin.formver.core.embeddings.expression.*
+import org.jetbrains.kotlin.formver.core.embeddings.types.CharTypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.fillHoles
 import org.jetbrains.kotlin.formver.core.embeddings.types.injection
 import org.jetbrains.kotlin.formver.core.embeddings.types.predicateAccess
@@ -495,13 +496,18 @@ data class LinearizationVisitor(
     override fun visitForAllEmbedding(e: ForAllEmbedding): Linearizable = object : OnlyToBuiltinLinearizable(e, this@LinearizationVisitor) {
         override fun toViperBuiltinType(ctx: LinearizationContext): Exp {
             val (conjunction, viperTriggers) = quantifierParts(e.conditions, e.triggerExpressions, ctx)
+            val charBound = e.variable.charDomainBoundOrNull()
             return Exp.Forall(
                 variables = listOf(e.variable.toLocalVarDecl()),
                 triggers = viperTriggers,
-                exp = if (e.variable.isOriginallyRef) Exp.Implies(
-                    e.variable.toViperExp(ctx).isOf(e.variable.type.runtimeType),
-                    conjunction
-                ) else conjunction,
+                exp = when {
+                    e.variable.isOriginallyRef -> Exp.Implies(
+                        e.variable.toViperExp(ctx).isOf(e.variable.type.runtimeType),
+                        conjunction
+                    )
+                    charBound != null -> Exp.Implies(charBound, conjunction)
+                    else -> conjunction
+                },
                 pos = ctx.source.asPosition,
                 info = e.sourceRole.asInfo,
             )
@@ -511,13 +517,18 @@ data class LinearizationVisitor(
     override fun visitExistsEmbedding(e: ExistsEmbedding): Linearizable = object : OnlyToBuiltinLinearizable(e, this@LinearizationVisitor) {
         override fun toViperBuiltinType(ctx: LinearizationContext): Exp {
             val (conjunction, viperTriggers) = quantifierParts(e.conditions, e.triggerExpressions, ctx)
+            val charBound = e.variable.charDomainBoundOrNull()
             return Exp.Exists(
                 variables = listOf(e.variable.toLocalVarDecl()),
                 triggers = viperTriggers,
-                exp = if (e.variable.isOriginallyRef) Exp.And(
-                    e.variable.toViperExp(ctx).isOf(e.variable.type.runtimeType),
-                    conjunction
-                ) else conjunction,
+                exp = when {
+                    e.variable.isOriginallyRef -> Exp.And(
+                        e.variable.toViperExp(ctx).isOf(e.variable.type.runtimeType),
+                        conjunction
+                    )
+                    charBound != null -> Exp.And(charBound, conjunction)
+                    else -> conjunction
+                },
                 pos = ctx.source.asPosition,
                 info = e.sourceRole.asInfo,
             )
@@ -624,3 +635,18 @@ data class LinearizationVisitor(
 
     // endregion
 }
+
+// Exclusive upper bound of the Unicode code-point range a Kotlin `Char` occupies.
+private const val CHAR_CODE_POINT_UPPER_BOUND = 65536
+
+/**
+ * A `Char` quantifier variable is lowered to a Viper `Int`, so without a bound it
+ * ranges over every integer including negative code points. Constrain it to the
+ * Unicode code-point range `[0, 65536)` so `forAll<Char>`/`exists<Char>` don't
+ * need a manual guard. Returns `null` for non-`Char` variables.
+ */
+private fun VariableEmbedding.charDomainBoundOrNull(): Exp? =
+    if (type.pretype == CharTypeEmbedding && !type.flags.nullable) {
+        val v = toLocalVarUse()
+        Exp.And(Exp.LeCmp(Exp.IntLit(0), v), Exp.LtCmp(v, Exp.IntLit(CHAR_CODE_POINT_UPPER_BOUND)))
+    } else null

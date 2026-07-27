@@ -61,8 +61,8 @@ fun write(): Any? =
 class InvariantBuilder {
     /**
      * Specifies trigger expressions for quantifiers.
-     * This function should be called within a `forAll` block to provide user-defined triggers
-     * for SMT solver guidance.
+     * This function should be called within a `forAll` or `exists` block to provide user-defined
+     * triggers for SMT solver guidance.
      */
     fun triggers(@Suppress("UNUSED_PARAMETER") vararg expressions: Any?): Unit =
         throw FormverFunctionCalledInRuntimeException("triggers")
