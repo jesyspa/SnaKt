@@ -10,16 +10,18 @@ import org.jetbrains.kotlin.fir.analysis.checkers.context.CheckerContext
 import org.jetbrains.kotlin.fir.caches.firCachesFactory
 import org.jetbrains.kotlin.fir.expressions.FirExpression
 import org.jetbrains.kotlin.fir.expressions.FirFunctionCall
+import org.jetbrains.kotlin.fir.expressions.FirJump
+import org.jetbrains.kotlin.fir.expressions.FirLiteralExpression
 import org.jetbrains.kotlin.fir.expressions.FirPropertyAccessExpression
 import org.jetbrains.kotlin.fir.expressions.FirReturnExpression
 import org.jetbrains.kotlin.fir.expressions.FirSafeCallExpression
 import org.jetbrains.kotlin.fir.expressions.FirThisReceiverExpression
+import org.jetbrains.kotlin.fir.expressions.FirThrowExpression
 import org.jetbrains.kotlin.fir.extensions.FirExtensionSessionComponent
 import org.jetbrains.kotlin.fir.references.symbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirConstructorSymbol
 import org.jetbrains.kotlin.fir.types.coneType
-import org.jetbrains.kotlin.fir.types.isNothingOrNullableNothing
-import org.jetbrains.kotlin.fir.types.isPrimitive
+import org.jetbrains.kotlin.fir.types.isNullLiteral
 import org.jetbrains.kotlin.fir.types.resolvedType
 import org.jetbrains.kotlin.formver.type.plugin.ExpressionTypeFactResolver
 import org.jetbrains.kotlin.formver.type.plugin.UnifyingExpressionTypeFactResolver
@@ -71,16 +73,17 @@ fun FirExpression.resolveTerminalUniqueness(): Uniqueness {
             receiverUniqueness.join(resolveAccessUniqueness())
         }
 
-        else -> {
-            val resolvedType = resolvedType
-
-            // Resolve `null` and primitive values as unique
-            if (resolvedType.isNothingOrNullableNothing || resolvedType.isPrimitive) {
+        is FirLiteralExpression -> {
+            if (isNullLiteral) {
                 Uniqueness.Unique
             } else {
                 Uniqueness.Shared
             }
         }
+
+        is FirJump<*>, is FirThrowExpression -> Uniqueness.Unique
+
+        else -> Uniqueness.Shared
     }
 }
 

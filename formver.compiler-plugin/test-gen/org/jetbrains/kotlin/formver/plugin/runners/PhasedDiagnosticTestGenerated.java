@@ -171,6 +171,12 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
     }
 
     @Test
+    @TestMetadata("break.kt")
+    public void testBreak() {
+      runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/break.kt");
+    }
+
+    @Test
     @TestMetadata("call.kt")
     public void testCall() {
       runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/call.kt");
@@ -192,6 +198,12 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
     @TestMetadata("context.kt")
     public void testContext() {
       runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/context.kt");
+    }
+
+    @Test
+    @TestMetadata("continue.kt")
+    public void testContinue() {
+      runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/continue.kt");
     }
 
     @Test
@@ -222,6 +234,12 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
     @TestMetadata("operator.kt")
     public void testOperator() {
       runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/operator.kt");
+    }
+
+    @Test
+    @TestMetadata("primitive.kt")
+    public void testPrimitive() {
+      runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/primitive.kt");
     }
 
     @Test
