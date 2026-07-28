@@ -11,21 +11,33 @@ import org.jetbrains.kotlin.fir.analysis.cfa.util.traverseToFixedPoint
 import org.jetbrains.kotlin.fir.analysis.checkers.context.CheckerContext
 import org.jetbrains.kotlin.fir.caches.firCachesFactory
 import org.jetbrains.kotlin.fir.declarations.FirFunction
+import org.jetbrains.kotlin.fir.expressions.FirCall
 import org.jetbrains.kotlin.fir.extensions.FirExtensionSessionComponent
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.CFGNode
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.ControlFlowGraph
 import org.jetbrains.kotlin.formver.locality.plugin.CallArgumentLocalitiesMapper
 
 /**
+ * Checks whether a call doesn't modify the uniqueness state.
+ */
+fun interface UniquenessNeutralCallPredicate {
+    context(context: CheckerContext)
+    fun accepts(call: FirCall): Boolean
+}
+
+/**
  * Session component that caches uniqueness-state flow analysis for control-flow graphs.
+ *
+ * @param uniquenessNeutralCallPredicate Is a predicate returning `true` if a call does not change the uniqueness state,
+ *  `false` otherwise.
  */
 class GraphUniquenessStatesResolver(
-    private val callPurityPredicate: CallPurityPredicate,
+    private val uniquenessNeutralCallPredicate: UniquenessNeutralCallPredicate,
     session: FirSession
 ) : FirExtensionSessionComponent(session) {
     companion object {
-        fun getFactory(callPurityPredicate: CallPurityPredicate = { false }): Factory {
-            return Factory { session -> GraphUniquenessStatesResolver(callPurityPredicate, session) }
+        fun getFactory(uniquenessNeutralCallPredicate: UniquenessNeutralCallPredicate = { false }): Factory {
+            return Factory { session -> GraphUniquenessStatesResolver(uniquenessNeutralCallPredicate, session) }
         }
     }
 
@@ -73,7 +85,7 @@ class GraphUniquenessStatesResolver(
             initialState,
             context,
             CallArgumentLocalitiesMapper,
-            callPurityPredicate
+            uniquenessNeutralCallPredicate
         )
 
         return graph.traverseToFixedPoint(analyzer)
