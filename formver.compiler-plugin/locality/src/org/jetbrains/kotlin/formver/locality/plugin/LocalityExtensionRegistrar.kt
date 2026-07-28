@@ -28,7 +28,9 @@ class LocalityExtensionRegistrar(
         +LocalityAttributeExtension.getFactory(localityAnnotationId)
         +ExpressionLocalityContractResolver.getFactory()
         +ExpressionLocalityResolver.getFactory()
-        +GraphLocalPropertySymbolsResolver.getFactory()
+        +GraphDeclaredSymbolsResolver.getFactory()
+        +GraphCapturedSymbolsResolver.getFactory()
+        +GraphScopeLocalityResolver.getFactory()
         +LocalityAdditionalCheckers.getFactory()
         +LocalityContractAdditionalCheckers.getFactory()
     }

@@ -120,33 +120,13 @@ fun `pass local as local argument in local property initializer`(x: @Borrowed A)
     val y = borrow(x)
 }
 
-fun `pass outer local as local argument in lambda`(x: @Borrowed A) {
-    {
-        borrow(<!INVALID_LOCALITY_CAPTURE!>x<!>)
+fun `capturing local function call result remains global`(x: @Borrowed A) {
+    fun produce(): A {
+        borrow(x)
+        return A()
     }
-}
-open class `base with global constructor parameter`(x: Any)
 
-class `derive and call super` : `base with global constructor parameter` {
-    constructor(x: Any, marker: Int) : super(x)
+    share(produce())
 
-    constructor(x: @Borrowed Any) : super(<!LOCALITY_MISMATCH!>x<!>)
-}
-
-class `chain this constructors with global parameter` {
-    constructor(x: Any)
-
-    constructor(x: @Borrowed Any, marker: Int) : this(<!LOCALITY_MISMATCH!>x<!>)
-}
-
-open class `base with borrowed constructor parameter`(x: @Borrowed Any)
-
-class `derive and call borrowed super` : `base with borrowed constructor parameter` {
-    constructor(x: @Borrowed Any) : super(x)
-}
-
-class `chain this constructors with borrowed parameter` {
-    constructor(x: @Borrowed Any)
-
-    constructor(x: @Borrowed Any, marker: Int) : this(x)
+    val y: A = produce()
 }

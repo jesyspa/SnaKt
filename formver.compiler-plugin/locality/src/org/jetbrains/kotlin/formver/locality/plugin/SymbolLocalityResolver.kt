@@ -7,6 +7,9 @@ package org.jetbrains.kotlin.formver.locality.plugin
 
 import org.jetbrains.kotlin.KtFakeSourceElementKind
 import org.jetbrains.kotlin.fir.analysis.checkers.context.CheckerContext
+import org.jetbrains.kotlin.fir.resolve.dfa.controlFlowGraph
+import org.jetbrains.kotlin.fir.symbols.impl.FirCallableSymbol
+import org.jetbrains.kotlin.fir.symbols.impl.FirFunctionSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirReceiverParameterSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirVariableSymbol
 import org.jetbrains.kotlin.fir.types.ConeErrorType
@@ -23,6 +26,14 @@ object ReceiverLocalityResolver :
 }
 
 context(context: CheckerContext)
+fun FirFunctionSymbol<*>.resolveScopeLocality(): Locality {
+    val graph = resolvedControlFlowGraphReference?.controlFlowGraph
+        ?: return Locality.Global
+
+    return graph.resolveScopeLocality()
+}
+
+context(context: CheckerContext)
 fun FirVariableSymbol<*>.resolveLocality(): Locality {
     if (resolvedReturnType is ConeErrorType) return Locality.Global
 
@@ -32,6 +43,14 @@ fun FirVariableSymbol<*>.resolveLocality(): Locality {
 
     return resolvedInitializer?.resolveLocality() ?: Locality.Global
 }
+
+context(context: CheckerContext)
+fun FirCallableSymbol<*>.resolveLocality(): Locality =
+    when (this) {
+        is FirVariableSymbol<*> -> resolveLocality()
+        is FirFunctionSymbol<*> -> resolveScopeLocality()
+        else -> Locality.Global
+    }
 
 object VariableLocalityResolver :
     SymbolTypeFactResolver<Locality, FirVariableSymbol<*>> {

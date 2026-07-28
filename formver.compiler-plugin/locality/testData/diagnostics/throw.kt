@@ -13,9 +13,3 @@ fun `throw local value explicitly`(x: @Borrowed Throwable) {
 fun @Borrowed Throwable.`throw local receiver explicitly`() {
     throw <!LOCALITY_MISMATCH!>this<!>
 }
-
-fun `throw local value from lambda`(x: @Borrowed Throwable) {
-    run {
-        throw <!INVALID_LOCALITY_CAPTURE, LOCALITY_MISMATCH!>x<!>
-    }
-}

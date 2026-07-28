@@ -1,0 +1,11 @@
+/cast.kt: error: Initializer locality mismatch: expected 'global', actual 'local'.
+
+/cast.kt: error: Initializer locality mismatch: expected 'global', actual 'local'.
+
+/cast.kt: error: Initializer locality mismatch: expected 'global', actual 'local'.
+
+/cast.kt: error: Assignment locality mismatch: expected 'global', actual 'local'.
+
+/cast.kt: error: Initializer locality mismatch: expected 'global', actual 'local'.
+
+/cast.kt: error: Assignment locality mismatch: expected 'global', actual 'local'.

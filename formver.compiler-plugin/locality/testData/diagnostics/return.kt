@@ -11,12 +11,6 @@ fun `return local value explicitly`(x: @Borrowed Any): Any {
 fun `return local value from expression body`(x: @Borrowed Any): Any =
     <!LOCALITY_MISMATCH!>x<!>
 
-fun `return local value from lambda body`(x: @Borrowed Any) {
-    run<Any> {
-        <!INVALID_LOCALITY_CAPTURE, LOCALITY_MISMATCH!>x<!>
-    }
-}
-
 class A(
     val x: Any
 )

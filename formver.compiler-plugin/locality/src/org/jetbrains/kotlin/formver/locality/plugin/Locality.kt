@@ -46,9 +46,6 @@ object LocalityUnifier : TypeFactUnifier<Locality> {
     }
 }
 
-/**
- * Meet operations will be needed later for checking locality contracts
- */
 fun Locality.meet(other: Locality): Locality =
     maxOf(this, other)
 

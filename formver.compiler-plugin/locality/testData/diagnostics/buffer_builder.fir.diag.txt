@@ -1,0 +1,1 @@
+/buffer_builder.kt: error: Assignment locality mismatch: expected 'global', actual 'local'.
