@@ -6,7 +6,7 @@
 package org.jetbrains.kotlin.formver.plugin
 
 @Target(AnnotationTarget.CONSTRUCTOR, AnnotationTarget.FUNCTION)
-annotation class SpecificationHelper
+internal annotation class SpecificationHelper
 
 private class FormverFunctionCalledInRuntimeException(offendingFunction: String) :
     RuntimeException("Function `$offendingFunction` should never be called in runtime.")
