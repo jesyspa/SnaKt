@@ -37,7 +37,7 @@ fun <T> forAll(@Suppress("UNUSED_PARAMETER") body: InvariantBuilder.(T) -> Unit)
 
 
 @SpecificationHelper
-fun <T> old(@Suppress("UNUSED_PARAMETER") body: T): T =
+fun <T> old(@Suppress("UNUSED_PARAMETER") body: @Borrowed T): T =
     throw FormverFunctionCalledInRuntimeException("old")
 
 
@@ -81,8 +81,10 @@ fun write(): Permission =
 
 /**
  * The uniqueness predicate of [data]: exclusive access to [data] and its fields.
+ *
+ * TODO: If this class only serves as a DSL for specifying a unique predicate, I would simply make it a function.
  */
-data class UniquePred @SpecificationHelper constructor(val data: Any) : Predicate(data)
+data class UniquePred @SpecificationHelper constructor(val data: @Borrowed Any) : Predicate(data)
 
 /**
  * Exchanges [exp] for access to its body, exposing the underlying fields. The inverse of [fold].
