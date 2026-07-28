@@ -22,6 +22,8 @@ import org.jetbrains.kotlin.fir.resolve.dfa.cfg.CFGNodeWithSubgraphs
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.ControlFlowGraph
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.EnterValueParameterNode
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.ExitDefaultArgumentsNode
+import org.jetbrains.kotlin.fir.resolve.dfa.cfg.CFGNodeWithSubgraphs
+import org.jetbrains.kotlin.fir.resolve.dfa.cfg.ControlFlowGraph
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.FunctionCallEnterNode
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.FunctionCallExitNode
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.JumpNode
