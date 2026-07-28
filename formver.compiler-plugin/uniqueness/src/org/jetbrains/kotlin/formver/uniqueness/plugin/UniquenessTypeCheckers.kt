@@ -12,6 +12,7 @@ import org.jetbrains.kotlin.formver.type.plugin.PropertyTypeFactChecker
 import org.jetbrains.kotlin.formver.type.plugin.QualifiedAccessTypeFactChecker
 import org.jetbrains.kotlin.formver.type.plugin.ReturnTypeFactChecker
 import org.jetbrains.kotlin.formver.type.plugin.ThrowTypeFactChecker
+import org.jetbrains.kotlin.formver.type.plugin.ValueParameterTypeFactChecker
 
 val AssignmentUniquenessChecker = AssignmentTypeFactChecker(
     kind = MppCheckerKind.Common,
@@ -60,4 +61,12 @@ val ThrowUniquenessChecker = ThrowTypeFactChecker(
     expressionTypeFactResolver = ExpressionUniquenessResolver,
     throwExceptionTypeFactResolver = { Uniqueness.Shared },
     diagnosticFactory = UniquenessErrors.UNIQUENESS_MISMATCH,
+)
+
+val ValueParameterUniquenessChecker = ValueParameterTypeFactChecker(
+    kind = MppCheckerKind.Common,
+    typeFactJudgment = UniquenessJudgment,
+    expressionTypeFactResolver = ExpressionUniquenessResolver,
+    parameterDeclaredTypeFactResolver = VariableUniquenessResolver,
+    diagnosticFactory = UniquenessErrors.UNIQUENESS_MISMATCH
 )
