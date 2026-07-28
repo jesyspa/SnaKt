@@ -11,6 +11,8 @@ data class PluginConfiguration(
     val behaviour: UnsupportedFeatureBehaviour,
     val conversionSelection: TargetsSelection,
     val verificationSelection: TargetsSelection,
+    val checkLocality: Boolean = true,
+    val checkUniqueness: Boolean = true,
     val dumpUniquenessCFG: Boolean = false,
 ) {
     init {

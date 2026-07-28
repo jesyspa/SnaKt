@@ -26,19 +26,23 @@ class FormalVerificationPluginExtensionRegistrar(private val config: PluginConfi
         registerDiagnosticContainers(PluginErrors)
         registerDiagnosticContainers(VerificationErrors)
         registerDiagnosticContainers(ConversionErrors)
-        registerDiagnosticContainers(UniquenessErrors)
-        registerDiagnosticContainers(LocalityErrors)
-        registerDiagnosticContainers(LocalityContractErrors)
 
-        +ExpressionAccessStateResolver.getFactory()
-        +ExpressionUniquenessResolver.getFactory()
-        +GraphUniquenessStatesResolver.getFactory { it.isSpecificationCall() }
-        +UniquenessAttributeExtension.getFactory()
+        if (config.checkLocality) {
+            registerDiagnosticContainers(LocalityErrors)
+            registerDiagnosticContainers(LocalityContractErrors)
+            +ExpressionLocalityContractResolver.getFactory()
+            +ExpressionLocalityResolver.getFactory()
+            +GraphLocalPropertySymbolsResolver.getFactory()
+            +LocalityAttributeExtension.getFactory()
+        }
 
-        +ExpressionLocalityContractResolver.getFactory()
-        +ExpressionLocalityResolver.getFactory()
-        +GraphLocalPropertySymbolsResolver.getFactory()
-        +LocalityAttributeExtension.getFactory()
+        if (config.checkUniqueness) {
+            registerDiagnosticContainers(UniquenessErrors)
+            +ExpressionAccessStateResolver.getFactory()
+            +ExpressionUniquenessResolver.getFactory()
+            +GraphUniquenessStatesResolver.getFactory { it.isSpecificationCall() }
+            +UniquenessAttributeExtension.getFactory()
+        }
 
         +PluginAdditionalCheckers.getFactory(config)
     }

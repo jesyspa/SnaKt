@@ -50,6 +50,7 @@ import org.jetbrains.kotlin.formver.uniqueness.plugin.QualifiedAccessUniquenessC
 import org.jetbrains.kotlin.formver.uniqueness.plugin.ReturnUniquenessChecker
 import org.jetbrains.kotlin.formver.uniqueness.plugin.ThrowUniquenessChecker
 import org.jetbrains.kotlin.formver.uniqueness.plugin.TypeRefUniquenessAttributeChecker
+import org.jetbrains.kotlin.formver.uniqueness.plugin.ValueParameterUniquenessChecker
 
 class PluginAdditionalCheckers(session: FirSession, config: PluginConfiguration) :
     FirAdditionalCheckersExtension(session) {
@@ -70,6 +71,8 @@ class PluginAdditionalCheckers(session: FirSession, config: PluginConfiguration)
             }
 
         override val functionCheckers: Set<FirFunctionChecker> = buildSet {
+            if (!config.checkUniqueness) return@buildSet
+
             // Because specification bodies are pure we don't need to check flow-sensitive properties.
             add(FunctionEscapeUniquenessConsistencyChecker.asSpecificationAware())
             add(FunctionExitUniquenessConsistencyChecker.asSpecificationAware())
@@ -77,63 +80,109 @@ class PluginAdditionalCheckers(session: FirSession, config: PluginConfiguration)
         }
 
         override val propertyCheckers: Set<FirPropertyChecker> = buildSet {
-            add(PropertyUniquenessChecker)
-            add(PropertyLocalityChecker)
-            add(PropertyLocalityContractChecker)
+            if (config.checkLocality) {
+                add(PropertyLocalityChecker)
+                add(PropertyLocalityContractChecker)
+            }
+
+            if (config.checkUniqueness) {
+                add(PropertyUniquenessChecker)
+            }
         }
 
         override val valueParameterCheckers: Set<FirValueParameterChecker> = buildSet {
-            add(ValueParameterLocalityChecker)
-            add(ValueParameterLocalityContractChecker)
+            if (config.checkLocality) {
+                add(ValueParameterLocalityChecker)
+                add(ValueParameterLocalityContractChecker)
+            }
+
+            if (config.checkUniqueness) {
+                add(ValueParameterUniquenessChecker)
+            }
         }
     }
 
     override val expressionCheckers: ExpressionCheckers = object : ExpressionCheckers() {
         override val variableAssignmentCheckers: Set<FirVariableAssignmentChecker> = buildSet {
-            add(AssignmentUniquenessChecker)
-            add(AssignmentLocalityChecker)
-            add(AssignmentLocalityContractChecker)
+            if (config.checkLocality) {
+                add(AssignmentLocalityChecker)
+                add(AssignmentLocalityContractChecker)
+            }
+
+            if (config.checkUniqueness) {
+                add(AssignmentUniquenessChecker)
+            }
         }
 
         override val callCheckers: Set<FirCallChecker> = buildSet {
-            add(CallUniquenessChecker)
-            add(CallLocalityChecker)
-            add(CallLocalityContractChecker)
+            if (config.checkLocality) {
+                add(CallLocalityChecker)
+                add(CallLocalityContractChecker)
+            }
+
+            if (config.checkUniqueness) {
+                add(CallUniquenessChecker)
+            }
         }
 
         override val functionCallCheckers: Set<FirFunctionCallChecker> = buildSet {
-            add(FunctionCallArgumentUniquenessCollisionChecker)
+            if (config.checkUniqueness) {
+                add(FunctionCallArgumentUniquenessCollisionChecker)
+            }
         }
 
         override val qualifiedAccessExpressionCheckers: Set<FirQualifiedAccessExpressionChecker> = buildSet {
-            add(QualifiedAccessUniquenessChecker)
-            add(QualifiedAccessArgumentUniquenessCollisionChecker)
-            add(QualifiedAccessLocalityChecker)
-            add(QualifiedAccessLocalityContractChecker)
+            if (config.checkLocality) {
+                add(QualifiedAccessLocalityChecker)
+                add(QualifiedAccessLocalityContractChecker)
+            }
+
+            if (config.checkUniqueness) {
+                add(QualifiedAccessUniquenessChecker)
+                add(QualifiedAccessArgumentUniquenessCollisionChecker)
+            }
         }
 
         override val propertyAccessExpressionCheckers: Set<FirPropertyAccessExpressionChecker> = buildSet {
             // Specification blocks are not executed. Hence, they should be able to capture any variable regardless of
             // its locality.
-            add(PropertyAccessLocalityChecker.asSpecificationAware())
+
+            if (config.checkLocality) {
+                add(PropertyAccessLocalityChecker.asSpecificationAware())
+            }
         }
 
         override val returnExpressionCheckers: Set<FirReturnExpressionChecker> = buildSet {
-            add(ReturnUniquenessChecker)
-            add(ReturnLocalityChecker)
-            add(ReturnLocalityContractChecker)
+            if (config.checkLocality) {
+                add(ReturnLocalityChecker)
+                add(ReturnLocalityContractChecker)
+            }
+
+            if (config.checkUniqueness) {
+                add(ReturnUniquenessChecker)
+            }
         }
 
         override val throwExpressionCheckers: Set<FirThrowExpressionChecker> = buildSet {
-            add(ThrowUniquenessChecker)
-            add(ThrowLocalityChecker)
+            if (config.checkLocality) {
+                add(ThrowLocalityChecker)
+            }
+
+            if (config.checkUniqueness) {
+                add(ThrowUniquenessChecker)
+            }
         }
     }
 
     override val typeCheckers: TypeCheckers = object : TypeCheckers() {
         override val resolvedTypeRefCheckers: Set<FirResolvedTypeRefChecker> = buildSet {
-            add(TypeRefUniquenessAttributeChecker)
-            add(TypeRefLocalityAttributeChecker)
+            if (config.checkLocality) {
+                add(TypeRefLocalityAttributeChecker)
+            }
+
+            if (config.checkUniqueness) {
+                add(TypeRefUniquenessAttributeChecker)
+            }
         }
     }
 }
