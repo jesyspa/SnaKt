@@ -17,6 +17,7 @@ import org.jetbrains.kotlin.fir.expressions.allReceiverExpressions
 import org.jetbrains.kotlin.fir.expressions.arguments
 import org.jetbrains.kotlin.fir.expressions.toResolvedCallableSymbol
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.CFGNode
+import org.jetbrains.kotlin.fir.resolve.dfa.cfg.EnterValueParameterNode
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.ExitDefaultArgumentsNode
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.FunctionCallEnterNode
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.FunctionCallExitNode
@@ -183,6 +184,23 @@ class GraphUniquenessStatesAnalyzer(
                     newUniquenessState = argument.resolveAccessState().initialize(newUniquenessState)
                 }
 
+                data.put(Unit, newUniquenessState)
+            }
+        }
+    }
+
+    override fun visitEnterValueParameterNode(
+        node: EnterValueParameterNode,
+        data: PathAwareControlFlowInfo<Unit, UniquenessState>
+    ): PathAwareControlFlowInfo<Unit, UniquenessState> {
+        val valueParameterSymbol = node.fir.symbol
+
+        return with(context) {
+            data.transformValues { data ->
+                val newUniquenessState = data.getOrInitialize().insert(
+                    listOf(valueParameterSymbol),
+                    UniquenessState(valueParameterSymbol.resolveUniqueness())
+                )
                 data.put(Unit, newUniquenessState)
             }
         }

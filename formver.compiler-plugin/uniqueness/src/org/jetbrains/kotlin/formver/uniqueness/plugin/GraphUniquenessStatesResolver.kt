@@ -55,13 +55,6 @@ class GraphUniquenessStatesResolver(session: FirSession) : FirExtensionSessionCo
                     )
                 }
 
-                for (valueParameter in declaration.valueParameters) {
-                    val valueParameterSymbol = valueParameter.symbol
-                    initialState = initialState.putChild(
-                        valueParameterSymbol,
-                        UniquenessState(valueParameterSymbol.resolveUniqueness())
-                    )
-                }
             }
         }
 

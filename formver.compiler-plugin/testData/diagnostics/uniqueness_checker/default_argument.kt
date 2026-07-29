@@ -12,6 +12,13 @@ fun `assign shared default argument for unique parameter`(
     x: @Unique Any = <!UNIQUENESS_MISMATCH!>sharedValue<!>
 ) {}
 
+fun `assign shared parameter as unique default argument`(
+    x: Any,
+    y: @Unique Any = <!UNIQUENESS_MISMATCH!>x<!>
+) {
+    val z = x
+}
+
 class `assign unique default argument in constructor`(
     val x: @Unique Any = Any(),
 )
