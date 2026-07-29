@@ -207,6 +207,12 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
     }
 
     @Test
+    @TestMetadata("default_argument.kt")
+    public void testDefault_argument() {
+      runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/default_argument.kt");
+    }
+
+    @Test
     @TestMetadata("dump_cfg.kt")
     public void testDump_cfg() {
       runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/dump_cfg.kt");
@@ -725,12 +731,6 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
       @TestMetadata("elvis.kt")
       public void testElvis() {
         runTest("formver.compiler-plugin/testData/diagnostics/verification/operators/elvis.kt");
-      }
-
-      @Test
-      @TestMetadata("identity_equality.kt")
-      public void testIdentity_equality() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verification/operators/identity_equality.kt");
       }
 
       @Test
