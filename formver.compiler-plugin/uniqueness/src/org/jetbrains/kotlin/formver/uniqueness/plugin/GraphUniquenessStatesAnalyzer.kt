@@ -17,6 +17,7 @@ import org.jetbrains.kotlin.fir.expressions.allReceiverExpressions
 import org.jetbrains.kotlin.fir.expressions.arguments
 import org.jetbrains.kotlin.fir.expressions.toResolvedCallableSymbol
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.CFGNode
+import org.jetbrains.kotlin.fir.resolve.dfa.cfg.ExitDefaultArgumentsNode
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.FunctionCallEnterNode
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.FunctionCallExitNode
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.JumpNode
@@ -182,6 +183,28 @@ class GraphUniquenessStatesAnalyzer(
                     newUniquenessState = argument.resolveAccessState().initialize(newUniquenessState)
                 }
 
+                data.put(Unit, newUniquenessState)
+            }
+        }
+    }
+
+    override fun visitExitDefaultArgumentsNode(
+        node: ExitDefaultArgumentsNode,
+        data: PathAwareControlFlowInfo<Unit, UniquenessState>
+    ): PathAwareControlFlowInfo<Unit, UniquenessState> {
+        val valueParameter = node.fir
+
+        return with(context) {
+            data.transformValues { data ->
+                var newUniquenessState = data.getOrInitialize()
+                val defaultValue = valueParameter.defaultValue
+                    ?: return@transformValues data
+                val valueParameterSymbol = valueParameter.symbol
+                val valueParameterPath = listOf(valueParameterSymbol)
+                val defaultValueAccessState = defaultValue.resolveAccessState()
+                val defaultValueUniquenessState = defaultValueAccessState.projectTerminalUniquenessState(newUniquenessState)
+                newUniquenessState = newUniquenessState.insert(valueParameterPath, defaultValueUniquenessState)
+                newUniquenessState = defaultValueAccessState.move(newUniquenessState)
                 data.put(Unit, newUniquenessState)
             }
         }
