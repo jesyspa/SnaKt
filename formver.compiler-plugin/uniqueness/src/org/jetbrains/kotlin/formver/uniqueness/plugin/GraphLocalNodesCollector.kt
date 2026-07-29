@@ -11,14 +11,18 @@ import org.jetbrains.kotlin.fir.resolve.dfa.cfg.EnterValueParameterNode
 import org.jetbrains.kotlin.fir.resolve.dfa.controlFlowGraph
 
 /**
- * Collect the "local" CFG nodes of this graph. A node can be considered local if it is executed in the local scope.
+ * Collect the CFG nodes of the graphs that can address the local lexical scope.
+ *
+ * For function graphs these include subnodes of [FirValueParameter].
  */
 fun ControlFlowGraph.collectLocalNodes(): Sequence<CFGNode<*>> = sequence {
     yieldAll(nodes)
 
     for (node in nodes) {
         if (node is EnterValueParameterNode) {
-            yieldAll(node.fir.controlFlowGraphReference?.controlFlowGraph?.nodes ?: emptyList())
+            val valueParameter = node.fir
+            val valueParameterGraph = valueParameter.controlFlowGraphReference?.controlFlowGraph ?: continue
+            yieldAll(valueParameterGraph.nodes)
         }
     }
 }
