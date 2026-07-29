@@ -8,6 +8,9 @@ import org.jetbrains.kotlin.fir.analysis.checkers.declaration.FirFunctionChecker
 import org.jetbrains.kotlin.fir.declarations.FirFunction
 import org.jetbrains.kotlin.fir.expressions.FirExpression
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.CFGNode
+import org.jetbrains.kotlin.fir.resolve.dfa.cfg.CFGNodeWithSubgraphs
+import org.jetbrains.kotlin.fir.resolve.dfa.cfg.ControlFlowGraph
+import org.jetbrains.kotlin.fir.resolve.dfa.cfg.EnterValueParameterNode
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.ExitSafeCallNode
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.QualifiedAccessNode
 import org.jetbrains.kotlin.fir.resolve.dfa.controlFlowGraph
@@ -35,7 +38,7 @@ object FunctionUseAfterMoveChecker : FirFunctionChecker(MppCheckerKind.Common) {
         val graph = declaration.controlFlowGraphReference?.controlFlowGraph ?: return
         val uniquenessStateFlows = lazy { graph.resolveUniquenessStateFlows() }
 
-        for (node in graph.nodes) {
+        for (node in graph.collectLocalNodes()) {
             if (node.isDead) continue
 
             for (accessExpression in node.resolveAccesses()) {
