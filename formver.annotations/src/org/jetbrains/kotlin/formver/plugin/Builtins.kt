@@ -22,7 +22,7 @@ fun verify(@Suppress("UNUSED_PARAMETER") vararg predicates: Boolean) = Unit
 infix fun Boolean.implies(other: Boolean) = !this || other
 
 @SpecificationHelper
-fun loopInvariants(@Suppress("UNUSED_PARAMETER") body: () -> Unit) = Unit
+fun loopInvariants(@Suppress("UNUSED_PARAMETER") body: @Borrowed () -> Unit) = Unit
 
 @SpecificationHelper
 fun preconditions(@Suppress("UNUSED_PARAMETER") body: () -> Unit) = Unit
