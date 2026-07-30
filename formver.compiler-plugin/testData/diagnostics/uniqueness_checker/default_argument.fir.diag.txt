@@ -9,3 +9,5 @@
 /default_argument.kt: error: Invalid access to moved reference.
 
 /default_argument.kt: error: Invalid access to moved reference.
+
+/default_argument.kt: error: Initializer uniqueness mismatch: expected 'unique', actual 'shared'.

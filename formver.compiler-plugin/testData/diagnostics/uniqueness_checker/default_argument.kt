@@ -53,6 +53,32 @@ fun `share default argument resolved from shared parameter twice`(
     share(y)
 }
 
+fun `share constructor default for shared parameter twice`(
+    y: Any = Any(),
+) {
+    share(y)
+    share(y)
+}
+
+fun `share shared parameter with constructor default after assignment`(
+    y: Any = Any(),
+) {
+    val z = y
+    share(y)
+}
+
+fun `shared parameter with constructor default cannot initialize unique local`(
+    y: Any = Any(),
+) {
+    val z: @Unique Any = <!UNIQUENESS_MISMATCH!>y<!>
+}
+
+fun `reuse shared constructor default across multiple defaults`(
+    y: Any = Any(),
+    z: Any = y,
+    w: Any = y,
+) {}
+
 fun `assign shared default argument for borrowed parameter`(
     x: @Borrowed Any = sharedValue,
 ) {}
