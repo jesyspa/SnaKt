@@ -74,7 +74,7 @@ object FunctionEscapeUniquenessConsistencyChecker : FirFunctionChecker(MppChecke
         val graph = declaration.controlFlowGraphReference?.controlFlowGraph ?: return
         val uniquenessStateFlows = graph.resolveUniquenessStateFlows()
 
-        for (node in graph.nodes) {
+        for (node in graph.uniquenessAnalysisTargetNodes) {
             if (node.isDead) continue
 
             val inputUniquenessState = lazy {

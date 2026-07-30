@@ -6,6 +6,11 @@ import org.jetbrains.kotlin.formver.plugin.Borrowed
 val sharedValue: Any = Any()
 
 fun share(x: Any) {}
+fun consume(x: @Unique Any) {}
+
+class Node {
+    var child: @Unique Any = Any()
+}
 
 fun `assign unique default argument from constructor call`(
     x: @Unique Any = Any()
@@ -78,6 +83,18 @@ fun `reuse shared constructor default across multiple defaults`(
     z: Any = y,
     w: Any = y,
 ) {}
+
+fun `escape inconsistent parameter in function default argument`(
+    b: @Unique Node,
+    moved: @Unique Any = b.child,
+    escaped: Unit = consume(<!ESCAPE_UNIQUENESS_INCONSISTENCY!>b<!>),
+) {}
+
+class EscapeFromConstructorDefaultArgument(
+    b: @Unique Node,
+    moved: @Unique Any = b.child,
+    escaped: Unit = consume(<!ESCAPE_UNIQUENESS_INCONSISTENCY!>b<!>),
+)
 
 fun `assign shared default argument for borrowed parameter`(
     x: @Borrowed Any = sharedValue,

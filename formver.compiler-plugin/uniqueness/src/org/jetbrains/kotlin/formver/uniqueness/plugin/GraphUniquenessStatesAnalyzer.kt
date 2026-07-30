@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.fir.expressions.toResolvedCallableSymbol
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.CFGNode
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.CFGNodeWithSubgraphs
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.ControlFlowGraph
+import org.jetbrains.kotlin.fir.resolve.dfa.cfg.EnterValueParameterNode
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.ExitDefaultArgumentsNode
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.FunctionCallEnterNode
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.FunctionCallExitNode
@@ -46,6 +47,18 @@ fun PathAwareUniquenessStateFlow?.joinOverEdgeKinds(): UniquenessState =
 
 private val CFGNodeWithSubgraphs<*>.extendsLocalFlow: Boolean
     get() = fir is FirValueParameter
+
+/**
+ * Returns the nodes of [this] graph that are analyzed by [GraphUniquenessStatesAnalyzer]
+ */
+val ControlFlowGraph.uniquenessAnalysisTargetNodes: Sequence<CFGNode<*>>
+    get() = nodes.asSequence().flatMap { node ->
+        if (node is EnterValueParameterNode) {
+            node.subGraphs.asSequence().flatMap { subGraph -> subGraph.nodes.asSequence() }
+        } else {
+            sequenceOf(node)
+        }
+    }
 
 /**
  * Data-flow analyzer that tracks the uniqueness state of paths through a CFG.

@@ -8,8 +8,6 @@ import org.jetbrains.kotlin.fir.analysis.checkers.declaration.FirFunctionChecker
 import org.jetbrains.kotlin.fir.declarations.FirFunction
 import org.jetbrains.kotlin.fir.expressions.FirExpression
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.CFGNode
-import org.jetbrains.kotlin.fir.resolve.dfa.cfg.ControlFlowGraph
-import org.jetbrains.kotlin.fir.resolve.dfa.cfg.EnterValueParameterNode
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.ExitSafeCallNode
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.QualifiedAccessNode
 import org.jetbrains.kotlin.fir.resolve.dfa.controlFlowGraph
@@ -29,19 +27,6 @@ private fun CFGNode<*>.resolveAccess(): FirExpression? =
     }
 
 /**
- * Returns the nodes of [this] graph while expanding [EnterValueParameterNode]s to the nodes of their default-argument
- * subgraphs.
- */
-private val ControlFlowGraph.nodesIncludingDefaultParameters: Sequence<CFGNode<*>>
-    get() = nodes.asSequence().flatMap { node ->
-        if (node is EnterValueParameterNode) {
-            node.subGraphs.asSequence().flatMap { subGraph -> subGraph.nodes.asSequence() }
-        } else {
-            sequenceOf(node)
-        }
-    }
-
-/**
  * Checks that expressions do not read paths that have already been moved.
  */
 object FunctionUseAfterMoveChecker : FirFunctionChecker(MppCheckerKind.Common) {
@@ -50,7 +35,7 @@ object FunctionUseAfterMoveChecker : FirFunctionChecker(MppCheckerKind.Common) {
         val graph = declaration.controlFlowGraphReference?.controlFlowGraph ?: return
         val uniquenessStateFlows = lazy { graph.resolveUniquenessStateFlows() }
 
-        for (node in graph.nodesIncludingDefaultParameters) {
+        for (node in graph.uniquenessAnalysisTargetNodes) {
             if (node.isDead) continue
             val accessExpression = node.resolveAccess() ?: continue
             val accessState = accessExpression.resolveAccessState()
