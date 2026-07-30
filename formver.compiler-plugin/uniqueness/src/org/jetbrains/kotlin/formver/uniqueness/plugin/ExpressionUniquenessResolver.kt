@@ -12,7 +12,6 @@ import org.jetbrains.kotlin.fir.expressions.FirExpression
 import org.jetbrains.kotlin.fir.expressions.FirFunctionCall
 import org.jetbrains.kotlin.fir.expressions.FirJump
 import org.jetbrains.kotlin.fir.expressions.FirLiteralExpression
-import org.jetbrains.kotlin.fir.expressions.FirJump
 import org.jetbrains.kotlin.fir.expressions.FirPropertyAccessExpression
 import org.jetbrains.kotlin.fir.expressions.FirReturnExpression
 import org.jetbrains.kotlin.fir.expressions.FirSafeCallExpression
