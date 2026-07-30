@@ -12,12 +12,14 @@ import org.jetbrains.kotlin.fir.analysis.cfa.util.PathAwareControlFlowInfo
 import org.jetbrains.kotlin.fir.analysis.cfa.util.merge
 import org.jetbrains.kotlin.fir.analysis.cfa.util.transformValues
 import org.jetbrains.kotlin.fir.analysis.checkers.context.CheckerContext
+import org.jetbrains.kotlin.fir.declarations.FirValueParameter
 import org.jetbrains.kotlin.fir.expressions.FirReturnExpression
 import org.jetbrains.kotlin.fir.expressions.allReceiverExpressions
 import org.jetbrains.kotlin.fir.expressions.arguments
 import org.jetbrains.kotlin.fir.expressions.toResolvedCallableSymbol
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.CFGNode
-import org.jetbrains.kotlin.fir.resolve.dfa.cfg.EnterValueParameterNode
+import org.jetbrains.kotlin.fir.resolve.dfa.cfg.CFGNodeWithSubgraphs
+import org.jetbrains.kotlin.fir.resolve.dfa.cfg.ControlFlowGraph
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.ExitDefaultArgumentsNode
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.FunctionCallEnterNode
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.FunctionCallExitNode
@@ -42,6 +44,9 @@ fun PathAwareUniquenessStateFlow?.joinOverEdgeKinds(): UniquenessState =
         ?.reduceOrNull(UniquenessState::join)
         ?: EmptyUniquenessState
 
+private val CFGNodeWithSubgraphs<*>.extendsLocalFlow: Boolean
+    get() = fir is FirValueParameter
+
 /**
  * Data-flow analyzer that tracks the uniqueness state of paths through a CFG.
  *
@@ -64,6 +69,10 @@ class GraphUniquenessStatesAnalyzer(
 
     private fun UniquenessStateFlow.getOrInitialize(): UniquenessState =
         this[Unit] ?: initialState
+
+    override fun visitSubGraph(node: CFGNodeWithSubgraphs<*>, graph: ControlFlowGraph): Boolean {
+        return node.extendsLocalFlow
+    }
 
     override fun visitNode(
         node: CFGNode<*>,
@@ -189,23 +198,6 @@ class GraphUniquenessStatesAnalyzer(
         }
     }
 
-    override fun visitEnterValueParameterNode(
-        node: EnterValueParameterNode,
-        data: PathAwareControlFlowInfo<Unit, UniquenessState>
-    ): PathAwareControlFlowInfo<Unit, UniquenessState> {
-        val valueParameterSymbol = node.fir.symbol
-
-        return with(context) {
-            data.transformValues { data ->
-                val newUniquenessState = data.getOrInitialize().insert(
-                    listOf(valueParameterSymbol),
-                    UniquenessState(valueParameterSymbol.resolveUniqueness())
-                )
-                data.put(Unit, newUniquenessState)
-            }
-        }
-    }
-
     override fun visitExitDefaultArgumentsNode(
         node: ExitDefaultArgumentsNode,
         data: PathAwareControlFlowInfo<Unit, UniquenessState>
@@ -215,8 +207,7 @@ class GraphUniquenessStatesAnalyzer(
         return with(context) {
             data.transformValues { data ->
                 var newUniquenessState = data.getOrInitialize()
-                val defaultValue = valueParameter.defaultValue
-                    ?: return@transformValues data
+                val defaultValue = valueParameter.defaultValue ?: return@transformValues data
                 val valueParameterSymbol = valueParameter.symbol
                 val valueParameterPath = listOf(valueParameterSymbol)
                 val defaultValueAccessState = defaultValue.resolveAccessState()

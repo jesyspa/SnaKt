@@ -67,6 +67,6 @@ val ValueParameterUniquenessChecker = ValueParameterTypeFactChecker(
     kind = MppCheckerKind.Common,
     typeFactJudgment = UniquenessJudgment,
     expressionTypeFactResolver = ExpressionUniquenessResolver,
-    parameterDeclaredTypeFactResolver = VariableUniquenessResolver,
+    parameterDeclaredTypeFactResolver = ParameterUniquenessResolver,
     diagnosticFactory = UniquenessErrors.UNIQUENESS_MISMATCH
 )

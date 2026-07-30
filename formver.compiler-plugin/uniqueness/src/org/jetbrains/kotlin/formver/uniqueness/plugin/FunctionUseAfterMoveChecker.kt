@@ -8,7 +8,6 @@ import org.jetbrains.kotlin.fir.analysis.checkers.declaration.FirFunctionChecker
 import org.jetbrains.kotlin.fir.declarations.FirFunction
 import org.jetbrains.kotlin.fir.expressions.FirExpression
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.CFGNode
-import org.jetbrains.kotlin.fir.resolve.dfa.cfg.CFGNodeWithSubgraphs
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.ControlFlowGraph
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.EnterValueParameterNode
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.ExitSafeCallNode
@@ -22,11 +21,24 @@ import org.jetbrains.kotlin.formver.uniqueness.plugin.UniquenessErrors.INVALID_M
  * Currently the expressions are extracted from either [QualifiedAccessNode] and [ExitSafeCallNode], as both node types
  * may represent a field access.
  */
-private fun CFGNode<*>.resolveAccesses(): Sequence<FirExpression> =
+private fun CFGNode<*>.resolveAccess(): FirExpression? =
     when (this) {
-        is QualifiedAccessNode -> sequenceOf(fir)
-        is ExitSafeCallNode -> sequenceOf(fir)
-        else -> emptySequence()
+        is QualifiedAccessNode -> fir
+        is ExitSafeCallNode -> fir
+        else -> null
+    }
+
+/**
+ * Returns the nodes of [this] graph while expanding [EnterValueParameterNode]s to the nodes of their default-argument
+ * subgraphs.
+ */
+private val ControlFlowGraph.nodesIncludingDefaultParameters: Sequence<CFGNode<*>>
+    get() = nodes.asSequence().flatMap { node ->
+        if (node is EnterValueParameterNode) {
+            node.subGraphs.asSequence().flatMap { subGraph -> subGraph.nodes.asSequence() }
+        } else {
+            sequenceOf(node)
+        }
     }
 
 /**
@@ -38,17 +50,15 @@ object FunctionUseAfterMoveChecker : FirFunctionChecker(MppCheckerKind.Common) {
         val graph = declaration.controlFlowGraphReference?.controlFlowGraph ?: return
         val uniquenessStateFlows = lazy { graph.resolveUniquenessStateFlows() }
 
-        for (node in graph.collectLocalNodes()) {
+        for (node in graph.nodesIncludingDefaultParameters) {
             if (node.isDead) continue
+            val accessExpression = node.resolveAccess() ?: continue
+            val accessState = accessExpression.resolveAccessState()
+            val uniquenessState = uniquenessStateFlows.value.readInputUniquenessStateOf(node)
+                ?: EmptyUniquenessState
 
-            for (accessExpression in node.resolveAccesses()) {
-                val accessState = accessExpression.resolveAccessState()
-                val uniquenessState = uniquenessStateFlows.value.readInputUniquenessStateOf(node)
-                    ?: EmptyUniquenessState
-
-                if (accessState.projectTerminalUniqueness(uniquenessState) == Uniqueness.Moved) {
-                    reporter.reportOn(accessExpression.source, INVALID_MOVED_ACCESS)
-                }
+            if (accessState.projectTerminalUniqueness(uniquenessState) == Uniqueness.Moved) {
+                reporter.reportOn(accessExpression.source, INVALID_MOVED_ACCESS)
             }
         }
     }
