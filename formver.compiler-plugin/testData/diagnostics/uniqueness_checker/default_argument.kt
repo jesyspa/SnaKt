@@ -1,8 +1,11 @@
 // UNIQUE_CHECK_ONLY
 
 import org.jetbrains.kotlin.formver.plugin.Unique
+import org.jetbrains.kotlin.formver.plugin.Borrowed
 
 val sharedValue: Any = Any()
+
+fun share(x: Any) {}
 
 fun `assign unique default argument from constructor call`(
     x: @Unique Any = Any()
@@ -41,3 +44,15 @@ fun `chain assign unique argument as unique default argument`(
 ) {
     val z = <!INVALID_MOVED_ACCESS!>x<!>
 }
+
+fun `share default argument resolved from shared parameter twice`(
+    x: Any,
+    y: Any = x,
+) {
+    share(y)
+    share(y)
+}
+
+fun `assign shared default argument for borrowed parameter`(
+    x: @Borrowed Any = sharedValue,
+) {}
