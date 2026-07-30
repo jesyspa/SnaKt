@@ -28,8 +28,7 @@ fun loopInvariants(@Suppress("UNUSED_PARAMETER") body: @Borrowed () -> Unit) = U
 fun preconditions(@Suppress("UNUSED_PARAMETER") body: @Borrowed () -> Unit) = Unit
 
 @SpecificationHelper
-fun <T> postconditions(@Suppress("UNUSED_PARAMETER") body: (T) -> Unit) = Unit
-
+fun <T> postconditions(@Suppress("UNUSED_PARAMETER") body: @Borrowed (T) -> Unit) = Unit
 
 @SpecificationHelper
 fun <T> forAll(@Suppress("UNUSED_PARAMETER") body: InvariantBuilder.(T) -> Unit): Boolean =
