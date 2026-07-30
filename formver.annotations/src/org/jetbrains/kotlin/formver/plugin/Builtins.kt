@@ -34,7 +34,6 @@ fun <T> postconditions(@Suppress("UNUSED_PARAMETER") body: @Borrowed (T) -> Unit
 fun <T> forAll(@Suppress("UNUSED_PARAMETER") body: @Borrowed InvariantBuilder.(T) -> Unit): Boolean =
     throw FormverFunctionCalledInRuntimeException("forAll")
 
-
 @SpecificationHelper
 fun <T> old(@Suppress("UNUSED_PARAMETER") body: @Borrowed T): T =
     throw FormverFunctionCalledInRuntimeException("old")
