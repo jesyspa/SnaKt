@@ -32,7 +32,9 @@ class FormalVerificationPluginExtensionRegistrar(private val config: PluginConfi
             registerDiagnosticContainers(LocalityContractErrors)
             +ExpressionLocalityContractResolver.getFactory()
             +ExpressionLocalityResolver.getFactory()
-            +GraphLocalPropertySymbolsResolver.getFactory()
+            +GraphCapturedSymbolsResolver.getFactory()
+            +GraphDeclaredSymbolsResolver.getFactory()
+            +GraphScopeLocalityResolver.getFactory()
             +LocalityAttributeExtension.getFactory()
         }
 
