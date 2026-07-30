@@ -12,7 +12,9 @@ import org.jetbrains.kotlin.formver.core.isSpecificationCall
 import org.jetbrains.kotlin.formver.locality.contract.plugin.ExpressionLocalityContractResolver
 import org.jetbrains.kotlin.formver.locality.contract.plugin.LocalityContractErrors
 import org.jetbrains.kotlin.formver.locality.plugin.ExpressionLocalityResolver
-import org.jetbrains.kotlin.formver.locality.plugin.GraphLocalPropertySymbolsResolver
+import org.jetbrains.kotlin.formver.locality.plugin.GraphCapturedSymbolsResolver
+import org.jetbrains.kotlin.formver.locality.plugin.GraphDeclaredSymbolsResolver
+import org.jetbrains.kotlin.formver.locality.plugin.GraphScopeLocalityResolver
 import org.jetbrains.kotlin.formver.locality.plugin.LocalityAttributeExtension
 import org.jetbrains.kotlin.formver.locality.plugin.LocalityErrors
 import org.jetbrains.kotlin.formver.uniqueness.plugin.ExpressionAccessStateResolver
