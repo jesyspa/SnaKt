@@ -25,7 +25,7 @@ infix fun Boolean.implies(other: Boolean) = !this || other
 fun loopInvariants(@Suppress("UNUSED_PARAMETER") body: @Borrowed () -> Unit) = Unit
 
 @SpecificationHelper
-fun preconditions(@Suppress("UNUSED_PARAMETER") body: () -> Unit) = Unit
+fun preconditions(@Suppress("UNUSED_PARAMETER") body: @Borrowed () -> Unit) = Unit
 
 @SpecificationHelper
 fun <T> postconditions(@Suppress("UNUSED_PARAMETER") body: (T) -> Unit) = Unit
