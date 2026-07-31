@@ -60,13 +60,6 @@ val ControlFlowGraph.uniquenessAnalysisTargetNodes: Sequence<CFGNode<*>>
         }
     }
 
-/**
- * Checks whether the call is pure, and hence doesn't modify the analysis state.
- */
-fun interface CallPurityPredicate {
-    context(context: CheckerContext)
-    fun accepts(call: FirCall): Boolean
-}
 
 /**
  * Data-flow analyzer that tracks the uniqueness state of paths through a CFG.
