@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.fir.resolve.dfa.cfg.ControlFlowGraph
 import org.jetbrains.kotlin.formver.locality.plugin.CallArgumentLocalitiesMapper
 
 /**
- * Checks whether a call doesn't modify the uniqueness state.
+ * Checks whether a call doesn't modify the uniqueness state (i.e. it is uniqueness-neutral).
  */
 fun interface UniquenessNeutralCallPredicate {
     context(context: CheckerContext)
