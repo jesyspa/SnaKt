@@ -71,7 +71,7 @@ class GraphUniquenessStatesAnalyzer(
     private val initialState: UniquenessState,
     private val context: CheckerContext,
     private val callArgumentLocalitiesMapper: CallArgumentTypeFactsMapper<Locality>,
-    private val callPurityPredicate: CallPurityPredicate
+    private val uniquenessNeutralCallPredicate: UniquenessNeutralCallPredicate
 ) : PathAwareControlFlowGraphVisitor<Unit, UniquenessState>() {
     override fun mergeInfo(
         a: UniquenessStateFlow,
