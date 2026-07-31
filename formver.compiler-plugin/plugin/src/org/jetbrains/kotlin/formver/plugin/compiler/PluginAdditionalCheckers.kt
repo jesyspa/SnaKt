@@ -50,6 +50,7 @@ import org.jetbrains.kotlin.formver.uniqueness.plugin.QualifiedAccessUniquenessC
 import org.jetbrains.kotlin.formver.uniqueness.plugin.ReturnUniquenessChecker
 import org.jetbrains.kotlin.formver.uniqueness.plugin.ThrowUniquenessChecker
 import org.jetbrains.kotlin.formver.uniqueness.plugin.TypeRefUniquenessAttributeChecker
+import org.jetbrains.kotlin.formver.uniqueness.plugin.ValueParameterUniquenessChecker
 
 class PluginAdditionalCheckers(session: FirSession, config: PluginConfiguration) :
     FirAdditionalCheckersExtension(session) {
