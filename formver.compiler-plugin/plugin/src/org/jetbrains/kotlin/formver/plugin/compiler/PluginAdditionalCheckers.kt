@@ -96,7 +96,9 @@ class PluginAdditionalCheckers(session: FirSession, config: PluginConfiguration)
                 add(ValueParameterLocalityContractChecker)
             }
 
-            // TODO: Add ValueParameterUniquenessChecker
+            if (config.checkUniqueness) {
+                add(ValueParameterUniquenessChecker)
+            }
         }
     }
 
