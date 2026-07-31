@@ -19,11 +19,11 @@ import org.jetbrains.kotlin.formver.uniqueness.plugin.UniquenessErrors.INVALID_M
  * Currently the expressions are extracted from either [QualifiedAccessNode] and [ExitSafeCallNode], as both node types
  * may represent a field access.
  */
-private fun CFGNode<*>.resolveAccesses(): Sequence<FirExpression> =
+private fun CFGNode<*>.resolveAccess(): FirExpression? =
     when (this) {
-        is QualifiedAccessNode -> sequenceOf(fir)
-        is ExitSafeCallNode -> sequenceOf(fir)
-        else -> emptySequence()
+        is QualifiedAccessNode -> fir
+        is ExitSafeCallNode -> fir
+        else -> null
     }
 
 /**
@@ -35,17 +35,15 @@ object FunctionUseAfterMoveChecker : FirFunctionChecker(MppCheckerKind.Common) {
         val graph = declaration.controlFlowGraphReference?.controlFlowGraph ?: return
         val uniquenessStateFlows = lazy { graph.resolveUniquenessStateFlows() }
 
-        for (node in graph.nodes) {
+        for (node in graph.uniquenessAnalysisTargetNodes) {
             if (node.isDead) continue
+            val accessExpression = node.resolveAccess() ?: continue
+            val accessState = accessExpression.resolveAccessState()
+            val uniquenessState = uniquenessStateFlows.value.readInputUniquenessStateOf(node)
+                ?: EmptyUniquenessState
 
-            for (accessExpression in node.resolveAccesses()) {
-                val accessState = accessExpression.resolveAccessState()
-                val uniquenessState = uniquenessStateFlows.value.readInputUniquenessStateOf(node)
-                    ?: EmptyUniquenessState
-
-                if (accessState.projectTerminalUniqueness(uniquenessState) == Uniqueness.Moved) {
-                    reporter.reportOn(accessExpression.source, INVALID_MOVED_ACCESS)
-                }
+            if (accessState.projectTerminalUniqueness(uniquenessState) == Uniqueness.Moved) {
+                reporter.reportOn(accessExpression.source, INVALID_MOVED_ACCESS)
             }
         }
     }

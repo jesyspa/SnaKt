@@ -55,7 +55,7 @@ object FunctionExitUniquenessConsistencyChecker : FirFunctionChecker( MppChecker
                 else -> false
             }
 
-        for (node in graph.nodes) {
+        for (node in graph.uniquenessAnalysisTargetNodes) {
             if (node.isDead || !node.isExit()) continue
 
             val outputUniquenessState = uniquenessStateFlows[node]?.joinOverEdgeKinds()

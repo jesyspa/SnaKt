@@ -207,6 +207,12 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
     }
 
     @Test
+    @TestMetadata("default_argument.kt")
+    public void testDefault_argument() {
+      runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/default_argument.kt");
+    }
+
+    @Test
     @TestMetadata("dump_cfg.kt")
     public void testDump_cfg() {
       runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/dump_cfg.kt");

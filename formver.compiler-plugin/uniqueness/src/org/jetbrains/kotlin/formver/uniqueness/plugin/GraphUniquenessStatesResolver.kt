@@ -45,14 +45,6 @@ class GraphUniquenessStatesResolver(session: FirSession) : FirExtensionSessionCo
 
         if (declaration is FirFunction) {
             context(context) {
-                for (valueParameter in declaration.valueParameters) {
-                    val valueParameterSymbol = valueParameter.symbol
-                    initialState = initialState.putChild(
-                        valueParameterSymbol,
-                        UniquenessState(valueParameterSymbol.resolveUniqueness())
-                    )
-                }
-
                 val receiverParameter = declaration.receiverParameter
 
                 if (receiverParameter != null) {
@@ -62,6 +54,15 @@ class GraphUniquenessStatesResolver(session: FirSession) : FirExtensionSessionCo
                         UniquenessState(receiverParameterSymbol.resolveUniqueness())
                     )
                 }
+
+                for (valueParameter in declaration.valueParameters) {
+                    val valueParameterSymbol = valueParameter.symbol
+                    initialState = initialState.putChild(
+                        valueParameterSymbol,
+                        UniquenessState(valueParameterSymbol.resolveUniqueness())
+                    )
+                }
+
             }
         }
 
