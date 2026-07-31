@@ -196,7 +196,7 @@ class GraphUniquenessStatesAnalyzer(
         val call = node.fir
 
         with(context) {
-            if (callPurityPredicate.accepts(call)) return data
+            if (uniquenessNeutralCallPredicate.accepts(call)) return data
 
             return data.transformValues { data ->
                 var newUniquenessState = data.getOrInitialize()
