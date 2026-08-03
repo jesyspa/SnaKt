@@ -10,8 +10,10 @@ fun <!VIPER_TEXT!>simpleExists<!>(): Int {
     return 0
 }
 
-// An unguarded integer index into a string inside `exists` should be flagged
-// by Viper as a potentially-negative index well-formedness error.
+// `s[res]` has no bounds guard on `res`; Viper rejects the unguarded index
+// inside the exists body as a well-formedness violation. Tests that exists<T>
+// in a postcondition surfaces a failure as VIPER_VERIFICATION_ERROR rather
+// than crashing or silently passing.
 <!VIPER_VERIFICATION_ERROR!>@AlwaysVerify
 fun <!VIPER_TEXT!>duplicateIndexExists<!>(s: String, res: Int): Int {
     postconditions<Int> {
