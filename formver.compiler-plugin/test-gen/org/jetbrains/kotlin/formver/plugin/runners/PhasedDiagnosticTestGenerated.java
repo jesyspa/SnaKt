@@ -834,18 +834,6 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
       }
 
       @Test
-      @TestMetadata("exists_char_bound_contract.kt")
-      public void testExists_char_bound_contract() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/exists_char_bound_contract.kt");
-      }
-
-      @Test
-      @TestMetadata("exists_char_domain.kt")
-      public void testExists_char_domain() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/exists_char_domain.kt");
-      }
-
-      @Test
       @TestMetadata("exists_list_get_crash.kt")
       public void testExists_list_get_crash() {
         runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/exists_list_get_crash.kt");
