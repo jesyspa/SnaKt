@@ -1,0 +1,9 @@
+/forall_char_domain.kt: info: Generated Viper text for forallCharNonNegative:
+method forallCharNonNegative() returns (v_ret_0: Ref)
+  ensures isSubtype(typeOf(v_ret_0), boolType())
+  ensures (forall anon: Int ::0 <= anon && anon < 65536 ==> anon >= 0)
+{
+  v_ret_0 := boolToRef(true)
+  goto lbl_ret_0
+  label lbl_ret_0
+}
