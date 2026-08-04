@@ -1,63 +1,60 @@
 # Info for plugin developers
 
-## Testing
+Publishing a new Silicon build: internal-dev.md.
 
-We use the test framework built for kotlinc for our tests.
-A test consists of two files:
+## Tests
 
-* A `.kt` file annotated with expected diagnostics.
-* A `.fir.diag.txt` file with the diagnostic text.
-    * In particular, this will include (a filtered version of) the generated Viper code.
+We use the test framework built for kotlinc. A test is a `.kt` file under
+`formver.compiler-plugin/testData/diagnostics/` annotated with expected
+diagnostics, alongside golden files holding the diagnostic text:
 
-There is a generated Java file that is the actual test runner;
-you can regenerate it using the `generateTests` gradle action.
+- `.fir.diag.txt` — the conversion output, including the generated Viper code.
+- `.viper.diag.txt` — verification diagnostics. Present only where verification
+  reported something.
 
-## Silicon
+The test runners are generated from the testData tree as part of
+`compileTestKotlin`, so a new file is picked up on the next build.
 
-Since Silicon and its dependencies are not centrally published, we provide them in
-[our Maven Space Repository](https://jetbrains.team/p/kotlin-formver/packages/maven/maven).
-To use the plugin, nothing is required except importing the library from there.
+The pipeline splits into conversion (uniqueness checking, conversion, purity
+checking) and verification (Viper consistency checking and verification):
 
-However, if you want to publish a new version of the Silicon library,
-here is some useful information about that:
+| Task                       | Conversion | Verification                |
+|:---------------------------|:-----------|:----------------------------|
+| `./gradlew test`           | every test | every test                  |
+| `./gradlew update`         | every test | where conversion changed    |
+| `./gradlew untilConversion`| every test | never                       |
 
-As prerequisites, you will need:
+Use `untilConversion` as much as possible while developing, and `test` last,
+before opening a PR. `update` re-verifies only the tests whose conversion output
+changed.
 
-* The Java Development Kit with Java 17 (as of April 2026).
-* [Maven](https://maven.apache.org/index.html)
-* [SBT](https://www.scala-sbt.org/)
+Regenerating golden files runs verification, since the goldens include its
+output.
 
-After that clone and build Silicon:
+Pass `-Pkotlin.test.update.test.data=true` to regenerate golden files. This also
+writes the diagnostic markers into the `.kt`, which a new test needs.
 
-```bash
-# The recursive cloning pulls `silver` as well. 
-git clone --recursive https://github.com/viperproject/silicon.git
-cd silicon
-# Compile Scala code into JVM bytecode.
-sbt compile
-# This command build the fat-JAR file containing all the dependencies
-# required by Silver (Silicon, Scala Library, ...)
-sbt assembly
-```
+### Directives
 
-To publish the Silicon jar to our Space repo we first need to modify the `built.sbt` script of silicon.
-For that refer to the [patch file](resources/patches/silicon-publish-maven.patch) that include all necessary changes.
+Test files support directives that control how they run. Ours are declared in
+`FormVerDirectives`, in
+`formver.compiler-plugin/test-fixtures/org/jetbrains/kotlin/formver/plugin/services/ExtensionRegistrarConfigurator.kt`.
+`FULL_JDK` and `WITH_STDLIB` come from the Kotlin test framework.
 
-In addition, you need to generate an access token for write access to the repository.
-For that you need to create a credential file at `~/.sbt/space-maven.credentials`.
-For detailed information of how to do so see the instructions on
-the [repository site](https://jetbrains.team/p/kotlin-formver/packages/maven/maven)
-under `Connect -> Publish` with tool `sbt` selected.
-With the drop-down menu you can create a write-access token.
+## Checks
 
-After completing these steps, you will be able to publish the Silicon artifact with
+`./gradlew check` runs detekt, `apiCheck` and every module's tests.
 
-```bash
-sbt publish
-```
+A separate CI workflow runs `pre-commit`; install the hook locally with
+`pre-commit install`.
 
-Additional Info:
+## Scripts
 
-* If you get a 401 response code while publishing, set the Space repository to private access.
-  Due to a bug, it is currently not possible to publish to public repos.
-* If you want to experiment locally, you can install Silicon into the local maven repo with `sbt publishM2`
+`scripts/` holds helpers for the loop above:
+
+- `run-test.sh` — run one test, recovering the expected/actual diff that
+  Gradle's cross-JVM serialization strips from golden-file assertions.
+- `update-goldens.sh` — regenerate goldens and report what changed.
+- `check-all.sh` — `check`, `pre-commit` and the testData checks together.
+- `check-testdata.sh` — golden files with no source, and empty golden files.
+- `dump-test-diff.sh` — the diff recovery `run-test.sh` escalates to.
