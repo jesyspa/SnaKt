@@ -52,6 +52,8 @@ A separate CI workflow runs `pre-commit`; install the hook locally with
 
 `scripts/` holds helpers for the loop above:
 
+- `check-conversion.sh` — the fast loop: `untilConversion` plus the locality
+  tests, which need no verification.
 - `run-test.sh` — run one test, recovering the expected/actual diff that
   Gradle's cross-JVM serialization strips from golden-file assertions.
 - `update-goldens.sh` — regenerate goldens and report what changed.
