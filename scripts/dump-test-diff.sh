@@ -9,7 +9,7 @@
 # This script works around that by temporarily registering a JUnit 5
 # TestWatcher extension (DumpAssertionDiffExtension, in test-fixtures) that
 # catches failures inside the test JVM and writes the diff to
-# $SNAKT_TEST_DUMP_DIR/test-assertion-dump-*.txt (default /tmp).
+# $SNAKT_TEST_DUMP_DIR/test-assertion-dump-*.txt.
 #
 # It then post-processes each dump into test-assertion-diff-*.txt in the same
 # directory — a unified diff with source-position prefixes (e.g.
@@ -26,7 +26,7 @@ set -euo pipefail
 if [[ $# -lt 1 ]]; then
     echo "Usage: $0 <test-method-name-pattern>"
     echo "Example: $0 'testIs_type_contract'"
-    echo "Set SNAKT_TEST_DUMP_DIR to override the output directory (default /tmp)."
+    echo "Set SNAKT_TEST_DUMP_DIR to override the output directory."
     exit 1
 fi
 
@@ -34,7 +34,9 @@ TEST_PATTERN="$1"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-DUMP_DIR="${SNAKT_TEST_DUMP_DIR:-/tmp}"
+# Per-user, since the cleanup below globs the directory and a shared /tmp
+# yields files owned by someone else.
+DUMP_DIR="${SNAKT_TEST_DUMP_DIR:-${TMPDIR:-/tmp}/snakt-test-diff-$(id -u)}"
 mkdir -p "$DUMP_DIR"
 export SNAKT_TEST_DUMP_DIR="$DUMP_DIR"
 
