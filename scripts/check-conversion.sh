@@ -18,12 +18,34 @@ if [[ -n "$PATTERN" ]]; then
 fi
 
 status=0
+matched=0
+
+# A pattern naming a test in one module leaves the other with nothing to run,
+# which Gradle reports as a failure.
+run_module() {
+    local out
+    if out="$(./gradlew "$1" "${args[@]}" 2>&1)"; then
+        matched=1
+        return
+    fi
+    if [[ -n "$PATTERN" && "$out" == *"No tests found for given includes"* ]]; then
+        return
+    fi
+    matched=1
+    echo "$out"
+    status=1
+}
 
 # Conversion only; verification is left to update-goldens.sh and check-all.sh.
-./gradlew :formver.compiler-plugin:untilConversion "${args[@]}" || status=1
+run_module :formver.compiler-plugin:untilConversion
 
 # Locality has no verification stage, so its whole suite belongs to this loop.
-./gradlew :formver.compiler-plugin:locality:test "${args[@]}" || status=1
+run_module :formver.compiler-plugin:locality:test
+
+if [[ "$matched" -eq 0 ]]; then
+    echo "No test matches '$PATTERN'."
+    exit 1
+fi
 
 if [[ "$status" -ne 0 ]]; then
     cat <<'EOF'

@@ -57,6 +57,8 @@ A separate CI workflow runs `pre-commit`; install the hook locally with
 - `run-test.sh` — run one test, recovering the expected/actual diff that
   Gradle's cross-JVM serialization strips from golden-file assertions.
 - `update-goldens.sh` — regenerate goldens and report what changed.
+- `check-verified.sh` — which tests record a verification failure as expected,
+  read off the recorded diagnostics rather than the build output.
 - `check-all.sh` — `check`, `pre-commit` and the testData checks together.
 - `check-testdata.sh` — golden files with no source, and empty golden files.
 - `dump-test-diff.sh` — the diff recovery `run-test.sh` escalates to.

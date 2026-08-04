@@ -12,6 +12,7 @@ While developing:
 Adding or changing a test:
 
     ./scripts/update-goldens.sh [pattern]    # regenerate, then report what needs review
+    ./scripts/check-verified.sh <pattern>    # exit 1 if that test does not actually verify
 
 Before pushing:
 
