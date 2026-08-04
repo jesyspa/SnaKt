@@ -15,6 +15,13 @@ import org.jetbrains.kotlin.test.util.trimTrailingWhitespacesAndAddNewlineAtEOF
 import org.jetbrains.kotlin.util.capitalizeDecapitalize.toLowerCaseAsciiOnly
 
 /**
+ * The flag the Kotlin test framework uses to decide whether a failing golden-file
+ * assertion rewrites the file instead of failing the test.
+ */
+private val updatingTestData: Boolean
+    get() = System.getProperty("kotlin.test.update.test.data") == "true"
+
+/**
  * TestService to collect diagnostics from the conversion and verification processes.
  */
 abstract class DiagnosticsCollector(val testServices: TestServices) : TestService {
@@ -93,9 +100,15 @@ abstract class DiagnosticsCollector(val testServices: TestServices) : TestServic
             testDataFile.parentFile.resolve("${testDataFile.nameWithoutExtension.removeSuffix(".fir")}${fileExtension}")
 
         val expectedOutput = render()
-        if (expectedOutput == null && !expectedFile.exists()) return
+        if (expectedOutput == null) {
+            // An empty golden file asserts the same thing as no golden file at all,
+            // so record the absence of diagnostics by removing the file.
+            if (updatingTestData) expectedFile.delete()
+            else if (expectedFile.exists()) testServices.assertions.assertEqualsToFile(expectedFile, "")
+            return
+        }
 
-        testServices.assertions.assertEqualsToFile(expectedFile, expectedOutput ?: "")
+        testServices.assertions.assertEqualsToFile(expectedFile, expectedOutput)
     }
 }
 
