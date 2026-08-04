@@ -8,6 +8,7 @@
 # Usage:
 #   ./scripts/run-test.sh testMax_of_two
 #   ./scripts/run-test.sh Max_of_two
+#   ./scripts/run-test.sh max_of_two
 
 set -euo pipefail
 
@@ -31,8 +32,18 @@ while read -r f; do
     fi
 done < <(find formver.compiler-plugin/testData formver.compiler-plugin/locality/testData -name "*.kt")
 
+# GenerateTestsKt capitalizes the first letter of a testData file's stem to
+# form the JUnit method name (max_of_two.kt -> testMax_of_two), and Gradle's
+# --tests filter is case-sensitive, so a pattern taken verbatim from the
+# filename would match nothing.
+if [[ "$PATTERN" == test* ]]; then
+    FILTER="$PATTERN"
+else
+    FILTER="${PATTERN^}"
+fi
+
 echo "Running $PATTERN in $module"
-if ./gradlew "$module:test" --tests "*$PATTERN*" --no-daemon -q 2>&1; then
+if ./gradlew "$module:test" --tests "*$FILTER*" --no-daemon -q 2>&1; then
     echo "PASSED: $PATTERN"
     exit 0
 fi
@@ -49,4 +60,4 @@ fi
 echo
 echo "FAILED. Recovering the assertion diff:"
 echo
-exec "$SCRIPT_DIR/dump-test-diff.sh" "$PATTERN"
+exec "$SCRIPT_DIR/dump-test-diff.sh" "$FILTER"

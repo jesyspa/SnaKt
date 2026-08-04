@@ -8,6 +8,7 @@
 # Usage:
 #   ./scripts/update-goldens.sh                 # every test
 #   ./scripts/update-goldens.sh Max_of_two      # one test
+#   ./scripts/update-goldens.sh max_of_two      # same, case-insensitive
 
 set -euo pipefail
 
@@ -16,9 +17,22 @@ cd "$(cd "$SCRIPT_DIR/.." && pwd)"
 
 PATTERN="${1:-}"
 
+# GenerateTestsKt capitalizes the first letter of a testData file's stem to
+# form the JUnit method name (max_function.kt -> testMax_function), and
+# Gradle's --tests filter is case-sensitive, so a pattern taken verbatim from
+# the filename would match nothing.
+gradle_filter() {
+    local p="$1"
+    if [[ "$p" == test* ]]; then
+        printf '%s' "$p"
+    else
+        printf '%s' "${p^}"
+    fi
+}
+
 args=(--no-daemon -q -Pkotlin.test.update.test.data=true)
 if [[ -n "$PATTERN" ]]; then
-    args+=(--tests "*$PATTERN*")
+    args+=(--tests "*$(gradle_filter "$PATTERN")*")
 fi
 
 # assertEqualsToFile writes the file and then fails, so these are expected to
