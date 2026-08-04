@@ -32,7 +32,8 @@ run_module() {
         return
     fi
     matched=1
-    echo "$out"
+    # Gradle's closing advice is about Gradle, not about the failure.
+    echo "$out" | grep -v '^\* Try:\|^> Run with \|^> Get more help '
     status=1
 }
 
@@ -48,12 +49,11 @@ if [[ "$matched" -eq 0 ]]; then
 fi
 
 if [[ "$status" -ne 0 ]]; then
-    cat <<'EOF'
-
-Gradle strips expected/actual off golden-file assertions. To see what differs:
-
-    ./scripts/run-test.sh <pattern>
-EOF
+    echo
+    echo "Gradle strips expected/actual off golden-file assertions."
+    echo "To see what differs:"
+    echo
+    echo "    ./scripts/run-test.sh ${PATTERN:-<pattern>}"
 fi
 
 exit "$status"
