@@ -1,5 +1,17 @@
 # lib.sh — helpers shared by the scripts in this directory. Source, don't run.
 
+# Gradle's JUnit XML carries failure messages with escaped entities and line
+# breaks, so the functions below parse it rather than grepping it. Absence of
+# the parser must say so: silently reporting no tests reads as a passing run
+# that executed nothing.
+need_python3() {
+    if command -v python3 >/dev/null 2>&1; then
+        return 0
+    fi
+    echo "python3 is needed to read Gradle's test results, and is not on PATH." >&2
+    return 1
+}
+
 # Turn a test name into the pattern Gradle's --tests expects.
 #
 # GenerateTestsKt capitalizes the first letter of a testData file's stem and
@@ -34,6 +46,7 @@ gradle_filter() {
 # only one module leaves the other module's directory absent, and the caller
 # runs under `set -e`.
 ran_tests_since() {
+    need_python3 || return 1
     local marker="$1" dirs=() dir
     for dir in formver.compiler-plugin/build/test-results \
                formver.compiler-plugin/locality/build/test-results; do
@@ -136,6 +149,7 @@ is_assertion_failure_type() {
 # printed if there is no fresh XML at all (the run died before any test
 # executed) or no failing testcase in it.
 report_first_xml_failure() {
+    need_python3 || return 1
     local marker="$1" dirs=() dir
     for dir in formver.compiler-plugin/build/test-results \
                formver.compiler-plugin/locality/build/test-results; do

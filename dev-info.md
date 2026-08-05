@@ -64,6 +64,8 @@ A separate CI workflow runs `pre-commit`; install the hook locally with
 - `dump-test-diff.sh` — the diff recovery `run-test.sh` escalates to.
 - `lib.sh` — sourced by the others, not run.
 
+They need `python3` on PATH: the test results they report from are XML.
+
 A test method's name comes from its testData file with the first letter
 capitalized, so `assign_local.kt` backs `testAssign_local`. Gradle's `--tests`
 filter is case-sensitive; the scripts capitalize for you, so any of the three

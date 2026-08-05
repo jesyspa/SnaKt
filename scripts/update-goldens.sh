@@ -20,7 +20,9 @@ cd "$(cd "$SCRIPT_DIR/.." && pwd)"
 PATTERN="${1:-}"
 
 
-args=(--no-daemon -q -Pkotlin.test.update.test.data=true)
+# --rerun: an UP-TO-DATE task writes no results, which the guard below
+# cannot tell from a run that executed nothing.
+args=(--rerun --no-daemon -q -Pkotlin.test.update.test.data=true)
 if [[ -n "$PATTERN" ]]; then
     args+=(--tests "*$(gradle_filter "$PATTERN")*")
 fi
