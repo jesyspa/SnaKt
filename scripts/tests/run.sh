@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
-# Exercises scripts/junit_ran_tests.py and scripts/junit_first_failure.py
-# directly against the fixture XML in scripts/tests/fixtures, the same way
-# lib.sh invokes them: python3 <script> <xml files...>. Not wired into any
-# other script — run by hand.
+# Exercises scripts/junit_first_failure.py directly against the fixture XML
+# in scripts/tests/fixtures, the same way lib.sh invokes it: python3 <script>
+# <xml files...>. Not wired into any other script — run by hand.
 set -euo pipefail
 
 TESTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -36,23 +35,11 @@ assert_eq() {
     failures=$((failures + 1))
 }
 
-# A passing run: one testcase, no failure/error. ran_tests lists it (and
-# strips the trailing "()" JUnit adds to the method name); first_failure
-# finds nothing and exits 1.
-assert_eq "ran_tests: passing run" \
-    "testAssign_local" 0 \
-    -- python3 "$LIB_DIR/junit_ran_tests.py" "$FIXTURES/passing.xml"
-
+# A passing run: one testcase, no failure/error. first_failure finds nothing
+# and exits 1.
 assert_eq "first_failure: passing run reports nothing" \
     "" 1 \
     -- python3 "$LIB_DIR/junit_first_failure.py" "$FIXTURES/passing.xml"
-
-# The same method name, testBasic, backed by two different classes across
-# two files: ran_tests must qualify both as classname.method rather than
-# collapsing them to one ambiguous "testBasic".
-assert_eq "ran_tests: same method name in two classes gets qualified" \
-    "$(printf '%s\n%s' "verification.BasicTest.testBasic" "verification.operators.BasicTest.testBasic")" 0 \
-    -- python3 "$LIB_DIR/junit_ran_tests.py" "$FIXTURES/ambiguous_a.xml" "$FIXTURES/ambiguous_b.xml"
 
 # A <failure>: first_failure reports type, "classname.name: message", then
 # trace lines with the leading restated-message line dropped.
@@ -72,18 +59,13 @@ assert_eq "first_failure: <error> is reported" \
     -- python3 "$LIB_DIR/junit_first_failure.py" "$FIXTURES/error.xml"
 
 # A malformed XML file must be skipped, not raise: alongside a real failure,
-# the failure is still found; alongside only a passing run, ran_tests still
-# lists the real test.
+# the failure is still found.
 assert_eq "first_failure: malformed XML is skipped, real failure still found" \
     "$(printf '%s\n%s\n%s' \
         "org.opentest4j.AssertionFailedError" \
         "verification.BasicTest.testAssign_local: expected: <1> but was: <2>" \
         "    at verification.BasicTest.testAssign_local(BasicTest.java:10)")" 0 \
     -- python3 "$LIB_DIR/junit_first_failure.py" "$FIXTURES/malformed.xml" "$FIXTURES/failure.xml"
-
-assert_eq "ran_tests: malformed XML is skipped, real test still listed" \
-    "testAssign_local" 0 \
-    -- python3 "$LIB_DIR/junit_ran_tests.py" "$FIXTURES/malformed.xml" "$FIXTURES/passing.xml"
 
 assert_eq "first_failure: only malformed XML reports nothing" \
     "" 1 \

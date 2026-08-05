@@ -3,6 +3,7 @@
 # Sourced, not executed, so the caller's $0/SCRIPT_DIR can't be relied on to
 # find the Python helpers below.
 LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck disable=SC2034 # used by callers to cd into, not within this file
 ROOT_DIR="$(cd "$LIB_DIR/.." && pwd)"
 
 # Gradle's JUnit XML carries failure messages with escaped entities and line
@@ -35,77 +36,12 @@ gradle_filter() {
     fi
 }
 
-# List the JUnit test methods that actually ran, based on the test-results XML
-# gradle writes under formver.compiler-plugin/build/test-results/<task>/ and
-# formver.compiler-plugin/locality/build/test-results/test/. Only files newer
-# than $1 count: gradle can report a test task SUCCESS (e.g. UP-TO-DATE)
-# without re-executing it, leaving stale XML from an earlier run that would
-# otherwise be mistaken for this run's output.
-#
-# A method name alone can be ambiguous — the same generated method name backs
-# tests in more than one class (verification/basic.kt and
-# verification/operators/basic.kt both produce testBasic) — so a name is
-# qualified as "classname.method" whenever it isn't unique across the run.
-#
-# Reporting nothing is a normal outcome, so this never fails: a task that ran
-# only one module leaves the other module's directory absent, and the caller
-# runs under `set -e`.
-ran_tests_since() {
-    need_python3 || return 1
-    local marker="$1" dirs=() dir
-    for dir in formver.compiler-plugin/build/test-results \
-               formver.compiler-plugin/locality/build/test-results; do
-        if [[ -d "$dir" ]]; then
-            dirs+=("$dir")
-        fi
-    done
-    if [[ "${#dirs[@]}" -eq 0 ]]; then
-        return 0
-    fi
-    local files=()
-    while IFS= read -r f; do
-        files+=("$f")
-    done < <(find "${dirs[@]}" -name '*.xml' -newer "$marker")
-    if [[ "${#files[@]}" -eq 0 ]]; then
-        return 0
-    fi
-    python3 "$LIB_DIR/junit_ran_tests.py" "${files[@]}"
-}
-
-# Report the tests behind a gradle success, or fail: a SUCCESS with no test
-# method behind it is not a pass. $2, if given, is the --tests pattern that
-# produced this run, used only to decide how much of the list to show.
-report_ran_tests() {
-    local marker="$1" pattern="${2:-}"
-    local tests count
-    tests="$(ran_tests_since "$marker")"
-    if [[ -z "$tests" ]]; then
-        echo "Gradle reported success, but no test actually ran."
-        return 1
-    fi
-    count="$(wc -l <<<"$tests")"
-
-    if [[ -z "$pattern" ]]; then
-        echo "Ran $count tests."
-    elif [[ "$count" -eq 1 ]]; then
-        echo "Ran: $tests"
-    elif [[ "$count" -le 5 ]]; then
-        echo "Ran $count tests — the pattern matched all of them:"
-        sed 's/^/  /' <<<"$tests"
-    else
-        local sample
-        sample="$(head -5 <<<"$tests" | paste -sd, - | sed 's/,/, /g')"
-        echo "Ran $count tests — the pattern matched all of them, including: $sample, ..."
-    fi
-    return 0
-}
-
 # True if a JUnit <failure>/<error> "type" attribute names an exception
 # DumpAssertionDiffExtension can pull expected/actual out of: opentest4j's
 # AssertionFailedError (assertEqualsToFile) or a *ComparisonFailure (covers
 # both org.junit.ComparisonFailure and com.intellij's FileComparisonFailure).
-# Anything else is a thrown exception, not a golden-file mismatch, and
-# re-running through dump-test-diff.sh would recover nothing.
+# Anything else is a thrown exception, not a golden-file mismatch, and there
+# is no diff for render_dump_diffs to recover.
 is_assertion_failure_type() {
     case "$1" in
         org.opentest4j.AssertionFailedError|*ComparisonFailure) return 0 ;;
@@ -113,15 +49,15 @@ is_assertion_failure_type() {
     esac
 }
 
-# Print the first failing <testcase> from JUnit XML newer than $1, across the
-# directories ran_tests_since checks: its failure "type" on the first line,
-# then "classname.name: message", then a few lines of stack trace.
+# Print the first failing <testcase> from JUnit XML newer than $1, across
+# formver.compiler-plugin's and formver.compiler-plugin/locality's
+# test-results directories: its failure "type" on the first line, then
+# "classname.name: message", then a few lines of stack trace.
 #
 # Reused so callers can decide what a failure actually was before acting on
-# it, instead of assuming a golden-file mismatch and escalating to
-# dump-test-diff.sh only to find nothing there. Returns 1 with nothing
-# printed if there is no fresh XML at all (the run died before any test
-# executed) or no failing testcase in it.
+# it, instead of assuming a golden-file mismatch and rendering dumps only to
+# find nothing there. Returns 1 with nothing printed if there is no fresh XML
+# at all (the run died before any test executed) or no failing testcase in it.
 report_first_xml_failure() {
     need_python3 || return 1
     local marker="$1" dirs=() dir
@@ -145,41 +81,19 @@ report_first_xml_failure() {
 }
 
 # DumpAssertionDiffExtension (formver.compiler-plugin test-fixtures) is a
-# JUnit 5 TestWatcher that, when auto-detected, catches a failing golden-file
-# assertion inside the forked test JVM — before Gradle's cross-JVM result
-# serialization strips the expected/actual values off it — and writes them to
-# $SNAKT_TEST_DUMP_DIR/test-assertion-dump-*.txt. Registration is by dropping
-# files where Gradle's test task picks up test resources, so it only reaches
-# :formver.compiler-plugin:test; :formver.compiler-plugin:locality has no
-# test-fixtures on its classpath to find the class by.
-DUMP_SERVICES_DIR="$ROOT_DIR/formver.compiler-plugin/testData/META-INF/services"
-DUMP_SERVICES_FILE="$DUMP_SERVICES_DIR/org.junit.jupiter.api.extension.Extension"
-DUMP_PLATFORM_PROPS="$ROOT_DIR/formver.compiler-plugin/testData/junit-platform.properties"
+# JUnit 5 TestWatcher, registered unconditionally via test-resources/, that
+# catches a failing golden-file assertion inside the forked test JVM — before
+# Gradle's cross-JVM result serialization strips the expected/actual values
+# off it — and writes them to $SNAKT_TEST_DUMP_DIR/test-assertion-dump-*.txt
+# whenever that variable is set. It only reaches :formver.compiler-plugin:test
+# and :untilConversion; :formver.compiler-plugin:locality has no test-fixtures
+# on its classpath to find the class by.
 
 # Default location for assertion dumps, overridable via SNAKT_TEST_DUMP_DIR.
 # Per-user: callers glob and clear this directory, and a shared /tmp would
 # pick up files left behind by someone else.
 dump_dir_default() {
     printf '%s' "${SNAKT_TEST_DUMP_DIR:-${TMPDIR:-/tmp}/snakt-test-diff-$(id -u)}"
-}
-
-# Registers DumpAssertionDiffExtension via auto-detection so the next gradle
-# run against :formver.compiler-plugin:test captures assertion dumps.
-install_dump_extension() {
-    mkdir -p "$DUMP_SERVICES_DIR"
-    echo "org.jetbrains.kotlin.formver.plugin.DumpAssertionDiffExtension" > "$DUMP_SERVICES_FILE"
-    echo "junit.jupiter.extensions.autodetection.enabled=true" > "$DUMP_PLATFORM_PROPS"
-}
-
-# Undoes install_dump_extension, including the copy Gradle's
-# processTestResources leaves under build/ so it doesn't persist into a run
-# that never calls install_dump_extension at all.
-remove_dump_extension() {
-    rm -f "$DUMP_SERVICES_FILE" "$DUMP_PLATFORM_PROPS"
-    rmdir "$DUMP_SERVICES_DIR" 2>/dev/null || true
-    rmdir "$(dirname "$DUMP_SERVICES_DIR")" 2>/dev/null || true
-    rm -f "$ROOT_DIR/formver.compiler-plugin/build/resources/test/junit-platform.properties"
-    rm -rf "$ROOT_DIR/formver.compiler-plugin/build/resources/test/META-INF/services"
 }
 
 # Replace source-position offsets like ":(23,31):" with ":(_,_):" so methods
