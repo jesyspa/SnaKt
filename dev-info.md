@@ -62,3 +62,9 @@ A separate CI workflow runs `pre-commit`; install the hook locally with
 - `check-all.sh` — `check`, `pre-commit` and the testData checks together.
 - `check-testdata.sh` — golden files with no source, and empty golden files.
 - `dump-test-diff.sh` — the diff recovery `run-test.sh` escalates to.
+- `lib.sh` — sourced by the others, not run.
+
+A test method's name comes from its testData file with the first letter
+capitalized, so `max_of_two.kt` backs `testMax_of_two`. Gradle's `--tests`
+filter is case-sensitive; the scripts capitalize for you, so any of the three
+spellings works as a pattern.
