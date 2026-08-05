@@ -47,8 +47,9 @@ fi
 if [[ "$matched" -eq 0 ]]; then
     # Either the test verifies and has no diagnostics file, or the pattern is
     # wrong; run-test.sh distinguishes the two.
-    echo "No verification diagnostics recorded for '$PATTERN'."
-    echo "Confirm the test exists and runs: ./scripts/run-test.sh $PATTERN"
+    echo "No recorded verification failure for '$PATTERN'."
+    echo "That is not evidence it verified: a test that never ran looks the same."
+    echo "To watch it run: ./scripts/run-test.sh $PATTERN"
     exit 0
 fi
 
