@@ -17,7 +17,7 @@ sourceSets {
     }
     test {
         java.setSrcDirs(listOf("test", "test-gen"))
-        resources.setSrcDirs(listOf("testData"))
+        resources.setSrcDirs(listOf("testData", "test-resources"))
     }
 }
 
