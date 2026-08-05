@@ -30,8 +30,11 @@ if [[ $# -lt 1 ]]; then
     exit 1
 fi
 
-TEST_PATTERN="$1"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+# shellcheck source=scripts/lib.sh
+source "$SCRIPT_DIR/lib.sh"
+
+TEST_PATTERN="$(gradle_filter "$1")"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 # Per-user, since the cleanup below globs the directory and a shared /tmp

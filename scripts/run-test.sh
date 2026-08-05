@@ -19,6 +19,8 @@ fi
 
 PATTERN="$1"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+# shellcheck source=scripts/lib.sh
+source "$SCRIPT_DIR/lib.sh"
 cd "$(cd "$SCRIPT_DIR/.." && pwd)"
 
 # Test methods are derived from testData file names, so the owning module can be
@@ -32,15 +34,7 @@ while read -r f; do
     fi
 done < <(find formver.compiler-plugin/testData formver.compiler-plugin/locality/testData -name "*.kt")
 
-# GenerateTestsKt capitalizes the first letter of a testData file's stem to
-# form the JUnit method name (max_of_two.kt -> testMax_of_two), and Gradle's
-# --tests filter is case-sensitive, so a pattern taken verbatim from the
-# filename would match nothing.
-if [[ "$PATTERN" == test* ]]; then
-    FILTER="$PATTERN"
-else
-    FILTER="${PATTERN^}"
-fi
+FILTER="$(gradle_filter "$PATTERN")"
 
 echo "Running $PATTERN in $module"
 if ./gradlew "$module:test" --tests "*$FILTER*" --no-daemon -q 2>&1; then
