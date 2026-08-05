@@ -36,10 +36,29 @@ writes the diagnostic markers into the `.kt`, which a new test needs.
 
 ### Directives
 
-Test files support directives that control how they run. Ours are declared in
-`FormVerDirectives`, in
+Test files support directives that control how they run, written as `// NAME` at
+the top of the file. `FULL_JDK` and `WITH_STDLIB` come from the Kotlin test
+framework; ours are declared in `FormVerDirectives`, in
 `formver.compiler-plugin/test-fixtures/org/jetbrains/kotlin/formver/plugin/services/ExtensionRegistrarConfigurator.kt`.
-`FULL_JDK` and `WITH_STDLIB` come from the Kotlin test framework.
+
+Which checks run:
+
+- `NEVER_VALIDATE` — convert but do not verify. Consistency checking still runs.
+  This is how a test that is not meant to reach the verifier says so.
+- `UNIQUE_CHECK_ONLY` — uniqueness checking, with locality first. No conversion.
+- `LOCALITY_CHECK_ONLY` — locality checking alone, uniqueness off. No conversion.
+- `ALWAYS_VALIDATE` — verify every target. Verification is already the default,
+  so this changes nothing on its own; it earns its place by overriding the two
+  `*_CHECK_ONLY` directives above.
+
+What the diagnostic contains:
+
+- `FULL_VIPER_DUMP` — the whole Viper program.
+- `RENDER_PREDICATES` — class predicates. Cannot be combined with the above.
+- `DUMP_UNIQUENESS_CFG` — the control-flow graph with flow information.
+
+And `REPLACE_STDLIB_EXTENSIONS` substitutes stdlib functions such as `run` with
+versions whose bodies the plugin can see.
 
 ## Checks
 
@@ -60,6 +79,7 @@ A separate CI workflow runs `pre-commit`; install the hook locally with
 - `check-verified.sh` — which tests record a verification failure as expected,
   read off the recorded diagnostics rather than the build output.
 - `check-all.sh` — `check`, `pre-commit` and the testData checks together.
+  `--rerun` re-executes tests Gradle considers current.
 - `check-testdata.sh` — golden files with no source, and empty golden files.
 - `dump-test-diff.sh` — the diff recovery `run-test.sh` escalates to.
 - `lib.sh` — sourced by the others, not run.
