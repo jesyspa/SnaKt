@@ -131,7 +131,12 @@ for path in sys.argv[1:]:
         message = node.get("message") or "(no message)"
         print(node.get("type", ""))
         print(f"{classname}.{name}: {message}")
-        for line in (node.text or "").strip().splitlines()[:8]:
+        # The trace opens by restating the message; printing it twice buries
+        # the frames that say where it came from.
+        trace = (node.text or "").strip().splitlines()
+        while trace and trace[0].strip() == message.strip():
+            trace.pop(0)
+        for line in trace[:8]:
             print(f"    {line}")
         sys.exit(0)
 

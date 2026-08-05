@@ -38,7 +38,7 @@ run_module() {
     fi
     matched=1
     # Gradle's closing advice is about Gradle, not about the failure.
-    echo "$out" | grep -v '^\* Try:\|^> Run with \|^> Get more help '
+    echo "$out" | grep -v '^\* Try:\|^> Run with \|^> Get more help ' || true
     status=1
 }
 

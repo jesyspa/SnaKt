@@ -57,7 +57,7 @@ if [[ "$status" -eq 0 ]]; then
 fi
 
 # Gradle's closing advice is about Gradle, not about the failure.
-echo "$gradle_out" | grep -v '^\* Try:\|^> Run with \|^> Get more help '
+echo "$gradle_out" | grep -v '^\* Try:\|^> Run with \|^> Get more help ' || true
 
 # DumpAssertionDiffExtension lives in the compiler-plugin test fixtures, which
 # are not on the locality test classpath.
