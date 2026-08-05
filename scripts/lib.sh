@@ -3,8 +3,6 @@
 # Sourced, not executed, so the caller's $0/SCRIPT_DIR can't be relied on to
 # find the Python helpers below.
 LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# shellcheck disable=SC2034 # used by callers to cd into, not within this file
-ROOT_DIR="$(cd "$LIB_DIR/.." && pwd)"
 
 # Gradle's JUnit XML carries failure messages with escaped entities and line
 # breaks, so the functions below parse it rather than grepping it. Absence of

@@ -14,13 +14,17 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 # shellcheck source=scripts/lib.sh
 source "$SCRIPT_DIR/lib.sh"
-cd "$ROOT_DIR"
+cd "$SCRIPT_DIR/.."
 
 MODE=conversion
-case "${1:-}" in
-    --verify) MODE=verify; shift ;;
-    --update) MODE=update; shift ;;
-esac
+while [[ "${1:-}" == --* ]]; do
+    case "$1" in
+        --verify) MODE=verify ;;
+        --update) MODE=update ;;
+        *) echo "Unknown flag: $1" >&2; exit 1 ;;
+    esac
+    shift
+done
 
 PATTERN="${1:-}"
 
@@ -31,8 +35,7 @@ else
 fi
 LOCALITY_TASK=:formver.compiler-plugin:locality:test
 
-# --rerun: an UP-TO-DATE task writes no results, which would otherwise be
-# indistinguishable from a run that executed nothing.
+# --rerun: an UP-TO-DATE task is green without executing anything.
 args=(--rerun --no-daemon -q)
 if [[ "$MODE" == update ]]; then
     args+=(-Pkotlin.test.update.test.data=true)
@@ -50,8 +53,7 @@ export SNAKT_TEST_DUMP_DIR="$DUMP_DIR"
 
 MARKER="$(mktemp)"
 
-compiler_matched=0
-locality_matched=0
+matched=0
 overall_status=0
 
 run_task() {
@@ -62,25 +64,10 @@ run_task() {
     fi
 }
 
-# In --update mode, a matching test is expected to fail: assertEqualsToFile
-# writes the golden and then fails, so only "no tests found" (a pattern that
-# doesn't reach this module) is worth telling apart from a real run.
-handle_compiler() {
-    run_task "$COMPILER_TASK"
-    if [[ -n "$PATTERN" && "$TASK_OUT" == *"No tests found for given includes"* ]]; then
-        return
-    fi
-    compiler_matched=1
-    if [[ "$MODE" == update || "$TASK_STATUS" -eq 0 ]]; then
-        return
-    fi
-    overall_status=1
-    # Gradle's closing advice is about Gradle, not about the failure.
-    echo "$TASK_OUT" | grep -v '^\* Try:\|^> Run with \|^> Get more help ' || true
-
-    # Look at what actually failed before assuming it's a golden-file
-    # mismatch: rendering dumps only pays off for the assertion family
-    # DumpAssertionDiffExtension knows how to recover expected/actual from.
+# Look at what actually failed before assuming it's a golden-file mismatch:
+# rendering dumps only pays off for the assertion family
+# DumpAssertionDiffExtension knows how to recover expected/actual from.
+report_compiler_failure() {
     local failure_info
     failure_info="$(report_first_xml_failure "$MARKER" || true)"
     if [[ -z "$failure_info" ]]; then
@@ -100,28 +87,37 @@ handle_compiler() {
     fi
 }
 
-handle_locality() {
-    run_task "$LOCALITY_TASK"
-    if [[ -n "$PATTERN" && "$TASK_OUT" == *"No tests found for given includes"* ]]; then
-        return
-    fi
-    locality_matched=1
-    if [[ "$MODE" == update || "$TASK_STATUS" -eq 0 ]]; then
-        return
-    fi
-    overall_status=1
-    echo "$TASK_OUT" | grep -v '^\* Try:\|^> Run with \|^> Get more help ' || true
+report_locality_failure() {
     echo
     echo "FAILED. Locality has no test-fixtures on its classpath, so it has no"
     echo "dump to recover. Expected/actual values are in the HTML report:"
     echo "  formver.compiler-plugin/locality/build/reports/tests/test/index.html"
 }
 
-handle_compiler
-handle_locality
+# In --update mode, a matching test is expected to fail: assertEqualsToFile
+# writes the golden and then fails, so only "no tests found" (a pattern that
+# doesn't reach this module) is worth telling apart from a real run.
+run_module() {
+    local task="$1" on_failure="$2"
+    run_task "$task"
+    if [[ -n "$PATTERN" && "$TASK_OUT" == *"No tests found for given includes"* ]]; then
+        return
+    fi
+    matched=1
+    if [[ "$MODE" == update || "$TASK_STATUS" -eq 0 ]]; then
+        return
+    fi
+    overall_status=1
+    # Gradle's closing advice is about Gradle, not about the failure.
+    echo "$TASK_OUT" | grep -v '^\* Try:\|^> Run with \|^> Get more help ' || true
+    "$on_failure"
+}
+
+run_module "$COMPILER_TASK" report_compiler_failure
+run_module "$LOCALITY_TASK" report_locality_failure
 rm -f "$MARKER"
 
-if [[ "$compiler_matched" -eq 0 && "$locality_matched" -eq 0 ]]; then
+if [[ "$matched" -eq 0 ]]; then
     echo "No test matches '$PATTERN'."
     exit 1
 fi
