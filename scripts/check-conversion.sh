@@ -23,6 +23,7 @@ fi
 
 status=0
 matched=0
+MARKER="$(mktemp)"
 
 # A pattern naming a test in one module leaves the other with nothing to run,
 # which Gradle reports as a failure.
@@ -49,8 +50,15 @@ run_module :formver.compiler-plugin:locality:test
 
 if [[ "$matched" -eq 0 ]]; then
     echo "No test matches '$PATTERN'."
+    rm -f "$MARKER"
     exit 1
 fi
+
+if [[ "$status" -eq 0 ]] && ! report_ran_tests "$MARKER" "$PATTERN"; then
+    rm -f "$MARKER"
+    exit 1
+fi
+rm -f "$MARKER"
 
 if [[ "$status" -ne 0 ]]; then
     echo

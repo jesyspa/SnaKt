@@ -37,10 +37,16 @@ done < <(find formver.compiler-plugin/testData formver.compiler-plugin/locality/
 FILTER="$(gradle_filter "$PATTERN")"
 
 echo "Running $PATTERN in $module"
+MARKER="$(mktemp)"
 if ./gradlew "$module:test" --tests "*$FILTER*" --no-daemon -q 2>&1; then
-    echo "PASSED: $PATTERN"
-    exit 0
+    if report_ran_tests "$MARKER" "$PATTERN"; then
+        rm -f "$MARKER"
+        exit 0
+    fi
+    rm -f "$MARKER"
+    exit 1
 fi
+rm -f "$MARKER"
 
 # DumpAssertionDiffExtension lives in the compiler-plugin test fixtures, which
 # are not on the locality test classpath.
