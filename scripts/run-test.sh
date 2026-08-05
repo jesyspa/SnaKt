@@ -27,15 +27,28 @@ source "$SCRIPT_DIR/lib.sh"
 cd "$(cd "$SCRIPT_DIR/.." && pwd)"
 
 # Test methods are derived from testData file names, so the owning module can be
-# found from the source file: assign_local.kt backs testAssign_local.
+# found from the source file: assign_local.kt backs testAssign_local. A stem
+# can match testData in both modules (e.g. assign_local, call, return, throw
+# each name both a compiler-plugin and a locality test) — locality wins, so
+# the matches are printed to make that choice visible instead of silently
+# skipping the other module's test.
 stem="$(echo "${PATTERN#test}" | tr '[:upper:]' '[:lower:]')"
 module=":formver.compiler-plugin"
+matches=()
 while read -r f; do
     base="$(basename "$f" .kt | tr '[:upper:]-' '[:lower:]_')"
-    if [[ "$base" == *"$stem"* && "$f" == *"/locality/testData/"* ]]; then
-        module=":formver.compiler-plugin:locality"
+    if [[ "$base" == *"$stem"* ]]; then
+        matches+=("$f")
+        if [[ "$f" == *"/locality/testData/"* ]]; then
+            module=":formver.compiler-plugin:locality"
+        fi
     fi
 done < <(find formver.compiler-plugin/testData formver.compiler-plugin/locality/testData -name "*.kt")
+
+if [[ "${#matches[@]}" -gt 1 ]]; then
+    echo "'$PATTERN' matches multiple testData files:"
+    printf '  %s\n' "${matches[@]}"
+fi
 
 FILTER="$(gradle_filter "$PATTERN")"
 

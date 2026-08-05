@@ -2,16 +2,19 @@
 
 # Turn a test name into the pattern Gradle's --tests expects.
 #
-# GenerateTestsKt capitalizes the first letter of a testData file's stem to form
-# the JUnit method name (assign_local.kt backs testAssign_local), and the --tests
-# filter is case-sensitive, so a pattern taken verbatim from the file name would
-# match nothing. A name already in method form is passed through.
+# GenerateTestsKt capitalizes the first letter of a testData file's stem and
+# turns dashes into underscores to form the JUnit method name (assign_local.kt
+# backs testAssign_local, non-local-returns.kt backs testNon_local_returns),
+# and the --tests filter is case-sensitive, so a pattern taken verbatim from
+# the file name would match nothing. A name already in method form is passed
+# through.
 gradle_filter() {
     local pattern="$1"
     if [[ "$pattern" == test* ]]; then
         printf '%s' "$pattern"
     else
-        printf '%s%s' "$(printf '%s' "${pattern:0:1}" | tr '[:lower:]' '[:upper:]')" "${pattern:1}"
+        printf '%s%s' "$(printf '%s' "${pattern:0:1}" | tr '[:lower:]' '[:upper:]')" "${pattern:1}" \
+            | tr '-' '_'
     fi
 }
 
@@ -21,6 +24,11 @@ gradle_filter() {
 # than $1 count: gradle can report a test task SUCCESS (e.g. UP-TO-DATE)
 # without re-executing it, leaving stale XML from an earlier run that would
 # otherwise be mistaken for this run's output.
+#
+# A method name alone can be ambiguous — the same generated method name backs
+# tests in more than one class (verification/basic.kt and
+# verification/operators/basic.kt both produce testBasic) — so a name is
+# qualified as "classname.method" whenever it isn't unique across the run.
 #
 # Reporting nothing is a normal outcome, so this never fails: a task that ran
 # only one module leaves the other module's directory absent, and the caller
@@ -36,11 +44,45 @@ ran_tests_since() {
     if [[ "${#dirs[@]}" -eq 0 ]]; then
         return 0
     fi
-    find "${dirs[@]}" -name '*.xml' -newer "$marker" \
-        | xargs -r grep -ho 'testcase name="[^"]*"' \
-        | sed -E 's/^testcase name="(.*)"$/\1/; s/\(\)$//' \
-        | sort -u \
-        || true
+    local files=()
+    while IFS= read -r f; do
+        files+=("$f")
+    done < <(find "${dirs[@]}" -name '*.xml' -newer "$marker")
+    if [[ "${#files[@]}" -eq 0 ]]; then
+        return 0
+    fi
+    python3 - "${files[@]}" <<'PY'
+import sys
+import xml.etree.ElementTree as ET
+from collections import defaultdict
+
+pairs = set()
+for path in sys.argv[1:]:
+    try:
+        root = ET.parse(path).getroot()
+    except ET.ParseError:
+        continue
+    for testcase in root.findall("testcase"):
+        classname = testcase.get("classname", root.get("name", "?"))
+        name = testcase.get("name", "?")
+        if name.endswith("()"):
+            name = name[:-2]
+        pairs.add((classname, name))
+
+classes_by_name = defaultdict(set)
+for classname, name in pairs:
+    classes_by_name[name].add(classname)
+
+labels = set()
+for classname, name in pairs:
+    if len(classes_by_name[name]) > 1:
+        labels.add(f"{classname}.{name}")
+    else:
+        labels.add(name)
+
+for label in sorted(labels):
+    print(label)
+PY
 }
 
 # Report the tests behind a gradle success, or fail: a SUCCESS with no test
