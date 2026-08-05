@@ -70,3 +70,71 @@ report_ran_tests() {
     fi
     return 0
 }
+
+# True if a JUnit <failure>/<error> "type" attribute names an exception
+# DumpAssertionDiffExtension can pull expected/actual out of: opentest4j's
+# AssertionFailedError (assertEqualsToFile) or a *ComparisonFailure (covers
+# both org.junit.ComparisonFailure and com.intellij's FileComparisonFailure).
+# Anything else is a thrown exception, not a golden-file mismatch, and
+# re-running through dump-test-diff.sh would recover nothing.
+is_assertion_failure_type() {
+    case "$1" in
+        org.opentest4j.AssertionFailedError|*ComparisonFailure) return 0 ;;
+        *) return 1 ;;
+    esac
+}
+
+# Print the first failing <testcase> from JUnit XML newer than $1, across the
+# directories ran_tests_since checks: its failure "type" on the first line,
+# then "classname.name: message", then a few lines of stack trace.
+#
+# Reused so callers can decide what a failure actually was before acting on
+# it, instead of assuming a golden-file mismatch and escalating to
+# dump-test-diff.sh only to find nothing there. Returns 1 with nothing
+# printed if there is no fresh XML at all (the run died before any test
+# executed) or no failing testcase in it.
+report_first_xml_failure() {
+    local marker="$1" dirs=() dir
+    for dir in formver.compiler-plugin/build/test-results \
+               formver.compiler-plugin/locality/build/test-results; do
+        if [[ -d "$dir" ]]; then
+            dirs+=("$dir")
+        fi
+    done
+    if [[ "${#dirs[@]}" -eq 0 ]]; then
+        return 1
+    fi
+    local files=()
+    while IFS= read -r f; do
+        files+=("$f")
+    done < <(find "${dirs[@]}" -name '*.xml' -newer "$marker")
+    if [[ "${#files[@]}" -eq 0 ]]; then
+        return 1
+    fi
+    python3 - "${files[@]}" <<'PY'
+import sys
+import xml.etree.ElementTree as ET
+
+for path in sys.argv[1:]:
+    try:
+        root = ET.parse(path).getroot()
+    except ET.ParseError:
+        continue
+    for testcase in root.findall("testcase"):
+        node = testcase.find("failure")
+        if node is None:
+            node = testcase.find("error")
+        if node is None:
+            continue
+        classname = testcase.get("classname", root.get("name", "?"))
+        name = testcase.get("name", "?")
+        message = node.get("message") or "(no message)"
+        print(node.get("type", ""))
+        print(f"{classname}.{name}: {message}")
+        for line in (node.text or "").strip().splitlines()[:8]:
+            print(f"    {line}")
+        sys.exit(0)
+
+sys.exit(1)
+PY
+}

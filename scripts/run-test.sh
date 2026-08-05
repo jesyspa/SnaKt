@@ -2,8 +2,11 @@
 # run-test.sh — Run one test in full verification mode and show why it failed.
 #
 # Gradle's cross-JVM serialization strips expected/actual values off golden-file
-# assertions, so a bare run reports only AssertionFailedError. On failure this
-# re-runs through dump-test-diff.sh to recover the diff.
+# assertions, so a bare run reports only AssertionFailedError. On a golden-file
+# mismatch this re-runs through dump-test-diff.sh to recover the diff; for any
+# other failure (a thrown exception, a missing directive) the JUnit XML already
+# has the real message and stack trace, so it's read and printed directly
+# instead of paying for a second build that would recover nothing.
 #
 # Usage:
 #   ./scripts/run-test.sh testAssign_local
@@ -38,7 +41,13 @@ FILTER="$(gradle_filter "$PATTERN")"
 
 echo "Running $PATTERN in $module"
 MARKER="$(mktemp)"
-if ./gradlew "$module:test" --tests "*$FILTER*" --no-daemon -q 2>&1; then
+if gradle_out="$(./gradlew "$module:test" --tests "*$FILTER*" --no-daemon -q 2>&1)"; then
+    status=0
+else
+    status=$?
+fi
+
+if [[ "$status" -eq 0 ]]; then
     if report_ran_tests "$MARKER" "$PATTERN"; then
         rm -f "$MARKER"
         exit 0
@@ -46,18 +55,42 @@ if ./gradlew "$module:test" --tests "*$FILTER*" --no-daemon -q 2>&1; then
     rm -f "$MARKER"
     exit 1
 fi
-rm -f "$MARKER"
+
+# Gradle's closing advice is about Gradle, not about the failure.
+echo "$gradle_out" | grep -v '^\* Try:\|^> Run with \|^> Get more help '
 
 # DumpAssertionDiffExtension lives in the compiler-plugin test fixtures, which
 # are not on the locality test classpath.
 if [[ "$module" == *":locality" ]]; then
+    rm -f "$MARKER"
     echo
     echo "FAILED. Expected/actual values are in the HTML report:"
     echo "  formver.compiler-plugin/locality/build/reports/tests/test/index.html"
     exit 1
 fi
 
+# Look at what actually failed before assuming it's a golden-file mismatch:
+# escalating to dump-test-diff.sh only pays off for the assertion family it
+# knows how to recover expected/actual from.
+failure_info="$(report_first_xml_failure "$MARKER" || true)"
+rm -f "$MARKER"
+
+if [[ -z "$failure_info" ]]; then
+    # No JUnit XML at all: the task died before any test ran (a real compile
+    # error in the plugin or test sources). Gradle's own "e:" lines, already
+    # printed above, are the answer.
+    exit 1
+fi
+
+if is_assertion_failure_type "$(head -1 <<<"$failure_info")"; then
+    echo
+    echo "FAILED. Recovering the assertion diff:"
+    echo
+    exec "$SCRIPT_DIR/dump-test-diff.sh" "$FILTER"
+fi
+
 echo
-echo "FAILED. Recovering the assertion diff:"
+echo "FAILED. Not a golden-file assertion — no diff to recover. From the test run:"
 echo
-exec "$SCRIPT_DIR/dump-test-diff.sh" "$FILTER"
+tail -n +2 <<<"$failure_info"
+exit 1
