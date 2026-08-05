@@ -72,32 +72,27 @@ and the script tests, both of which need no build.
 
 `scripts/` holds helpers for the loop above:
 
-- `check-conversion.sh` — the fast loop: `untilConversion` plus the locality
-  tests, which need no verification.
-- `run-test.sh` — run one test, recovering the expected/actual diff that
-  Gradle's cross-JVM serialization strips from golden-file assertions.
-- `update-goldens.sh` — regenerate goldens, show what they now say, and end with
-  what the run established.
-- `check-verified.sh` — whether a test verifies, records a failure as its
-  expectation, or does not run the verifier at all. Read off the recorded
-  diagnostics and the test's directives rather than the build output. Exits 0,
-  1 and 3 for those three cases, and 2 when the pattern names no test.
+- `test.sh` — the test driver. Conversion only by default (`untilConversion`
+  plus the locality tests, which have no verification stage), `--verify` for the
+  full pipeline, `--update` to regenerate goldens and report what they now say.
+  On failure it prints the expected/actual diff that Gradle's cross-JVM
+  serialization strips from golden-file assertions.
 - `check-all.sh` — `check`, `pre-commit` and the testData checks together.
   `--rerun` re-executes tests Gradle considers current. Exits 1 if a check
   failed and 2 if none failed but one was skipped, which is what a missing
   `pre-commit` gives you.
 - `check-testdata.sh` — golden files with no source, and empty golden files.
-- `dump-test-diff.sh` — the diff recovery `run-test.sh` escalates to.
 - `lib.sh` — sourced by the others, not run.
-- `junit_ran_tests.py`, `junit_first_failure.py` — the JUnit XML parsers `lib.sh`
-  calls; `tests/run.sh` exercises them against fixture XML.
+- `junit_first_failure.py` — the JUnit XML parser `lib.sh` calls; `tests/run.sh`
+  exercises it against fixture XML.
 
 They need `python3` on PATH: the test results they report from are XML.
 
-Which tests a directive silences is decided in `ExtensionRegistrarConfigurator`,
-and `check-verified.sh` mirrors it: `NEVER_VALIDATE` forces verification off and
-beats `ALWAYS_VALIDATE`, which in turn overrides the two `*_CHECK_ONLY`
-directives. The locality module has no verification stage at all.
+The diff recovery works through `DumpAssertionDiffExtension`, registered on the
+compiler-plugin test classpath by `formver.compiler-plugin/test-resources/`. It
+is registered for every run and stays inert unless `SNAKT_TEST_DUMP_DIR` is set,
+which `test.sh` does. The locality module has no test fixtures on its classpath,
+so its failures go to the HTML report instead.
 
 A test method's name comes from its testData file with the first letter
 capitalized, so `assign_local.kt` backs `testAssign_local`. Gradle's `--tests`

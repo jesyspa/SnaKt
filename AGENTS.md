@@ -1,37 +1,21 @@
 # AGENTS.md
 
-Tests are golden-file based. Regenerating goldens records whatever the run
-produced, so a function that fails verification passes once that failure has
-been recorded.
+Tests are golden-file based: a test passes when its goldens match. Regenerating
+records whatever the run produced, so a function that fails verification passes
+from then on once that failure is in the golden. Read what `--update` prints.
 
-While developing:
+    ./scripts/test.sh [pattern]           # conversion only — the fast loop
+    ./scripts/test.sh --verify [pattern]  # full pipeline, including verification
+    ./scripts/test.sh --update [pattern]  # regenerate goldens, then report what changed
 
-    ./scripts/check-conversion.sh [pattern]  # the fast loop, no verification
-    ./scripts/run-test.sh <pattern>          # run one test, recovering the assertion diff
-
-Adding or changing a test:
-
-    ./scripts/update-goldens.sh [pattern]    # regenerate, then say what it established
-    ./scripts/check-verified.sh <pattern>    # ask that question on its own
-
-A green test means the goldens match. Whether the subject verifies is a separate
-question, which `check-verified.sh` answers:
-
-    exit 0   the verifier ran and recorded nothing — it verifies
-    exit 1   the verifier ran and recorded diagnostics — that failure is now
-             the expectation
-    exit 3   a directive turned the verifier off, so the question does not
-             apply to this test
-
-Exit 1 is the one to watch. Regenerating records whatever ran, so a test you
-meant to verify goes green asserting its own failure; that is only right for a
-test whose job is to pin down a known limitation.
+A failing run prints the expected/actual diff itself; there is no second command
+to reach for. A pattern can be spelled as the testData file is named
+(`assign_local`) or as the generated method (`testAssign_local`).
 
 Before pushing:
 
     ./scripts/check-all.sh   # exit 2: nothing failed, but a check was skipped
 
-Verifying is slow, so stay on the fast loop while developing. The other scripts
-verify for you when it matters.
+Verification is slow. Stay on the fast loop while developing.
 
 Documentation for humans: README.md, dev-info.md, SPECIFICATIONS.md.
