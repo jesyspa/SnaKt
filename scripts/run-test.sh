@@ -2,11 +2,13 @@
 # run-test.sh — Run one test in full verification mode and show why it failed.
 #
 # Gradle's cross-JVM serialization strips expected/actual values off golden-file
-# assertions, so a bare run reports only AssertionFailedError. On a golden-file
-# mismatch this re-runs through dump-test-diff.sh to recover the diff; for any
-# other failure (a thrown exception, a missing directive) the JUnit XML already
-# has the real message and stack trace, so it's read and printed directly
-# instead of paying for a second build that would recover nothing.
+# assertions, so a bare run reports only AssertionFailedError. For
+# :formver.compiler-plugin, this registers DumpAssertionDiffExtension (see
+# lib.sh) before its one gradle run, so a golden-file mismatch already has its
+# diff on disk to render once the run comes back failed — no second gradle
+# invocation needed. For any other failure (a thrown exception, a missing
+# directive) the JUnit XML already has the real message and stack trace, so
+# it's read and printed directly instead.
 #
 # Usage:
 #   ./scripts/run-test.sh testAssign_local
@@ -24,7 +26,7 @@ PATTERN="$1"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 # shellcheck source=scripts/lib.sh
 source "$SCRIPT_DIR/lib.sh"
-cd "$(cd "$SCRIPT_DIR/.." && pwd)"
+cd "$ROOT_DIR"
 
 # Test methods are derived from testData file names, so the owning module can be
 # found from the source file: assign_local.kt backs testAssign_local. A stem
@@ -52,6 +54,18 @@ fi
 
 FILTER="$(gradle_filter "$PATTERN")"
 
+# DumpAssertionDiffExtension lives in the compiler-plugin test fixtures, which
+# are not on the locality test classpath, so only register it for that module.
+# The trap covers both a Ctrl-C and every exit path below.
+DUMP_DIR="$(dump_dir_default)"
+if [[ "$module" == ":formver.compiler-plugin" ]]; then
+    mkdir -p "$DUMP_DIR"
+    rm -f "$DUMP_DIR"/test-assertion-dump-*.txt "$DUMP_DIR"/test-assertion-diff-*.txt
+    export SNAKT_TEST_DUMP_DIR="$DUMP_DIR"
+    install_dump_extension
+    trap remove_dump_extension EXIT
+fi
+
 echo "Running $PATTERN in $module"
 MARKER="$(mktemp)"
 # --rerun: an UP-TO-DATE task writes no results, which is indistinguishable
@@ -74,8 +88,6 @@ fi
 # Gradle's closing advice is about Gradle, not about the failure.
 echo "$gradle_out" | grep -v '^\* Try:\|^> Run with \|^> Get more help ' || true
 
-# DumpAssertionDiffExtension lives in the compiler-plugin test fixtures, which
-# are not on the locality test classpath.
 if [[ "$module" == *":locality" ]]; then
     rm -f "$MARKER"
     echo
@@ -85,7 +97,7 @@ if [[ "$module" == *":locality" ]]; then
 fi
 
 # Look at what actually failed before assuming it's a golden-file mismatch:
-# escalating to dump-test-diff.sh only pays off for the assertion family it
+# rendering dumps only pays off for the assertion family DumpAssertionDiffExtension
 # knows how to recover expected/actual from.
 failure_info="$(report_first_xml_failure "$MARKER" || true)"
 rm -f "$MARKER"
@@ -100,8 +112,8 @@ fi
 if is_assertion_failure_type "$(head -1 <<<"$failure_info")"; then
     echo
     echo "FAILED. Recovering the assertion diff:"
-    echo
-    exec "$SCRIPT_DIR/dump-test-diff.sh" "$FILTER"
+    render_dump_diffs "$DUMP_DIR" || true
+    exit 1
 fi
 
 echo

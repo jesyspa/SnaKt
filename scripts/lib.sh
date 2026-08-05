@@ -1,5 +1,10 @@
 # lib.sh — helpers shared by the scripts in this directory. Source, don't run.
 
+# Sourced, not executed, so the caller's $0/SCRIPT_DIR can't be relied on to
+# find the Python helpers below.
+LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT_DIR="$(cd "$LIB_DIR/.." && pwd)"
+
 # Gradle's JUnit XML carries failure messages with escaped entities and line
 # breaks, so the functions below parse it rather than grepping it. Absence of
 # the parser must say so: silently reporting no tests reads as a passing run
@@ -64,38 +69,7 @@ ran_tests_since() {
     if [[ "${#files[@]}" -eq 0 ]]; then
         return 0
     fi
-    python3 - "${files[@]}" <<'PY'
-import sys
-import xml.etree.ElementTree as ET
-from collections import defaultdict
-
-pairs = set()
-for path in sys.argv[1:]:
-    try:
-        root = ET.parse(path).getroot()
-    except ET.ParseError:
-        continue
-    for testcase in root.findall("testcase"):
-        classname = testcase.get("classname", root.get("name", "?"))
-        name = testcase.get("name", "?")
-        if name.endswith("()"):
-            name = name[:-2]
-        pairs.add((classname, name))
-
-classes_by_name = defaultdict(set)
-for classname, name in pairs:
-    classes_by_name[name].add(classname)
-
-labels = set()
-for classname, name in pairs:
-    if len(classes_by_name[name]) > 1:
-        labels.add(f"{classname}.{name}")
-    else:
-        labels.add(name)
-
-for label in sorted(labels):
-    print(label)
-PY
+    python3 "$LIB_DIR/junit_ran_tests.py" "${files[@]}"
 }
 
 # Report the tests behind a gradle success, or fail: a SUCCESS with no test
@@ -167,35 +141,112 @@ report_first_xml_failure() {
     if [[ "${#files[@]}" -eq 0 ]]; then
         return 1
     fi
-    python3 - "${files[@]}" <<'PY'
-import sys
-import xml.etree.ElementTree as ET
+    python3 "$LIB_DIR/junit_first_failure.py" "${files[@]}"
+}
 
-for path in sys.argv[1:]:
-    try:
-        root = ET.parse(path).getroot()
-    except ET.ParseError:
-        continue
-    for testcase in root.findall("testcase"):
-        node = testcase.find("failure")
-        if node is None:
-            node = testcase.find("error")
-        if node is None:
-            continue
-        classname = testcase.get("classname", root.get("name", "?"))
-        name = testcase.get("name", "?")
-        message = node.get("message") or "(no message)"
-        print(node.get("type", ""))
-        print(f"{classname}.{name}: {message}")
-        # The trace opens by restating the message; printing it twice buries
-        # the frames that say where it came from.
-        trace = (node.text or "").strip().splitlines()
-        while trace and trace[0].strip() == message.strip():
-            trace.pop(0)
-        for line in trace[:8]:
-            print(f"    {line}")
-        sys.exit(0)
+# DumpAssertionDiffExtension (formver.compiler-plugin test-fixtures) is a
+# JUnit 5 TestWatcher that, when auto-detected, catches a failing golden-file
+# assertion inside the forked test JVM — before Gradle's cross-JVM result
+# serialization strips the expected/actual values off it — and writes them to
+# $SNAKT_TEST_DUMP_DIR/test-assertion-dump-*.txt. Registration is by dropping
+# files where Gradle's test task picks up test resources, so it only reaches
+# :formver.compiler-plugin:test; :formver.compiler-plugin:locality has no
+# test-fixtures on its classpath to find the class by.
+DUMP_SERVICES_DIR="$ROOT_DIR/formver.compiler-plugin/testData/META-INF/services"
+DUMP_SERVICES_FILE="$DUMP_SERVICES_DIR/org.junit.jupiter.api.extension.Extension"
+DUMP_PLATFORM_PROPS="$ROOT_DIR/formver.compiler-plugin/testData/junit-platform.properties"
 
-sys.exit(1)
-PY
+# Default location for assertion dumps, overridable via SNAKT_TEST_DUMP_DIR.
+# Per-user: callers glob and clear this directory, and a shared /tmp would
+# pick up files left behind by someone else.
+dump_dir_default() {
+    printf '%s' "${SNAKT_TEST_DUMP_DIR:-${TMPDIR:-/tmp}/snakt-test-diff-$(id -u)}"
+}
+
+# Registers DumpAssertionDiffExtension via auto-detection so the next gradle
+# run against :formver.compiler-plugin:test captures assertion dumps.
+install_dump_extension() {
+    mkdir -p "$DUMP_SERVICES_DIR"
+    echo "org.jetbrains.kotlin.formver.plugin.DumpAssertionDiffExtension" > "$DUMP_SERVICES_FILE"
+    echo "junit.jupiter.extensions.autodetection.enabled=true" > "$DUMP_PLATFORM_PROPS"
+}
+
+# Undoes install_dump_extension, including the copy Gradle's
+# processTestResources leaves under build/ so it doesn't persist into a run
+# that never calls install_dump_extension at all.
+remove_dump_extension() {
+    rm -f "$DUMP_SERVICES_FILE" "$DUMP_PLATFORM_PROPS"
+    rmdir "$DUMP_SERVICES_DIR" 2>/dev/null || true
+    rmdir "$(dirname "$DUMP_SERVICES_DIR")" 2>/dev/null || true
+    rm -f "$ROOT_DIR/formver.compiler-plugin/build/resources/test/junit-platform.properties"
+    rm -rf "$ROOT_DIR/formver.compiler-plugin/build/resources/test/META-INF/services"
+}
+
+# Replace source-position offsets like ":(23,31):" with ":(_,_):" so methods
+# that only shifted by edits to earlier code drop out of the diff. Restricted
+# to lines starting with a "/path:" prefix to avoid false matches.
+normalize_dump_positions() {
+    sed -E 's#^(/[^:]+):\([0-9]+,[0-9]+\):#\1:(_,_):#'
+}
+
+# Split a dump file at the "=== ACTUAL ===" marker into two files.
+split_dump() {
+    local dump="$1" expected_path="$2" actual_path="$3"
+    awk -v exp_out="$expected_path" -v act_out="$actual_path" '
+        /^=== EXPECTED ===$/ { side = "expected"; next }
+        /^=== ACTUAL ===$/   { side = "actual";   next }
+        side == "expected" { print > exp_out }
+        side == "actual"   { print > act_out }
+    ' "$dump"
+}
+
+# Turn every test-assertion-dump-*.txt in $1 into a test-assertion-diff-*.txt
+# alongside it (split into expected/actual, normalize position offsets, unified
+# diff), then print the non-empty diffs. Returns 1 if no dump files were
+# present at all (nothing for the caller to have recovered).
+render_dump_diffs() {
+    local dump_dir="$1"
+    # A subshell, so nullglob does not leak into the caller's globbing.
+    (
+    shopt -s nullglob
+    local dump base exp_file act_file exp_norm act_norm
+    for dump in "$dump_dir"/test-assertion-dump-*.txt; do
+        base="$(basename "$dump" .txt)"
+        base="${base#test-assertion-dump-}"
+        exp_file="$(mktemp)"; act_file="$(mktemp)"
+        exp_norm="$(mktemp)"; act_norm="$(mktemp)"
+        split_dump "$dump" "$exp_file" "$act_file"
+        normalize_dump_positions < "$exp_file" > "$exp_norm"
+        normalize_dump_positions < "$act_file" > "$act_norm"
+        # -B drops hunks that are pure blank-line drift (golden files don't
+        # always end in exactly the same number of newlines); real whitespace
+        # differences inside content lines are still reported.
+        diff -u -B --label "expected (positions normalized)" --label "actual (positions normalized)" \
+            "$exp_norm" "$act_norm" > "$dump_dir/test-assertion-diff-$base.txt" || true
+        rm -f "$exp_file" "$act_file" "$exp_norm" "$act_norm"
+    done
+
+    echo
+    echo "=== Normalized diffs (source-position offsets stripped) ==="
+    local f shown=0
+    for f in "$dump_dir"/test-assertion-diff-*.txt; do
+        if [[ -s "$f" ]]; then
+            echo
+            echo "--- $(basename "$f") ---"
+            cat "$f"
+            shown=1
+        fi
+    done
+
+    if [[ $shown -eq 1 ]]; then
+        exit 0
+    fi
+    if compgen -G "$dump_dir/test-assertion-dump-*.txt" >/dev/null; then
+        echo "(no real differences after normalizing positions — all changes were just offset shifts)"
+        echo "Raw dumps remain at $dump_dir/test-assertion-dump-*.txt"
+        exit 0
+    fi
+    echo "(no diffs captured — test may have passed or failed with a non-assertion error)"
+    exit 1
+    )
 }
