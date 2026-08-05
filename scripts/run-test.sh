@@ -41,7 +41,9 @@ FILTER="$(gradle_filter "$PATTERN")"
 
 echo "Running $PATTERN in $module"
 MARKER="$(mktemp)"
-if gradle_out="$(./gradlew "$module:test" --tests "*$FILTER*" --no-daemon -q 2>&1)"; then
+# --rerun: an UP-TO-DATE task writes no results, which is indistinguishable
+# from a run that executed nothing.
+if gradle_out="$(./gradlew "$module:test" --tests "*$FILTER*" --rerun --no-daemon -q 2>&1)"; then
     status=0
 else
     status=$?

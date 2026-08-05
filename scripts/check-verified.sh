@@ -7,7 +7,8 @@
 #
 # Usage:
 #   ./scripts/check-verified.sh              # list every test recording a failure
-#   ./scripts/check-verified.sh Factorial    # exit 1 if that test does not verify
+#   ./scripts/check-verified.sh Factorial    # exit 1 if it records a failure,
+#                                            # 2 if there is no such test
 
 set -euo pipefail
 
@@ -33,7 +34,7 @@ while read -r golden; do
     matched=$((matched + 1))
     [[ -s "$golden" ]] || continue
     recorded=$((recorded + 1))
-    echo "$stem does not verify:"
+    echo "$golden does not verify:"
     sed 's/^/  /' "$golden"
 done < <(find "${TEST_DATA_DIRS[@]}" -name "*.viper.diag.txt" | sort)
 
@@ -45,8 +46,16 @@ if [[ -z "$PATTERN" ]]; then
 fi
 
 if [[ "$matched" -eq 0 ]]; then
-    # Either the test verifies and has no diagnostics file, or the pattern is
-    # wrong; run-test.sh distinguishes the two.
+    # A pattern naming nothing at all must not read like a clean result, so
+    # separate "this test has no recorded failure" from "there is no such test".
+    # testData names use dashes where the generated method uses underscores,
+    # so compare both sides in the same spelling.
+    if ! find "${TEST_DATA_DIRS[@]}" -name "*.kt" \
+        | sed 's#.*/##; s#\.kt$##; s#-#_#g' \
+        | grep -qi -- "${PATTERN//-/_}"; then
+        echo "No test matches '$PATTERN'."
+        exit 2
+    fi
     echo "No recorded verification failure for '$PATTERN'."
     echo "That is not evidence it verified: a test that never ran looks the same."
     echo "To watch it run: ./scripts/run-test.sh $PATTERN"

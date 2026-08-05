@@ -16,7 +16,9 @@ cd "$(cd "$SCRIPT_DIR/.." && pwd)"
 PATTERN="${1:-}"
 
 
-args=(--no-daemon -q)
+# --rerun: an UP-TO-DATE task writes no results, which is indistinguishable
+# from a run that executed nothing.
+args=(--rerun --no-daemon -q)
 if [[ -n "$PATTERN" ]]; then
     args+=(--tests "*$(gradle_filter "$PATTERN")*")
 fi

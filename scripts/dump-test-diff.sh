@@ -84,7 +84,7 @@ cd "$ROOT_DIR"
     --rerun \
     --no-daemon \
     -q \
-    2>&1 || true
+    2>&1 && test_status=0 || test_status=$?
 
 # Replace source-position offsets like ":(23,31):" with ":(_,_):" so methods
 # that only shifted by edits to earlier code drop out of the diff. Restricted
@@ -141,3 +141,7 @@ if [[ $shown -eq 0 ]]; then
         echo "(no diffs captured — test may have passed or failed with a non-assertion error)"
     fi
 fi
+
+# The diff is output, not a verdict: a caller exec'ing this script gets its
+# status as the test's.
+exit "$test_status"

@@ -12,7 +12,11 @@ While developing:
 Adding or changing a test:
 
     ./scripts/update-goldens.sh [pattern]    # regenerate, then report what needs review
-    ./scripts/check-verified.sh <pattern>    # exit 1 if that test does not actually verify
+    ./scripts/check-verified.sh <pattern>    # exit 1 if that test records a failure
+
+A recorded failure is the trap above: the test is green because the failure is
+what the golden says to expect. Read what the script prints before deciding
+whether that is the test you meant to write.
 
 Before pushing:
 
