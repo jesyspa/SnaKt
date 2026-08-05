@@ -7,8 +7,8 @@
 #
 # Usage:
 #   ./scripts/update-goldens.sh                 # every test
-#   ./scripts/update-goldens.sh Max_of_two      # one test
-#   ./scripts/update-goldens.sh max_of_two      # same, as the file is named
+#   ./scripts/update-goldens.sh Assign_local      # one test
+#   ./scripts/update-goldens.sh assign_local      # same, as the file is named
 
 set -euo pipefail
 

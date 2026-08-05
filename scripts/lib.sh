@@ -3,7 +3,7 @@
 # Turn a test name into the pattern Gradle's --tests expects.
 #
 # GenerateTestsKt capitalizes the first letter of a testData file's stem to form
-# the JUnit method name (max_of_two.kt backs testMax_of_two), and the --tests
+# the JUnit method name (assign_local.kt backs testAssign_local), and the --tests
 # filter is case-sensitive, so a pattern taken verbatim from the file name would
 # match nothing. A name already in method form is passed through.
 gradle_filter() {
@@ -21,14 +21,26 @@ gradle_filter() {
 # than $1 count: gradle can report a test task SUCCESS (e.g. UP-TO-DATE)
 # without re-executing it, leaving stale XML from an earlier run that would
 # otherwise be mistaken for this run's output.
+#
+# Reporting nothing is a normal outcome, so this never fails: a task that ran
+# only one module leaves the other module's directory absent, and the caller
+# runs under `set -e`.
 ran_tests_since() {
-    local marker="$1"
-    find formver.compiler-plugin/build/test-results \
-         formver.compiler-plugin/locality/build/test-results \
-         -name '*.xml' -newer "$marker" 2>/dev/null \
+    local marker="$1" dirs=() dir
+    for dir in formver.compiler-plugin/build/test-results \
+               formver.compiler-plugin/locality/build/test-results; do
+        if [[ -d "$dir" ]]; then
+            dirs+=("$dir")
+        fi
+    done
+    if [[ "${#dirs[@]}" -eq 0 ]]; then
+        return 0
+    fi
+    find "${dirs[@]}" -name '*.xml' -newer "$marker" \
         | xargs -r grep -ho 'testcase name="[^"]*"' \
         | sed -E 's/^testcase name="(.*)"$/\1/; s/\(\)$//' \
-        | sort -u
+        | sort -u \
+        || true
 }
 
 # Report the tests behind a gradle success, or fail: a SUCCESS with no test

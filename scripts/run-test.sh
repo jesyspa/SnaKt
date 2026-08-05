@@ -6,9 +6,9 @@
 # re-runs through dump-test-diff.sh to recover the diff.
 #
 # Usage:
-#   ./scripts/run-test.sh testMax_of_two
-#   ./scripts/run-test.sh Max_of_two
-#   ./scripts/run-test.sh max_of_two
+#   ./scripts/run-test.sh testAssign_local
+#   ./scripts/run-test.sh Assign_local
+#   ./scripts/run-test.sh assign_local
 
 set -euo pipefail
 
@@ -24,7 +24,7 @@ source "$SCRIPT_DIR/lib.sh"
 cd "$(cd "$SCRIPT_DIR/.." && pwd)"
 
 # Test methods are derived from testData file names, so the owning module can be
-# found from the source file: max_of_two.kt backs testMax_of_two.
+# found from the source file: assign_local.kt backs testAssign_local.
 stem="$(echo "${PATTERN#test}" | tr '[:upper:]' '[:lower:]')"
 module=":formver.compiler-plugin"
 while read -r f; do

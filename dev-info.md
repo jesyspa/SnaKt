@@ -65,6 +65,6 @@ A separate CI workflow runs `pre-commit`; install the hook locally with
 - `lib.sh` — sourced by the others, not run.
 
 A test method's name comes from its testData file with the first letter
-capitalized, so `max_of_two.kt` backs `testMax_of_two`. Gradle's `--tests`
+capitalized, so `assign_local.kt` backs `testAssign_local`. Gradle's `--tests`
 filter is case-sensitive; the scripts capitalize for you, so any of the three
 spellings works as a pattern.

@@ -7,7 +7,7 @@
 #
 # Usage:
 #   ./scripts/check-verified.sh              # list every test recording a failure
-#   ./scripts/check-verified.sh Max_of_two   # exit 1 if that test does not verify
+#   ./scripts/check-verified.sh Factorial    # exit 1 if that test does not verify
 
 set -euo pipefail
 
