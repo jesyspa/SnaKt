@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="verification.BasicTest" tests="1" skipped="0" failures="1" errors="0" timestamp="2026-08-05T00:00:00" hostname="host" time="0.01">
+  <properties/>
+  <testcase name="testAssign_local" classname="verification.BasicTest" time="0.01">
+    <failure message="expected: &lt;1&gt; but was: &lt;2&gt;" type="org.opentest4j.AssertionFailedError">expected: &lt;1&gt; but was: &lt;2&gt;
+at verification.BasicTest.testAssign_local(BasicTest.java:10)
+</failure>
+  </testcase>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

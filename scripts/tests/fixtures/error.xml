@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="verification.BasicTest" tests="1" skipped="0" failures="0" errors="1" timestamp="2026-08-05T00:00:00" hostname="host" time="0.01">
+  <properties/>
+  <testcase name="testNon_local_returns" classname="verification.BasicTest" time="0.01">
+    <error message="boom" type="java.lang.RuntimeException">boom
+at verification.BasicTest.testNon_local_returns(BasicTest.java:20)
+</error>
+  </testcase>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
