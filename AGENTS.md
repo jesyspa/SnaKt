@@ -22,4 +22,4 @@ Exit 1 is a real failure. Exit 2 means a check did not run: install what it
 needs and run again, rather than reading 2 as a pass.
 
 docs/agents-dev.md goes deeper on all of the above. Written for humans:
-README.md, docs/dev-info.md, SPECIFICATIONS.md.
+README.md, docs/developing.md, SPECIFICATIONS.md.

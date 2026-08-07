@@ -140,7 +140,7 @@ manager, operating system, etc.
 
 ## Contributing
 
-See docs/dev-info.md for testing and the repository's tooling.
+See docs/developing.md for testing and the checks CI runs.
 
 ## Contact
 

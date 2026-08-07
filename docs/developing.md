@@ -1,4 +1,4 @@
-# Info for plugin developers
+# Developing the plugin
 
 Publishing a new Silicon build: publish-silicon.md.
 
