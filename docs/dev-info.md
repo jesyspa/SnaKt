@@ -1,6 +1,6 @@
 # Info for plugin developers
 
-Publishing a new Silicon build: internal-dev.md.
+Publishing a new Silicon build: publish-silicon.md.
 
 ## Tests
 
@@ -25,14 +25,12 @@ checking) and verification (Viper consistency checking and verification):
 | `./gradlew untilConversion`| every test | never                       |
 
 Use `untilConversion` as much as possible while developing, and `test` last,
-before opening a PR. `update` re-verifies only the tests whose conversion output
-changed.
+before opening a PR.
 
-Regenerating golden files runs verification, since the goldens include its
-output.
-
-Pass `-Pkotlin.test.update.test.data=true` to regenerate golden files. This also
-writes the diagnostic markers into the `.kt`, which a new test needs.
+All three only check the goldens. Regenerating them is a separate thing, run by
+passing `-Pkotlin.test.update.test.data=true` to `test`: it rewrites the golden
+files and writes the diagnostic markers into the `.kt`, which a new test needs.
+Verification runs, because the goldens include its output.
 
 ### Directives
 
@@ -65,11 +63,6 @@ versions whose bodies the plugin can see.
 `./gradlew check` runs detekt, `apiCheck` and every module's tests.
 
 A separate CI workflow runs `pre-commit`; install the hook locally with
-`pre-commit install`. Besides the formatting hooks it runs `check-testdata.sh`
-and the script tests, both of which need no build.
-
-## Scripts
-
-`agent-scripts/` holds the scripts agents drive the test loop with, documented
-in agents-dev.md. They wrap the Gradle tasks above and nothing in the build
-depends on them.
+`pre-commit install`. Besides the formatting hooks it runs two checks that need
+no build: one over the testData tree, and the tests for the repository's own
+scripts.

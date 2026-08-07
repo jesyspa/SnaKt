@@ -69,7 +69,7 @@ report_first_xml_failure() {
     python3 "$LIB_DIR/junit_first_failure.py" "${files[@]}"
 }
 
-# Where DumpAssertionDiffExtension writes its dumps (see agents-dev.md).
+# Where DumpAssertionDiffExtension writes its dumps (see docs/agents-dev.md).
 # Per-user, because callers glob and clear this directory and a shared /tmp
 # would hand them someone else's files.
 dump_dir_default() {

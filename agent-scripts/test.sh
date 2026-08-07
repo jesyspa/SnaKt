@@ -11,9 +11,9 @@ cd "$SCRIPT_DIR/.."
 usage() {
     cat <<'EOF'
 Usage:
-  ./agent-scripts/test.sh [pattern]           # conversion only — the fast loop, default
-  ./agent-scripts/test.sh --verify [pattern]  # full pipeline
-  ./agent-scripts/test.sh --update [pattern]  # regenerate goldens, then report what changed
+  ./agent-scripts/test.sh [pattern]                  # conversion only — the fast loop, default
+  ./agent-scripts/test.sh --verify [pattern]         # full pipeline
+  ./agent-scripts/test.sh --update-goldens [pattern] # regenerate goldens, then report what changed
 
 A pattern can be given as the testData file is named (assign_local), as the
 path to it, or as the generated test method (testAssign_local).
@@ -23,7 +23,7 @@ EOF
 MODE=conversion
 set_mode() {
     if [[ "$MODE" != conversion && "$MODE" != "$1" ]]; then
-        echo "--verify and --update select different runs; pass one." >&2
+        echo "--verify and --update-goldens select different runs; pass one." >&2
         exit 1
     fi
     MODE="$1"
@@ -32,7 +32,7 @@ set_mode() {
 while [[ "${1:-}" == -* ]]; do
     case "$1" in
         --verify) set_mode verify ;;
-        --update) set_mode update ;;
+        --update-goldens) set_mode update ;;
         -h|--help) usage; exit 0 ;;
         *) echo "Unknown flag: $1" >&2; echo >&2; usage >&2; exit 1 ;;
     esac
@@ -61,7 +61,7 @@ if [[ -n "$PATTERN" ]]; then
     args+=(--tests "*$(gradle_filter "$PATTERN")*")
 fi
 
-# DumpAssertionDiffExtension only fires when this is set (see agents-dev.md).
+# DumpAssertionDiffExtension only fires when this is set (see docs/agents-dev.md).
 DUMP_DIR="$(dump_dir_default)"
 mkdir -p "$DUMP_DIR"
 rm -f "$DUMP_DIR"/test-assertion-dump-*.txt "$DUMP_DIR"/test-assertion-diff-*.txt
@@ -106,7 +106,7 @@ report_locality_failure() {
     echo "  formver.compiler-plugin/locality/build/reports/tests/test/index.html"
 }
 
-# In --update mode a matching test is expected to fail: assertEqualsToFile
+# In --update-goldens mode a matching test is expected to fail: assertEqualsToFile
 # writes the golden and then fails. Only "no tests found" means anything there.
 run_module() {
     local task="$1" on_failure="$2"
