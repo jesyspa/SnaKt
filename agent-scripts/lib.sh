@@ -1,13 +1,10 @@
 # lib.sh — helpers shared by the scripts in this directory. Source, don't run.
 
-# Sourced, not executed, so the caller's $0/SCRIPT_DIR can't be relied on to
-# find the Python helpers below.
+# $0 is the caller's, so BASH_SOURCE is what locates junit_first_failure.py.
 LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Gradle's JUnit XML carries failure messages with escaped entities and line
-# breaks, so the functions below parse it rather than grepping it. Absence of
-# the parser must say so: silently reporting no tests reads as a passing run
-# that executed nothing.
+# Missing python3 must be said out loud: reporting no failures instead reads as
+# a run that passed.
 need_python3() {
     if command -v python3 >/dev/null 2>&1; then
         return 0
@@ -18,16 +15,10 @@ need_python3() {
 
 # Turn a test name into the pattern Gradle's --tests expects.
 #
-# GenerateTestsKt capitalizes the first letter of a testData file's stem and
-# turns dashes into underscores to form the JUnit method name (assign_local.kt
-# backs testAssign_local, non-local-returns.kt backs testNon_local_returns),
-# and the --tests filter is case-sensitive, so a pattern taken verbatim from
-# the file name would match nothing. A name already in method form is passed
-# through.
-#
-# A path with a .kt suffix is accepted too: listing testData is how a pattern
-# usually gets found, and the whole path matching nothing looks like a missing
-# test rather than a mis-spelled pattern.
+# GenerateTestsKt capitalizes a testData stem and turns dashes into underscores
+# to form the method name (non-local-returns.kt backs testNon_local_returns),
+# and --tests is case-sensitive. A name already in method form, and a path to
+# the .kt, are both accepted.
 gradle_filter() {
     local pattern="${1##*/}"
     pattern="${pattern%.kt}"
@@ -39,12 +30,10 @@ gradle_filter() {
     fi
 }
 
-# True if a JUnit <failure>/<error> "type" attribute names an exception
-# DumpAssertionDiffExtension can pull expected/actual out of: opentest4j's
-# AssertionFailedError (assertEqualsToFile) or a *ComparisonFailure (covers
-# both org.junit.ComparisonFailure and com.intellij's FileComparisonFailure).
-# Anything else is a thrown exception, not a golden-file mismatch, and there
-# is no diff for render_dump_diffs to recover.
+# True if a JUnit "type" attribute names a golden-file mismatch rather than a
+# thrown exception: assertEqualsToFile raises opentest4j's AssertionFailedError,
+# and *ComparisonFailure covers both org.junit's and com.intellij's. Only these
+# carry expected/actual values for render_dump_diffs to recover.
 is_assertion_failure_type() {
     case "$1" in
         org.opentest4j.AssertionFailedError|*ComparisonFailure) return 0 ;;
@@ -52,15 +41,10 @@ is_assertion_failure_type() {
     esac
 }
 
-# Print the first failing <testcase> from JUnit XML newer than $1, across
-# formver.compiler-plugin's and formver.compiler-plugin/locality's
-# test-results directories: its failure "type" on the first line, then
-# "classname.name: message", then a few lines of stack trace.
-#
-# Reused so callers can decide what a failure actually was before acting on
-# it, instead of assuming a golden-file mismatch and rendering dumps only to
-# find nothing there. Returns 1 with nothing printed if there is no fresh XML
-# at all (the run died before any test executed) or no failing testcase in it.
+# Print the first failing <testcase> from JUnit XML newer than $1: failure
+# "type" on the first line, then "classname.name: message", then stack trace.
+# Returns 1 with nothing printed if there is no fresh XML at all, or none of it
+# holds a failure.
 report_first_xml_failure() {
     need_python3 || return 1
     local marker="$1" dirs=() dir
@@ -73,9 +57,8 @@ report_first_xml_failure() {
     if [[ "${#dirs[@]}" -eq 0 ]]; then
         return 1
     fi
-    # Sorted, because find's order is the filesystem's: with more than one
-    # failing test, "the first failure" would otherwise differ between runs of
-    # the same failure.
+    # Sorted: find's order is the filesystem's, and with two failing tests
+    # "the first failure" would vary between runs of the same failure.
     local files=()
     while IFS= read -r f; do
         files+=("$f")
@@ -86,30 +69,20 @@ report_first_xml_failure() {
     python3 "$LIB_DIR/junit_first_failure.py" "${files[@]}"
 }
 
-# DumpAssertionDiffExtension (formver.compiler-plugin test-fixtures) is a
-# JUnit 5 TestWatcher, registered unconditionally via test-resources/, that
-# catches a failing golden-file assertion inside the forked test JVM — before
-# Gradle's cross-JVM result serialization strips the expected/actual values
-# off it — and writes them to $SNAKT_TEST_DUMP_DIR/test-assertion-dump-*.txt
-# whenever that variable is set. It reaches the test tasks of
-# :formver.compiler-plugin, which is where test-fixtures is on the classpath;
-# :formver.compiler-plugin:locality has no test-fixtures to find the class by.
-
-# Default location for assertion dumps, overridable via SNAKT_TEST_DUMP_DIR.
-# Per-user: callers glob and clear this directory, and a shared /tmp would
-# pick up files left behind by someone else.
+# Where DumpAssertionDiffExtension writes its dumps (see agents-dev.md).
+# Per-user, because callers glob and clear this directory and a shared /tmp
+# would hand them someone else's files.
 dump_dir_default() {
     printf '%s' "${SNAKT_TEST_DUMP_DIR:-${TMPDIR:-/tmp}/snakt-test-diff-$(id -u)}"
 }
 
-# Replace source-position offsets like ":(23,31):" with ":(_,_):" so methods
-# that only shifted by edits to earlier code drop out of the diff. Restricted
-# to lines starting with a "/path:" prefix to avoid false matches.
+# Replace source-position offsets like ":(23,31):" with ":(_,_):", so a method
+# that only shifted because of an edit above it drops out of the diff. Anchored
+# on the "/path:" prefix to avoid matching content that looks similar.
 normalize_dump_positions() {
     sed -E 's#^(/[^:]+):\([0-9]+,[0-9]+\):#\1:(_,_):#'
 }
 
-# Split a dump file at the "=== ACTUAL ===" marker into two files.
 split_dump() {
     local dump="$1" expected_path="$2" actual_path="$3"
     awk -v exp_out="$expected_path" -v act_out="$actual_path" '
@@ -120,10 +93,8 @@ split_dump() {
     ' "$dump"
 }
 
-# Turn every test-assertion-dump-*.txt in $1 into a test-assertion-diff-*.txt
-# alongside it (split into expected/actual, normalize position offsets, unified
-# diff), then print the non-empty diffs. Returns 1 if no dump files were
-# present at all (nothing for the caller to have recovered).
+# Diff every test-assertion-dump-*.txt in $1 into a test-assertion-diff-*.txt
+# beside it, then print the non-empty ones. Returns 1 if there were no dumps.
 render_dump_diffs() {
     local dump_dir="$1"
     # A subshell, so nullglob does not leak into the caller's globbing.
@@ -138,9 +109,9 @@ render_dump_diffs() {
         split_dump "$dump" "$exp_file" "$act_file"
         normalize_dump_positions < "$exp_file" > "$exp_norm"
         normalize_dump_positions < "$act_file" > "$act_norm"
-        # -B drops hunks that are pure blank-line drift (golden files don't
-        # always end in exactly the same number of newlines); real whitespace
-        # differences inside content lines are still reported.
+        # -B drops hunks that are only blank-line drift; goldens do not always
+        # end in the same number of newlines. Whitespace inside a content line
+        # is still reported.
         diff -u -B --label "expected (positions normalized)" --label "actual (positions normalized)" \
             "$exp_norm" "$act_norm" > "$dump_dir/test-assertion-diff-$base.txt" || true
         rm -f "$exp_file" "$act_file" "$exp_norm" "$act_norm"

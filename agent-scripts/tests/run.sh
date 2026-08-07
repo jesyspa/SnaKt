@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
-# Exercises agent-scripts/junit_first_failure.py directly against the fixture XML
-# in agent-scripts/tests/fixtures, the same way lib.sh invokes it: python3 <script>
-# <xml files...>. Needs no build, so .pre-commit-config.yaml runs it as a hook;
-# it is also runnable by hand.
+# Exercises junit_first_failure.py against the fixture XML in fixtures/, the way
+# lib.sh invokes it: python3 <script> <xml files...>. Needs no build, so
+# pre-commit runs it as a hook; also runnable by hand.
 set -euo pipefail
 
 TESTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -17,8 +16,8 @@ assert_eq() {
     shift 3
     [[ "$1" == "--" ]] || { echo "assert_eq: missing --"; exit 2; }
     shift
-    # stderr is kept separate: folded into stdout, a Python traceback reads as
-    # the wrong output rather than as a crash.
+    # stderr kept separate: folded into stdout, a traceback reads as wrong
+    # output rather than as a crash.
     local actual actual_exit err_file
     err_file="$(mktemp)"
     actual="$("$@" 2>"$err_file")" && actual_exit=0 || actual_exit=$?
@@ -46,14 +45,10 @@ assert_eq() {
     failures=$((failures + 1))
 }
 
-# A passing run: one testcase, no failure/error. first_failure finds nothing
-# and exits 1.
 assert_eq "first_failure: passing run reports nothing" \
     "" 1 \
     -- python3 "$LIB_DIR/junit_first_failure.py" "$FIXTURES/passing.xml"
 
-# A <failure>: first_failure reports type, "classname.name: message", then
-# trace lines with the leading restated-message line dropped.
 assert_eq "first_failure: <failure> is reported" \
     "$(printf '%s\n%s\n%s' \
         "org.opentest4j.AssertionFailedError" \
@@ -61,7 +56,6 @@ assert_eq "first_failure: <failure> is reported" \
         "    at verification.BasicTest.testAssign_local(BasicTest.java:10)")" 0 \
     -- python3 "$LIB_DIR/junit_first_failure.py" "$FIXTURES/failure.xml"
 
-# An <error>: same reporting path as <failure>, via the error element instead.
 assert_eq "first_failure: <error> is reported" \
     "$(printf '%s\n%s\n%s' \
         "java.lang.RuntimeException" \
@@ -69,8 +63,6 @@ assert_eq "first_failure: <error> is reported" \
         "    at verification.BasicTest.testNon_local_returns(BasicTest.java:20)")" 0 \
     -- python3 "$LIB_DIR/junit_first_failure.py" "$FIXTURES/error.xml"
 
-# A malformed XML file must be skipped, not raise: alongside a real failure,
-# the failure is still found.
 assert_eq "first_failure: malformed XML is skipped, real failure still found" \
     "$(printf '%s\n%s\n%s' \
         "org.opentest4j.AssertionFailedError" \

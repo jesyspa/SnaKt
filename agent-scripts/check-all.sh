@@ -16,8 +16,7 @@ EOF
 args=()
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        # An UP-TO-DATE test task is green without executing anything. That is
-        # a true statement about unchanged inputs, and not always the question.
+        # An UP-TO-DATE test task is green without executing anything.
         --rerun) args+=(--rerun) ;;
         -h|--help) usage; exit 0 ;;
         *) echo "Unknown argument: $1" >&2; echo >&2; usage >&2; exit 1 ;;
@@ -30,11 +29,11 @@ gradle_result=passed
 ./gradlew check --no-daemon "${args[@]}" || gradle_result=failed
 
 testdata_result=passed
-# Also registered as a pre-commit hook; called directly here too, so this
-# still runs when pre-commit isn't installed.
+# Called directly as well as through pre-commit, so it runs even when
+# pre-commit is missing.
 ./agent-scripts/check-testdata.sh || testdata_result=failed
 
-# Enforced by a CI workflow. No git hook is installed by default.
+# CI enforces this; no git hook is installed by default.
 if command -v pre-commit >/dev/null; then
     precommit_result=passed
     pre-commit run --all-files || precommit_result=failed
@@ -64,8 +63,7 @@ if [[ "$failed" == 1 ]]; then
 fi
 
 # A skip is not a pass: the run covered less than this script promises, and the
-# gap is in the setup rather than in the code. Distinct from 1 so it can be told
-# apart from a real failure, but it is still something to go and fix.
+# gap is in the setup, not the code. Distinct from 1, still to be fixed.
 if [[ "$skipped" == 1 ]]; then
     echo
     echo "Exit 2: nothing failed, but a check above did not run. Install what it"

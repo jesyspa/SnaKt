@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
-# check-testdata.sh — Structural checks on testData. Needs no build.
-#
-# Usage:
-#   ./agent-scripts/check-testdata.sh
+# check-testdata.sh — Structural checks on testData. Takes no arguments and
+# needs no build.
 
 set -euo pipefail
 
@@ -15,10 +13,8 @@ TEST_DATA_DIRS=(
 
 status=0
 
-# A missing directory would make find fail, and inside the process
-# substitutions below that status is discarded: the checks would quietly cover
-# less than they claim to. Checked here, where the failure is still ours to
-# report.
+# The process substitutions below discard find's status, so a missing directory
+# would silently narrow the checks. Caught here instead.
 for dir in "${TEST_DATA_DIRS[@]}"; do
     if [ ! -d "$dir" ]; then
         echo "testData directory is missing: $dir" >&2

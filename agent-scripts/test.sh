@@ -61,8 +61,7 @@ if [[ -n "$PATTERN" ]]; then
     args+=(--tests "*$(gradle_filter "$PATTERN")*")
 fi
 
-# DumpAssertionDiffExtension is registered unconditionally on the
-# compiler-plugin test classpath and only fires when this is set (see lib.sh).
+# DumpAssertionDiffExtension only fires when this is set (see agents-dev.md).
 DUMP_DIR="$(dump_dir_default)"
 mkdir -p "$DUMP_DIR"
 rm -f "$DUMP_DIR"/test-assertion-dump-*.txt "$DUMP_DIR"/test-assertion-diff-*.txt
@@ -81,15 +80,11 @@ run_task() {
     fi
 }
 
-# Look at what actually failed before assuming it's a golden-file mismatch:
-# rendering dumps only pays off for the assertion family
-# DumpAssertionDiffExtension knows how to recover expected/actual from.
 report_compiler_failure() {
     local failure_info
     failure_info="$(report_first_xml_failure "$MARKER" || true)"
     if [[ -z "$failure_info" ]]; then
-        # No JUnit XML at all: the task died before any test ran. Gradle's
-        # own error output, already printed above, is the answer.
+        # The task died before any test ran; Gradle's error output above says why.
         return
     fi
     if is_assertion_failure_type "$(head -1 <<<"$failure_info")"; then
@@ -111,9 +106,8 @@ report_locality_failure() {
     echo "  formver.compiler-plugin/locality/build/reports/tests/test/index.html"
 }
 
-# In --update mode, a matching test is expected to fail: assertEqualsToFile
-# writes the golden and then fails, so only "no tests found" (a pattern that
-# doesn't reach this module) is worth telling apart from a real run.
+# In --update mode a matching test is expected to fail: assertEqualsToFile
+# writes the golden and then fails. Only "no tests found" means anything there.
 run_module() {
     local task="$1" on_failure="$2"
     run_task "$task"
@@ -143,14 +137,9 @@ if [[ "$MODE" != update ]]; then
     exit "$overall_status"
 fi
 
-# Regeneration records whatever the run produced. A function that fails
-# verification has its failure written into the goldens and passes from then
-# on, so the diff below is the only place that distinguishes the two.
-
-# --no-renames, because a rename is reported as "old -> new" in a single entry
-# and show() would then have a path it cannot read; as a delete plus an add,
-# the add is a path that exists. Entries for files no longer on disk are
-# dropped for the same reason: there is nothing left to print of them.
+# --no-renames, so a rename arrives as a delete plus an add rather than as one
+# "old -> new" entry that is not a readable path. Paths gone from disk are
+# dropped for the same reason.
 changed() {
     local file
     while IFS= read -r file; do
@@ -160,13 +149,13 @@ changed() {
     done < <(git status --porcelain --no-renames -- "$@" | sed -E 's/^.{3}//')
 }
 
-# What the golden now says, not just that it changed: a path on its own leaves
-# the reader to go and look, and that is the step that gets skipped. A new
-# golden has no diff to show, so its whole body is the new content.
+# What the golden now says, not just that it changed: going to look at the file
+# is the step that gets skipped. An untracked golden has no diff, so its whole
+# body is the new content.
 show() {
     local cap="$1" file="$2" body
     if git ls-files --error-unmatch "$file" >/dev/null 2>&1; then
-        # Drop git's four header lines; the path is already printed above.
+        # Drop git's four header lines; the path is printed above.
         body="$(git diff --no-prefix -- "$file" | tail -n +5)"
     else
         body="$(sed 's/^/+/' "$file")"
@@ -199,8 +188,8 @@ report() {
 
 echo
 echo "=== golden changes ==="
-# Verification diagnostics are a few lines each, and are the thing most likely
-# to be recorded by accident, so they are shown whole.
+# Verification diagnostics are short and are what gets recorded by accident,
+# so they are shown whole.
 report "verification produced diagnostics for these; confirm that is intended:" 40 \
     '*.viper.diag.txt'
 report "conversion output changed:" 40 \
