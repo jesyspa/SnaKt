@@ -6,3 +6,18 @@ repos:
         # Generated API dumps end with a trailing blank line that `apiCheck`
         # requires; the fixer would strip it and break the check.
         exclude: '\.api$'
+  # These need no build, so they run here rather than in the Gradle workflow.
+  - repo: local
+    hooks:
+      - id: check-testdata
+        name: check-testdata
+        entry: agent-scripts/check-testdata.sh
+        language: script
+        always_run: true
+        pass_filenames: false
+      - id: script-tests
+        name: script-tests
+        entry: agent-scripts/tests/run.sh
+        language: script
+        always_run: true
+        pass_filenames: false

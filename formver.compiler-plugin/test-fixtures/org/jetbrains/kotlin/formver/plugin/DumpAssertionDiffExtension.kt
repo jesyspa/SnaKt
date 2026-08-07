@@ -5,15 +5,13 @@ import org.junit.jupiter.api.extension.TestWatcher
 import org.opentest4j.AssertionFailedError
 import java.io.File
 
-// Dumps expected vs actual content from golden-file assertion failures to
-// $SNAKT_TEST_DUMP_DIR/test-assertion-dump-*.txt (default /tmp). Inert unless
-// registered via META-INF/services and enabled via junit-platform.properties
-// autodetection; scripts/dump-test-diff.sh manages that registration
-// transiently.
+// Registered unconditionally via META-INF/services, so it must stay inert
+// unless asked for: dumps expected vs actual content from golden-file
+// assertion failures to $SNAKT_TEST_DUMP_DIR/test-assertion-dump-*.txt only
+// when that variable is set.
 class DumpAssertionDiffExtension : TestWatcher {
-    private val dumpDir: File = File(System.getenv("SNAKT_TEST_DUMP_DIR") ?: "/tmp")
-
     override fun testFailed(context: ExtensionContext, cause: Throwable) {
+        val dumpDir = File(System.getenv("SNAKT_TEST_DUMP_DIR") ?: return)
         val baseName = context.displayName.replace(Regex("[^a-zA-Z0-9_]"), "_")
         val assertions = collectAssertionErrors(cause)
         for ((index, error) in assertions.withIndex()) {

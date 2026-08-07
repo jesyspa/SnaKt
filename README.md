@@ -138,30 +138,9 @@ You need to (additionally) set `Z3_EXE` in `~/.xprofile` and/or
 `~/.bash_profile` depending on your shell, window manager, display
 manager, operating system, etc.
 
-## Running tests
+## Contributing
 
-Depending on the situation, different test modes should be run. The test pipeline is split into conversion and
-verification
-Conversion includes: Uniqueness checking, conversion, purity checking
-Verification includes: viper consistency checking, viper verification
-
-The table below summarizes the modes:
-
-| Gradle Task                | Mode                   | Conversion          | Verification                    | Primary Use Case                                                                   |
-|:---------------------------|:-----------------------|:--------------------|:--------------------------------|:-----------------------------------------------------------------------------------|
-| `/gradlew test`            | **`FULL`**             | Runs for every test | Runs for every test             | Ensures total consistency (used in CI/CD)                                          |
-| `/gradlew update`          | **`UPDATE`**           | Runs for every test | Runs only if conversion changed | **Manual Review:** Validates that code changes produced the expected effect.       |
-| `/gradlew untilConversion` | **`CHECK_CONVERSION`** | Runs for every test | Never runs                      | **Refactoring:** Confirms that logic changes didn't accidentally break the output. |
-
-To update golden files after a change, pass `-Pkotlin.test.update.test.data=true`.
-
-### Test directives
-
-Test source files support directives that control how they are run:
-
-- `NEVER_VALIDATE` — skip verification, keep consistency and uniqueness checking.
-- `UNIQUE_CHECK_ONLY` — run only the uniqueness checker (skip conversion and verification).
-- `ALWAYS_VALIDATE` — force verification for all functions.
+See docs/developing.md for testing and the checks CI runs.
 
 ## Contact
 

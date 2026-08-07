@@ -77,10 +77,6 @@ val generateTests by tasks.registering(JavaExec::class) {
     workingDir = rootDir
 }
 
-tasks.compileTestKotlin {
-    dependsOn(generateTests)
-}
-
 // Run locality checks
 tasks.test {
     configureFormverTest()
