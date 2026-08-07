@@ -1,20 +1,29 @@
 #!/usr/bin/env bash
-# check-all.sh — Everything CI enforces, in one command.
-#
-# Usage:
-#   ./scripts/check-all.sh
-#   ./scripts/check-all.sh --rerun   # re-execute tests gradle considers current
+# check-all.sh — Everything CI enforces, in one command. --help for usage.
 
 set -euo pipefail
 
 cd "$(cd "$(dirname "$0")/.." && pwd)"
 
+usage() {
+    cat <<'EOF'
+Usage:
+  ./scripts/check-all.sh
+  ./scripts/check-all.sh --rerun   # re-execute tests gradle considers current
+EOF
+}
+
 args=()
-if [[ "${1:-}" == "--rerun" ]]; then
-    # An UP-TO-DATE test task is green without executing anything. That is a
-    # true statement about unchanged inputs, and not always the question.
-    args+=(--rerun)
-fi
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        # An UP-TO-DATE test task is green without executing anything. That is
+        # a true statement about unchanged inputs, and not always the question.
+        --rerun) args+=(--rerun) ;;
+        -h|--help) usage; exit 0 ;;
+        *) echo "Unknown argument: $1" >&2; echo >&2; usage >&2; exit 1 ;;
+    esac
+    shift
+done
 
 gradle_result=passed
 # detekt, apiCheck and every module's test task.

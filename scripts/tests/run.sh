@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Exercises scripts/junit_first_failure.py directly against the fixture XML
 # in scripts/tests/fixtures, the same way lib.sh invokes it: python3 <script>
-# <xml files...>. Not wired into any other script — run by hand.
+# <xml files...>. Needs no build, so .pre-commit-config.yaml runs it as a hook;
+# it is also runnable by hand.
 set -euo pipefail
 
 TESTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -16,9 +17,15 @@ assert_eq() {
     shift 3
     [[ "$1" == "--" ]] || { echo "assert_eq: missing --"; exit 2; }
     shift
-    local actual actual_exit
-    actual="$("$@" 2>&1)" && actual_exit=0 || actual_exit=$?
-    if [[ "$actual" == "$expected" && "$actual_exit" == "$expected_exit" ]]; then
+    # stderr is kept separate: folded into stdout, a Python traceback reads as
+    # the wrong output rather than as a crash.
+    local actual actual_exit err_file
+    err_file="$(mktemp)"
+    actual="$("$@" 2>"$err_file")" && actual_exit=0 || actual_exit=$?
+    local errors
+    errors="$(cat "$err_file")"
+    rm -f "$err_file"
+    if [[ "$actual" == "$expected" && "$actual_exit" == "$expected_exit" && -z "$errors" ]]; then
         echo "ok - $name"
         return 0
     fi
@@ -31,6 +38,10 @@ assert_eq() {
     fi
     if [[ "$actual_exit" != "$expected_exit" ]]; then
         echo "  expected exit $expected_exit, got $actual_exit"
+    fi
+    if [[ -n "$errors" ]]; then
+        echo "  unexpected stderr:"
+        sed 's/^/    /' <<<"$errors"
     fi
     failures=$((failures + 1))
 }

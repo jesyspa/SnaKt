@@ -15,6 +15,17 @@ TEST_DATA_DIRS=(
 
 status=0
 
+# A missing directory would make find fail, and inside the process
+# substitutions below that status is discarded: the checks would quietly cover
+# less than they claim to. Checked here, where the failure is still ours to
+# report.
+for dir in "${TEST_DATA_DIRS[@]}"; do
+    if [ ! -d "$dir" ]; then
+        echo "testData directory is missing: $dir" >&2
+        exit 1
+    fi
+done
+
 golden_files() {
     find "${TEST_DATA_DIRS[@]}" \
         \( -name "*.fir.diag.txt" -o -name "*.viper.diag.txt" \)

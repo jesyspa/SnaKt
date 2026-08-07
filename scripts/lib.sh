@@ -24,8 +24,13 @@ need_python3() {
 # and the --tests filter is case-sensitive, so a pattern taken verbatim from
 # the file name would match nothing. A name already in method form is passed
 # through.
+#
+# A path with a .kt suffix is accepted too: listing testData is how a pattern
+# usually gets found, and the whole path matching nothing looks like a missing
+# test rather than a mis-spelled pattern.
 gradle_filter() {
-    local pattern="$1"
+    local pattern="${1##*/}"
+    pattern="${pattern%.kt}"
     if [[ "$pattern" == test* ]]; then
         printf '%s' "$pattern"
     else
@@ -68,10 +73,13 @@ report_first_xml_failure() {
     if [[ "${#dirs[@]}" -eq 0 ]]; then
         return 1
     fi
+    # Sorted, because find's order is the filesystem's: with more than one
+    # failing test, "the first failure" would otherwise differ between runs of
+    # the same failure.
     local files=()
     while IFS= read -r f; do
         files+=("$f")
-    done < <(find "${dirs[@]}" -name '*.xml' -newer "$marker")
+    done < <(find "${dirs[@]}" -name '*.xml' -newer "$marker" | sort)
     if [[ "${#files[@]}" -eq 0 ]]; then
         return 1
     fi

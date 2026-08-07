@@ -6,7 +6,9 @@ for path in sys.argv[1:]:
         root = ET.parse(path).getroot()
     except ET.ParseError:
         continue
-    for testcase in root.findall("testcase"):
+    # Gradle emits a bare <testsuite>, but a <testsuites> wrapper would put the
+    # cases a level deeper, and finding nothing reads as a clean run.
+    for testcase in root.iter("testcase"):
         node = testcase.find("failure")
         if node is None:
             node = testcase.find("error")

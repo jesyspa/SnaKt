@@ -1,13 +1,5 @@
 #!/usr/bin/env bash
-# test.sh — Drive the formver test suite.
-#
-# Usage:
-#   ./scripts/test.sh [pattern]           # conversion only — the fast loop, default
-#   ./scripts/test.sh --verify [pattern]  # full pipeline
-#   ./scripts/test.sh --update [pattern]  # regenerate goldens, then report what changed
-#
-# A pattern can be given as the testData file is named (assign_local) or as
-# the generated test method (testAssign_local).
+# test.sh — Drive the formver test suite. --help for usage.
 
 set -euo pipefail
 
@@ -16,17 +8,42 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/lib.sh"
 cd "$SCRIPT_DIR/.."
 
+usage() {
+    cat <<'EOF'
+Usage:
+  ./scripts/test.sh [pattern]           # conversion only — the fast loop, default
+  ./scripts/test.sh --verify [pattern]  # full pipeline
+  ./scripts/test.sh --update [pattern]  # regenerate goldens, then report what changed
+
+A pattern can be given as the testData file is named (assign_local), as the
+path to it, or as the generated test method (testAssign_local).
+EOF
+}
+
 MODE=conversion
-while [[ "${1:-}" == --* ]]; do
+set_mode() {
+    if [[ "$MODE" != conversion && "$MODE" != "$1" ]]; then
+        echo "--verify and --update select different runs; pass one." >&2
+        exit 1
+    fi
+    MODE="$1"
+}
+
+while [[ "${1:-}" == -* ]]; do
     case "$1" in
-        --verify) MODE=verify ;;
-        --update) MODE=update ;;
-        *) echo "Unknown flag: $1" >&2; exit 1 ;;
+        --verify) set_mode verify ;;
+        --update) set_mode update ;;
+        -h|--help) usage; exit 0 ;;
+        *) echo "Unknown flag: $1" >&2; echo >&2; usage >&2; exit 1 ;;
     esac
     shift
 done
 
 PATTERN="${1:-}"
+if [[ $# -gt 1 ]]; then
+    echo "Only one pattern is accepted; got: $*" >&2
+    exit 1
+fi
 
 if [[ "$MODE" == conversion ]]; then
     COMPILER_TASK=:formver.compiler-plugin:untilConversion
@@ -130,8 +147,17 @@ fi
 # verification has its failure written into the goldens and passes from then
 # on, so the diff below is the only place that distinguishes the two.
 
+# --no-renames, because a rename is reported as "old -> new" in a single entry
+# and show() would then have a path it cannot read; as a delete plus an add,
+# the add is a path that exists. Entries for files no longer on disk are
+# dropped for the same reason: there is nothing left to print of them.
 changed() {
-    git status --porcelain -- "$@" | sed -E 's/^.{3}//'
+    local file
+    while IFS= read -r file; do
+        if [[ -f "$file" ]]; then
+            printf '%s\n' "$file"
+        fi
+    done < <(git status --porcelain --no-renames -- "$@" | sed -E 's/^.{3}//')
 }
 
 # What the golden now says, not just that it changed: a path on its own leaves
