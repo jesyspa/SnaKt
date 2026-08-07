@@ -144,5 +144,5 @@ See docs/developing.md for testing and the checks CI runs.
 
 ## Contact
 
-Reach out to komi.golov@jetbrains.com if you'd like to use or contribute to the plugin!
+Reach out to kameliya.golova@jetbrains.com if you'd like to use or contribute to the plugin!
 We are open to supervising bachelor and master theses about this work.
