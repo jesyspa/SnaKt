@@ -11,13 +11,13 @@ repos:
     hooks:
       - id: check-testdata
         name: check-testdata
-        entry: scripts/check-testdata.sh
+        entry: agent-scripts/check-testdata.sh
         language: script
         always_run: true
         pass_filenames: false
       - id: script-tests
         name: script-tests
-        entry: scripts/tests/run.sh
+        entry: agent-scripts/tests/run.sh
         language: script
         always_run: true
         pass_filenames: false

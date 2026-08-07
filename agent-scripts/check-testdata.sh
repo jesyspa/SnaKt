@@ -2,7 +2,7 @@
 # check-testdata.sh — Structural checks on testData. Needs no build.
 #
 # Usage:
-#   ./scripts/check-testdata.sh
+#   ./agent-scripts/check-testdata.sh
 
 set -euo pipefail
 

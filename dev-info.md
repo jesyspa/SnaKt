@@ -70,31 +70,6 @@ and the script tests, both of which need no build.
 
 ## Scripts
 
-`scripts/` holds helpers for the loop above:
-
-- `test.sh` — the test driver. Conversion only by default (`untilConversion`
-  plus the locality tests, which have no verification stage), `--verify` for the
-  full pipeline, `--update` to regenerate goldens and report what they now say.
-  On failure it prints the expected/actual diff that Gradle's cross-JVM
-  serialization strips from golden-file assertions.
-- `check-all.sh` — `check`, `pre-commit` and the testData checks together.
-  `--rerun` re-executes tests Gradle considers current. Exits 1 if a check
-  failed and 2 if none failed but one was skipped, which is what a missing
-  `pre-commit` gives you.
-- `check-testdata.sh` — golden files with no source, and empty golden files.
-- `lib.sh` — sourced by the others, not run.
-- `junit_first_failure.py` — the JUnit XML parser `lib.sh` calls; `tests/run.sh`
-  exercises it against fixture XML.
-
-They need `python3` on PATH: the test results they report from are XML.
-
-The diff recovery works through `DumpAssertionDiffExtension`, registered on the
-compiler-plugin test classpath by `formver.compiler-plugin/test-resources/`. It
-is registered for every run and stays inert unless `SNAKT_TEST_DUMP_DIR` is set,
-which `test.sh` does. The locality module has no test fixtures on its classpath,
-so its failures go to the HTML report instead.
-
-A test method's name comes from its testData file with the first letter
-capitalized, so `assign_local.kt` backs `testAssign_local`. Gradle's `--tests`
-filter is case-sensitive; the scripts capitalize for you, so any of the three
-spellings works as a pattern.
+`agent-scripts/` holds the scripts agents drive the test loop with, documented
+in agents-dev.md. They wrap the Gradle tasks above and nothing in the build
+depends on them.

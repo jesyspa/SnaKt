@@ -91,9 +91,9 @@ report_first_xml_failure() {
 # catches a failing golden-file assertion inside the forked test JVM — before
 # Gradle's cross-JVM result serialization strips the expected/actual values
 # off it — and writes them to $SNAKT_TEST_DUMP_DIR/test-assertion-dump-*.txt
-# whenever that variable is set. It only reaches :formver.compiler-plugin:test
-# and :untilConversion; :formver.compiler-plugin:locality has no test-fixtures
-# on its classpath to find the class by.
+# whenever that variable is set. It reaches the test tasks of
+# :formver.compiler-plugin, which is where test-fixtures is on the classpath;
+# :formver.compiler-plugin:locality has no test-fixtures to find the class by.
 
 # Default location for assertion dumps, overridable via SNAKT_TEST_DUMP_DIR.
 # Per-user: callers glob and clear this directory, and a shared /tmp would

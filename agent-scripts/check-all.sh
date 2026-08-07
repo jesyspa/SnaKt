@@ -8,8 +8,8 @@ cd "$(cd "$(dirname "$0")/.." && pwd)"
 usage() {
     cat <<'EOF'
 Usage:
-  ./scripts/check-all.sh
-  ./scripts/check-all.sh --rerun   # re-execute tests gradle considers current
+  ./agent-scripts/check-all.sh
+  ./agent-scripts/check-all.sh --rerun   # re-execute tests gradle considers current
 EOF
 }
 
@@ -32,7 +32,7 @@ gradle_result=passed
 testdata_result=passed
 # Also registered as a pre-commit hook; called directly here too, so this
 # still runs when pre-commit isn't installed.
-./scripts/check-testdata.sh || testdata_result=failed
+./agent-scripts/check-testdata.sh || testdata_result=failed
 
 # Enforced by a CI workflow. No git hook is installed by default.
 if command -v pre-commit >/dev/null; then
@@ -61,8 +61,16 @@ done
 
 if [[ "$failed" == 1 ]]; then
     exit 1
-elif [[ "$skipped" == 1 ]]; then
-    exit 2
-else
-    exit 0
 fi
+
+# A skip is not a pass: the run covered less than this script promises, and the
+# gap is in the setup rather than in the code. Distinct from 1 so it can be told
+# apart from a real failure, but it is still something to go and fix.
+if [[ "$skipped" == 1 ]]; then
+    echo
+    echo "Exit 2: nothing failed, but a check above did not run. Install what it"
+    echo "needs and run again for a clean 0."
+    exit 2
+fi
+
+exit 0

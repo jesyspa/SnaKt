@@ -4,16 +4,16 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-# shellcheck source=scripts/lib.sh
+# shellcheck source=agent-scripts/lib.sh
 source "$SCRIPT_DIR/lib.sh"
 cd "$SCRIPT_DIR/.."
 
 usage() {
     cat <<'EOF'
 Usage:
-  ./scripts/test.sh [pattern]           # conversion only — the fast loop, default
-  ./scripts/test.sh --verify [pattern]  # full pipeline
-  ./scripts/test.sh --update [pattern]  # regenerate goldens, then report what changed
+  ./agent-scripts/test.sh [pattern]           # conversion only — the fast loop, default
+  ./agent-scripts/test.sh --verify [pattern]  # full pipeline
+  ./agent-scripts/test.sh --update [pattern]  # regenerate goldens, then report what changed
 
 A pattern can be given as the testData file is named (assign_local), as the
 path to it, or as the generated test method (testAssign_local).

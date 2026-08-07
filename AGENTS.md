@@ -4,18 +4,23 @@ Tests are golden-file based: a test passes when its goldens match. Regenerating
 records whatever the run produced, so a function that fails verification passes
 from then on once that failure is in the golden. Read what `--update` prints.
 
-    ./scripts/test.sh [pattern]           # conversion only — the fast loop
-    ./scripts/test.sh --verify [pattern]  # full pipeline, including verification
-    ./scripts/test.sh --update [pattern]  # regenerate goldens, then report what changed
+    ./agent-scripts/test.sh [pattern]           # conversion only — the fast loop
+    ./agent-scripts/test.sh --verify [pattern]  # full pipeline, including verification
+    ./agent-scripts/test.sh --update [pattern]  # regenerate goldens, then report what changed
 
-A failing run prints the expected/actual diff itself; there is no second command
-to reach for. A pattern can be spelled as the testData file is named
-(`assign_local`) or as the generated method (`testAssign_local`).
+A failing run prints the expected/actual diff. A pattern can be spelled as the
+testData file is named (`assign_local`), as the path to it, or as the generated
+method (`testAssign_local`).
 
 Before pushing:
 
-    ./scripts/check-all.sh   # exit 2: nothing failed, but a check was skipped
+    ./agent-scripts/check-all.sh
+
+Exit 1 is a real failure. Exit 2 means nothing failed but a check did not run,
+which is what a missing `pre-commit` gives you; install it and rerun rather than
+reading 2 as a pass.
 
 Verification is slow. Stay on the fast loop while developing.
 
-Documentation for humans: README.md, dev-info.md, SPECIFICATIONS.md.
+More on the scripts: agents-dev.md. Documentation for humans: README.md,
+dev-info.md, SPECIFICATIONS.md.

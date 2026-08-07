@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Exercises scripts/junit_first_failure.py directly against the fixture XML
-# in scripts/tests/fixtures, the same way lib.sh invokes it: python3 <script>
+# Exercises agent-scripts/junit_first_failure.py directly against the fixture XML
+# in agent-scripts/tests/fixtures, the same way lib.sh invokes it: python3 <script>
 # <xml files...>. Needs no build, so .pre-commit-config.yaml runs it as a hook;
 # it is also runnable by hand.
 set -euo pipefail
