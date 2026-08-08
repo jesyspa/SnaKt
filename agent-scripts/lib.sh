@@ -3,6 +3,11 @@
 # $0 is the caller's, so BASH_SOURCE is what locates junit_first_failure.py.
 LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# Where each module's Gradle test tasks write their JUnit XML. Relative to the
+# repository root, which the scripts cd to.
+COMPILER_RESULTS_DIR=formver.compiler-plugin/build/test-results
+LOCALITY_RESULTS_DIR=formver.compiler-plugin/locality/build/test-results
+
 # Missing python3 must be said out loud: reporting no failures instead reads as
 # a run that passed.
 need_python3() {
@@ -48,8 +53,7 @@ is_assertion_failure_type() {
 report_first_xml_failure() {
     need_python3 || return 1
     local marker="$1" dirs=() dir
-    for dir in formver.compiler-plugin/build/test-results \
-               formver.compiler-plugin/locality/build/test-results; do
+    for dir in "$COMPILER_RESULTS_DIR" "$LOCALITY_RESULTS_DIR"; do
         if [[ -d "$dir" ]]; then
             dirs+=("$dir")
         fi
@@ -67,6 +71,26 @@ report_first_xml_failure() {
         return 1
     fi
     python3 "$LIB_DIR/junit_first_failure.py" "${files[@]}"
+}
+
+# Print "total assertion_failed other_failed skipped unreadable" over the JUnit
+# XML in directory $1 written since marker file $2. Prints nothing and returns
+# 1 when the module left no fresh XML, 2 when the counts could not be read at
+# all; a caller that reports the two as one cause names the wrong one.
+count_xml_results() {
+    need_python3 || return 2
+    local dir="$1" marker="$2"
+    if [[ ! -d "$dir" ]]; then
+        return 1
+    fi
+    local files=()
+    while IFS= read -r f; do
+        files+=("$f")
+    done < <(find "$dir" -name '*.xml' -newer "$marker")
+    if [[ "${#files[@]}" -eq 0 ]]; then
+        return 1
+    fi
+    python3 "$LIB_DIR/junit_counts.py" "${files[@]}" || return 2
 }
 
 # Where DumpAssertionDiffExtension writes its dumps (see docs/agents-dev.md).
