@@ -13,13 +13,10 @@ them.
 - `check-all.sh` — `check`, `pre-commit` and the testData checks together.
   `--rerun` re-executes tests Gradle considers current.
 - `check-testdata.sh` — golden files with no source, and empty golden files.
-- `lib.sh` — sourced by the others, not run.
-- `junit_first_failure.py` — the JUnit XML parser `lib.sh` calls; `tests/run.sh`
-  exercises it against fixture XML.
 
-`test.sh` and `check-all.sh` take `--help`. `test.sh` and `lib.sh` need `python3`
-on PATH, because the test results they report from are XML; `check-testdata.sh`
-needs nothing but a checkout.
+`test.sh` and `check-all.sh` take `--help`, and need `python3` on PATH because
+the test results they report from are XML; `check-testdata.sh` needs nothing but
+a checkout.
 
 ## Exit codes
 

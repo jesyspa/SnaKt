@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Exercises junit_first_failure.py against the fixture XML in fixtures/, the way
+# Exercises the JUnit XML parsers against the fixture XML in fixtures/, the way
 # lib.sh invokes it: python3 <script> <xml files...>. Needs no build, so
 # pre-commit runs it as a hook; also runnable by hand.
 set -euo pipefail
@@ -73,6 +73,23 @@ assert_eq "first_failure: malformed XML is skipped, real failure still found" \
 assert_eq "first_failure: only malformed XML reports nothing" \
     "" 1 \
     -- python3 "$LIB_DIR/junit_first_failure.py" "$FIXTURES/malformed.xml"
+
+# counts are "total assertion_failed other_failed skipped unreadable".
+assert_eq "counts: a passing run" \
+    "1 0 0 0 0" 0 \
+    -- python3 "$LIB_DIR/junit_counts.py" "$FIXTURES/passing.xml"
+
+assert_eq "counts: a golden mismatch is counted apart from a thrown exception" \
+    "2 1 1 0 0" 0 \
+    -- python3 "$LIB_DIR/junit_counts.py" "$FIXTURES/failure.xml" "$FIXTURES/error.xml"
+
+assert_eq "counts: a skipped test is neither passed nor failed" \
+    "2 0 0 1 0" 0 \
+    -- python3 "$LIB_DIR/junit_counts.py" "$FIXTURES/skipped.xml"
+
+assert_eq "counts: malformed XML is reported, not silently dropped" \
+    "1 0 0 0 1" 0 \
+    -- python3 "$LIB_DIR/junit_counts.py" "$FIXTURES/malformed.xml" "$FIXTURES/passing.xml"
 
 if [[ "$failures" -gt 0 ]]; then
     echo "$failures assertion(s) failed"
