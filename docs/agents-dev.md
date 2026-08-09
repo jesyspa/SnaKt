@@ -13,14 +13,10 @@ them.
 - `check-all.sh` — `check`, `pre-commit` and the testData checks together.
   `--rerun` re-executes tests Gradle considers current.
 - `check-testdata.sh` — golden files with no source, and empty golden files.
-- `lib.sh` — sourced by the others, not run.
-- `junit_first_failure.py`, `junit_counts.py` — the JUnit XML parsers `lib.sh`
-  calls, for the first failure and for the run's counts; `tests/run.sh`
-  exercises both against fixture XML.
 
-`test.sh` and `check-all.sh` take `--help`. `test.sh` and `lib.sh` need `python3`
-on PATH, because the test results they report from are XML; `check-testdata.sh`
-needs nothing but a checkout.
+`test.sh` and `check-all.sh` take `--help`, and need `python3` on PATH because
+the test results they report from are XML; `check-testdata.sh` needs nothing but
+a checkout.
 
 ## Exit codes
 
@@ -44,16 +40,6 @@ Only golden-file assertions carry values to recover. For a thrown exception
 
 Diffs are printed with source-position offsets replaced by `(_,_)`, so a method
 that only moved because of an edit earlier in the file drops out.
-
-## Counts
-
-Every run closes with how many tests it ran and how they went, counted over the
-JUnit XML each module wrote since the run started. A silent success and a
-success that tested nothing are otherwise the same output. A module that ran
-and left no results says so on its own line rather than being left out of the
-total, which would make the other module's count read as the whole run. Under
-`--update-goldens` a golden-file mismatch is the expected outcome and is
-reported as a rewrite; anything else is still a failure.
 
 ## Patterns
 

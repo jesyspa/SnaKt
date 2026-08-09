@@ -1,18 +1,13 @@
 import sys
 import xml.etree.ElementTree as ET
 
-# Counted from the <testcase> elements rather than the <testsuite> attributes:
-# one module can emit several suites, and a suite that died early still carries
-# a count that its cases do not back.
-#
-# Golden-file mismatches are counted apart from the rest, because under
-# --update-goldens they are the expected outcome and other failures are not.
-# The types are the ones is_assertion_failure_type accepts.
 ASSERTION_TYPES = ("org.opentest4j.AssertionFailedError",)
 ASSERTION_SUFFIX = "ComparisonFailure"
 
 total = assertion_failed = other_failed = skipped = unreadable = 0
 
+# Counted from the <testcase> elements rather than the <testsuite> attributes:
+# a suite that died early still carries a count that its cases do not back.
 for path in sys.argv[1:]:
     try:
         root = ET.parse(path).getroot()

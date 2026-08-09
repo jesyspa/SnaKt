@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Exercises junit_first_failure.py against the fixture XML in fixtures/, the way
+# Exercises the JUnit XML parsers against the fixture XML in fixtures/, the way
 # lib.sh invokes it: python3 <script> <xml files...>. Needs no build, so
 # pre-commit runs it as a hook; also runnable by hand.
 set -euo pipefail

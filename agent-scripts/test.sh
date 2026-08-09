@@ -76,8 +76,7 @@ total_rewritten=0
 total_failed=0
 total_skipped=0
 total_unreadable=0
-# Modules that ran but whose count could not be established. Without these the
-# summary would describe the modules it did count as if they were the whole run.
+# Modules that ran but whose count could not be established.
 no_results=()
 unreadable_results=()
 
@@ -158,15 +157,11 @@ if [[ "$matched" -eq 0 ]]; then
     exit 1
 fi
 
-# A run that says nothing reads the same whether it tested everything or
-# nothing, so the count is printed even when everything passed.
 summary() {
     local failed=$((total_rewritten + total_failed)) line
     local passed=$((total_tests - failed - total_skipped))
     if [[ "$total_tests" -gt 0 ]]; then
         if [[ "$MODE" == update ]]; then
-            # assertEqualsToFile writes the golden and then fails, so a mismatch
-            # here is a golden that got rewritten. Anything else really failed.
             line="Ran $total_tests tests, $total_rewritten golden(s) rewritten"
             if [[ "$total_failed" -gt 0 ]]; then
                 line+=", $total_failed failed for other reasons"
@@ -179,8 +174,6 @@ summary() {
         fi
         echo "$line."
     fi
-    # A module that ran and left no results is the case where a count over the
-    # other module alone reads as a clean run.
     local module
     for module in "${no_results[@]+"${no_results[@]}"}"; do
         echo "The $module module produced no test results; see its output above."

@@ -3,8 +3,8 @@
 # $0 is the caller's, so BASH_SOURCE is what locates junit_first_failure.py.
 LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Where each module's Gradle test tasks write their JUnit XML. Relative to the
-# repository root, which the scripts cd to.
+# Where each module's Gradle test tasks write their JUnit XML, relative to the
+# repository root the scripts cd to.
 COMPILER_RESULTS_DIR=formver.compiler-plugin/build/test-results
 LOCALITY_RESULTS_DIR=formver.compiler-plugin/locality/build/test-results
 
@@ -74,9 +74,8 @@ report_first_xml_failure() {
 }
 
 # Print "total assertion_failed other_failed skipped unreadable" over the JUnit
-# XML in directory $1 written since marker file $2. Prints nothing and returns
-# 1 when the module left no fresh XML, 2 when the counts could not be read at
-# all; a caller that reports the two as one cause names the wrong one.
+# XML in directory $1 written since marker file $2. Returns 1 when the module
+# left no fresh XML, 2 when the counts could not be read.
 count_xml_results() {
     need_python3 || return 2
     local dir="$1" marker="$2"
