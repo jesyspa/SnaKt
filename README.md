@@ -56,15 +56,14 @@ repositories {
 }
 ```
 
-Additionally, make sure you set Kotlin to use K2 and increase the stack size of the Kotlin Daemon:
+Additionally, increase the stack size and metaspace of the Kotlin Daemon: the shaded plugin
+jar bundles Silicon and the Scala runtime (~100 MB), and without a larger metaspace the daemon
+dies with `OutOfMemoryError: Metaspace` after roughly a dozen compiles.
 
 ```kotlin
 kotlin {
-    compilerOptions {
-        languageVersion.set(KotlinVersion.KOTLIN_2_0)
-    }
-    // Set stack size to 30mb
-    kotlinDaemonJvmArgs = listOf("-Xss30m")
+    // Set stack size to 30mb and raise the metaspace limit
+    kotlinDaemonJvmArgs = listOf("-Xss30m", "-XX:MaxMetaspaceSize=1g")
 }
 ```
 
@@ -137,6 +136,10 @@ Check that this is the case when you open a new shell, too!
 You need to (additionally) set `Z3_EXE` in `~/.xprofile` and/or
 `~/.bash_profile` depending on your shell, window manager, display
 manager, operating system, etc.
+
+The Gradle and Kotlin daemons capture `Z3_EXE` at startup, so changing it
+afterwards has no effect until both are stopped (`./gradlew --stop`, plus
+killing the Kotlin daemon).
 
 ## Contributing
 
