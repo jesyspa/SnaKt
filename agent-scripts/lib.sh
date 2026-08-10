@@ -93,10 +93,13 @@ count_xml_results() {
 }
 
 # Where DumpAssertionDiffExtension writes its dumps (see docs/agents-dev.md).
-# Per-user, because callers glob and clear this directory and a shared /tmp
-# would hand them someone else's files.
+# Per-user and per-checkout, because callers glob and clear this directory and
+# a shared /tmp would hand them another user's or another worktree's files.
 dump_dir_default() {
-    printf '%s' "${SNAKT_TEST_DUMP_DIR:-${TMPDIR:-/tmp}/snakt-test-diff-$(id -u)}"
+    local repo_root repo_tag
+    repo_root="$(dirname "$LIB_DIR")"
+    repo_tag="$(printf '%s' "$repo_root" | cksum | cut -d' ' -f1)"
+    printf '%s' "${SNAKT_TEST_DUMP_DIR:-${TMPDIR:-/tmp}/snakt-test-diff-$(id -u)-$repo_tag}"
 }
 
 # Replace source-position offsets like ":(23,31):" with ":(_,_):", so a method
