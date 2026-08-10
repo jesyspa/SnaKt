@@ -12,6 +12,7 @@ object PluginErrors : KtDiagnosticsContainer() {
     val VIPER_TEXT by info2<PsiElement, String, String>(SourceElementPositioningStrategies.DECLARATION_NAME)
     val EXP_EMBEDDING by info2<PsiElement, String, String>(SourceElementPositioningStrategies.DECLARATION_NAME)
     val INTERNAL_ERROR by error1<PsiElement, String>()
+    val PROVER_NOT_FOUND by error1<PsiElement, String>()
     val UNIQUENESS_VIOLATION by error1<PsiElement, String>()
     val UNIQUENESS_CFG by info1<PsiElement, String>(SourceElementPositioningStrategies.DECLARATION_NAME)
     val ADT_VIOLATION by error1<PsiElement, String>()
@@ -21,6 +22,7 @@ object PluginErrors : KtDiagnosticsContainer() {
         VIPER_TEXT.name,
         EXP_EMBEDDING.name,
         INTERNAL_ERROR.name,
+        PROVER_NOT_FOUND.name,
         UNIQUENESS_VIOLATION.name,
         UNIQUENESS_CFG.name,
         ADT_VIOLATION.name

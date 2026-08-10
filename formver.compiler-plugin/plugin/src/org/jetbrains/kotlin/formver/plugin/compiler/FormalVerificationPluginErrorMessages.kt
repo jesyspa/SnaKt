@@ -39,6 +39,11 @@ object FormalVerificationPluginErrorMessages : BaseDiagnosticRendererFactory() {
             CommonRenderers.STRING,
         )
         map.put(
+            PluginErrors.PROVER_NOT_FOUND,
+            "{0}",
+            CommonRenderers.STRING,
+        )
+        map.put(
             VerificationErrors.UNEXPECTED_RETURNED_VALUE,
             "Function may return a {0} value.",
             CommonRenderers.STRING,
