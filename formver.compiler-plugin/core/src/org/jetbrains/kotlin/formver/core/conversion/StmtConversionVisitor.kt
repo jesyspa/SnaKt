@@ -23,6 +23,8 @@ import org.jetbrains.kotlin.formver.common.SnaktInternalException
 import org.jetbrains.kotlin.formver.common.UnsupportedFeatureBehaviour
 import org.jetbrains.kotlin.formver.core.embeddings.LabelLink
 import org.jetbrains.kotlin.formver.core.embeddings.callables.CallableEmbedding
+import org.jetbrains.kotlin.formver.core.embeddings.callables.InlineNamedFunction
+import org.jetbrains.kotlin.formver.core.embeddings.callables.NonInlineCallable
 import org.jetbrains.kotlin.formver.core.embeddings.callables.insertCall
 import org.jetbrains.kotlin.formver.core.embeddings.callables.isVerifyFunction
 import org.jetbrains.kotlin.formver.core.embeddings.expression.*
@@ -282,16 +284,52 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
             }
         }
 
+    /**
+     * The call's value arguments in the order the callee declares its parameters, `null` where
+     * the call leaves a parameter to its default value.
+     *
+     * `null` when the mapping is unavailable, in which case the arguments have to be taken as
+     * they come.
+     */
+    private fun FirFunctionCall.argumentsPerParameter(symbol: FirFunctionSymbol<*>): List<FirExpression?>? {
+        val mapping = resolvedArgumentMapping ?: return null
+        val byParameter = mapping.entries.associate { (argument, parameter) -> parameter.symbol to argument }
+        return symbol.valueParameterSymbols.map { byParameter[it] }
+    }
+
     override fun visitFunctionCall(functionCall: FirFunctionCall, data: StmtConversionContext): ExpEmbedding {
         val symbol = functionCall.toResolvedCallableSymbol() as? FirFunctionSymbol<*>
             ?: throw NotImplementedError("Only functions are expected as callables of function calls, got ${functionCall.toResolvedCallableSymbol()}")
 
         val callee = data.embedAnyFunction(symbol)
-        return callee.insertCall(
-            functionCall.functionCallArguments.withVarargsHandled(data, callee),
-            data,
-            data.embedType(functionCall.resolvedType),
-        )
+        val returnType = data.embedType(functionCall.resolvedType)
+        // Only a call that matches its arguments against the callee's own parameters needs this;
+        // the plugin's specification functions interpret the arguments they were given themselves.
+        val matchesParameters = callee is NonInlineCallable || callee is InlineNamedFunction
+        val arguments = if (matchesParameters) functionCall.argumentsPerParameter(symbol) else null
+        if (arguments == null || arguments.none { it == null }) {
+            return callee.insertCall(
+                functionCall.functionCallArguments.withVarargsHandled(data, callee),
+                data,
+                returnType,
+            )
+        }
+
+        // A default value is not available at the call site, and a Viper call that simply omits the
+        // argument leaves the callee's formal unbound, which makes the verification state
+        // inconsistent and proves anything afterwards. Pass a value of the parameter's type instead
+        // and assume nothing else about it: that loses what the default would have told us, but
+        // only that.
+        val declarations = mutableListOf<Declare>()
+        val receivers = listOfNotNull(functionCall.dispatchReceiver, functionCall.extensionReceiver)
+        val args = receivers.map { data.convert(it) } +
+                arguments.zip(symbol.valueParameterSymbols) { argument, parameter ->
+                    if (argument != null) return@zip data.convert(argument)
+                    val (declaration, value) = data.unconstrainedValue(data.embedType(parameter.resolvedReturnType))
+                    declarations.add(declaration)
+                    value
+                }
+        return (declarations + callee.insertCall(args, data, returnType)).toBlock()
     }
 
     override fun visitImplicitInvokeCall(

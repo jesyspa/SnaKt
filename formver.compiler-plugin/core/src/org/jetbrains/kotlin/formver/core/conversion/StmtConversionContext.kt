@@ -149,6 +149,17 @@ fun StmtConversionContext.embedPropertyAccess(accessExpression: FirPropertyAcces
     }
 
 
+/**
+ * A value about which nothing is known beyond its type.
+ *
+ * Access permissions are deliberately left out: inhaling them would conjure permission to a
+ * reference nobody handed us.
+ */
+fun StmtConversionContext.unconstrainedValue(type: TypeEmbedding): Pair<Declare, ExpEmbedding> {
+    val declaration = declareAnonVar(type, null)
+    return declaration to declaration.variable.withInvariants(typeResolver) { proven = true }
+}
+
 fun StmtConversionContext.argumentDeclaration(
     arg: ExpEmbedding,
     callType: TypeEmbedding

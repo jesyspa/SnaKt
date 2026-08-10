@@ -130,6 +130,12 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
       }
 
       @Test
+      @TestMetadata("prefix_suffix.kt")
+      public void testPrefix_suffix() {
+        runTest("formver.compiler-plugin/testData/diagnostics/stdlib/string/prefix_suffix.kt");
+      }
+
+      @Test
       @TestMetadata("strings.kt")
       public void testStrings() {
         runTest("formver.compiler-plugin/testData/diagnostics/stdlib/string/strings.kt");
@@ -292,6 +298,12 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
     @TestMetadata("basic.kt")
     public void testBasic() {
       runTest("formver.compiler-plugin/testData/diagnostics/verification/basic.kt");
+    }
+
+    @Test
+    @TestMetadata("default_arguments.kt")
+    public void testDefault_arguments() {
+      runTest("formver.compiler-plugin/testData/diagnostics/verification/default_arguments.kt");
     }
 
     @Test
