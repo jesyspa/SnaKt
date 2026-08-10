@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.formver.cli.FormalVerificationConfigurationKeys.DUMP
 import org.jetbrains.kotlin.formver.cli.FormalVerificationConfigurationKeys.ERROR_STYLE
 import org.jetbrains.kotlin.formver.cli.FormalVerificationConfigurationKeys.LOG_LEVEL
 import org.jetbrains.kotlin.formver.cli.FormalVerificationConfigurationKeys.UNSUPPORTED_FEATURE_BEHAVIOUR
+import org.jetbrains.kotlin.formver.cli.FormalVerificationConfigurationKeys.VERIFICATION_ERROR_SEVERITY
 import org.jetbrains.kotlin.formver.cli.FormalVerificationConfigurationKeys.VERIFICATION_TARGETS_SELECTION
 import org.jetbrains.kotlin.formver.common.*
 import org.jetbrains.kotlin.formver.common.FormalVerificationPluginNames.CHECK_LOCALITY_OPTION_NAME
@@ -24,6 +25,7 @@ import org.jetbrains.kotlin.formver.common.FormalVerificationPluginNames.DUMP_UN
 import org.jetbrains.kotlin.formver.common.FormalVerificationPluginNames.ERROR_STYLE_NAME
 import org.jetbrains.kotlin.formver.common.FormalVerificationPluginNames.LOG_LEVEL_OPTION_NAME
 import org.jetbrains.kotlin.formver.common.FormalVerificationPluginNames.UNSUPPORTED_FEATURE_BEHAVIOUR_OPTION_NAME
+import org.jetbrains.kotlin.formver.common.FormalVerificationPluginNames.VERIFICATION_ERROR_SEVERITY_OPTION_NAME
 import org.jetbrains.kotlin.formver.common.FormalVerificationPluginNames.VERIFICATION_TARGETS_SELECTION_OPTION_NAME
 import org.jetbrains.kotlin.util.capitalizeDecapitalize.toUpperCaseAsciiOnly
 
@@ -42,6 +44,8 @@ object FormalVerificationConfigurationKeys {
         CompilerConfigurationKey.create("check locality")
     val DUMP_UNIQUENESS_CFG: CompilerConfigurationKey<Boolean> =
         CompilerConfigurationKey.create("dump uniqueness CFG")
+    val VERIFICATION_ERROR_SEVERITY: CompilerConfigurationKey<VerificationErrorSeverity> =
+        CompilerConfigurationKey.create("verification error severity")
 }
 
 @OptIn(ExperimentalCompilerApi::class)
@@ -97,6 +101,13 @@ class FormalVerificationCommandLineProcessor : CommandLineProcessor {
             required = false,
             allowMultipleOccurrences = false
         )
+        val VERIFICATION_ERROR_SEVERITY_OPTION = CliOption(
+            VERIFICATION_ERROR_SEVERITY_OPTION_NAME,
+            "<verification_error_severity>",
+            "Severity at which a failed proof is reported",
+            required = false,
+            allowMultipleOccurrences = false
+        )
     }
 
     override val pluginId: String = FormalVerificationPluginNames.PLUGIN_ID
@@ -109,6 +120,7 @@ class FormalVerificationCommandLineProcessor : CommandLineProcessor {
         CHECK_UNIQUENESS_OPTION,
         CHECK_LOCALITY_OPTION,
         DUMP_UNIQUENESS_CFG_OPTION,
+        VERIFICATION_ERROR_SEVERITY_OPTION,
     )
 
     override fun processOption(option: AbstractCliOption, value: String, configuration: CompilerConfiguration) =
@@ -144,6 +156,12 @@ class FormalVerificationCommandLineProcessor : CommandLineProcessor {
 
                 DUMP_UNIQUENESS_CFG_OPTION ->
                     configuration.put(DUMP_UNIQUENESS_CFG, value.toBooleanStrict())
+
+                VERIFICATION_ERROR_SEVERITY_OPTION ->
+                    configuration.put(
+                        VERIFICATION_ERROR_SEVERITY,
+                        VerificationErrorSeverity.valueOf(value.toUpperCaseAsciiOnly())
+                    )
 
                 else -> throw CliOptionProcessingException("Unknown option: ${option.optionName}")
             }

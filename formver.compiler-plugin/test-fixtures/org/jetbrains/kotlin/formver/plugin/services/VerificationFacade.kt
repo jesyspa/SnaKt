@@ -9,6 +9,7 @@ import org.jetbrains.kotlin.fir.visitors.FirDefaultVisitorVoid
 import org.jetbrains.kotlin.formver.common.services.runChecks
 import org.jetbrains.kotlin.formver.core.shouldVerify
 import org.jetbrains.kotlin.formver.core.viperProgram
+import org.jetbrains.kotlin.formver.plugin.compiler.VerificationDiagnostics
 import org.jetbrains.kotlin.formver.plugin.compiler.VerificationErrors
 import org.jetbrains.kotlin.formver.plugin.compiler.reporting.*
 import org.jetbrains.kotlin.formver.plugin.runners.*
@@ -116,10 +117,11 @@ class ViperProgramVerificationFacade(val testServices: TestServices) :
         module: TestModule
     ): KtDiagnostic {
         val source = err.position.unwrapOr { decl.source }!!
+        val diagnostics = VerificationDiagnostics.of(module.verificationErrorSeverity)
         val diagnostic = when (val formattedError = err.formatUserFriendly()) {
             is ConditionalEffectError -> {
                 val msg = formattedError.msg()
-                VerificationErrors.CONDITIONAL_EFFECT_ERROR.on(
+                diagnostics.CONDITIONAL_EFFECT_ERROR.on(
                     source, msg.first, msg.second,
                     positioningStrategy = SourceElementPositioningStrategies.DEFAULT,
                     languageVersionSettings = module.languageVersionSettings
@@ -128,7 +130,7 @@ class ViperProgramVerificationFacade(val testServices: TestServices) :
 
             is DefaultError -> {
                 val msg = formattedError.msg()
-                VerificationErrors.VIPER_VERIFICATION_ERROR.on(
+                diagnostics.VIPER_VERIFICATION_ERROR.on(
                     source, msg,
                     positioningStrategy = SourceElementPositioningStrategies.DEFAULT,
                     languageVersionSettings = module.languageVersionSettings
@@ -137,7 +139,7 @@ class ViperProgramVerificationFacade(val testServices: TestServices) :
 
             is IndexOutOfBoundError -> {
                 val msg = formattedError.msg()
-                VerificationErrors.POSSIBLE_INDEX_OUT_OF_BOUND.on(
+                diagnostics.POSSIBLE_INDEX_OUT_OF_BOUND.on(
                     source, msg.first, msg.second,
                     positioningStrategy = SourceElementPositioningStrategies.DEFAULT,
                     languageVersionSettings = module.languageVersionSettings
@@ -146,7 +148,7 @@ class ViperProgramVerificationFacade(val testServices: TestServices) :
 
             is InvalidSubListRangeError -> {
                 val msg = formattedError.msg()
-                VerificationErrors.INVALID_SUBLIST_RANGE.on(
+                diagnostics.INVALID_SUBLIST_RANGE.on(
                     source, msg.first, msg.second,
                     positioningStrategy = SourceElementPositioningStrategies.DEFAULT,
                     languageVersionSettings = module.languageVersionSettings
@@ -155,7 +157,7 @@ class ViperProgramVerificationFacade(val testServices: TestServices) :
 
             is ReturnsEffectError -> {
                 val msg = formattedError.msg()
-                VerificationErrors.UNEXPECTED_RETURNED_VALUE.on(
+                diagnostics.UNEXPECTED_RETURNED_VALUE.on(
                     source, msg,
                     positioningStrategy = SourceElementPositioningStrategies.DEFAULT,
                     languageVersionSettings = module.languageVersionSettings
@@ -163,7 +165,7 @@ class ViperProgramVerificationFacade(val testServices: TestServices) :
             }
 
             null -> {
-                VerificationErrors.VIPER_VERIFICATION_ERROR.on(
+                diagnostics.VIPER_VERIFICATION_ERROR.on(
                     source, err.msg, positioningStrategy = SourceElementPositioningStrategies.DEFAULT,
                     languageVersionSettings = module.languageVersionSettings
                 )
