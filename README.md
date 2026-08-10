@@ -84,13 +84,8 @@ unless you run `gradle` with the `--info` flag.
 ### Annotations
 
 The plugin provides a number of annotations to add specifications to your code.
-To access these, add a dependency to `formver.annotations`:
-
-```kotlin
-dependencies {
-    implementation("org.jetbrains.kotlin.formver:formver.annotations:0.1.0-SNAPSHOT")
-}
-```
+Applying the Gradle plugin automatically adds a dependency on `formver.annotations`,
+so no further setup is needed to access them.
 
 ### Running from the command line
 
