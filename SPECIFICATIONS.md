@@ -4,17 +4,25 @@ SnaKt translates Kotlin code with formal specifications to [Viper](https://www.p
 
 ## Verification Control
 
-By default, SnaKt only verifies functions with Kotlin `contract { }` blocks. To verify functions with SnaKt specifications:
+By default, SnaKt verifies the functions that have a contract: a Kotlin `contract { }` block, or a
+SnaKt `preconditions { }` or `postconditions<T> { }` block. Everything else is left alone:
 
 ```kotlin
 import org.jetbrains.kotlin.formver.plugin.*
 
-@AlwaysVerify  // Enables verification for this function
 fun divide(numerator: Int, denominator: Int): Int {
-    preconditions { denominator != 0 }
+    preconditions { denominator != 0 }   // enough on its own to make this a target
     return numerator / denominator
 }
+
+@AlwaysVerify  // verify this one too, though it specifies nothing
+fun half(x: Int) = divide(x, 2)
 ```
+
+Callers of a specified function may assume its postconditions, so a function that carries a
+specification is verified against it rather than believed. Suppressing that — with `@NeverVerify`,
+or by setting the selection to `no_targets` — turns the specification into an assumption that
+nothing checks.
 
 **Annotations:**
 - `@AlwaysVerify` — verify this function regardless of plugin settings
@@ -25,7 +33,7 @@ fun divide(numerator: Int, denominator: Int): Int {
 ```kotlin
 formver {
     verificationTargetsSelection("all_targets")  // Verify all functions
-    // or "targets_with_contract" (default) — only Kotlin contract { } blocks
+    // or "targets_with_contract" (default) — only functions carrying a contract
     // or "no_targets" — disable verification
 }
 ```

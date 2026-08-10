@@ -48,6 +48,9 @@ Which checks run:
 - `ALWAYS_VALIDATE` — verify every target. Verification is already the default,
   so this changes nothing on its own; it earns its place by overriding the two
   `*_CHECK_ONLY` directives above.
+- `DEFAULT_SELECTION` — pick targets the way an unconfigured plugin does, rather
+  than taking every function in the file. For tests about which functions get
+  selected at all; elsewhere it only hides code from the verifier.
 
 What the diagnostic contains:
 

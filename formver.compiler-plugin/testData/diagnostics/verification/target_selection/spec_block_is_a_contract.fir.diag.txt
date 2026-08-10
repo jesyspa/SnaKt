@@ -1,0 +1,56 @@
+/spec_block_is_a_contract.kt: info: Generated Viper text for alwaysPositive:
+method alwaysPositive(x: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(x), intType())
+  ensures isSubtype(typeOf(v_ret_0), intType())
+  ensures intFromRef(v_ret_0) > 0
+{
+  v_ret_0 := x
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/spec_block_is_a_contract.kt: info: Generated Viper text for atLeastTen:
+function size(this: Ref): Ref
+  requires isSubtype(typeOf(this), BooleanArray())
+  ensures isSubtype(typeOf(result), intType())
+
+
+method atLeastTen(x: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(x), intType())
+  requires intFromRef(x) >= 10
+  ensures isSubtype(typeOf(v_ret_0), intType())
+{
+  assert intFromRef(x) > 100
+  v_ret_0 := x
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/spec_block_is_a_contract.kt: info: Generated Viper text for caller:
+function size(this: Ref): Ref
+  requires isSubtype(typeOf(this), BooleanArray())
+  ensures isSubtype(typeOf(result), intType())
+
+
+method alwaysPositive(x: Ref) returns (ret_1: Ref)
+  requires isSubtype(typeOf(x), intType())
+  ensures isSubtype(typeOf(ret_1), intType())
+  ensures intFromRef(ret_1) > 0
+
+
+method atLeastTen(x: Ref) returns (ret_2: Ref)
+  requires isSubtype(typeOf(x), intType())
+  requires intFromRef(x) >= 10
+  ensures isSubtype(typeOf(ret_2), intType())
+
+
+method caller() returns (v_ret_0: Ref)
+  ensures isSubtype(typeOf(v_ret_0), intType())
+{
+  var positive: Ref
+  positive := alwaysPositive(intToRef(-1))
+  assert intFromRef(positive) > 0
+  v_ret_0 := atLeastTen(intToRef(20))
+  goto lbl_ret_0
+  label lbl_ret_0
+}

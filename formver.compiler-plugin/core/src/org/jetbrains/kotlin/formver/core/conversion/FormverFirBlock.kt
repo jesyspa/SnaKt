@@ -38,6 +38,24 @@ private fun FirAnonymousFunction.extractFormverReturnVar(returnType: ConeKotlinT
     return param.symbol
 }
 
+private fun FirStatement.isFormverCallNamed(name: String): Boolean {
+    if (this !is FirFunctionCall) return false
+    val firFunction = toResolvedCallableSymbol() as? FirFunctionSymbol<*> ?: return false
+    return firFunction.isFormverFunctionNamed(name)
+}
+
+/**
+ * Whether [parentBlock] opens with a specification block, that is, whether
+ * [extractFirSpecification] would find anything in it.
+ *
+ * Answers the question without touching the lambdas, so it is safe to ask about a body that
+ * conversion may yet reject.
+ */
+fun hasFirSpecification(parentBlock: FirBlock): Boolean {
+    val firstStmt = parentBlock.statements.firstOrNull() ?: return false
+    return firstStmt.isFormverCallNamed("postconditions") || firstStmt.isFormverCallNamed("preconditions")
+}
+
 fun extractFirSpecification(parentBlock: FirBlock, returnType: ConeKotlinType): FirSpecification {
     val firstStmt = parentBlock.statements.firstOrNull() ?: return FirSpecification()
 
