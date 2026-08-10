@@ -79,6 +79,9 @@ class ProgramConverter(
     override fun reportMinorInternalError(msg: String) =
         emit(currentDeclarationSource, ConversionErrors.MINOR_INTERNAL_ERROR, msg)
 
+    override fun reportIgnoredSpecBlock(source: KtSourceElement?, msg: String) =
+        emit(source, ConversionErrors.IGNORED_SPEC_BLOCK, msg)
+
     private fun reportVerificationSkipped(source: KtSourceElement?, msg: String) {
         context(diagnosticContext) {
             reporter.reportOn(source, ConversionErrors.VERIFICATION_SKIPPED, msg)
@@ -376,8 +379,14 @@ class ProgramConverter(
             return Pair(emptyList(), emptyList())
         }
 
-        val firSpec = extractFirSpecification(body, declaration.symbol.resolvedReturnType)
-
+        val firSpec = extractFirSpecification(body, declaration.symbol.resolvedReturnType) { name, source ->
+            reportIgnoredSpecBlock(
+                source,
+                "This `$name` block is ignored: `preconditions` must be the first statement of the function " +
+                    "body, and `postconditions` must immediately follow it (or be first, if there is no " +
+                    "`preconditions` block)."
+            )
+        }
 
         val (preconditionContext, postconditionContext) = createContractConversionContext(
             symbol, signature, firSpec, returnTarget

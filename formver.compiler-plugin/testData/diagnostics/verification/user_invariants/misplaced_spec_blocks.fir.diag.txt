@@ -1,0 +1,11 @@
+/misplaced_spec_blocks.kt: error: Function 'preconditionsAfterPostconditions' was not verified because of errors in its declaration
+
+/misplaced_spec_blocks.kt: error: This `preconditions` block is ignored: `preconditions` must be the first statement of the function body, and `postconditions` must immediately follow it (or be first, if there is no `preconditions` block).
+
+/misplaced_spec_blocks.kt: error: Function 'postconditionsNotImmediatelyAfterPreconditions' was not verified because of errors in its declaration
+
+/misplaced_spec_blocks.kt: error: This `postconditions` block is ignored: `preconditions` must be the first statement of the function body, and `postconditions` must immediately follow it (or be first, if there is no `preconditions` block).
+
+/misplaced_spec_blocks.kt: error: Function 'loopInvariantsNotFirstInLoop' was not verified because of errors in its declaration
+
+/misplaced_spec_blocks.kt: error: This `loopInvariants` block is ignored: it must be the first statement of the loop body.

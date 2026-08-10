@@ -18,4 +18,7 @@ interface ErrorCollectionContext {
 
     /** Report a minor internal error; the source is supplied by the implementation. */
     fun reportMinorInternalError(msg: String)
+
+    /** Report a spec block (`preconditions`/`postconditions`/`loopInvariants`) at [source] that will be ignored. */
+    fun reportIgnoredSpecBlock(source: KtSourceElement?, msg: String)
 }

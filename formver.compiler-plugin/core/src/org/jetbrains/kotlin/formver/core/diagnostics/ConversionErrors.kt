@@ -20,6 +20,9 @@ object ConversionErrors : KtDiagnosticsContainer() {
     val PURITY_VIOLATION by error1<PsiElement, String>()
     val MINOR_INTERNAL_ERROR by error1<PsiElement, String>(SourceElementPositioningStrategies.DECLARATION_NAME)
 
+    /** A `preconditions`/`postconditions`/`loopInvariants` block sits in a position where the conversion never looks for it. */
+    val IGNORED_SPEC_BLOCK by error1<PsiElement, String>()
+
     /**
      * Per-function summary fired by `ProgramConverter.validateAll` whenever a registered declaration's
      * pipeline (signature embedding, body conversion, or validation) produced any blocking errors.

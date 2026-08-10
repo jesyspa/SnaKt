@@ -337,7 +337,12 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
             data.retrievePropertiesAndParameters().forEach {
                 addAll(it.provenInvariants())
             }
-            extractLoopInvariants(whileLoop.block)?.let {
+            extractLoopInvariants(whileLoop.block) { source ->
+                data.reportIgnoredSpecBlock(
+                    source,
+                    "This `loopInvariants` block is ignored: it must be the first statement of the loop body."
+                )
+            }?.let {
                 addAll(data.withScopeImpl(ScopeIndex.NoScope) { data.collectInvariants(it) })
             }
         }

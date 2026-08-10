@@ -888,6 +888,12 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
       }
 
       @Test
+      @TestMetadata("misplaced_spec_blocks.kt")
+      public void testMisplaced_spec_blocks() {
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/misplaced_spec_blocks.kt");
+      }
+
+      @Test
       @TestMetadata("simple_forall.kt")
       public void testSimple_forall() {
         runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/simple_forall.kt");
