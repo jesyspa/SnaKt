@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.formver.common.SnaktInternalException
 import org.jetbrains.kotlin.formver.common.UnsupportedFeatureBehaviour
 import org.jetbrains.kotlin.formver.core.embeddings.LabelLink
 import org.jetbrains.kotlin.formver.core.embeddings.callables.CallableEmbedding
+import org.jetbrains.kotlin.formver.core.embeddings.callables.FunctionSignature
 import org.jetbrains.kotlin.formver.core.embeddings.callables.insertCall
 import org.jetbrains.kotlin.formver.core.embeddings.callables.isVerifyFunction
 import org.jetbrains.kotlin.formver.core.embeddings.expression.*
@@ -264,34 +265,79 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         }
     }
 
-    private fun List<FirExpression>.withVarargsHandled(data: StmtConversionContext, function: CallableEmbedding?) =
-        flatMap { arg ->
-            when (arg) {
-                is FirVarargArgumentsExpression -> {
-                    if (function == null || !function.isVerifyFunction) {
-                        throw SnaktInternalException(
-                            arg.source, "Vararg arguments are currently supported for `verify` function only."
-                        )
-                    }
-                    data.withNoScope {
-                        arg.arguments.map { this.convert(it) }
-                    }
-                }
-
-                else -> listOf(data.convert(arg))
+    /**
+     * Converts [arguments] into the actuals of a call to [callee].
+     *
+     * A `null` entry is a formal argument the call leaves to its default value, which requires
+     * [arguments] to be in the order of the callee's formal arguments. The default value is not
+     * available at the call site, and a Viper call that omits the actual leaves the callee's formal
+     * unbound, which makes the verification state inconsistent and proves anything afterwards. Such
+     * a formal gets a value of its own type that nothing else is assumed about: that loses what the
+     * default would have told us, but only that. The declarations of those values are collected in
+     * [declarations], and belong in front of the call.
+     */
+    private fun buildCallArguments(
+        arguments: List<FirExpression?>,
+        data: StmtConversionContext,
+        callee: CallableEmbedding?,
+        declarations: MutableList<Declare> = mutableListOf(),
+    ): List<ExpEmbedding> = arguments.flatMapIndexed { index, arg ->
+        when (arg) {
+            null -> {
+                val formal = (callee as? FunctionSignature)?.formalArgs?.getOrNull(index)
+                    ?: throw SnaktInternalException(
+                        null, "Cannot fill in the argument at index $index of a call to $callee."
+                    )
+                val (declaration, value) = data.unconstrainedValue(formal.type)
+                declarations.add(declaration)
+                listOf(value)
             }
+
+            is FirVarargArgumentsExpression -> {
+                if (callee == null || !callee.isVerifyFunction) {
+                    throw SnaktInternalException(
+                        arg.source, "Vararg arguments are currently supported for `verify` function only."
+                    )
+                }
+                data.withNoScope {
+                    arg.arguments.map { this.convert(it) }
+                }
+            }
+
+            else -> listOf(data.convert(arg))
         }
+    }
+
+    /**
+     * The call's arguments in the order of the callee's formal arguments: receivers first, then one
+     * entry per value parameter, `null` where the call leaves the parameter to its default value.
+     *
+     * Falls back to the arguments as they come when the call has no argument mapping.
+     */
+    private fun FirFunctionCall.argumentsPerParameter(symbol: FirFunctionSymbol<*>): List<FirExpression?> {
+        val mapping = resolvedArgumentMapping ?: return functionCallArguments
+        val byParameter = mapping.entries.groupBy({ (_, parameter) -> parameter.symbol }) { (argument, _) -> argument }
+        val valueArguments = symbol.valueParameterSymbols.map { parameter ->
+            val arguments = byParameter[parameter] ?: return@map null
+            arguments.singleOrNull() ?: throw SnaktInternalException(
+                source, "Parameter ${parameter.name} of ${symbol.name} is given ${arguments.size} arguments."
+            )
+        }
+        return listOfNotNull(dispatchReceiver, extensionReceiver) + valueArguments
+    }
 
     override fun visitFunctionCall(functionCall: FirFunctionCall, data: StmtConversionContext): ExpEmbedding {
         val symbol = functionCall.toResolvedCallableSymbol() as? FirFunctionSymbol<*>
             ?: throw NotImplementedError("Only functions are expected as callables of function calls, got ${functionCall.toResolvedCallableSymbol()}")
 
         val callee = data.embedAnyFunction(symbol)
-        return callee.insertCall(
-            functionCall.functionCallArguments.withVarargsHandled(data, callee),
-            data,
-            data.embedType(functionCall.resolvedType),
-        )
+        val arguments =
+            if (callee.takesArgumentPerParameter) functionCall.argumentsPerParameter(symbol)
+            else functionCall.functionCallArguments
+        val declarations = mutableListOf<Declare>()
+        val args = buildCallArguments(arguments, data, callee, declarations)
+        val call = callee.insertCall(args, data, data.embedType(functionCall.resolvedType))
+        return if (declarations.isEmpty()) call else (declarations + call).toBlock()
     }
 
     override fun visitImplicitInvokeCall(
@@ -305,7 +351,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
             )
         val returnType = data.embedType(implicitInvokeCall.resolvedType)
         val receiverSymbol = receiver.calleeReference.toResolvedSymbol<FirBasedSymbol<*>>()!!
-        val args = implicitInvokeCall.argumentList.arguments.withVarargsHandled(data, function = null)
+        val args = buildCallArguments(implicitInvokeCall.argumentList.arguments, data, callee = null)
         return when (val exp = data.embedLocalSymbol(receiverSymbol).ignoringMetaNodes()) {
             is LambdaExp -> {
                 // The lambda is already the receiver, so we do not need to convert it.

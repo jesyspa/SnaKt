@@ -16,6 +16,16 @@ import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
  */
 interface CallableEmbedding {
     val callableType: FunctionTypeEmbedding
+
+    /**
+     * Whether [insertCall] expects one argument per formal argument of the Kotlin callable:
+     * receivers first, then one per value parameter, in declaration order.
+     *
+     * `false` for callables that interpret whatever arguments the call site provides; those get no
+     * argument for a parameter left at its default value.
+     */
+    val takesArgumentPerParameter: Boolean
+
     fun insertCall(args: List<ExpEmbedding>, ctx: StmtConversionContext): ExpEmbedding
 }
 

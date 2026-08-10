@@ -1,0 +1,56 @@
+/prefix_suffix.kt: info: Generated Viper text for startsWithKeepsStateConsistent:
+function size(v_this: Ref): Ref
+  requires isSubtype(typeOf(v_this), BooleanArray())
+  ensures isSubtype(typeOf(result), intType())
+
+
+method startsWith(v_this_extension: Ref, prefix: Ref, ignoreCase: Ref)
+  returns (ret_1: Ref)
+  requires isSubtype(typeOf(v_this_extension), stringType())
+  requires isSubtype(typeOf(prefix), stringType())
+  requires isSubtype(typeOf(ignoreCase), boolType())
+  ensures isSubtype(typeOf(ret_1), boolType())
+
+
+method startsWithKeepsStateConsistent(a: Ref, b: Ref)
+  returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(a), stringType())
+  requires isSubtype(typeOf(b), stringType())
+  ensures isSubtype(typeOf(v_ret_0), unitType())
+{
+  var anon_0: Ref
+  var anon_1: Ref
+  inhale isSubtype(typeOf(anon_0), boolType())
+  anon_1 := startsWith(a, b, anon_0)
+  assert false
+  label lbl_ret_0
+  inhale isSubtype(typeOf(v_ret_0), unitType())
+}
+
+/prefix_suffix.kt: info: Generated Viper text for endsWithKeepsStateConsistent:
+function size(v_this: Ref): Ref
+  requires isSubtype(typeOf(v_this), BooleanArray())
+  ensures isSubtype(typeOf(result), intType())
+
+
+method endsWith(v_this_extension: Ref, suffix: Ref, ignoreCase: Ref)
+  returns (ret_1: Ref)
+  requires isSubtype(typeOf(v_this_extension), stringType())
+  requires isSubtype(typeOf(suffix), stringType())
+  requires isSubtype(typeOf(ignoreCase), boolType())
+  ensures isSubtype(typeOf(ret_1), boolType())
+
+
+method endsWithKeepsStateConsistent(a: Ref, b: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(a), stringType())
+  requires isSubtype(typeOf(b), stringType())
+  ensures isSubtype(typeOf(v_ret_0), unitType())
+{
+  var anon_0: Ref
+  var anon_1: Ref
+  inhale isSubtype(typeOf(anon_0), boolType())
+  anon_1 := endsWith(a, b, anon_0)
+  assert false
+  label lbl_ret_0
+  inhale isSubtype(typeOf(v_ret_0), unitType())
+}

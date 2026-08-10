@@ -27,6 +27,10 @@ class LambdaExp(
     override val type: TypeEmbedding
         get() = callableType.asTypeEmbedding()
 
+    // A lambda cannot declare default values, so a call to it always supplies every parameter.
+    override val takesArgumentPerParameter: Boolean
+        get() = false
+
     override fun insertCall(
         args: List<ExpEmbedding>,
         ctx: StmtConversionContext,

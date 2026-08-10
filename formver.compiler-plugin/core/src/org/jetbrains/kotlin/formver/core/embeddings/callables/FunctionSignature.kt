@@ -86,6 +86,8 @@ interface NamedCallableEmbedding : NamedFunctionSignature, CallableEmbedding
 
 
 interface NonInlineCallable : NamedCallableEmbedding {
+    override val takesArgumentPerParameter: Boolean
+        get() = true
 
     override fun insertCall(args: List<ExpEmbedding>, ctx: StmtConversionContext): ExpEmbedding = insertCall(args)
 
@@ -170,6 +172,9 @@ data class InlineNamedFunction(
     override val postconditions: List<ExpEmbedding>,
     override val symbol: FirFunctionSymbol<*>,
 ) : CompleteFunctionSignature, NamedCallableEmbedding, NamedFunctionSignature by signature {
+    override val takesArgumentPerParameter: Boolean
+        get() = true
+
     override fun insertCall(
         args: List<ExpEmbedding>,
         ctx: StmtConversionContext,
