@@ -76,4 +76,11 @@ interface FormVer {
      * @return the configured value, or null if unset
      */
     val dumpUniquenessCFG: Boolean?
+
+    /**
+     * Returns the severity at which a failed proof is reported.
+     *
+     * @return the configured severity, or null if unset
+     */
+    val verificationErrorSeverity: String?
 }

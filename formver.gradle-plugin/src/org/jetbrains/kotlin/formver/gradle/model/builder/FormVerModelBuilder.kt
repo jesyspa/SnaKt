@@ -28,6 +28,7 @@ class FormVerModelBuilder : ToolingModelBuilder {
             extension.myCheckUniqueness,
             extension.myCheckLocality,
             extension.myDumpUniquenessCFG,
+            extension.myVerificationErrorSeverity,
         )
     }
 

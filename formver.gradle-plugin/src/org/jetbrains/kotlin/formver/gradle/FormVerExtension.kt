@@ -15,6 +15,7 @@ open class FormVerExtension {
     internal var myCheckUniqueness: Boolean? = null
     internal var myCheckLocality: Boolean? = null
     internal var myDumpUniquenessCFG: Boolean? = null
+    internal var myVerificationErrorSeverity: String? = null
 
     open fun logLevel(logLevel: String) {
         myLogLevel = logLevel
@@ -46,5 +47,9 @@ open class FormVerExtension {
 
     open fun dumpUniquenessCFG(enabled: Boolean) {
         myDumpUniquenessCFG = enabled
+    }
+
+    open fun verificationErrorSeverity(severity: String) {
+        myVerificationErrorSeverity = severity
     }
 }

@@ -72,6 +72,10 @@ class FormVerGradleSubplugin
                 options += SubpluginOption(FormalVerificationPluginNames.DUMP_UNIQUENESS_CFG_OPTION_NAME, it.toString())
             }
 
+            formVerExtension.myVerificationErrorSeverity?.let {
+                options += SubpluginOption(FormalVerificationPluginNames.VERIFICATION_ERROR_SEVERITY_OPTION_NAME, it)
+            }
+
             options
         }
     }

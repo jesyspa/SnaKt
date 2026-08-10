@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.diagnostics.reportOn
 import org.jetbrains.kotlin.fir.analysis.checkers.context.CheckerContext
 import org.jetbrains.kotlin.fir.analysis.diagnostics.FirDiagnosticRenderers
 import org.jetbrains.kotlin.formver.core.embeddings.SourceRole
-import org.jetbrains.kotlin.formver.plugin.compiler.VerificationErrors
+import org.jetbrains.kotlin.formver.plugin.compiler.VerificationDiagnostics
 import org.jetbrains.kotlin.formver.plugin.compiler.reporting.SourceRoleConditionPrettyPrinter.prettyPrint
 import org.jetbrains.kotlin.formver.viper.ast.info
 import org.jetbrains.kotlin.formver.viper.ast.unwrapOr
@@ -19,7 +19,7 @@ import org.jetbrains.kotlin.formver.viper.errors.VerificationError
 
 sealed interface FormattedError {
     context(context: CheckerContext, reporter: DiagnosticReporter)
-    fun report(source: KtSourceElement?)
+    fun report(source: KtSourceElement?, diagnostics: VerificationDiagnostics)
 }
 
 class ReturnsEffectError(private val sourceRole: SourceRole.ReturnsEffect) : FormattedError {
@@ -31,8 +31,8 @@ class ReturnsEffectError(private val sourceRole: SourceRole.ReturnsEffect) : For
         }
 
     context(context: CheckerContext, reporter: DiagnosticReporter)
-    override fun report(source: KtSourceElement?) {
-        reporter.reportOn(source, VerificationErrors.UNEXPECTED_RETURNED_VALUE, msg())
+    override fun report(source: KtSourceElement?, diagnostics: VerificationDiagnostics) {
+        reporter.reportOn(source, diagnostics.UNEXPECTED_RETURNED_VALUE, msg())
     }
 
     fun msg(): String = sourceRole.asUserFriendlyMessage
@@ -46,9 +46,9 @@ class ConditionalEffectError(private val sourceRole: SourceRole.ConditionalEffec
         }
 
     context(context: CheckerContext, reporter: DiagnosticReporter)
-    override fun report(source: KtSourceElement?) {
+    override fun report(source: KtSourceElement?, diagnostics: VerificationDiagnostics) {
         val (returnEffectMsg, conditionPrettyPrinted) = msg()
-        reporter.reportOn(source, VerificationErrors.CONDITIONAL_EFFECT_ERROR, returnEffectMsg, conditionPrettyPrinted)
+        reporter.reportOn(source, diagnostics.CONDITIONAL_EFFECT_ERROR, returnEffectMsg, conditionPrettyPrinted)
     }
 
     fun msg(): Pair<String, String> = sourceRole.let { (returnEffect, condition) ->
@@ -58,8 +58,8 @@ class ConditionalEffectError(private val sourceRole: SourceRole.ConditionalEffec
 
 class DefaultError(private val error: VerificationError) : FormattedError {
     context(context: CheckerContext, reporter: DiagnosticReporter)
-    override fun report(source: KtSourceElement?) {
-        reporter.reportOn(source, VerificationErrors.VIPER_VERIFICATION_ERROR, msg())
+    override fun report(source: KtSourceElement?, diagnostics: VerificationDiagnostics) {
+        reporter.reportOn(source, diagnostics.VIPER_VERIFICATION_ERROR, msg())
     }
 
     fun msg(): String = error.msg
@@ -78,7 +78,7 @@ class IndexOutOfBoundError(
         }
 
     context(context: CheckerContext, reporter: DiagnosticReporter)
-    override fun report(source: KtSourceElement?) {
+    override fun report(source: KtSourceElement?, diagnostics: VerificationDiagnostics) {
         /**
          * When we are dealing with inlined expressions returning a list, we do not have access to any list symbol.
          * Therefore, we do not report any name since the compiler would highlight the sub-expression causing the problem.
@@ -86,7 +86,7 @@ class IndexOutOfBoundError(
         val (targetInfo, userFriendlyMessage) = msg()
         reporter.reportOn(
             source,
-            VerificationErrors.POSSIBLE_INDEX_OUT_OF_BOUND,
+            diagnostics.POSSIBLE_INDEX_OUT_OF_BOUND,
             targetInfo,
             userFriendlyMessage,
         )
@@ -110,11 +110,11 @@ class InvalidSubListRangeError(
         }
 
     context(context: CheckerContext, reporter: DiagnosticReporter)
-    override fun report(source: KtSourceElement?) {
+    override fun report(source: KtSourceElement?, diagnostics: VerificationDiagnostics) {
         val (targetInfo, userFriendlyMessage) = msg()
         reporter.reportOn(
             source,
-            VerificationErrors.INVALID_SUBLIST_RANGE,
+            diagnostics.INVALID_SUBLIST_RANGE,
             targetInfo,
             userFriendlyMessage,
         )
