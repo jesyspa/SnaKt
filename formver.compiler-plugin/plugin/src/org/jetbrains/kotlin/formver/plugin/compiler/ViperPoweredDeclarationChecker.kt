@@ -26,6 +26,7 @@ import org.jetbrains.kotlin.formver.core.names.SimpleNameResolver
 import org.jetbrains.kotlin.formver.core.shouldVerify
 import org.jetbrains.kotlin.formver.core.viperProgram
 import org.jetbrains.kotlin.formver.plugin.compiler.reporting.reportVerifierError
+import org.jetbrains.kotlin.formver.viper.ProverNotFoundException
 import org.jetbrains.kotlin.formver.viper.SiliconFrontend
 import org.jetbrains.kotlin.formver.viper.ast.Program
 import org.jetbrains.kotlin.formver.viper.ast.registerAllNames
@@ -115,6 +116,8 @@ class ViperPoweredDeclarationChecker(private val session: FirSession, private va
 
         } catch (e: SnaktInternalException) {
             reporter.reportOn(e.source, PluginErrors.INTERNAL_ERROR, e.message)
+        } catch (e: ProverNotFoundException) {
+            reporter.reportOn(declaration.source, PluginErrors.PROVER_NOT_FOUND, e.message ?: "Prover not found")
         } catch (e: Exception) {
             val error = e.message ?: "No message provided"
             reporter.reportOn(declaration.source, PluginErrors.INTERNAL_ERROR, error)
