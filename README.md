@@ -80,6 +80,10 @@ formver {
 However, keep in mind that the Viper is dump is provided as an info message: this message will not be shown
 unless you run `gradle` with the `--info` flag.
 
+By default a failed proof is reported as a warning, so adopting the plugin cannot break an
+existing build. Set `verificationErrorSeverity("error")` to fail compilation on a failed proof
+instead.
+
 ### Annotations
 
 The plugin provides a number of annotations to add specifications to your code.
@@ -104,6 +108,8 @@ The plugin accepts a number of command line options which can be passed via
   `targets_with_contract`, `all_targets` (default: `targets_with_contract`).
 - Option `unsupported_feature_behaviour`: permitted values `throw_exception`, `assume_unreachable` (default:
   `throw_exception`).
+- Option `verification_error_severity`: permitted values `warning` and `error` (default: `warning`, so that
+  adopting the plugin cannot break an existing build).
 
 ### Z3
 
