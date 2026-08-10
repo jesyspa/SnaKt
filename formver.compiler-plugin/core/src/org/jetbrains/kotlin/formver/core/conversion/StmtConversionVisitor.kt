@@ -336,6 +336,9 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         val invariants = buildList {
             data.retrievePropertiesAndParameters().forEach {
                 addAll(it.provenInvariants())
+                // Without these the loop gives up the permissions to the fields of everything in scope, so
+                // no invariant may mention such a field and nothing may be read from one after the loop.
+                addAll(it.accessInvariants(data.typeResolver))
             }
             extractLoopInvariants(whileLoop.block)?.let {
                 addAll(data.withScopeImpl(ScopeIndex.NoScope) { data.collectInvariants(it) })

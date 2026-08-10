@@ -40,6 +40,15 @@ interface LinearizationContext {
 
     val typeResolver: TypeResolver
 
+    /**
+     * Whether an assumption can be recorded here.
+     *
+     * An `inhale` is a statement, so a context that has to produce a single Viper expression has nowhere to put
+     * one. Facts that would have been inhaled are dropped there instead, which costs the verifier information
+     * but never adds any.
+     */
+    val canInhale: Boolean
+
     fun freshAnonVar(type: TypeEmbedding): AnonymousVariableEmbedding
 
     fun asBlock(action: LinearizationContext.() -> Unit): Stmt.Seqn

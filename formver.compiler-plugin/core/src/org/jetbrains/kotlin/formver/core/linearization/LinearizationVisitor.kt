@@ -244,7 +244,10 @@ data class LinearizationVisitor(
         }
     }
 
-    override fun visitInhaleInvariants(e: InhaleInvariants): Linearizable {
+    override fun visitInhaleInvariants(e: InhaleInvariants): Linearizable =
+        InhalingIfPossible(inhaling = linearizeInhaleInvariants(e), plain = e.exp.linearize())
+
+    private fun linearizeInhaleInvariants(e: InhaleInvariants): Linearizable {
         // InhaleInvariantsForVariable: expression is a variable, use OnlyToViper-style
         // (toViperUnusedResult must call toViper, not just iterate children, to emit the inhales)
         if (e.exp.underlyingVariable != null) {
@@ -605,4 +608,26 @@ data class LinearizationVisitor(
     }
 
     // endregion
+}
+
+/**
+ * Emits the invariants where the context can hold an `inhale`, and the bare expression where it cannot.
+ *
+ * The choice depends on the context rather than on the embedding, so it can only be made once the
+ * [LinearizationContext] is in hand.
+ */
+private class InhalingIfPossible(private val inhaling: Linearizable, private val plain: Linearizable) : Linearizable {
+    private fun LinearizationContext.pick(): Linearizable = if (canInhale) inhaling else plain
+
+    override fun toViper(ctx: LinearizationContext): Exp = ctx.pick().toViper(ctx)
+
+    override fun toViperStoringIn(result: VariableEmbedding, ctx: LinearizationContext) =
+        ctx.pick().toViperStoringIn(result, ctx)
+
+    override fun toViperMaybeStoringIn(result: VariableEmbedding?, ctx: LinearizationContext) =
+        ctx.pick().toViperMaybeStoringIn(result, ctx)
+
+    override fun toViperBuiltinType(ctx: LinearizationContext): Exp = ctx.pick().toViperBuiltinType(ctx)
+
+    override fun toViperUnusedResult(ctx: LinearizationContext) = ctx.pick().toViperUnusedResult(ctx)
 }
