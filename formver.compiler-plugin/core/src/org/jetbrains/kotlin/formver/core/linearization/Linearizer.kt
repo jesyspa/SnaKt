@@ -38,6 +38,9 @@ data class Linearizer(
     override val logicOperatorPolicy: LogicOperatorPolicy
         get() = LogicOperatorPolicy.CONVERT_TO_IF
 
+    override val canInhale: Boolean
+        get() = true
+
     override fun freshAnonVar(type: TypeEmbedding): AnonymousVariableEmbedding {
         val variable = state.freshAnonVar(type)
         addDeclaration(variable.toLocalVarDecl())

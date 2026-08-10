@@ -112,6 +112,18 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
       public void testList() {
         runTest("formver.compiler-plugin/testData/diagnostics/stdlib/list/list.kt");
       }
+
+      @Test
+      @TestMetadata("size_across_loop.kt")
+      public void testSize_across_loop() {
+        runTest("formver.compiler-plugin/testData/diagnostics/stdlib/list/size_across_loop.kt");
+      }
+
+      @Test
+      @TestMetadata("size_in_specs.kt")
+      public void testSize_in_specs() {
+        runTest("formver.compiler-plugin/testData/diagnostics/stdlib/list/size_in_specs.kt");
+      }
     }
 
     @Nested

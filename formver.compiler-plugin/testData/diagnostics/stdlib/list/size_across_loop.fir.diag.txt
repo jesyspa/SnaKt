@@ -1,0 +1,93 @@
+/size_across_loop.kt: info: Generated Viper text for size_read_after_loop:
+field size: Ref
+
+method size_read_after_loop(a: Ref, b: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(a), List())
+  requires acc(a.size, write)
+  requires intFromRef(a.size) >= 0
+  requires isSubtype(typeOf(b), List())
+  requires acc(b.size, write)
+  requires intFromRef(b.size) >= 0
+  ensures acc(a.size, write)
+  ensures intFromRef(a.size) >= 0
+  ensures acc(b.size, write)
+  ensures intFromRef(b.size) >= 0
+  ensures isSubtype(typeOf(v_ret_0), intType())
+{
+  var i: Ref
+  var anon_0: Ref
+  var anon_1: Ref
+  i := intToRef(0)
+  label cont
+    invariant isSubtype(typeOf(i), intType())
+    invariant isSubtype(typeOf(a), List())
+    invariant acc(a.size, write)
+    invariant intFromRef(a.size) >= 0
+    invariant isSubtype(typeOf(b), List())
+    invariant acc(b.size, write)
+    invariant intFromRef(b.size) >= 0
+  anon_1 := a.size
+  inhale isSubtype(typeOf(anon_1), intType())
+  anon_0 := ltInts(i, anon_1)
+  if (boolFromRef(anon_0)) {
+    i := plusInts(i, intToRef(1))
+    goto cont
+  }
+  label break
+  assert isSubtype(typeOf(i), intType())
+  assert isSubtype(typeOf(a), List())
+  assert acc(a.size, write)
+  assert intFromRef(a.size) >= 0
+  assert isSubtype(typeOf(b), List())
+  assert acc(b.size, write)
+  assert intFromRef(b.size) >= 0
+  v_ret_0 := b.size
+  inhale isSubtype(typeOf(v_ret_0), intType())
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/size_across_loop.kt: info: Generated Viper text for size_of_aliased_list:
+field size: Ref
+
+method size_of_aliased_list(l: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(l), List())
+  requires acc(l.size, write)
+  requires intFromRef(l.size) >= 0
+  ensures acc(l.size, write)
+  ensures intFromRef(l.size) >= 0
+  ensures isSubtype(typeOf(v_ret_0), intType())
+{
+  var m: Ref
+  var i: Ref
+  var anon_0: Ref
+  var anon_1: Ref
+  m := l
+  i := intToRef(0)
+  label cont
+    invariant isSubtype(typeOf(m), List())
+    invariant acc(m.size, write)
+    invariant intFromRef(m.size) >= 0
+    invariant isSubtype(typeOf(i), intType())
+    invariant isSubtype(typeOf(l), List())
+    invariant acc(l.size, write)
+    invariant intFromRef(l.size) >= 0
+  anon_1 := m.size
+  inhale isSubtype(typeOf(anon_1), intType())
+  anon_0 := ltInts(i, anon_1)
+  if (boolFromRef(anon_0)) {
+    i := plusInts(i, intToRef(1))
+    goto cont
+  }
+  label break
+  assert isSubtype(typeOf(m), List())
+  assert acc(m.size, write)
+  assert intFromRef(m.size) >= 0
+  assert isSubtype(typeOf(i), intType())
+  assert isSubtype(typeOf(l), List())
+  assert acc(l.size, write)
+  assert intFromRef(l.size) >= 0
+  v_ret_0 := i
+  goto lbl_ret_0
+  label lbl_ret_0
+}
