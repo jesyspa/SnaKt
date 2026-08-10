@@ -645,6 +645,28 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
     }
 
     @Nested
+    @TestMetadata("formver.compiler-plugin/testData/diagnostics/verification/error_severity")
+    @TestDataPath("$PROJECT_ROOT")
+    public class Error_severity {
+      @Test
+      public void testAllFilesPresentInError_severity() {
+        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/verification/error_severity"), Pattern.compile("^(.+)\\.kt$"), null, true);
+      }
+
+      @Test
+      @TestMetadata("default_severity.kt")
+      public void testDefault_severity() {
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/error_severity/default_severity.kt");
+      }
+
+      @Test
+      @TestMetadata("fail_on_verification_error.kt")
+      public void testFail_on_verification_error() {
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/error_severity/fail_on_verification_error.kt");
+      }
+    }
+
+    @Nested
     @TestMetadata("formver.compiler-plugin/testData/diagnostics/verification/inlining")
     @TestDataPath("$PROJECT_ROOT")
     public class Inlining {

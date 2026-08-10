@@ -1,0 +1,10 @@
+/default_severity.kt: info: Generated Viper text for unprovablePostcondition:
+method unprovablePostcondition(x: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(x), intType())
+  ensures isSubtype(typeOf(v_ret_0), intType())
+  ensures intFromRef(v_ret_0) > intFromRef(x)
+{
+  v_ret_0 := x
+  goto lbl_ret_0
+  label lbl_ret_0
+}
