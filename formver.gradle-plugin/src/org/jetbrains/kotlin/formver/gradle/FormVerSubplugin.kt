@@ -31,6 +31,10 @@ class FormVerGradleSubplugin
     override fun applyToCompilation(kotlinCompilation: KotlinCompilation<*>): Provider<List<SubpluginOption>> {
         val project = kotlinCompilation.target.project
 
+        kotlinCompilation.defaultSourceSet.dependencies {
+            implementation(BuildConfig.ANNOTATIONS_LIBRARY_COORDINATES)
+        }
+
         val formVerExtension = project.extensions.getByType(FormVerExtension::class.java)
 
         return project.provider {
