@@ -84,8 +84,7 @@ unless you run `gradle` with the `--info` flag.
 ### Annotations
 
 The plugin provides a number of annotations to add specifications to your code.
-Applying the Gradle plugin automatically adds a dependency on `formver.annotations`,
-so no further setup is needed to access them.
+Applying the Gradle plugin automatically adds a dependency on `formver.annotations`.
 
 ### Running from the command line
 
