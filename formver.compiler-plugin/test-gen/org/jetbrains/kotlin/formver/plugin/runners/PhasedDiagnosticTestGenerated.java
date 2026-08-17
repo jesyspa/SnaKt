@@ -876,6 +876,12 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
       }
 
       @Test
+      @TestMetadata("forall_char_domain.kt")
+      public void testForall_char_domain() {
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/forall_char_domain.kt");
+      }
+
+      @Test
       @TestMetadata("forall_with_triggers.kt")
       public void testForall_with_triggers() {
         runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/forall_with_triggers.kt");
