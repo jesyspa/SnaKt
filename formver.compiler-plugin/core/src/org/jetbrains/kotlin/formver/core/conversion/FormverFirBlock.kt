@@ -12,42 +12,54 @@ import org.jetbrains.kotlin.fir.symbols.impl.FirValueParameterSymbol
 import org.jetbrains.kotlin.fir.types.ConeKotlinType
 import org.jetbrains.kotlin.formver.core.isFormverFunctionNamed
 
-fun FirStatement.extractFormverFirBlock(predicate: FirFunctionSymbol<*>.() -> Boolean): FirAnonymousFunction? {
+fun FirStatement.extractFormverFirBlock(
+    ctx: ProgramConversionContext,
+    predicate: FirFunctionSymbol<*>.() -> Boolean,
+): FirAnonymousFunction? {
     if (this !is FirFunctionCall) return null
     val firFunction = toResolvedCallableSymbol() as? FirFunctionSymbol<*> ?: return null
     if (!predicate(firFunction)) return null
     val formverInvariantsArgument = argument
-    if (formverInvariantsArgument !is FirAnonymousFunctionExpression)
-        error("Only lambdas are allowed as arguments of ${firFunction.name}.")
+    if (formverInvariantsArgument !is FirAnonymousFunctionExpression) {
+        return ctx.handleUnsupportedFeature(
+            source, "Only lambdas are allowed as arguments of ${firFunction.name}."
+        ) { null }
+    }
     return formverInvariantsArgument.anonymousFunction
 }
 
-fun extractLoopInvariants(parentBlock: FirBlock): FirBlock? {
+fun extractLoopInvariants(parentBlock: FirBlock, ctx: ProgramConversionContext): FirBlock? {
     val firstStmt = parentBlock.statements.firstOrNull() ?: return null
-    return firstStmt.extractFormverFirBlock { isFormverFunctionNamed("loopInvariants") }?.body
+    return firstStmt.extractFormverFirBlock(ctx) { isFormverFunctionNamed("loopInvariants") }?.body
 }
 
 data class FirSpecification(val precond: FirBlock?, val postcond: FirBlock?, val returnVar: FirValueParameterSymbol?) {
     constructor() : this(null, null, null)
 }
 
-private fun FirAnonymousFunction.extractFormverReturnVar(returnType: ConeKotlinType): FirValueParameterSymbol {
+private fun FirAnonymousFunction.extractFormverReturnVar(
+    returnType: ConeKotlinType,
+    ctx: ProgramConversionContext,
+): FirValueParameterSymbol? {
     val param = valueParameters.first()
-    if (param.symbol.resolvedReturnType != returnType)
-        error("Expected type ${returnType} based on signature, got ${param.symbol.resolvedReturnType}")
+    if (param.symbol.resolvedReturnType != returnType) {
+        return ctx.handleUnsupportedFeature(
+            source, "Expected type ${returnType} based on signature, got ${param.symbol.resolvedReturnType}"
+        ) { null }
+    }
     return param.symbol
 }
 
-fun extractFirSpecification(parentBlock: FirBlock, returnType: ConeKotlinType): FirSpecification {
+fun extractFirSpecification(parentBlock: FirBlock, returnType: ConeKotlinType, ctx: ProgramConversionContext): FirSpecification {
     val firstStmt = parentBlock.statements.firstOrNull() ?: return FirSpecification()
 
-    firstStmt.extractFormverFirBlock { isFormverFunctionNamed("postconditions") }?.let { lambda ->
-        return FirSpecification(null, lambda.body, lambda.extractFormverReturnVar(returnType))
+    firstStmt.extractFormverFirBlock(ctx) { isFormverFunctionNamed("postconditions") }?.let { lambda ->
+        return FirSpecification(null, lambda.body, lambda.extractFormverReturnVar(returnType, ctx))
     }
 
-    val precond = firstStmt.extractFormverFirBlock { isFormverFunctionNamed("preconditions") }
+    val precond = firstStmt.extractFormverFirBlock(ctx) { isFormverFunctionNamed("preconditions") }
         ?: return FirSpecification()
     val postcond =
-        parentBlock.statements.getOrNull(1)?.extractFormverFirBlock { isFormverFunctionNamed("postconditions") }
-    return FirSpecification(precond.body, postcond?.body, postcond?.extractFormverReturnVar(returnType))
+        parentBlock.statements.getOrNull(1)?.extractFormverFirBlock(ctx) { isFormverFunctionNamed("postconditions") }
+    return FirSpecification(precond.body, postcond?.body, postcond?.extractFormverReturnVar(returnType, ctx))
 }
