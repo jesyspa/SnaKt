@@ -6,6 +6,7 @@
 package org.jetbrains.kotlin.formver.core.embeddings.callables
 
 import org.jetbrains.kotlin.formver.common.SnaktInternalException
+import org.jetbrains.kotlin.formver.core.conversion.handleUnsupportedFeature
 import org.jetbrains.kotlin.formver.core.conversion.insertForAllFunctionCall
 import org.jetbrains.kotlin.formver.core.embeddings.expression.*
 import org.jetbrains.kotlin.formver.core.embeddings.expression.OperatorExpEmbeddings.AddCharInt
@@ -214,10 +215,10 @@ object SpecialKotlinFunctions {
 
         addFunction(forAllCallableType, SpecialPackages.formver, name = "forAll") { args, ctx ->
             val arg = args.first()
-            val lambda = arg.ignoringMetaNodes() as? LambdaExp ?: throw SnaktInternalException(
+            val lambda = arg.ignoringMetaNodes() as? LambdaExp ?: return@addFunction ctx.handleUnsupportedFeature(
                 null,
                 "First argument of forAll function must be a lambda."
-            )
+            ) { ErrorExp }
             val param = lambda.function.valueParameters.first()
             val body = lambda.function.body ?: throw SnaktInternalException(
                 null,
@@ -281,17 +282,24 @@ object SpecialKotlinFunctions {
         }
         addFunction(accCallableType, SpecialPackages.formver, name = "acc") { args, ctx ->
             val source = (args.firstOrNull() as? WithPosition)?.source
-            val perm = extractPermission(args.getOrNull(1))
+            val perm = when (val permArg = args.getOrNull(1)?.ignoringCastsAndMetaNodes()) {
+                null, NullLit -> PermissionLit(PermExp.FullPerm())
+                is PermissionLit -> permArg
+                else -> return@addFunction ctx.handleUnsupportedFeature(
+                    source,
+                    "Second argument of `acc` must be `read()` or `write()`."
+                ) { ErrorExp }
+            }
             ctx.withNoScope {
                 when (val exp = args.firstOrNull()?.ignoringCastsAndMetaNodes()) {
-                    null -> throw SnaktInternalException(
+                    null -> ctx.handleUnsupportedFeature(
                         source, "First argument of `acc` must be a field access like `x.a`."
-                    )
+                    ) { ErrorExp }
                     is FieldAccess -> AccEmbedding(exp.receiver, exp.field, perm.perm)
                     is MethodCall -> extractPredicate(exp, perm)
-                    else -> throw SnaktInternalException(
+                    else -> ctx.handleUnsupportedFeature(
                         source, "First argument of `acc` must be a field access like `x.a` or a predicate."
-                    )
+                    ) { ErrorExp }
                 }
             }
         }
@@ -391,18 +399,22 @@ object SpecialKotlinFunctions {
             withReturnType { unit() }
         }
         addFunction(uniquePredicatePermissionsToUnit, SpecialPackages.formver, name = "unfold") { args, ctx ->
-            val exp = (args[0].ignoringMetaNodes() as? MethodCall) ?: throw SnaktInternalException(
-                null, "First argument of `unfold` must be a predicate constructor call like `UniquePred(x)`."
-            )
+            val exp = (args[0].ignoringMetaNodes() as? MethodCall)
+                ?: return@addFunction ctx.handleUnsupportedFeature(
+                    (args.firstOrNull() as? WithPosition)?.source,
+                    "First argument of `unfold` must be a predicate constructor call like `UniquePred(x)`."
+                ) { ErrorExp }
             Unfold(
                 extractPredicate(exp, extractPermission(args.getOrNull(1)))
             )
         }
 
         addFunction(uniquePredicatePermissionsToUnit, SpecialPackages.formver, name = "fold") { args, ctx ->
-            val exp = (args[0].ignoringMetaNodes() as? MethodCall) ?: throw SnaktInternalException(
-                null, "First argument of `fold` must be a predicate constructor call like `UniquePred(x)`."
-            )
+            val exp = (args[0].ignoringMetaNodes() as? MethodCall)
+                ?: return@addFunction ctx.handleUnsupportedFeature(
+                    (args.firstOrNull() as? WithPosition)?.source,
+                    "First argument of `fold` must be a predicate constructor call like `UniquePred(x)`."
+                ) { ErrorExp }
             Fold(
                 extractPredicate(exp, extractPermission(args.getOrNull(1)))
             )

@@ -6,7 +6,6 @@
 package org.jetbrains.kotlin.formver.core.conversion
 
 import org.jetbrains.kotlin.KtSourceElement
-import org.jetbrains.kotlin.descriptors.isInterface
 import org.jetbrains.kotlin.diagnostics.DiagnosticContext
 import org.jetbrains.kotlin.diagnostics.DiagnosticReporter
 import org.jetbrains.kotlin.diagnostics.KtDiagnosticFactory1
@@ -16,14 +15,12 @@ import org.jetbrains.kotlin.fir.declarations.FirSimpleFunction
 import org.jetbrains.kotlin.fir.declarations.utils.isFinal
 import org.jetbrains.kotlin.fir.resolve.toClassSymbol
 import org.jetbrains.kotlin.fir.symbols.SymbolInternals
-import org.jetbrains.kotlin.fir.symbols.impl.FirConstructorSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirFunctionSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirPropertySymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirRegularClassSymbol
 import org.jetbrains.kotlin.fir.types.*
 import org.jetbrains.kotlin.formver.common.PluginConfiguration
 import org.jetbrains.kotlin.formver.common.SnaktInternalException
-import org.jetbrains.kotlin.formver.common.UnsupportedFeatureBehaviour
 import org.jetbrains.kotlin.formver.core.*
 import org.jetbrains.kotlin.formver.core.diagnostics.ConversionErrors
 import org.jetbrains.kotlin.formver.core.domains.RuntimeTypeDomain
@@ -103,6 +100,9 @@ class ProgramConverter(
     private val registered: MutableList<RegisteredFunction> = mutableListOf()
 
     override val typeResolver: TypeResolver = TypeResolver()
+
+    private val typeEmbedder = TypeEmbedder(this)
+    private val contractEmbedder = ContractEmbedder(this)
 
     val debugExpEmbeddings: Map<SymbolicName, ExpEmbedding>
         get() = buildMap {
@@ -233,40 +233,6 @@ class ProgramConverter(
         return stmtCtx
     }
 
-    private fun createContractConversionContext(
-        symbol: FirFunctionSymbol<*>,
-        signature: NamedFunctionSignature,
-        firSpec: FirSpecification,
-        returnTarget: ReturnTarget,
-    ): Pair<StmtConversionContext, StmtConversionContext> {
-        val rootResolver = RootParameterResolver(
-            this@ProgramConverter,
-            signature,
-            symbol.valueParameterSymbols,
-            signature.labelName,
-            returnTarget,
-        )
-
-        val wrappedResolver = firSpec.returnVar?.let { ReturnVarSubstitutor(it, signature.returns) }
-            ?.let { ctx -> SubstitutedReturnParameterResolver(rootResolver, ctx) } ?: rootResolver
-
-        val preconditionContext = MethodConverter(
-            this@ProgramConverter,
-            signature,
-            rootResolver,
-            ScopeIndex.NoScope,
-        ).statementCtxt()
-
-        val postconditionContext = MethodConverter(
-            this@ProgramConverter,
-            signature,
-            wrappedResolver,
-            ScopeIndex.NoScope,
-        ).statementCtxt()
-
-        return Pair(preconditionContext, postconditionContext)
-    }
-
     // endregion
 
 
@@ -361,48 +327,9 @@ class ProgramConverter(
 
     // region contracts
 
-    private fun embedFormverContract(
-        symbol: FirFunctionSymbol<*>, signature: NamedFunctionSignature, returnTarget: ReturnTarget
-    ): Pair<List<ExpEmbedding>, List<ExpEmbedding>> {
-        @OptIn(SymbolInternals::class) val declaration = symbol.fir
-        val body = declaration.body
-
-        /** Specifications are only allowed inside simple functions.
-         * We are also unable to retrieve them when body is not visible,
-         * although ideally we should be able to see preconditions and postconditions
-         * from other modules.
-         */
-        if (declaration !is FirSimpleFunction || body == null) {
-            return Pair(emptyList(), emptyList())
-        }
-
-        val firSpec = extractFirSpecification(body, declaration.symbol.resolvedReturnType)
-
-
-        val (preconditionContext, postconditionContext) = createContractConversionContext(
-            symbol, signature, firSpec, returnTarget
-        )
-
-        val preconditions = firSpec.precond?.let { preconditionContext.collectInvariants(it) } ?: emptyList()
-        val postconditions = firSpec.postcond?.let { postconditionContext.collectInvariants(it) } ?: emptyList()
-
-        return Pair(preconditions, postconditions)
-    }
-
-    private fun embedKotlinContract(
-        symbol: FirFunctionSymbol<*>, signature: NamedFunctionSignature
-    ): List<ExpEmbedding> {
-        val contractVisitor = ContractDescriptionConversionVisitor(this@ProgramConverter, signature, symbol)
-        return contractVisitor.getPostconditions()
-    }
-
     override fun embedContract(
         symbol: FirFunctionSymbol<*>, signature: NamedFunctionSignature, returnTarget: ReturnTarget
-    ): Pair<List<ExpEmbedding>, List<ExpEmbedding>> {
-        val kotlinContractPostcondition = embedKotlinContract(symbol, signature)
-        val userContract = embedFormverContract(symbol, signature, returnTarget)
-        return Pair(userContract.first, kotlinContractPostcondition + userContract.second)
-    }
+    ): Pair<List<ExpEmbedding>, List<ExpEmbedding>> = contractEmbedder.embedContract(symbol, signature, returnTarget)
 
     // endregion
 
@@ -433,9 +360,19 @@ class ProgramConverter(
 
                 val classSymbol = symbol.dispatchReceiverType?.toClassSymbol(session)
 
-                val regularClass = classSymbol as? FirRegularClassSymbol ?: throw SnaktInternalException(
-                    symbol.source, "Properties dispatch receiver is not a regular class"
-                )
+                val regularClass = classSymbol as? FirRegularClassSymbol
+                    ?: return@getOrPutProperty handleUnsupportedFeature(
+                        symbol.source, "Properties dispatch receiver is not a regular class"
+                    ) {
+                        PropertyEmbedding(
+                            getter = null,
+                            setter = null,
+                            hasDefaultBehaviour = false,
+                            isUnique = false,
+                            isVal = symbol.isVal,
+                            type = embedType(symbol.resolvedReturnType),
+                        )
+                    }
 
                 val isDefaultProperty = isGuaranteedDefaultProperty(symbol)
                 val isImmutable = symbol.isVal
@@ -506,7 +443,7 @@ class ProgramConverter(
     private fun embedBackingField(
         symbol: FirPropertySymbol, classSymbol: FirRegularClassSymbol
     ): FieldEmbedding {
-        val embedding = embedClass(classSymbol)
+        val embedding = typeEmbedder.embedClass(classSymbol)
         val scopedName = symbol.callableId!!.embedMemberBackingFieldName(scopePolicy(symbol, this))
         val backingField = UserFieldEmbedding(
             scopedName,
@@ -569,114 +506,10 @@ class ProgramConverter(
 
     // region types (also classes)
 
-    override fun embedType(type: ConeKotlinType): TypeEmbedding = buildType { embedTypeWithBuilder(type) }
+    override fun embedType(type: ConeKotlinType): TypeEmbedding = typeEmbedder.embedType(type)
 
-    /**
-     * Returns an embedding of the class type, with details set.
-     */
-    private fun embedClass(symbol: FirRegularClassSymbol): ClassTypeEmbedding {
-        val className = symbol.classId.embedName()
-        typeResolver.lookupClassTypeEmbedding(className)?.let { return it }
-
-        val embedding = typeResolver.getEmbeddingOrExecute(className) {
-            val classEmbedding = buildClassPretype {
-                withName(className)
-            }
-
-            typeResolver.register(classEmbedding, symbol.classKind.isInterface)
-            if (symbol.isManual(session)) {
-                typeResolver.markManual(className)
-            }
-
-            symbol.resolvedSuperTypes.forEach {
-                val superTypeName = embedType(it).pretype.name
-                typeResolver.addSubtypeRelation(className, superTypeName)
-            }
-
-            classEmbedding
-        }
-        symbol.propertySymbols.forEach {
-            embedProperty(it)
-        }
-        return embedding
-    }
-
-    // Note: keep in mind that this function is necessary to resolve the name of the function!
-    override fun embedFunctionPretype(symbol: FirFunctionSymbol<*>): FunctionTypeEmbedding = buildFunctionPretype {
-        embedFunctionPretypeWithBuilder(symbol)
-    }
-
-
-    private fun TypeBuilder.embedTypeWithBuilder(type: ConeKotlinType): PretypeBuilder = when {
-        type is ConeErrorType -> error("Encountered an erroneous type: $type")
-        type is ConeTypeParameterType -> {
-            isNullable = true; any()
-        }
-
-        type.isString -> {
-            val stringClassSymbol = type.toClassSymbol(session) as FirRegularClassSymbol
-            stringClassSymbol.propertySymbols.forEach {
-                embedProperty(it)
-            }
-            string()
-        }
-
-        type.isUnit -> unit()
-        type.isChar -> char()
-        type.isInt -> int()
-        type.isBoolean -> boolean()
-        type.isNothing -> nothing()
-        type.isSomeFunctionType(session) -> function {
-            check(type is ConeClassLikeType) { "Expected a ConeClassLikeType for a function type, got $type" }
-            type.receiverType(session)?.let { withDispatchReceiver { embedTypeWithBuilder(it) } }
-            type.valueParameterTypesWithoutReceivers(session).forEach { param ->
-                withParam { embedTypeWithBuilder(param) }
-            }
-            withReturnType { embedTypeWithBuilder(type.returnType(session)) }
-        }
-
-        type.canBeNull(session) -> {
-            isNullable = true
-            embedTypeWithBuilder(type.withNullability(false, session.typeContext))
-        }
-
-        type.isAny -> any()
-        type is ConeClassLikeType -> {
-            val classLikeSymbol = type.toClassSymbol(session)
-            if (classLikeSymbol is FirRegularClassSymbol) {
-                existing(embedClass(classLikeSymbol))
-            } else {
-                unimplementedTypeEmbedding(type)
-            }
-        }
-
-        else -> unimplementedTypeEmbedding(type)
-    }
-
-    private fun FunctionPretypeBuilder.embedFunctionPretypeWithBuilder(symbol: FirFunctionSymbol<*>) {
-        symbol.receiverType?.let {
-            withDispatchReceiver { embedTypeWithBuilder(it) }
-        }
-        symbol.extensionReceiverType?.let {
-            withExtensionReceiver { embedTypeWithBuilder(it) }
-        }
-        symbol.valueParameterSymbols.forEach { param ->
-            withParam {
-                embedTypeWithBuilder(param.resolvedReturnType)
-            }
-        }
-        withReturnType { embedTypeWithBuilder(symbol.resolvedReturnType) }
-        returnsUnique = symbol.isUnique(session) || symbol is FirConstructorSymbol
-    }
-
-    private fun TypeBuilder.unimplementedTypeEmbedding(type: ConeKotlinType): PretypeBuilder = when (config.behaviour) {
-        UnsupportedFeatureBehaviour.THROW_EXCEPTION -> throw NotImplementedError("The embedding for type $type is not yet implemented.")
-
-        UnsupportedFeatureBehaviour.ASSUME_UNREACHABLE -> {
-            reportMinorInternalError("Requested type $type, for which we do not yet have an embedding.")
-            unit()
-        }
-    }
+    override fun embedFunctionPretype(symbol: FirFunctionSymbol<*>): FunctionTypeEmbedding =
+        typeEmbedder.embedFunctionPretype(symbol)
 
     // endregion
 }
