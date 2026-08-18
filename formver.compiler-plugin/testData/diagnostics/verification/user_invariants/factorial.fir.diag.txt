@@ -15,6 +15,8 @@ function fact(n: Ref): Ref
         timesInts(n, fact(minusInts(n, intToRef(1)))) :
         null)) in
       (let anon_0_0 ==
-        ((intFromRef(n) == 0 ? anon_1_0 : anon_2_0)) in
+        ((intFromRef(n) == 0 || !(intFromRef(n) == 0) ?
+          (intFromRef(n) == 0 ? anon_1_0 : anon_2_0) :
+          null)) in
         anon_0_0)))
 }

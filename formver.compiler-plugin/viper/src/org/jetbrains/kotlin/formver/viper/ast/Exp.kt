@@ -785,6 +785,13 @@ sealed interface Exp : WithSilverMetadata, IntoSilver<viper.silver.ast.Exp> {
         fun List<Exp>.toConjunction(): Exp =
             if (isEmpty()) BoolLit(true)
             else reduce { l, r -> And(l, r) }
+
+        /**
+         * Take the disjunction of the given expressions.
+         */
+        fun List<Exp>.toDisjunction(): Exp =
+            if (isEmpty()) BoolLit(false)
+            else reduce { l, r -> Or(l, r) }
     }
 
     /**
