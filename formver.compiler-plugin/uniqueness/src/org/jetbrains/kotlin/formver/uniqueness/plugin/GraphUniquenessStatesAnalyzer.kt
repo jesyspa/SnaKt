@@ -60,6 +60,7 @@ val ControlFlowGraph.uniquenessAnalysisTargetNodes: Sequence<CFGNode<*>>
         }
     }
 
+
 /**
  * Data-flow analyzer that tracks the uniqueness state of paths through a CFG.
  *
@@ -70,6 +71,7 @@ class GraphUniquenessStatesAnalyzer(
     private val initialState: UniquenessState,
     private val context: CheckerContext,
     private val callArgumentLocalitiesMapper: CallArgumentTypeFactsMapper<Locality>,
+    private val uniquenessNeutralCallPredicate: UniquenessNeutralCallPredicate
 ) : PathAwareControlFlowGraphVisitor<Unit, UniquenessState>() {
     override fun mergeInfo(
         a: UniquenessStateFlow,
@@ -166,7 +168,10 @@ class GraphUniquenessStatesAnalyzer(
     ): PathAwareUniquenessStateFlow {
         val call = node.fir
 
+
         with(context) {
+            if (uniquenessNeutralCallPredicate.accepts(call)) return data
+
             return data.transformValues { data ->
                 var newUniquenessState = data.getOrInitialize()
 
@@ -191,6 +196,8 @@ class GraphUniquenessStatesAnalyzer(
         val call = node.fir
 
         with(context) {
+            if (uniquenessNeutralCallPredicate.accepts(call)) return data
+
             return data.transformValues { data ->
                 var newUniquenessState = data.getOrInitialize()
                 val explicitReceiver = call.explicitReceiver

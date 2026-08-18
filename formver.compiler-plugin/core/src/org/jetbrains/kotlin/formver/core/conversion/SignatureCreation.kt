@@ -78,8 +78,8 @@ fun FirFunctionSymbol<*>.toFunctionSignature(): SignatureWithTarget<FunctionSign
         PlaceholderVariableEmbedding(
             ExtensionReceiverName,
             converter.embedType(it),
-            this.receiverParameterSymbol?.isUnique(converter.session) ?: false,
-            this.receiverParameterSymbol?.isBorrowed(converter.session) ?: false,
+            this.receiverParameterSymbol?.isUnique ?: false,
+            this.receiverParameterSymbol?.isBorrowed ?: false,
         )
     }
 
@@ -88,8 +88,8 @@ fun FirFunctionSymbol<*>.toFunctionSignature(): SignatureWithTarget<FunctionSign
             it.embedName(),
             converter.embedType(it.resolvedReturnType),
             it,
-            it.isUnique(converter.session),
-            it.isBorrowed(converter.session)
+            it.isUnique,
+            it.isBorrowed
         )
     }
 

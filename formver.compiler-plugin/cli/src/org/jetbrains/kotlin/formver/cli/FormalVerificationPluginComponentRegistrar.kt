@@ -10,9 +10,7 @@ import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.fir.extensions.FirExtensionRegistrarAdapter
 import org.jetbrains.kotlin.formver.common.*
-import org.jetbrains.kotlin.formver.locality.plugin.LocalityExtensionRegistrar
 import org.jetbrains.kotlin.formver.plugin.compiler.FormalVerificationPluginExtensionRegistrar
-import org.jetbrains.kotlin.formver.uniqueness.plugin.UniquenessExtensionRegistrar
 
 @OptIn(ExperimentalCompilerApi::class)
 class FormalVerificationPluginComponentRegistrar : CompilerPluginRegistrar() {
@@ -48,13 +46,5 @@ class FormalVerificationPluginComponentRegistrar : CompilerPluginRegistrar() {
             checkLocality, checkUniqueness, dumpUniquenessCFG
         )
         FirExtensionRegistrarAdapter.registerExtension(FormalVerificationPluginExtensionRegistrar(config))
-
-        if (config.checkLocality) {
-            FirExtensionRegistrarAdapter.registerExtension(LocalityExtensionRegistrar())
-        }
-
-        if (config.checkUniqueness) {
-            FirExtensionRegistrarAdapter.registerExtension(UniquenessExtensionRegistrar())
-        }
     }
 }

@@ -3,18 +3,18 @@
 import org.jetbrains.kotlin.formver.plugin.*
 
 abstract class Super(
-    @Unique var x: Int
+    var x: @Unique Any
 )
 
 @Manual
 class Test(
-    x: Int
+    x: @Unique Any
 ) : Super(x)
 
-fun <!VIPER_TEXT!>test<!>(@Unique p: Test) {
+fun <!VIPER_TEXT!>test<!>(p: @Unique Test) {
     unfold(UniquePred(p))
     unfold(UniquePred(p as Super))
-    p.x = 5
+    p.x = Any()
     fold(UniquePred(p as Super))
     fold(UniquePred(p))
 }
@@ -22,13 +22,13 @@ fun <!VIPER_TEXT!>test<!>(@Unique p: Test) {
 
 @Manual
 class Tree(
-    @Unique var left: Tree?,
-    @Unique var right: Tree?,
-    @Unique var data: Int,
+    var left: @Unique Tree?,
+    var right: @Unique Tree?,
+    var data: Int,
 )
 
 
-fun <!VIPER_TEXT!>contains<!>(@Unique @Borrowed tree: Tree?, search: Int) : Boolean {
+fun <!VIPER_TEXT!>contains<!>(tree: @Unique @Borrowed Tree?, search: Int) : Boolean {
     if (tree == null) return false
     unfold(UniquePred(tree))
     if (tree.data == search) {
@@ -41,13 +41,12 @@ fun <!VIPER_TEXT!>contains<!>(@Unique @Borrowed tree: Tree?, search: Int) : Bool
 }
 
 
-@Unique
-fun <!VIPER_TEXT!>combine<!>(@Unique left: Tree, @Unique right: Tree) : Tree {
+fun <!VIPER_TEXT!>combine<!>(left: @Unique Tree, right: @Unique Tree) : @Unique Tree {
     unfold(UniquePred(left))
     unfold(UniquePred(right))
     val data = left.data + right.data
     fold(UniquePred(left))
     fold(UniquePred(right))
-    val res = Tree(left, right, data)
+    val res: @Unique Tree = Tree(left, right, data)
     return res
 }

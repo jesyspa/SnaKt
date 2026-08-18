@@ -6,8 +6,8 @@
 package org.jetbrains.kotlin.formver.core
 
 import org.jetbrains.kotlin.KtSourceElement
-import org.jetbrains.kotlin.fir.FirAnnotationContainer
 import org.jetbrains.kotlin.fir.FirSession
+import org.jetbrains.kotlin.fir.analysis.checkers.context.CheckerContext
 import org.jetbrains.kotlin.fir.contracts.FirEffectDeclaration
 import org.jetbrains.kotlin.fir.declarations.FirDeclarationDataKey
 import org.jetbrains.kotlin.fir.declarations.FirDeclarationDataRegistry
@@ -18,13 +18,21 @@ import org.jetbrains.kotlin.fir.declarations.impl.FirDefaultPropertySetter
 import org.jetbrains.kotlin.fir.declarations.utils.isInline
 import org.jetbrains.kotlin.fir.expressions.FirExpression
 import org.jetbrains.kotlin.fir.expressions.FirFunctionCall
+import org.jetbrains.kotlin.fir.expressions.FirStatement
+import org.jetbrains.kotlin.fir.expressions.toResolvedCallableSymbol
 import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
 import org.jetbrains.kotlin.fir.symbols.SymbolInternals
+import org.jetbrains.kotlin.fir.symbols.impl.FirCallableSymbol
+import org.jetbrains.kotlin.fir.symbols.impl.FirReceiverParameterSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirFunctionSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirNamedFunctionSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirPropertySymbol
 import org.jetbrains.kotlin.formver.core.embeddings.SourceRole
 import org.jetbrains.kotlin.formver.core.names.SpecialPackages
+import org.jetbrains.kotlin.formver.locality.plugin.Locality
+import org.jetbrains.kotlin.formver.locality.plugin.locality
+import org.jetbrains.kotlin.formver.uniqueness.plugin.Uniqueness
+import org.jetbrains.kotlin.formver.uniqueness.plugin.scopeUniqueness
 import org.jetbrains.kotlin.formver.viper.ast.Position
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.ClassId
@@ -72,17 +80,37 @@ fun formverCallableId(className: String?, name: String): CallableId =
 
 fun kotlinCallableId(className: String?, name: String): CallableId = callableId(SpecialPackages.kotlin, className, name)
 
-fun FirBasedSymbol<*>.isUnique(session: FirSession) = hasAnnotation(annotationId("Unique"), session)
+val FirBasedSymbol<*>.isUnique: Boolean
+    get() = when (this) {
+        is FirReceiverParameterSymbol -> resolvedType.scopeUniqueness == Uniqueness.Unique
+        is FirCallableSymbol<*> -> resolvedReturnType.scopeUniqueness == Uniqueness.Unique
+        else -> false
+    }
 
-fun FirBasedSymbol<*>.isBorrowed(session: FirSession) = hasAnnotation(annotationId("Borrowed"), session)
+val FirBasedSymbol<*>.isBorrowed: Boolean
+    get() = when (this) {
+        is FirReceiverParameterSymbol -> resolvedType.locality == Locality.Local
+        is FirCallableSymbol<*> -> resolvedReturnType.locality == Locality.Local
+        else -> false
+    }
+
+/**
+ * Returns `true` if [this] function represents one of the following specification functions: `preconditions`,
+ * `postconditions`, `loopInvariants`, `verify`.
+ */
+context(context: CheckerContext)
+private fun FirFunctionSymbol<*>.isSpecificationFunction(): Boolean =
+    hasAnnotation(annotationId("SpecificationHelper"), context.session)
+
+context(context: CheckerContext)
+fun FirStatement.isSpecificationCall(): Boolean =
+    ((this as? FirFunctionCall)
+        ?.toResolvedCallableSymbol() as? FirFunctionSymbol<*>)
+        ?.isSpecificationFunction() ?: false
 
 fun FirBasedSymbol<*>.isPure(session: FirSession) = hasAnnotation(annotationId("Pure"), session)
 
 fun FirBasedSymbol<*>.isManual(session: FirSession) = hasAnnotation(annotationId("Manual"), session)
-
-fun FirAnnotationContainer.isUnique(session: FirSession) = hasAnnotation(annotationId("Unique"), session)
-
-fun FirAnnotationContainer.isBorrowed(session: FirSession) = hasAnnotation(annotationId("Borrowed"), session)
 
 fun FirFunctionSymbol<*>.neverConvert(session: FirSession) = hasAnnotation(annotationId("NeverConvert"), session)
 

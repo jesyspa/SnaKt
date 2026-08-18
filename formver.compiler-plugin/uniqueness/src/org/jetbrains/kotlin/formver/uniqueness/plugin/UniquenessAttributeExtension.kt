@@ -11,13 +11,21 @@ import org.jetbrains.kotlin.fir.extensions.FirTypeAttributeExtension
 import org.jetbrains.kotlin.fir.expressions.FirAnnotation
 import org.jetbrains.kotlin.fir.types.ConeAttribute
 import org.jetbrains.kotlin.name.ClassId
+import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.name.Name
+
+val defaultUniquenessAnnotationId =
+    ClassId(
+        FqName("org.jetbrains.kotlin.formver.plugin"),
+        Name.identifier("Unique")
+    )
 
 class UniquenessAttributeExtension(
     session: FirSession,
     private val annotationId: ClassId
 ) : FirTypeAttributeExtension(session) {
     companion object {
-        fun getFactory(annotationId: ClassId): Factory {
+        fun getFactory(annotationId: ClassId = defaultUniquenessAnnotationId): Factory {
             return Factory { session -> UniquenessAttributeExtension(session, annotationId) }
         }
     }

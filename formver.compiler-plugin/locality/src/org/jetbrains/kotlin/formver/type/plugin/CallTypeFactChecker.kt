@@ -35,7 +35,6 @@ class CallTypeFactChecker<TypeFact>(
     private val argumentDiagnosticFactory: KtDiagnosticFactory3<String, TypeFact, TypeFact>,
     private val contextDiagnosticFactory: KtDiagnosticFactory3<ConeKotlinType, TypeFact, TypeFact>
 ) : FirCallChecker(kind) {
-
     context(context: CheckerContext, reporter: DiagnosticReporter)
     override fun check(expression: FirCall) {
         val requiredTypes = callArgumentTypeFactsMapper.mapArgumentTypeFactsOf(expression)

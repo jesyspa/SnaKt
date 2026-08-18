@@ -5,10 +5,10 @@ import org.jetbrains.kotlin.formver.plugin.AlwaysVerify
 import org.jetbrains.kotlin.formver.plugin.Unique
 import org.jetbrains.kotlin.formver.plugin.verify
 
-class Link(var data: Int, @Unique val next: Link?)
+class Link(var data: Int, val next: @Unique Link?)
 
 @AlwaysVerify
-fun <!VIPER_TEXT!>getVal<!>(@Unique l: Link): Int? {
+fun <!VIPER_TEXT!>getVal<!>(l: @Unique Link): Int? {
     return l.next?.data
 }
 
