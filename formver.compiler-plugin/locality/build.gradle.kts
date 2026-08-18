@@ -21,7 +21,7 @@ sourceSets {
 
 dependencies {
     compileOnly(kotlin("compiler"))
-    compileOnly("org.jetbrains.kotlinx:kotlinx-collections-immutable-jvm:0.3.7")
+    compileOnly(libs.kotlinx.collections.immutable)
     testFixturesApi(kotlin("test-junit5"))
     testFixturesApi(kotlin("compiler-internal-test-framework"))
     testFixturesApi(kotlin("compiler"))

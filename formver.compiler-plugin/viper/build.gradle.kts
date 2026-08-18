@@ -1,18 +1,8 @@
 plugins {
     kotlin("jvm")
+    id("formver.source-layout")
 }
 
 dependencies {
-    implementation(ViperVersions.silicon)
-}
-
-sourceSets {
-    main {
-        java.srcDirs("src")
-        resources.srcDir("resources")
-    }
-    test {
-        java.setSrcDirs(emptyList<String>())
-        resources.setSrcDirs(emptyList<String>())
-    }
+    implementation(libs.viper.silicon)
 }

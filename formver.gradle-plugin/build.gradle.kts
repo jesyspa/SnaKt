@@ -4,17 +4,7 @@ plugins {
     id("java-gradle-plugin")
     id("com.gradle.plugin-publish")
     id("maven-publish")
-}
-
-sourceSets {
-    main {
-        java.setSrcDirs(listOf("src"))
-        resources.setSrcDirs(listOf("resources"))
-    }
-    test {
-        java.setSrcDirs(listOf<String>())
-        resources.setSrcDirs(listOf<String>())
-    }
+    id("formver.source-layout")
 }
 
 dependencies {

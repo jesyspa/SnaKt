@@ -4,7 +4,7 @@ plugins {
     id("com.github.gmazzo.buildconfig")
     idea
     id("maven-publish")
-    id("com.gradleup.shadow") version "9.0.0-rc1"
+    alias(libs.plugins.shadow)
 }
 
 sourceSets {
@@ -43,7 +43,7 @@ dependencies {
     testFixturesImplementation(project(":formver.common"))
     testFixturesImplementation(project(":formver.compiler-plugin:plugin"))
     testFixturesApi(project(":formver.compiler-plugin:viper"))
-    testFixturesApi("viper:silicon_2.13:1.2-SNAPSHOT")
+    testFixturesApi(libs.viper.silicon)
     testFixturesImplementation(project(":formver.compiler-plugin:core"))
     testFixturesImplementation(project(":formver.compiler-plugin:locality"))
     testFixturesImplementation(project(":formver.compiler-plugin:uniqueness"))

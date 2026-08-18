@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm")
+    id("formver.source-layout")
 }
 
 dependencies {
@@ -8,15 +9,4 @@ dependencies {
     implementation(project(":formver.compiler-plugin:plugin"))
     implementation(project(":formver.compiler-plugin:locality"))
     implementation(project(":formver.compiler-plugin:uniqueness"))
-}
-
-sourceSets {
-    main {
-        java.srcDirs("src")
-        resources.srcDir("resources")
-    }
-    test {
-        java.setSrcDirs(emptyList<String>())
-        resources.setSrcDirs(emptyList<String>())
-    }
 }

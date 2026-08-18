@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm")
+    id("formver.source-layout")
 }
 
 dependencies {
@@ -8,16 +9,5 @@ dependencies {
     compileOnly(kotlin("compiler"))
 
     // TODO: figure out how to avoid this dependency
-    compileOnly(ViperVersions.silicon)
-}
-
-sourceSets {
-    main {
-        java.srcDirs("src")
-        resources.srcDir("resources")
-    }
-    test {
-        java.setSrcDirs(emptyList<String>())
-        resources.setSrcDirs(emptyList<String>())
-    }
+    compileOnly(libs.viper.silicon)
 }
