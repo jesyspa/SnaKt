@@ -14,69 +14,34 @@ import org.jetbrains.kotlin.formver.core.embeddings.expression.OperatorExpEmbedd
 import org.jetbrains.kotlin.formver.core.embeddings.expression.OperatorExpEmbeddings.LeIntInt
 import org.jetbrains.kotlin.formver.core.embeddings.expression.OperatorExpEmbeddings.Not
 import org.jetbrains.kotlin.formver.core.embeddings.expression.OperatorExpEmbeddings.SubIntInt
-import org.jetbrains.kotlin.formver.core.names.NameMatcher
+import org.jetbrains.kotlin.formver.core.embeddings.types.PretypeEmbedding
+import org.jetbrains.kotlin.formver.core.names.SpecialPackages
 
 private fun VariableEmbedding.sameSize(): ExpEmbedding =
     EqCmp(FieldAccess(this, CollectionSizeFieldEmbedding), Old(FieldAccess(this, CollectionSizeFieldEmbedding)))
 
-private fun VariableEmbedding.increasedSize(amount: Int): ExpEmbedding =
-    EqCmp(
-        FieldAccess(this, CollectionSizeFieldEmbedding),
-        OperatorExpEmbeddings.AddIntInt(Old(FieldAccess(this, CollectionSizeFieldEmbedding)), IntLit(amount)),
-    )
+private fun VariableEmbedding.increasedSize(amount: Int): ExpEmbedding = EqCmp(
+    FieldAccess(this, CollectionSizeFieldEmbedding),
+    OperatorExpEmbeddings.AddIntInt(Old(FieldAccess(this, CollectionSizeFieldEmbedding)), IntLit(amount)),
+)
 
-sealed interface StdLibReceiverInterface {
-    fun match(function: NamedFunctionSignature, ctx: TypeResolver): Boolean
-}
-
-sealed interface PresentInterface : StdLibReceiverInterface {
-    val interfaceName: String
-    override fun match(function: NamedFunctionSignature, ctx: TypeResolver): Boolean =
-        function.callableType.dispatchReceiverType?.pretype?.let {
-            ctx.isInheritorOfCollectionTypeNamed(
-                it,
-                interfaceName
-            )
-        }
-            ?: false
-}
-
-data object CollectionInterface : PresentInterface {
-    override val interfaceName = "Collection"
-}
-
-data object ListInterface : PresentInterface {
-    override val interfaceName = "List"
-}
-
-data object MutableListInterface : PresentInterface {
-    override val interfaceName = "MutableList"
-}
-
-data object NoInterface : StdLibReceiverInterface {
-    override fun match(function: NamedFunctionSignature, ctx: TypeResolver): Boolean =
-        NameMatcher.matchClassScope(function.name) {
-            ifInCollectionsPkg {
-                ifNoReceiver {
-                    return true
-                }
-            }
-            return false
-        }
+/**
+ * Matches any parameter whose pretype is a subtype of `[pkg].[paramTypeInherits]`.
+ * If the parameter type is nullable, the generated embeddings are wrapped as
+ * `param != null implies condition`.
+ */
+data class StdLibParamSpec(
+    val pkg: List<String>,
+    val paramTypeInherits: String,
+) {
+    fun matches(paramPretype: PretypeEmbedding, typeResolver: TypeResolver): Boolean =
+        typeResolver.isInheritorOf(paramPretype, pkg, paramTypeInherits)
 }
 
 sealed interface StdLibCondition {
-    val stdLibInterface: StdLibReceiverInterface
-    val functionName: String
-
-    fun match(function: NamedFunctionSignature): Boolean {
-        NameMatcher.matchClassScope(function.name) {
-            ifFunctionName(functionName) {
-                return true
-            }
-            return false
-        }
-    }
+    val conditions: List<FunctionCondition>
+    fun matches(function: NamedFunctionSignature, typeResolver: TypeResolver): Boolean =
+        with(typeResolver) { conditions.all { it.matches(function) } }
 }
 
 sealed interface StdLibPrecondition : StdLibCondition {
@@ -94,17 +59,46 @@ sealed interface StdLibPostcondition : StdLibCondition {
             IsEmptyPostcondition,
             GetPostcondition,
             SubListPostcondition,
-            AddPostcondition
+            AddPostcondition,
         )
     }
 
     fun getEmbeddings(returnVariable: VariableEmbedding, function: NamedFunctionSignature): List<ExpEmbedding>
 }
 
+sealed interface StdLibParamPrecondition {
+    val spec: StdLibParamSpec
+    fun matches(paramPretype: PretypeEmbedding, typeResolver: TypeResolver): Boolean =
+        spec.matches(paramPretype, typeResolver)
+
+    fun getEmbeddings(param: VariableEmbedding): List<ExpEmbedding>
+
+    companion object {
+        val all: List<StdLibParamPrecondition> = listOf()
+    }
+}
+
+sealed interface StdLibParamPostcondition {
+    val spec: StdLibParamSpec
+    fun matches(paramPretype: PretypeEmbedding, typeResolver: TypeResolver): Boolean =
+        spec.matches(paramPretype, typeResolver)
+
+    fun getEmbeddings(returnVariable: VariableEmbedding, param: VariableEmbedding): List<ExpEmbedding>
+
+    companion object {
+        val all: List<StdLibParamPostcondition> = listOf()
+    }
+}
+
 data object GetPrecondition : StdLibPrecondition {
+    override val conditions = listOf(
+        ReceiverSatisfies(listOf(IsSubtype(SpecialPackages.collections, "List"))),
+        HasFunctionName("get"),
+    )
+
     override fun getEmbeddings(function: NamedFunctionSignature): List<ExpEmbedding> {
         val receiver = function.dispatchReceiver!!
-        val indexArg = function.formalArgs[1]
+        val indexArg = function.params[0]
         return listOf(
             GeIntInt(
                 indexArg,
@@ -118,42 +112,49 @@ data object GetPrecondition : StdLibPrecondition {
             ),
         )
     }
-
-    override val stdLibInterface = ListInterface
-    override val functionName = "get"
 }
 
 data object SubListPrecondition : StdLibPrecondition {
+    override val conditions = listOf(
+        ReceiverSatisfies(listOf(IsSubtype(SpecialPackages.collections, "List"))),
+        HasFunctionName("subList"),
+    )
+
     override fun getEmbeddings(function: NamedFunctionSignature): List<ExpEmbedding> {
         val receiver = function.dispatchReceiver!!
-        val fromIndexArg = function.formalArgs[1]
-        val toIndexArg = function.formalArgs[2]
+        val fromIndexArg = function.params[0]
+        val toIndexArg = function.params[1]
         return listOf(
             LeIntInt(fromIndexArg, toIndexArg, SourceRole.SubListCreation.CheckInSize),
             GeIntInt(fromIndexArg, IntLit(0), SourceRole.SubListCreation.CheckNegativeIndices),
-            LeIntInt(toIndexArg, FieldAccess(receiver, CollectionSizeFieldEmbedding), SourceRole.SubListCreation.CheckInSize)
+            LeIntInt(
+                toIndexArg,
+                FieldAccess(receiver, CollectionSizeFieldEmbedding),
+                SourceRole.SubListCreation.CheckInSize
+            )
         )
     }
-
-    override val stdLibInterface = ListInterface
-    override val functionName = "subList"
 }
 
 data object EmptyListPostcondition : StdLibPostcondition {
+    override val conditions = listOf(
+        InPackage(SpecialPackages.collections),
+        HasNoReceiver,
+        HasFunctionName("emptyList"),
+    )
+
     override fun getEmbeddings(
         returnVariable: VariableEmbedding,
         function: NamedFunctionSignature
-    ): List<ExpEmbedding> {
-        return listOf(
-            EqCmp(FieldAccess(returnVariable, CollectionSizeFieldEmbedding), IntLit(0))
-        )
-    }
-
-    override val stdLibInterface = NoInterface
-    override val functionName = "emptyList"
+    ): List<ExpEmbedding> = listOf(EqCmp(FieldAccess(returnVariable, CollectionSizeFieldEmbedding), IntLit(0)))
 }
 
 data object IsEmptyPostcondition : StdLibPostcondition {
+    override val conditions = listOf(
+        ReceiverSatisfies(listOf(IsSubtype(SpecialPackages.collections, "Collection"))),
+        HasFunctionName("isEmpty"),
+    )
+
     override fun getEmbeddings(
         returnVariable: VariableEmbedding,
         function: NamedFunctionSignature
@@ -165,82 +166,70 @@ data object IsEmptyPostcondition : StdLibPostcondition {
             Implies(Not(returnVariable), GtIntInt(FieldAccess(receiver, CollectionSizeFieldEmbedding), IntLit(0)))
         )
     }
-
-    override val stdLibInterface = CollectionInterface
-    override val functionName = "isEmpty"
 }
 
 data object GetPostcondition : StdLibPostcondition {
+    override val conditions = listOf(
+        ReceiverSatisfies(listOf(IsSubtype(SpecialPackages.collections, "List"))),
+        HasFunctionName("get"),
+    )
+
     override fun getEmbeddings(
         returnVariable: VariableEmbedding,
         function: NamedFunctionSignature
-    ): List<ExpEmbedding> {
-        return listOf(function.dispatchReceiver!!.sameSize())
-    }
-
-    override val stdLibInterface = ListInterface
-    override val functionName = "get"
+    ): List<ExpEmbedding> = listOf(function.dispatchReceiver!!.sameSize())
 }
 
 data object SubListPostcondition : StdLibPostcondition {
+    override val conditions = listOf(
+        ReceiverSatisfies(listOf(IsSubtype(SpecialPackages.collections, "List"))),
+        HasFunctionName("subList"),
+    )
+
     override fun getEmbeddings(
         returnVariable: VariableEmbedding,
         function: NamedFunctionSignature
     ): List<ExpEmbedding> {
-        val fromIndexArg = function.formalArgs[1]
-        val toIndexArg = function.formalArgs[2]
+        val fromIndexArg = function.params[0]
+        val toIndexArg = function.params[1]
         return listOf(
             function.dispatchReceiver!!.sameSize(),
             EqCmp(FieldAccess(returnVariable, CollectionSizeFieldEmbedding), SubIntInt(toIndexArg, fromIndexArg))
         )
     }
-
-    override val stdLibInterface = ListInterface
-    override val functionName = "subList"
 }
 
 data object AddPostcondition : StdLibPostcondition {
+    override val conditions = listOf(
+        ReceiverSatisfies(listOf(IsSubtype(SpecialPackages.collections, "MutableList"))),
+        HasFunctionName("add"),
+    )
+
     override fun getEmbeddings(
         returnVariable: VariableEmbedding,
         function: NamedFunctionSignature
-    ): List<ExpEmbedding> {
-        return listOf(function.dispatchReceiver!!.increasedSize(1))
-    }
-
-    override val stdLibInterface = MutableListInterface
-    override val functionName = "add"
+    ): List<ExpEmbedding> = listOf(function.dispatchReceiver!!.increasedSize(1))
 }
 
 fun NamedFunctionSignature.stdLibPreconditions(ctx: TypeResolver): List<ExpEmbedding> {
-    StdLibPrecondition.all.groupBy {
-        it.stdLibInterface
-    }.forEach { (stdLibInterface, preconditions) ->
-        if (stdLibInterface.match(this, ctx)) {
-            preconditions.forEach {
-                if (it.match(this)) {
-                    return it.getEmbeddings(this)
-                }
-            }
-        }
+    val fromFunction = StdLibPrecondition.all.filter { it.matches(this, ctx) }.flatMap { it.getEmbeddings(this) }
+    val fromParams = params.flatMap { param ->
+        StdLibParamPrecondition.all.filter { it.matches(param.type.pretype, ctx) }.flatMap { it.getEmbeddings(param) }
+            .map { if (param.type.isNullable) Implies(param.notNullCmp(), it) else it }
     }
-    return listOf()
+    return fromFunction + fromParams
 }
-
 
 fun NamedFunctionSignature.stdLibPostconditions(
     returnVariable: VariableEmbedding,
-    ctx: TypeResolver
+    ctx: TypeResolver,
 ): List<ExpEmbedding> {
-    StdLibPostcondition.all.groupBy {
-        it.stdLibInterface
-    }.forEach { (stdLibInterface, postconditions) ->
-        if (stdLibInterface.match(this, ctx)) {
-            postconditions.forEach {
-                if (it.match(this)) {
-                    return it.getEmbeddings(returnVariable, this)
-                }
-            }
-        }
+    val fromFunction =
+        StdLibPostcondition.all.filter { it.matches(this, ctx) }.flatMap { it.getEmbeddings(returnVariable, this) }
+    val fromParams = params.flatMap { param ->
+        StdLibParamPostcondition.all.filter { it.matches(param.type.pretype, ctx) }
+            .flatMap { it.getEmbeddings(returnVariable, param) }
+            .map { if (param.type.isNullable) Implies(param.notNullCmp(), it) else it }
     }
-    return listOf()
+    return fromFunction + fromParams
 }

@@ -66,6 +66,11 @@ internal class ClassScopeNameMatcher(name: SymbolicName) : NameMatcher(name) {
         if (scopedName?.name == BackingFieldKotlinName(Name.identifier(name)))
             this.action()
     }
+
+    inline fun ifConstructorOf(vararg classSegments: String, action: ClassScopeNameMatcher.() -> Unit) {
+        if (scopedName?.name is ConstructorKotlinName && className == ClassKotlinName(classSegments.toList()))
+            this.action()
+    }
 }
 
 internal class GlobalScopeNameMatcher(name: SymbolicName) : NameMatcher(name) {

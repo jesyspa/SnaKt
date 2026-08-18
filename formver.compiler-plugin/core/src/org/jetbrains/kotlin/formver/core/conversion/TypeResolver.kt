@@ -8,6 +8,7 @@ import org.jetbrains.kotlin.formver.core.embeddings.types.PretypeEmbedding
 import org.jetbrains.kotlin.formver.core.names.NameMatcher
 import org.jetbrains.kotlin.formver.core.names.NameScope
 import org.jetbrains.kotlin.formver.core.names.ScopedName
+import org.jetbrains.kotlin.formver.core.names.SpecialPackages
 import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.name.Name
 
@@ -145,22 +146,23 @@ class TypeResolver {
         }
     }
 
-    /**
-     * Returns true if the [pretypeEmbedding] is a subtype of Collection with [name]
-     */
-    fun isInheritorOfCollectionTypeNamed(pretypeEmbedding: PretypeEmbedding, name: String): Boolean {
+    fun isInheritorOf(pretypeEmbedding: PretypeEmbedding, pkg: List<String>, name: String): Boolean {
         val classEmbedding = pretypeEmbedding as? ClassTypeEmbedding ?: return false
-        return classEmbedding.isCollectionTypeNamed(name) || lookupSuperTypes(classEmbedding.name).any {
-            isInheritorOfCollectionTypeNamed(it, name)
+        return classEmbedding.isPkgTypeNamed(pkg, name) || lookupSuperTypes(classEmbedding.name).any {
+            isInheritorOf(it, pkg, name)
         }
     }
 
-    fun isCollectionInheritor(pretype: PretypeEmbedding) = isInheritorOfCollectionTypeNamed(pretype, "Collection")
+    fun isInheritorOfCollectionTypeNamed(pretypeEmbedding: PretypeEmbedding, name: String) =
+        isInheritorOf(pretypeEmbedding, SpecialPackages.collections, name)
 
-    fun PretypeEmbedding.isCollectionTypeNamed(name: String): Boolean {
+    fun isCollectionInheritor(pretype: PretypeEmbedding) =
+        isInheritorOf(pretype, SpecialPackages.collections, "Collection")
+
+    private fun PretypeEmbedding.isPkgTypeNamed(pkg: List<String>, name: String): Boolean {
         val classEmbedding = this as? ClassTypeEmbedding ?: return false
         NameMatcher.matchGlobalScope(classEmbedding.name) {
-            ifInCollectionsPkg {
+            ifPackageName(pkg) {
                 ifClassName(name) {
                     return true
                 }
