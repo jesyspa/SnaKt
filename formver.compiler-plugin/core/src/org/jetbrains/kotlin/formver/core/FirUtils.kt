@@ -95,8 +95,9 @@ val FirBasedSymbol<*>.isBorrowed: Boolean
     }
 
 /**
- * Returns `true` if [this] function represents one of the following specification functions: `preconditions`,
- * `postconditions`, `loopInvariants`, `verify`.
+ * Returns `true` if [this] function is part of the specification DSL, that is, if it carries `@SpecificationHelper`.
+ *
+ * Such a function is never executed, so its arguments are neither consumed nor mutated.
  */
 context(context: CheckerContext)
 private fun FirFunctionSymbol<*>.isSpecificationFunction(): Boolean =

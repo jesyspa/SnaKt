@@ -13,7 +13,6 @@ import org.jetbrains.kotlin.fir.declarations.FirDeclaration
 import org.jetbrains.kotlin.fir.expressions.FirStatement
 import org.jetbrains.kotlin.formver.core.isSpecificationCall
 
-
 /**
  * Returns `true` if [this] context is in an argument position for a specification function.
  */
@@ -25,9 +24,9 @@ private fun CheckerContext.isInSpecificationContext(): Boolean =
 /**
  * Wraps a declaration [checker] into a checker that only executes if not in a specification context.
  *
- * @See [CheckerContext.isInSpecificationContext]
+ * @see [CheckerContext.isInSpecificationContext]
  */
-class SpecificationAwareDeclarationChecker<Declaration: FirDeclaration>(
+class SpecificationAwareDeclarationChecker<Declaration : FirDeclaration>(
     private val checker: FirDeclarationChecker<Declaration>
 ) : FirDeclarationChecker<Declaration>(checker.mppKind) {
     context(context: CheckerContext, reporter: DiagnosticReporter)
@@ -41,16 +40,15 @@ class SpecificationAwareDeclarationChecker<Declaration: FirDeclaration>(
 /**
  * Wraps [this] checker into a [SpecificationAwareDeclarationChecker].
  */
-fun <Declaration: FirDeclaration> FirDeclarationChecker<Declaration>.asSpecificationAware()
-        : FirDeclarationChecker<Declaration> =
+fun <Declaration : FirDeclaration> FirDeclarationChecker<Declaration>.asSpecificationAware(): FirDeclarationChecker<Declaration> =
     SpecificationAwareDeclarationChecker(this)
 
 /**
  * Wraps an expression [checker] into a checker that only executes if not in a specification context.
  *
- * @See [CheckerContext.isInSpecificationContext]
+ * @see [CheckerContext.isInSpecificationContext]
  */
-class SpecificationAwareExpressionChecker<Expression: FirStatement>(
+class SpecificationAwareExpressionChecker<Expression : FirStatement>(
     private val checker: FirExpressionChecker<Expression>
 ) : FirExpressionChecker<Expression>(checker.mppKind) {
     context(context: CheckerContext, reporter: DiagnosticReporter)
@@ -64,6 +62,5 @@ class SpecificationAwareExpressionChecker<Expression: FirStatement>(
 /**
  * Wraps [this] checker into a [SpecificationAwareExpressionChecker].
  */
-fun <Expression: FirStatement> FirExpressionChecker<Expression>.asSpecificationAware()
-        : FirExpressionChecker<Expression> =
+fun <Expression : FirStatement> FirExpressionChecker<Expression>.asSpecificationAware(): FirExpressionChecker<Expression> =
     SpecificationAwareExpressionChecker(this)

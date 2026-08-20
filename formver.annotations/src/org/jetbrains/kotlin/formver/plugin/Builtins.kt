@@ -79,8 +79,6 @@ fun write(): Permission =
 
 /**
  * The uniqueness predicate of [data]: exclusive access to [data] and its fields.
- *
- * TODO: If this class only serves as a DSL for specifying a unique predicate, I would simply make it a function.
  */
 data class UniquePred @SpecificationHelper constructor(val data: @Borrowed Any) : Predicate(data)
 

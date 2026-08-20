@@ -60,7 +60,6 @@ val ControlFlowGraph.uniquenessAnalysisTargetNodes: Sequence<CFGNode<*>>
         }
     }
 
-
 /**
  * Data-flow analyzer that tracks the uniqueness state of paths through a CFG.
  *
@@ -167,7 +166,6 @@ class GraphUniquenessStatesAnalyzer(
         data: PathAwareUniquenessStateFlow
     ): PathAwareUniquenessStateFlow {
         val call = node.fir
-
 
         with(context) {
             if (uniquenessNeutralCallPredicate.accepts(call)) return data
