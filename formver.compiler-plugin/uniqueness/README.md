@@ -49,9 +49,11 @@ The checker tracks two kinds of uniqueness:
   - The initial state contains the uniqueness information of the function's parameters.
 
 - **Variable declaration/assignment**
-  - Project RHS' uniqueness substate into LHS' path.
+  - Project RHS' uniqueness substate against the incoming state.
+  - Move RHS access paths, also against the incoming state.
+  - Insert the projected substate into LHS' path.
   - Initialize LHS path to declared uniqueness.
-  - Move RHS access paths.
+  - The order matters when the LHS is a prefix of an RHS path: advancing a cursor with `current = current.next` moves the field out of the node the cursor is leaving, and overwriting `current` then drops that mark, because it describes a location the cursor no longer reaches.
 
 - **Function-call enter**
   - Move all receivers (including context receivers) and value arguments.
@@ -95,6 +97,7 @@ Current scenarios include:
 - return/throw escape consistency
 - loops, `when`, `try/catch`, nullable flows
 - constructor/operator cases
+- recursive data structures: linked lists and binary trees, walked both by loop and by recursion
 
 ## Current Limitations / Untested Behavior
 

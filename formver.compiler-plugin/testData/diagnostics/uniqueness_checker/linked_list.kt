@@ -38,18 +38,17 @@ fun `return node after detaching tail`(head: @Unique Node): @Unique Node {
 // Borrowed traversal
 
 // Advancing the cursor reads the unique `next` field out of the node the cursor
-// points at, so the cursor's own `next` is moved on the way round the loop. The
-// checker keeps that moved field in the state joined at the loop head, which
-// makes the next read of `current.next` an access to a moved reference and
-// leaves the borrowed cursor with a moved field at exit.
+// points at. That read moves the field, but the same assignment points the
+// cursor at what it read, so the moved field is no longer reachable through the
+// cursor and the loop head has nothing to carry round.
 fun `sum values`(head: @Borrowed Node?): Int {
     var current: @Borrowed Node? = head
     var total = 0
     while (current != null) {
         total = total + current.value
-        current = <!INVALID_MOVED_ACCESS!>current.next<!>
+        current = current.next
     }
-    <!EXIT_UNIQUENESS_INCONSISTENCY!>return total<!>
+    return total
 }
 
 fun `traverse then consume list`(head: @Unique Node) {
@@ -59,10 +58,9 @@ fun `traverse then consume list`(head: @Unique Node) {
 
 // Traversing recursively through a borrowed parameter
 //
-// The same walk the loop above cannot express. Each call borrows the node it is
-// handed and restores it at exit, so nothing is left moved and the caller's list
-// survives the traversal. What the loop loses is lost in the join at the loop
-// head, not in the borrow.
+// The same walk, written the other way. Each call borrows the node it is handed
+// and restores it at exit, so nothing is left moved and the caller's list
+// survives the traversal.
 
 fun length(n: @Borrowed Node?): Int = if (n == null) 0 else 1 + length(n.next)
 
@@ -82,9 +80,8 @@ fun `use list after recursive search`(head: @Unique Node) {
 // A spine that cannot be reassigned
 //
 // `next` is a `val` here, so the chain is fixed once built and only the payload
-// is mutable. That buys nothing for the cursor: the loop form is rejected the
-// same way it is for a `var` spine, while the recursive form checks clean and
-// may write through the spine it walks.
+// is mutable. Both the loop and the recursion walk it without disturbing it, and
+// the recursive form may write through the spine as it goes.
 
 class RoNode(var value: Int, val next: @Unique RoNode?)
 
@@ -95,9 +92,9 @@ fun `sum a readonly spine in a loop`(head: @Borrowed RoNode?): Int {
     var total = 0
     while (current != null) {
         total = total + current.value
-        current = <!INVALID_MOVED_ACCESS!>current.next<!>
+        current = current.next
     }
-    <!EXIT_UNIQUENESS_INCONSISTENCY!>return total<!>
+    return total
 }
 
 fun `sum a readonly spine recursively`(n: @Borrowed RoNode?): Int =
@@ -113,6 +110,20 @@ fun `use readonly spine list after recursion`(head: @Unique RoNode) {
     val total = `sum a readonly spine recursively`(head)
     `bump a readonly spine recursively`(head)
     consumeRo(head)
+}
+
+// A cursor whose field is taken by someone else
+//
+// Overwriting the cursor only drops the moved mark because the assignment is
+// what reads the field. Here the field goes to `consume` first, so the read that
+// advances the cursor is a read of a reference already handed away.
+
+fun `drop the tail in a loop`(head: @Unique Node?) {
+    var current: @Unique Node? = head
+    while (current != null) {
+        consume(current.next)
+        current = <!INVALID_MOVED_ACCESS!>current.next<!>
+    }
 }
 
 // Iterative reversal
