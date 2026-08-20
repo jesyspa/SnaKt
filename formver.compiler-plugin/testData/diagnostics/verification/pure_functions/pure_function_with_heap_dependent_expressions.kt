@@ -90,4 +90,4 @@ fun <!VIPER_TEXT!>getNextValueUsingId<!>(node: Node): Int {
 }
 
 @Pure
-fun <!VIPER_TEXT!>testBorrowed<!>(@Unique @Borrowed node: Node): Unit = Unit
+fun <!VIPER_TEXT!>testBorrowed<!>(node: @Unique @Borrowed Node): Unit = Unit

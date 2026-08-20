@@ -70,6 +70,7 @@ class GraphUniquenessStatesAnalyzer(
     private val initialState: UniquenessState,
     private val context: CheckerContext,
     private val callArgumentLocalitiesMapper: CallArgumentTypeFactsMapper<Locality>,
+    private val uniquenessNeutralCallPredicate: UniquenessNeutralCallPredicate
 ) : PathAwareControlFlowGraphVisitor<Unit, UniquenessState>() {
     override fun mergeInfo(
         a: UniquenessStateFlow,
@@ -167,6 +168,8 @@ class GraphUniquenessStatesAnalyzer(
         val call = node.fir
 
         with(context) {
+            if (uniquenessNeutralCallPredicate.accepts(call)) return data
+
             return data.transformValues { data ->
                 var newUniquenessState = data.getOrInitialize()
 
@@ -191,6 +194,8 @@ class GraphUniquenessStatesAnalyzer(
         val call = node.fir
 
         with(context) {
+            if (uniquenessNeutralCallPredicate.accepts(call)) return data
+
             return data.transformValues { data ->
                 var newUniquenessState = data.getOrInitialize()
                 val explicitReceiver = call.explicitReceiver

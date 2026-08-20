@@ -11,7 +11,11 @@ function g_data(this: Ref): Ref
   ensures isSubtype(typeOf(result), anyType())
 
 
-method con(par_data: Ref) returns (ret_1: Ref)
+method con_Any() returns (ret_2: Ref)
+  ensures isSubtype(typeOf(ret_2), anyType())
+
+
+method con_UniquePred(par_data: Ref) returns (ret_1: Ref)
   requires isSubtype(typeOf(par_data), anyType())
   ensures isSubtype(typeOf(ret_1), UniquePred())
   ensures acc(UniquePred_unique(ret_1), write)
@@ -22,9 +26,11 @@ method test(p: Ref) returns (v_ret_0: Ref)
   requires acc(Test_unique(p), write)
   ensures isSubtype(typeOf(v_ret_0), unitType())
 {
+  var anon: Ref
   unfold acc(Test_unique(p), write)
   unfold acc(Super_unique(p), write)
-  p.x := intToRef(5)
+  anon := con_Any()
+  p.x := anon
   fold acc(Super_unique(p), write)
   fold acc(Test_unique(p), write)
   label lbl_ret_0

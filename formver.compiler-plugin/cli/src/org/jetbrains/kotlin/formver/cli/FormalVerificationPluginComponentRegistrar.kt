@@ -10,9 +10,7 @@ import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.fir.extensions.FirExtensionRegistrarAdapter
 import org.jetbrains.kotlin.formver.common.*
-import org.jetbrains.kotlin.formver.locality.plugin.LocalityExtensionRegistrar
 import org.jetbrains.kotlin.formver.plugin.compiler.FormalVerificationPluginExtensionRegistrar
-import org.jetbrains.kotlin.formver.uniqueness.plugin.UniquenessExtensionRegistrar
 
 @OptIn(ExperimentalCompilerApi::class)
 class FormalVerificationPluginComponentRegistrar : CompilerPluginRegistrar() {
@@ -40,21 +38,19 @@ class FormalVerificationPluginComponentRegistrar : CompilerPluginRegistrar() {
             FormalVerificationConfigurationKeys.VERIFICATION_TARGETS_SELECTION,
             TargetsSelection.Companion.defaultBehaviour()
         )
-        val checkUniqueness = configuration.get(FormalVerificationConfigurationKeys.CHECK_UNIQUENESS, false)
-        val checkLocality = configuration.get(FormalVerificationConfigurationKeys.CHECK_LOCALITY, false)
+        val checkUniqueness = configuration.get(
+            FormalVerificationConfigurationKeys.CHECK_UNIQUENESS,
+            PluginConfiguration.DEFAULT_CHECK_UNIQUENESS
+        )
+        val checkLocality = configuration.get(
+            FormalVerificationConfigurationKeys.CHECK_LOCALITY,
+            PluginConfiguration.DEFAULT_CHECK_LOCALITY
+        )
         val dumpUniquenessCFG = configuration.get(FormalVerificationConfigurationKeys.DUMP_UNIQUENESS_CFG, false)
         val config = PluginConfiguration(
             logLevel, errorStyle, behaviour, conversionSelection, verificationSelection,
             checkLocality, checkUniqueness, dumpUniquenessCFG
         )
         FirExtensionRegistrarAdapter.registerExtension(FormalVerificationPluginExtensionRegistrar(config))
-
-        if (config.checkLocality) {
-            FirExtensionRegistrarAdapter.registerExtension(LocalityExtensionRegistrar())
-        }
-
-        if (config.checkUniqueness) {
-            FirExtensionRegistrarAdapter.registerExtension(UniquenessExtensionRegistrar())
-        }
     }
 }
