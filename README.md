@@ -22,6 +22,21 @@ At present, we do not distribute any part of the plugin through a central reposi
 If you would like to use the plugin, clone it and use the `publishToMavenLocal`
 task to put it in your local repository.
 
+## Kotlin and JDK versions
+
+SnaKt is compiled against Kotlin compiler internals, so the compiler that loads
+it has to be one it was built for. The published plugin is built against Kotlin
+2.3.0 and works with 2.3.x and earlier 2.x releases; a newer Kotlin is refused
+at the start of compilation with a message naming both versions, rather than
+failing later with a linkage error. Moving SnaKt to a newer Kotlin means
+rebuilding it against that release.
+
+Any JDK from 21 to 25 works, both for running the plugin and as the target of
+the code you verify: `jvmToolchain(25)` is supported. Running your own Gradle
+daemon on JDK 25 additionally requires Gradle 9 — Gradle 8 compiles Kotlin
+build scripts with a compiler that rejects JDK 25 outright. Targeting JVM 25
+from a JDK 21 daemon works on Gradle 8.
+
 ## Running the plugin
 
 Once you've published to your local Maven repository, you can use the Gradle
