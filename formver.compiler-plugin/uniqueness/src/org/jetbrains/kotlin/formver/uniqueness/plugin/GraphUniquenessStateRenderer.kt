@@ -18,7 +18,9 @@ private fun UniquenessState?.renderOrNull(): String =
 private fun UniquenessState.render(): String? =
     children.takeIf { it.isNotEmpty() }?.entries
         ?.flatMap { (symbol, state) ->
-            val current = "${symbol.render()} ${UniquenessRenderer.render(state.data)}"
+            // A summary node covers everything below it, so its line has to say so: it has no children to render.
+            val descendants = if (state.summarizesDescendants) " (and below)" else ""
+            val current = "${symbol.render()} ${UniquenessRenderer.render(state.data)}$descendants"
             val children = state.render()?.prependIndent("    ")
             listOfNotNull(current, children)
         }

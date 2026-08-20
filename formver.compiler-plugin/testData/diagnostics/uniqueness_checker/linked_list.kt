@@ -128,24 +128,20 @@ fun `drop the tail in a loop`(head: @Unique Node?) {
 
 // Iterative reversal
 //
-// Commented out: the uniqueness checker does not terminate on this function.
-// A run with the body below live was still burning CPU inside the check after
-// 40 minutes and produced no diagnostics, so there is no golden to record.
-//
-// The loop is not on its own what costs. Advancing a unique cursor with
-// `current = current.next` and nothing else checks in seconds, and so does
-// advancing while writing `null` into the field just read. What those two
-// leave out, and what the body below adds, is writing a unique local carried
-// over from the previous iteration back into the field.
-//
-// fun `reverse in place`(head: @Unique Node?): @Unique Node? {
-//     var prev: @Unique Node? = null
-//     var current: @Unique Node? = head
-//     while (current != null) {
-//         val next: @Unique Node? = current.next
-//         current.next = prev
-//         prev = current
-//         current = next
-//     }
-//     return prev
-// }
+// Writing a unique local carried over from the previous iteration back into the
+// field is what deepens the tracked paths: `prev` gains the spine of the node it
+// was just assigned, and that spine is written into `current.next` next time
+// round. Summarizing a path where a symbol comes round a second time bounds the
+// depth, so the states stabilize and the reversal checks.
+
+fun `reverse in place`(head: @Unique Node?): @Unique Node? {
+    var prev: @Unique Node? = null
+    var current: @Unique Node? = head
+    while (current != null) {
+        val next: @Unique Node? = current.next
+        current.next = prev
+        prev = current
+        current = next
+    }
+    return prev
+}

@@ -40,10 +40,11 @@ The checker tracks two kinds of uniqueness:
   - `AccessState = PathTrie<Access>`
   - `UniquenessState = PathTrie<Uniqueness>`
 - `ExpressionAccessStateResolver.kt` extracts the paths touched by each expression.
+- A trie node can be a **summary node**: a leaf whose value is the join of everything that would otherwise be below it, standing for both its own prefix and every path under it. A lookup or update that would descend past a summary node lands on the node itself instead. `UniquenessState.summarizeRecursivePaths` collapses any path that revisits a symbol into a summary, which bounds the trie's depth by the number of distinct symbols a function mentions — the mechanism that keeps recursive types from growing the trie without bound.
 
 ### CFG uniqueness state analysis
 
-`GraphUniquenessStatesAnalyzer.kt` computes a fixed point over the following CFG nodes:
+`GraphUniquenessStatesAnalyzer.kt` computes a fixed point over the following CFG nodes. The outgoing state of every node is normalized by `UniquenessState.summarizeRecursivePaths` before it is recorded, so recursion through a symbol never deepens the trie past a summary node — this is what makes the fixed point terminate over recursive types.
 
 - **Initialization**
   - The initial state contains the uniqueness information of the function's parameters.
@@ -119,4 +120,7 @@ Known limitations in current code/tests:
 
 - **Interaction with closures** 
   - The current `GraphUniquenessStatesAnalyzer.kt` visits the lambda subgraphs as if they were part of the local control flows, which can result in unexpected behavior.
+
+- **Summary nodes are approximate**
+  - A summary node stands for a whole region of paths rather than one path, so operations that reach past it apply to that entire region. An access past a summary lands on the summary itself, so a read there is treated as touching everything it covers. Restoring a borrow through a summary likewise restores the whole summarized region, not just the one path that was borrowed.
   

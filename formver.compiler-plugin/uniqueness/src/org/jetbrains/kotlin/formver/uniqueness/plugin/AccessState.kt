@@ -97,12 +97,19 @@ fun AccessState.append(other: AccessState): AccessState {
  * If any of the intermediate path components is not resolved within [uniquenessState], the uniqueness of those
  * components is automatically inferred to be the join between the declared uniqueness of the component's symbol and the
  * uniqueness of the parent.
+ *
+ * An access that reaches past a summary node lands on the summary itself, which is the only node standing for the path
+ * it names. The transform then applies to the whole region the summary covers rather than to one path in it.
  */
 context(context: CheckerContext)
 fun AccessState.transformOnTerminals(
     uniquenessState: UniquenessState,
     transform: (FirBasedSymbol<*>, UniquenessState) -> UniquenessState
 ): UniquenessState {
+    if (uniquenessState.summarizesDescendants) {
+        return children.keys.fold(uniquenessState) { state, symbol -> transform(symbol, state) }
+    }
+
     var newUniquenessState = uniquenessState
 
     for ((symbol, accessChild) in children) {
