@@ -171,6 +171,12 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
     }
 
     @Test
+    @TestMetadata("binary_tree.kt")
+    public void testBinary_tree() {
+      runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/binary_tree.kt");
+    }
+
+    @Test
     @TestMetadata("break.kt")
     public void testBreak() {
       runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/break.kt");
