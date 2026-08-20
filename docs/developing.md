@@ -15,8 +15,12 @@ diagnostics, alongside golden files holding the diagnostic text:
 The test runners are generated from the testData tree as part of
 `compileTestKotlin`, so a new file is picked up on the next build.
 
-The pipeline splits into conversion (uniqueness checking, conversion, purity
-checking) and verification (Viper consistency checking and verification):
+Locality and uniqueness checking happens in FIR checkers that run in every task
+below and report into `.fir.diag.txt`; the plugin's `check_locality` and
+`check_uniqueness` options switch those diagnostics off, and tests leave them on.
+`@Unique` and `@Borrowed` reach conversion as type attributes either way. Past
+that the pipeline splits into conversion (conversion proper and purity checking)
+and verification (Viper consistency checking and verification):
 
 | Task                       | Conversion | Verification                |
 |:---------------------------|:-----------|:----------------------------|
@@ -43,11 +47,11 @@ Which checks run:
 
 - `NEVER_VALIDATE` — convert but do not verify. Consistency checking still runs.
   This is how a test that is not meant to reach the verifier says so.
-- `UNIQUE_CHECK_ONLY` — uniqueness checking, with locality first. No conversion.
-- `LOCALITY_CHECK_ONLY` — locality checking alone, uniqueness off. No conversion.
-- `ALWAYS_VALIDATE` — verify every target. Verification is already the default,
-  so this changes nothing on its own; it earns its place by overriding the two
-  `*_CHECK_ONLY` directives above.
+- `UNIQUE_CHECK_ONLY`, `LOCALITY_CHECK_ONLY` — neither convert nor verify, so the
+  goldens hold the locality and uniqueness diagnostics alone. The two have the
+  same effect; both checkers run either way.
+- `ALWAYS_VALIDATE` — verify every target. Tests verify every target already, so
+  this changes nothing on its own.
 
 What the diagnostic contains:
 
