@@ -1,4 +1,4 @@
-import io.gitlab.arturbosch.detekt.Detekt
+import dev.detekt.gradle.Detekt
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -7,7 +7,7 @@ plugins {
     id("com.github.gmazzo.buildconfig") version "5.6.5"
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.16.3" apply false
     id("com.gradle.plugin-publish") version "1.3.1" apply false
-    id("io.gitlab.arturbosch.detekt") version "1.23.7"
+    id("dev.detekt") version "2.0.0-alpha.6"
 }
 
 // The JDK this project compiles against and targets. Pinned rather than
@@ -33,7 +33,7 @@ allprojects {
 }
 
 subprojects {
-    apply(plugin = "io.gitlab.arturbosch.detekt")
+    apply(plugin = "dev.detekt")
 
     detekt {
         buildUponDefaultConfig = true
@@ -59,9 +59,9 @@ subprojects {
         exclude("**/build/**")
         reports {
             html.required.set(true)
-            xml.required.set(true)
+            checkstyle.required.set(true)
             sarif.required.set(false)
-            md.required.set(false)
+            markdown.required.set(false)
         }
     }
 }
