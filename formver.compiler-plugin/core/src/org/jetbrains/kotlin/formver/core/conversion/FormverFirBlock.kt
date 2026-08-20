@@ -6,11 +6,16 @@
 package org.jetbrains.kotlin.formver.core.conversion
 
 import org.jetbrains.kotlin.fir.declarations.FirAnonymousFunction
+import org.jetbrains.kotlin.fir.declarations.FirSimpleFunction
 import org.jetbrains.kotlin.fir.expressions.*
+import org.jetbrains.kotlin.fir.symbols.SymbolInternals
 import org.jetbrains.kotlin.fir.symbols.impl.FirFunctionSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirValueParameterSymbol
 import org.jetbrains.kotlin.fir.types.ConeKotlinType
+import org.jetbrains.kotlin.fir.types.withAttributes
 import org.jetbrains.kotlin.formver.core.isFormverFunctionNamed
+import org.jetbrains.kotlin.formver.locality.plugin.LocalityAttribute
+import org.jetbrains.kotlin.formver.uniqueness.plugin.UniquenessAttribute
 
 fun FirStatement.extractFormverFirBlock(predicate: FirFunctionSymbol<*>.() -> Boolean): FirAnonymousFunction? {
     if (this !is FirFunctionCall) return null
@@ -31,23 +36,50 @@ data class FirSpecification(val precond: FirBlock?, val postcond: FirBlock?, val
     constructor() : this(null, null, null)
 }
 
+/**
+ * Drops the attributes that a specification binder inherits rather than restates.
+ *
+ * `@Unique` and `@Borrowed` are rejected on a type argument, so a `postconditions` binder cannot spell out the
+ * uniqueness and locality of the value it stands for; it takes them from the signature instead.
+ */
+private fun ConeKotlinType.withoutInheritedAttributes(): ConeKotlinType =
+    withAttributes(attributes.remove(UniquenessAttribute).remove(LocalityAttribute))
+
 private fun FirAnonymousFunction.extractFormverReturnVar(returnType: ConeKotlinType): FirValueParameterSymbol {
     val param = valueParameters.first()
-    if (param.symbol.resolvedReturnType != returnType)
-        error("Expected type ${returnType} based on signature, got ${param.symbol.resolvedReturnType}")
+    val declaredType = param.symbol.resolvedReturnType
+    if (declaredType.withoutInheritedAttributes() != returnType.withoutInheritedAttributes())
+        error("Expected type ${returnType} based on signature, got ${declaredType}")
     return param.symbol
+}
+
+/**
+ * The lambda of the `postconditions` block of [this] body, if it has one.
+ */
+private fun FirBlock.extractPostconditionsLambda(): FirAnonymousFunction? {
+    val firstStmt = statements.firstOrNull() ?: return null
+
+    firstStmt.extractFormverFirBlock { isFormverFunctionNamed("postconditions") }?.let { return it }
+    firstStmt.extractFormverFirBlock { isFormverFunctionNamed("preconditions") } ?: return null
+
+    return statements.getOrNull(1)?.extractFormverFirBlock { isFormverFunctionNamed("postconditions") }
+}
+
+/**
+ * The parameter that the `postconditions` block of [this] function binds its return value to, if it has one.
+ */
+@OptIn(SymbolInternals::class)
+fun FirFunctionSymbol<*>.extractPostconditionsReturnVar(): FirValueParameterSymbol? {
+    val body = (fir as? FirSimpleFunction)?.body ?: return null
+    return body.extractPostconditionsLambda()?.valueParameters?.firstOrNull()?.symbol
 }
 
 fun extractFirSpecification(parentBlock: FirBlock, returnType: ConeKotlinType): FirSpecification {
     val firstStmt = parentBlock.statements.firstOrNull() ?: return FirSpecification()
 
-    firstStmt.extractFormverFirBlock { isFormverFunctionNamed("postconditions") }?.let { lambda ->
-        return FirSpecification(null, lambda.body, lambda.extractFormverReturnVar(returnType))
-    }
-
     val precond = firstStmt.extractFormverFirBlock { isFormverFunctionNamed("preconditions") }
-        ?: return FirSpecification()
-    val postcond =
-        parentBlock.statements.getOrNull(1)?.extractFormverFirBlock { isFormverFunctionNamed("postconditions") }
-    return FirSpecification(precond.body, postcond?.body, postcond?.extractFormverReturnVar(returnType))
+    val postcond = parentBlock.extractPostconditionsLambda()
+    if (precond == null && postcond == null) return FirSpecification()
+
+    return FirSpecification(precond?.body, postcond?.body, postcond?.extractFormverReturnVar(returnType))
 }
