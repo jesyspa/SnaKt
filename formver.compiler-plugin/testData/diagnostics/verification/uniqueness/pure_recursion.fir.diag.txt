@@ -1,0 +1,30 @@
+/pure_recursion.kt: info: Generated Viper text for length:
+field data: Ref
+
+function length(l: Ref): Ref
+  requires isSubtype(typeOf(l), nullable(Link()))
+  requires l != nullValue() ==> acc(Link_unique(l), write)
+  ensures isSubtype(typeOf(result), intType())
+  ensures intFromRef(result) >= 0
+{
+  (let anon_1_0 ==
+    ((l == nullValue() ? intToRef(0) : null)) in
+    (let anon_2_0 ==
+      ((!(l == nullValue()) ?
+        plusInts(intToRef(1), length(next(l))) :
+        null)) in
+      (let anon_0_0 ==
+        ((l == nullValue() ? anon_1_0 : anon_2_0)) in
+        anon_0_0)))
+}
+
+function next(this: Ref): Ref
+  requires isSubtype(typeOf(this), Link())
+  ensures isSubtype(typeOf(result), nullable(Link()))
+
+
+predicate Link_unique(this: Ref) {
+  isSubtype(typeOf(this), Link()) && acc(this.data, write) &&
+  isSubtype(typeOf(this.data), intType()) &&
+  (next(this) != nullValue() ==> acc(Link_unique(next(this)), write))
+}

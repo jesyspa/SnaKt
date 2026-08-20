@@ -855,6 +855,22 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
     }
 
     @Nested
+    @TestMetadata("formver.compiler-plugin/testData/diagnostics/verification/uniqueness")
+    @TestDataPath("$PROJECT_ROOT")
+    public class Uniqueness {
+      @Test
+      public void testAllFilesPresentInUniqueness() {
+        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/verification/uniqueness"), Pattern.compile("^(.+)\\.kt$"), null, true);
+      }
+
+      @Test
+      @TestMetadata("pure_recursion.kt")
+      public void testPure_recursion() {
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/uniqueness/pure_recursion.kt");
+      }
+    }
+
+    @Nested
     @TestMetadata("formver.compiler-plugin/testData/diagnostics/verification/user_invariants")
     @TestDataPath("$PROJECT_ROOT")
     public class User_invariants {

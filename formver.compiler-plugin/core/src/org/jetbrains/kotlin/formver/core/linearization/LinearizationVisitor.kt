@@ -11,9 +11,11 @@ import org.jetbrains.kotlin.formver.core.conversion.AccessPolicy
 import org.jetbrains.kotlin.formver.core.domains.RuntimeTypeDomain
 import org.jetbrains.kotlin.formver.core.domains.RuntimeTypeDomain.Companion.isOf
 import org.jetbrains.kotlin.formver.core.embeddings.*
+import org.jetbrains.kotlin.formver.core.embeddings.callables.NonInlineCallable
 import org.jetbrains.kotlin.formver.core.embeddings.callables.toFuncApp
 import org.jetbrains.kotlin.formver.core.embeddings.callables.toMethodCall
 import org.jetbrains.kotlin.formver.core.embeddings.expression.*
+import org.jetbrains.kotlin.formver.core.embeddings.properties.CustomGetter
 import org.jetbrains.kotlin.formver.core.embeddings.types.ClassTypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.fillHoles
 import org.jetbrains.kotlin.formver.core.embeddings.types.injection
@@ -116,10 +118,17 @@ data class LinearizationVisitor(
     }
 
     override fun visitFunctionCall(e: FunctionCall): Linearizable = object : DirectResultLinearizable(e, this@LinearizationVisitor) {
-        override fun toViper(ctx: LinearizationContext): Exp = e.function.toFuncApp(
-            e.args.map { it.linearize().toViper(ctx) },
-            ctx.source.asPosition
-        )
+        override fun toViper(ctx: LinearizationContext): Exp {
+            val argExps = e.args.map { it.linearize().toViper(ctx) }
+            var result: Exp = e.function.toFuncApp(argExps, ctx.source.asPosition)
+            for ((formal, arg) in e.function.formalArgs.zip(e.args.zip(argExps))) {
+                val (argEmbedding, argExp) = arg
+                if (formal.isUnique) {
+                    result = ctx.unfoldingUniqueReads(argEmbedding, argExp, result)
+                }
+            }
+            return result
+        }
     }
 
     override fun visitInvokeFunctionObject(e: InvokeFunctionObject): Linearizable = object : DirectResultLinearizable(e, this@LinearizationVisitor) {
@@ -605,4 +614,42 @@ data class LinearizationVisitor(
     }
 
     // endregion
+}
+
+/**
+ * The class whose unique predicate holds the permissions for the value [callable] reads, if [callable]
+ * is the getter of a `@Unique` property that its class embeds as a function rather than as a field.
+ */
+private fun LinearizationContext.uniqueReadOwner(callable: NonInlineCallable): ClassTypeEmbedding? {
+    val owner = callable.callableType.dispatchReceiverType?.pretype as? ClassTypeEmbedding ?: return null
+    val property = typeResolver.lookupClassDefaultBehavingProperties(owner.name).firstOrNull {
+        (it.getter as? CustomGetter)?.getterMethod?.name == callable.name
+    } ?: return null
+    return owner.takeIf { property.isUnique }
+}
+
+/**
+ * [body], wrapped in the unfoldings that expose the permissions carried by the value [arg] reads.
+ *
+ * A `@Unique` property with no backing field is embedded as a permission-free function, so the
+ * permissions of the value it holds sit inside the unique predicate of the receiver it is read from.
+ * A chain of such reads needs one unfolding per link, with the receiver end outermost: unfolding one
+ * link is what grants access to the predicate of the next.
+ *
+ * [argExp] must be the Viper form of [arg]. The two are walked in lockstep, and the wrapping stops as
+ * soon as they cease to correspond, since only [argExp] may be reused: linearizing [arg] again would
+ * emit its statements a second time.
+ */
+private fun LinearizationContext.unfoldingUniqueReads(arg: ExpEmbedding, argExp: Exp, body: Exp): Exp {
+    val read = arg.ignoringCastsAndMetaNodes() as? FunctionCall ?: return body
+    val owner = uniqueReadOwner(read.function) ?: return body
+    val call = argExp as? Exp.FuncApp ?: return body
+    if (call.functionName != read.function.name) return body
+    val receiver = read.args.singleOrNull() ?: return body
+    val receiverExp = call.args.singleOrNull() ?: return body
+    return unfoldingUniqueReads(
+        receiver,
+        receiverExp,
+        Exp.Unfolding(uniquePredicateAccess(receiverExp, owner, source), body, source.asPosition),
+    )
 }
