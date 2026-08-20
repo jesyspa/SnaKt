@@ -231,6 +231,12 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
     }
 
     @Test
+    @TestMetadata("linked_list.kt")
+    public void testLinked_list() {
+      runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/linked_list.kt");
+    }
+
+    @Test
     @TestMetadata("loop.kt")
     public void testLoop() {
       runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/loop.kt");
