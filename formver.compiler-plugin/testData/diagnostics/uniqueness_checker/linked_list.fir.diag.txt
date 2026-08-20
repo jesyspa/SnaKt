@@ -5,3 +5,7 @@
 /linked_list.kt: error: Invalid access to moved reference.
 
 /linked_list.kt: error: Borrowed local value has moved field at exit: 'current.next'.
+
+/linked_list.kt: error: Invalid access to moved reference.
+
+/linked_list.kt: error: Borrowed local value has moved field at exit: 'current.next'.

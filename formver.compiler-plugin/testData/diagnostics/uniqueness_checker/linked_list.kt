@@ -57,6 +57,64 @@ fun `traverse then consume list`(head: @Unique Node) {
     consume(head)
 }
 
+// Traversing recursively through a borrowed parameter
+//
+// The same walk the loop above cannot express. Each call borrows the node it is
+// handed and restores it at exit, so nothing is left moved and the caller's list
+// survives the traversal. What the loop loses is lost in the join at the loop
+// head, not in the borrow.
+
+fun length(n: @Borrowed Node?): Int = if (n == null) 0 else 1 + length(n.next)
+
+fun contains(n: @Borrowed Node?, v: Int): Boolean =
+    if (n == null) false else if (n.value == v) true else contains(n.next, v)
+
+fun `use list after recursive length`(head: @Unique Node) {
+    val len = length(head)
+    consume(head)
+}
+
+fun `use list after recursive search`(head: @Unique Node) {
+    val found = contains(head, 3)
+    consume(head)
+}
+
+// A spine that cannot be reassigned
+//
+// `next` is a `val` here, so the chain is fixed once built and only the payload
+// is mutable. That buys nothing for the cursor: the loop form is rejected the
+// same way it is for a `var` spine, while the recursive form checks clean and
+// may write through the spine it walks.
+
+class RoNode(var value: Int, val next: @Unique RoNode?)
+
+fun consumeRo(n: @Unique RoNode?) {}
+
+fun `sum a readonly spine in a loop`(head: @Borrowed RoNode?): Int {
+    var current: @Borrowed RoNode? = head
+    var total = 0
+    while (current != null) {
+        total = total + current.value
+        current = <!INVALID_MOVED_ACCESS!>current.next<!>
+    }
+    <!EXIT_UNIQUENESS_INCONSISTENCY!>return total<!>
+}
+
+fun `sum a readonly spine recursively`(n: @Borrowed RoNode?): Int =
+    if (n == null) 0 else n.value + `sum a readonly spine recursively`(n.next)
+
+fun `bump a readonly spine recursively`(n: @Borrowed RoNode?) {
+    if (n == null) return
+    n.value = n.value + 1
+    `bump a readonly spine recursively`(n.next)
+}
+
+fun `use readonly spine list after recursion`(head: @Unique RoNode) {
+    val total = `sum a readonly spine recursively`(head)
+    `bump a readonly spine recursively`(head)
+    consumeRo(head)
+}
+
 // Iterative reversal
 //
 // Commented out: the uniqueness checker does not terminate on this function.
