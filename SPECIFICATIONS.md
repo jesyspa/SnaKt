@@ -46,6 +46,8 @@ fun abs(x: Int): Int {
 ```
 
 Multiple conditions are implicitly conjoined. The postconditions block receives the return value as its parameter.
+Its type argument spells the return type without `@Unique`, which the parameter inherits from the function's
+signature.
 
 ## Loop Invariants
 

@@ -50,6 +50,10 @@ The checker tracks two kinds of uniqueness:
 - `@Unique` applies to types only (`AnnotationTarget.TYPE`). `TypeRefUniquenessAttributeChecker.kt` narrows
   that further to the type positions the analysis understands: value parameters, receiver parameters,
   properties, function return types, and implicit type arguments.
+- A `postconditions` binder is typed by an explicit type argument, a position that checker rejects `@Unique`
+  on, so it takes its uniqueness from the declared return type of the function it specifies.
+  `SymbolUniquenessResolver.kt` asks an `InheritedUniquenessResolver` for that before reading a symbol's own
+  type; the plugin supplies `resolveSpecificationBinderUniqueness`.
 
 ### Path models
 

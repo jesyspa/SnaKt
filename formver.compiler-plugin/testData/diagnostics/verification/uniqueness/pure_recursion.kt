@@ -16,8 +16,8 @@ fun <!VIPER_TEXT!>callLength<!>(l: @Unique @Borrowed Link?) {
     verify(length(l) == length(l))
 }
 
-@AlwaysVerify
-fun <!VIPER_TEXT!>pushFront<!>(old: @Unique Link?, d: Int): @Unique Link {
-    postconditions<Link> { new -> length(new) == length(old) + 1 }
-    return Link(d, old)
-}
+<!VIPER_VERIFICATION_ERROR!>@AlwaysVerify
+fun <!VIPER_TEXT!>pushFront<!>(tail: @Unique Link?, d: Int): @Unique Link {
+    postconditions<Link> { new -> length(new) == old(length(tail)) + 1 }
+    return Link(d, tail)
+}<!>

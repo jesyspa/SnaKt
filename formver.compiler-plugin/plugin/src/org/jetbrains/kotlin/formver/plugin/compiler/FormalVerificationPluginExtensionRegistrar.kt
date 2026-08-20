@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.formver.locality.plugin.LocalityErrors
 import org.jetbrains.kotlin.formver.uniqueness.plugin.ExpressionAccessStateResolver
 import org.jetbrains.kotlin.formver.uniqueness.plugin.ExpressionUniquenessResolver
 import org.jetbrains.kotlin.formver.uniqueness.plugin.GraphUniquenessStatesResolver
+import org.jetbrains.kotlin.formver.uniqueness.plugin.SymbolUniquenessResolver
 import org.jetbrains.kotlin.formver.uniqueness.plugin.UniquenessAttributeExtension
 import org.jetbrains.kotlin.formver.uniqueness.plugin.UniquenessErrors
 
@@ -41,6 +42,7 @@ class FormalVerificationPluginExtensionRegistrar(private val config: PluginConfi
         +ExpressionAccessStateResolver.getFactory()
         +ExpressionUniquenessResolver.getFactory()
         +GraphUniquenessStatesResolver.getFactory { it.isSpecificationCall() }
+        +SymbolUniquenessResolver.getFactory { it.resolveSpecificationBinderUniqueness() }
         +UniquenessAttributeExtension.getFactory()
 
         if (config.checkLocality) {
