@@ -29,7 +29,9 @@ buildConfig {
 
     val pluginProject = project(":formver.compiler-plugin")
     buildConfigField("String", "COMPILER_PLUGIN_GROUP", "\"${pluginProject.group}\"")
-    buildConfigField("String", "COMPILER_PLUGIN_NAME", "\"${pluginProject.name}\"")
+    // Gradle runs the compiler out of kotlin-compiler-embeddable, which needs the
+    // variant of the compiler plugin relocated to match it.
+    buildConfigField("String", "COMPILER_PLUGIN_NAME", "\"${pluginProject.name}-embeddable\"")
     buildConfigField("String", "COMPILER_PLUGIN_VERSION", "\"${pluginProject.version}\"")
 
     val annotationsProject = project(":formver.annotations")
