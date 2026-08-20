@@ -35,7 +35,7 @@ object FormalVerificationPluginErrorMessages : BaseDiagnosticRendererFactory() {
         )
         map.put(
             PluginErrors.INTERNAL_ERROR,
-            "An internal error has occurred.\nDetails: {0}\nPlease report this at https://github.com/jesyspa/kotlin",
+            "An internal error has occurred.\nDetails: {0}\nPlease report this at https://github.com/JetBrains/SnaKt/issues",
             CommonRenderers.STRING,
         )
         map.put(
