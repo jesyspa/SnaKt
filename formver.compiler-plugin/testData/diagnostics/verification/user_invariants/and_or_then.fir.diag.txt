@@ -24,19 +24,21 @@ method testImplies(par_arg: Ref) returns (v_ret_0: Ref)
 }
 
 /and_or_then.kt: info: Generated Viper text for testAnd:
-method testAnd(arg1: Ref, arg2: Ref) returns (v_ret_0: Ref)
-  requires isSubtype(typeOf(arg1), boolType())
-  requires isSubtype(typeOf(arg2), boolType())
+method testAnd(par_arg1: Ref, par_arg2: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(par_arg1), boolType())
+  requires isSubtype(typeOf(par_arg2), boolType())
   ensures isSubtype(typeOf(v_ret_0), boolType())
-  ensures boolFromRef(v_ret_0) ==> boolFromRef(arg1) && boolFromRef(arg2)
+  ensures boolFromRef(v_ret_0) ==>
+    boolFromRef(par_arg1) && boolFromRef(par_arg2)
   ensures !boolFromRef(v_ret_0) ==>
-    !boolFromRef(arg1) || !boolFromRef(arg2)
-  ensures boolFromRef(arg1) && boolFromRef(arg2) ==> boolFromRef(v_ret_0)
-  ensures !boolFromRef(arg1) ==> !boolFromRef(v_ret_0)
-  ensures !boolFromRef(arg2) ==> !boolFromRef(v_ret_0)
+    !boolFromRef(par_arg1) || !boolFromRef(par_arg2)
+  ensures boolFromRef(par_arg1) && boolFromRef(par_arg2) ==>
+    boolFromRef(v_ret_0)
+  ensures !boolFromRef(par_arg1) ==> !boolFromRef(v_ret_0)
+  ensures !boolFromRef(par_arg2) ==> !boolFromRef(v_ret_0)
 {
-  if (boolFromRef(arg1)) {
-    v_ret_0 := arg2
+  if (boolFromRef(par_arg1)) {
+    v_ret_0 := par_arg2
   } else {
     v_ret_0 := boolToRef(false)}
   goto lbl_ret_0

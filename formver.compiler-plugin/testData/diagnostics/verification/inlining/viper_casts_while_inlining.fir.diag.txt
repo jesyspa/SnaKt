@@ -12,6 +12,7 @@ method idFun(par_arg: Ref) returns (v_ret_0: Ref)
 function g_member(v_this: Ref): Ref
   requires isSubtype(typeOf(v_this), ClassWithMember())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method checkMemberAccess() returns (v_ret_0: Ref)
@@ -96,6 +97,7 @@ method runWithId(v_this_extension: Ref, block: Ref) returns (ret_3: Ref)
 function g_wrapped(v_this: Ref): Ref
   requires isSubtype(typeOf(v_this), Box())
   ensures isSubtype(typeOf(result), nullable(anyType()))
+  decreases _
 
 
 method checkGenericMemberAccess(box: Ref) returns (v_ret_0: Ref)
@@ -220,11 +222,13 @@ field b: Ref
 function c(v_this: Ref): Ref
   requires isSubtype(typeOf(v_this), ManyMembers())
   ensures isSubtype(typeOf(result), ClassWithVar())
+  decreases _
 
 
 function i(v_this: Ref): Ref
   requires isSubtype(typeOf(v_this), ManyMembers())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method accessManyMembers(m: Ref) returns (v_ret_0: Ref)
@@ -328,16 +332,19 @@ field b: Ref
 function c(v_this: Ref): Ref
   requires isSubtype(typeOf(v_this), ManyMembers())
   ensures isSubtype(typeOf(result), ClassWithVar())
+  decreases _
 
 
 function g_i(v_this: Ref): Ref
   requires isSubtype(typeOf(v_this), ManyMembers())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function size(v_this: Ref): Ref
   requires isSubtype(typeOf(v_this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method checkEvaluatedOnce(par_i: Ref, mm: Ref) returns (v_ret_0: Ref)

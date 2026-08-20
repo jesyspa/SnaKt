@@ -38,6 +38,7 @@ method idFun(par_t: Ref) returns (ret_1: Ref)
 function size(v_this: Ref): Ref
   requires isSubtype(typeOf(v_this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method idFun(par_t: Ref) returns (ret_5: Ref)

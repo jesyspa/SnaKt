@@ -4,9 +4,9 @@ field size: Ref
 method declaration() returns (v_ret_0: Ref)
   ensures isSubtype(typeOf(v_ret_0), unitType())
 {
-  var l1: Ref
-  var l2: Ref
-  var l3: Ref
+  var l0_l1: Ref
+  var l0_l2: Ref
+  var l0_l3: Ref
   label lbl_ret_0
   inhale isSubtype(typeOf(v_ret_0), unitType())
 }

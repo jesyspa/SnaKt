@@ -32,6 +32,7 @@ method useChecks() returns (v_ret_0: Ref)
 function size(v_this: Ref): Ref
   requires isSubtype(typeOf(v_this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method f_run_args_NAny_NAny_ret_NAny(v_this_extension: Ref, block: Ref)
@@ -98,6 +99,7 @@ method useRuns(x: Ref) returns (v_ret_0: Ref)
 function size(v_this: Ref): Ref
   requires isSubtype(typeOf(v_this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method also(v_this_extension: Ref, block: Ref) returns (ret_1: Ref)
@@ -135,6 +137,7 @@ method useAlso(x: Ref) returns (v_ret_0: Ref)
 function size(v_this: Ref): Ref
   requires isSubtype(typeOf(v_this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method f_let(v_this_extension: Ref, block: Ref) returns (ret_1: Ref)
@@ -176,6 +179,7 @@ method useLet(x: Ref) returns (v_ret_0: Ref)
 function size(this: Ref): Ref
   requires isSubtype(typeOf(this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method useWith(x: Ref) returns (v_ret_0: Ref)
@@ -216,6 +220,7 @@ method with(receiver: Ref, block: Ref) returns (ret_1: Ref)
 function size(v_this: Ref): Ref
   requires isSubtype(typeOf(v_this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method f_apply(v_this_extension: Ref, block: Ref) returns (ret_1: Ref)

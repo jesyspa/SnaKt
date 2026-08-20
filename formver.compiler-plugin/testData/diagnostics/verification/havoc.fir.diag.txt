@@ -1,4 +1,60 @@
 /havoc.kt: info: Generated Viper text for havoc:
+domain BoolWellFoundedOrder  {
+
+  axiom bool_ax_dec {
+    (decreasing(false, true): Bool)
+  }
+
+  axiom bool_ax_bound {
+    (forall bool1: Bool ::
+      { (bounded(bool1): Bool) }
+      (bounded(bool1): Bool))
+  }
+}
+
+domain PredicateInstance  {
+
+
+}
+
+domain PredicateInstancesNestedRelation  {
+
+  function nestedPredicates(l1: PredicateInstance, l2: PredicateInstance): Bool
+
+  axiom nestedTrans {
+    (forall l1: PredicateInstance, l2: PredicateInstance, l3: PredicateInstance ::
+      { nestedPredicates(l1, l2), nestedPredicates(l2, l3) }
+      nestedPredicates(l1, l2) && nestedPredicates(l2, l3) ==>
+      nestedPredicates(l1, l3))
+  }
+
+  axiom nestedReflex {
+    (forall l1: PredicateInstance ::!nestedPredicates(l1, l1))
+  }
+}
+
+domain PredicateInstancesWellFoundedOrder  {
+
+  axiom predicate_instances_ax_dec {
+    (forall l1: PredicateInstance, l2: PredicateInstance ::
+      { nestedPredicates(l1, l2) }
+      (decreasing(l1, l2): Bool) == nestedPredicates(l1, l2))
+  }
+
+  axiom predicate_instances_ax_bound {
+    (forall l1: PredicateInstance ::
+      { (bounded(l1): Bool) }
+      (bounded(l1): Bool))
+  }
+}
+
+domain WellFoundedOrder[T]  {
+
+  function decreasing(arg1: T, arg2: T): Bool
+
+  function bounded(arg1: T): Bool
+}
+
 domain rt  {
 
   unique function intType(): rt
@@ -278,106 +334,126 @@ field unitNull: Ref
 function addCharInt(arg_1: Ref, arg_2: Ref): Ref
   ensures isSubtype(typeOf(result), charType())
   ensures charFromRef(result) == charFromRef(arg_1) + intFromRef(arg_2)
+  decreases _
 
 
 function addStringChar(arg_1: Ref, arg_2: Ref): Ref
   ensures isSubtype(typeOf(result), stringType())
   ensures stringFromRef(result) ==
     stringFromRef(arg_1) ++ Seq(charFromRef(arg_2))
+  decreases _
 
 
 function addStrings(arg_1: Ref, arg_2: Ref): Ref
   ensures isSubtype(typeOf(result), stringType())
   ensures stringFromRef(result) ==
     stringFromRef(arg_1) ++ stringFromRef(arg_2)
+  decreases _
 
 
 function andBools(arg_1: Ref, arg_2: Ref): Ref
   ensures isSubtype(typeOf(result), boolType())
   ensures boolFromRef(result) == (boolFromRef(arg_1) && boolFromRef(arg_2))
+  decreases _
 
 
 function divInts(arg_1: Ref, arg_2: Ref): Ref
   requires intFromRef(arg_2) != 0
   ensures isSubtype(typeOf(result), intType())
   ensures intFromRef(result) == intFromRef(arg_1) \ intFromRef(arg_2)
+  decreases _
 
 
 function geChars(arg_1: Ref, arg_2: Ref): Ref
   ensures isSubtype(typeOf(result), boolType())
   ensures boolFromRef(result) == charFromRef(arg_1) >= charFromRef(arg_2)
+  decreases _
 
 
 function geInts(arg_1: Ref, arg_2: Ref): Ref
   ensures isSubtype(typeOf(result), boolType())
   ensures boolFromRef(result) == intFromRef(arg_1) >= intFromRef(arg_2)
+  decreases _
 
 
 function gtChars(arg_1: Ref, arg_2: Ref): Ref
   ensures isSubtype(typeOf(result), boolType())
   ensures boolFromRef(result) == charFromRef(arg_1) > charFromRef(arg_2)
+  decreases _
 
 
 function gtInts(arg_1: Ref, arg_2: Ref): Ref
   ensures isSubtype(typeOf(result), boolType())
   ensures boolFromRef(result) == intFromRef(arg_1) > intFromRef(arg_2)
+  decreases _
 
 
 function impliesBools(arg_1: Ref, arg_2: Ref): Ref
   ensures isSubtype(typeOf(result), boolType())
   ensures boolFromRef(result) ==
     (boolFromRef(arg_1) ==> boolFromRef(arg_2))
+  decreases _
 
 
 function leChars(arg_1: Ref, arg_2: Ref): Ref
   ensures isSubtype(typeOf(result), boolType())
   ensures boolFromRef(result) == charFromRef(arg_1) <= charFromRef(arg_2)
+  decreases _
 
 
 function leInts(arg_1: Ref, arg_2: Ref): Ref
   ensures isSubtype(typeOf(result), boolType())
   ensures boolFromRef(result) == intFromRef(arg_1) <= intFromRef(arg_2)
+  decreases _
 
 
 function ltChars(arg_1: Ref, arg_2: Ref): Ref
   ensures isSubtype(typeOf(result), boolType())
   ensures boolFromRef(result) == charFromRef(arg_1) < charFromRef(arg_2)
+  decreases _
 
 
 function ltInts(arg_1: Ref, arg_2: Ref): Ref
   ensures isSubtype(typeOf(result), boolType())
   ensures boolFromRef(result) == intFromRef(arg_1) < intFromRef(arg_2)
+  decreases _
 
 
 function minusInts(arg_1: Ref, arg_2: Ref): Ref
   ensures isSubtype(typeOf(result), intType())
   ensures intFromRef(result) == intFromRef(arg_1) - intFromRef(arg_2)
+  decreases _
 
 
 function negInt(arg_1: Ref): Ref
   ensures isSubtype(typeOf(result), intType())
   ensures intFromRef(result) == -intFromRef(arg_1)
+  decreases _
 
 
 function notBool(arg_1: Ref): Ref
   ensures isSubtype(typeOf(result), boolType())
   ensures boolFromRef(result) == !boolFromRef(arg_1)
+  decreases _
 
 
 function orBools(arg_1: Ref, arg_2: Ref): Ref
   ensures isSubtype(typeOf(result), boolType())
   ensures boolFromRef(result) == (boolFromRef(arg_1) || boolFromRef(arg_2))
+  decreases _
 
 
 function plusInts(arg_1: Ref, arg_2: Ref): Ref
   ensures isSubtype(typeOf(result), intType())
   ensures intFromRef(result) == intFromRef(arg_1) + intFromRef(arg_2)
+  decreases _
 
 
 function remInts(arg_1: Ref, arg_2: Ref): Ref
   requires intFromRef(arg_2) != 0
   ensures isSubtype(typeOf(result), intType())
   ensures intFromRef(result) == intFromRef(arg_1) % intFromRef(arg_2)
+  decreases _
 
 
 function stringGet(arg_1: Ref, arg_2: Ref): Ref
@@ -385,31 +461,37 @@ function stringGet(arg_1: Ref, arg_2: Ref): Ref
     intFromRef(arg_2) < |stringFromRef(arg_1)|
   ensures isSubtype(typeOf(result), charType())
   ensures charFromRef(result) == stringFromRef(arg_1)[intFromRef(arg_2)]
+  decreases _
 
 
 function stringLength(arg_1: Ref): Ref
   ensures isSubtype(typeOf(result), intType())
   ensures intFromRef(result) == |stringFromRef(arg_1)|
+  decreases _
 
 
 function subCharInt(arg_1: Ref, arg_2: Ref): Ref
   ensures isSubtype(typeOf(result), charType())
   ensures charFromRef(result) == charFromRef(arg_1) - intFromRef(arg_2)
+  decreases _
 
 
 function subChars(arg_1: Ref, arg_2: Ref): Ref
   ensures isSubtype(typeOf(result), intType())
   ensures intFromRef(result) == charFromRef(arg_1) - charFromRef(arg_2)
+  decreases _
 
 
 function timesInts(arg_1: Ref, arg_2: Ref): Ref
   ensures isSubtype(typeOf(result), intType())
   ensures intFromRef(result) == intFromRef(arg_1) * intFromRef(arg_2)
+  decreases _
 
 
 function xorBools(arg_1: Ref, arg_2: Ref): Ref
   ensures isSubtype(typeOf(result), boolType())
   ensures boolFromRef(result) == (boolFromRef(arg_1) != boolFromRef(arg_2))
+  decreases _
 
 
 predicate A_unique(this: Ref) {

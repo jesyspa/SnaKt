@@ -13,10 +13,12 @@ import org.jetbrains.kotlin.formver.core.conversion.StmtConversionContext
 import org.jetbrains.kotlin.formver.core.conversion.SubstitutedArgument
 import org.jetbrains.kotlin.formver.core.conversion.TypeResolver
 import org.jetbrains.kotlin.formver.core.conversion.insertInlineFunctionCall
+import org.jetbrains.kotlin.formver.core.domains.RuntimeTypeDomain
 import org.jetbrains.kotlin.formver.core.embeddings.expression.ExpEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.expression.FunctionCall
 import org.jetbrains.kotlin.formver.core.embeddings.expression.MethodCall
 import org.jetbrains.kotlin.formver.core.embeddings.expression.VariableEmbedding
+import org.jetbrains.kotlin.formver.core.embeddings.types.ClassTypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.FunctionTypeEmbedding
 import org.jetbrains.kotlin.formver.core.linearization.pureToViper
 import org.jetbrains.kotlin.formver.viper.SymbolicName
@@ -156,10 +158,36 @@ fun CompleteFunctionSignature.toViperFunction(
         // TODO: Be explicit about the return types of functions instead of boxing them into a Ref
         Type.Ref,
         preconditions.pureToViper(toBuiltin = true, ctx),
-        postconditions.pureToViper(toBuiltin = true, ctx),
+        postconditions.pureToViper(toBuiltin = true, ctx) + terminationMeasure(),
         body,
         declarationSource.asPosition
     )
+}
+
+/**
+ * The measure this function must decrease at every recursive call, or nothing if none can be built.
+ *
+ * A `@Unique` parameter owns the structure reachable from it, and a recursive `@Pure` function over
+ * such a parameter descends into that ownership, so the parameter's unique predicate instance orders
+ * the calls: nesting of predicate instances is the one ordering on the heap Viper knows about.
+ *
+ * Each instance is preceded by a nullity test because the unique predicate nests the next link only
+ * where that link is non-null. At the call that reaches the end of the structure the two instances
+ * are unrelated and the nullity component is what decreases; elsewhere it is constant and the
+ * instance decides. Parameters contribute in declaration order, compared lexicographically.
+ *
+ * A function with no `@Unique` parameter gets no measure, and so cannot be called from one that has
+ * a measure: there is nothing to build a measure from in that case.
+ */
+private fun CompleteFunctionSignature.terminationMeasure(): List<Exp> {
+    val components = formalArgs.filter { it.isUnique }.flatMap { arg ->
+        val classType = arg.type.pretype as? ClassTypeEmbedding ?: return@flatMap emptyList()
+        listOf(
+            Exp.NeCmp(arg.toLocalVarUse(), RuntimeTypeDomain.nullValue()),
+            PredicateInstance(classType.uniquePredicateName, listOf(arg.toLocalVarUse())),
+        )
+    }
+    return if (components.isEmpty()) emptyList() else listOf(DecreasesTuple(components))
 }
 
 

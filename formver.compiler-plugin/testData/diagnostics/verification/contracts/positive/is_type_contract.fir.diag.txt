@@ -36,6 +36,7 @@ method f_subtypeTransitive(x: Ref) returns (v_ret_0: Ref)
 function bar(this: Ref): Ref
   requires isSubtype(typeOf(this), Foo())
   ensures isSubtype(typeOf(result), Bar())
+  decreases _
 
 
 method con() returns (ret_2: Ref)
@@ -62,6 +63,7 @@ method constructorReturnType() returns (v_ret_0: Ref)
 function g_bar(this: Ref): Ref
   requires isSubtype(typeOf(this), Foo())
   ensures isSubtype(typeOf(result), Bar())
+  decreases _
 
 
 method subtypeSuperType(par_bar: Ref) returns (v_ret_0: Ref)
@@ -77,6 +79,7 @@ method subtypeSuperType(par_bar: Ref) returns (v_ret_0: Ref)
 function bar(this: Ref): Ref
   requires isSubtype(typeOf(this), Foo())
   ensures isSubtype(typeOf(result), Bar())
+  decreases _
 
 
 method typeOfField(foo: Ref) returns (v_ret_0: Ref)

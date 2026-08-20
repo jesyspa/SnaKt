@@ -2,11 +2,13 @@
 function g_str(this: Ref): Ref
   requires isSubtype(typeOf(this), StringBox())
   ensures isSubtype(typeOf(result), stringType())
+  decreases _
 
 
 function size(this: Ref): Ref
   requires isSubtype(typeOf(this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 predicate BooleanArray_unique(this: Ref) {
@@ -68,11 +70,13 @@ method testType(s: Ref) returns (v_ret_0: Ref)
 function g_str(this: Ref): Ref
   requires isSubtype(typeOf(this), StringBox())
   ensures isSubtype(typeOf(result), stringType())
+  decreases _
 
 
 function size(this: Ref): Ref
   requires isSubtype(typeOf(this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 predicate BooleanArray_unique(this: Ref) {
@@ -126,6 +130,7 @@ method testLengthField(s: Ref) returns (v_ret_0: Ref)
 function size(this: Ref): Ref
   requires isSubtype(typeOf(this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 predicate BooleanArray_unique(this: Ref) {

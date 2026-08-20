@@ -4,11 +4,13 @@ field b: Ref
 function x(this: Ref): Ref
   requires isSubtype(typeOf(this), Foo())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function y(this: Ref): Ref
   requires isSubtype(typeOf(this), Foo())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method getY(this: Ref) returns (v_ret_0: Ref)
@@ -26,16 +28,19 @@ field b: Ref
 function x(this: Ref): Ref
   requires isSubtype(typeOf(this), Foo())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function y(this: Ref): Ref
   requires isSubtype(typeOf(this), Foo())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function z(this: Ref): Ref
   requires isSubtype(typeOf(this), Bar())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method sum(this: Ref) returns (v_ret_0: Ref)
@@ -53,16 +58,19 @@ field b: Ref
 function x(this: Ref): Ref
   requires isSubtype(typeOf(this), Foo())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function y(this: Ref): Ref
   requires isSubtype(typeOf(this), Foo())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function z(this: Ref): Ref
   requires isSubtype(typeOf(this), Bar())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method callSuperMethod(bar: Ref) returns (v_ret_0: Ref)
@@ -85,16 +93,19 @@ field b: Ref
 function x(this: Ref): Ref
   requires isSubtype(typeOf(this), Foo())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function y(this: Ref): Ref
   requires isSubtype(typeOf(this), Foo())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function z(this: Ref): Ref
   requires isSubtype(typeOf(this), Bar())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method accessSuperField(bar: Ref) returns (v_ret_0: Ref)
@@ -112,16 +123,19 @@ field b: Ref
 function x(this: Ref): Ref
   requires isSubtype(typeOf(this), Foo())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function y(this: Ref): Ref
   requires isSubtype(typeOf(this), Foo())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function z(this: Ref): Ref
   requires isSubtype(typeOf(this), Bar())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method accessNewField(bar: Ref) returns (v_ret_0: Ref)
@@ -139,16 +153,19 @@ field b: Ref
 function x(this: Ref): Ref
   requires isSubtype(typeOf(this), Foo())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function y(this: Ref): Ref
   requires isSubtype(typeOf(this), Foo())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function z(this: Ref): Ref
   requires isSubtype(typeOf(this), Bar())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method callNewMethod(bar: Ref) returns (v_ret_0: Ref)
@@ -171,16 +188,19 @@ field b: Ref
 function x(this: Ref): Ref
   requires isSubtype(typeOf(this), Foo())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function y(this: Ref): Ref
   requires isSubtype(typeOf(this), Foo())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function z(this: Ref): Ref
   requires isSubtype(typeOf(this), Bar())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method setSuperField(bar: Ref) returns (v_ret_0: Ref)
@@ -197,16 +217,19 @@ field b: Ref
 function x(this: Ref): Ref
   requires isSubtype(typeOf(this), Foo())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function y(this: Ref): Ref
   requires isSubtype(typeOf(this), Foo())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function z(this: Ref): Ref
   requires isSubtype(typeOf(this), Bar())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method accessSuperSuperField(baz: Ref) returns (v_ret_0: Ref)

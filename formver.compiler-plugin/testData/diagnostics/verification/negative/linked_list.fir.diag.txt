@@ -4,6 +4,7 @@ field data: Ref
 function next(this: Ref): Ref
   requires isSubtype(typeOf(this), Link())
   ensures isSubtype(typeOf(result), nullable(Link()))
+  decreases _
 
 
 predicate Link_unique(this: Ref) {
@@ -33,11 +34,13 @@ field bf_data: Ref
 function g_next(this: Ref): Ref
   requires isSubtype(typeOf(this), Link())
   ensures isSubtype(typeOf(result), nullable(Link()))
+  decreases _
 
 
 function size(this: Ref): Ref
   requires isSubtype(typeOf(this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 predicate BooleanArray_unique(this: Ref) {

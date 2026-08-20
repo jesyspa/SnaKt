@@ -4,6 +4,7 @@ field bf_field: Ref
 function FinalClassFinalFieldValDerived_g_field(this: Ref): Ref
   requires isSubtype(typeOf(this), FinalClassFinalFieldValDerived())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method extractInt(base: Ref, returnNull: Ref) returns (v_ret_0: Ref)

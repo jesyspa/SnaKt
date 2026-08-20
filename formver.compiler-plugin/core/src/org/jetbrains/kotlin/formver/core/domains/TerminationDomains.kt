@@ -31,6 +31,7 @@ import org.jetbrains.kotlin.formver.viper.ast.*
  */
 
 const val WELL_FOUNDED_ORDER_DOMAIN_NAME = "WellFoundedOrder"
+const val BOOL_WELL_FOUNDED_ORDER_DOMAIN_NAME = "BoolWellFoundedOrder"
 const val PREDICATE_INSTANCE_DOMAIN_NAME = "PredicateInstance"
 const val PREDICATE_INSTANCES_NESTED_RELATION_DOMAIN_NAME = "PredicateInstancesNestedRelation"
 const val PREDICATE_INSTANCES_WELL_FOUNDED_ORDER_DOMAIN_NAME = "PredicateInstancesWellFoundedOrder"
@@ -219,14 +220,55 @@ object PredicateInstancesWellFoundedOrder :
 }
 
 /**
+ * ```viper
+ * domain BoolWellFoundedOrder {
+ *   axiom bool_ax_dec { decreasing(false, true) }
+ *   axiom bool_ax_bound { (forall bool1: Bool :: { bounded(bool1) } bounded(bool1)) }
+ * }
+ * ```
+ *
+ * The instantiation of [WellFoundedOrder] at `Bool`, ordering `false` below `true`.
+ *
+ * A measure over a nullable structure needs this as much as it needs the order on predicate
+ * instances. Where a recursive call reaches the end of the structure, the two predicate instances
+ * being compared are unrelated — the unique predicate nests the next link only where that link is
+ * non-null — and it is the leading nullity component that has to decrease, from `true` to `false`.
+ */
+object BoolWellFoundedOrder : BuiltinDomain(DomainName(BOOL_WELL_FOUNDED_ORDER_DOMAIN_NAME)) {
+    override val typeVars: List<Type.TypeVar> = emptyList()
+
+    private val bool1 = domainVar("bool1", Type.Bool)
+
+    private val atBool = mapOf(WellFoundedOrder.elementType to Type.Bool)
+
+    private fun decreasing(smaller: Exp, larger: Exp): Exp =
+        WellFoundedOrder.funcApp(WellFoundedOrder.decreasing, listOf(smaller, larger), atBool)
+
+    private fun bounded(arg: Exp): Exp =
+        WellFoundedOrder.funcApp(WellFoundedOrder.bounded, listOf(arg), atBool)
+
+    override val functions: List<DomainFunc> = emptyList()
+    override val axioms: List<DomainAxiom> = AxiomListBuilder.build(this) {
+        // Deliberately left without a trigger, as in silver's own version.
+        axiom("bool_ax_dec") {
+            decreasing(Exp.BoolLit(false), Exp.BoolLit(true))
+        }
+        axiom("bool_ax_bound") {
+            Exp.forall(bool1) { bool1 -> simpleTrigger { bounded(bool1) } }
+        }
+    }
+}
+
+/**
  * The termination-library domains, in the order silver's `.vpr` sources declare them.
  *
  * A domain's name is registered with the name resolver only if the domain is in
- * `Program.domains`, so all four have to be listed even though two of them are only
+ * `Program.domains`, so all of them have to be listed even though some are only
  * referred to by the others.
  */
 val terminationDomains: List<Domain> = listOf(
     WellFoundedOrder,
+    BoolWellFoundedOrder,
     PredicateInstanceDomain,
     PredicateInstancesNestedRelation,
     PredicateInstancesWellFoundedOrder,

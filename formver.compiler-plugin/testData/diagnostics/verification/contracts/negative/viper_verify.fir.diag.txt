@@ -2,6 +2,7 @@
 function size(this: Ref): Ref
   requires isSubtype(typeOf(this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method verify_false() returns (v_ret_0: Ref)
@@ -16,6 +17,7 @@ method verify_false() returns (v_ret_0: Ref)
 function size(this: Ref): Ref
   requires isSubtype(typeOf(this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method verify_compound() returns (v_ret_0: Ref)
@@ -35,6 +37,7 @@ method verify_compound() returns (v_ret_0: Ref)
 function size(this: Ref): Ref
   requires isSubtype(typeOf(this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method verify_forall() returns (v_ret_0: Ref)

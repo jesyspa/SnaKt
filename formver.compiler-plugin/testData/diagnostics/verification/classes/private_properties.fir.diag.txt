@@ -26,6 +26,7 @@ method s_field(this: Ref, anon: Ref) returns (ret_2: Ref)
 function B_g_field(this: Ref): Ref
   requires isSubtype(typeOf(this), B())
   ensures isSubtype(typeOf(result), stringType())
+  decreases _
 
 
 method getStringField(this: Ref) returns (v_ret_0: Ref)
@@ -54,16 +55,19 @@ field bf_field: Ref
 function B_g_field(this: Ref): Ref
   requires isSubtype(typeOf(this), B())
   ensures isSubtype(typeOf(result), stringType())
+  decreases _
 
 
 function D_g_field(this: Ref): Ref
   requires isSubtype(typeOf(this), D())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function size(this: Ref): Ref
   requires isSubtype(typeOf(this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method con_C() returns (ret_3: Ref)

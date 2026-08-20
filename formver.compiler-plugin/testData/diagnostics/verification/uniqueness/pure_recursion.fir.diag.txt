@@ -6,6 +6,7 @@ function length(l: Ref): Ref
   requires l != nullValue() ==> acc(Link_unique(l), write)
   ensures isSubtype(typeOf(result), intType())
   ensures intFromRef(result) >= 0
+  decreases l != nullValue(), Link_unique(l)
 {
   (let anon_1_0 ==
     ((l == nullValue() ? intToRef(0) : null)) in
@@ -22,6 +23,7 @@ function length(l: Ref): Ref
 function next(this: Ref): Ref
   requires isSubtype(typeOf(this), Link())
   ensures isSubtype(typeOf(result), nullable(Link()))
+  decreases _
 
 
 predicate Link_unique(this: Ref) {
@@ -38,6 +40,7 @@ function length(l: Ref): Ref
   requires l != nullValue() ==> acc(Link_unique(l), write)
   ensures isSubtype(typeOf(result), intType())
   ensures intFromRef(result) >= 0
+  decreases l != nullValue(), Link_unique(l)
 {
   (let anon_1_0 ==
     ((l == nullValue() ? intToRef(0) : null)) in
@@ -54,11 +57,13 @@ function length(l: Ref): Ref
 function next(this: Ref): Ref
   requires isSubtype(typeOf(this), Link())
   ensures isSubtype(typeOf(result), nullable(Link()))
+  decreases _
 
 
 function size(this: Ref): Ref
   requires isSubtype(typeOf(this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 predicate BooleanArray_unique(this: Ref) {
@@ -98,6 +103,7 @@ field bf_data: Ref
 function g_next(this: Ref): Ref
   requires isSubtype(typeOf(this), Link())
   ensures isSubtype(typeOf(result), nullable(Link()))
+  decreases _
 
 
 function length(l: Ref): Ref
@@ -105,6 +111,7 @@ function length(l: Ref): Ref
   requires l != nullValue() ==> acc(Link_unique(l), write)
   ensures isSubtype(typeOf(result), intType())
   ensures intFromRef(result) >= 0
+  decreases l != nullValue(), Link_unique(l)
 {
   (let anon_2_0 ==
     ((l == nullValue() ? intToRef(0) : null)) in

@@ -10,5 +10,5 @@ class Link(var data: Int, val next: @Unique Link?)
 @AlwaysVerify
 @Pure
 fun <!VIPER_TEXT!>badLength<!>(l: @Unique @Borrowed Link?): Int {
-    return if (l == null) 0 else 1 + badLength(l)
+    return if (l == null) 0 else 1 + <!VIPER_VERIFICATION_ERROR!>badLength(l)<!>
 }

@@ -55,6 +55,7 @@ field b: Ref
 function a(this: Ref): Ref
   requires isSubtype(typeOf(this), X())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function annotatedReferenceReturn(x: Ref): Ref

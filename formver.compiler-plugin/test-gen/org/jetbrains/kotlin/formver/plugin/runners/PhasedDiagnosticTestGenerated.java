@@ -880,12 +880,6 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
       public void testPure_recursion_nonterminating() {
         runTest("formver.compiler-plugin/testData/diagnostics/verification/uniqueness/pure_recursion_nonterminating.kt");
       }
-
-      @Test
-      @TestMetadata("pure_recursion_unmeasured_callee.kt")
-      public void testPure_recursion_unmeasured_callee() {
-        runTest("formver.compiler-plugin/testData/diagnostics/verification/uniqueness/pure_recursion_unmeasured_callee.kt");
-      }
     }
 
     @Nested

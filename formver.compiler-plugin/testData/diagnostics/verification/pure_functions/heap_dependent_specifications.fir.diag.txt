@@ -30,11 +30,13 @@ function isAlternating(node: Ref, expectsPositive: Ref): Ref
 function next(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), nullable(Node()))
+  decreases _
 
 
 function value(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 /heap_dependent_specifications.kt: info: Generated Viper text for isStrictlyAscendingAndPositive:
@@ -68,11 +70,13 @@ function isStrictlyAscendingAndPositive(node: Ref): Ref
 function next(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), nullable(Node()))
+  decreases _
 
 
 function value(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 /heap_dependent_specifications.kt: info: Generated Viper text for isLocallyValidBST:
@@ -106,13 +110,16 @@ function isLocallyValidBST(node: Ref): Ref
 function left(this: Ref): Ref
   requires isSubtype(typeOf(this), TreeNode())
   ensures isSubtype(typeOf(result), nullable(TreeNode()))
+  decreases _
 
 
 function right(this: Ref): Ref
   requires isSubtype(typeOf(this), TreeNode())
   ensures isSubtype(typeOf(result), nullable(TreeNode()))
+  decreases _
 
 
 function value(this: Ref): Ref
   requires isSubtype(typeOf(this), TreeNode())
   ensures isSubtype(typeOf(result), intType())
+  decreases _

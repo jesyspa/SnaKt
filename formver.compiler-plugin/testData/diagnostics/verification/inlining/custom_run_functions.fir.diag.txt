@@ -73,6 +73,7 @@ method useBranching() returns (v_ret_0: Ref)
 function size(v_this: Ref): Ref
   requires isSubtype(typeOf(v_this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method doubleEqualsThree(block: Ref) returns (ret_70: Ref)
@@ -681,11 +682,13 @@ method ifTrue(v_this_extension: Ref, block: Ref) returns (ret_2: Ref)
 function member(v_this: Ref): Ref
   requires isSubtype(typeOf(v_this), CustomClass())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function size(v_this: Ref): Ref
   requires isSubtype(typeOf(v_this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method con() returns (ret_1: Ref)

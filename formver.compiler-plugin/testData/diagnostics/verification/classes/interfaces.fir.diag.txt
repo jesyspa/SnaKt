@@ -41,6 +41,7 @@ method valProp(this: Ref) returns (ret_3: Ref)
 function Impl_g_number(this: Ref): Ref
   requires isSubtype(typeOf(this), Impl())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method con(par_number: Ref) returns (ret_3: Ref)
@@ -117,6 +118,7 @@ method take2(obj: Ref) returns (v_ret_0: Ref)
 function g_field(this: Ref): Ref
   requires isSubtype(typeOf(this), AbstractWithFinalImplementation3())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method take3(obj: Ref) returns (v_ret_0: Ref)
@@ -150,21 +152,25 @@ method take4(obj: Ref) returns (v_ret_0: Ref)
 function AbstractWithFinalImplementation3_g_field(this: Ref): Ref
   requires isSubtype(typeOf(this), AbstractWithFinalImplementation3())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function Impl12_g_field(this: Ref): Ref
   requires isSubtype(typeOf(this), Impl12())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function Impl14_g_field(this: Ref): Ref
   requires isSubtype(typeOf(this), Impl14())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function size(this: Ref): Ref
   requires isSubtype(typeOf(this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method con_Impl12() returns (ret_3: Ref)

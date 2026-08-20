@@ -2,6 +2,7 @@
 function g_fieldNotOverride(this: Ref): Ref
   requires isSubtype(typeOf(this), A())
   ensures isSubtype(typeOf(result), C())
+  decreases _
 
 
 method con_B(par_fieldOverride: Ref) returns (ret_4: Ref)
@@ -52,6 +53,7 @@ method g_fieldOverride(this: Ref) returns (ret_2: Ref)
 function SecondBackingFieldClass_g_x(this: Ref): Ref
   requires isSubtype(typeOf(this), SecondBackingFieldClass())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method con_FirstBackingFieldClass() returns (ret_2: Ref)
@@ -125,6 +127,7 @@ method public_g_x(this: Ref) returns (ret_1: Ref)
 function g_a(this: Ref): Ref
   requires isSubtype(typeOf(this), X())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method con(par_a: Ref) returns (ret_1: Ref)
