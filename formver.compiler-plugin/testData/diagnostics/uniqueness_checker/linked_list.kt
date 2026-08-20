@@ -60,9 +60,14 @@ fun `traverse then consume list`(head: @Unique Node) {
 // Iterative reversal
 //
 // Commented out: the uniqueness checker does not terminate on this function.
-// A run of `./agent-scripts/test.sh linked_list` with the body below live was
-// still burning CPU inside the check after 40 minutes and produced no
-// diagnostics, so the scenario cannot be recorded as a golden.
+// A run with the body below live was still burning CPU inside the check after
+// 40 minutes and produced no diagnostics, so there is no golden to record.
+//
+// The loop is not on its own what costs. Advancing a unique cursor with
+// `current = current.next` and nothing else checks in seconds, and so does
+// advancing while writing `null` into the field just read. What those two
+// leave out, and what the body below adds, is writing a unique local carried
+// over from the previous iteration back into the field.
 //
 // fun `reverse in place`(head: @Unique Node?): @Unique Node? {
 //     var prev: @Unique Node? = null
