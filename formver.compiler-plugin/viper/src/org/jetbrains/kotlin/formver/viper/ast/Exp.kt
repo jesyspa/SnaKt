@@ -422,6 +422,10 @@ sealed interface Exp : WithSilverMetadata, IntoSilver<viper.silver.ast.Exp> {
      * Example: x is of type T, f(x: T) -> Int is a domain function, and you want to
      * make the generic domain function call f(x) then a Map from T -> T needs to be
      * supplied.
+     *
+     * Build this through [DomainFunc.toFuncApp] to leave the domain uninstantiated, or through
+     * [Domain.funcApp] to instantiate it. Which types the map picks is checked nowhere below this
+     * point: a map that instantiates the domain wrongly still yields a well-formed Viper program.
      */
     data class DomainFuncApp(
         val function: DomainFunc,
@@ -430,6 +434,12 @@ sealed interface Exp : WithSilverMetadata, IntoSilver<viper.silver.ast.Exp> {
         override val pos: Position = Position.NoPosition,
         override val info: Info = Info.NoInfo,
     ) : Exp {
+        init {
+            require(typeVarMap.keys == function.typeArgs.toSet()) {
+                "Applying ${function.name} needs an instantiation of exactly ${function.typeArgs}, got ${typeVarMap.keys}."
+            }
+        }
+
         context(nameResolver: NameResolver)
         private val scalaTypeVarMap: scala.collection.immutable.Map<TypeVar, viper.silver.ast.Type>
             get() = typeVarMap.mapKeys { it.key.toSilver() }.mapValues { it.value.toSilver() }.toScalaMap()
