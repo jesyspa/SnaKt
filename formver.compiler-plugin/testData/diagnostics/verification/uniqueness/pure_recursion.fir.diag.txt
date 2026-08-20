@@ -106,16 +106,16 @@ function length(l: Ref): Ref
   ensures isSubtype(typeOf(result), intType())
   ensures intFromRef(result) >= 0
 {
-  (let anon_1_0 ==
+  (let anon_2_0 ==
     ((l == nullValue() ? intToRef(0) : null)) in
-    (let anon_2_0 ==
+    (let anon_3_0 ==
       ((!(l == nullValue()) ?
         plusInts(intToRef(1), (unfolding acc(Link_unique(l), write) in
           length(g_next(l)))) :
         null)) in
-      (let anon_0_0 ==
-        ((l == nullValue() ? anon_1_0 : anon_2_0)) in
-        anon_0_0)))
+      (let anon_1_0 ==
+        ((l == nullValue() ? anon_2_0 : anon_3_0)) in
+        anon_1_0)))
 }
 
 predicate Link_unique(this: Ref) {
@@ -144,7 +144,13 @@ method pushFront(tail: Ref, d: Ref) returns (v_ret_0: Ref)
   ensures acc(Link_unique(v_ret_0), write)
   ensures intFromRef(length(v_ret_0)) == old(intFromRef(length(tail))) + 1
 {
-  v_ret_0 := con(d, tail)
+  var anon_0: Ref
+  anon_0 := new(bf_data)
+  inhale isSubtype(typeOf(anon_0), Link())
+  anon_0.bf_data := d
+  inhale g_next(anon_0) == tail
+  fold acc(Link_unique(anon_0), write)
+  v_ret_0 := anon_0
   goto lbl_ret_0
   label lbl_ret_0
 }

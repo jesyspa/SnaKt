@@ -19,14 +19,24 @@ method createB() returns (v_ret_0: Ref)
   ensures isSubtype(typeOf(v_ret_0), unitType())
 {
   var fieldB: Ref
+  var anon_0: Ref
   var b: Ref
+  var anon_1: Ref
   var l0_fieldOverride: Ref
-  var anon: Ref
+  var anon_2: Ref
   var l0_fieldNotOverride: Ref
-  fieldB := con_FieldB()
-  b := con_B(fieldB)
-  anon := g_fieldOverride(b)
-  l0_fieldOverride := anon
+  anon_0 := new()
+  inhale isSubtype(typeOf(anon_0), FieldB())
+  fold acc(FieldA_unique(anon_0), write)
+  fold acc(FieldB_unique(anon_0), write)
+  fieldB := anon_0
+  anon_1 := new()
+  inhale isSubtype(typeOf(anon_1), B())
+  fold acc(A_unique(anon_1), write)
+  fold acc(B_unique(anon_1), write)
+  b := anon_1
+  anon_2 := g_fieldOverride(b)
+  l0_fieldOverride := anon_2
   inhale isSubtype(typeOf(l0_fieldOverride), FieldB())
   l0_fieldNotOverride := g_fieldNotOverride(b)
   label lbl_ret_0
@@ -66,22 +76,41 @@ method createBFsAndNoBF() returns (v_ret_0: Ref)
   ensures isSubtype(typeOf(v_ret_0), unitType())
 {
   var fbf: Ref
-  var fbfx: Ref
   var anon_0: Ref
+  var fbfx: Ref
+  var anon_4: Ref
   var nbf: Ref
-  var nbfx: Ref
   var anon_1: Ref
+  var nbfx: Ref
+  var anon_5: Ref
   var sbf: Ref
+  var anon_2: Ref
+  var anon_3: Ref
   var sbfx: Ref
-  fbf := con_FirstBackingFieldClass()
-  anon_0 := public_g_x(fbf)
-  fbfx := anon_0
+  anon_0 := new()
+  inhale isSubtype(typeOf(anon_0), FirstBackingFieldClass())
+  fold acc(FirstBackingFieldClass_unique(anon_0), write)
+  fbf := anon_0
+  anon_4 := public_g_x(fbf)
+  fbfx := anon_4
   inhale isSubtype(typeOf(fbfx), intType())
-  nbf := con_NoBackingFieldClass()
-  anon_1 := public_g_x(nbf)
-  nbfx := anon_1
+  anon_1 := new()
+  inhale isSubtype(typeOf(anon_1), NoBackingFieldClass())
+  fold acc(FirstBackingFieldClass_unique(anon_1), write)
+  fold acc(NoBackingFieldClass_unique(anon_1), write)
+  nbf := anon_1
+  anon_5 := public_g_x(nbf)
+  nbfx := anon_5
   inhale isSubtype(typeOf(nbfx), intType())
-  sbf := con_SecondBackingFieldClass(intToRef(10))
+  anon_2 := intToRef(10)
+  anon_3 := new()
+  inhale isSubtype(typeOf(anon_3), SecondBackingFieldClass())
+  inhale intFromRef(SecondBackingFieldClass_g_x(anon_3)) ==
+    intFromRef(anon_2)
+  fold acc(FirstBackingFieldClass_unique(anon_3), write)
+  fold acc(NoBackingFieldClass_unique(anon_3), write)
+  fold acc(SecondBackingFieldClass_unique(anon_3), write)
+  sbf := anon_3
   sbfx := SecondBackingFieldClass_g_x(sbf)
   label lbl_ret_0
   inhale isSubtype(typeOf(v_ret_0), unitType())
@@ -108,8 +137,15 @@ method createY() returns (v_ret_0: Ref)
   ensures isSubtype(typeOf(v_ret_0), unitType())
 {
   var y: Ref
+  var anon_0: Ref
+  var anon_1: Ref
   var ya: Ref
-  y := con(intToRef(10))
+  anon_0 := intToRef(10)
+  anon_1 := new()
+  inhale isSubtype(typeOf(anon_1), Y())
+  fold acc(X_unique(anon_1), write)
+  fold acc(Y_unique(anon_1), write)
+  y := anon_1
   ya := g_a(y)
   label lbl_ret_0
   inhale isSubtype(typeOf(v_ret_0), unitType())

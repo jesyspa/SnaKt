@@ -106,18 +106,26 @@ method f_fakePrint_args_Int_ret_Unit(value: Ref) returns (ret_1: Ref)
 method testGlobalScopeOverloading() returns (v_ret_0: Ref)
   ensures isSubtype(typeOf(v_ret_0), unitType())
 {
-  var anon_0: Ref
-  var anon_1: Ref
   var anon_2: Ref
   var anon_3: Ref
   var anon_4: Ref
   var anon_5: Ref
-  anon_0 := f_fakePrint_args_Int_ret_Unit(intToRef(42))
-  anon_1 := f_fakePrint_args_Boolean_ret_Unit(boolToRef(true))
-  anon_3 := con_Foo()
-  anon_2 := f_fakePrint_args_Foo_ret_Unit(anon_3)
-  anon_5 := con_Bar()
-  anon_4 := f_fakePrint_args_Bar_ret_Unit(anon_5)
+  var anon_0: Ref
+  var anon_6: Ref
+  var anon_7: Ref
+  var anon_1: Ref
+  anon_2 := f_fakePrint_args_Int_ret_Unit(intToRef(42))
+  anon_3 := f_fakePrint_args_Boolean_ret_Unit(boolToRef(true))
+  anon_0 := new()
+  inhale isSubtype(typeOf(anon_0), Foo())
+  fold acc(Foo_unique(anon_0), write)
+  anon_5 := anon_0
+  anon_4 := f_fakePrint_args_Foo_ret_Unit(anon_5)
+  anon_1 := new()
+  inhale isSubtype(typeOf(anon_1), Bar())
+  fold acc(Bar_unique(anon_1), write)
+  anon_7 := anon_1
+  anon_6 := f_fakePrint_args_Bar_ret_Unit(anon_7)
   label lbl_ret_0
   inhale isSubtype(typeOf(v_ret_0), unitType())
 }
@@ -152,14 +160,26 @@ method testClassFunctionOverloading() returns (v_ret_0: Ref)
 {
   var l0_b: Ref
   var anon_0: Ref
-  var anon_1: Ref
-  var anon_2: Ref
   var anon_3: Ref
-  l0_b := con_c_Bar()
-  anon_1 := con_Foo()
-  anon_0 := c_Bar_f_baz_args_c_Bar_Foo_ret_Unit(l0_b, anon_1)
-  anon_3 := con_c_Bar()
-  anon_2 := c_Bar_f_baz_args_c_Bar_c_Bar_ret_Unit(l0_b, anon_3)
+  var anon_4: Ref
+  var anon_1: Ref
+  var anon_5: Ref
+  var anon_6: Ref
+  var anon_2: Ref
+  anon_0 := new()
+  inhale isSubtype(typeOf(anon_0), c_Bar())
+  fold acc(c_Bar_unique(anon_0), write)
+  l0_b := anon_0
+  anon_1 := new()
+  inhale isSubtype(typeOf(anon_1), Foo())
+  fold acc(Foo_unique(anon_1), write)
+  anon_4 := anon_1
+  anon_3 := c_Bar_f_baz_args_c_Bar_Foo_ret_Unit(l0_b, anon_4)
+  anon_2 := new()
+  inhale isSubtype(typeOf(anon_2), c_Bar())
+  fold acc(c_Bar_unique(anon_2), write)
+  anon_6 := anon_2
+  anon_5 := c_Bar_f_baz_args_c_Bar_c_Bar_ret_Unit(l0_b, anon_6)
   label lbl_ret_0
   inhale isSubtype(typeOf(v_ret_0), unitType())
 }

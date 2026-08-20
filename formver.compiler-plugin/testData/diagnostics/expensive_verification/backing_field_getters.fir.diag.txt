@@ -123,16 +123,20 @@ method nullableReceiverNotNullSafeGet() returns (v_ret_0: Ref)
   ensures isSubtype(typeOf(v_ret_0), unitType())
 {
   var f: Ref
+  var anon_1: Ref
   var anon_0: Ref
   var cond1: Ref
-  var anon_1: Ref
-  anon_0 := con()
-  f := anon_0
+  var anon_2: Ref
+  anon_0 := new()
+  inhale isSubtype(typeOf(anon_0), Baz())
+  fold acc(Baz_unique(anon_0), write)
+  anon_1 := anon_0
+  f := anon_1
   if (f != nullValue()) {
-    anon_1 := x(f)
+    anon_2 := x(f)
   } else {
-    anon_1 := nullValue()}
-  cond1 := notBool(boolToRef(anon_1 == nullValue()))
+    anon_2 := nullValue()}
+  cond1 := notBool(boolToRef(anon_2 == nullValue()))
   assert boolFromRef(cond1)
   label lbl_ret_0
   inhale isSubtype(typeOf(v_ret_0), unitType())
@@ -186,14 +190,18 @@ method nonNullableReceiverSafeGet() returns (v_ret_0: Ref)
   ensures isSubtype(typeOf(v_ret_0), unitType())
 {
   var f: Ref
+  var anon_0: Ref
   var cond1: Ref
-  var anon: Ref
-  f := con()
+  var anon_1: Ref
+  anon_0 := new()
+  inhale isSubtype(typeOf(anon_0), Baz())
+  fold acc(Baz_unique(anon_0), write)
+  f := anon_0
   if (f != nullValue()) {
-    anon := x(f)
+    anon_1 := x(f)
   } else {
-    anon := nullValue()}
-  cond1 := notBool(boolToRef(anon == nullValue()))
+    anon_1 := nullValue()}
+  cond1 := notBool(boolToRef(anon_1 == nullValue()))
   assert boolFromRef(cond1)
   label lbl_ret_0
   inhale isSubtype(typeOf(v_ret_0), unitType())
@@ -226,18 +234,34 @@ method checkPrimary(par_x: Ref, par_y: Ref) returns (v_ret_0: Ref)
   ensures isSubtype(typeOf(v_ret_0), unitType())
 {
   var classI: Ref
+  var anon_0: Ref
   var l0_z: Ref
+  var anon_1: Ref
   var cond1: Ref
   var cond2: Ref
-  var anon: Ref
-  classI := con_ClassI(par_x, par_y)
-  l0_z := con_Z()
+  var anon_3: Ref
+  var anon_2: Ref
+  anon_0 := new()
+  inhale isSubtype(typeOf(anon_0), ClassI())
+  inhale intFromRef(g_x(anon_0)) == intFromRef(par_x)
+  inhale intFromRef(g_y(anon_0)) == intFromRef(par_y)
+  fold acc(ClassI_unique(anon_0), write)
+  classI := anon_0
+  anon_1 := new()
+  inhale isSubtype(typeOf(anon_1), Z())
+  fold acc(Z_unique(anon_1), write)
+  l0_z := anon_1
   if (!(intFromRef(par_x) == intFromRef(par_y))) {
     cond1 := boolToRef(true)
   } else {
     cond1 := boolToRef(intFromRef(g_x(classI)) == intFromRef(g_y(classI)))}
-  anon := con_ClassII(l0_z)
-  cond2 := boolToRef(ClassII_g_z(anon) == l0_z)
+  anon_2 := new()
+  inhale isSubtype(typeOf(anon_2), ClassII())
+  inhale ClassII_g_z(anon_2) == l0_z
+  fold acc(ClassI_unique(anon_2), write)
+  fold acc(ClassII_unique(anon_2), write)
+  anon_3 := anon_2
+  cond2 := boolToRef(ClassII_g_z(anon_3) == l0_z)
   assert boolFromRef(cond1)
   assert boolFromRef(cond2)
   label lbl_ret_0

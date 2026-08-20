@@ -25,17 +25,33 @@ method createBox() returns (v_ret_0: Ref)
   ensures isSubtype(typeOf(v_ret_0), intType())
 {
   var boolBox: Ref
-  var b: Ref
   var anon_0: Ref
-  var intBox: Ref
   var anon_1: Ref
-  boolBox := con(boolToRef(true))
-  anon_0 := havoc(nullable(anyType()))
-  b := anon_0
+  var b: Ref
+  var anon_4: Ref
+  var intBox: Ref
+  var anon_2: Ref
+  var anon_3: Ref
+  var anon_5: Ref
+  anon_0 := boolToRef(true)
+  inhale isSubtype(typeOf(anon_0), nullable(anyType()))
+  anon_1 := new(bf_t)
+  inhale isSubtype(typeOf(anon_1), Box())
+  anon_1.bf_t := anon_0
+  fold acc(Box_unique(anon_1), write)
+  boolBox := anon_1
+  anon_4 := havoc(nullable(anyType()))
+  b := anon_4
   inhale isSubtype(typeOf(b), boolType())
-  intBox := con(intToRef(2))
-  anon_1 := havoc(nullable(anyType()))
-  v_ret_0 := anon_1
+  anon_2 := intToRef(2)
+  inhale isSubtype(typeOf(anon_2), nullable(anyType()))
+  anon_3 := new(bf_t)
+  inhale isSubtype(typeOf(anon_3), Box())
+  anon_3.bf_t := anon_2
+  fold acc(Box_unique(anon_3), write)
+  intBox := anon_3
+  anon_5 := havoc(nullable(anyType()))
+  v_ret_0 := anon_5
   inhale isSubtype(typeOf(v_ret_0), intType())
   goto lbl_ret_0
   label lbl_ret_0
@@ -55,7 +71,15 @@ method setGenericField() returns (v_ret_0: Ref)
   ensures isSubtype(typeOf(v_ret_0), unitType())
 {
   var box: Ref
-  box := con(intToRef(3))
+  var anon_0: Ref
+  var anon_1: Ref
+  anon_0 := intToRef(3)
+  inhale isSubtype(typeOf(anon_0), nullable(anyType()))
+  anon_1 := new(bf_t)
+  inhale isSubtype(typeOf(anon_1), Box())
+  anon_1.bf_t := anon_0
+  fold acc(Box_unique(anon_1), write)
+  box := anon_1
   label lbl_ret_0
   inhale isSubtype(typeOf(v_ret_0), unitType())
 }

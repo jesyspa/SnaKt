@@ -81,45 +81,52 @@ method applyInlineDelta(v_this: Ref, v_this_extension: Ref)
 method checkClassWithExtension() returns (v_ret_0: Ref)
   ensures isSubtype(typeOf(v_ret_0), unitType())
 {
-  var anon_2: Ref
-  var anon_3: Ref
-  var v_ret_4: Ref
-  var anon_0: Ref
   var anon_4: Ref
   var anon_5: Ref
-  var v_ret_5: Ref
+  var v_ret_4: Ref
+  var anon_2: Ref
   var anon_6: Ref
+  var anon_0: Ref
+  var anon_1: Ref
   var anon_7: Ref
+  var v_ret_5: Ref
   var anon_8: Ref
   var anon_9: Ref
+  var anon_10: Ref
+  var anon_11: Ref
   var v_ret_10: Ref
-  var anon_1: Ref
-  anon_4 := con(intToRef(42))
-  anon_0 := anon_4
-  inhale isSubtype(typeOf(anon_0), nullable(anyType()))
-  inhale isSubtype(typeOf(anon_0), ClassWithExtension())
-  anon_6 := applyDelta(anon_0, intToRef(42))
-  inhale isSubtype(typeOf(anon_0), ClassWithExtension())
-  anon_7 := returnDelta(anon_0)
-  inhale isSubtype(typeOf(anon_0), ClassWithExtension())
-  anon_8 := extensionReturnDelta(anon_0)
-  anon_1 := intToRef(42)
-  inhale isSubtype(typeOf(anon_0), ClassWithExtension())
-  v_ret_10 := plusInts(anon_1, g_delta(anon_0))
+  var anon_3: Ref
+  anon_0 := intToRef(42)
+  anon_1 := new()
+  inhale isSubtype(typeOf(anon_1), ClassWithExtension())
+  inhale intFromRef(g_delta(anon_1)) == intFromRef(anon_0)
+  fold acc(ClassWithExtension_unique(anon_1), write)
+  anon_6 := anon_1
+  anon_2 := anon_6
+  inhale isSubtype(typeOf(anon_2), nullable(anyType()))
+  inhale isSubtype(typeOf(anon_2), ClassWithExtension())
+  anon_8 := applyDelta(anon_2, intToRef(42))
+  inhale isSubtype(typeOf(anon_2), ClassWithExtension())
+  anon_9 := returnDelta(anon_2)
+  inhale isSubtype(typeOf(anon_2), ClassWithExtension())
+  anon_10 := extensionReturnDelta(anon_2)
+  anon_3 := intToRef(42)
+  inhale isSubtype(typeOf(anon_2), ClassWithExtension())
+  v_ret_10 := plusInts(anon_3, g_delta(anon_2))
   goto lbl_ret_10
   label lbl_ret_10
-  anon_9 := v_ret_10
-  assert intFromRef(anon_9) == 84
+  anon_11 := v_ret_10
+  assert intFromRef(anon_11) == 84
   label lbl_ret_5
   inhale isSubtype(typeOf(v_ret_5), unitType())
-  anon_5 := v_ret_5
-  v_ret_4 := anon_5
+  anon_7 := v_ret_5
+  v_ret_4 := anon_7
   inhale isSubtype(typeOf(v_ret_4), nullable(anyType()))
   goto lbl_ret_4
   label lbl_ret_4
-  anon_3 := v_ret_4
-  anon_2 := anon_3
-  inhale isSubtype(typeOf(anon_2), unitType())
+  anon_5 := v_ret_4
+  anon_4 := anon_5
+  inhale isSubtype(typeOf(anon_4), unitType())
   label lbl_ret_0
   inhale isSubtype(typeOf(v_ret_0), unitType())
 }

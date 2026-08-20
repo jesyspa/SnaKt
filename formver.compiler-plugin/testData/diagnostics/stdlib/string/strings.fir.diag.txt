@@ -39,13 +39,25 @@ method testType(s: Ref) returns (v_ret_0: Ref)
   ensures isSubtype(typeOf(v_ret_0), unitType())
 {
   var cond1: Ref
+  var anon_3: Ref
   var anon_0: Ref
   var cond2: Ref
+  var anon_4: Ref
   var anon_1: Ref
-  anon_0 := con(s)
-  cond1 := boolToRef(stringFromRef(g_str(anon_0)) == stringFromRef(s))
-  anon_1 := con(stringToRef(Seq(115, 116, 114)))
-  cond2 := boolToRef(stringFromRef(g_str(anon_1)) == Seq(115, 116, 114))
+  var anon_2: Ref
+  anon_0 := new()
+  inhale isSubtype(typeOf(anon_0), StringBox())
+  inhale stringFromRef(g_str(anon_0)) == stringFromRef(s)
+  fold acc(StringBox_unique(anon_0), write)
+  anon_3 := anon_0
+  cond1 := boolToRef(stringFromRef(g_str(anon_3)) == stringFromRef(s))
+  anon_1 := stringToRef(Seq(115, 116, 114))
+  anon_2 := new()
+  inhale isSubtype(typeOf(anon_2), StringBox())
+  inhale stringFromRef(g_str(anon_2)) == stringFromRef(anon_1)
+  fold acc(StringBox_unique(anon_2), write)
+  anon_4 := anon_2
+  cond2 := boolToRef(stringFromRef(g_str(anon_4)) == Seq(115, 116, 114))
   assert boolFromRef(cond1)
   assert boolFromRef(cond2)
   label lbl_ret_0
@@ -94,10 +106,17 @@ method testLengthField(s: Ref) returns (v_ret_0: Ref)
 {
   var len: Ref
   var cond1: Ref
-  var anon: Ref
+  var anon_2: Ref
+  var anon_0: Ref
+  var anon_1: Ref
   len := stringLength(s)
-  anon := con(stringToRef(Seq(115, 116, 114)))
-  cond1 := boolToRef(|stringFromRef(g_str(anon))| == 3)
+  anon_0 := stringToRef(Seq(115, 116, 114))
+  anon_1 := new()
+  inhale isSubtype(typeOf(anon_1), StringBox())
+  inhale stringFromRef(g_str(anon_1)) == stringFromRef(anon_0)
+  fold acc(StringBox_unique(anon_1), write)
+  anon_2 := anon_1
+  cond1 := boolToRef(|stringFromRef(g_str(anon_2))| == 3)
   assert boolFromRef(cond1)
   label lbl_ret_0
   inhale isSubtype(typeOf(v_ret_0), unitType())

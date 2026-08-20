@@ -105,9 +105,12 @@ val FirBasedSymbol<*>.isBorrowed: Boolean
  *
  * Such a function is never executed, so its arguments are neither consumed nor mutated.
  */
+fun FirFunctionSymbol<*>.isSpecificationFunction(session: FirSession): Boolean =
+    hasAnnotation(annotationId("SpecificationHelper"), session)
+
 context(context: CheckerContext)
 private fun FirFunctionSymbol<*>.isSpecificationFunction(): Boolean =
-    hasAnnotation(annotationId("SpecificationHelper"), context.session)
+    isSpecificationFunction(context.session)
 
 context(context: CheckerContext)
 fun FirStatement.isSpecificationCall(): Boolean =

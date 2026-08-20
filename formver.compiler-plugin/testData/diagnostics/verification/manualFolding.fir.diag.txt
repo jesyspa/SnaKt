@@ -123,17 +123,26 @@ method combine(par_left: Ref, par_right: Ref) returns (v_ret_0: Ref)
   ensures acc(Tree_unique(v_ret_0), write)
 {
   var l0_data: Ref
-  var anon_0: Ref
   var anon_1: Ref
+  var anon_2: Ref
   var res: Ref
+  var anon_0: Ref
   unfold acc(Tree_unique(par_left), write)
   unfold acc(Tree_unique(par_right), write)
-  anon_0 := par_left.bf_data
-  anon_1 := par_right.bf_data
-  l0_data := plusInts(anon_0, anon_1)
+  anon_1 := par_left.bf_data
+  anon_2 := par_right.bf_data
+  l0_data := plusInts(anon_1, anon_2)
   fold acc(Tree_unique(par_left), write)
   fold acc(Tree_unique(par_right), write)
-  res := con_Tree(par_left, par_right, l0_data)
+  anon_0 := new(bf_left, bf_right, bf_data)
+  inhale isSubtype(typeOf(anon_0), Tree())
+  inhale isSubtype(typeOf(par_left), nullable(Tree()))
+  anon_0.bf_left := par_left
+  inhale isSubtype(typeOf(par_right), nullable(Tree()))
+  anon_0.bf_right := par_right
+  anon_0.bf_data := l0_data
+  fold acc(Tree_unique(anon_0), write)
+  res := anon_0
   v_ret_0 := res
   goto lbl_ret_0
   label lbl_ret_0

@@ -19,45 +19,52 @@ method checkMemberAccess() returns (v_ret_0: Ref)
   ensures boolFromRef(v_ret_0) == true
 {
   var obj: Ref
-  var anon_1: Ref
-  var anon_2: Ref
-  var v_ret_5: Ref
-  var anon_3: Ref
-  var v_ret_7: Ref
   var anon_0: Ref
+  var anon_1: Ref
+  var anon_3: Ref
   var anon_4: Ref
+  var v_ret_5: Ref
   var anon_5: Ref
+  var v_ret_7: Ref
+  var anon_2: Ref
   var anon_6: Ref
-  var v_ret_10: Ref
   var anon_7: Ref
+  var anon_8: Ref
+  var v_ret_10: Ref
+  var anon_9: Ref
   var v_ret_11: Ref
-  obj := con(intToRef(42))
+  anon_0 := intToRef(42)
+  anon_1 := new()
+  inhale isSubtype(typeOf(anon_1), ClassWithMember())
+  inhale intFromRef(g_member(anon_1)) == intFromRef(anon_0)
+  fold acc(ClassWithMember_unique(anon_1), write)
+  obj := anon_1
   inhale isSubtype(typeOf(obj), nullable(anyType()))
-  anon_4 := idFun(obj)
-  anon_0 := anon_4
-  inhale isSubtype(typeOf(anon_0), ClassWithMember())
-  v_ret_7 := g_member(anon_0)
+  anon_6 := idFun(obj)
+  anon_2 := anon_6
+  inhale isSubtype(typeOf(anon_2), ClassWithMember())
+  v_ret_7 := g_member(anon_2)
   goto lbl_ret_7
   label lbl_ret_7
-  anon_3 := v_ret_7
-  v_ret_5 := anon_3
+  anon_5 := v_ret_7
+  v_ret_5 := anon_5
   inhale isSubtype(typeOf(v_ret_5), nullable(anyType()))
   goto lbl_ret_5
   label lbl_ret_5
-  anon_2 := v_ret_5
-  anon_1 := anon_2
-  inhale isSubtype(typeOf(anon_1), intType())
+  anon_4 := v_ret_5
+  anon_3 := anon_4
+  inhale isSubtype(typeOf(anon_3), intType())
   v_ret_0 := boolToRef(intFromRef(g_member(obj)) == 42)
   goto lbl_ret_0
   label lbl_ret_11
-  anon_7 := v_ret_11
-  v_ret_10 := anon_7
+  anon_9 := v_ret_11
+  v_ret_10 := anon_9
   inhale isSubtype(typeOf(v_ret_10), nullable(anyType()))
   goto lbl_ret_10
   label lbl_ret_10
-  anon_6 := v_ret_10
-  anon_5 := anon_6
-  inhale isSubtype(typeOf(anon_5), nothingType())
+  anon_8 := v_ret_10
+  anon_7 := anon_8
+  inhale isSubtype(typeOf(anon_7), nothingType())
   label lbl_ret_0
 }
 
@@ -99,17 +106,19 @@ method checkGenericMemberAccess(box: Ref) returns (v_ret_0: Ref)
   var v_ret_4: Ref
   var v_ret_6: Ref
   var anon_0: Ref
-  var anon_2: Ref
-  var anon_3: Ref
   var anon_4: Ref
-  var v_ret_10: Ref
-  var anon_1: Ref
   var anon_5: Ref
   var anon_6: Ref
+  var v_ret_10: Ref
+  var anon_3: Ref
+  var anon_7: Ref
+  var anon_1: Ref
+  var anon_2: Ref
+  var anon_8: Ref
   var v_ret_11: Ref
   inhale isSubtype(typeOf(box), nullable(anyType()))
-  anon_2 := idFun(box)
-  anon_0 := anon_2
+  anon_4 := idFun(box)
+  anon_0 := anon_4
   inhale isSubtype(typeOf(anon_0), Box())
   v_ret_6 := g_wrapped(anon_0)
   goto lbl_ret_6
@@ -117,21 +126,26 @@ method checkGenericMemberAccess(box: Ref) returns (v_ret_0: Ref)
   v_ret_4 := v_ret_6
   goto lbl_ret_4
   label lbl_ret_4
-  anon_5 := con(g_wrapped(box))
-  anon_1 := anon_5
-  inhale isSubtype(typeOf(anon_1), nullable(anyType()))
-  inhale isSubtype(typeOf(anon_1), Box())
-  v_ret_0 := boolToRef(g_wrapped(anon_1) == g_wrapped(box))
+  anon_1 := g_wrapped(box)
+  anon_2 := new()
+  inhale isSubtype(typeOf(anon_2), Box())
+  inhale g_wrapped(anon_2) == anon_1
+  fold acc(Box_unique(anon_2), write)
+  anon_7 := anon_2
+  anon_3 := anon_7
+  inhale isSubtype(typeOf(anon_3), nullable(anyType()))
+  inhale isSubtype(typeOf(anon_3), Box())
+  v_ret_0 := boolToRef(g_wrapped(anon_3) == g_wrapped(box))
   goto lbl_ret_0
   label lbl_ret_11
-  anon_6 := v_ret_11
-  v_ret_10 := anon_6
+  anon_8 := v_ret_11
+  v_ret_10 := anon_8
   inhale isSubtype(typeOf(v_ret_10), nullable(anyType()))
   goto lbl_ret_10
   label lbl_ret_10
-  anon_4 := v_ret_10
-  anon_3 := anon_4
-  inhale isSubtype(typeOf(anon_3), nothingType())
+  anon_6 := v_ret_10
+  anon_5 := anon_6
+  inhale isSubtype(typeOf(anon_5), nothingType())
   label lbl_ret_0
 }
 

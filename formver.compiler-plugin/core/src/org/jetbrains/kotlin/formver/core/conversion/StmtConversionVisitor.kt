@@ -22,6 +22,7 @@ import org.jetbrains.kotlin.fir.types.resolvedType
 import org.jetbrains.kotlin.fir.visitors.FirVisitor
 import org.jetbrains.kotlin.formver.common.SnaktInternalException
 import org.jetbrains.kotlin.formver.common.UnsupportedFeatureBehaviour
+import org.jetbrains.kotlin.formver.core.isSpecificationFunction
 import org.jetbrains.kotlin.formver.core.embeddings.LabelLink
 import org.jetbrains.kotlin.formver.core.embeddings.callables.CallableEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.callables.insertCall
@@ -290,7 +291,9 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         val callee = data.embedAnyFunction(symbol)
         val args = functionCall.functionCallArguments.withVarargsHandled(data, callee)
         val returnType = data.embedType(functionCall.resolvedType)
-        if (symbol.isPrimaryConstructor()) {
+        // A specification-DSL constructor such as `UniquePred(x)` denotes a predicate instance rather than an
+        // allocation: `fold` and `unfold` read the predicate back off the method call it converts to.
+        if (symbol.isPrimaryConstructor() && !symbol.isSpecificationFunction(data.session)) {
             data.insertPrimaryConstructorCall(symbol, callee, args)?.let { constructed ->
                 return constructed.withNewTypeInvariants(returnType, data.typeResolver) {
                     access = true
