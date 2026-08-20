@@ -1,63 +1,63 @@
 import org.jetbrains.kotlin.formver.plugin.Unique
 
-class UniquePrimitiveFields(
-    val sharedVal: Int,
-    var sharedVar: Int,
-    @Unique val uniqueVal: Int,
-    @Unique var uniqueVar: Int
+class UniqueContainer(
+    val sharedVal: Any,
+    var sharedVar: Any,
+    val uniqueVal: @Unique Any,
+    var uniqueVar: @Unique Any
 )
 
-fun <!VIPER_TEXT!>testPrimitiveFieldGetterUnique<!>(@Unique pf: UniquePrimitiveFields) {
+fun <!VIPER_TEXT!>testPrimitiveFieldGetterUnique<!>(pf: @Unique UniqueContainer) {
     val sharedVal = pf.sharedVal
     var sharedVar = pf.sharedVar
     val uniqueVal = pf.uniqueVal
     var uniqueVar = pf.uniqueVar
 }
 
-fun <!VIPER_TEXT!>testPrimitiveFieldGetterShared<!>(pf: UniquePrimitiveFields) {
+fun <!VIPER_TEXT!>testPrimitiveFieldGetterShared<!>(pf: UniqueContainer) {
     val sharedVal = pf.sharedVal
     var sharedVar = pf.sharedVar
     val uniqueVal = pf.uniqueVal
     var uniqueVar = pf.uniqueVar
 }
 
-fun <!VIPER_TEXT!>testPrimitiveFieldSetterUnique<!>(@Unique pf: UniquePrimitiveFields) {
-    pf.sharedVar = 1
-    pf.uniqueVar = 2
+fun <!VIPER_TEXT!>testPrimitiveFieldSetterUnique<!>(pf: @Unique UniqueContainer) {
+    pf.sharedVar = Any()
+    pf.uniqueVar = Any()
 }
 
-fun <!VIPER_TEXT!>testPrimitiveFieldSetterShared<!>(pf: UniquePrimitiveFields) {
-    pf.sharedVar = 3
-    pf.uniqueVar = 4
+fun <!VIPER_TEXT!>testPrimitiveFieldSetterShared<!>(pf: UniqueContainer) {
+    pf.sharedVar = Any()
+    pf.uniqueVar = Any()
 }
 
-class UniqueReferenceFields(
-    val sharedVal: UniquePrimitiveFields,
-    var sharedVar: UniquePrimitiveFields,
-    @Unique val uniqueVal: UniquePrimitiveFields,
-    @Unique var uniqueVar: UniquePrimitiveFields
+class UniqueNestedContainer(
+    val sharedVal: UniqueContainer,
+    var sharedVar: UniqueContainer,
+    val uniqueVal: @Unique UniqueContainer,
+    var uniqueVar: @Unique UniqueContainer
 )
 
-fun <!VIPER_TEXT!>testReferenceFieldGetterUnique<!>(@Unique rf: UniqueReferenceFields) {
+fun <!VIPER_TEXT!>testReferenceFieldGetterUnique<!>(rf: @Unique UniqueNestedContainer) {
     val sharedVal = rf.sharedVal
     var sharedVar = rf.sharedVar
     val uniqueVal = rf.uniqueVal
     var uniqueVar = rf.uniqueVar
 }
 
-fun <!VIPER_TEXT!>testReferenceFieldGetterShared<!>(rf: UniqueReferenceFields) {
+fun <!VIPER_TEXT!>testReferenceFieldGetterShared<!>(rf: UniqueNestedContainer) {
     val sharedVal = rf.sharedVal
     var sharedVar = rf.sharedVar
     val uniqueVal = rf.uniqueVal
     var uniqueVar = rf.uniqueVar
 }
 
-fun <!VIPER_TEXT!>testReferenceFieldSetterUnique<!>(@Unique rf: UniqueReferenceFields) {
-    rf.sharedVar = UniquePrimitiveFields(5, 6, 7, 8)
-    rf.uniqueVar = UniquePrimitiveFields(9, 10, 11, 12)
+fun <!VIPER_TEXT!>testReferenceFieldSetterUnique<!>(rf: @Unique UniqueNestedContainer) {
+    rf.sharedVar = UniqueContainer(Any(), Any(), Any(), Any())
+    rf.uniqueVar = UniqueContainer(Any(), Any(), Any(), Any())
 }
 
-fun <!VIPER_TEXT!>testReferenceFieldSetterShared<!>(rf: UniqueReferenceFields) {
-    rf.sharedVar = UniquePrimitiveFields(13, 14, 15, 16)
-    rf.uniqueVar = UniquePrimitiveFields(17, 18, 19, 20)
+fun <!VIPER_TEXT!>testReferenceFieldSetterShared<!>(rf: UniqueNestedContainer) {
+    rf.sharedVar = UniqueContainer(Any(), Any(), Any(), Any())
+    rf.uniqueVar = UniqueContainer(Any(), Any(), Any(), Any())
 }

@@ -9,7 +9,6 @@ import org.jetbrains.kotlin.compiler.plugin.CompilerPluginRegistrar.ExtensionSto
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.fir.extensions.FirExtensionRegistrarAdapter
 import org.jetbrains.kotlin.formver.common.*
-import org.jetbrains.kotlin.formver.locality.plugin.LocalityExtensionRegistrar
 import org.jetbrains.kotlin.formver.plugin.compiler.FormalVerificationPluginExtensionRegistrar
 import org.jetbrains.kotlin.formver.plugin.services.FormVerDirectives.ALWAYS_VALIDATE
 import org.jetbrains.kotlin.formver.plugin.services.FormVerDirectives.DUMP_UNIQUENESS_CFG
@@ -19,7 +18,6 @@ import org.jetbrains.kotlin.formver.plugin.services.FormVerDirectives.NEVER_VALI
 import org.jetbrains.kotlin.formver.plugin.services.FormVerDirectives.RENDER_PREDICATES
 import org.jetbrains.kotlin.formver.plugin.services.FormVerDirectives.REPLACE_STDLIB_EXTENSIONS
 import org.jetbrains.kotlin.formver.plugin.services.FormVerDirectives.UNIQUE_CHECK_ONLY
-import org.jetbrains.kotlin.formver.uniqueness.plugin.UniquenessExtensionRegistrar
 import org.jetbrains.kotlin.test.directives.model.DirectivesContainer
 import org.jetbrains.kotlin.test.directives.model.RegisteredDirectives
 import org.jetbrains.kotlin.test.directives.model.SimpleDirectivesContainer
@@ -61,27 +59,16 @@ class ExtensionRegistrarConfigurator(testServices: TestServices) : EnvironmentCo
             uniquenessOnly || localityOnly -> TargetsSelection.NO_TARGETS
             else -> TargetsSelection.ALL_TARGETS
         }
-        val checkUniqueness = uniquenessOnly
-        // Locality must run before uniqueness in tests.
-        // UNIQUE_CHECK_ONLY enables both checkers (in this order), while LOCALITY_CHECK_ONLY keeps uniqueness off.
-        val checkLocality = localityOnly || checkUniqueness
+
         val config = PluginConfiguration(
             logLevel,
             errorStyle,
             UnsupportedFeatureBehaviour.THROW_EXCEPTION,
             conversionSelection = conversionSelection,
             verificationSelection = verificationSelection,
-            checkUniqueness = checkUniqueness,
-            dumpUniquenessCFG = dumpUniquenessCFG,
-            checkLocality = checkLocality,
+            dumpUniquenessCFG = dumpUniquenessCFG
         )
         FirExtensionRegistrarAdapter.registerExtension(FormalVerificationPluginExtensionRegistrar(config))
-        if (config.checkLocality) {
-            FirExtensionRegistrarAdapter.registerExtension(LocalityExtensionRegistrar())
-        }
-        if (config.checkUniqueness) {
-            FirExtensionRegistrarAdapter.registerExtension(UniquenessExtensionRegistrar())
-        }
     }
 }
 
@@ -98,12 +85,15 @@ object FormVerDirectives : SimpleDirectivesContainer() {
         description = "Always validate functions"
     )
 
+    // The uniqueness and locality checkers run in every test; these two only take conversion and verification out of
+    // the way, so a test can be about the checker diagnostics alone. They are synonyms, kept apart to say which
+    // checker the test is about.
     val UNIQUE_CHECK_ONLY by directive(
-        description = "Do uniqueness checking (and run locality first)"
+        description = "Report checker diagnostics only; do not convert or verify"
     )
 
     val LOCALITY_CHECK_ONLY by directive(
-        description = "Do locality checking"
+        description = "Report checker diagnostics only; do not convert or verify"
     )
 
     val DUMP_UNIQUENESS_CFG by directive(

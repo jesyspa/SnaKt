@@ -13,20 +13,15 @@ import org.jetbrains.kotlin.fir.analysis.checkers.declaration.FirSimpleFunctionC
 import org.jetbrains.kotlin.fir.declarations.FirDeclarationOrigin
 import org.jetbrains.kotlin.fir.declarations.FirSimpleFunction
 import org.jetbrains.kotlin.fir.resolve.dfa.controlFlowGraph
-import org.jetbrains.kotlin.formver.common.PluginConfiguration
 import org.jetbrains.kotlin.formver.uniqueness.plugin.render
 import org.jetbrains.kotlin.formver.uniqueness.plugin.resolveUniquenessStateFlows
 
 /**
  * Stub checker for emitting the rendered representation of a graph along with the uniqueness state information.
  */
-class FunctionUniquenessStateRenderingChecker(
-    private val config: PluginConfiguration
-) : FirSimpleFunctionChecker(MppCheckerKind.Common) {
+object FunctionUniquenessStateRenderingChecker : FirSimpleFunctionChecker(MppCheckerKind.Common) {
     context(context: CheckerContext, reporter: DiagnosticReporter)
     override fun check(declaration: FirSimpleFunction) {
-        if (!config.checkUniqueness || !config.dumpUniquenessCFG) return
-
         if (declaration.origin != FirDeclarationOrigin.Source) return
 
         val graph = declaration.controlFlowGraphReference?.controlFlowGraph

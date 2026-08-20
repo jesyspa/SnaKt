@@ -2,7 +2,7 @@
 
 import org.jetbrains.kotlin.formver.plugin.Borrowed
 
-fun `allow locality attribute on extension receiver type`(@Borrowed x: Any) {
+fun `allow locality attribute on extension receiver type`(x: @Borrowed Any) {
     fun @Borrowed Any.localReceiver() {}
     x.localReceiver()
 }
