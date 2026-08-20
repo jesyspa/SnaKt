@@ -277,6 +277,35 @@ sealed interface Stmt : WithSilverMetadata, IntoSilver<viper.silver.ast.Stmt> {
         }
     }
 
+    /**
+     * Allocates a fresh reference into [lhs] and grants write permission to each of [fields] on it.
+     *
+     * The freshness is what makes this usable in place of a havoc: the allocated reference is
+     * distinct from every reference reachable beforehand, so heap-dependent functions applied to
+     * it cannot be conflated with their pre-allocation values.
+     */
+    data class New(
+        val lhs: Exp.LocalVar,
+        val fields: List<Field>,
+        override val pos: Position = Position.NoPosition,
+        override val info: Info = Info.NoInfo,
+    ) : Stmt {
+        context(nameResolver: NameResolver)
+        override fun toSilver(): viper.silver.ast.NewStmt = viper.silver.ast.NewStmt(
+            lhs.toSilver(),
+            fields.toSilver().toScalaSeq(),
+            pos.toSilver(),
+            info.toSilver(),
+            silverNoTrafos
+        )
+
+        context(nameResolver: NameResolver)
+        override fun registerNames() {
+            nameResolver.register(lhs.name)
+            fields.forEach { nameResolver.register(it.name) }
+        }
+    }
+
     data class Fold(
         val acc: Exp.PredicateAccess,
         override val pos: Position = Position.NoPosition,

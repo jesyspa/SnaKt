@@ -477,6 +477,29 @@ data class LinearizationVisitor(
         }
     }
 
+    override fun visitAllocateObject(e: AllocateObject): Linearizable = object : UnitResultLinearizable(e) {
+        override fun toViperUnusedResult(ctx: LinearizationContext) {
+            val target = e.variable.toViperExp(ctx) as? Exp.LocalVar
+                ?: error("Allocation target must be a local variable")
+            val fields = ctx.typeResolver.flatMapUniqueFields(e.classType.name) { listOf(it.toViper()) }
+            ctx.addStatement { Stmt.New(target, fields, ctx.source.asPosition) }
+        }
+    }
+
+    override fun visitInitField(e: InitField): Linearizable = object : UnitResultLinearizable(e) {
+        override fun toViperUnusedResult(ctx: LinearizationContext) {
+            val receiverViper = e.receiver.linearize().toViper(ctx)
+            val valueViper = e.value.linearize().toViper(ctx)
+            ctx.addStatement {
+                Stmt.FieldAssign(
+                    Exp.FieldAccess(receiverViper, e.field.toViper()),
+                    valueViper,
+                    ctx.source.asPosition
+                )
+            }
+        }
+    }
+
     // endregion
 
     // region Assignment / Declaration

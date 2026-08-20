@@ -8,6 +8,7 @@ package org.jetbrains.kotlin.formver.core.conversion
 import org.jetbrains.kotlin.KtSourceElement
 import org.jetbrains.kotlin.contracts.description.LogicOperationKind
 import org.jetbrains.kotlin.fir.FirElement
+import org.jetbrains.kotlin.fir.analysis.checkers.isPrimaryConstructor
 import org.jetbrains.kotlin.fir.declarations.FirProperty
 import org.jetbrains.kotlin.fir.expressions.*
 import org.jetbrains.kotlin.fir.expressions.impl.FirElseIfTrueCondition
@@ -287,11 +288,17 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
             ?: throw NotImplementedError("Only functions are expected as callables of function calls, got ${functionCall.toResolvedCallableSymbol()}")
 
         val callee = data.embedAnyFunction(symbol)
-        return callee.insertCall(
-            functionCall.functionCallArguments.withVarargsHandled(data, callee),
-            data,
-            data.embedType(functionCall.resolvedType),
-        )
+        val args = functionCall.functionCallArguments.withVarargsHandled(data, callee)
+        val returnType = data.embedType(functionCall.resolvedType)
+        if (symbol.isPrimaryConstructor()) {
+            data.insertPrimaryConstructorCall(symbol, callee, args)?.let { constructed ->
+                return constructed.withNewTypeInvariants(returnType, data.typeResolver) {
+                    access = true
+                    proven = true
+                }
+            }
+        }
+        return callee.insertCall(args, data, returnType)
     }
 
     override fun visitImplicitInvokeCall(

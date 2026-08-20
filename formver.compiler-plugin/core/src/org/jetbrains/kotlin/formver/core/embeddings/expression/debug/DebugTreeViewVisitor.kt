@@ -145,6 +145,22 @@ class DebugTreeViewVisitor(private val nameResolver: NameResolver) : DefaultingE
         OperatorNode(e.receiver.tree(), ".", e.field.debugTreeView)
     }
 
+    override fun visitAllocateObject(e: AllocateObject): TreeView = with(nameResolver) {
+        OperatorNode(
+            e.variable.tree(),
+            " := new ",
+            e.classType.debugTreeView,
+        )
+    }
+
+    override fun visitInitField(e: InitField): TreeView = with(nameResolver) {
+        OperatorNode(
+            OperatorNode(e.receiver.tree(), ".", e.field.debugTreeView),
+            " := ",
+            e.value.tree(),
+        )
+    }
+
     override fun visitFieldModification(e: FieldModification): TreeView = with(nameResolver) {
         OperatorNode(
             OperatorNode(e.receiver.tree(), ".", e.field.debugTreeView),

@@ -70,6 +70,8 @@ internal class ExprPurityVisitor(val declaredVariables: MutableSet<VariableEmbed
     override fun visitAccEmbedding(e: AccEmbedding): Boolean = false
     override fun visitFold(e: Fold): Boolean = false
     override fun visitUnfold(e: Unfold): Boolean = false
+    override fun visitAllocateObject(e: AllocateObject): Boolean = false
+    override fun visitInitField(e: InitField): Boolean = false
 }
 
 private fun ExpEmbedding.allChildrenPure(v: ExprPurityVisitor): Boolean =

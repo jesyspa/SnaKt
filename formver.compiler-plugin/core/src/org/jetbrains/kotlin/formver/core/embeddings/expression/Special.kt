@@ -6,6 +6,8 @@
 package org.jetbrains.kotlin.formver.core.embeddings.expression
 
 import org.jetbrains.kotlin.formver.core.embeddings.ExpVisitor
+import org.jetbrains.kotlin.formver.core.embeddings.properties.FieldEmbedding
+import org.jetbrains.kotlin.formver.core.embeddings.types.ClassTypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.buildType
 import org.jetbrains.kotlin.formver.core.purity.PurityContext
@@ -65,4 +67,31 @@ data class Fold(val pred: PredicateAccessPermissions) : ExpEmbedding {
 
     override fun children(): Sequence<ExpEmbedding> = sequenceOf(pred)
     override fun <R> accept(v: ExpVisitor<R>): R = v.visitFold(this)
+}
+
+/**
+ * Allocates a fresh object into [variable], granting write access to every backing field of [classType]
+ * and its supertypes.
+ *
+ * The freshness comes from Viper's allocation, not from a havoc: the reference is distinct from every
+ * reference reachable beforehand, so heap-dependent functions applied to it are unconstrained rather
+ * than conflated with their pre-allocation values.
+ */
+data class AllocateObject(val variable: VariableEmbedding, val classType: ClassTypeEmbedding) : ExpEmbedding {
+    override val type: TypeEmbedding = buildType { unit() }
+
+    override fun <R> accept(v: ExpVisitor<R>): R = v.visitAllocateObject(this)
+}
+
+/**
+ * Writes [value] into [field] of a freshly allocated [receiver].
+ *
+ * Unlike [FieldModification] this neither unfolds nor havocs: the receiver's predicates are not folded
+ * yet, so the write permission is held directly.
+ */
+data class InitField(val receiver: ExpEmbedding, val field: FieldEmbedding, val value: ExpEmbedding) : ExpEmbedding {
+    override val type: TypeEmbedding = buildType { unit() }
+
+    override fun children(): Sequence<ExpEmbedding> = sequenceOf(receiver, value)
+    override fun <R> accept(v: ExpVisitor<R>): R = v.visitInitField(this)
 }
