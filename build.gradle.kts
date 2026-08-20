@@ -1,4 +1,5 @@
 import io.gitlab.arturbosch.detekt.Detekt
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -9,9 +10,20 @@ plugins {
     id("io.gitlab.arturbosch.detekt") version "1.23.7"
 }
 
+// The JDK this project compiles against and targets. Pinned rather than
+// inherited from the launching JVM so the bytecode does not depend on which
+// JDK a developer happens to run Gradle on.
+val jdkVersion = 21
+
 allprojects {
     group = "org.jetbrains.kotlin.formver"
     version = "0.1.0-SNAPSHOT"
+
+    pluginManager.withPlugin("org.jetbrains.kotlin.jvm") {
+        extensions.configure<KotlinJvmProjectExtension> {
+            jvmToolchain(jdkVersion)
+        }
+    }
 
     tasks.withType<KotlinCompile> {
         compilerOptions {
@@ -30,7 +42,7 @@ subprojects {
     }
 
     tasks.withType<Detekt>().configureEach {
-        jvmTarget = "21"
+        jvmTarget = jdkVersion.toString()
         // Project uses a custom layout (src/ instead of src/main/kotlin) — list the
         // source roots explicitly so detekt scans them. test-gen is not listed: it
         // contains only generated Java test runners (produced by generateTests),
