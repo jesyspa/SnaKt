@@ -70,9 +70,6 @@ class ViperProgramVerificationFacade(val testServices: TestServices) :
                 })
             }
             if (toVerify.isNotEmpty()) {
-                // TODO: emptyList() leaves z3config.smt2's `smt.mbqi false` in effect, which
-                //  prevents exists<T> from discharging postcondition existential witnesses. Pass
-                //  Silicon args that enable MBQI here once that change is scoped and approved.
                 val verifier = SiliconFrontend(emptyList())
                 toVerify.forEach { (testFile, decl) ->
                     val diagnostics = verifyFunction(verifier, decl, module)

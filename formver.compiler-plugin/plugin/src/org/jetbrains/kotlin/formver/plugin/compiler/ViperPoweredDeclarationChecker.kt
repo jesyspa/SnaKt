@@ -109,9 +109,6 @@ class ViperPoweredDeclarationChecker(private val session: FirSession, private va
                     reporter.reportVerifierError(source, err, config.errorStyle)
                 }
 
-                // TODO: emptyList() leaves z3config.smt2's `smt.mbqi false` in effect, which
-                //  prevents exists<T> from discharging postcondition existential witnesses. Pass
-                //  Silicon args that enable MBQI here once that change is scoped and approved.
                 val verifier = SiliconFrontend(emptyList())
                 verifier.use { it.verify(viperProgram, onFailure) }
             }

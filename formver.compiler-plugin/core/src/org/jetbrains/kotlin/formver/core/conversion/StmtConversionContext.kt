@@ -217,7 +217,7 @@ fun StmtConversionContext.insertInlineFunctionCall(
     }
 }
 
-private fun StmtConversionContext.insertQuantifierFunctionCall(
+internal fun StmtConversionContext.insertQuantifierFunctionCall(
     symbol: FirValueParameterSymbol,
     block: FirBlock,
     buildEmbedding: (VariableEmbedding, List<ExpEmbedding>, List<ExpEmbedding>) -> ExpEmbedding,
@@ -241,15 +241,6 @@ private fun StmtConversionContext.insertQuantifierFunctionCall(
     }
 }
 
-fun StmtConversionContext.insertForAllFunctionCall(
-    symbol: FirValueParameterSymbol,
-    block: FirBlock,
-): ExpEmbedding = insertQuantifierFunctionCall(symbol, block, ::ForAllEmbedding)
-
-fun StmtConversionContext.insertExistsFunctionCall(
-    symbol: FirValueParameterSymbol,
-    block: FirBlock,
-): ExpEmbedding = insertQuantifierFunctionCall(symbol, block, ::ExistsEmbedding)
 
 fun StmtConversionContext.convertImpureBody(
     declaration: FirSimpleFunction,

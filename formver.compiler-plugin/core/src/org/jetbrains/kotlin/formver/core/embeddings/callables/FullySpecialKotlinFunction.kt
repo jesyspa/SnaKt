@@ -6,11 +6,8 @@
 package org.jetbrains.kotlin.formver.core.embeddings.callables
 
 import org.jetbrains.kotlin.formver.common.SnaktInternalException
-import org.jetbrains.kotlin.fir.expressions.FirBlock
-import org.jetbrains.kotlin.fir.symbols.impl.FirValueParameterSymbol
 import org.jetbrains.kotlin.formver.core.conversion.StmtConversionContext
-import org.jetbrains.kotlin.formver.core.conversion.insertExistsFunctionCall
-import org.jetbrains.kotlin.formver.core.conversion.insertForAllFunctionCall
+import org.jetbrains.kotlin.formver.core.conversion.insertQuantifierFunctionCall
 import org.jetbrains.kotlin.formver.core.embeddings.expression.*
 import org.jetbrains.kotlin.formver.core.embeddings.expression.OperatorExpEmbeddings.AddCharInt
 import org.jetbrains.kotlin.formver.core.embeddings.expression.OperatorExpEmbeddings.AddIntInt
@@ -46,7 +43,7 @@ private fun insertQuantifierFunctionCall(
     functionName: String,
     args: List<ExpEmbedding>,
     ctx: StmtConversionContext,
-    insertCall: StmtConversionContext.(FirValueParameterSymbol, FirBlock) -> ExpEmbedding,
+    buildEmbedding: (VariableEmbedding, List<ExpEmbedding>, List<ExpEmbedding>) -> ExpEmbedding,
 ): ExpEmbedding {
     val lambda = args.first().ignoringMetaNodes() as? LambdaExp ?: throw SnaktInternalException(
         null,
@@ -57,7 +54,7 @@ private fun insertQuantifierFunctionCall(
         null,
         "Lambda body of $functionName function must be present."
     )
-    return ctx.insertCall(param.symbol, body)
+    return ctx.insertQuantifierFunctionCall(param.symbol, body, buildEmbedding)
 }
 
 /**
@@ -221,11 +218,11 @@ object SpecialKotlinFunctions {
         }
 
         addFunction(quantifierCallableType, SpecialPackages.formver, name = "forAll") { args, ctx ->
-            insertQuantifierFunctionCall("forAll", args, ctx, StmtConversionContext::insertForAllFunctionCall)
+            insertQuantifierFunctionCall("forAll", args, ctx, ::ForAllEmbedding)
         }
 
         addFunction(quantifierCallableType, SpecialPackages.formver, name = "exists") { args, ctx ->
-            insertQuantifierFunctionCall("exists", args, ctx, StmtConversionContext::insertExistsFunctionCall)
+            insertQuantifierFunctionCall("exists", args, ctx, ::ExistsEmbedding)
         }
 
         val permissionCallableType = buildFunctionPretype {

@@ -31,24 +31,8 @@ fun <T> forAll(@Suppress("UNUSED_PARAMETER") body: InvariantBuilder.(T) -> Unit)
 /**
  * Asserts that there exists a value of type [T] satisfying the predicate in [body].
  *
- * Lowered to a Viper `exists` quantifier. The [body] runs in an [InvariantBuilder] receiver scope,
- * allowing [InvariantBuilder.triggers] to supply SMT trigger hints.
- *
- * **Known limitation — postcondition witnesses are not dischargeable.** Silicon ships with
- * `smt.mbqi false` (model-based quantifier instantiation disabled) and this plugin passes an empty
- * argument list at both verification call sites. MBQI is the primary mechanism by which an SMT
- * solver finds an existential witness; without it a postcondition of the form
- *
- * ```kotlin
- * exists<Int> { i -> 0 <= i && i < n && pred(i) }
- * ```
- *
- * will not verify even when the body is trivially satisfiable and a trigger is present. This is
- * confirmed at the Silicon configuration level and is not a gap in the lowering.
- *
- * Workaround: place the witness in a **precondition** or carry it through a **loop invariant**
- * rather than asserting it as a postcondition. Enabling MBQI at the two `SiliconFrontend`
- * call sites is tracked as a maintainer follow-up.
+ * **Known limitation:** `exists` in a postcondition will not verify even when the predicate
+ * is trivially satisfiable. Place the witness in a precondition or loop invariant instead.
  */
 fun <T> exists(@Suppress("UNUSED_PARAMETER") body: InvariantBuilder.(T) -> Unit): Boolean =
     throw FormverFunctionCalledInRuntimeException("exists")

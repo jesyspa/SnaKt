@@ -22,10 +22,6 @@ sealed class Info : IntoSilver<viper.silver.ast.Info> {
         fun fromSilver(info: viper.silver.ast.Info): Info = when (info) {
             `NoInfo$`.`MODULE$` -> NoInfo
             is Wrapper -> Wrapped(info.wrappedValue)
-            // Silicon may attach its own info kinds (e.g. auto-generated trigger
-            // metadata) to the nodes it reports errors on. Those carry no SnaKt
-            // source role, so treat them as absent rather than crashing: this lets
-            // the error surface as a normal Viper verification error.
             else -> NoInfo
         }
     }
