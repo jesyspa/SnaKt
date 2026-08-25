@@ -1,0 +1,22 @@
+/exists_list_get_crash.kt: error: An internal error has occurred.
+Details: PureLinearizer used to convert non-pure ExpEmbedding; operation freshAnonVar is not supported in a pure context.
+Embedding debug view:
+SequentialAnd(
+    SequentialAnd(
+        (Int(0), Var(anon$builtin$0)),
+        (Var(anon$builtin$0), InhaleInvariants(Var(par$l).Field(p$size), type = Int)),
+    ),
+    EqCmp(
+        MethodCall(
+            callee = pkg$kotlin$collections$c$List$f$get$args$t$pkg$kotlin$collections$c$List$Int$ret$Int,
+            Var(par$l),
+            Var(anon$builtin$0),
+        ),
+        MethodCall(
+            callee = pkg$kotlin$collections$c$List$f$get$args$t$pkg$kotlin$collections$c$List$Int$ret$Int,
+            Var(par$l),
+            Var(par$res),
+        ),
+    ),
+)
+Please report this at https://github.com/jesyspa/kotlin

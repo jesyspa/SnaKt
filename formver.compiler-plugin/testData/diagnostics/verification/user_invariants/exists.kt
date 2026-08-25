@@ -2,6 +2,11 @@
 
 import org.jetbrains.kotlin.formver.plugin.*
 
+// Green path: an `exists` in a *precondition* is assumed at method entry, so it
+// verifies without needing the solver to construct a witness. This is the only
+// position in which `exists` currently verifies — discharging an `exists` in a
+// postcondition needs MBQI, which is not yet enabled (see the follow-up branch
+// introducing `unsafeExists`).
 @AlwaysVerify
 fun <!VIPER_TEXT!>simpleExists<!>(): Int {
     preconditions {
@@ -10,10 +15,11 @@ fun <!VIPER_TEXT!>simpleExists<!>(): Int {
     return 0
 }
 
-// `s[res]` has no bounds guard on `res`; Viper rejects the unguarded index
-// inside the exists body as a well-formedness violation. Tests that exists<T>
-// in a postcondition surfaces a failure as VIPER_VERIFICATION_ERROR rather
-// than crashing or silently passing.
+// Well-formedness path: `s[res]` inside the `exists` body has no bounds guard on
+// `res`, so Viper rejects the body as not well-formed ("Index ... might be
+// negative"). This pins that a well-formedness failure inside an `exists` body
+// surfaces as a VIPER_VERIFICATION_ERROR diagnostic rather than crashing the
+// compiler or silently passing. (It is not a failure to prove the existential.)
 <!VIPER_VERIFICATION_ERROR!>@AlwaysVerify
 fun <!VIPER_TEXT!>duplicateIndexExists<!>(s: String, res: Int): Int {
     postconditions<Int> {
