@@ -1,1 +1,3 @@
 /exists.kt: warning: Viper verification error: Contract might not be well-formed. Index intFromRef(res) into stringFromRef(s) might be negative.
+
+/exists.kt: warning: Viper verification error: Postcondition of existsPostcondWithoutTrigger might not hold. Assertion (exists anon: Int :: anon == 0) might not hold.

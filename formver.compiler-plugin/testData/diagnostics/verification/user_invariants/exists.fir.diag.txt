@@ -20,3 +20,13 @@ method duplicateIndexExists(s: Ref, res: Ref) returns (v_ret_0: Ref)
   goto lbl_ret_0
   label lbl_ret_0
 }
+
+/exists.kt: info: Generated Viper text for existsPostcondWithoutTrigger:
+method existsPostcondWithoutTrigger() returns (v_ret_0: Ref)
+  ensures isSubtype(typeOf(v_ret_0), intType())
+  ensures (exists anon: Int :: anon == 0)
+{
+  v_ret_0 := intToRef(0)
+  goto lbl_ret_0
+  label lbl_ret_0
+}
