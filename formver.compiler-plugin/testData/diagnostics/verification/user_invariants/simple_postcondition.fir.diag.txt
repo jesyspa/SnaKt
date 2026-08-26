@@ -11,6 +11,7 @@ method testGreater(init: Ref) returns (v_ret_0: Ref)
 
 /simple_postcondition.kt: info: Generated Viper text for testString:
 method testString() returns (v_ret_0: Ref)
+  ensures 0 <= charFromRef(v_ret_0) && charFromRef(v_ret_0) < 65536
   ensures isSubtype(typeOf(v_ret_0), charType())
   ensures charFromRef(v_ret_0) == 97
 {

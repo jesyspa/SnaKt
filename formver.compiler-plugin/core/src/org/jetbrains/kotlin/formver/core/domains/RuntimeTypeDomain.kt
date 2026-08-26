@@ -9,6 +9,7 @@ import org.jetbrains.kotlin.formver.core.conversion.TypeResolver
 import org.jetbrains.kotlin.formver.core.embeddings.types.embedClassTypeFunc
 import org.jetbrains.kotlin.formver.core.names.DomainName
 import org.jetbrains.kotlin.formver.core.names.QualifiedDomainFuncName
+import org.jetbrains.kotlin.formver.core.embeddings.types.CharTypeEmbedding
 import org.jetbrains.kotlin.formver.core.names.UnqualifiedDomainFuncName
 import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.ast.*
@@ -242,6 +243,7 @@ class RuntimeTypeDomain(typeResolver: TypeResolver) : BuiltinDomain(DomainName(R
         private val t3 = domainVar("t3", RuntimeType)
 
         private val r = domainVar("r", Ref)
+        private val codePoint = domainVar("codePoint", Type.Int)
 
         // three basic functions
         /** `isSubtype: (Type, Type) -> Bool` */
@@ -277,6 +279,19 @@ class RuntimeTypeDomain(typeResolver: TypeResolver) : BuiltinDomain(DomainName(R
         val charInjection = Injection(UnqualifiedDomainFuncName("char"), Type.Int, charType)
         val stringInjection = Injection(UnqualifiedDomainFuncName("string"), Type.Seq(Type.Int), stringType)
         val primitiveTypeInjections = listOf(intInjection, boolInjection, charInjection, stringInjection)
+        /**
+         * `truncateToChar: Int -> Int`
+         *
+         * Reduction of an arbitrary integer to the code range of a Kotlin `Char`. A `Char` is
+         * embedded as an unbounded `Int`, so operations producing one have to say which value in
+         * the code range they produce; naming that reduction keeps it out of the expressions
+         * themselves, which matters because Viper does not accept arithmetic in a trigger.
+         */
+        val truncateToChar: DomainFunc =
+            createDomainFunc(UnqualifiedDomainFuncName("truncateToChar"), listOf(codePoint.decl()), Type.Int)
+
+        private val charCodeRangeSize = Exp.IntLit(CharTypeEmbedding.CODE_RANGE_SIZE)
+
         // special values
         val nullValue = createDomainFunc(UnqualifiedDomainFuncName("nullValue"), emptyList(), Ref)
         val unitValue = createDomainFunc(UnqualifiedDomainFuncName("unitValue"), emptyList(), Ref)
@@ -289,9 +304,25 @@ class RuntimeTypeDomain(typeResolver: TypeResolver) : BuiltinDomain(DomainName(R
         typeResolver.classTypeEmbeddings().map { it.embedClassTypeFunc() }
     val nonNullableTypes: List<DomainFunc> = (builtinTypes + userTypes).distinctBy { it.name }
     override val functions: List<DomainFunc> = nonNullableTypes + listOf(
-        nullValue, unitValue, isSubtype, typeOf, nullable
+        nullValue, unitValue, isSubtype, typeOf, nullable, truncateToChar
     ) + allInjections.flatMap { listOf(it.toRef, it.fromRef) }
     override val axioms: List<DomainAxiom> = AxiomListBuilder.build(this) {
+        axiom("truncateToCharInCodeRange") {
+            Exp.forall(codePoint) { code ->
+                val truncated = simpleTrigger { truncateToChar.toFuncApp(listOf(code)) }
+                Exp.And(Exp.LeCmp(Exp.IntLit(0), truncated), Exp.LtCmp(truncated, charCodeRangeSize))
+            }
+        }
+        // The reduction is the non-negative remainder, which is what truncating to the low 16 bits
+        // comes to. Viper's `%` takes the sign of its left operand, hence the second reduction.
+        axiom("truncateToCharIsNonNegativeRemainder") {
+            Exp.forall(codePoint) { code ->
+                Exp.EqCmp(
+                    simpleTrigger { truncateToChar.toFuncApp(listOf(code)) },
+                    Exp.Mod(Exp.Add(Exp.Mod(code, charCodeRangeSize), charCodeRangeSize), charCodeRangeSize)
+                )
+            }
+        }
         axiom("subtypeReflexive") {
             Exp.forall(t) { t -> t subtype t }
         }

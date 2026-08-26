@@ -6,6 +6,7 @@ method zFuncHelper(s: Ref, res: Ref, i: Ref, checkedLeft: Ref, checkedRight: Ref
   requires isSubtype(typeOf(i), intType())
   requires isSubtype(typeOf(checkedLeft), intType())
   requires isSubtype(typeOf(checkedRight), intType())
+  requires |stringFromRef(s)| + 48 < 65536
   requires 1 <= intFromRef(i) && intFromRef(i) < |stringFromRef(s)|
   requires |stringFromRef(res)| == intFromRef(i)
   requires 0 <= intFromRef(checkedLeft) &&
@@ -14,29 +15,33 @@ method zFuncHelper(s: Ref, res: Ref, i: Ref, checkedLeft: Ref, checkedRight: Ref
   requires intFromRef(checkedLeft) < intFromRef(i)
   requires (forall anon_builtin_0: Int ::0 <= anon_builtin_0 &&
       anon_builtin_0 < intFromRef(i) ==>
-      48 <= stringFromRef(res)[anon_builtin_0] &&
-      stringFromRef(res)[anon_builtin_0] <=
-      48 + |stringFromRef(s)| - anon_builtin_0 &&
+      48 <= truncateToChar(stringFromRef(res)[anon_builtin_0]) &&
+      truncateToChar(stringFromRef(res)[anon_builtin_0]) <=
+      truncateToChar(truncateToChar(48 + |stringFromRef(s)|) -
+      anon_builtin_0) &&
       (forall anon_builtin_1: Int ::0 <= anon_builtin_1 &&
-        anon_builtin_1 < stringFromRef(res)[anon_builtin_0] - 48 ==>
-        stringFromRef(s)[anon_builtin_1] ==
-        stringFromRef(s)[anon_builtin_0 + anon_builtin_1]) &&
-      (stringFromRef(res)[anon_builtin_0] - 48 ==
+        anon_builtin_1 <
+        truncateToChar(stringFromRef(res)[anon_builtin_0]) - 48 ==>
+        truncateToChar(stringFromRef(s)[anon_builtin_1]) ==
+        truncateToChar(stringFromRef(s)[anon_builtin_0 + anon_builtin_1])) &&
+      (truncateToChar(stringFromRef(res)[anon_builtin_0]) - 48 ==
       |stringFromRef(s)| - anon_builtin_0 ||
-      !(stringFromRef(s)[anon_builtin_0 +
-      (stringFromRef(res)[anon_builtin_0] - 48)] ==
-      stringFromRef(s)[stringFromRef(res)[anon_builtin_0] - 48])))
+      !(truncateToChar(stringFromRef(s)[anon_builtin_0 +
+      (truncateToChar(stringFromRef(res)[anon_builtin_0]) - 48)]) ==
+      truncateToChar(stringFromRef(s)[truncateToChar(stringFromRef(res)[anon_builtin_0]) -
+      48]))))
   requires (forall anon_builtin_2: Int ::0 <= anon_builtin_2 &&
       anon_builtin_2 < intFromRef(checkedRight) - intFromRef(checkedLeft) ==>
-      stringFromRef(s)[intFromRef(checkedLeft) + anon_builtin_2] ==
-      stringFromRef(s)[anon_builtin_2])
+      truncateToChar(stringFromRef(s)[intFromRef(checkedLeft) +
+      anon_builtin_2]) ==
+      truncateToChar(stringFromRef(s)[anon_builtin_2]))
   ensures isSubtype(typeOf(v_ret_0), intType())
   ensures intFromRef(i) <= intFromRef(v_ret_0) &&
     intFromRef(v_ret_0) <= |stringFromRef(s)|
   ensures (forall anon_builtin_3: Int ::intFromRef(i) <= anon_builtin_3 &&
       anon_builtin_3 < intFromRef(v_ret_0) ==>
-      stringFromRef(s)[anon_builtin_3 - intFromRef(i)] ==
-      stringFromRef(s)[anon_builtin_3])
+      truncateToChar(stringFromRef(s)[anon_builtin_3 - intFromRef(i)]) ==
+      truncateToChar(stringFromRef(s)[anon_builtin_3]))
 {
   var anon_0: Ref
   if (intFromRef(checkedLeft) == 0) {
@@ -59,19 +64,20 @@ method zFuncHelper(s: Ref, res: Ref, i: Ref, checkedLeft: Ref, checkedRight: Ref
 }
 
 /z_function.kt: info: Generated Viper text for zFunction:
-method plus(v_this: Ref, other: Ref) returns (ret_4: Ref)
+method plus(v_this: Ref, other: Ref) returns (ret_5: Ref)
   requires isSubtype(typeOf(v_this), stringType())
   requires isSubtype(typeOf(other), nullable(anyType()))
-  ensures isSubtype(typeOf(ret_4), stringType())
+  ensures isSubtype(typeOf(ret_5), stringType())
 
 
 method zFuncHelper(s: Ref, par_res: Ref, par_i: Ref, par_checkedLeft: Ref, par_checkedRight: Ref)
-  returns (ret_9: Ref)
+  returns (ret_10: Ref)
   requires isSubtype(typeOf(s), stringType())
   requires isSubtype(typeOf(par_res), stringType())
   requires isSubtype(typeOf(par_i), intType())
   requires isSubtype(typeOf(par_checkedLeft), intType())
   requires isSubtype(typeOf(par_checkedRight), intType())
+  requires |stringFromRef(s)| + 48 < 65536
   requires 1 <= intFromRef(par_i) && intFromRef(par_i) < |stringFromRef(s)|
   requires |stringFromRef(par_res)| == intFromRef(par_i)
   requires 0 <= intFromRef(par_checkedLeft) &&
@@ -80,51 +86,59 @@ method zFuncHelper(s: Ref, par_res: Ref, par_i: Ref, par_checkedLeft: Ref, par_c
   requires intFromRef(par_checkedLeft) < intFromRef(par_i)
   requires (forall anon_builtin_5: Int ::0 <= anon_builtin_5 &&
       anon_builtin_5 < intFromRef(par_i) ==>
-      48 <= stringFromRef(par_res)[anon_builtin_5] &&
-      stringFromRef(par_res)[anon_builtin_5] <=
-      48 + |stringFromRef(s)| - anon_builtin_5 &&
+      48 <= truncateToChar(stringFromRef(par_res)[anon_builtin_5]) &&
+      truncateToChar(stringFromRef(par_res)[anon_builtin_5]) <=
+      truncateToChar(truncateToChar(48 + |stringFromRef(s)|) -
+      anon_builtin_5) &&
       (forall anon_builtin_6: Int ::0 <= anon_builtin_6 &&
-        anon_builtin_6 < stringFromRef(par_res)[anon_builtin_5] - 48 ==>
-        stringFromRef(s)[anon_builtin_6] ==
-        stringFromRef(s)[anon_builtin_5 + anon_builtin_6]) &&
-      (stringFromRef(par_res)[anon_builtin_5] - 48 ==
+        anon_builtin_6 <
+        truncateToChar(stringFromRef(par_res)[anon_builtin_5]) - 48 ==>
+        truncateToChar(stringFromRef(s)[anon_builtin_6]) ==
+        truncateToChar(stringFromRef(s)[anon_builtin_5 + anon_builtin_6])) &&
+      (truncateToChar(stringFromRef(par_res)[anon_builtin_5]) - 48 ==
       |stringFromRef(s)| - anon_builtin_5 ||
-      !(stringFromRef(s)[anon_builtin_5 +
-      (stringFromRef(par_res)[anon_builtin_5] - 48)] ==
-      stringFromRef(s)[stringFromRef(par_res)[anon_builtin_5] - 48])))
+      !(truncateToChar(stringFromRef(s)[anon_builtin_5 +
+      (truncateToChar(stringFromRef(par_res)[anon_builtin_5]) - 48)]) ==
+      truncateToChar(stringFromRef(s)[truncateToChar(stringFromRef(par_res)[anon_builtin_5]) -
+      48]))))
   requires (forall anon_builtin_7: Int ::0 <= anon_builtin_7 &&
       anon_builtin_7 <
       intFromRef(par_checkedRight) - intFromRef(par_checkedLeft) ==>
-      stringFromRef(s)[intFromRef(par_checkedLeft) + anon_builtin_7] ==
-      stringFromRef(s)[anon_builtin_7])
-  ensures isSubtype(typeOf(ret_9), intType())
-  ensures intFromRef(par_i) <= intFromRef(ret_9) &&
-    intFromRef(ret_9) <= |stringFromRef(s)|
+      truncateToChar(stringFromRef(s)[intFromRef(par_checkedLeft) +
+      anon_builtin_7]) ==
+      truncateToChar(stringFromRef(s)[anon_builtin_7]))
+  ensures isSubtype(typeOf(ret_10), intType())
+  ensures intFromRef(par_i) <= intFromRef(ret_10) &&
+    intFromRef(ret_10) <= |stringFromRef(s)|
   ensures (forall anon_builtin_8: Int ::intFromRef(par_i) <= anon_builtin_8 &&
-      anon_builtin_8 < intFromRef(ret_9) ==>
-      stringFromRef(s)[anon_builtin_8 - intFromRef(par_i)] ==
-      stringFromRef(s)[anon_builtin_8])
+      anon_builtin_8 < intFromRef(ret_10) ==>
+      truncateToChar(stringFromRef(s)[anon_builtin_8 - intFromRef(par_i)]) ==
+      truncateToChar(stringFromRef(s)[anon_builtin_8]))
 
 
 method zFunction(v_this_extension: Ref) returns (v_ret_0: Ref)
   requires isSubtype(typeOf(v_this_extension), stringType())
+  requires |stringFromRef(v_this_extension)| + 48 < 65536
   ensures isSubtype(typeOf(v_ret_0), stringType())
   ensures |stringFromRef(v_ret_0)| == |stringFromRef(v_this_extension)|
   ensures (forall anon_builtin_0: Int ::0 <= anon_builtin_0 &&
       anon_builtin_0 < |stringFromRef(v_this_extension)| ==>
-      48 <= stringFromRef(v_ret_0)[anon_builtin_0] &&
-      stringFromRef(v_ret_0)[anon_builtin_0] <=
-      48 + |stringFromRef(v_this_extension)| - anon_builtin_0 &&
+      48 <= truncateToChar(stringFromRef(v_ret_0)[anon_builtin_0]) &&
+      truncateToChar(stringFromRef(v_ret_0)[anon_builtin_0]) <=
+      truncateToChar(truncateToChar(48 + |stringFromRef(v_this_extension)|) -
+      anon_builtin_0) &&
       (forall anon_builtin_1: Int ::0 <= anon_builtin_1 &&
-        anon_builtin_1 < stringFromRef(v_ret_0)[anon_builtin_0] - 48 ==>
-        stringFromRef(v_this_extension)[anon_builtin_1] ==
-        stringFromRef(v_this_extension)[anon_builtin_0 + anon_builtin_1]) &&
-      (stringFromRef(v_ret_0)[anon_builtin_0] - 48 ==
+        anon_builtin_1 <
+        truncateToChar(stringFromRef(v_ret_0)[anon_builtin_0]) - 48 ==>
+        truncateToChar(stringFromRef(v_this_extension)[anon_builtin_1]) ==
+        truncateToChar(stringFromRef(v_this_extension)[anon_builtin_0 +
+        anon_builtin_1])) &&
+      (truncateToChar(stringFromRef(v_ret_0)[anon_builtin_0]) - 48 ==
       |stringFromRef(v_this_extension)| - anon_builtin_0 ||
-      !(stringFromRef(v_this_extension)[anon_builtin_0 +
-      (stringFromRef(v_ret_0)[anon_builtin_0] - 48)] ==
-      stringFromRef(v_this_extension)[stringFromRef(v_ret_0)[anon_builtin_0] -
-      48])))
+      !(truncateToChar(stringFromRef(v_this_extension)[anon_builtin_0 +
+      (truncateToChar(stringFromRef(v_ret_0)[anon_builtin_0]) - 48)]) ==
+      truncateToChar(stringFromRef(v_this_extension)[truncateToChar(stringFromRef(v_ret_0)[anon_builtin_0]) -
+      48]))))
 {
   var l0_i: Ref
   var l0_res: Ref
@@ -150,19 +164,23 @@ method zFunction(v_this_extension: Ref) returns (v_ret_0: Ref)
       intFromRef(l0_i) <= |stringFromRef(v_this_extension)|
     invariant (forall anon_builtin_2: Int ::0 <= anon_builtin_2 &&
         anon_builtin_2 < intFromRef(l0_i) ==>
-        48 <= stringFromRef(l0_res)[anon_builtin_2] &&
-        stringFromRef(l0_res)[anon_builtin_2] <=
-        48 + |stringFromRef(v_this_extension)| - anon_builtin_2 &&
+        48 <= truncateToChar(stringFromRef(l0_res)[anon_builtin_2]) &&
+        truncateToChar(stringFromRef(l0_res)[anon_builtin_2]) <=
+        truncateToChar(truncateToChar(48 +
+        |stringFromRef(v_this_extension)|) -
+        anon_builtin_2) &&
         (forall anon_builtin_3: Int ::0 <= anon_builtin_3 &&
-          anon_builtin_3 < stringFromRef(l0_res)[anon_builtin_2] - 48 ==>
-          stringFromRef(v_this_extension)[anon_builtin_3] ==
-          stringFromRef(v_this_extension)[anon_builtin_2 + anon_builtin_3]) &&
-        (stringFromRef(l0_res)[anon_builtin_2] - 48 ==
+          anon_builtin_3 <
+          truncateToChar(stringFromRef(l0_res)[anon_builtin_2]) - 48 ==>
+          truncateToChar(stringFromRef(v_this_extension)[anon_builtin_3]) ==
+          truncateToChar(stringFromRef(v_this_extension)[anon_builtin_2 +
+          anon_builtin_3])) &&
+        (truncateToChar(stringFromRef(l0_res)[anon_builtin_2]) - 48 ==
         |stringFromRef(v_this_extension)| - anon_builtin_2 ||
-        !(stringFromRef(v_this_extension)[anon_builtin_2 +
-        (stringFromRef(l0_res)[anon_builtin_2] - 48)] ==
-        stringFromRef(v_this_extension)[stringFromRef(l0_res)[anon_builtin_2] -
-        48])))
+        !(truncateToChar(stringFromRef(v_this_extension)[anon_builtin_2 +
+        (truncateToChar(stringFromRef(l0_res)[anon_builtin_2]) - 48)]) ==
+        truncateToChar(stringFromRef(v_this_extension)[truncateToChar(stringFromRef(l0_res)[anon_builtin_2]) -
+        48]))))
     invariant 0 <= intFromRef(l0_checkedLeft) &&
       intFromRef(l0_checkedLeft) <= intFromRef(l0_checkedRight) &&
       intFromRef(l0_checkedRight) <= |stringFromRef(v_this_extension)|
@@ -170,9 +188,9 @@ method zFunction(v_this_extension: Ref) returns (v_ret_0: Ref)
     invariant (forall anon_builtin_4: Int ::0 <= anon_builtin_4 &&
         anon_builtin_4 <
         intFromRef(l0_checkedRight) - intFromRef(l0_checkedLeft) ==>
-        stringFromRef(v_this_extension)[intFromRef(l0_checkedLeft) +
-        anon_builtin_4] ==
-        stringFromRef(v_this_extension)[anon_builtin_4])
+        truncateToChar(stringFromRef(v_this_extension)[intFromRef(l0_checkedLeft) +
+        anon_builtin_4]) ==
+        truncateToChar(stringFromRef(v_this_extension)[anon_builtin_4]))
   anon_0 := ltInts(l0_i, stringLength(v_this_extension))
   if (boolFromRef(anon_0)) {
     var j: Ref
@@ -189,19 +207,19 @@ method zFunction(v_this_extension: Ref) returns (v_ret_0: Ref)
       invariant (forall anon_builtin_9: Int ::intFromRef(l0_checkedLeft) <=
           anon_builtin_9 &&
           anon_builtin_9 < intFromRef(l0_checkedRight) ==>
-          stringFromRef(v_this_extension)[anon_builtin_9 -
-          intFromRef(l0_checkedLeft)] ==
-          stringFromRef(v_this_extension)[anon_builtin_9])
+          truncateToChar(stringFromRef(v_this_extension)[anon_builtin_9 -
+          intFromRef(l0_checkedLeft)]) ==
+          truncateToChar(stringFromRef(v_this_extension)[anon_builtin_9]))
       invariant (forall anon_builtin_10: Int ::intFromRef(l0_i) <=
           anon_builtin_10 &&
           anon_builtin_10 < intFromRef(j) ==>
-          stringFromRef(v_this_extension)[anon_builtin_10 -
-          intFromRef(l0_i)] ==
-          stringFromRef(v_this_extension)[anon_builtin_10])
+          truncateToChar(stringFromRef(v_this_extension)[anon_builtin_10 -
+          intFromRef(l0_i)]) ==
+          truncateToChar(stringFromRef(v_this_extension)[anon_builtin_10]))
     if (intFromRef(j) < |stringFromRef(v_this_extension)|) {
-      anon_1 := boolToRef(stringFromRef(v_this_extension)[intFromRef(j) -
-        intFromRef(l0_i)] ==
-        stringFromRef(v_this_extension)[intFromRef(j)])
+      anon_1 := boolToRef(truncateToChar(stringFromRef(v_this_extension)[intFromRef(j) -
+        intFromRef(l0_i)]) ==
+        truncateToChar(stringFromRef(v_this_extension)[intFromRef(j)]))
     } else {
       anon_1 := boolToRef(false)}
     if (boolFromRef(anon_1)) {
@@ -219,14 +237,15 @@ method zFunction(v_this_extension: Ref) returns (v_ret_0: Ref)
     assert (forall anon_builtin_9: Int ::intFromRef(l0_checkedLeft) <=
         anon_builtin_9 &&
         anon_builtin_9 < intFromRef(l0_checkedRight) ==>
-        stringFromRef(v_this_extension)[anon_builtin_9 -
-        intFromRef(l0_checkedLeft)] ==
-        stringFromRef(v_this_extension)[anon_builtin_9])
+        truncateToChar(stringFromRef(v_this_extension)[anon_builtin_9 -
+        intFromRef(l0_checkedLeft)]) ==
+        truncateToChar(stringFromRef(v_this_extension)[anon_builtin_9]))
     assert (forall anon_builtin_10: Int ::intFromRef(l0_i) <=
         anon_builtin_10 &&
         anon_builtin_10 < intFromRef(j) ==>
-        stringFromRef(v_this_extension)[anon_builtin_10 - intFromRef(l0_i)] ==
-        stringFromRef(v_this_extension)[anon_builtin_10])
+        truncateToChar(stringFromRef(v_this_extension)[anon_builtin_10 -
+        intFromRef(l0_i)]) ==
+        truncateToChar(stringFromRef(v_this_extension)[anon_builtin_10]))
     l0_res := addStringChar(l0_res, addCharInt(charToRef(48), minusInts(j, l0_i)))
     if (intFromRef(j) > intFromRef(l0_checkedRight)) {
       l0_checkedLeft := l0_i
@@ -245,19 +264,22 @@ method zFunction(v_this_extension: Ref) returns (v_ret_0: Ref)
     intFromRef(l0_i) <= |stringFromRef(v_this_extension)|
   assert (forall anon_builtin_2: Int ::0 <= anon_builtin_2 &&
       anon_builtin_2 < intFromRef(l0_i) ==>
-      48 <= stringFromRef(l0_res)[anon_builtin_2] &&
-      stringFromRef(l0_res)[anon_builtin_2] <=
-      48 + |stringFromRef(v_this_extension)| - anon_builtin_2 &&
+      48 <= truncateToChar(stringFromRef(l0_res)[anon_builtin_2]) &&
+      truncateToChar(stringFromRef(l0_res)[anon_builtin_2]) <=
+      truncateToChar(truncateToChar(48 + |stringFromRef(v_this_extension)|) -
+      anon_builtin_2) &&
       (forall anon_builtin_3: Int ::0 <= anon_builtin_3 &&
-        anon_builtin_3 < stringFromRef(l0_res)[anon_builtin_2] - 48 ==>
-        stringFromRef(v_this_extension)[anon_builtin_3] ==
-        stringFromRef(v_this_extension)[anon_builtin_2 + anon_builtin_3]) &&
-      (stringFromRef(l0_res)[anon_builtin_2] - 48 ==
+        anon_builtin_3 <
+        truncateToChar(stringFromRef(l0_res)[anon_builtin_2]) - 48 ==>
+        truncateToChar(stringFromRef(v_this_extension)[anon_builtin_3]) ==
+        truncateToChar(stringFromRef(v_this_extension)[anon_builtin_2 +
+        anon_builtin_3])) &&
+      (truncateToChar(stringFromRef(l0_res)[anon_builtin_2]) - 48 ==
       |stringFromRef(v_this_extension)| - anon_builtin_2 ||
-      !(stringFromRef(v_this_extension)[anon_builtin_2 +
-      (stringFromRef(l0_res)[anon_builtin_2] - 48)] ==
-      stringFromRef(v_this_extension)[stringFromRef(l0_res)[anon_builtin_2] -
-      48])))
+      !(truncateToChar(stringFromRef(v_this_extension)[anon_builtin_2 +
+      (truncateToChar(stringFromRef(l0_res)[anon_builtin_2]) - 48)]) ==
+      truncateToChar(stringFromRef(v_this_extension)[truncateToChar(stringFromRef(l0_res)[anon_builtin_2]) -
+      48]))))
   assert 0 <= intFromRef(l0_checkedLeft) &&
     intFromRef(l0_checkedLeft) <= intFromRef(l0_checkedRight) &&
     intFromRef(l0_checkedRight) <= |stringFromRef(v_this_extension)|
@@ -265,40 +287,44 @@ method zFunction(v_this_extension: Ref) returns (v_ret_0: Ref)
   assert (forall anon_builtin_4: Int ::0 <= anon_builtin_4 &&
       anon_builtin_4 <
       intFromRef(l0_checkedRight) - intFromRef(l0_checkedLeft) ==>
-      stringFromRef(v_this_extension)[intFromRef(l0_checkedLeft) +
-      anon_builtin_4] ==
-      stringFromRef(v_this_extension)[anon_builtin_4])
+      truncateToChar(stringFromRef(v_this_extension)[intFromRef(l0_checkedLeft) +
+      anon_builtin_4]) ==
+      truncateToChar(stringFromRef(v_this_extension)[anon_builtin_4]))
   v_ret_0 := l0_res
   goto lbl_ret_0
   label lbl_ret_0
 }
 
 /z_function.kt: info: Generated Viper text for zFunctionNaive:
-method plus(v_this: Ref, other: Ref) returns (ret_4: Ref)
+method plus(v_this: Ref, other: Ref) returns (ret_5: Ref)
   requires isSubtype(typeOf(v_this), stringType())
   requires isSubtype(typeOf(other), nullable(anyType()))
-  ensures isSubtype(typeOf(ret_4), stringType())
+  ensures isSubtype(typeOf(ret_5), stringType())
 
 
 method zFunctionNaive(v_this_extension: Ref) returns (v_ret_0: Ref)
   requires isSubtype(typeOf(v_this_extension), stringType())
+  requires |stringFromRef(v_this_extension)| + 48 < 65536
   ensures isSubtype(typeOf(v_ret_0), stringType())
   ensures |stringFromRef(v_ret_0)| == |stringFromRef(v_this_extension)|
   ensures (forall anon_builtin_0: Int ::0 <= anon_builtin_0 &&
       anon_builtin_0 < |stringFromRef(v_this_extension)| ==>
-      48 <= stringFromRef(v_ret_0)[anon_builtin_0] &&
-      stringFromRef(v_ret_0)[anon_builtin_0] <=
-      48 + |stringFromRef(v_this_extension)| - anon_builtin_0 &&
+      48 <= truncateToChar(stringFromRef(v_ret_0)[anon_builtin_0]) &&
+      truncateToChar(stringFromRef(v_ret_0)[anon_builtin_0]) <=
+      truncateToChar(truncateToChar(48 + |stringFromRef(v_this_extension)|) -
+      anon_builtin_0) &&
       (forall anon_builtin_1: Int ::0 <= anon_builtin_1 &&
-        anon_builtin_1 < stringFromRef(v_ret_0)[anon_builtin_0] - 48 ==>
-        stringFromRef(v_this_extension)[anon_builtin_1] ==
-        stringFromRef(v_this_extension)[anon_builtin_0 + anon_builtin_1]) &&
-      (stringFromRef(v_ret_0)[anon_builtin_0] - 48 ==
+        anon_builtin_1 <
+        truncateToChar(stringFromRef(v_ret_0)[anon_builtin_0]) - 48 ==>
+        truncateToChar(stringFromRef(v_this_extension)[anon_builtin_1]) ==
+        truncateToChar(stringFromRef(v_this_extension)[anon_builtin_0 +
+        anon_builtin_1])) &&
+      (truncateToChar(stringFromRef(v_ret_0)[anon_builtin_0]) - 48 ==
       |stringFromRef(v_this_extension)| - anon_builtin_0 ||
-      !(stringFromRef(v_this_extension)[anon_builtin_0 +
-      (stringFromRef(v_ret_0)[anon_builtin_0] - 48)] ==
-      stringFromRef(v_this_extension)[stringFromRef(v_ret_0)[anon_builtin_0] -
-      48])))
+      !(truncateToChar(stringFromRef(v_this_extension)[anon_builtin_0 +
+      (truncateToChar(stringFromRef(v_ret_0)[anon_builtin_0]) - 48)]) ==
+      truncateToChar(stringFromRef(v_this_extension)[truncateToChar(stringFromRef(v_ret_0)[anon_builtin_0]) -
+      48]))))
 {
   var i: Ref
   var res: Ref
@@ -317,19 +343,23 @@ method zFunctionNaive(v_this_extension: Ref) returns (v_ret_0: Ref)
       intFromRef(i) <= |stringFromRef(v_this_extension)|
     invariant (forall anon_builtin_2: Int ::0 <= anon_builtin_2 &&
         anon_builtin_2 < intFromRef(i) ==>
-        48 <= stringFromRef(res)[anon_builtin_2] &&
-        stringFromRef(res)[anon_builtin_2] <=
-        48 + |stringFromRef(v_this_extension)| - anon_builtin_2 &&
+        48 <= truncateToChar(stringFromRef(res)[anon_builtin_2]) &&
+        truncateToChar(stringFromRef(res)[anon_builtin_2]) <=
+        truncateToChar(truncateToChar(48 +
+        |stringFromRef(v_this_extension)|) -
+        anon_builtin_2) &&
         (forall anon_builtin_3: Int ::0 <= anon_builtin_3 &&
-          anon_builtin_3 < stringFromRef(res)[anon_builtin_2] - 48 ==>
-          stringFromRef(v_this_extension)[anon_builtin_3] ==
-          stringFromRef(v_this_extension)[anon_builtin_2 + anon_builtin_3]) &&
-        (stringFromRef(res)[anon_builtin_2] - 48 ==
+          anon_builtin_3 <
+          truncateToChar(stringFromRef(res)[anon_builtin_2]) - 48 ==>
+          truncateToChar(stringFromRef(v_this_extension)[anon_builtin_3]) ==
+          truncateToChar(stringFromRef(v_this_extension)[anon_builtin_2 +
+          anon_builtin_3])) &&
+        (truncateToChar(stringFromRef(res)[anon_builtin_2]) - 48 ==
         |stringFromRef(v_this_extension)| - anon_builtin_2 ||
-        !(stringFromRef(v_this_extension)[anon_builtin_2 +
-        (stringFromRef(res)[anon_builtin_2] - 48)] ==
-        stringFromRef(v_this_extension)[stringFromRef(res)[anon_builtin_2] -
-        48])))
+        !(truncateToChar(stringFromRef(v_this_extension)[anon_builtin_2 +
+        (truncateToChar(stringFromRef(res)[anon_builtin_2]) - 48)]) ==
+        truncateToChar(stringFromRef(v_this_extension)[truncateToChar(stringFromRef(res)[anon_builtin_2]) -
+        48]))))
   anon_0 := ltInts(i, stringLength(v_this_extension))
   if (boolFromRef(anon_0)) {
     var j: Ref
@@ -343,12 +373,13 @@ method zFunctionNaive(v_this_extension: Ref) returns (v_ret_0: Ref)
         intFromRef(j) <= |stringFromRef(v_this_extension)|
       invariant (forall anon_builtin_4: Int ::0 <= anon_builtin_4 &&
           anon_builtin_4 < intFromRef(j) - intFromRef(i) ==>
-          stringFromRef(v_this_extension)[intFromRef(i) + anon_builtin_4] ==
-          stringFromRef(v_this_extension)[anon_builtin_4])
+          truncateToChar(stringFromRef(v_this_extension)[intFromRef(i) +
+          anon_builtin_4]) ==
+          truncateToChar(stringFromRef(v_this_extension)[anon_builtin_4]))
     if (intFromRef(j) < |stringFromRef(v_this_extension)|) {
-      anon_1 := boolToRef(stringFromRef(v_this_extension)[intFromRef(j) -
-        intFromRef(i)] ==
-        stringFromRef(v_this_extension)[intFromRef(j)])
+      anon_1 := boolToRef(truncateToChar(stringFromRef(v_this_extension)[intFromRef(j) -
+        intFromRef(i)]) ==
+        truncateToChar(stringFromRef(v_this_extension)[intFromRef(j)]))
     } else {
       anon_1 := boolToRef(false)}
     if (boolFromRef(anon_1)) {
@@ -363,8 +394,9 @@ method zFunctionNaive(v_this_extension: Ref) returns (v_ret_0: Ref)
       intFromRef(j) <= |stringFromRef(v_this_extension)|
     assert (forall anon_builtin_4: Int ::0 <= anon_builtin_4 &&
         anon_builtin_4 < intFromRef(j) - intFromRef(i) ==>
-        stringFromRef(v_this_extension)[intFromRef(i) + anon_builtin_4] ==
-        stringFromRef(v_this_extension)[anon_builtin_4])
+        truncateToChar(stringFromRef(v_this_extension)[intFromRef(i) +
+        anon_builtin_4]) ==
+        truncateToChar(stringFromRef(v_this_extension)[anon_builtin_4]))
     res := addStringChar(res, addCharInt(charToRef(48), minusInts(j, i)))
     i := plusInts(i, intToRef(1))
     goto cont_0
@@ -377,19 +409,22 @@ method zFunctionNaive(v_this_extension: Ref) returns (v_ret_0: Ref)
     intFromRef(i) <= |stringFromRef(v_this_extension)|
   assert (forall anon_builtin_2: Int ::0 <= anon_builtin_2 &&
       anon_builtin_2 < intFromRef(i) ==>
-      48 <= stringFromRef(res)[anon_builtin_2] &&
-      stringFromRef(res)[anon_builtin_2] <=
-      48 + |stringFromRef(v_this_extension)| - anon_builtin_2 &&
+      48 <= truncateToChar(stringFromRef(res)[anon_builtin_2]) &&
+      truncateToChar(stringFromRef(res)[anon_builtin_2]) <=
+      truncateToChar(truncateToChar(48 + |stringFromRef(v_this_extension)|) -
+      anon_builtin_2) &&
       (forall anon_builtin_3: Int ::0 <= anon_builtin_3 &&
-        anon_builtin_3 < stringFromRef(res)[anon_builtin_2] - 48 ==>
-        stringFromRef(v_this_extension)[anon_builtin_3] ==
-        stringFromRef(v_this_extension)[anon_builtin_2 + anon_builtin_3]) &&
-      (stringFromRef(res)[anon_builtin_2] - 48 ==
+        anon_builtin_3 <
+        truncateToChar(stringFromRef(res)[anon_builtin_2]) - 48 ==>
+        truncateToChar(stringFromRef(v_this_extension)[anon_builtin_3]) ==
+        truncateToChar(stringFromRef(v_this_extension)[anon_builtin_2 +
+        anon_builtin_3])) &&
+      (truncateToChar(stringFromRef(res)[anon_builtin_2]) - 48 ==
       |stringFromRef(v_this_extension)| - anon_builtin_2 ||
-      !(stringFromRef(v_this_extension)[anon_builtin_2 +
-      (stringFromRef(res)[anon_builtin_2] - 48)] ==
-      stringFromRef(v_this_extension)[stringFromRef(res)[anon_builtin_2] -
-      48])))
+      !(truncateToChar(stringFromRef(v_this_extension)[anon_builtin_2 +
+      (truncateToChar(stringFromRef(res)[anon_builtin_2]) - 48)]) ==
+      truncateToChar(stringFromRef(v_this_extension)[truncateToChar(stringFromRef(res)[anon_builtin_2]) -
+      48]))))
   v_ret_0 := res
   goto lbl_ret_0
   label lbl_ret_0

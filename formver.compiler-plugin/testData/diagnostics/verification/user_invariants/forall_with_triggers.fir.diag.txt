@@ -38,10 +38,10 @@ method forAllWithTriggersInLoop(str: Ref) returns (v_ret_0: Ref)
     invariant isSubtype(typeOf(i), intType())
     invariant isSubtype(typeOf(str), stringType())
     invariant (forall anon_builtin: Int ::
-        { stringFromRef(str)[anon_builtin] }
+        { truncateToChar(stringFromRef(str)[anon_builtin]) }
         0 <= anon_builtin && anon_builtin < |stringFromRef(str)| ==>
-        (stringFromRef(str)[anon_builtin] - 97) *
-        (stringFromRef(str)[anon_builtin] - 97) >=
+        (truncateToChar(stringFromRef(str)[anon_builtin]) - 97) *
+        (truncateToChar(stringFromRef(str)[anon_builtin]) - 97) >=
         intFromRef(res))
   anon_1 := gtInts(i, intToRef(0))
   if (boolFromRef(anon_1)) {
@@ -55,10 +55,10 @@ method forAllWithTriggersInLoop(str: Ref) returns (v_ret_0: Ref)
   assert isSubtype(typeOf(i), intType())
   assert isSubtype(typeOf(str), stringType())
   assert (forall anon_builtin: Int ::
-      { stringFromRef(str)[anon_builtin] }
+      { truncateToChar(stringFromRef(str)[anon_builtin]) }
       0 <= anon_builtin && anon_builtin < |stringFromRef(str)| ==>
-      (stringFromRef(str)[anon_builtin] - 97) *
-      (stringFromRef(str)[anon_builtin] - 97) >=
+      (truncateToChar(stringFromRef(str)[anon_builtin]) - 97) *
+      (truncateToChar(stringFromRef(str)[anon_builtin]) - 97) >=
       intFromRef(res))
   v_ret_0 := res
   goto lbl_ret_0

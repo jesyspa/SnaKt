@@ -31,6 +31,18 @@ data class LinearizationVisitor(
      */
     private fun ExpEmbedding.linearize(): Linearizable = accept(this@LinearizationVisitor)
 
+    /**
+     * A quantified variable is not introduced by any declaration, so nothing has established what
+     * its type guarantees; the guarantees have to be restated at the quantifier itself. They are an
+     * antecedent under a `forall` and a conjunct under an `exists`.
+     */
+    private fun VariableEmbedding.quantifiedTypeGuarantees(ctx: LinearizationContext): List<Exp> = buildList {
+        if (isOriginallyRef) {
+            add(toViperExp(ctx).isOf(type.runtimeType))
+        }
+        addAll(pureInvariants().pureToViper(true, ctx.typeResolver, ctx.source))
+    }
+
     private fun getQuantifierParts(
         conditions: List<ExpEmbedding>,
         triggerExpressions: List<ExpEmbedding>,
@@ -505,14 +517,12 @@ data class LinearizationVisitor(
     override fun visitForAllEmbedding(e: ForAllEmbedding): Linearizable = object : OnlyToBuiltinLinearizable(e, this@LinearizationVisitor) {
         override fun toViperBuiltinType(ctx: LinearizationContext): Exp {
             val (conjunction, viperTriggers) = getQuantifierParts(e.conditions, e.triggerExpressions, ctx)
+            val guarantees = e.variable.quantifiedTypeGuarantees(ctx)
             return Exp.Forall(
                 variables = listOf(e.variable.toLocalVarDecl()),
                 triggers = viperTriggers,
-                exp = if (e.variable.isOriginallyRef) Exp.Implies(
-                    e.variable.toViperExp(ctx).isOf(e.variable.type.runtimeType),
-                    conjunction
-                )
-                else conjunction,
+                exp = if (guarantees.isEmpty()) conjunction
+                else Exp.Implies(guarantees.toConjunction(), conjunction),
                 pos = ctx.source.asPosition,
                 info = e.sourceRole.asInfo,
             )
@@ -522,14 +532,12 @@ data class LinearizationVisitor(
     override fun visitExistsEmbedding(e: ExistsEmbedding): Linearizable = object : OnlyToBuiltinLinearizable(e, this@LinearizationVisitor) {
         override fun toViperBuiltinType(ctx: LinearizationContext): Exp {
             val (conjunction, viperTriggers) = getQuantifierParts(e.conditions, e.triggerExpressions, ctx)
+            val guarantees = e.variable.quantifiedTypeGuarantees(ctx)
             return Exp.Exists(
                 variables = listOf(e.variable.toLocalVarDecl()),
                 triggers = viperTriggers,
-                exp = if (e.variable.isOriginallyRef) Exp.And(
-                    e.variable.toViperExp(ctx).isOf(e.variable.type.runtimeType),
-                    conjunction
-                )
-                else conjunction,
+                exp = if (guarantees.isEmpty()) conjunction
+                else Exp.And(guarantees.toConjunction(), conjunction),
                 pos = ctx.source.asPosition,
                 info = e.sourceRole.asInfo,
             )

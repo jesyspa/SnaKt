@@ -6,8 +6,8 @@ method firstNotSortedIndex(s: Ref) returns (v_ret_0: Ref)
     intFromRef(v_ret_0) <= |stringFromRef(s)|
   ensures (forall anon_builtin_0: Int ::0 <= anon_builtin_0 &&
       anon_builtin_0 + 1 < intFromRef(v_ret_0) ==>
-      stringFromRef(s)[anon_builtin_0] <=
-      stringFromRef(s)[anon_builtin_0 + 1])
+      truncateToChar(stringFromRef(s)[anon_builtin_0]) <=
+      truncateToChar(stringFromRef(s)[anon_builtin_0 + 1]))
 {
   if (|stringFromRef(s)| == 0) {
     v_ret_0 := intToRef(0)
@@ -22,8 +22,8 @@ method firstNotSortedIndex(s: Ref) returns (v_ret_0: Ref)
       invariant intFromRef(i) <= |stringFromRef(s)| && intFromRef(i) >= 1
       invariant (forall anon_builtin_1: Int ::0 <= anon_builtin_1 &&
           anon_builtin_1 + 1 < intFromRef(i) ==>
-          stringFromRef(s)[anon_builtin_1] <=
-          stringFromRef(s)[anon_builtin_1 + 1])
+          truncateToChar(stringFromRef(s)[anon_builtin_1]) <=
+          truncateToChar(stringFromRef(s)[anon_builtin_1 + 1]))
     if (intFromRef(i) < |stringFromRef(s)|) {
       anon_0 := leChars(stringGet(s, minusInts(i, intToRef(1))), stringGet(s,
         i))
@@ -39,8 +39,8 @@ method firstNotSortedIndex(s: Ref) returns (v_ret_0: Ref)
     assert intFromRef(i) <= |stringFromRef(s)| && intFromRef(i) >= 1
     assert (forall anon_builtin_1: Int ::0 <= anon_builtin_1 &&
         anon_builtin_1 + 1 < intFromRef(i) ==>
-        stringFromRef(s)[anon_builtin_1] <=
-        stringFromRef(s)[anon_builtin_1 + 1])
+        truncateToChar(stringFromRef(s)[anon_builtin_1]) <=
+        truncateToChar(stringFromRef(s)[anon_builtin_1 + 1]))
     v_ret_0 := i
     goto lbl_ret_0
   }
@@ -59,15 +59,18 @@ method returnNewString() returns (v_ret_0: Ref)
 /strings_in_conditions.kt: info: Generated Viper text for addCharacterTimes:
 method addCharacterTimes(s: Ref, c: Ref, n: Ref) returns (v_ret_0: Ref)
   requires isSubtype(typeOf(s), stringType())
+  requires 0 <= charFromRef(c) && charFromRef(c) < 65536
   requires isSubtype(typeOf(c), charType())
   requires isSubtype(typeOf(n), intType())
   requires intFromRef(n) >= 0
+  ensures 0 <= charFromRef(c) && charFromRef(c) < 65536
   ensures isSubtype(typeOf(v_ret_0), stringType())
   ensures |stringFromRef(v_ret_0)| == |stringFromRef(s)| + intFromRef(n)
   ensures (forall anon_builtin_0: Int ::|stringFromRef(s)| <=
       anon_builtin_0 &&
       anon_builtin_0 < |stringFromRef(v_ret_0)| ==>
-      stringFromRef(v_ret_0)[anon_builtin_0] == charFromRef(c))
+      truncateToChar(stringFromRef(v_ret_0)[anon_builtin_0]) ==
+      charFromRef(c))
 {
   var i: Ref
   var res: Ref
@@ -79,13 +82,15 @@ method addCharacterTimes(s: Ref, c: Ref, n: Ref) returns (v_ret_0: Ref)
     invariant isSubtype(typeOf(res), stringType())
     invariant isSubtype(typeOf(s), stringType())
     invariant isSubtype(typeOf(c), charType())
+    invariant 0 <= charFromRef(c) && charFromRef(c) < 65536
     invariant isSubtype(typeOf(n), intType())
     invariant 0 <= intFromRef(i) && intFromRef(i) <= intFromRef(n)
     invariant |stringFromRef(res)| == |stringFromRef(s)| + intFromRef(i)
     invariant (forall anon_builtin_1: Int ::|stringFromRef(s)| <=
         anon_builtin_1 &&
         anon_builtin_1 < |stringFromRef(res)| ==>
-        stringFromRef(res)[anon_builtin_1] == charFromRef(c))
+        truncateToChar(stringFromRef(res)[anon_builtin_1]) ==
+        charFromRef(c))
   anon_0 := ltInts(i, n)
   if (boolFromRef(anon_0)) {
     res := addStringChar(res, c)
@@ -97,12 +102,13 @@ method addCharacterTimes(s: Ref, c: Ref, n: Ref) returns (v_ret_0: Ref)
   assert isSubtype(typeOf(res), stringType())
   assert isSubtype(typeOf(s), stringType())
   assert isSubtype(typeOf(c), charType())
+  assert 0 <= charFromRef(c) && charFromRef(c) < 65536
   assert isSubtype(typeOf(n), intType())
   assert 0 <= intFromRef(i) && intFromRef(i) <= intFromRef(n)
   assert |stringFromRef(res)| == |stringFromRef(s)| + intFromRef(i)
   assert (forall anon_builtin_1: Int ::|stringFromRef(s)| <= anon_builtin_1 &&
       anon_builtin_1 < |stringFromRef(res)| ==>
-      stringFromRef(res)[anon_builtin_1] == charFromRef(c))
+      truncateToChar(stringFromRef(res)[anon_builtin_1]) == charFromRef(c))
   v_ret_0 := res
   goto lbl_ret_0
   label lbl_ret_0

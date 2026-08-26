@@ -336,6 +336,9 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         val invariants = buildList {
             data.retrievePropertiesAndParameters().forEach {
                 addAll(it.provenInvariants())
+                // A variable assigned in the body is havocked at the loop head, so anything its type
+                // guarantees is lost inside the loop unless it is carried by an invariant.
+                addAll(it.pureInvariants())
             }
             extractLoopInvariants(whileLoop.block)?.let {
                 addAll(data.withScopeImpl(ScopeIndex.NoScope) { data.collectInvariants(it) })
