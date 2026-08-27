@@ -2,7 +2,7 @@
 
 import org.jetbrains.kotlin.formver.plugin.*
 
-// Verifies, as there are no postconditions
+// Verifies that we can transform exists from SnaKt to viper
 @AlwaysVerify
 fun <!VIPER_TEXT!>simpleExists<!>(): Int {
     preconditions {
