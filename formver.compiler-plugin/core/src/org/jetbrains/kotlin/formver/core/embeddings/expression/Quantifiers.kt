@@ -8,6 +8,8 @@ package org.jetbrains.kotlin.formver.core.embeddings.expression
 import org.jetbrains.kotlin.formver.core.embeddings.ExpVisitor
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.buildType
+import org.jetbrains.kotlin.formver.core.purity.PurityContext
+import org.jetbrains.kotlin.formver.core.purity.isPure
 
 data class ForAllEmbedding(
     // TODO: support multiple variables
@@ -21,6 +23,12 @@ data class ForAllEmbedding(
 
     override fun children(): Sequence<ExpEmbedding> = conditions.asSequence()
     override fun <R> accept(v: ExpVisitor<R>): R = v.visitForAllEmbedding(this)
+
+    override fun isValid(ctx: PurityContext): Boolean {
+        val allPure = conditions.all { it.isPure() }
+        if (!allPure) ctx.addPurityError(this, "forAll body contains impure expressions; method calls are not supported in quantifier bodies")
+        return allPure
+    }
 }
 
 data class ExistsEmbedding(
@@ -34,4 +42,10 @@ data class ExistsEmbedding(
 
     override fun children(): Sequence<ExpEmbedding> = conditions.asSequence()
     override fun <R> accept(v: ExpVisitor<R>): R = v.visitExistsEmbedding(this)
+
+    override fun isValid(ctx: PurityContext): Boolean {
+        val allPure = conditions.all { it.isPure() }
+        if (!allPure) ctx.addPurityError(this, "exists body contains impure expressions; method calls are not supported in quantifier bodies")
+        return allPure
+    }
 }

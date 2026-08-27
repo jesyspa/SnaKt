@@ -169,6 +169,12 @@ class ProgramConverter(
                 reportPurityViolation(source, "Impure function body detected in pure function")
             }
         }
+        for ((_, signature) in fullSignatures) {
+            val source = signature.declarationSource ?: continue
+            for (condition in signature.preconditions + signature.postconditions) {
+                condition.checkValidity(source, this)
+            }
+        }
         if (hadConversionError) {
             for (entry in registered) {
                 reportVerificationSkipped(
