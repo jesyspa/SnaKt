@@ -2,10 +2,7 @@
 
 import org.jetbrains.kotlin.formver.plugin.*
 
-// Green path: an `exists` in a *precondition* is assumed at method entry, so it
-// verifies without the solver having to construct a witness. (An `exists` in a
-// postcondition must instead be proven; that verifies when a witness is reachable
-// — see max_character.kt in the expensive_verification tests.)
+// Verifies, as there are no postconditions
 @AlwaysVerify
 fun <!VIPER_TEXT!>simpleExists<!>(): Int {
     preconditions {
