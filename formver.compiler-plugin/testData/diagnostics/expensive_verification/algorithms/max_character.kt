@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.formver.plugin.*
 
 
 // `m` is the maximum character of `s` and actually occurs in it: the existential
-// quantifier is the dual of `forAll` and is required to state that the maximum is
+// quantifier is required to state that the maximum is
 // attained. The loop invariant carries the witness forward so the postcondition holds.
 fun <!VIPER_TEXT!>maxCharacter<!>(s: String): Char {
     preconditions {
