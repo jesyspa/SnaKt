@@ -30,17 +30,6 @@ fun <T> forAll(@Suppress("UNUSED_PARAMETER") body: InvariantBuilder.(T) -> Unit)
 
 /**
  * Asserts that there exists a value of type [T] satisfying the predicate in [body].
- *
- * An `exists` in a precondition or loop invariant is *assumed*, so it always holds. An `exists`
- * in a postcondition must be *proven*: it verifies when the solver can find a witness. This
- * succeeds when the body contains a trigger term the solver can match on (e.g. a `s[i]` access)
- * and the witness is established in context — for example carried forward by a loop invariant of
- * the same shape (see `max_character.kt` in the `expensive_verification` tests).
- *
- * It may fail for an existential over bare arithmetic with no such trigger (e.g. `exists { it == 0 }`),
- * because finding that witness needs model-based quantifier instantiation, which is not enabled.
- * Such a failure is reported as a verification warning ("might not hold"); note this signals only
- * that the witness could not be found, not that the existential is false.
  */
 fun <T> exists(@Suppress("UNUSED_PARAMETER") body: InvariantBuilder.(T) -> Unit): Boolean =
     throw FormverFunctionCalledInRuntimeException("exists")
