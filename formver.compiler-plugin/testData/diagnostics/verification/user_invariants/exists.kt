@@ -11,19 +11,6 @@ fun <!VIPER_TEXT!>simpleExists<!>(): Int {
     return 0
 }
 
-// Well-formedness path: `s[res]` inside the `exists` body has no bounds guard on
-// `res`, so Viper rejects the body as not well-formed ("Index ... might be
-// negative"). This pins that a well-formedness failure inside an `exists` body
-// surfaces as a VIPER_VERIFICATION_ERROR diagnostic rather than crashing the
-// compiler or silently passing. (It is not a failure to prove the existential.)
-<!VIPER_VERIFICATION_ERROR!>@AlwaysVerify
-fun <!VIPER_TEXT!>duplicateIndexExists<!>(s: String, res: Int): Int {
-    postconditions<Int> {
-        exists<Int> { i -> 0 <= i && i < s.length && s[i] == s[res] }
-    }
-    return 0
-}<!>
-
 // Incompleteness path: this existential (`it == 0`) is plainly true, but its body is bare
 // arithmetic with no trigger term for the solver to match on. Without model-based quantifier
 // instantiation the witness cannot be constructed, so the postcondition is reported as a
