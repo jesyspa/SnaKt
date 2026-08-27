@@ -56,15 +56,14 @@ repositories {
 }
 ```
 
-Additionally, make sure you set Kotlin to use K2 and increase the stack size of the Kotlin Daemon:
+Additionally, increase the stack size and metaspace of the Kotlin Daemon: the shaded plugin
+jar bundles Silicon and the Scala runtime (~100 MB), and without a larger metaspace the daemon
+dies with `OutOfMemoryError: Metaspace` after roughly a dozen compiles.
 
 ```kotlin
 kotlin {
-    compilerOptions {
-        languageVersion.set(KotlinVersion.KOTLIN_2_0)
-    }
-    // Set stack size to 30mb
-    kotlinDaemonJvmArgs = listOf("-Xss30m")
+    // Set stack size to 30mb and raise the metaspace limit
+    kotlinDaemonJvmArgs = listOf("-Xss30m", "-XX:MaxMetaspaceSize=1g")
 }
 ```
 
@@ -84,13 +83,7 @@ unless you run `gradle` with the `--info` flag.
 ### Annotations
 
 The plugin provides a number of annotations to add specifications to your code.
-To access these, add a dependency to `formver.annotations`:
-
-```kotlin
-dependencies {
-    implementation("org.jetbrains.kotlin.formver:formver.annotations:0.1.0-SNAPSHOT")
-}
-```
+Applying the Gradle plugin automatically adds a dependency on `formver.annotations`.
 
 ### Running from the command line
 
@@ -138,32 +131,15 @@ You need to (additionally) set `Z3_EXE` in `~/.xprofile` and/or
 `~/.bash_profile` depending on your shell, window manager, display
 manager, operating system, etc.
 
-## Running tests
+The Gradle and Kotlin daemons capture `Z3_EXE` at startup, so changing it
+afterwards has no effect until both are stopped (`./gradlew --stop`, plus
+killing the Kotlin daemon).
 
-Depending on the situation, different test modes should be run. The test pipeline is split into conversion and
-verification
-Conversion includes: Uniqueness checking, conversion, purity checking
-Verification includes: viper consistency checking, viper verification
+## Contributing
 
-The table below summarizes the modes:
-
-| Gradle Task                | Mode                   | Conversion          | Verification                    | Primary Use Case                                                                   |
-|:---------------------------|:-----------------------|:--------------------|:--------------------------------|:-----------------------------------------------------------------------------------|
-| `/gradlew test`            | **`FULL`**             | Runs for every test | Runs for every test             | Ensures total consistency (used in CI/CD)                                          |
-| `/gradlew update`          | **`UPDATE`**           | Runs for every test | Runs only if conversion changed | **Manual Review:** Validates that code changes produced the expected effect.       |
-| `/gradlew untilConversion` | **`CHECK_CONVERSION`** | Runs for every test | Never runs                      | **Refactoring:** Confirms that logic changes didn't accidentally break the output. |
-
-To update golden files after a change, pass `-Pkotlin.test.update.test.data=true`.
-
-### Test directives
-
-Test source files support directives that control how they are run:
-
-- `NEVER_VALIDATE` — skip verification, keep consistency and uniqueness checking.
-- `UNIQUE_CHECK_ONLY` — run only the uniqueness checker (skip conversion and verification).
-- `ALWAYS_VALIDATE` — force verification for all functions.
+See docs/developing.md for testing and the checks CI runs.
 
 ## Contact
 
-Reach out to komi.golov@jetbrains.com if you'd like to use or contribute to the plugin!
+Reach out to kameliya.golova@jetbrains.com if you'd like to use or contribute to the plugin!
 We are open to supervising bachelor and master theses about this work.

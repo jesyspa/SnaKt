@@ -17,7 +17,7 @@ sourceSets {
     }
     test {
         java.setSrcDirs(listOf("test", "test-gen"))
-        resources.setSrcDirs(listOf("testData"))
+        resources.setSrcDirs(listOf("testData", "test-resources"))
     }
 }
 
@@ -46,6 +46,7 @@ dependencies {
     testFixturesApi("viper:silicon_2.13:1.2-SNAPSHOT")
     testFixturesImplementation(project(":formver.compiler-plugin:core"))
     testFixturesImplementation(project(":formver.compiler-plugin:locality"))
+    testFixturesImplementation(project(":formver.compiler-plugin:uniqueness"))
 
     annotationsRuntimeClasspath(project(":formver.annotations"))
 

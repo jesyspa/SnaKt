@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="verification.BasicTest" tests="2" skipped="1" failures="0" errors="0" timestamp="1970-01-01T00:00:00" hostname="host" time="0.01">
+  <properties/>
+  <testcase name="testAssign_local" classname="verification.BasicTest" time="0.01"/>
+  <testcase name="testIgnored" classname="verification.BasicTest" time="0.0">
+    <skipped/>
+  </testcase>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

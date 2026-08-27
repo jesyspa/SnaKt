@@ -11,7 +11,13 @@ annotation class AlwaysVerify
 annotation class DumpExpEmbeddings
 
 // We annotate the function to indicate that the return value is unique
-@Target(AnnotationTarget.LOCAL_VARIABLE, AnnotationTarget.VALUE_PARAMETER, AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY)
+@Target(
+    AnnotationTarget.LOCAL_VARIABLE,
+    AnnotationTarget.VALUE_PARAMETER,
+    AnnotationTarget.FUNCTION,
+    AnnotationTarget.PROPERTY,
+    AnnotationTarget.TYPE,
+)
 annotation class Unique
 
 @Target(AnnotationTarget.LOCAL_VARIABLE, AnnotationTarget.VALUE_PARAMETER, AnnotationTarget.TYPE)
@@ -20,5 +26,11 @@ annotation class Borrowed
 @Target(AnnotationTarget.FUNCTION)
 annotation class Pure
 
-@Target(AnnotationTarget.PROPERTY)
+/**
+ * Disables automatic permission management for the annotated element.
+ *
+ * On a class, the automatic folding, unfolding, and havoc of that class's uniqueness predicate
+ * are turned off, leaving its permissions to be managed explicitly.
+ */
+@Target(AnnotationTarget.PROPERTY, AnnotationTarget.CLASS)
 annotation class Manual

@@ -1,0 +1,42 @@
+/manualFoldingNegative.kt: info: Generated Viper text for writeWithoutUnfold:
+field value: Ref
+
+method writeWithoutUnfold(c: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(c), Cell())
+  requires acc(Cell_unique(c), write)
+  ensures isSubtype(typeOf(v_ret_0), unitType())
+{
+  c.value := intToRef(5)
+  label lbl_ret_0
+  inhale isSubtype(typeOf(v_ret_0), unitType())
+}
+
+/manualFoldingNegative.kt: info: Generated Viper text for unfoldWithoutRefold:
+field value: Ref
+
+function exp(this: Ref): Ref
+  requires isSubtype(typeOf(this), Predicate())
+  ensures isSubtype(typeOf(result), anyType())
+
+
+function g_data(this: Ref): Ref
+  requires isSubtype(typeOf(this), UniquePred())
+  ensures isSubtype(typeOf(result), anyType())
+
+
+method con(par_data: Ref) returns (ret_1: Ref)
+  requires isSubtype(typeOf(par_data), anyType())
+  ensures isSubtype(typeOf(ret_1), UniquePred())
+  ensures acc(UniquePred_unique(ret_1), write)
+
+
+method unfoldWithoutRefold(c: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(c), Cell())
+  requires acc(Cell_unique(c), write)
+  ensures acc(Cell_unique(c), write)
+  ensures isSubtype(typeOf(v_ret_0), unitType())
+{
+  unfold acc(Cell_unique(c), write)
+  label lbl_ret_0
+  inhale isSubtype(typeOf(v_ret_0), unitType())
+}

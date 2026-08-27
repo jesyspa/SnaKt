@@ -26,8 +26,17 @@ import kotlin.collections.orEmpty
  */
 fun interface InvokeParameterTypeFactsResolver<TypeFact> {
     context(context: CheckerContext)
-    fun resolveInvokeParameters(receiver: FirExpression): List<TypeFact>?
+    fun resolveInvokeParametersOf(receiver: FirExpression): List<TypeFact>?
 }
+
+private val FirCall.invokeDispatchReceiver: FirExpression?
+    get() =
+        when (this) {
+            is FirImplicitInvokeCall -> dispatchReceiver
+            // This can happen if .invoke is called explicitly.
+            is FirFunctionCall if calleeReference.name == OperatorNameConventions.INVOKE -> dispatchReceiver
+            else -> null
+        }
 
 /**
  * Resolves the types of the parameters of a call.
@@ -40,14 +49,6 @@ class CallArgumentTypeFactsMapper<TypeFact>(
     private val declaredParameterTypeFactResolver: SymbolTypeFactResolver<TypeFact, FirValueParameterSymbol>,
     private val invokeParameterTypeFactsResolver: InvokeParameterTypeFactsResolver<TypeFact>
 ) {
-    private val FirCall.invokeDispatchReceiver: FirExpression?
-        get() =
-            when (this) {
-                is FirImplicitInvokeCall -> dispatchReceiver
-                // This can happen if .invoke is called explicitly.
-                is FirFunctionCall if calleeReference.name == OperatorNameConventions.INVOKE -> dispatchReceiver
-                else -> null
-            }
 
     /**
      * Resolves the mapping between the argument expressions of [call] and their corresponding type-facts.
@@ -57,7 +58,7 @@ class CallArgumentTypeFactsMapper<TypeFact>(
         val invokeReceiver = call.invokeDispatchReceiver
 
         if (invokeReceiver != null) {
-            val invokeParameterTypeFacts = invokeParameterTypeFactsResolver.resolveInvokeParameters(invokeReceiver)
+            val invokeParameterTypeFacts = invokeParameterTypeFactsResolver.resolveInvokeParametersOf(invokeReceiver)
 
             if (invokeParameterTypeFacts != null) {
                 // NOTE: In invoke calls context and receiver arguments are actually passed as explicit normal

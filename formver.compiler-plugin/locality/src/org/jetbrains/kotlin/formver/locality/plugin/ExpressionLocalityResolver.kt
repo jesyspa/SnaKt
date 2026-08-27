@@ -8,18 +8,24 @@ package org.jetbrains.kotlin.formver.locality.plugin
 import org.jetbrains.kotlin.fir.FirSession
 import org.jetbrains.kotlin.fir.analysis.checkers.context.CheckerContext
 import org.jetbrains.kotlin.fir.caches.firCachesFactory
+import org.jetbrains.kotlin.fir.expressions.FirAnonymousFunctionExpression
+import org.jetbrains.kotlin.fir.expressions.FirCallableReferenceAccess
 import org.jetbrains.kotlin.fir.expressions.FirExpression
+import org.jetbrains.kotlin.fir.expressions.FirPropertyAccessExpression
 import org.jetbrains.kotlin.fir.expressions.FirQualifiedAccessExpression
 import org.jetbrains.kotlin.fir.expressions.FirReturnExpression
+import org.jetbrains.kotlin.fir.expressions.FirThisReceiverExpression
 import org.jetbrains.kotlin.fir.expressions.FirThrowExpression
 import org.jetbrains.kotlin.fir.extensions.FirExtensionSessionComponent
 import org.jetbrains.kotlin.fir.references.symbol
+import org.jetbrains.kotlin.fir.resolve.dfa.controlFlowGraph
+import org.jetbrains.kotlin.fir.symbols.impl.FirCallableSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirReceiverParameterSymbol
-import org.jetbrains.kotlin.fir.symbols.impl.FirVariableSymbol
 import org.jetbrains.kotlin.formver.locality.contract.plugin.resolveLocalityContract
 import org.jetbrains.kotlin.formver.type.plugin.CallArgumentTypeFactsMapper
 import org.jetbrains.kotlin.formver.type.plugin.ExpressionTypeFactResolver
 import org.jetbrains.kotlin.formver.type.plugin.InvokeParameterTypeFactsResolver
+import org.jetbrains.kotlin.formver.type.plugin.QualifiedAccessArgumentTypeFactMapper
 import org.jetbrains.kotlin.formver.type.plugin.ReturnResultTypeFactResolver
 import org.jetbrains.kotlin.formver.type.plugin.ThrowExceptionTypeFactResolver
 import org.jetbrains.kotlin.formver.type.plugin.UnifyingExpressionTypeFactResolver
@@ -28,10 +34,21 @@ private object TerminalLocalityResolver : ExpressionTypeFactResolver<Locality> {
     context(context: CheckerContext)
     override fun resolveTypeFactOf(expression: FirExpression): Locality =
         when (expression) {
+            is FirAnonymousFunctionExpression -> {
+                val graph = expression.anonymousFunction.controlFlowGraphReference?.controlFlowGraph
+                    ?: return Locality.Global
+
+                graph.resolveScopeLocality()
+            }
+
             is FirQualifiedAccessExpression ->
-                when (val symbol = expression.calleeReference.symbol) {
-                    is FirVariableSymbol -> symbol.resolveLocality()
-                    is FirReceiverParameterSymbol -> symbol.resolveLocality()
+                when (expression) {
+                    is FirPropertyAccessExpression, is FirThisReceiverExpression, is FirCallableReferenceAccess ->
+                        when (val symbol = expression.calleeReference.symbol) {
+                            is FirCallableSymbol<*> -> symbol.resolveLocality()
+                            is FirReceiverParameterSymbol -> symbol.resolveLocality()
+                            else -> Locality.Global
+                        }
                     else -> Locality.Global
                 }
 
@@ -75,11 +92,16 @@ object ThrowExceptionLocalityResolver : ThrowExceptionTypeFactResolver<Locality>
 
 object InvokeParametersLocalityResolver : InvokeParameterTypeFactsResolver<Locality> {
     context(context: CheckerContext)
-    override fun resolveInvokeParameters(receiver: FirExpression): List<Locality>? =
+    override fun resolveInvokeParametersOf(receiver: FirExpression): List<Locality>? =
         receiver.resolveLocalityContract()?.parameterTypeFacts?.map { it.typeFact }
 }
 
-val CallArgumentLocalityMapper = CallArgumentTypeFactsMapper(
+val CallArgumentLocalitiesMapper = CallArgumentTypeFactsMapper(
     VariableLocalityResolver,
     InvokeParametersLocalityResolver
+)
+
+val QualifiedAccessArgumentLocalitiesMapper = QualifiedAccessArgumentTypeFactMapper(
+    ReceiverLocalityResolver,
+    VariableLocalityResolver
 )

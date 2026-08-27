@@ -14,9 +14,9 @@ import org.jetbrains.kotlin.formver.core.embeddings.*
 import org.jetbrains.kotlin.formver.core.embeddings.callables.toFuncApp
 import org.jetbrains.kotlin.formver.core.embeddings.callables.toMethodCall
 import org.jetbrains.kotlin.formver.core.embeddings.expression.*
+import org.jetbrains.kotlin.formver.core.embeddings.types.ClassTypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.fillHoles
 import org.jetbrains.kotlin.formver.core.embeddings.types.injection
-import org.jetbrains.kotlin.formver.core.embeddings.types.predicateAccess
 import org.jetbrains.kotlin.formver.viper.ast.Exp
 import org.jetbrains.kotlin.formver.viper.ast.Exp.Companion.toConjunction
 import org.jetbrains.kotlin.formver.viper.ast.Stmt
@@ -358,6 +358,8 @@ data class LinearizationVisitor(
     override fun visitEqCmp(e: EqCmp): Linearizable = comparisonLinearizable(e)
     override fun visitNeCmp(e: NeCmp): Linearizable = comparisonLinearizable(e)
 
+    override fun visitIdentityCmp(e: IdentityCmp): Linearizable = comparisonLinearizable(e)
+
     private fun comparisonLinearizable(e: AnyComparisonExpression): Linearizable = object : DirectResultLinearizable(e, this@LinearizationVisitor) {
         override fun toViper(ctx: LinearizationContext): Exp =
             RuntimeTypeDomain.boolInjection.toRef(
@@ -366,20 +368,16 @@ data class LinearizationVisitor(
                 info = e.sourceRole.asInfo
             )
 
-        override fun toViperBuiltinType(ctx: LinearizationContext): Exp =
-            if (e.left.type == e.right.type)
-                e.comparisonOperation(
-                    e.left.linearize().toViperBuiltinType(ctx),
-                    e.right.linearize().toViperBuiltinType(ctx),
-                    pos = ctx.source.asPosition,
-                    info = e.sourceRole.asInfo
-                )
-            else e.comparisonOperation(
-                e.left.linearize().toViper(ctx),
-                e.right.linearize().toViper(ctx),
+        override fun toViperBuiltinType(ctx: LinearizationContext): Exp {
+            fun ExpEmbedding.operand(): Exp =
+                if (e.comparesUnwrapped) linearize().toViperBuiltinType(ctx) else linearize().toViper(ctx)
+            return e.comparisonOperation(
+                e.left.operand(),
+                e.right.operand(),
                 pos = ctx.source.asPosition,
                 info = e.sourceRole.asInfo
             )
+        }
     }
 
     // endregion
@@ -432,20 +430,16 @@ data class LinearizationVisitor(
 
     override fun visitFieldModification(e: FieldModification): Linearizable = object : UnitResultLinearizable(e) {
         override fun toViperUnusedResult(ctx: LinearizationContext) {
+            val accessIsManual = with(ctx.typeResolver) { (e.receiver.type.pretype as? ClassTypeEmbedding)?.isManual ?: false }
             when (e.field.accessPolicy) {
-                AccessPolicy.BY_RECEIVER_UNIQUENESS -> {
+                AccessPolicy.BY_RECEIVER_UNIQUENESS if !accessIsManual -> {
                     e.receiver.linearize().toViperUnusedResult(ctx)
                     e.newValue.linearize().toViperUnusedResult(ctx)
                 }
                 else -> {
                     val receiverViper = e.receiver.linearize().toViper(ctx)
-                    if (e.field.unfoldToAccess) {
-                        val receiverWrapper = ExpWrapper(receiverViper, e.receiver.type)
-                        val hierarchyPath = ctx.typeResolver.hierarchyPathTo(e.receiver.type.pretype, e.field)
-                        hierarchyPath.forEach { classType ->
-                            val predAcc = classType.predicateAccess(receiverWrapper, ctx.typeResolver, ctx.source)
-                            ctx.addStatement { Stmt.Unfold(predAcc) }
-                        }
+                    if (e.field.unfoldToAccess && !accessIsManual) {
+                        ctx.unfoldHierarchyPredicates(receiverViper, e.receiver.type, e.field)
                     }
                     val newValueViper = e.newValue.linearize().toViper(ctx)
                     ctx.addStatement {
@@ -468,6 +462,22 @@ data class LinearizationVisitor(
     override fun visitPredicateAccessPermissions(e: PredicateAccessPermissions): Linearizable = object : OnlyToBuiltinLinearizable(e, this@LinearizationVisitor) {
         override fun toViperBuiltinType(ctx: LinearizationContext): Exp =
             Exp.PredicateAccess(e.predicateName, e.args.map { it.linearize().toViper(ctx) }, e.perm, ctx.source.asPosition)
+    }
+
+    override fun visitUnfold(e: Unfold): Linearizable = object : UnitResultLinearizable(e) {
+        override fun toViperUnusedResult(ctx: LinearizationContext) {
+            ctx.addStatement {
+                Stmt.Unfold(e.pred.linearize().toViperBuiltinType(ctx) as Exp.PredicateAccess)
+            }
+        }
+    }
+
+    override fun visitFold(e: Fold): Linearizable = object : UnitResultLinearizable(e) {
+        override fun toViperUnusedResult(ctx: LinearizationContext) {
+            ctx.addStatement {
+                Stmt.Fold(e.pred.linearize().toViperBuiltinType(ctx) as Exp.PredicateAccess)
+            }
+        }
     }
 
     // endregion
@@ -541,6 +551,9 @@ data class LinearizationVisitor(
             )
         }
     }
+
+    override fun visitPermissionLit(e: PermissionLit): Linearizable =
+        error("PermissionLit should not be linearized; it is consumed directly by `acc` argument handling")
 
     // endregion
 
@@ -616,13 +629,6 @@ data class LinearizationVisitor(
             TODO("create new function object with counter, duplicable (requires toViper restructuring)")
         }
     }
-
-    // endregion
-
-    // region Default
-
-    override fun visitDefault(e: ExpEmbedding): Linearizable =
-        error("visitDefault should not be called; all concrete ExpEmbedding types must have their own visitor method")
 
     // endregion
 }

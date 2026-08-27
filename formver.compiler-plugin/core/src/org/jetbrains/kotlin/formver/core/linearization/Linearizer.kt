@@ -13,15 +13,12 @@ import org.jetbrains.kotlin.formver.core.conversion.ReturnTarget
 import org.jetbrains.kotlin.formver.core.conversion.TypeResolver
 import org.jetbrains.kotlin.formver.core.embeddings.callables.SpecialMethods
 import org.jetbrains.kotlin.formver.core.embeddings.expression.AnonymousVariableEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.expression.ExpEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.expression.ExpWrapper
 import org.jetbrains.kotlin.formver.core.embeddings.expression.VariableEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.properties.FieldEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.toLink
 import org.jetbrains.kotlin.formver.core.embeddings.toViperGoto
 import org.jetbrains.kotlin.formver.core.embeddings.types.ClassTypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.types.predicateAccess
 import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.ast.Declaration
 import org.jetbrains.kotlin.formver.viper.ast.Exp
@@ -111,9 +108,10 @@ data class Linearizer(
 
     override fun addFieldAccessStoringIn(receiver: Linearizable, receiverType: TypeEmbedding, field: FieldEmbedding, result: VariableEmbedding) {
         addStatement {
+            val accessIsManual = with(typeResolver) { (receiverType.pretype as? ClassTypeEmbedding)?.isManual ?: false }
             when (field.accessPolicy) {
                 // TODO: Handling a unique field on a shared receiver must be added here.
-                AccessPolicy.BY_RECEIVER_UNIQUENESS -> {
+                AccessPolicy.BY_RECEIVER_UNIQUENESS if !accessIsManual -> {
                     receiver.toViperUnusedResult(this)
                     SpecialMethods.havocMethod.toMethodCall(
                         listOf(field.type.runtimeType),
@@ -125,26 +123,14 @@ data class Linearizer(
                     val receiverViper = receiver.toViper(this)
                     // If the field access is not replaced with havoc,
                     // we might need to unfold some predicate to access it.
-                    if (field.unfoldToAccess) {
-                        val receiverWrapper = ExpWrapper(receiverViper, receiverType)
-                        val hierarchyPath = typeResolver.hierarchyPathTo(receiverType.pretype, field)
-                        hierarchyPath.unfoldHierarchyPath(receiverWrapper, this)
+                    if (field.unfoldToAccess && !accessIsManual) {
+                        unfoldHierarchyPredicates(receiverViper, receiverType, field)
                     }
                     Stmt.assign(
                         result.toLocalVarUse(), Exp.FieldAccess(receiverViper, field.toViper(), source.asPosition)
                     )
                 }
             }
-        }
-    }
-
-    private fun Sequence<ClassTypeEmbedding>?.unfoldHierarchyPath(
-        receiverWrapper: ExpEmbedding,
-        ctx: LinearizationContext
-    ) {
-        this?.forEach { classType ->
-            val predAcc = classType.predicateAccess(receiverWrapper, typeResolver, source)
-            ctx.addStatement { Stmt.Unfold(predAcc, source.asPosition) }
         }
     }
 

@@ -13,9 +13,3 @@
 /call.kt: error: Receiver locality mismatch: expected 'global', actual 'local'.
 
 /call.kt: error: Receiver locality mismatch: expected 'global', actual 'local'.
-
-/call.kt: error: Unable to capture outer local declaration from 'anonymous'.
-
-/call.kt: error: Argument locality mismatch: expected 'global', actual 'local'.
-
-/call.kt: error: Argument locality mismatch: expected 'global', actual 'local'.

@@ -1,0 +1,5 @@
+/primitive.kt: error: Initializer uniqueness mismatch: expected 'unique', actual 'shared'.
+
+/primitive.kt: error: Initializer uniqueness mismatch: expected 'unique', actual 'shared'.
+
+/primitive.kt: error: Initializer uniqueness mismatch: expected 'unique', actual 'shared'.

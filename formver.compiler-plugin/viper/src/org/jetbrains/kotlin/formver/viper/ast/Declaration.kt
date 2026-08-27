@@ -7,12 +7,14 @@ package org.jetbrains.kotlin.formver.viper.ast
 
 import org.jetbrains.kotlin.formver.viper.*
 
-sealed interface Declaration : IntoSilver<viper.silver.ast.Declaration> {
+sealed interface Declaration : WithSilverMetadata, IntoSilver<viper.silver.ast.Declaration> {
+    val name: SymbolicName
+
     data class LocalVarDecl(
-        val name: SymbolicName,
+        override val name: SymbolicName,
         val type: Type,
-        val pos: Position = Position.NoPosition,
-        val info: Info = Info.NoInfo,
+        override val pos: Position = Position.NoPosition,
+        override val info: Info = Info.NoInfo,
     ) : Declaration {
         context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.LocalVarDecl =
@@ -26,16 +28,16 @@ sealed interface Declaration : IntoSilver<viper.silver.ast.Declaration> {
     }
 
     data class LabelDecl(
-        val name: SymbolicName,
+        override val name: SymbolicName,
         val invariants: List<Exp>,
-        val position: Position = Position.NoPosition,
-        val info: Info = Info.NoInfo,
+        override val pos: Position = Position.NoPosition,
+        override val info: Info = Info.NoInfo,
     ) : Declaration {
         context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.Label = viper.silver.ast.Label(
             name.mangled,
             invariants.toSilver().toScalaSeq(),
-            position.toSilver(),
+            pos.toSilver(),
             info.toSilver(),
             silverNoTrafos
         )

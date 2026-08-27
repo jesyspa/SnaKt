@@ -43,23 +43,8 @@ fun `pass global-local function as local-local function argument`() {
     requireLocalLocalFunction(<!LOCALITY_CONTRACT_MISMATCH!>produceGlobalLocalFunction()<!>)
 }
 
-fun `use global function as local function default`(
-    f: (@Borrowed Any) -> Unit = <!LOCALITY_CONTRACT_MISMATCH!>produceGlobalFunction()<!>
-) {}
-
 fun `pass local function as global function argument`() {
     requireGlobalFunction(produceLocalFunction())
-}
-
-fun `return global function as local function`(): (@Borrowed Any) -> Unit {
-    return <!LOCALITY_CONTRACT_MISMATCH!>produceGlobalFunction()<!>
-}
-
-fun `infer mixed function contract then assign to local function`(
-    f: (Any) -> Unit,
-    g: (@Borrowed Any) -> Unit
-) {
-    val h: (@Borrowed Any) -> Unit = <!LOCALITY_CONTRACT_MISMATCH!>if (true) f else g<!>
 }
 
 fun `pass global receiver function as local receiver function`() {

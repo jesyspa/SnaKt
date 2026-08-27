@@ -8,15 +8,21 @@ public final class org/jetbrains/kotlin/formver/plugin/BuiltinsKt {
 	public static final fun acc (Ljava/lang/Object;Ljava/lang/Object;)Z
 	public static synthetic fun acc$default (Ljava/lang/Object;Ljava/lang/Object;ILjava/lang/Object;)Z
 	public static final fun exists (Lkotlin/jvm/functions/Function2;)Z
+	public static final fun acc (Ljava/lang/Object;Lorg/jetbrains/kotlin/formver/plugin/Permission;)Z
+	public static synthetic fun acc$default (Ljava/lang/Object;Lorg/jetbrains/kotlin/formver/plugin/Permission;ILjava/lang/Object;)Z
+	public static final fun fold (Lorg/jetbrains/kotlin/formver/plugin/Predicate;Lorg/jetbrains/kotlin/formver/plugin/Permission;)V
+	public static synthetic fun fold$default (Lorg/jetbrains/kotlin/formver/plugin/Predicate;Lorg/jetbrains/kotlin/formver/plugin/Permission;ILjava/lang/Object;)V
 	public static final fun forAll (Lkotlin/jvm/functions/Function2;)Z
 	public static final fun implies (ZZ)Z
 	public static final fun loopInvariants (Lkotlin/jvm/functions/Function0;)V
 	public static final fun old (Ljava/lang/Object;)Ljava/lang/Object;
 	public static final fun postconditions (Lkotlin/jvm/functions/Function1;)V
 	public static final fun preconditions (Lkotlin/jvm/functions/Function0;)V
-	public static final fun read ()Ljava/lang/Object;
+	public static final fun read ()Lorg/jetbrains/kotlin/formver/plugin/Permission;
+	public static final fun unfold (Lorg/jetbrains/kotlin/formver/plugin/Predicate;Lorg/jetbrains/kotlin/formver/plugin/Permission;)V
+	public static synthetic fun unfold$default (Lorg/jetbrains/kotlin/formver/plugin/Predicate;Lorg/jetbrains/kotlin/formver/plugin/Permission;ILjava/lang/Object;)V
 	public static final fun verify ([Z)V
-	public static final fun write ()Ljava/lang/Object;
+	public static final fun write ()Lorg/jetbrains/kotlin/formver/plugin/Permission;
 }
 
 public abstract interface annotation class org/jetbrains/kotlin/formver/plugin/DumpExpEmbeddings : java/lang/annotation/Annotation {
@@ -36,9 +42,28 @@ public abstract interface annotation class org/jetbrains/kotlin/formver/plugin/N
 public abstract interface annotation class org/jetbrains/kotlin/formver/plugin/NeverVerify : java/lang/annotation/Annotation {
 }
 
+public abstract interface class org/jetbrains/kotlin/formver/plugin/Permission {
+}
+
+public abstract class org/jetbrains/kotlin/formver/plugin/Predicate {
+	public fun <init> (Ljava/lang/Object;)V
+	public final fun getExp ()Ljava/lang/Object;
+}
+
 public abstract interface annotation class org/jetbrains/kotlin/formver/plugin/Pure : java/lang/annotation/Annotation {
 }
 
 public abstract interface annotation class org/jetbrains/kotlin/formver/plugin/Unique : java/lang/annotation/Annotation {
+}
+
+public final class org/jetbrains/kotlin/formver/plugin/UniquePred : org/jetbrains/kotlin/formver/plugin/Predicate {
+	public fun <init> (Ljava/lang/Object;)V
+	public final fun component1 ()Ljava/lang/Object;
+	public final fun copy (Ljava/lang/Object;)Lorg/jetbrains/kotlin/formver/plugin/UniquePred;
+	public static synthetic fun copy$default (Lorg/jetbrains/kotlin/formver/plugin/UniquePred;Ljava/lang/Object;ILjava/lang/Object;)Lorg/jetbrains/kotlin/formver/plugin/UniquePred;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getData ()Ljava/lang/Object;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 

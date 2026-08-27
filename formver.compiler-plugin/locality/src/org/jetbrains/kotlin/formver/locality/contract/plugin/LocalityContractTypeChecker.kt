@@ -26,7 +26,7 @@ val CallLocalityContractChecker = CallTypeFactChecker(
     kind = MppCheckerKind.Common,
     typeFactJudgment = LocalityContractJudgment,
     expressionTypeFactResolver = ExpressionLocalityContractResolver,
-    callArgumentTypeFactsMapper = CallParametersLocalityContractResolver,
+    callArgumentTypeFactsMapper = CallArgumentLocalityContractsMapper,
     argumentDiagnosticFactory = LOCALITY_CONTRACT_MISMATCH,
     contextDiagnosticFactory = CONTEXT_LOCALITY_CONTRACT_MISMATCH
 )
@@ -43,8 +43,7 @@ val QualifiedAccessLocalityContractChecker = QualifiedAccessTypeFactChecker(
     kind = MppCheckerKind.Common,
     typeFactJudgment = LocalityContractJudgment,
     expressionTypeFactResolver = ExpressionLocalityContractResolver,
-    receiverTypeFactResolver = ReceiverLocalityContractResolver,
-    variableTypeFactResolver = VariableLocalityContractResolver,
+    qualifiedAccessArgumentTypeFactMapper = QualifiedAccessArgumentLocalityContractsMapper,
     receiverDiagnosticFactory = LOCALITY_CONTRACT_MISMATCH,
     contextArgumentDiagnosticFactory = CONTEXT_LOCALITY_CONTRACT_MISMATCH,
 )

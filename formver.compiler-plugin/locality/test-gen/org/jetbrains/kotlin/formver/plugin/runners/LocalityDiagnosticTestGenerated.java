@@ -34,6 +34,12 @@ public class LocalityDiagnosticTestGenerated extends AbstractLocalityDiagnosticT
   }
 
   @Test
+  @TestMetadata("buffer_builder.kt")
+  public void testBuffer_builder() {
+    runTest("formver.compiler-plugin/locality/testData/diagnostics/buffer_builder.kt");
+  }
+
+  @Test
   @TestMetadata("call.kt")
   public void testCall() {
     runTest("formver.compiler-plugin/locality/testData/diagnostics/call.kt");
@@ -43,12 +49,6 @@ public class LocalityDiagnosticTestGenerated extends AbstractLocalityDiagnosticT
   @TestMetadata("call_anonymous.kt")
   public void testCall_anonymous() {
     runTest("formver.compiler-plugin/locality/testData/diagnostics/call_anonymous.kt");
-  }
-
-  @Test
-  @TestMetadata("call_anonymous_with_context.kt")
-  public void testCall_anonymous_with_context() {
-    runTest("formver.compiler-plugin/locality/testData/diagnostics/call_anonymous_with_context.kt");
   }
 
   @Test
@@ -64,9 +64,33 @@ public class LocalityDiagnosticTestGenerated extends AbstractLocalityDiagnosticT
   }
 
   @Test
+  @TestMetadata("cast.kt")
+  public void testCast() {
+    runTest("formver.compiler-plugin/locality/testData/diagnostics/cast.kt");
+  }
+
+  @Test
   @TestMetadata("closure_capture.kt")
   public void testClosure_capture() {
     runTest("formver.compiler-plugin/locality/testData/diagnostics/closure_capture.kt");
+  }
+
+  @Test
+  @TestMetadata("conditional_expression.kt")
+  public void testConditional_expression() {
+    runTest("formver.compiler-plugin/locality/testData/diagnostics/conditional_expression.kt");
+  }
+
+  @Test
+  @TestMetadata("connection_pool.kt")
+  public void testConnection_pool() {
+    runTest("formver.compiler-plugin/locality/testData/diagnostics/connection_pool.kt");
+  }
+
+  @Test
+  @TestMetadata("constructor.kt")
+  public void testConstructor() {
+    runTest("formver.compiler-plugin/locality/testData/diagnostics/constructor.kt");
   }
 
   @Test
@@ -76,15 +100,21 @@ public class LocalityDiagnosticTestGenerated extends AbstractLocalityDiagnosticT
   }
 
   @Test
-  @TestMetadata("invalid.kt")
-  public void testInvalid() {
-    runTest("formver.compiler-plugin/locality/testData/diagnostics/invalid.kt");
+  @TestMetadata("deferred_callbacks.kt")
+  public void testDeferred_callbacks() {
+    runTest("formver.compiler-plugin/locality/testData/diagnostics/deferred_callbacks.kt");
   }
 
   @Test
-  @TestMetadata("nested_scope.kt")
-  public void testNested_scope() {
-    runTest("formver.compiler-plugin/locality/testData/diagnostics/nested_scope.kt");
+  @TestMetadata("inner_function.kt")
+  public void testInner_function() {
+    runTest("formver.compiler-plugin/locality/testData/diagnostics/inner_function.kt");
+  }
+
+  @Test
+  @TestMetadata("invalid.kt")
+  public void testInvalid() {
+    runTest("formver.compiler-plugin/locality/testData/diagnostics/invalid.kt");
   }
 
   @Test
@@ -136,6 +166,12 @@ public class LocalityDiagnosticTestGenerated extends AbstractLocalityDiagnosticT
     @TestMetadata("call_with_vararg.kt")
     public void testCall_with_vararg() {
       runTest("formver.compiler-plugin/locality/testData/diagnostics/contract/call_with_vararg.kt");
+    }
+
+    @Test
+    @TestMetadata("conditional_expression.kt")
+    public void testConditional_expression() {
+      runTest("formver.compiler-plugin/locality/testData/diagnostics/contract/conditional_expression.kt");
     }
 
     @Test

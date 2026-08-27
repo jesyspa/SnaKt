@@ -1,0 +1,13 @@
+/nullable.kt: error: Escaping value has moved field: 'b.y'.
+
+/nullable.kt: error: Escaping value has moved field: 'a.x'.
+
+/nullable.kt: error: Escaping value has moved field: 'a.x'.
+
+/nullable.kt: error: Invalid access to moved reference.
+
+/nullable.kt: error: Invalid access to moved reference.
+
+/nullable.kt: error: Invalid access to moved reference.
+
+/nullable.kt: error: Invalid access to moved reference.

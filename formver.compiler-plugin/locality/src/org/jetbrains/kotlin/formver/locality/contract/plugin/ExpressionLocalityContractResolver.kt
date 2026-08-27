@@ -22,6 +22,7 @@ import org.jetbrains.kotlin.fir.types.resolvedType
 import org.jetbrains.kotlin.formver.type.plugin.CallArgumentTypeFactsMapper
 import org.jetbrains.kotlin.formver.type.plugin.ExpressionTypeFactResolver
 import org.jetbrains.kotlin.formver.type.plugin.InvokeParameterTypeFactsResolver
+import org.jetbrains.kotlin.formver.type.plugin.QualifiedAccessArgumentTypeFactMapper
 import org.jetbrains.kotlin.formver.type.plugin.ReturnResultTypeFactResolver
 import org.jetbrains.kotlin.formver.type.plugin.UnifyingExpressionTypeFactResolver
 
@@ -73,11 +74,16 @@ object ReturnResultLocalityContractResolver : ReturnResultTypeFactResolver<Local
 
 private object InvokeParametersLocalityContractResolver : InvokeParameterTypeFactsResolver<LocalityContract?> {
     context(context: CheckerContext)
-    override fun resolveInvokeParameters(receiver: FirExpression): List<LocalityContract?>? =
+    override fun resolveInvokeParametersOf(receiver: FirExpression): List<LocalityContract?>? =
         receiver.resolveLocalityContract()?.parameterTypeFacts?.map { element -> element.functionTypeFact }
 }
 
-val CallParametersLocalityContractResolver = CallArgumentTypeFactsMapper(
+val CallArgumentLocalityContractsMapper = CallArgumentTypeFactsMapper(
     VariableLocalityContractResolver,
     InvokeParametersLocalityContractResolver
+)
+
+val QualifiedAccessArgumentLocalityContractsMapper = QualifiedAccessArgumentTypeFactMapper(
+    ReceiverLocalityContractResolver,
+    VariableLocalityContractResolver
 )

@@ -24,7 +24,10 @@ class FormVerModelBuilder : ToolingModelBuilder {
             extension.myErrorStyle,
             extension.myUnsupportedFeatureBehaviour,
             extension.myConversionTargetsSelection,
-            extension.myVerificationTargetsSelection
+            extension.myVerificationTargetsSelection,
+            extension.myCheckUniqueness,
+            extension.myCheckLocality,
+            extension.myDumpUniquenessCFG,
         )
     }
 

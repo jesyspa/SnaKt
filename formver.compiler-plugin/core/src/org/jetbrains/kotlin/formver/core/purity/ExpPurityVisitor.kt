@@ -20,6 +20,7 @@ internal class ExprPurityVisitor(val declaredVariables: MutableSet<VariableEmbed
         return pure
     }
     override fun visitLiteralEmbedding(e: LiteralEmbedding) = true
+    override fun visitPermissionLit(e: PermissionLit) = true
     override fun visitExpWrapper(e: ExpWrapper) = true
     override fun visitVariableEmbedding(e: VariableEmbedding) = true
     override fun visitAssign(e: Assign): Boolean =
@@ -33,6 +34,7 @@ internal class ExprPurityVisitor(val declaredVariables: MutableSet<VariableEmbed
     override fun visitSequentialOr(e: SequentialOr) = e.allChildrenPure(this)
     override fun visitEqCmp(e: EqCmp) = e.allChildrenPure(this)
     override fun visitNeCmp(e: NeCmp) = e.allChildrenPure(this)
+    override fun visitIdentityCmp(e: IdentityCmp) = e.allChildrenPure(this)
     override fun visitUnaryOperatorExpEmbedding(e: UnaryOperatorExpEmbedding) = e.allChildrenPure(this)
     override fun visitWithPosition(e: WithPosition) = e.allChildrenPure(this)
     override fun visitInjectionBasedExpEmbedding(e: InjectionBasedExpEmbedding) = e.allChildrenPure(this)
@@ -67,7 +69,8 @@ internal class ExprPurityVisitor(val declaredVariables: MutableSet<VariableEmbed
     override fun visitPredicateAccessPermissions(e: PredicateAccessPermissions): Boolean = false
     override fun visitLabelExp(e: LabelExp): Boolean = false
     override fun visitAccEmbedding(e: AccEmbedding): Boolean = false
-    override fun visitDefault(e: ExpEmbedding): Boolean = false
+    override fun visitFold(e: Fold): Boolean = false
+    override fun visitUnfold(e: Unfold): Boolean = false
 }
 
 private fun ExpEmbedding.allChildrenPure(v: ExprPurityVisitor): Boolean =

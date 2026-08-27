@@ -584,6 +584,9 @@ class ProgramConverter(
             }
 
             typeResolver.register(classEmbedding, symbol.classKind.isInterface)
+            if (symbol.isManual(session)) {
+                typeResolver.markManual(className)
+            }
 
             symbol.resolvedSuperTypes.forEach {
                 val superTypeName = embedType(it).pretype.name

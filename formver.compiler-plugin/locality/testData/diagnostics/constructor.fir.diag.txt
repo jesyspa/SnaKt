@@ -1,0 +1,3 @@
+/constructor.kt: error: Argument locality mismatch: expected 'global', actual 'local'.
+
+/constructor.kt: error: Argument locality mismatch: expected 'global', actual 'local'.

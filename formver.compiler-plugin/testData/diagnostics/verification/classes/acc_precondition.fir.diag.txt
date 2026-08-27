@@ -1,6 +1,10 @@
 /acc_precondition.kt: info: Generated Viper text for test_acc_precondition:
 field a: Ref
 
+predicate Permission_unique(this: Ref) {
+  isSubtype(typeOf(this), Permission())
+}
+
 predicate X_unique(this: Ref) {
   isSubtype(typeOf(this), X()) && acc(this.a, write) &&
   isSubtype(typeOf(this.a), anyType())
@@ -19,6 +23,10 @@ method test_acc_precondition(x: Ref) returns (v_ret_0: Ref)
 /acc_precondition.kt: info: Generated Viper text for test_acc_precondition_write:
 field a: Ref
 
+predicate Permission_unique(this: Ref) {
+  isSubtype(typeOf(this), Permission())
+}
+
 predicate X_unique(this: Ref) {
   isSubtype(typeOf(this), X()) && acc(this.a, write) &&
   isSubtype(typeOf(this.a), anyType())
@@ -36,6 +44,10 @@ method test_acc_precondition_write(x: Ref) returns (v_ret_0: Ref)
 
 /acc_precondition.kt: info: Generated Viper text for test_acc_precondition_read:
 field a: Ref
+
+predicate Permission_unique(this: Ref) {
+  isSubtype(typeOf(this), Permission())
+}
 
 predicate X_unique(this: Ref) {
   isSubtype(typeOf(this), X()) && acc(this.a, write) &&

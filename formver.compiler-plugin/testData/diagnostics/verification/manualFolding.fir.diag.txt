@@ -1,0 +1,157 @@
+/manualFolding.kt: info: Generated Viper text for test:
+field x: Ref
+
+function exp(this: Ref): Ref
+  requires isSubtype(typeOf(this), Predicate())
+  ensures isSubtype(typeOf(result), anyType())
+
+
+function g_data(this: Ref): Ref
+  requires isSubtype(typeOf(this), UniquePred())
+  ensures isSubtype(typeOf(result), anyType())
+
+
+method con(par_data: Ref) returns (ret_1: Ref)
+  requires isSubtype(typeOf(par_data), anyType())
+  ensures isSubtype(typeOf(ret_1), UniquePred())
+  ensures acc(UniquePred_unique(ret_1), write)
+
+
+method test(p: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(p), Test())
+  requires acc(Test_unique(p), write)
+  ensures isSubtype(typeOf(v_ret_0), unitType())
+{
+  unfold acc(Test_unique(p), write)
+  unfold acc(Super_unique(p), write)
+  p.x := intToRef(5)
+  fold acc(Super_unique(p), write)
+  fold acc(Test_unique(p), write)
+  label lbl_ret_0
+  inhale isSubtype(typeOf(v_ret_0), unitType())
+}
+
+/manualFolding.kt: info: Generated Viper text for contains:
+field bf_data: Ref
+
+field left: Ref
+
+field right: Ref
+
+function exp(this: Ref): Ref
+  requires isSubtype(typeOf(this), Predicate())
+  ensures isSubtype(typeOf(result), anyType())
+
+
+function g_data(this: Ref): Ref
+  requires isSubtype(typeOf(this), UniquePred())
+  ensures isSubtype(typeOf(result), anyType())
+
+
+method con(par_data: Ref) returns (ret_1: Ref)
+  requires isSubtype(typeOf(par_data), anyType())
+  ensures isSubtype(typeOf(ret_1), UniquePred())
+  ensures acc(UniquePred_unique(ret_1), write)
+
+
+method contains(tree: Ref, search: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(tree), nullable(Tree()))
+  requires tree != nullValue() ==> acc(Tree_unique(tree), write)
+  requires isSubtype(typeOf(search), intType())
+  ensures tree != nullValue() ==> acc(Tree_unique(tree), write)
+  ensures isSubtype(typeOf(v_ret_0), boolType())
+{
+  var anon_0: Ref
+  var res: Ref
+  var anon_1: Ref
+  var anon_2: Ref
+  if (tree == nullValue()) {
+    v_ret_0 := boolToRef(false)
+    goto lbl_ret_0
+  }
+  unfold acc(Tree_unique(tree), write)
+  anon_0 := tree.bf_data
+  if (intFromRef(anon_0) == intFromRef(search)) {
+    fold acc(Tree_unique(tree), write)
+    v_ret_0 := boolToRef(true)
+    goto lbl_ret_0
+  }
+  anon_2 := tree.left
+  anon_1 := contains(anon_2, search)
+  if (boolFromRef(anon_1)) {
+    res := boolToRef(true)
+  } else {
+    var anon_3: Ref
+    anon_3 := tree.right
+    res := contains(anon_3, search)
+  }
+  fold acc(Tree_unique(tree), write)
+  v_ret_0 := res
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/manualFolding.kt: info: Generated Viper text for combine:
+field bf_data: Ref
+
+field bf_left: Ref
+
+field bf_right: Ref
+
+function exp(this: Ref): Ref
+  requires isSubtype(typeOf(this), Predicate())
+  ensures isSubtype(typeOf(result), anyType())
+
+
+function g_data(this: Ref): Ref
+  requires isSubtype(typeOf(this), UniquePred())
+  ensures isSubtype(typeOf(result), anyType())
+
+
+method combine(par_left: Ref, par_right: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(par_left), Tree())
+  requires acc(Tree_unique(par_left), write)
+  requires isSubtype(typeOf(par_right), Tree())
+  requires acc(Tree_unique(par_right), write)
+  ensures isSubtype(typeOf(v_ret_0), Tree())
+  ensures acc(Tree_unique(v_ret_0), write)
+{
+  var l0_data: Ref
+  var anon_0: Ref
+  var anon_1: Ref
+  var res: Ref
+  unfold acc(Tree_unique(par_left), write)
+  unfold acc(Tree_unique(par_right), write)
+  anon_0 := par_left.bf_data
+  anon_1 := par_right.bf_data
+  l0_data := plusInts(anon_0, anon_1)
+  fold acc(Tree_unique(par_left), write)
+  fold acc(Tree_unique(par_right), write)
+  res := con_Tree(par_left, par_right, l0_data)
+  v_ret_0 := res
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+method con_Tree(par_left: Ref, par_right: Ref, par_data: Ref)
+  returns (ret_2: Ref)
+  requires isSubtype(typeOf(par_left), nullable(Tree()))
+  requires par_left != nullValue() ==> acc(Tree_unique(par_left), write)
+  requires isSubtype(typeOf(par_right), nullable(Tree()))
+  requires par_right != nullValue() ==> acc(Tree_unique(par_right), write)
+  requires isSubtype(typeOf(par_data), intType())
+  ensures isSubtype(typeOf(ret_2), Tree())
+  ensures acc(Tree_unique(ret_2), write)
+  ensures (unfolding acc(Tree_unique(ret_2), write) in ret_2.bf_left) ==
+    par_left
+  ensures (unfolding acc(Tree_unique(ret_2), write) in ret_2.bf_right) ==
+    par_right
+  ensures intFromRef((unfolding acc(Tree_unique(ret_2), write) in
+      ret_2.bf_data)) ==
+    intFromRef(par_data)
+
+
+method con_UniquePred(par_data: Ref) returns (ret_1: Ref)
+  requires isSubtype(typeOf(par_data), anyType())
+  ensures isSubtype(typeOf(ret_1), UniquePred())
+  ensures acc(UniquePred_unique(ret_1), write)

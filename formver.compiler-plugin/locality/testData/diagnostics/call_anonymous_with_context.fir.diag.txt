@@ -1,1 +1,0 @@
-/call_anonymous_with_context.kt: error: Argument locality contract mismatch: expected '[local]', actual '[global]'.

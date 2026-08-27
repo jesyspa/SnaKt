@@ -1,0 +1,15 @@
+/when_expression.kt: error: Invalid access to moved reference.
+
+/when_expression.kt: error: Invalid access to moved reference.
+
+/when_expression.kt: error: Invalid access to moved reference.
+
+/when_expression.kt: error: Invalid access to moved reference.
+
+/when_expression.kt: error: Invalid access to moved reference.
+
+/when_expression.kt: error: Escaping value has moved field: 'b.y.w'.
+
+/when_expression.kt: error: Escaping value has moved field: 'b.y.x'.
+
+/when_expression.kt: error: Escaping value has moved field: 'b.y.x'.

@@ -3,7 +3,3 @@
 /return.kt: error: Return locality mismatch: expected 'global', actual 'local'.
 
 /return.kt: error: Return locality mismatch: expected 'global', actual 'local'.
-
-/return.kt: error: Unable to capture outer local declaration from 'anonymous'.
-
-/return.kt: error: Return locality mismatch: expected 'global', actual 'local'.

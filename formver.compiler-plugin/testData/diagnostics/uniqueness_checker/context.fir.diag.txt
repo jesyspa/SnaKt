@@ -1,0 +1,31 @@
+/context.kt: error: Invalid access to moved reference.
+
+/context.kt: error: Invalid access to moved reference.
+
+/context.kt: error: Invalid access to moved reference.
+
+/context.kt: error: Invalid access to moved reference.
+
+/context.kt: error: Invalid access to moved reference.
+
+/context.kt: error: Attempt to pass the same unique argument 'box' twice.
+
+/context.kt: error: Attempt to pass the same unique argument 'box' twice.
+
+/context.kt: error: Attempt to pass the same unique argument 'box' twice.
+
+/context.kt: error: Attempt to pass the same unique argument 'box' twice.
+
+/context.kt: error: Attempt to pass unique argument 'box' with overlapping unique argument 'box.item'.
+
+/context.kt: error: Attempt to pass unique argument 'box.item' with overlapping unique argument 'box'.
+
+/context.kt: error: Uniqueness mismatch for context parameter of type 'Box': expected 'unique', actual 'shared'.
+
+/context.kt: error: Attempt to pass the same unique argument 'box' twice.
+
+/context.kt: error: Attempt to pass the same unique argument 'box' twice.
+
+/context.kt: error: Attempt to pass unique argument 'box' with overlapping unique argument 'box.item'.
+
+/context.kt: error: Attempt to pass unique argument 'box.item' with overlapping unique argument 'box'.

@@ -1,0 +1,3 @@
+/annotations.kt: error: Uniqueness can only be specified on values, properties, functions, and compatible type positions.
+
+/annotations.kt: error: Uniqueness can only be specified on values, properties, functions, and compatible type positions.

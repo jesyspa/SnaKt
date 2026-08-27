@@ -1,0 +1,41 @@
+/identity_equality.kt: info: Generated Viper text for identity:
+method identity(x: Ref, y: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(x), C())
+  requires isSubtype(typeOf(y), C())
+  ensures isSubtype(typeOf(v_ret_0), boolType())
+{
+  v_ret_0 := boolToRef(x == y)
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/identity_equality.kt: info: Generated Viper text for nonIdentity:
+method nonIdentity(x: Ref, y: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(x), C())
+  requires isSubtype(typeOf(y), C())
+  ensures isSubtype(typeOf(v_ret_0), boolType())
+{
+  v_ret_0 := notBool(boolToRef(x == y))
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/identity_equality.kt: info: Generated Viper text for identityWithNull:
+method identityWithNull(x: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(x), nullable(C()))
+  ensures isSubtype(typeOf(v_ret_0), boolType())
+{
+  v_ret_0 := boolToRef(x == nullValue())
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/identity_equality.kt: info: Generated Viper text for nonIdentityWithNull:
+method nonIdentityWithNull(x: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(x), nullable(C()))
+  ensures isSubtype(typeOf(v_ret_0), boolType())
+{
+  v_ret_0 := notBool(boolToRef(x == nullValue()))
+  goto lbl_ret_0
+  label lbl_ret_0
+}

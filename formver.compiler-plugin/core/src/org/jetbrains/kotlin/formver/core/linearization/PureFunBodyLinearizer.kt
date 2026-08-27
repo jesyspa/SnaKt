@@ -12,11 +12,9 @@ import org.jetbrains.kotlin.formver.core.conversion.FreshEntityProducer
 import org.jetbrains.kotlin.formver.core.conversion.ReturnTarget
 import org.jetbrains.kotlin.formver.core.conversion.TypeResolver
 import org.jetbrains.kotlin.formver.core.embeddings.expression.AnonymousVariableEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.expression.ExpWrapper
 import org.jetbrains.kotlin.formver.core.embeddings.expression.VariableEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.properties.FieldEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
-import org.jetbrains.kotlin.formver.core.embeddings.types.predicateAccess
 import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.ast.Declaration
 import org.jetbrains.kotlin.formver.viper.ast.Exp
@@ -105,10 +103,7 @@ data class PureFunBodyLinearizer(
             source,
             "Invalid receiver encountered in pure function"
         )
-        val receiverWrapper = ExpWrapper(viperReceiver, receiverType)
-        val hierarchyPath = typeResolver.hierarchyPathTo(receiverType.pretype, field)
-        val accessInvariants =
-            hierarchyPath.map { it.predicateAccess(receiverWrapper, typeResolver, source) }.toList()
+        val accessInvariants = hierarchyPredicateAccesses(viperReceiver, receiverType, field).toList()
         val primitiveAccess: Exp = Exp.FieldAccess(viperReceiver, field.toViper(), source.asPosition)
         ssaConverter.addAssignment(result.name, primitiveAccess, accessInvariants)
     }

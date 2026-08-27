@@ -12,6 +12,9 @@ open class FormVerExtension {
     internal var myUnsupportedFeatureBehaviour: String? = null
     internal var myConversionTargetsSelection: String? = null
     internal var myVerificationTargetsSelection: String? = null
+    internal var myCheckUniqueness: Boolean? = null
+    internal var myCheckLocality: Boolean? = null
+    internal var myDumpUniquenessCFG: Boolean? = null
 
     open fun logLevel(logLevel: String) {
         myLogLevel = logLevel
@@ -31,5 +34,17 @@ open class FormVerExtension {
 
     open fun verificationTargetsSelection(selection: String) {
         myVerificationTargetsSelection = selection
+    }
+
+    open fun checkUniqueness(enabled: Boolean) {
+        myCheckUniqueness = enabled
+    }
+
+    open fun checkLocality(enabled: Boolean) {
+        myCheckLocality = enabled
+    }
+
+    open fun dumpUniquenessCFG(enabled: Boolean) {
+        myDumpUniquenessCFG = enabled
     }
 }

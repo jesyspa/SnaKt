@@ -1,5 +1,11 @@
-/assign_property.kt: error: Assignment uniqueness mismatch: expected 'unique global', actual 'shared global'.
+/assign_property.kt: error: Escaping value has moved field: 'z.y'.
 
-/assign_property.kt: error: Assignment uniqueness mismatch: expected 'unique global', actual 'shared local'.
+/assign_property.kt: error: Assignment uniqueness mismatch: expected 'unique', actual 'shared'.
 
-/assign_property.kt: error: Assignment uniqueness mismatch: expected 'unique global', actual 'unique local'.
+/assign_property.kt: error: Assignment locality mismatch: expected 'global', actual 'local'.
+
+/assign_property.kt: error: Assignment uniqueness mismatch: expected 'unique', actual 'unknown'.
+
+/assign_property.kt: error: Assignment locality mismatch: expected 'global', actual 'local'.
+
+/assign_property.kt: error: Escaping value has moved field: 'a.um.um'.

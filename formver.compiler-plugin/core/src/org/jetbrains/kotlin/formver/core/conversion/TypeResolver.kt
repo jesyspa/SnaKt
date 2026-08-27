@@ -36,6 +36,11 @@ class TypeResolver {
     private val properties = mutableMapOf<ClassPropertyPair, PropertyEmbedding>()
 
     /**
+     * Names of classes marked `@Manual`.
+     */
+    private val manualClassNames = mutableSetOf<SymbolicName>()
+
+    /**
      * Register a class or interface type embedding.
      * This is needed to know which classes were already registered.
      */
@@ -43,6 +48,13 @@ class TypeResolver {
         true -> interfaceEmbedding.putIfAbsent(typeEmbedding.name, typeEmbedding)
         false -> classEmbedding.putIfAbsent(typeEmbedding.name, typeEmbedding)
     }
+
+    fun markManual(name: SymbolicName) {
+        manualClassNames.add(name)
+    }
+
+    val ClassTypeEmbedding.isManual: Boolean
+        get() = name in manualClassNames
 
     private fun toBackingField(property: PropertyEmbedding): FieldEmbedding? =
         (property.getter as? BackingFieldGetter)?.field

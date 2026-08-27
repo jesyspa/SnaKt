@@ -1,0 +1,3 @@
+/manualFoldingNegative.kt: warning: Viper verification error: Assignment might fail. There might be insufficient permission to access c.value
+
+/manualFoldingNegative.kt: warning: Viper verification error: Postcondition of unfoldWithoutRefold might not hold. There might be insufficient permission to access Cell_unique(c)

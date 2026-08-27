@@ -31,6 +31,10 @@ class FormVerGradleSubplugin
     override fun applyToCompilation(kotlinCompilation: KotlinCompilation<*>): Provider<List<SubpluginOption>> {
         val project = kotlinCompilation.target.project
 
+        kotlinCompilation.defaultSourceSet.dependencies {
+            implementation(BuildConfig.ANNOTATIONS_LIBRARY_COORDINATES)
+        }
+
         val formVerExtension = project.extensions.getByType(FormVerExtension::class.java)
 
         return project.provider {
@@ -54,6 +58,18 @@ class FormVerGradleSubplugin
 
             formVerExtension.myVerificationTargetsSelection?.let {
                 options += SubpluginOption(FormalVerificationPluginNames.VERIFICATION_TARGETS_SELECTION_OPTION_NAME, it)
+            }
+
+            formVerExtension.myCheckUniqueness?.let {
+                options += SubpluginOption(FormalVerificationPluginNames.CHECK_UNIQUENESS_OPTION_NAME, it.toString())
+            }
+
+            formVerExtension.myCheckLocality?.let {
+                options += SubpluginOption(FormalVerificationPluginNames.CHECK_LOCALITY_OPTION_NAME, it.toString())
+            }
+
+            formVerExtension.myDumpUniquenessCFG?.let {
+                options += SubpluginOption(FormalVerificationPluginNames.DUMP_UNIQUENESS_CFG_OPTION_NAME, it.toString())
             }
 
             options
