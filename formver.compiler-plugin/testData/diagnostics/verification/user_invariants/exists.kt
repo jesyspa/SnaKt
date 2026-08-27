@@ -11,6 +11,18 @@ fun <!VIPER_TEXT!>simpleExists<!>(): Int {
     return 0
 }
 
+// Checks whether there is a symbol that can be verified
+@AlwaysVerify
+fun <!VIPER_TEXT!>symbolExists<!>(s: String): Int {
+    preconditions {
+        s.length > 0
+    }
+    postconditions<Int> { res ->
+        exists<Int> { 0 <= it && it < s.length && s[it] == s[res] }
+    }
+    return 0
+}
+
 // Incompleteness path: this existential (`it == 0`) is plainly true, but its body is bare
 // arithmetic with no trigger term for the solver to match on. Without model-based quantifier
 // instantiation the witness cannot be constructed, so the postcondition is reported as a
