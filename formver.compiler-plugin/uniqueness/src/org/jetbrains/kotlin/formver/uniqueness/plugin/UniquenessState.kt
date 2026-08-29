@@ -28,13 +28,53 @@ fun UniquenessState.enumerateInconsistentPaths(): Sequence<Path> =
 
 /**
  * Replaces the substate at [path] with [child].
+ *
+ * Writing into a summary node cannot single out one path out of the region the summary stands for, so the write is
+ * weak there: the summary absorbs [child] instead of replacing anything.
  */
 fun UniquenessState.insert(path: Path, child: UniquenessState): UniquenessState =
-    if (path.isEmpty()) {
-        child
-    } else {
-        val head = path.first()
-        copy(
-            children = children.put(head, (children[head] ?: EmptyUniquenessState).insert(path.drop(1), child))
-        )
+    when {
+        path.isEmpty() -> child
+        summarizesDescendants -> copy(data = data.join(child.joinChildren(UniquenessUnifier)))
+        else -> {
+            val head = path.first()
+            copy(
+                children = children.put(head, (children[head] ?: EmptyUniquenessState).insert(path.drop(1), child))
+            )
+        }
     }
+
+/**
+ * Collapses every path that revisits a symbol into a summary of the region below the repeat.
+ *
+ * Assignment projects the substate of the right-hand side under the path of the left-hand side, so a loop over a
+ * recursive type can deepen the trie once per iteration - `prev.next`, then `prev.next.next`, and so on - and the
+ * chain of states never stabilizes. Cutting the trie wherever a symbol comes round a second time bounds its depth by
+ * the number of distinct symbols the function mentions, which makes the state space finite and the fixed point
+ * reachable. Any growth that is unbounded has to repeat a symbol, because a loop body can only ever append the finitely
+ * many components its own syntax spells out; paths over non-recursive data are therefore left exactly as they are.
+ */
+fun UniquenessState.summarizeRecursivePaths(): UniquenessState =
+    summarizeRecursivePaths(emptySet())
+
+private fun UniquenessState.summarizeRecursivePaths(seen: Set<FirBasedSymbol<*>>): UniquenessState {
+    if (summarizesDescendants || children.isEmpty()) return this
+
+    var newChildren = children
+
+    for ((symbol, child) in children) {
+        // States are normalized at every node, so most of the time there is nothing to collapse: keep the subtries
+        // that come back unchanged rather than rebuilding the trie on each visit.
+        val newChild = if (symbol in seen) {
+            child.summarizeDescendants(UniquenessUnifier)
+        } else {
+            child.summarizeRecursivePaths(seen + symbol)
+        }
+
+        if (newChild !== child) {
+            newChildren = newChildren.put(symbol, newChild)
+        }
+    }
+
+    return if (newChildren === children) this else copy(children = newChildren)
+}

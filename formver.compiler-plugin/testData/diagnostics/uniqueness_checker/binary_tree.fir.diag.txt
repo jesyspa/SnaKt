@@ -1,0 +1,5 @@
+/binary_tree.kt: error: Escaping value has moved field: 'pivot.right'.
+
+/binary_tree.kt: error: Attempt to pass the same unique argument 't.left' twice.
+
+/binary_tree.kt: error: Attempt to pass the same unique argument 't.left' twice.

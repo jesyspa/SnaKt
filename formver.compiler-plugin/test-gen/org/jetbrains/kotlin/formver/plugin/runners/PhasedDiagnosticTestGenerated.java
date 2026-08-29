@@ -171,6 +171,12 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
     }
 
     @Test
+    @TestMetadata("binary_tree.kt")
+    public void testBinary_tree() {
+      runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/binary_tree.kt");
+    }
+
+    @Test
     @TestMetadata("break.kt")
     public void testBreak() {
       runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/break.kt");
@@ -222,6 +228,12 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
     @TestMetadata("leak.kt")
     public void testLeak() {
       runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/leak.kt");
+    }
+
+    @Test
+    @TestMetadata("linked_list.kt")
+    public void testLinked_list() {
+      runTest("formver.compiler-plugin/testData/diagnostics/uniqueness_checker/linked_list.kt");
     }
 
     @Test
