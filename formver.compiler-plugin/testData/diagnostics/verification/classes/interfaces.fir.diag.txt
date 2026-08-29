@@ -54,8 +54,17 @@ method createImpl() returns (v_ret_0: Ref)
   ensures isSubtype(typeOf(v_ret_0), unitType())
 {
   var impl: Ref
+  var anon_0: Ref
+  var anon_1: Ref
   var implField: Ref
-  impl := con(intToRef(-1))
+  anon_0 := intToRef(-1)
+  anon_1 := new()
+  inhale isSubtype(typeOf(anon_1), Impl())
+  inhale intFromRef(Impl_g_number(anon_1)) == intFromRef(anon_0)
+  fold acc(First_unique(anon_1), write)
+  fold acc(Second_unique(anon_1), write)
+  fold acc(Impl_unique(anon_1), write)
+  impl := anon_1
   implField := Impl_g_number(impl)
   label lbl_ret_0
   inhale isSubtype(typeOf(v_ret_0), unitType())
@@ -191,64 +200,95 @@ method createImpls() returns (v_ret_0: Ref)
   ensures isSubtype(typeOf(v_ret_0), unitType())
 {
   var impl12: Ref
-  var start12: Ref
   var anon_0: Ref
-  var anon_1: Ref
-  var impl23: Ref
-  var start23: Ref
-  var anon_2: Ref
-  var anon_3: Ref
-  var impl3: Ref
-  var start3: Ref
-  var anon_4: Ref
-  var impl24: Ref
-  var start24: Ref
+  var start12: Ref
   var anon_5: Ref
   var anon_6: Ref
+  var impl23: Ref
+  var anon_1: Ref
+  var start23: Ref
   var anon_7: Ref
   var anon_8: Ref
-  var impl14: Ref
-  var start14: Ref
+  var impl3: Ref
+  var anon_2: Ref
+  var start3: Ref
   var anon_9: Ref
+  var impl24: Ref
+  var anon_3: Ref
+  var start24: Ref
   var anon_10: Ref
-  var impl6: Ref
-  var start6: Ref
   var anon_11: Ref
   var anon_12: Ref
+  var anon_13: Ref
+  var impl14: Ref
+  var anon_4: Ref
+  var start14: Ref
+  var anon_14: Ref
+  var anon_15: Ref
+  var impl6: Ref
+  var start6: Ref
+  var anon_16: Ref
+  var anon_17: Ref
   var cond1: Ref
   var cond2: Ref
   var cond3: Ref
   var cond4: Ref
   var cond5: Ref
-  impl12 := con_Impl12()
+  anon_0 := new()
+  inhale isSubtype(typeOf(anon_0), Impl12())
+  fold acc(InterfaceWithImplementation1_unique(anon_0), write)
+  fold acc(InterfaceWithoutImplementation2_unique(anon_0), write)
+  fold acc(Impl12_unique(anon_0), write)
+  impl12 := anon_0
   start12 := minusInts(plusInts(Impl12_g_field(impl12), intToRef(1)), intToRef(1))
-  anon_0 := take1(impl12)
-  anon_1 := take2(impl12)
-  impl23 := con_Impl23()
+  anon_5 := take1(impl12)
+  anon_6 := take2(impl12)
+  anon_1 := new()
+  inhale isSubtype(typeOf(anon_1), Impl23())
+  fold acc(AnyInterfaceWithoutImplementation5_unique(anon_1), write)
+  fold acc(InterfaceWithoutImplementation2_unique(anon_1), write)
+  fold acc(InheritingInterfaceWithoutImplementation6_unique(anon_1), write)
+  fold acc(AbstractWithFinalImplementation3_unique(anon_1), write)
+  fold acc(Impl23_unique(anon_1), write)
+  impl23 := anon_1
   start23 := minusInts(plusInts(AbstractWithFinalImplementation3_g_field(impl23),
     intToRef(1)), intToRef(1))
-  anon_2 := take2(impl23)
-  anon_3 := take3(impl23)
-  impl3 := con_Impl3()
+  anon_7 := take2(impl23)
+  anon_8 := take3(impl23)
+  anon_2 := new()
+  inhale isSubtype(typeOf(anon_2), Impl3())
+  fold acc(AbstractWithFinalImplementation3_unique(anon_2), write)
+  fold acc(Impl3_unique(anon_2), write)
+  impl3 := anon_2
   start3 := minusInts(plusInts(AbstractWithFinalImplementation3_g_field(impl3),
     intToRef(1)), intToRef(1))
-  anon_4 := take3(impl3)
-  impl24 := con_Impl24()
-  anon_6 := public_g_field(impl24)
-  anon_5 := anon_6
-  inhale isSubtype(typeOf(anon_5), intType())
-  start24 := minusInts(plusInts(anon_5, intToRef(1)), intToRef(1))
-  anon_7 := take2(impl24)
-  anon_8 := take4(impl24)
-  impl14 := con_Impl14()
+  anon_9 := take3(impl3)
+  anon_3 := new()
+  inhale isSubtype(typeOf(anon_3), Impl24())
+  fold acc(InterfaceWithoutImplementation2_unique(anon_3), write)
+  fold acc(AbstractWithOpenImplementation4_unique(anon_3), write)
+  fold acc(Impl24_unique(anon_3), write)
+  impl24 := anon_3
+  anon_11 := public_g_field(impl24)
+  anon_10 := anon_11
+  inhale isSubtype(typeOf(anon_10), intType())
+  start24 := minusInts(plusInts(anon_10, intToRef(1)), intToRef(1))
+  anon_12 := take2(impl24)
+  anon_13 := take4(impl24)
+  anon_4 := new()
+  inhale isSubtype(typeOf(anon_4), Impl14())
+  fold acc(InterfaceWithImplementation1_unique(anon_4), write)
+  fold acc(AbstractWithOpenImplementation4_unique(anon_4), write)
+  fold acc(Impl14_unique(anon_4), write)
+  impl14 := anon_4
   start14 := minusInts(plusInts(Impl14_g_field(impl14), intToRef(1)), intToRef(1))
-  anon_9 := take1(impl14)
-  anon_10 := take4(impl14)
+  anon_14 := take1(impl14)
+  anon_15 := take4(impl14)
   impl6 := create6()
-  anon_12 := public_g_field(impl6)
-  anon_11 := anon_12
-  inhale isSubtype(typeOf(anon_11), intType())
-  start6 := minusInts(plusInts(anon_11, intToRef(1)), intToRef(1))
+  anon_17 := public_g_field(impl6)
+  anon_16 := anon_17
+  inhale isSubtype(typeOf(anon_16), intType())
+  start6 := minusInts(plusInts(anon_16, intToRef(1)), intToRef(1))
   cond1 := boolToRef(intFromRef(start12) ==
     intFromRef(Impl12_g_field(impl12)))
   cond2 := boolToRef(intFromRef(start23) ==
@@ -306,11 +346,19 @@ method g_field(this: Ref) returns (ret_1: Ref)
 method testDiamond() returns (v_ret_0: Ref)
   ensures isSubtype(typeOf(v_ret_0), intType())
 {
-  var anon_0: Ref
   var anon_1: Ref
-  anon_1 := con()
-  anon_0 := g_field(anon_1)
-  v_ret_0 := anon_0
+  var anon_2: Ref
+  var anon_0: Ref
+  anon_0 := new()
+  inhale isSubtype(typeOf(anon_0), D())
+  fold acc(A_unique(anon_0), write)
+  fold acc(B_unique(anon_0), write)
+  fold acc(A_unique(anon_0), write)
+  fold acc(C_unique(anon_0), write)
+  fold acc(D_unique(anon_0), write)
+  anon_2 := anon_0
+  anon_1 := g_field(anon_2)
+  v_ret_0 := anon_1
   inhale isSubtype(typeOf(v_ret_0), intType())
   goto lbl_ret_0
   label lbl_ret_0
@@ -343,22 +391,34 @@ method testVarVal() returns (v_ret_0: Ref)
 {
   var g: Ref
   var anon_0: Ref
-  var anon_1: Ref
   var anon_2: Ref
-  var i: Ref
   var anon_3: Ref
   var anon_4: Ref
+  var i: Ref
+  var anon_1: Ref
   var anon_5: Ref
-  g := con_G()
-  anon_1 := g_field(g)
-  anon_0 := anon_1
-  inhale isSubtype(typeOf(anon_0), intType())
-  anon_2 := s_field(g, intToRef(1))
-  i := con_I()
-  anon_4 := g_field(i)
-  anon_3 := anon_4
-  inhale isSubtype(typeOf(anon_3), intType())
-  anon_5 := s_field(i, intToRef(1))
+  var anon_6: Ref
+  var anon_7: Ref
+  anon_0 := new()
+  inhale isSubtype(typeOf(anon_0), G())
+  fold acc(E_unique(anon_0), write)
+  fold acc(F_unique(anon_0), write)
+  fold acc(G_unique(anon_0), write)
+  g := anon_0
+  anon_3 := g_field(g)
+  anon_2 := anon_3
+  inhale isSubtype(typeOf(anon_2), intType())
+  anon_4 := s_field(g, intToRef(1))
+  anon_1 := new()
+  inhale isSubtype(typeOf(anon_1), I())
+  fold acc(E_unique(anon_1), write)
+  fold acc(H_unique(anon_1), write)
+  fold acc(I_unique(anon_1), write)
+  i := anon_1
+  anon_6 := g_field(i)
+  anon_5 := anon_6
+  inhale isSubtype(typeOf(anon_5), intType())
+  anon_7 := s_field(i, intToRef(1))
   label lbl_ret_0
   inhale isSubtype(typeOf(v_ret_0), unitType())
 }

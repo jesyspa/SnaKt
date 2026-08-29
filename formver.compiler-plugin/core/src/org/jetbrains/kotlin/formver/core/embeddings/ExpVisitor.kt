@@ -68,6 +68,8 @@ interface ExpVisitor<R> {
     fun visitPermissionLit(e: PermissionLit): R
     fun visitFold(e: Fold): R
     fun visitUnfold(e: Unfold): R
+    fun visitAllocateObject(e: AllocateObject): R
+    fun visitInitField(e: InitField): R
 }
 
 /**
@@ -129,4 +131,6 @@ interface DefaultingExpVisitor<R> : ExpVisitor<R> {
     override fun visitPermissionLit(e: PermissionLit): R = visitDefault(e)
     override fun visitFold(e: Fold): R = visitDefault(e)
     override fun visitUnfold(e: Unfold): R = visitDefault(e)
+    override fun visitAllocateObject(e: AllocateObject): R = visitDefault(e)
+    override fun visitInitField(e: InitField): R = visitDefault(e)
 }

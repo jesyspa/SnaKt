@@ -135,6 +135,13 @@ class TypeResolver {
     }
 
     /**
+     * [classType] and its supertypes, ordered so that every class comes after the supertypes its unique
+     * predicate nests, and so can be folded in this order.
+     */
+    fun uniquePredicateFoldOrder(classType: ClassTypeEmbedding): List<ClassTypeEmbedding> =
+        lookupSuperTypes(classType.name).flatMap { uniquePredicateFoldOrder(it) } + classType
+
+    /**
      * Returns the sequence of class types that are between the [typeEmbedding] and the [field].
      */
     fun hierarchyPathTo(

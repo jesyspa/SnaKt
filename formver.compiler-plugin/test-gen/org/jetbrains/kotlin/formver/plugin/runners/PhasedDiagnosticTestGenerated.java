@@ -388,6 +388,12 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
       }
 
       @Test
+      @TestMetadata("construction_through_hierarchy.kt")
+      public void testConstruction_through_hierarchy() {
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/classes/construction_through_hierarchy.kt");
+      }
+
+      @Test
       @TestMetadata("inheritance.kt")
       public void testInheritance() {
         runTest("formver.compiler-plugin/testData/diagnostics/verification/classes/inheritance.kt");

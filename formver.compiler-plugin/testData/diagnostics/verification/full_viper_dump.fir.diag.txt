@@ -1,7 +1,21 @@
 /full_viper_dump.kt: info: Generated ExpEmbedding for pkg$f$f$args$t$ret$Unit:
 Function(
     name = pkg$f$f$args$t$ret$Unit,
-    { Declare(Var(l0$foo), pkg$c$Foo, MethodCall(callee = pkg$c$Foo$con$pkg$c$Foo$args$Int, Int(0))) },
+    {
+        Declare(
+            Var(l0$foo),
+            pkg$c$Foo,
+            {
+                Declare(Var(v$anon$0), Int, Int(0));
+                Declare(Var(v$anon$1), pkg$c$Foo);
+                Var(v$anon$1) := new pkg$c$Foo;
+                InhaleDirect(Is(Var(v$anon$1), type = pkg$c$Foo));
+                InhaleDirect(EqCmp(FunctionCall(Var(v$anon$1)), Var(v$anon$0)));
+                Fold(PredicateAccess(pkg$c$Foo$unique, Var(v$anon$1)));
+                Var(v$anon$1);
+            },
+        );
+    },
     return = lbl$ret$0,
 )
 
@@ -401,7 +415,14 @@ method f() returns (v_ret_0: Ref)
   ensures isSubtype(typeOf(v_ret_0), unitType())
 {
   var foo: Ref
-  foo := con(intToRef(0))
+  var anon_0: Ref
+  var anon_1: Ref
+  anon_0 := intToRef(0)
+  anon_1 := new()
+  inhale isSubtype(typeOf(anon_1), Foo())
+  inhale intFromRef(g_x(anon_1)) == intFromRef(anon_0)
+  fold acc(Foo_unique(anon_1), write)
+  foo := anon_1
   label lbl_ret_0
   inhale isSubtype(typeOf(v_ret_0), unitType())
 }

@@ -18,18 +18,24 @@ import org.jetbrains.kotlin.fir.types.resolvedType
 import org.jetbrains.kotlin.formver.common.SnaktInternalException
 import org.jetbrains.kotlin.formver.core.embeddings.FunctionBodyEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.LabelEmbedding
+import org.jetbrains.kotlin.formver.core.embeddings.callables.CallableEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.callables.FunctionSignature
 import org.jetbrains.kotlin.formver.core.embeddings.callables.NamedFunctionSignatureWithContract
 import org.jetbrains.kotlin.formver.core.embeddings.expression.*
+import org.jetbrains.kotlin.formver.core.embeddings.properties.BackingFieldGetter
 import org.jetbrains.kotlin.formver.core.embeddings.properties.ClassPropertyAccess
 import org.jetbrains.kotlin.formver.core.embeddings.properties.PropertyAccessEmbedding
+import org.jetbrains.kotlin.formver.core.embeddings.properties.PropertyEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.properties.asPropertyAccess
+import org.jetbrains.kotlin.formver.core.embeddings.types.ClassTypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
+import org.jetbrains.kotlin.formver.core.embeddings.types.fillHoles
 import org.jetbrains.kotlin.formver.core.isCustom
 import org.jetbrains.kotlin.formver.core.isInvariantBuilderFunctionNamed
 import org.jetbrains.kotlin.formver.core.linearization.*
 import org.jetbrains.kotlin.formver.viper.SymbolicName
 import org.jetbrains.kotlin.formver.viper.ast.Exp
+import org.jetbrains.kotlin.formver.viper.ast.PermExp
 import org.jetbrains.kotlin.utils.addIfNotNull
 import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
 import org.jetbrains.kotlin.utils.filterIsInstanceAnd
@@ -214,6 +220,84 @@ fun StmtConversionContext.insertInlineFunctionCall(
             // if unit is what we return we might not guarantee it yet
             add(returnTarget.variable.withIsUnitInvariantIfUnit(typeResolver))
         }
+    }
+}
+
+/**
+ * Lowers a call to the primary constructor of [symbol]'s class into an allocation, writes of the
+ * parameters backing properties, and folds of the class and supertype unique predicates. Returns null if
+ * the constructed type has no class embedding, and so no unique predicate to establish.
+ *
+ * A bodyless method promising only `acc(C_unique(ret), write)` leaves the predicate's snapshot
+ * unconstrained, so a heap-dependent function reading through it is unrelated to the arguments.
+ * Allocating and folding here ties the snapshot to the heap the arguments were written into.
+ */
+fun StmtConversionContext.insertPrimaryConstructorCall(
+    symbol: FirFunctionSymbol<*>,
+    callable: CallableEmbedding,
+    args: List<ExpEmbedding>,
+): ExpEmbedding? {
+    val classType = embedType(symbol.resolvedReturnType)
+    val pretype = classType.pretype as? ClassTypeEmbedding ?: return null
+    val parameterMatching = with(this) { symbol.constructedClassSymbol().primaryConstructorPropertyMatching() }
+
+    val (declarations, callArgs) = getInlineFunctionCallArgs(args, callable.callableType.formalArgTypes)
+    val valueArgs = callArgs.takeLast(symbol.valueParameterSymbols.size)
+    val obj = freshAnonVar(classType)
+
+    val written = symbol.valueParameterSymbols.zip(valueArgs).mapNotNull { (param, arg) ->
+        parameterMatching[param]?.let { it to arg }
+    }
+    val initializers = written.map { (property, arg) ->
+        when (val getter = property.getter!!) {
+            is BackingFieldGetter -> InitField(obj, getter.field, arg.withType(getter.field.type))
+            else -> InhaleDirect(EqCmp(getter.getValueSimple(obj, typeResolver), arg))
+        }
+    }
+
+    // Innermost first: folding a predicate consumes the predicates of the supertypes it nests.
+    val foldOrder = typeResolver.uniquePredicateFoldOrder(pretype)
+    val initialized = written.mapTo(mutableSetOf()) { it.first }
+
+    return Block {
+        addAll(declarations)
+        add(Declare(obj, null))
+        add(AllocateObject(obj, pretype))
+        obj.provenInvariants().forEach { add(InhaleDirect(it)) }
+        addAll(initializers)
+        // The permission part of the type's access invariants comes from the allocation; what remains are
+        // the invariants over the field values, which have to be assumed of the values just written.
+        typeResolver.flatMapUniqueFields(pretype.name) { it.extraAccessInvariantsForParameter() }
+            .fillHoles(obj)
+            .forEach { add(InhaleDirect(it)) }
+        foldOrder.forEach { addAll(residualPredicateAssumptions(it, obj, initialized)) }
+        foldOrder.forEach {
+            add(Fold(PredicateAccessPermissions(it.uniquePredicateName, listOf(obj), PermExp.FullPerm())))
+        }
+        add(obj)
+    }
+}
+
+/**
+ * The type invariants of the backing fields of [classType] that a constructor call does not establish
+ * from its arguments, as assumptions about [obj]. [initialized] are the properties a constructor
+ * parameter was written into.
+ *
+ * A property is left out of [initialized] when nothing runs that would give it a value: neither a class
+ * body initializer nor a superclass constructor's arguments are converted. The field then holds an
+ * arbitrary reference, and its Kotlin type has to be assumed for the fold to go through. That is a fact
+ * the Kotlin type system guarantees, and no more than the bodyless method this replaces assumed.
+ */
+private fun StmtConversionContext.residualPredicateAssumptions(
+    classType: ClassTypeEmbedding,
+    obj: VariableEmbedding,
+    initialized: Set<PropertyEmbedding>,
+): List<ExpEmbedding> = buildList {
+    for (property in typeResolver.lookupClassProperties(classType.name)) {
+        if (property in initialized) continue
+        val field = (property.getter as? BackingFieldGetter)?.field ?: continue
+        if (field.accessPolicy == AccessPolicy.ALWAYS_WRITEABLE) continue
+        add(InhaleDirect(field.type.subTypeInvariant().fillHole(PrimitiveFieldAccess(obj, field))))
     }
 }
 

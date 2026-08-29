@@ -51,8 +51,15 @@ method primaryAndSecondConstructor() returns (v_ret_0: Ref)
 {
   var bc1: Ref
   var bc2: Ref
+  var anon_0: Ref
+  var anon_1: Ref
   bc1 := con_c_BothConstructors_args_Boolean(boolToRef(false))
-  bc2 := con_c_BothConstructors_args_Int(intToRef(42))
+  anon_0 := intToRef(42)
+  anon_1 := new()
+  inhale isSubtype(typeOf(anon_1), c_BothConstructors())
+  inhale intFromRef(g_a(anon_1)) == intFromRef(anon_0)
+  fold acc(c_BothConstructors_unique(anon_1), write)
+  bc2 := anon_1
   label lbl_ret_0
   inhale isSubtype(typeOf(v_ret_0), unitType())
 }

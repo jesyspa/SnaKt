@@ -92,29 +92,104 @@ method test() returns (v_ret_0: Ref)
   ensures isSubtype(typeOf(v_ret_0), unitType())
 {
   var n: Ref
+  var anon_16: Ref
+  var anon_17: Ref
+  var anon_20: Ref
   var anon_0: Ref
   var anon_1: Ref
   var anon_2: Ref
   var anon_3: Ref
-  var expr1: Ref
+  var anon_18: Ref
+  var anon_21: Ref
+  var anon_12: Ref
+  var anon_13: Ref
+  var anon_22: Ref
   var anon_4: Ref
-  var expr2: Ref
   var anon_5: Ref
-  anon_0 := con(intToRef(4), nullValue(), nullValue())
-  anon_2 := con(intToRef(2), nullValue(), nullValue())
-  anon_3 := con(intToRef(1), nullValue(), nullValue())
-  anon_1 := con(intToRef(3), anon_2, anon_3)
-  n := con(intToRef(5), anon_0, anon_1)
-  anon_4 := havoc(intType())
-  expr1 := boolToRef(intFromRef(anon_4) == 5)
+  var anon_6: Ref
+  var anon_7: Ref
+  var anon_14: Ref
+  var anon_23: Ref
+  var anon_8: Ref
+  var anon_9: Ref
+  var anon_10: Ref
+  var anon_11: Ref
+  var anon_15: Ref
+  var anon_19: Ref
+  var expr1: Ref
+  var anon_24: Ref
+  var expr2: Ref
+  var anon_25: Ref
+  anon_16 := intToRef(5)
+  anon_0 := intToRef(4)
+  anon_1 := nullValue()
+  inhale isSubtype(typeOf(anon_1), nullable(Node()))
+  anon_2 := nullValue()
+  inhale isSubtype(typeOf(anon_2), nullable(Node()))
+  anon_3 := new(bf_data)
+  inhale isSubtype(typeOf(anon_3), Node())
+  anon_3.bf_data := anon_0
+  inhale g_left(anon_3) == anon_1
+  inhale g_right(anon_3) == anon_2
+  fold acc(Node_unique(anon_3), write)
+  anon_20 := anon_3
+  anon_17 := anon_20
+  inhale isSubtype(typeOf(anon_17), nullable(Node()))
+  anon_12 := intToRef(3)
+  anon_4 := intToRef(2)
+  anon_5 := nullValue()
+  inhale isSubtype(typeOf(anon_5), nullable(Node()))
+  anon_6 := nullValue()
+  inhale isSubtype(typeOf(anon_6), nullable(Node()))
+  anon_7 := new(bf_data)
+  inhale isSubtype(typeOf(anon_7), Node())
+  anon_7.bf_data := anon_4
+  inhale g_left(anon_7) == anon_5
+  inhale g_right(anon_7) == anon_6
+  fold acc(Node_unique(anon_7), write)
+  anon_22 := anon_7
+  anon_13 := anon_22
+  inhale isSubtype(typeOf(anon_13), nullable(Node()))
+  anon_8 := intToRef(1)
+  anon_9 := nullValue()
+  inhale isSubtype(typeOf(anon_9), nullable(Node()))
+  anon_10 := nullValue()
+  inhale isSubtype(typeOf(anon_10), nullable(Node()))
+  anon_11 := new(bf_data)
+  inhale isSubtype(typeOf(anon_11), Node())
+  anon_11.bf_data := anon_8
+  inhale g_left(anon_11) == anon_9
+  inhale g_right(anon_11) == anon_10
+  fold acc(Node_unique(anon_11), write)
+  anon_23 := anon_11
+  anon_14 := anon_23
+  inhale isSubtype(typeOf(anon_14), nullable(Node()))
+  anon_15 := new(bf_data)
+  inhale isSubtype(typeOf(anon_15), Node())
+  anon_15.bf_data := anon_12
+  inhale g_left(anon_15) == anon_13
+  inhale g_right(anon_15) == anon_14
+  fold acc(Node_unique(anon_15), write)
+  anon_21 := anon_15
+  anon_18 := anon_21
+  inhale isSubtype(typeOf(anon_18), nullable(Node()))
+  anon_19 := new(bf_data)
+  inhale isSubtype(typeOf(anon_19), Node())
+  anon_19.bf_data := anon_16
+  inhale g_left(anon_19) == anon_17
+  inhale g_right(anon_19) == anon_18
+  fold acc(Node_unique(anon_19), write)
+  n := anon_19
+  anon_24 := havoc(intType())
+  expr1 := boolToRef(intFromRef(anon_24) == 5)
   assert boolFromRef(expr1)
   if (g_left(n) != nullValue()) {
-    var anon_6: Ref
-    anon_6 := havoc(intType())
-    anon_5 := anon_6
+    var anon_26: Ref
+    anon_26 := havoc(intType())
+    anon_25 := anon_26
   } else {
-    anon_5 := nullValue()}
-  expr2 := boolToRef(anon_5 == intToRef(4))
+    anon_25 := nullValue()}
+  expr2 := boolToRef(anon_25 == intToRef(4))
   assert boolFromRef(expr2)
   label lbl_ret_0
   inhale isSubtype(typeOf(v_ret_0), unitType())

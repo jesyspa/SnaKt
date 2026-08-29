@@ -1,0 +1,1 @@
+/inherited_unique_property.kt: warning: Viper verification error: Folding Node_unique(anon_2) might fail. There might be insufficient permission to access Node_unique(g_child(this))

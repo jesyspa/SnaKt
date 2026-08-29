@@ -230,7 +230,11 @@ method unique_result() returns (v_ret_0: Ref)
   ensures isSubtype(typeOf(v_ret_0), T())
   ensures acc(T_unique(v_ret_0), write)
 {
-  v_ret_0 := con()
+  var anon: Ref
+  anon := new()
+  inhale isSubtype(typeOf(anon), T())
+  fold acc(T_unique(anon), write)
+  v_ret_0 := anon
   goto lbl_ret_0
   label lbl_ret_0
 }

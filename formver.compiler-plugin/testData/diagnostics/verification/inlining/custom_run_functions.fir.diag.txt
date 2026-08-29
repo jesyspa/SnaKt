@@ -709,41 +709,45 @@ method testCustomClass() returns (v_ret_0: Ref)
   ensures isSubtype(typeOf(v_ret_0), unitType())
 {
   var custom: Ref
-  var cond1: Ref
   var anon_0: Ref
+  var cond1: Ref
   var anon_1: Ref
-  var v_ret_4: Ref
   var anon_2: Ref
-  var v_ret_5: Ref
+  var v_ret_4: Ref
   var anon_3: Ref
+  var v_ret_5: Ref
   var anon_4: Ref
-  var v_ret_8: Ref
   var anon_5: Ref
+  var v_ret_8: Ref
+  var anon_6: Ref
   var v_ret_9: Ref
-  custom := con()
+  anon_0 := new()
+  inhale isSubtype(typeOf(anon_0), CustomClass())
+  fold acc(CustomClass_unique(anon_0), write)
+  custom := anon_0
   v_ret_5 := member(custom)
   goto lbl_ret_5
   label lbl_ret_5
-  anon_2 := v_ret_5
-  v_ret_4 := anon_2
+  anon_3 := v_ret_5
+  v_ret_4 := anon_3
   inhale isSubtype(typeOf(v_ret_4), nullable(anyType()))
   goto lbl_ret_4
   label lbl_ret_4
-  anon_1 := v_ret_4
-  anon_0 := anon_1
-  inhale isSubtype(typeOf(anon_0), intType())
+  anon_2 := v_ret_4
+  anon_1 := anon_2
+  inhale isSubtype(typeOf(anon_1), intType())
   v_ret_9 := member(custom)
   goto lbl_ret_9
   label lbl_ret_9
-  anon_5 := v_ret_9
-  v_ret_8 := anon_5
+  anon_6 := v_ret_9
+  v_ret_8 := anon_6
   inhale isSubtype(typeOf(v_ret_8), nullable(anyType()))
   goto lbl_ret_8
   label lbl_ret_8
-  anon_4 := v_ret_8
-  anon_3 := anon_4
-  inhale isSubtype(typeOf(anon_3), intType())
-  cond1 := boolToRef(intFromRef(anon_0) == intFromRef(anon_3))
+  anon_5 := v_ret_8
+  anon_4 := anon_5
+  inhale isSubtype(typeOf(anon_4), intType())
+  cond1 := boolToRef(intFromRef(anon_1) == intFromRef(anon_4))
   assert boolFromRef(cond1)
   label lbl_ret_0
   inhale isSubtype(typeOf(v_ret_0), unitType())

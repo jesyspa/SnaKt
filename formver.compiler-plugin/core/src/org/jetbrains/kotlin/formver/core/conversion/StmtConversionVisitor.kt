@@ -8,6 +8,7 @@ package org.jetbrains.kotlin.formver.core.conversion
 import org.jetbrains.kotlin.KtSourceElement
 import org.jetbrains.kotlin.contracts.description.LogicOperationKind
 import org.jetbrains.kotlin.fir.FirElement
+import org.jetbrains.kotlin.fir.analysis.checkers.isPrimaryConstructor
 import org.jetbrains.kotlin.fir.declarations.FirProperty
 import org.jetbrains.kotlin.fir.expressions.*
 import org.jetbrains.kotlin.fir.expressions.impl.FirElseIfTrueCondition
@@ -21,6 +22,7 @@ import org.jetbrains.kotlin.fir.types.resolvedType
 import org.jetbrains.kotlin.fir.visitors.FirVisitor
 import org.jetbrains.kotlin.formver.common.SnaktInternalException
 import org.jetbrains.kotlin.formver.common.UnsupportedFeatureBehaviour
+import org.jetbrains.kotlin.formver.core.isSpecificationFunction
 import org.jetbrains.kotlin.formver.core.embeddings.LabelLink
 import org.jetbrains.kotlin.formver.core.embeddings.callables.CallableEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.callables.insertCall
@@ -287,11 +289,19 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
             ?: throw NotImplementedError("Only functions are expected as callables of function calls, got ${functionCall.toResolvedCallableSymbol()}")
 
         val callee = data.embedAnyFunction(symbol)
-        return callee.insertCall(
-            functionCall.functionCallArguments.withVarargsHandled(data, callee),
-            data,
-            data.embedType(functionCall.resolvedType),
-        )
+        val args = functionCall.functionCallArguments.withVarargsHandled(data, callee)
+        val returnType = data.embedType(functionCall.resolvedType)
+        // A specification constructor such as `UniquePred(x)` is never executed and allocates nothing; it
+        // denotes a predicate, which `fold` and `unfold` read back off the call it converts to.
+        if (symbol.isPrimaryConstructor() && !symbol.isSpecificationFunction(data.session)) {
+            data.insertPrimaryConstructorCall(symbol, callee, args)?.let { constructed ->
+                return constructed.withNewTypeInvariants(returnType, data.typeResolver) {
+                    access = true
+                    proven = true
+                }
+            }
+        }
+        return callee.insertCall(args, data, returnType)
     }
 
     override fun visitImplicitInvokeCall(

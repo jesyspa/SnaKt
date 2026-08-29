@@ -80,15 +80,26 @@ method extractPublic() returns (v_ret_0: Ref)
   ensures isSubtype(typeOf(v_ret_0), unitType())
 {
   var cond1: Ref
-  var anon_0: Ref
-  var anon_1: Ref
-  var cond2: Ref
   var anon_2: Ref
-  anon_1 := con_C()
-  anon_0 := havoc(intType())
-  cond1 := boolToRef(isSubtype(typeOf(anon_0), intType()))
-  anon_2 := con_D()
-  cond2 := boolToRef(isSubtype(typeOf(D_g_field(anon_2)), intType()))
+  var anon_0: Ref
+  var cond2: Ref
+  var anon_3: Ref
+  var anon_1: Ref
+  anon_0 := new(bf_field)
+  inhale isSubtype(typeOf(anon_0), C())
+  inhale isSubtype(typeOf(anon_0.bf_field), intType())
+  fold acc(A_unique(anon_0), write)
+  fold acc(B_unique(anon_0), write)
+  fold acc(C_unique(anon_0), write)
+  anon_2 := havoc(intType())
+  cond1 := boolToRef(isSubtype(typeOf(anon_2), intType()))
+  anon_1 := new()
+  inhale isSubtype(typeOf(anon_1), D())
+  fold acc(A_unique(anon_1), write)
+  fold acc(B_unique(anon_1), write)
+  fold acc(D_unique(anon_1), write)
+  anon_3 := anon_1
+  cond2 := boolToRef(isSubtype(typeOf(D_g_field(anon_3)), intType()))
   assert boolFromRef(cond1)
   assert boolFromRef(cond2)
   label lbl_ret_0

@@ -13,6 +13,7 @@ import org.jetbrains.kotlin.formver.core.embeddings.callables.*
 import org.jetbrains.kotlin.formver.core.embeddings.expression.EqCmp
 import org.jetbrains.kotlin.formver.core.embeddings.expression.FirVariableEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.expression.PlaceholderVariableEmbedding
+import org.jetbrains.kotlin.formver.core.embeddings.properties.PropertyEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.FunctionTypeEmbedding
 import org.jetbrains.kotlin.formver.core.isBorrowed
 import org.jetbrains.kotlin.formver.core.isPure
@@ -161,19 +162,34 @@ fun SignatureWithTarget<NonInlineCallable>.toCompleteSignature(
 }
 
 
+/**
+ * The class a constructor constructs.
+ */
+context(converter: ProgramConversionContext)
+fun FirFunctionSymbol<*>.constructedClassSymbol(): FirRegularClassSymbol =
+    resolvedReturnType.toRegularClassSymbol(converter.session) ?: throw SnaktInternalException(
+        source, "Constructor does not return a regular class"
+    )
+
+/**
+ * The properties of this class that a primary constructor parameter backs, keyed by that parameter.
+ *
+ * Only default-behaving properties are included: an open or custom-accessor property is embedded as an
+ * opaque accessor, and nothing relates it to the parameter it was declared from.
+ */
+context(converter: ProgramConversionContext)
+fun FirRegularClassSymbol.primaryConstructorPropertyMatching(): Map<FirValueParameterSymbol, PropertyEmbedding> =
+    propertySymbols.mapNotNull { propertySymbol ->
+        val name = propertySymbol.embedMemberPropertyName(converter)
+        propertySymbol.withConstructorParam { paramSymbol ->
+            converter.typeResolver.lookupDefaultBehavingProperties(name)?.let { paramSymbol to it }
+        }
+    }.toMap()
+
 context(converter: ProgramConversionContext)
 fun SignatureWithTarget<NonInlineCallable>.toConstructorSignature(symbol: FirFunctionSymbol<*>): SignatureWithTarget<NonInlineFunctionSignature> =
     refineSignature { current ->
-        val constructedClassSymbol =
-            symbol.resolvedReturnType.toRegularClassSymbol(converter.session) ?: throw SnaktInternalException(
-                symbol.source, "Constructor does not return a regular class"
-            )
-        val parameterMatching = constructedClassSymbol.propertySymbols.mapNotNull { propertySymbol ->
-            val name = propertySymbol.embedMemberPropertyName(converter)
-            propertySymbol.withConstructorParam { paramSymbol ->
-                converter.typeResolver.lookupDefaultBehavingProperties(name)?.let { paramSymbol to it }
-            }
-        }.toMap()
+        val parameterMatching = symbol.constructedClassSymbol().primaryConstructorPropertyMatching()
 
         val fieldPostconditions = current.signature.params.mapNotNull { param ->
             require(param is FirVariableEmbedding) { "Constructor parameters must be represented by FirVariableEmbeddings" }

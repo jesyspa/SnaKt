@@ -1,1 +1,0 @@
-/pure_recursion.kt: warning: Viper verification error: Postcondition of pushFront might not hold. Assertion intFromRef(length(v_ret_0)) == old(intFromRef(length(tail))) + 1 might not hold.

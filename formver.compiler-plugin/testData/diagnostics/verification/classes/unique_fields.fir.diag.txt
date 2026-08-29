@@ -270,16 +270,28 @@ method testReferenceFieldSetterUnique(rf: Ref) returns (v_ret_0: Ref)
   var anon_7: Ref
   var anon_8: Ref
   var anon_9: Ref
+  anon_0 := con_Any()
   anon_1 := con_Any()
   anon_2 := con_Any()
   anon_3 := con_Any()
-  anon_4 := con_Any()
-  anon_0 := con_UniqueContainer(anon_1, anon_2, anon_3, anon_4)
+  anon_4 := new(bf_sharedVar, bf_uniqueVar)
+  inhale isSubtype(typeOf(anon_4), UniqueContainer())
+  inhale UniqueContainer_g_sharedVal(anon_4) == anon_0
+  anon_4.bf_sharedVar := anon_1
+  inhale UniqueContainer_g_uniqueVal(anon_4) == anon_2
+  anon_4.bf_uniqueVar := anon_3
+  fold acc(UniqueContainer_unique(anon_4), write)
+  anon_5 := con_Any()
   anon_6 := con_Any()
   anon_7 := con_Any()
   anon_8 := con_Any()
-  anon_9 := con_Any()
-  anon_5 := con_UniqueContainer(anon_6, anon_7, anon_8, anon_9)
+  anon_9 := new(bf_sharedVar, bf_uniqueVar)
+  inhale isSubtype(typeOf(anon_9), UniqueContainer())
+  inhale UniqueContainer_g_sharedVal(anon_9) == anon_5
+  anon_9.bf_sharedVar := anon_6
+  inhale UniqueContainer_g_uniqueVal(anon_9) == anon_7
+  anon_9.bf_uniqueVar := anon_8
+  fold acc(UniqueContainer_unique(anon_9), write)
   label lbl_ret_0
   inhale isSubtype(typeOf(v_ret_0), unitType())
 }
@@ -346,16 +358,28 @@ method testReferenceFieldSetterShared(rf: Ref) returns (v_ret_0: Ref)
   var anon_7: Ref
   var anon_8: Ref
   var anon_9: Ref
+  anon_0 := con_Any()
   anon_1 := con_Any()
   anon_2 := con_Any()
   anon_3 := con_Any()
-  anon_4 := con_Any()
-  anon_0 := con_UniqueContainer(anon_1, anon_2, anon_3, anon_4)
+  anon_4 := new(bf_sharedVar, bf_uniqueVar)
+  inhale isSubtype(typeOf(anon_4), UniqueContainer())
+  inhale UniqueContainer_g_sharedVal(anon_4) == anon_0
+  anon_4.bf_sharedVar := anon_1
+  inhale UniqueContainer_g_uniqueVal(anon_4) == anon_2
+  anon_4.bf_uniqueVar := anon_3
+  fold acc(UniqueContainer_unique(anon_4), write)
+  anon_5 := con_Any()
   anon_6 := con_Any()
   anon_7 := con_Any()
   anon_8 := con_Any()
-  anon_9 := con_Any()
-  anon_5 := con_UniqueContainer(anon_6, anon_7, anon_8, anon_9)
+  anon_9 := new(bf_sharedVar, bf_uniqueVar)
+  inhale isSubtype(typeOf(anon_9), UniqueContainer())
+  inhale UniqueContainer_g_sharedVal(anon_9) == anon_5
+  anon_9.bf_sharedVar := anon_6
+  inhale UniqueContainer_g_uniqueVal(anon_9) == anon_7
+  anon_9.bf_uniqueVar := anon_8
+  fold acc(UniqueContainer_unique(anon_9), write)
   label lbl_ret_0
   inhale isSubtype(typeOf(v_ret_0), unitType())
 }

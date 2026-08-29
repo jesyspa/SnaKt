@@ -152,15 +152,22 @@ method test_boolean_postcondition() returns (v_ret_0: Ref)
   ensures isSubtype(typeOf(v_ret_0), unitType())
 {
   var withVar: Ref
+  var anon_0: Ref
+  var anon_1: Ref
   var boolean: Ref
-  var anon: Ref
-  withVar := con(intToRef(42))
+  var anon_2: Ref
+  anon_0 := intToRef(42)
+  anon_1 := new(bf_e)
+  inhale isSubtype(typeOf(anon_1), WithVar())
+  anon_1.bf_e := anon_0
+  fold acc(WithVar_unique(anon_1), write)
+  withVar := anon_1
   boolean := boolToRef(true)
   label cont
     invariant isSubtype(typeOf(withVar), WithVar())
     invariant isSubtype(typeOf(boolean), boolType())
-  anon := boolean
-  if (boolFromRef(anon)) {
+  anon_2 := boolean
+  if (boolFromRef(anon_2)) {
     boolean := doSomething(withVar)
     goto cont
   }
@@ -195,12 +202,19 @@ method test_while(param: Ref) returns (v_ret_0: Ref)
   ensures isSubtype(typeOf(v_ret_0), unitType())
 {
   var c: Ref
+  var anon_0: Ref
+  var anon_1: Ref
   var initParamField: Ref
   var iteration: Ref
-  var anon: Ref
+  var anon_2: Ref
   var cond1: Ref
   var cond2: Ref
-  c := con(intToRef(13))
+  anon_0 := intToRef(13)
+  anon_1 := new()
+  inhale isSubtype(typeOf(anon_1), ClassWithField())
+  inhale intFromRef(g_field(anon_1)) == intFromRef(anon_0)
+  fold acc(ClassWithField_unique(anon_1), write)
+  c := anon_1
   initParamField := g_field(param)
   if (intFromRef(initParamField) > 0) {
     iteration := intToRef(0)
@@ -214,8 +228,8 @@ method test_while(param: Ref) returns (v_ret_0: Ref)
     invariant isSubtype(typeOf(initParamField), intType())
     invariant isSubtype(typeOf(iteration), intType())
     invariant isSubtype(typeOf(param), ClassWithField())
-  anon := ltInts(iteration, intToRef(10))
-  if (boolFromRef(anon)) {
+  anon_2 := ltInts(iteration, intToRef(10))
+  if (boolFromRef(anon_2)) {
     var l4_field: Ref
     var paramField: Ref
     l4_field := g_field(c)
@@ -266,55 +280,69 @@ method test_while_with_inlining(param: Ref) returns (v_ret_0: Ref)
   ensures isSubtype(typeOf(v_ret_0), unitType())
 {
   var local: Ref
-  var anon_1: Ref
-  var anon_2: Ref
-  var v_ret_4: Ref
   var anon_0: Ref
-  var anon_3: Ref
+  var anon_1: Ref
+  var anon_5: Ref
+  var anon_6: Ref
+  var v_ret_4: Ref
   var anon_4: Ref
+  var anon_7: Ref
+  var anon_2: Ref
+  var anon_3: Ref
+  var anon_8: Ref
   var v_ret_5: Ref
   var iteration: Ref
-  var anon_5: Ref
-  local := con(intToRef(13))
-  anon_3 := con(intToRef(42))
-  anon_0 := anon_3
-  inhale isSubtype(typeOf(anon_0), nullable(anyType()))
+  var anon_9: Ref
+  anon_0 := intToRef(13)
+  anon_1 := new()
+  inhale isSubtype(typeOf(anon_1), ClassWithField())
+  inhale intFromRef(g_field(anon_1)) == intFromRef(anon_0)
+  fold acc(ClassWithField_unique(anon_1), write)
+  local := anon_1
+  anon_2 := intToRef(42)
+  anon_3 := new()
+  inhale isSubtype(typeOf(anon_3), ClassWithField())
+  inhale intFromRef(g_field(anon_3)) == intFromRef(anon_2)
+  fold acc(ClassWithField_unique(anon_3), write)
+  anon_7 := anon_3
+  anon_4 := anon_7
+  inhale isSubtype(typeOf(anon_4), nullable(anyType()))
   iteration := intToRef(0)
   label cont
     invariant isSubtype(typeOf(iteration), intType())
-    invariant isSubtype(typeOf(anon_0), nullable(anyType()))
+    invariant isSubtype(typeOf(anon_4), nullable(anyType()))
     invariant isSubtype(typeOf(local), ClassWithField())
     invariant isSubtype(typeOf(param), ClassWithField())
-  anon_5 := ltInts(iteration, intToRef(10))
-  if (boolFromRef(anon_5)) {
+  anon_9 := ltInts(iteration, intToRef(10))
+  if (boolFromRef(anon_9)) {
     var paramField: Ref
     var localField: Ref
     var thisField: Ref
     paramField := g_field(param)
     localField := g_field(local)
-    inhale isSubtype(typeOf(anon_0), ClassWithField())
-    thisField := g_field(anon_0)
+    inhale isSubtype(typeOf(anon_4), ClassWithField())
+    thisField := g_field(anon_4)
     iteration := plusInts(iteration, intToRef(1))
     goto cont
   }
   label break
   assert isSubtype(typeOf(iteration), intType())
-  assert isSubtype(typeOf(anon_0), nullable(anyType()))
+  assert isSubtype(typeOf(anon_4), nullable(anyType()))
   assert isSubtype(typeOf(local), ClassWithField())
   assert isSubtype(typeOf(param), ClassWithField())
-  inhale isSubtype(typeOf(anon_0), ClassWithField())
-  assert intFromRef(g_field(anon_0)) == 42
+  inhale isSubtype(typeOf(anon_4), ClassWithField())
+  assert intFromRef(g_field(anon_4)) == 42
   assert intFromRef(g_field(local)) == 13
   label lbl_ret_5
   inhale isSubtype(typeOf(v_ret_5), unitType())
-  anon_4 := v_ret_5
-  v_ret_4 := anon_4
+  anon_8 := v_ret_5
+  v_ret_4 := anon_8
   inhale isSubtype(typeOf(v_ret_4), nullable(anyType()))
   goto lbl_ret_4
   label lbl_ret_4
-  anon_2 := v_ret_4
-  anon_1 := anon_2
-  inhale isSubtype(typeOf(anon_1), unitType())
+  anon_6 := v_ret_4
+  anon_5 := anon_6
+  inhale isSubtype(typeOf(anon_5), unitType())
   label lbl_ret_0
   inhale isSubtype(typeOf(v_ret_0), unitType())
 }

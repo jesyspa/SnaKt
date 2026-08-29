@@ -16,3 +16,8 @@ fun <!VIPER_TEXT!>depth<!>(n: @Unique @Borrowed Node?): Int {
 fun <!VIPER_TEXT!>depthOfTagged<!>(t: @Unique @Borrowed Tagged) {
     verify(depth(t.child) >= 0)
 }
+
+// A superclass constructor is not run, so nothing writes `child`. Folding `Node_unique` needs exclusive
+// access to it, which the construction cannot establish.
+<!VIPER_VERIFICATION_ERROR!>@AlwaysVerify
+fun <!VIPER_TEXT!>buildTagged<!>(): Tagged = Tagged(1, null)<!>

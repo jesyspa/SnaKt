@@ -72,16 +72,31 @@ method test(n: Ref) returns (v_ret_0: Ref)
 {
   var customList: Ref
   var anon_0: Ref
-  customList := con(n, intToRef(0))
-  anon_0 := isEmpty(customList)
-  if (!boolFromRef(anon_0)) {
-    var anon_1: Ref
-    var anon_2: Ref
+  var anon_1: Ref
+  var anon_2: Ref
+  anon_0 := intToRef(0)
+  anon_1 := new(p_size)
+  inhale isSubtype(typeOf(anon_1), CustomList())
+  anon_1.p_size := n
+  inhale intFromRef(anon_1.p_size) >= 0
+  fold acc(Iterable_unique(anon_1), write)
+  fold acc(Collection_unique(anon_1), write)
+  fold acc(AbstractCollection_unique(anon_1), write)
+  fold acc(Iterable_unique(anon_1), write)
+  fold acc(Collection_unique(anon_1), write)
+  fold acc(List_unique(anon_1), write)
+  fold acc(AbstractList_unique(anon_1), write)
+  fold acc(CustomList_unique(anon_1), write)
+  customList := anon_1
+  anon_2 := isEmpty(customList)
+  if (!boolFromRef(anon_2)) {
     var anon_3: Ref
-    anon_2 := customList.p_size
-    inhale isSubtype(typeOf(anon_2), intType())
-    anon_1 := get(customList, minusInts(anon_2, intToRef(1)))
-    anon_3 := get(customList, intToRef(0))
+    var anon_4: Ref
+    var anon_5: Ref
+    anon_4 := customList.p_size
+    inhale isSubtype(typeOf(anon_4), intType())
+    anon_3 := get(customList, minusInts(anon_4, intToRef(1)))
+    anon_5 := get(customList, intToRef(0))
   }
   label lbl_ret_0
   inhale isSubtype(typeOf(v_ret_0), unitType())

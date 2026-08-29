@@ -21,7 +21,17 @@ method con(par_a: Ref, par_b: Ref) returns (ret_1: Ref)
 method createPrimitiveFields() returns (v_ret_0: Ref)
   ensures isSubtype(typeOf(v_ret_0), PrimitiveFields())
 {
-  v_ret_0 := con(intToRef(10), intToRef(20))
+  var anon_0: Ref
+  var anon_1: Ref
+  var anon_2: Ref
+  anon_0 := intToRef(10)
+  anon_1 := intToRef(20)
+  anon_2 := new()
+  inhale isSubtype(typeOf(anon_2), PrimitiveFields())
+  inhale intFromRef(g_a(anon_2)) == intFromRef(anon_0)
+  inhale intFromRef(g_b(anon_2)) == intFromRef(anon_1)
+  fold acc(PrimitiveFields_unique(anon_2), write)
+  v_ret_0 := anon_2
   goto lbl_ret_0
   label lbl_ret_0
 }
@@ -42,7 +52,15 @@ method con(par_a: Ref) returns (ret_1: Ref)
 method createRecursive() returns (v_ret_0: Ref)
   ensures isSubtype(typeOf(v_ret_0), Recursive())
 {
-  v_ret_0 := con(nullValue())
+  var anon_0: Ref
+  var anon_1: Ref
+  anon_0 := nullValue()
+  inhale isSubtype(typeOf(anon_0), nullable(Recursive()))
+  anon_1 := new()
+  inhale isSubtype(typeOf(anon_1), Recursive())
+  inhale g_a(anon_1) == anon_0
+  fold acc(Recursive_unique(anon_1), write)
+  v_ret_0 := anon_1
   goto lbl_ret_0
   label lbl_ret_0
 }
@@ -68,7 +86,14 @@ method con(par_c: Ref) returns (ret_1: Ref)
 method createFieldInBody() returns (v_ret_0: Ref)
   ensures isSubtype(typeOf(v_ret_0), FieldInBody())
 {
-  v_ret_0 := con(intToRef(10))
+  var anon_0: Ref
+  var anon_1: Ref
+  anon_0 := intToRef(10)
+  anon_1 := new()
+  inhale isSubtype(typeOf(anon_1), FieldInBody())
+  inhale intFromRef(g_c(anon_1)) == intFromRef(anon_0)
+  fold acc(FieldInBody_unique(anon_1), write)
+  v_ret_0 := anon_1
   goto lbl_ret_0
   label lbl_ret_0
 }

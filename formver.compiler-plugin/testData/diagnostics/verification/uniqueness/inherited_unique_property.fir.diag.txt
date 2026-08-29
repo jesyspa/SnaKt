@@ -96,3 +96,50 @@ method depthOfTagged(par_t: Ref) returns (v_ret_0: Ref)
   label lbl_ret_0
   inhale isSubtype(typeOf(v_ret_0), unitType())
 }
+
+/inherited_unique_property.kt: info: Generated Viper text for buildTagged:
+function g_child(this: Ref): Ref
+  requires isSubtype(typeOf(this), Node())
+  ensures isSubtype(typeOf(result), nullable(Node()))
+
+
+function g_tag(this: Ref): Ref
+  requires isSubtype(typeOf(this), Tagged())
+  ensures isSubtype(typeOf(result), intType())
+
+
+predicate Node_unique(this: Ref) {
+  isSubtype(typeOf(this), Node()) &&
+  (g_child(this) != nullValue() ==> acc(Node_unique(g_child(this)), write))
+}
+
+predicate Tagged_unique(this: Ref) {
+  isSubtype(typeOf(this), Tagged()) && acc(Node_unique(this), write)
+}
+
+method buildTagged() returns (v_ret_0: Ref)
+  ensures isSubtype(typeOf(v_ret_0), Tagged())
+{
+  var anon_0: Ref
+  var anon_1: Ref
+  var anon_2: Ref
+  anon_0 := intToRef(1)
+  anon_1 := nullValue()
+  inhale isSubtype(typeOf(anon_1), nullable(Node()))
+  anon_2 := new()
+  inhale isSubtype(typeOf(anon_2), Tagged())
+  inhale intFromRef(g_tag(anon_2)) == intFromRef(anon_0)
+  fold acc(Node_unique(anon_2), write)
+  fold acc(Tagged_unique(anon_2), write)
+  v_ret_0 := anon_2
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+method con(par_tag: Ref, par_child: Ref) returns (ret_1: Ref)
+  requires isSubtype(typeOf(par_tag), intType())
+  requires isSubtype(typeOf(par_child), nullable(Node()))
+  requires par_child != nullValue() ==> acc(Node_unique(par_child), write)
+  ensures isSubtype(typeOf(ret_1), Tagged())
+  ensures acc(Tagged_unique(ret_1), write)
+  ensures intFromRef(g_tag(ret_1)) == intFromRef(par_tag)
