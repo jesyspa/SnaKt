@@ -149,7 +149,7 @@ private fun VerificationError.lookupSourceRole(): SourceRole? {
      * But the actual info we are interested in is on the pre-condition, contained in the reason's offending node.
      */
     return when (val locationNodeRole = locationNode.getInfoOrNull<SourceRole>()) {
-        null -> unverifiableProposition.getInfoOrNull<SourceRole>()
+        null -> unverifiableProposition?.getInfoOrNull<SourceRole>()
         else -> locationNodeRole
     }
 }

@@ -4,11 +4,13 @@ field data: Ref
 function left(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), nullable(Node()))
+  decreases _
 
 
 function right(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), nullable(Node()))
+  decreases _
 
 
 predicate Node_unique(this: Ref) {
@@ -39,16 +41,19 @@ field bf_data: Ref
 function g_left(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), nullable(Node()))
+  decreases _
 
 
 function g_right(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), nullable(Node()))
+  decreases _
 
 
 function size(this: Ref): Ref
   requires isSubtype(typeOf(this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 predicate BooleanArray_unique(this: Ref) {

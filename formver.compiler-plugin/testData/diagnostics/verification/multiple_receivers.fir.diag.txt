@@ -2,11 +2,13 @@
 function delta(v_this: Ref): Ref
   requires isSubtype(typeOf(v_this), ClassWithExtension())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function size(v_this: Ref): Ref
   requires isSubtype(typeOf(v_this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method applyDelta(v_this: Ref, v_this_extension: Ref)
@@ -28,6 +30,7 @@ method applyDelta(v_this: Ref, v_this_extension: Ref)
 function delta(this: Ref): Ref
   requires isSubtype(typeOf(this), ClassWithExtension())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method returnDelta(this: Ref) returns (v_ret_0: Ref)
@@ -43,6 +46,7 @@ method returnDelta(this: Ref) returns (v_ret_0: Ref)
 function delta(v_this: Ref): Ref
   requires isSubtype(typeOf(v_this), ClassWithExtension())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method extensionReturnDelta(v_this_extension: Ref) returns (v_ret_0: Ref)
@@ -58,11 +62,13 @@ method extensionReturnDelta(v_this_extension: Ref) returns (v_ret_0: Ref)
 function g_delta(v_this: Ref): Ref
   requires isSubtype(typeOf(v_this), ClassWithExtension())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function size(v_this: Ref): Ref
   requires isSubtype(typeOf(v_this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method applyDelta(v_this: Ref, v_this_extension: Ref) returns (ret_6: Ref)

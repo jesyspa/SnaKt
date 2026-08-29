@@ -21,10 +21,13 @@ class VerificationError(
         get() = AstWrapper.Node(result.offendingNode())
 
     /**
-     * The [unverifiableProposition] represents the proposition that could not be verified in the Viper's AST.
+     * The proposition that could not be verified, or null when the reason does not blame one.
+     *
+     * A termination error blames the callee's declaration rather than an expression, so the reason's
+     * offending node is not always an [viper.silver.ast.Exp].
      */
-    val unverifiableProposition: AstWrapper.Exp
-        get() = AstWrapper.Exp(result.reason().offendingNode())
+    val unverifiableProposition: AstWrapper.Exp?
+        get() = (result.reason().offendingNode() as? viper.silver.ast.Exp)?.let { AstWrapper.Exp(it) }
     override val id: String
         get() = result.id()
     override val msg: String

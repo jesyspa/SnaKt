@@ -26,6 +26,7 @@ method safeAsOperator(foo: Ref) returns (v_ret_0: Ref)
 function x(this: Ref): Ref
   requires isSubtype(typeOf(this), IntHolder())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method getX(a: Ref) returns (v_ret_0: Ref)

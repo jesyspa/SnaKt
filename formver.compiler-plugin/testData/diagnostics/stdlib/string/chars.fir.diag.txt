@@ -2,11 +2,13 @@
 function g_char(this: Ref): Ref
   requires isSubtype(typeOf(this), CharBox())
   ensures isSubtype(typeOf(result), charType())
+  decreases _
 
 
 function size(this: Ref): Ref
   requires isSubtype(typeOf(this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method con(par_char: Ref) returns (ret_1: Ref)

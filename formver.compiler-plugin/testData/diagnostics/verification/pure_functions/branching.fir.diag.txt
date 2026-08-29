@@ -2,6 +2,7 @@
 function noAssignmentInBlocks(a: Ref): Ref
   requires isSubtype(typeOf(a), boolType())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 {
   (let l0_result_0 ==
     (intToRef(0)) in
@@ -14,6 +15,7 @@ function noAssignmentInBlocks(a: Ref): Ref
 function simpleBranching(a: Ref): Ref
   requires isSubtype(typeOf(a), boolType())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 {
   (let l0_result_0 ==
     (intToRef(0)) in
@@ -31,6 +33,7 @@ function nestedBranching(a: Ref, b: Ref): Ref
   requires isSubtype(typeOf(a), boolType())
   requires isSubtype(typeOf(b), boolType())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 {
   (let l0_result_0 ==
     (intToRef(0)) in
@@ -73,6 +76,7 @@ function nestedBranching(a: Ref, b: Ref): Ref
 function whenExpressionSimple(x: Ref): Ref
   requires isSubtype(typeOf(x), intType())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 {
   (let y_0 ==
     (intToRef(0)) in
@@ -98,6 +102,7 @@ function whenNoArgumentBranching(x: Ref, y: Ref): Ref
   requires isSubtype(typeOf(x), intType())
   requires isSubtype(typeOf(y), intType())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 {
   (let z_0 ==
     ((!(intFromRef(x) == 0) && !(intFromRef(x) > 0 && intFromRef(y) > 0) &&
@@ -118,6 +123,7 @@ function whenNoArgumentBranching(x: Ref, y: Ref): Ref
 function stringEqualityBranching(input: Ref): Ref
   requires isSubtype(typeOf(input), stringType())
   ensures isSubtype(typeOf(result), boolType())
+  decreases _
 {
   (let isValid_0 ==
     (boolToRef(false)) in
@@ -147,6 +153,7 @@ function stringEqualityBranching(input: Ref): Ref
 /branching.kt: info: Generated Viper text for sequentialIfWithMutation:
 function sequentialIfWithMutation(): Ref
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 {
   (let x_0 ==
     (intToRef(10)) in
@@ -163,6 +170,7 @@ function sequentialIfWithMutation(): Ref
 function complexBooleanReturn(x: Ref): Ref
   requires isSubtype(typeOf(x), intType())
   ensures isSubtype(typeOf(result), boolType())
+  decreases _
 {
   (let l0_result_0 ==
     (boolToRef(false)) in
@@ -186,6 +194,7 @@ function safeDivide(x: Ref, y: Ref): Ref
   requires isSubtype(typeOf(x), intType())
   requires isSubtype(typeOf(y), intType())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 {
   (let res_0 ==
     (intToRef(0)) in
@@ -200,6 +209,7 @@ function safeDivide(x: Ref, y: Ref): Ref
 function getStringLength(obj: Ref): Ref
   requires isSubtype(typeOf(obj), anyType())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 {
   (let len_0 ==
     (intToRef(-1)) in
@@ -216,6 +226,7 @@ function safeNestedDivide(x: Ref, y: Ref, z: Ref): Ref
   requires isSubtype(typeOf(y), intType())
   requires isSubtype(typeOf(z), intType())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 {
   (let res_0 ==
     (intToRef(0)) in
@@ -235,6 +246,7 @@ function safeInverseDifference(x: Ref, y: Ref): Ref
   requires isSubtype(typeOf(x), intType())
   requires isSubtype(typeOf(y), intType())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 {
   (let res_0 ==
     (intToRef(0)) in

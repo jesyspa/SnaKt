@@ -430,6 +430,12 @@ sealed interface Exp : WithSilverMetadata, IntoSilver<viper.silver.ast.Exp> {
         override val pos: Position = Position.NoPosition,
         override val info: Info = Info.NoInfo,
     ) : Exp {
+        init {
+            require(typeVarMap.keys == function.typeArgs.toSet()) {
+                "Applying ${function.name} needs an instantiation of exactly ${function.typeArgs}, got ${typeVarMap.keys}."
+            }
+        }
+
         context(nameResolver: NameResolver)
         private val scalaTypeVarMap: scala.collection.immutable.Map<TypeVar, viper.silver.ast.Type>
             get() = typeVarMap.mapKeys { it.key.toSilver() }.mapValues { it.value.toSilver() }.toScalaMap()

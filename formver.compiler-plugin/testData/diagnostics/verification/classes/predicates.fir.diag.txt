@@ -4,16 +4,19 @@ field b: Ref
 function a(this: Ref): Ref
   requires isSubtype(typeOf(this), PrimitiveFields())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function next(this: Ref): Ref
   requires isSubtype(typeOf(this), Recursive())
   ensures isSubtype(typeOf(result), nullable(Recursive()))
+  decreases _
 
 
 function pf(this: Ref): Ref
   requires isSubtype(typeOf(this), ReferenceField())
   ensures isSubtype(typeOf(result), PrimitiveFields())
+  decreases _
 
 
 predicate Baz_unique(this: Ref) {
@@ -48,6 +51,7 @@ field y: Ref
 function x(this: Ref): Ref
   requires isSubtype(typeOf(this), A())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 predicate A_unique(this: Ref) {
@@ -123,11 +127,13 @@ field z: Ref
 function w(this: Ref): Ref
   requires isSubtype(typeOf(this), Foo())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function y(this: Ref): Ref
   requires isSubtype(typeOf(this), Foo())
   ensures isSubtype(typeOf(result), T())
+  decreases _
 
 
 predicate Foo_unique(this: Ref) {

@@ -2,6 +2,7 @@
 function x(this: Ref): Ref
   requires isSubtype(typeOf(this), Foo())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method memberFun(this: Ref) returns (v_ret_0: Ref)
@@ -17,6 +18,7 @@ method memberFun(this: Ref) returns (v_ret_0: Ref)
 function x(this: Ref): Ref
   requires isSubtype(typeOf(this), Foo())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method callMemberFun(this: Ref) returns (v_ret_0: Ref)
@@ -38,6 +40,7 @@ method memberFun(this: Ref) returns (ret_1: Ref)
 function x(this: Ref): Ref
   requires isSubtype(typeOf(this), Foo())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method memberFun(this: Ref) returns (ret_1: Ref)
@@ -60,6 +63,7 @@ method siblingCall(this: Ref, other: Ref) returns (v_ret_0: Ref)
 function x(this: Ref): Ref
   requires isSubtype(typeOf(this), Foo())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method memberFun(this: Ref) returns (ret_1: Ref)

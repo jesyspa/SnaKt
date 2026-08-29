@@ -2,6 +2,7 @@
 function size(v_this: Ref): Ref
   requires isSubtype(typeOf(v_this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method isNotNull(v_this_extension: Ref) returns (ret_3: Ref)

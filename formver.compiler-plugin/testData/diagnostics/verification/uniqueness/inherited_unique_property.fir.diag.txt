@@ -2,6 +2,7 @@
 function child(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), nullable(Node()))
+  decreases _
 
 
 function depth(n: Ref): Ref
@@ -9,6 +10,7 @@ function depth(n: Ref): Ref
   requires n != nullValue() ==> acc(Node_unique(n), write)
   ensures isSubtype(typeOf(result), intType())
   ensures intFromRef(result) >= 0
+  decreases n != nullValue(), Node_unique(n)
 {
   (let anon_1_0 ==
     ((n == nullValue() ? intToRef(0) : null)) in
@@ -31,6 +33,7 @@ predicate Node_unique(this: Ref) {
 function child(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), nullable(Node()))
+  decreases _
 
 
 function depth(n: Ref): Ref
@@ -38,6 +41,7 @@ function depth(n: Ref): Ref
   requires n != nullValue() ==> acc(Node_unique(n), write)
   ensures isSubtype(typeOf(result), intType())
   ensures intFromRef(result) >= 0
+  decreases n != nullValue(), Node_unique(n)
 {
   (let anon_1_0 ==
     ((n == nullValue() ? intToRef(0) : null)) in
@@ -54,11 +58,13 @@ function depth(n: Ref): Ref
 function size(this: Ref): Ref
   requires isSubtype(typeOf(this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function tag(this: Ref): Ref
   requires isSubtype(typeOf(this), Tagged())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 predicate BooleanArray_unique(this: Ref) {
@@ -101,11 +107,13 @@ method depthOfTagged(par_t: Ref) returns (v_ret_0: Ref)
 function g_child(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), nullable(Node()))
+  decreases _
 
 
 function g_tag(this: Ref): Ref
   requires isSubtype(typeOf(this), Tagged())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 predicate Node_unique(this: Ref) {

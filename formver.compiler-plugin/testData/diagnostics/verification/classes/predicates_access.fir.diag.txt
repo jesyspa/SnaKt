@@ -4,16 +4,19 @@ field y: Ref
 function a(this: Ref): Ref
   requires isSubtype(typeOf(this), A())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function b(this: Ref): Ref
   requires isSubtype(typeOf(this), B())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function x(this: Ref): Ref
   requires isSubtype(typeOf(this), C())
   ensures isSubtype(typeOf(result), A())
+  decreases _
 
 
 predicate A_unique(this: Ref) {
@@ -56,16 +59,19 @@ field y: Ref
 function a(this: Ref): Ref
   requires isSubtype(typeOf(this), A())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function b(this: Ref): Ref
   requires isSubtype(typeOf(this), B())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function x(this: Ref): Ref
   requires isSubtype(typeOf(this), C())
   ensures isSubtype(typeOf(result), A())
+  decreases _
 
 
 predicate A_unique(this: Ref) {
@@ -106,6 +112,7 @@ method d(this: Ref) returns (ret_1: Ref)
 function a(this: Ref): Ref
   requires isSubtype(typeOf(this), A())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 predicate A_unique(this: Ref) {
@@ -128,11 +135,13 @@ method accessNullable(x: Ref) returns (v_ret_0: Ref)
 function a(this: Ref): Ref
   requires isSubtype(typeOf(this), A())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function b(this: Ref): Ref
   requires isSubtype(typeOf(this), B())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 predicate A_unique(this: Ref) {
@@ -158,11 +167,13 @@ method accessCast(x: Ref) returns (v_ret_0: Ref)
 function a(this: Ref): Ref
   requires isSubtype(typeOf(this), A())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function b(this: Ref): Ref
   requires isSubtype(typeOf(this), B())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 predicate A_unique(this: Ref) {
@@ -196,11 +207,13 @@ method accessSafeCast(x: Ref) returns (v_ret_0: Ref)
 function a(this: Ref): Ref
   requires isSubtype(typeOf(this), A())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function b(this: Ref): Ref
   requires isSubtype(typeOf(this), B())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 predicate A_unique(this: Ref) {

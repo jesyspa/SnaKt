@@ -1,0 +1,1 @@
+/pure_recursion_nonterminating.kt: warning: Viper verification error: Function might not terminate. Termination measure might not decrease or might not be bounded.

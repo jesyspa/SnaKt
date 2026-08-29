@@ -2,6 +2,7 @@
 function a(this: Ref): Ref
   requires isSubtype(typeOf(this), c_NoPrimaryConstructor())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method con_c_NoPrimaryConstructor_args_Boolean(b: Ref) returns (ret_1: Ref)
@@ -31,6 +32,7 @@ method onlySecondConstructors() returns (v_ret_0: Ref)
 function g_a(this: Ref): Ref
   requires isSubtype(typeOf(this), c_BothConstructors())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method con_c_BothConstructors_args_Boolean(b: Ref) returns (ret_1: Ref)

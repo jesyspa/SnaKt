@@ -94,6 +94,7 @@ field bf_own: Ref
 function base(this: Ref): Ref
   requires isSubtype(typeOf(this), Parametrized())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 predicate Parametrized_unique(this: Ref) {

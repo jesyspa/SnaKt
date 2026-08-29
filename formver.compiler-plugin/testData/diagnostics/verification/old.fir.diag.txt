@@ -4,6 +4,7 @@ field bf_field: Ref
 function size(this: Ref): Ref
   requires isSubtype(typeOf(this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method inc(c: Ref) returns (ret_3: Ref)

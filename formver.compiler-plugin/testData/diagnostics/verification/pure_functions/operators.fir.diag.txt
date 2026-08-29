@@ -3,6 +3,7 @@ function testAnd(a: Ref, b: Ref): Ref
   requires isSubtype(typeOf(a), boolType())
   requires isSubtype(typeOf(b), boolType())
   ensures isSubtype(typeOf(result), boolType())
+  decreases _
 {
   andBools(andBools(a, b), andBools(a, b))
 }
@@ -12,6 +13,7 @@ function testOr(a: Ref, b: Ref): Ref
   requires isSubtype(typeOf(a), boolType())
   requires isSubtype(typeOf(b), boolType())
   ensures isSubtype(typeOf(result), boolType())
+  decreases _
 {
   orBools(orBools(a, b), orBools(a, b))
 }
@@ -21,6 +23,7 @@ function testXor(a: Ref, b: Ref): Ref
   requires isSubtype(typeOf(a), boolType())
   requires isSubtype(typeOf(b), boolType())
   ensures isSubtype(typeOf(result), boolType())
+  decreases _
 {
   xorBools(a, xorBools(a, b))
 }
@@ -29,6 +32,7 @@ function testXor(a: Ref, b: Ref): Ref
 function testNot(a: Ref): Ref
   requires isSubtype(typeOf(a), boolType())
   ensures isSubtype(typeOf(result), boolType())
+  decreases _
 {
   notBool(notBool(a))
 }
@@ -37,6 +41,7 @@ function testNot(a: Ref): Ref
 function testNegation(a: Ref): Ref
   requires isSubtype(typeOf(a), intType())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 {
   negInt(negInt(a))
 }
@@ -45,6 +50,7 @@ function testNegation(a: Ref): Ref
 function testPlus(a: Ref): Ref
   requires isSubtype(typeOf(a), intType())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 {
   a
 }
@@ -56,6 +62,7 @@ function testReminder(a: Ref, b: Ref, c: Ref): Ref
   requires isSubtype(typeOf(c), intType())
   requires !(intFromRef(b) == 0) && !(intFromRef(c) == 0)
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 {
   remInts(remInts(a, b), c)
 }
@@ -65,6 +72,7 @@ function testCompare(a: Ref, b: Ref): Ref
   requires isSubtype(typeOf(a), intType())
   requires isSubtype(typeOf(b), intType())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 {
   minusInts(a, b)
 }

@@ -48,7 +48,7 @@ interface Function : IntoSilver<viper.silver.ast.Function>, Applicable {
         formalArgs.map { it.toSilver() }.toScalaSeq(),
         retType.toSilver(),
         pres.toSilver().toScalaSeq(),
-        posts.toSilver().toScalaSeq(),
+        postsWithTerminationMeasure.toSilver().toScalaSeq(),
         body.toScalaOption().toSilver(),
         pos.toSilver(),
         info.toSilver(),
@@ -82,6 +82,18 @@ abstract class BuiltinFunction(
 ) : Function {
     override val includeInDumpPolicy: IncludeInDumpPolicy = IncludeInDumpPolicy.ONLY_IN_FULL_DUMP
 }
+
+/**
+ * The postconditions to emit, with `decreases _` added for a bodyless function.
+ *
+ * A bodyless function is uninterpreted, so it cannot recurse and claiming it terminates claims
+ * nothing. It still has to make the claim: a function that carries a measure of its own fails to
+ * verify at every call to a function that carries none. A function with a body gets its measure
+ * where it is built from the Kotlin declaration, which is the only place that can tell whether the
+ * measure is a real obligation.
+ */
+private val Function.postsWithTerminationMeasure: List<Exp>
+    get() = if (body != null) posts else posts + DecreasesWildcard()
 
 /**
  * These are function-like classes which are not translated to Viper as function calls but as arithmetic and/or boolean operations.

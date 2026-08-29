@@ -4,6 +4,7 @@ field size: Ref
 function value(this: Ref): Ref
   requires isSubtype(typeOf(this), CustomList())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method get(this: Ref, index: Ref) returns (v_ret_0: Ref)
@@ -29,6 +30,7 @@ field p_size: Ref
 function g_value(this: Ref): Ref
   requires isSubtype(typeOf(this), CustomList())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method con(par_size: Ref, par_value: Ref) returns (ret_1: Ref)

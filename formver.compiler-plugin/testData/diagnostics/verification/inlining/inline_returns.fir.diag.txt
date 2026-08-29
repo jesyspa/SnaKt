@@ -2,6 +2,7 @@
 function size(this: Ref): Ref
   requires isSubtype(typeOf(this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method not(f: Ref) returns (ret_1: Ref)

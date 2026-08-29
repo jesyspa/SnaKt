@@ -2,6 +2,7 @@
 function size(this: Ref): Ref
   requires isSubtype(typeOf(this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method test(n: Ref) returns (v_ret_0: Ref)
@@ -100,6 +101,7 @@ method loopInsideLoop() returns (v_ret_0: Ref)
 function size(this: Ref): Ref
   requires isSubtype(typeOf(this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method withBreak() returns (v_ret_0: Ref)
@@ -132,6 +134,7 @@ field bf_e: Ref
 function size(this: Ref): Ref
   requires isSubtype(typeOf(this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method con(par_e: Ref) returns (ret_1: Ref)
@@ -183,11 +186,13 @@ method test_boolean_postcondition() returns (v_ret_0: Ref)
 function g_field(this: Ref): Ref
   requires isSubtype(typeOf(this), ClassWithField())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function size(this: Ref): Ref
   requires isSubtype(typeOf(this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method con(par_field: Ref) returns (ret_1: Ref)
@@ -255,11 +260,13 @@ method test_while(param: Ref) returns (v_ret_0: Ref)
 function g_field(v_this: Ref): Ref
   requires isSubtype(typeOf(v_this), ClassWithField())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function size(v_this: Ref): Ref
   requires isSubtype(typeOf(v_this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method con(par_field: Ref) returns (ret_1: Ref)
@@ -351,6 +358,7 @@ method test_while_with_inlining(param: Ref) returns (v_ret_0: Ref)
 function g_field(this: Ref): Ref
   requires isSubtype(typeOf(this), ClassWithField())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method test_while_with_smartcast(param: Ref, innerParam: Ref)

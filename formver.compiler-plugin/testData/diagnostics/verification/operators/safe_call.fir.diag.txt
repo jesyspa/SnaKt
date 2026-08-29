@@ -2,6 +2,7 @@
 function x(this: Ref): Ref
   requires isSubtype(typeOf(this), Foo())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method f(this: Ref) returns (ret_1: Ref)
@@ -27,6 +28,7 @@ method testSafeCall(foo: Ref) returns (v_ret_0: Ref)
 function x(this: Ref): Ref
   requires isSubtype(typeOf(this), Foo())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method f(this: Ref) returns (ret_1: Ref)
@@ -52,6 +54,7 @@ method testSafeCallNonNullable(foo: Ref) returns (v_ret_0: Ref)
 function x(this: Ref): Ref
   requires isSubtype(typeOf(this), Foo())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method testSafeCallProperty(foo: Ref) returns (v_ret_0: Ref)
@@ -70,6 +73,7 @@ method testSafeCallProperty(foo: Ref) returns (v_ret_0: Ref)
 function x(this: Ref): Ref
   requires isSubtype(typeOf(this), Foo())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method testSafeCallPropertyNonNullable(foo: Ref) returns (v_ret_0: Ref)
@@ -88,6 +92,7 @@ method testSafeCallPropertyNonNullable(foo: Ref) returns (v_ret_0: Ref)
 function g_v(this: Ref): Ref
   requires isSubtype(typeOf(this), Rec())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method f_nullable(this: Ref) returns (ret_1: Ref)

@@ -6,11 +6,13 @@ field bf_uniqueVar: Ref
 function g_sharedVal(this: Ref): Ref
   requires isSubtype(typeOf(this), UniqueContainer())
   ensures isSubtype(typeOf(result), anyType())
+  decreases _
 
 
 function g_uniqueVal(this: Ref): Ref
   requires isSubtype(typeOf(this), UniqueContainer())
   ensures isSubtype(typeOf(result), anyType())
+  decreases _
 
 
 method testPrimitiveFieldGetterUnique(pf: Ref) returns (v_ret_0: Ref)
@@ -38,11 +40,13 @@ field bf_uniqueVar: Ref
 function g_sharedVal(this: Ref): Ref
   requires isSubtype(typeOf(this), UniqueContainer())
   ensures isSubtype(typeOf(result), anyType())
+  decreases _
 
 
 function g_uniqueVal(this: Ref): Ref
   requires isSubtype(typeOf(this), UniqueContainer())
   ensures isSubtype(typeOf(result), anyType())
+  decreases _
 
 
 method testPrimitiveFieldGetterShared(pf: Ref) returns (v_ret_0: Ref)
@@ -69,11 +73,13 @@ field uniqueVar: Ref
 function sharedVal(this: Ref): Ref
   requires isSubtype(typeOf(this), UniqueContainer())
   ensures isSubtype(typeOf(result), anyType())
+  decreases _
 
 
 function uniqueVal(this: Ref): Ref
   requires isSubtype(typeOf(this), UniqueContainer())
   ensures isSubtype(typeOf(result), anyType())
+  decreases _
 
 
 method con() returns (ret_1: Ref)
@@ -101,11 +107,13 @@ field uniqueVar: Ref
 function sharedVal(this: Ref): Ref
   requires isSubtype(typeOf(this), UniqueContainer())
   ensures isSubtype(typeOf(result), anyType())
+  decreases _
 
 
 function uniqueVal(this: Ref): Ref
   requires isSubtype(typeOf(this), UniqueContainer())
   ensures isSubtype(typeOf(result), anyType())
+  decreases _
 
 
 method con() returns (ret_1: Ref)
@@ -132,21 +140,25 @@ field bf_uniqueVar: Ref
 function UniqueContainer_g_sharedVal(this: Ref): Ref
   requires isSubtype(typeOf(this), UniqueContainer())
   ensures isSubtype(typeOf(result), anyType())
+  decreases _
 
 
 function UniqueContainer_g_uniqueVal(this: Ref): Ref
   requires isSubtype(typeOf(this), UniqueContainer())
   ensures isSubtype(typeOf(result), anyType())
+  decreases _
 
 
 function UniqueNestedContainer_g_sharedVal(this: Ref): Ref
   requires isSubtype(typeOf(this), UniqueNestedContainer())
   ensures isSubtype(typeOf(result), UniqueContainer())
+  decreases _
 
 
 function UniqueNestedContainer_g_uniqueVal(this: Ref): Ref
   requires isSubtype(typeOf(this), UniqueNestedContainer())
   ensures isSubtype(typeOf(result), UniqueContainer())
+  decreases _
 
 
 method testReferenceFieldGetterUnique(rf: Ref) returns (v_ret_0: Ref)
@@ -174,21 +186,25 @@ field bf_uniqueVar: Ref
 function UniqueContainer_g_sharedVal(this: Ref): Ref
   requires isSubtype(typeOf(this), UniqueContainer())
   ensures isSubtype(typeOf(result), anyType())
+  decreases _
 
 
 function UniqueContainer_g_uniqueVal(this: Ref): Ref
   requires isSubtype(typeOf(this), UniqueContainer())
   ensures isSubtype(typeOf(result), anyType())
+  decreases _
 
 
 function UniqueNestedContainer_g_sharedVal(this: Ref): Ref
   requires isSubtype(typeOf(this), UniqueNestedContainer())
   ensures isSubtype(typeOf(result), UniqueContainer())
+  decreases _
 
 
 function UniqueNestedContainer_g_uniqueVal(this: Ref): Ref
   requires isSubtype(typeOf(this), UniqueNestedContainer())
   ensures isSubtype(typeOf(result), UniqueContainer())
+  decreases _
 
 
 method testReferenceFieldGetterShared(rf: Ref) returns (v_ret_0: Ref)
@@ -215,21 +231,25 @@ field bf_uniqueVar: Ref
 function UniqueContainer_g_sharedVal(this: Ref): Ref
   requires isSubtype(typeOf(this), UniqueContainer())
   ensures isSubtype(typeOf(result), anyType())
+  decreases _
 
 
 function UniqueContainer_g_uniqueVal(this: Ref): Ref
   requires isSubtype(typeOf(this), UniqueContainer())
   ensures isSubtype(typeOf(result), anyType())
+  decreases _
 
 
 function UniqueNestedContainer_g_sharedVal(this: Ref): Ref
   requires isSubtype(typeOf(this), UniqueNestedContainer())
   ensures isSubtype(typeOf(result), UniqueContainer())
+  decreases _
 
 
 function UniqueNestedContainer_g_uniqueVal(this: Ref): Ref
   requires isSubtype(typeOf(this), UniqueNestedContainer())
   ensures isSubtype(typeOf(result), UniqueContainer())
+  decreases _
 
 
 method con_Any() returns (ret_2: Ref)
@@ -304,21 +324,25 @@ field bf_uniqueVar: Ref
 function UniqueContainer_g_sharedVal(this: Ref): Ref
   requires isSubtype(typeOf(this), UniqueContainer())
   ensures isSubtype(typeOf(result), anyType())
+  decreases _
 
 
 function UniqueContainer_g_uniqueVal(this: Ref): Ref
   requires isSubtype(typeOf(this), UniqueContainer())
   ensures isSubtype(typeOf(result), anyType())
+  decreases _
 
 
 function UniqueNestedContainer_g_sharedVal(this: Ref): Ref
   requires isSubtype(typeOf(this), UniqueNestedContainer())
   ensures isSubtype(typeOf(result), UniqueContainer())
+  decreases _
 
 
 function UniqueNestedContainer_g_uniqueVal(this: Ref): Ref
   requires isSubtype(typeOf(this), UniqueNestedContainer())
   ensures isSubtype(typeOf(result), UniqueContainer())
+  decreases _
 
 
 method con_Any() returns (ret_2: Ref)

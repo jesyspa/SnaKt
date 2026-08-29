@@ -13,10 +13,12 @@ import org.jetbrains.kotlin.formver.core.conversion.StmtConversionContext
 import org.jetbrains.kotlin.formver.core.conversion.SubstitutedArgument
 import org.jetbrains.kotlin.formver.core.conversion.TypeResolver
 import org.jetbrains.kotlin.formver.core.conversion.insertInlineFunctionCall
+import org.jetbrains.kotlin.formver.core.domains.RuntimeTypeDomain
 import org.jetbrains.kotlin.formver.core.embeddings.expression.ExpEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.expression.FunctionCall
 import org.jetbrains.kotlin.formver.core.embeddings.expression.MethodCall
 import org.jetbrains.kotlin.formver.core.embeddings.expression.VariableEmbedding
+import org.jetbrains.kotlin.formver.core.embeddings.types.ClassTypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.FunctionTypeEmbedding
 import org.jetbrains.kotlin.formver.core.linearization.pureToViper
 import org.jetbrains.kotlin.formver.viper.SymbolicName
@@ -146,6 +148,7 @@ fun CompleteFunctionSignature.toViperMethod(ctx: TypeResolver, body: Stmt.Seqn?)
 fun CompleteFunctionSignature.toViperFunction(
     ctx: TypeResolver,
     body: Exp?,
+    isRecursive: Boolean,
 ): UserFunction {
     require(isPure) {
         "Impure functions should not be converted to functions"
@@ -156,12 +159,43 @@ fun CompleteFunctionSignature.toViperFunction(
         // TODO: Be explicit about the return types of functions instead of boxing them into a Ref
         Type.Ref,
         preconditions.pureToViper(toBuiltin = true, ctx),
-        postconditions.pureToViper(toBuiltin = true, ctx),
+        postconditions.pureToViper(toBuiltin = true, ctx) + terminationMeasure(body != null, isRecursive),
         body,
         declarationSource.asPosition
     )
 }
 
+/**
+ * The termination measure to emit, or nothing if the function is left without one.
+ *
+ * A function that carries no measure cannot be called from one that does, so the measures have to
+ * cover the whole pure call graph, not just the functions that recurse. Outside a cycle `decreases _`
+ * is enough, since termination there follows by induction over the acyclic part of the graph.
+ *
+ * Inside a cycle the claim has to be proved, and the only ordering on the heap Viper knows about is
+ * nesting of predicate instances: a `@Unique` parameter owns the structure reachable from it, so a
+ * recursive call descending into that ownership unfolds the parameter's unique predicate. A nullable
+ * parameter's instance is preceded by a nullity test, because the predicate nests the next link only
+ * where that link is non-null: at the call that reaches the end of the structure the two instances
+ * are unrelated and the nullity component is what decreases. Parameters contribute in declaration
+ * order, compared lexicographically.
+ *
+ * A function in a cycle with no `@Unique` parameter is the one case left without a measure: there is
+ * nothing to build one from, and `decreases _` would be a claim rather than a consequence.
+ *
+ * Bodyless functions are handled where they are emitted; the signature does not distinguish them.
+ */
+private fun CompleteFunctionSignature.terminationMeasure(hasBody: Boolean, isRecursive: Boolean): List<Exp> {
+    if (!hasBody) return emptyList()
+    if (!isRecursive) return listOf(DecreasesWildcard())
+    val components = formalArgs.filter { it.isUnique }.flatMap { arg ->
+        val classType = arg.type.pretype as? ClassTypeEmbedding ?: return@flatMap emptyList()
+        val nullityTest = Exp.NeCmp(arg.toLocalVarUse(), RuntimeTypeDomain.nullValue())
+            .takeIf { arg.type.isNullable }
+        listOfNotNull(nullityTest, PredicateInstance(classType.uniquePredicateName, listOf(arg.toLocalVarUse())))
+    }
+    return if (components.isEmpty()) emptyList() else listOf(DecreasesTuple(components))
+}
 
 data class InlineNamedFunction(
     val signature: NamedFunctionSignature,

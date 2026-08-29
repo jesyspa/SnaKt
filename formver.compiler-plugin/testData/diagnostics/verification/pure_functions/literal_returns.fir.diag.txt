@@ -1,6 +1,7 @@
 /literal_returns.kt: info: Generated Viper text for emptyFunction:
 function emptyAnnotatedFunction(): Ref
   ensures isSubtype(typeOf(result), nullable(intType()))
+  decreases _
 {
   nullValue()
 }
@@ -17,6 +18,7 @@ method emptyFunction() returns (v_ret_0: Ref)
 /literal_returns.kt: info: Generated Viper text for emptyAnnotatedFunction:
 function emptyAnnotatedFunction(): Ref
   ensures isSubtype(typeOf(result), nullable(intType()))
+  decreases _
 {
   nullValue()
 }
@@ -24,6 +26,7 @@ function emptyAnnotatedFunction(): Ref
 /literal_returns.kt: info: Generated Viper text for annotatedIntLitReturn:
 function annotatedIntLitReturn(): Ref
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 {
   intToRef(42)
 }
@@ -31,6 +34,7 @@ function annotatedIntLitReturn(): Ref
 /literal_returns.kt: info: Generated Viper text for annotatedBoolLitReturn:
 function annotatedBoolLitReturn(): Ref
   ensures isSubtype(typeOf(result), boolType())
+  decreases _
 {
   boolToRef(true)
 }
@@ -38,6 +42,7 @@ function annotatedBoolLitReturn(): Ref
 /literal_returns.kt: info: Generated Viper text for annotatedCharLitReturn:
 function annotatedCharLitReturn(): Ref
   ensures isSubtype(typeOf(result), charType())
+  decreases _
 {
   charToRef(65)
 }
@@ -45,6 +50,7 @@ function annotatedCharLitReturn(): Ref
 /literal_returns.kt: info: Generated Viper text for annotatedStringLitReturn:
 function annotatedStringLitReturn(): Ref
   ensures isSubtype(typeOf(result), stringType())
+  decreases _
 {
   stringToRef(Seq(72, 101, 108, 108, 111, 32, 83, 110, 97, 75, 116))
 }
@@ -55,11 +61,13 @@ field b: Ref
 function a(this: Ref): Ref
   requires isSubtype(typeOf(this), X())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function annotatedReferenceReturn(x: Ref): Ref
   requires isSubtype(typeOf(x), X())
   ensures isSubtype(typeOf(result), X())
+  decreases _
 {
   x
 }
@@ -75,6 +83,7 @@ function verifiedAnnotatedIntLitReturn(par_arg: Ref): Ref
   ensures (forall anon: Int ::
       { anon == intFromRef(result) }
       anon == intFromRef(result) ==> anon == intFromRef(par_arg))
+  decreases _
 {
   intToRef(42)
 }
@@ -87,6 +96,7 @@ function verifiedAnnotatedBoolLitReturn(par_arg: Ref): Ref
   ensures isSubtype(typeOf(result), boolType())
   ensures boolFromRef(result)
   ensures intFromRef(par_arg) == 0
+  decreases _
 {
   boolToRef(true)
 }
@@ -98,6 +108,7 @@ function verifiedAnnotatedCharLitReturn(par_arg: Ref): Ref
     Seq(72, 101, 108, 108, 111, 32, 83, 110, 97, 75, 116)
   ensures isSubtype(typeOf(result), charType())
   ensures charFromRef(result) == 65
+  decreases _
 {
   charToRef(65)
 }
@@ -109,6 +120,7 @@ function verifiedAnnotatedStringLitReturn(par_arg: Ref): Ref
   ensures isSubtype(typeOf(result), stringType())
   ensures stringFromRef(result) ==
     Seq(72, 101, 108, 108, 111, 32, 83, 110, 97, 75, 116)
+  decreases _
 {
   stringToRef(Seq(72, 101, 108, 108, 111, 32, 83, 110, 97, 75, 116))
 }

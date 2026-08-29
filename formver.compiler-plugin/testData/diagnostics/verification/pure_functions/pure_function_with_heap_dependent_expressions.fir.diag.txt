@@ -2,6 +2,7 @@
 function getValue(node: Ref): Ref
   requires isSubtype(typeOf(node), Node())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 {
   value(node)
 }
@@ -9,17 +10,20 @@ function getValue(node: Ref): Ref
 function next(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), nullable(Node()))
+  decreases _
 
 
 function value(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 /pure_function_with_heap_dependent_expressions.kt: info: Generated Viper text for getSafeNextValue:
 function getSafeNextValue(node: Ref): Ref
   requires isSubtype(typeOf(node), Node())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 {
   (let anon_1_0 ==
     ((next(node) != nullValue() ? value(next(node)) : nullValue())) in
@@ -31,17 +35,20 @@ function getSafeNextValue(node: Ref): Ref
 function next(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), nullable(Node()))
+  decreases _
 
 
 function value(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 /pure_function_with_heap_dependent_expressions.kt: info: Generated Viper text for getSafeNextNextValue:
 function getSafeNextNextValue(node: Ref): Ref
   requires isSubtype(typeOf(node), Node())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 {
   (let anon_2_0 ==
     ((next(node) != nullValue() ? next(next(node)) : nullValue())) in
@@ -55,22 +62,26 @@ function getSafeNextNextValue(node: Ref): Ref
 function next(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), nullable(Node()))
+  decreases _
 
 
 function value(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 /pure_function_with_heap_dependent_expressions.kt: info: Generated Viper text for sumFirstTwoNodes:
 function next(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), nullable(Node()))
+  decreases _
 
 
 function sumFirstTwoNodes(node: Ref): Ref
   requires isSubtype(typeOf(node), Node())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 {
   (let nextNode_0 ==
     (next(node)) in
@@ -88,12 +99,14 @@ function sumFirstTwoNodes(node: Ref): Ref
 function value(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 /pure_function_with_heap_dependent_expressions.kt: info: Generated Viper text for isLastNode:
 function isLastNode(node: Ref): Ref
   requires isSubtype(typeOf(node), Node())
   ensures isSubtype(typeOf(result), boolType())
+  decreases _
 {
   boolToRef(next(node) == nullValue())
 }
@@ -101,11 +114,13 @@ function isLastNode(node: Ref): Ref
 function next(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), nullable(Node()))
+  decreases _
 
 
 function value(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 /pure_function_with_heap_dependent_expressions.kt: info: Generated Viper text for length:
@@ -129,17 +144,20 @@ function length(node: Ref): Ref
 function next(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), nullable(Node()))
+  decreases _
 
 
 function value(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 /pure_function_with_heap_dependent_expressions.kt: info: Generated Viper text for sumAllNodes:
 function next(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), nullable(Node()))
+  decreases _
 
 
 function sumAllNodes(node: Ref): Ref
@@ -162,6 +180,7 @@ function sumAllNodes(node: Ref): Ref
 function value(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 /pure_function_with_heap_dependent_expressions.kt: info: Generated Viper text for containsValue:
@@ -188,17 +207,20 @@ function containsValue(node: Ref, target: Ref): Ref
 function next(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), nullable(Node()))
+  decreases _
 
 
 function value(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 /pure_function_with_heap_dependent_expressions.kt: info: Generated Viper text for aliasAndReassign:
 function aliasAndReassign(node: Ref): Ref
   requires isSubtype(typeOf(node), Node())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 {
   (let alias1_0 ==
     (node) in
@@ -218,17 +240,20 @@ function aliasAndReassign(node: Ref): Ref
 function next(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), nullable(Node()))
+  decreases _
 
 
 function value(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 /pure_function_with_heap_dependent_expressions.kt: info: Generated Viper text for id:
 function id(node: Ref): Ref
   requires isSubtype(typeOf(node), nullable(Node()))
   ensures isSubtype(typeOf(result), nullable(Node()))
+  decreases _
 {
   node
 }
@@ -236,17 +261,20 @@ function id(node: Ref): Ref
 function next(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), nullable(Node()))
+  decreases _
 
 
 function value(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 /pure_function_with_heap_dependent_expressions.kt: info: Generated Viper text for useIdentityFunction:
 function id(node: Ref): Ref
   requires isSubtype(typeOf(node), nullable(Node()))
   ensures isSubtype(typeOf(result), nullable(Node()))
+  decreases _
 {
   node
 }
@@ -254,11 +282,13 @@ function id(node: Ref): Ref
 function next(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), nullable(Node()))
+  decreases _
 
 
 function useIdentityFunction(node: Ref): Ref
   requires isSubtype(typeOf(node), Node())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 {
   (let sameNode_0 ==
     (id(node)) in
@@ -272,12 +302,14 @@ function useIdentityFunction(node: Ref): Ref
 function value(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 /pure_function_with_heap_dependent_expressions.kt: info: Generated Viper text for getNextValueUsingId:
 function getNextValueUsingId(node: Ref): Ref
   requires isSubtype(typeOf(node), Node())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 {
   (let nextNode_0 ==
     (id(next(node))) in
@@ -293,6 +325,7 @@ function getNextValueUsingId(node: Ref): Ref
 function id(node: Ref): Ref
   requires isSubtype(typeOf(node), nullable(Node()))
   ensures isSubtype(typeOf(result), nullable(Node()))
+  decreases _
 {
   node
 }
@@ -300,23 +333,27 @@ function id(node: Ref): Ref
 function next(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), nullable(Node()))
+  decreases _
 
 
 function value(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 /pure_function_with_heap_dependent_expressions.kt: info: Generated Viper text for testBorrowed:
 function next(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), nullable(Node()))
+  decreases _
 
 
 function testBorrowed(node: Ref): Ref
   requires isSubtype(typeOf(node), Node())
   requires acc(Node_unique(node), write)
   ensures isSubtype(typeOf(result), unitType())
+  decreases _
 {
   unitValue()
 }
@@ -324,3 +361,4 @@ function testBorrowed(node: Ref): Ref
 function value(this: Ref): Ref
   requires isSubtype(typeOf(this), Node())
   ensures isSubtype(typeOf(result), intType())
+  decreases _

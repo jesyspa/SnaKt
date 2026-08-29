@@ -2,11 +2,13 @@
 function y(this: Ref): Ref
   requires isSubtype(typeOf(this), X())
   ensures isSubtype(typeOf(result), Y())
+  decreases _
 
 
 function z(this: Ref): Ref
   requires isSubtype(typeOf(this), Y())
   ensures isSubtype(typeOf(result), Z())
+  decreases _
 
 
 method cascadeGet(x: Ref) returns (v_ret_0: Ref)
@@ -22,11 +24,13 @@ method cascadeGet(x: Ref) returns (v_ret_0: Ref)
 function y(this: Ref): Ref
   requires isSubtype(typeOf(this), X())
   ensures isSubtype(typeOf(result), Y())
+  decreases _
 
 
 function z(this: Ref): Ref
   requires isSubtype(typeOf(this), Y())
   ensures isSubtype(typeOf(result), Z())
+  decreases _
 
 
 method receiverNotNullProved(x: Ref) returns (v_ret_0: Ref)
@@ -48,11 +52,13 @@ method receiverNotNullProved(x: Ref) returns (v_ret_0: Ref)
 function y(this: Ref): Ref
   requires isSubtype(typeOf(this), NullableX())
   ensures isSubtype(typeOf(result), nullable(NullableY()))
+  decreases _
 
 
 function z(this: Ref): Ref
   requires isSubtype(typeOf(this), NullableY())
   ensures isSubtype(typeOf(result), nullable(Z()))
+  decreases _
 
 
 method cascadeNullableGet(x: Ref) returns (v_ret_0: Ref)
@@ -77,11 +83,13 @@ method cascadeNullableGet(x: Ref) returns (v_ret_0: Ref)
 function y(this: Ref): Ref
   requires isSubtype(typeOf(this), NullableX())
   ensures isSubtype(typeOf(result), nullable(NullableY()))
+  decreases _
 
 
 function z(this: Ref): Ref
   requires isSubtype(typeOf(this), NullableY())
   ensures isSubtype(typeOf(result), nullable(Z()))
+  decreases _
 
 
 method cascadeNullableSmartcastGet(x: Ref) returns (v_ret_0: Ref)
@@ -107,11 +115,13 @@ method cascadeNullableSmartcastGet(x: Ref) returns (v_ret_0: Ref)
 function size(this: Ref): Ref
   requires isSubtype(typeOf(this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function x(this: Ref): Ref
   requires isSubtype(typeOf(this), Baz())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method con() returns (ret_1: Ref)
@@ -146,11 +156,13 @@ method nullableReceiverNotNullSafeGet() returns (v_ret_0: Ref)
 function size(this: Ref): Ref
   requires isSubtype(typeOf(this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function x(this: Ref): Ref
   requires isSubtype(typeOf(this), Baz())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method nullableReceiverNullSafeGet() returns (v_ret_0: Ref)
@@ -174,11 +186,13 @@ method nullableReceiverNullSafeGet() returns (v_ret_0: Ref)
 function size(this: Ref): Ref
   requires isSubtype(typeOf(this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function x(this: Ref): Ref
   requires isSubtype(typeOf(this), Baz())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method con() returns (ret_1: Ref)
@@ -211,21 +225,25 @@ method nonNullableReceiverSafeGet() returns (v_ret_0: Ref)
 function ClassII_g_z(this: Ref): Ref
   requires isSubtype(typeOf(this), ClassII())
   ensures isSubtype(typeOf(result), Z())
+  decreases _
 
 
 function g_x(this: Ref): Ref
   requires isSubtype(typeOf(this), ClassI())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function g_y(this: Ref): Ref
   requires isSubtype(typeOf(this), ClassI())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 function size(this: Ref): Ref
   requires isSubtype(typeOf(this), BooleanArray())
   ensures isSubtype(typeOf(result), intType())
+  decreases _
 
 
 method checkPrimary(par_x: Ref, par_y: Ref) returns (v_ret_0: Ref)
