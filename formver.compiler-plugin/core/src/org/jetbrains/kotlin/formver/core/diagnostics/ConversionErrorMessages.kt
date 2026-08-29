@@ -26,5 +26,10 @@ object ConversionErrorMessages : BaseDiagnosticRendererFactory() {
             "{0}",
             CommonRenderers.STRING,
         )
+        map.put(
+            ConversionErrors.IGNORED_SPEC_BLOCK,
+            "{0}",
+            CommonRenderers.STRING,
+        )
     }
 }

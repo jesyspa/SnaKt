@@ -815,6 +815,22 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
     }
 
     @Nested
+    @TestMetadata("formver.compiler-plugin/testData/diagnostics/verification/target_selection")
+    @TestDataPath("$PROJECT_ROOT")
+    public class Target_selection {
+      @Test
+      public void testAllFilesPresentInTarget_selection() {
+        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/verification/target_selection"), Pattern.compile("^(.+)\\.kt$"), null, true);
+      }
+
+      @Test
+      @TestMetadata("spec_block_is_a_contract.kt")
+      public void testSpec_block_is_a_contract() {
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/target_selection/spec_block_is_a_contract.kt");
+      }
+    }
+
+    @Nested
     @TestMetadata("formver.compiler-plugin/testData/diagnostics/verification/types")
     @TestDataPath("$PROJECT_ROOT")
     public class Types {
@@ -885,6 +901,12 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
       @TestMetadata("loops.kt")
       public void testLoops() {
         runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/loops.kt");
+      }
+
+      @Test
+      @TestMetadata("misplaced_spec_blocks.kt")
+      public void testMisplaced_spec_blocks() {
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/misplaced_spec_blocks.kt");
       }
 
       @Test

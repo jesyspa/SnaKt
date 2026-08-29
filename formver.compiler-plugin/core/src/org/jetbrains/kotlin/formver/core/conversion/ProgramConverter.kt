@@ -6,6 +6,7 @@
 package org.jetbrains.kotlin.formver.core.conversion
 
 import org.jetbrains.kotlin.KtSourceElement
+import org.jetbrains.kotlin.fir.expressions.FirBlock
 import org.jetbrains.kotlin.descriptors.isInterface
 import org.jetbrains.kotlin.diagnostics.DiagnosticContext
 import org.jetbrains.kotlin.diagnostics.DiagnosticReporter
@@ -78,6 +79,22 @@ class ProgramConverter(
 
     override fun reportMinorInternalError(msg: String) =
         emit(currentDeclarationSource, ConversionErrors.MINOR_INTERNAL_ERROR, msg)
+
+    private fun reportIgnoredSpecBlocks(body: FirBlock) {
+        for ((kind, call) in findIgnoredSpecBlocks(body)) {
+            val expectedPosition = when (kind) {
+                SpecBlockKind.PRECONDITIONS -> "be the first statement of the function body"
+                SpecBlockKind.POSTCONDITIONS ->
+                    "immediately follow `preconditions`, or be the first statement of the function body"
+                SpecBlockKind.LOOP_INVARIANTS -> "be the first statement of a loop body"
+            }
+            emit(
+                call.source,
+                ConversionErrors.IGNORED_SPEC_BLOCK,
+                "This `${kind.functionName}` block is ignored: it must $expectedPosition.",
+            )
+        }
+    }
 
     private fun reportVerificationSkipped(source: KtSourceElement?, msg: String) {
         context(diagnosticContext) {
@@ -376,6 +393,7 @@ class ProgramConverter(
             return Pair(emptyList(), emptyList())
         }
 
+        reportIgnoredSpecBlocks(body)
         val firSpec = extractFirSpecification(body, declaration.symbol.resolvedReturnType)
 
 

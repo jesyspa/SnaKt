@@ -101,7 +101,8 @@ The plugin accepts a number of command line options which can be passed via
   `only_warnings`).
 - Option `error_style`: permitted values `user_friendly`, `original_viper` and `both` (default: `user_friendly`).
 - Options `conversion_targets_selection` and `verification_targets_selection`: permitted values `no_targets`,
-  `targets_with_contract`, `all_targets` (default: `targets_with_contract`).
+  `targets_with_contract`, `all_targets` (default: `targets_with_contract`). A function counts as having a
+  contract if it has a Kotlin `contract { }` block or a SnaKt `preconditions`/`postconditions` block.
 - Option `unsupported_feature_behaviour`: permitted values `throw_exception`, `assume_unreachable` (default:
   `throw_exception`).
 

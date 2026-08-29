@@ -12,6 +12,7 @@ import org.jetbrains.kotlin.formver.common.*
 import org.jetbrains.kotlin.formver.locality.plugin.LocalityExtensionRegistrar
 import org.jetbrains.kotlin.formver.plugin.compiler.FormalVerificationPluginExtensionRegistrar
 import org.jetbrains.kotlin.formver.plugin.services.FormVerDirectives.ALWAYS_VALIDATE
+import org.jetbrains.kotlin.formver.plugin.services.FormVerDirectives.DEFAULT_SELECTION
 import org.jetbrains.kotlin.formver.plugin.services.FormVerDirectives.DUMP_UNIQUENESS_CFG
 import org.jetbrains.kotlin.formver.plugin.services.FormVerDirectives.FULL_VIPER_DUMP
 import org.jetbrains.kotlin.formver.plugin.services.FormVerDirectives.LOCALITY_CHECK_ONLY
@@ -51,14 +52,17 @@ class ExtensionRegistrarConfigurator(testServices: TestServices) : EnvironmentCo
         val uniquenessOnly = UNIQUE_CHECK_ONLY in module.directives
         val localityOnly = LOCALITY_CHECK_ONLY in module.directives
         val dumpUniquenessCFG = DUMP_UNIQUENESS_CFG in module.directives
+        val defaultSelection = DEFAULT_SELECTION in module.directives
         val verificationSelection = when {
             conversionOnly -> TargetsSelection.FORCE_DISABLE
             ALWAYS_VALIDATE in module.directives -> TargetsSelection.ALL_TARGETS
             uniquenessOnly || localityOnly -> TargetsSelection.NO_TARGETS
+            defaultSelection -> TargetsSelection.defaultBehaviour()
             else -> TargetsSelection.ALL_TARGETS
         }
         val conversionSelection = when {
             uniquenessOnly || localityOnly -> TargetsSelection.NO_TARGETS
+            defaultSelection -> TargetsSelection.defaultBehaviour()
             else -> TargetsSelection.ALL_TARGETS
         }
         val checkUniqueness = uniquenessOnly
@@ -116,6 +120,10 @@ object FormVerDirectives : SimpleDirectivesContainer() {
 
     val NEVER_VALIDATE by directive(
         description = "Run in conversion-only mode: skip verification, keep consistency checking"
+    )
+
+    val DEFAULT_SELECTION by directive(
+        description = "Select targets the way an unconfigured plugin does, rather than taking every function"
     )
 }
 
