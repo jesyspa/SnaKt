@@ -29,38 +29,54 @@ object PluginErrors : KtDiagnosticsContainer() {
 }
 
 /**
- * The diagnostics a failed proof is reported through.
+ * The factories a failed proof is reported through, at one severity.
  *
- * The Kotlin diagnostic API fixes a severity per factory, so reporting a failed
- * proof at a configurable severity takes one set of factories per severity.
- * The two sets carry the same diagnostic names, so which one is in use is
- * invisible to anything that refers to a diagnostic by name — a `@Suppress`, an
+ * The Kotlin diagnostic API fixes a severity per factory, so a configurable
+ * severity takes one set of factories per severity. Both sets use the same
+ * property names, and a factory's name is its property name, so which set is in
+ * use is invisible to anything naming a diagnostic: a `@Suppress`, an
  * `-Xwarning-level`, a test's expected tags.
+ *
+ * Every parameter is required, so a diagnostic added at one severity does not
+ * compile until it is added at the other.
  */
-// The property names are the diagnostic names: the delegates in the
-// implementing containers derive one from the other.
-@Suppress("VariableNaming")
-sealed interface VerificationDiagnostics {
-    val CONDITIONAL_EFFECT_ERROR: KtDiagnosticFactory2<String, String>
-    val VIPER_VERIFICATION_ERROR: KtDiagnosticFactory1<String>
-    val POSSIBLE_INDEX_OUT_OF_BOUND: KtDiagnosticFactory2<String, String>
-    val UNEXPECTED_RETURNED_VALUE: KtDiagnosticFactory1<String>
-    val INVALID_SUBLIST_RANGE: KtDiagnosticFactory2<String, String>
-
+data class VerificationDiagnostics(
+    val conditionalEffectError: KtDiagnosticFactory2<String, String>,
+    val viperVerificationError: KtDiagnosticFactory1<String>,
+    val possibleIndexOutOfBound: KtDiagnosticFactory2<String, String>,
+    val unexpectedReturnedValue: KtDiagnosticFactory1<String>,
+    val invalidSublistRange: KtDiagnosticFactory2<String, String>,
+) {
     companion object {
+        private val warnings = VerificationDiagnostics(
+            conditionalEffectError = VerificationErrors.CONDITIONAL_EFFECT_ERROR,
+            viperVerificationError = VerificationErrors.VIPER_VERIFICATION_ERROR,
+            possibleIndexOutOfBound = VerificationErrors.POSSIBLE_INDEX_OUT_OF_BOUND,
+            unexpectedReturnedValue = VerificationErrors.UNEXPECTED_RETURNED_VALUE,
+            invalidSublistRange = VerificationErrors.INVALID_SUBLIST_RANGE,
+        )
+
+        private val errors = VerificationDiagnostics(
+            conditionalEffectError = StrictVerificationErrors.CONDITIONAL_EFFECT_ERROR,
+            viperVerificationError = StrictVerificationErrors.VIPER_VERIFICATION_ERROR,
+            possibleIndexOutOfBound = StrictVerificationErrors.POSSIBLE_INDEX_OUT_OF_BOUND,
+            unexpectedReturnedValue = StrictVerificationErrors.UNEXPECTED_RETURNED_VALUE,
+            invalidSublistRange = StrictVerificationErrors.INVALID_SUBLIST_RANGE,
+        )
+
         fun of(severity: VerificationErrorSeverity): VerificationDiagnostics = when (severity) {
-            VerificationErrorSeverity.WARNING -> VerificationErrors
-            VerificationErrorSeverity.ERROR -> StrictVerificationErrors
+            VerificationErrorSeverity.WARNING -> warnings
+            VerificationErrorSeverity.ERROR -> errors
         }
     }
 }
 
-object VerificationErrors : KtDiagnosticsContainer(), VerificationDiagnostics {
-    override val CONDITIONAL_EFFECT_ERROR by warning2<PsiElement, String, String>()
-    override val VIPER_VERIFICATION_ERROR by warning1<PsiElement, String>()
-    override val POSSIBLE_INDEX_OUT_OF_BOUND by warning2<PsiElement, String, String>()
-    override val UNEXPECTED_RETURNED_VALUE by warning1<PsiElement, String>()
-    override val INVALID_SUBLIST_RANGE by warning2<PsiElement, String, String>()
+object VerificationErrors : KtDiagnosticsContainer() {
+    val CONDITIONAL_EFFECT_ERROR by warning2<PsiElement, String, String>()
+    val VIPER_VERIFICATION_ERROR by warning1<PsiElement, String>()
+    val POSSIBLE_INDEX_OUT_OF_BOUND by warning2<PsiElement, String, String>()
+    val UNEXPECTED_RETURNED_VALUE by warning1<PsiElement, String>()
+    val INVALID_SUBLIST_RANGE by warning2<PsiElement, String, String>()
     val CONSISTENCY by error1<PsiElement, String>()
     override fun getRendererFactory() = FormalVerificationPluginErrorMessages
     fun tags() = listOf(
@@ -73,11 +89,13 @@ object VerificationErrors : KtDiagnosticsContainer(), VerificationDiagnostics {
     )
 }
 
-object StrictVerificationErrors : KtDiagnosticsContainer(), VerificationDiagnostics {
-    override val CONDITIONAL_EFFECT_ERROR by error2<PsiElement, String, String>()
-    override val VIPER_VERIFICATION_ERROR by error1<PsiElement, String>()
-    override val POSSIBLE_INDEX_OUT_OF_BOUND by error2<PsiElement, String, String>()
-    override val UNEXPECTED_RETURNED_VALUE by error1<PsiElement, String>()
-    override val INVALID_SUBLIST_RANGE by error2<PsiElement, String, String>()
+// Not registered as a diagnostic container: its renderers live in the factory
+// VerificationErrors registers, which is enough for them to be found.
+object StrictVerificationErrors : KtDiagnosticsContainer() {
+    val CONDITIONAL_EFFECT_ERROR by error2<PsiElement, String, String>()
+    val VIPER_VERIFICATION_ERROR by error1<PsiElement, String>()
+    val POSSIBLE_INDEX_OUT_OF_BOUND by error2<PsiElement, String, String>()
+    val UNEXPECTED_RETURNED_VALUE by error1<PsiElement, String>()
+    val INVALID_SUBLIST_RANGE by error2<PsiElement, String, String>()
     override fun getRendererFactory() = FormalVerificationPluginErrorMessages
 }

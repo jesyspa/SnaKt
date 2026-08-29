@@ -26,6 +26,10 @@ data class FormVerImpl(
     override val modelVersion = serialVersionUID
 
     companion object {
+        /**
+         * Version of this class as both a serialized form and a [FormVer] model:
+         * bump it whenever the properties change.
+         */
         private const val serialVersionUID = 3L
     }
 }

@@ -8,32 +8,33 @@ package org.jetbrains.kotlin.formver.plugin.compiler
 import org.jetbrains.kotlin.diagnostics.KtDiagnosticFactoryToRendererMap
 import org.jetbrains.kotlin.diagnostics.rendering.BaseDiagnosticRendererFactory
 import org.jetbrains.kotlin.diagnostics.rendering.CommonRenderers
+import org.jetbrains.kotlin.formver.common.VerificationErrorSeverity
 
 private fun KtDiagnosticFactoryToRendererMap.putVerificationDiagnostics(diagnostics: VerificationDiagnostics) {
     put(
-        diagnostics.VIPER_VERIFICATION_ERROR,
+        diagnostics.viperVerificationError,
         "Viper verification error: {0}",
         CommonRenderers.STRING,
     )
     put(
-        diagnostics.UNEXPECTED_RETURNED_VALUE,
+        diagnostics.unexpectedReturnedValue,
         "Function may return a {0} value.",
         CommonRenderers.STRING,
     )
     put(
-        diagnostics.CONDITIONAL_EFFECT_ERROR,
+        diagnostics.conditionalEffectError,
         "Cannot verify that if {0} then {1}.",
         CommonRenderers.STRING,
         CommonRenderers.STRING,
     )
     put(
-        diagnostics.POSSIBLE_INDEX_OUT_OF_BOUND,
+        diagnostics.possibleIndexOutOfBound,
         "Invalid index for {0}, the index may be {1}.",
         CommonRenderers.STRING,
         CommonRenderers.STRING,
     )
     put(
-        diagnostics.INVALID_SUBLIST_RANGE,
+        diagnostics.invalidSublistRange,
         "Invalid sub-list range for {0}, the range may be {1}.",
         CommonRenderers.STRING,
         CommonRenderers.STRING,
@@ -54,8 +55,7 @@ object FormalVerificationPluginErrorMessages : BaseDiagnosticRendererFactory() {
             CommonRenderers.STRING,
             CommonRenderers.STRING,
         )
-        map.putVerificationDiagnostics(VerificationErrors)
-        map.putVerificationDiagnostics(StrictVerificationErrors)
+        VerificationErrorSeverity.entries.forEach { map.putVerificationDiagnostics(VerificationDiagnostics.of(it)) }
         map.put(
             VerificationErrors.CONSISTENCY,
             "Viper consistency error: {0}",

@@ -121,7 +121,7 @@ class ViperProgramVerificationFacade(val testServices: TestServices) :
         val diagnostic = when (val formattedError = err.formatUserFriendly()) {
             is ConditionalEffectError -> {
                 val msg = formattedError.msg()
-                diagnostics.CONDITIONAL_EFFECT_ERROR.on(
+                diagnostics.conditionalEffectError.on(
                     source, msg.first, msg.second,
                     positioningStrategy = SourceElementPositioningStrategies.DEFAULT,
                     languageVersionSettings = module.languageVersionSettings
@@ -130,7 +130,7 @@ class ViperProgramVerificationFacade(val testServices: TestServices) :
 
             is DefaultError -> {
                 val msg = formattedError.msg()
-                diagnostics.VIPER_VERIFICATION_ERROR.on(
+                diagnostics.viperVerificationError.on(
                     source, msg,
                     positioningStrategy = SourceElementPositioningStrategies.DEFAULT,
                     languageVersionSettings = module.languageVersionSettings
@@ -139,7 +139,7 @@ class ViperProgramVerificationFacade(val testServices: TestServices) :
 
             is IndexOutOfBoundError -> {
                 val msg = formattedError.msg()
-                diagnostics.POSSIBLE_INDEX_OUT_OF_BOUND.on(
+                diagnostics.possibleIndexOutOfBound.on(
                     source, msg.first, msg.second,
                     positioningStrategy = SourceElementPositioningStrategies.DEFAULT,
                     languageVersionSettings = module.languageVersionSettings
@@ -148,7 +148,7 @@ class ViperProgramVerificationFacade(val testServices: TestServices) :
 
             is InvalidSubListRangeError -> {
                 val msg = formattedError.msg()
-                diagnostics.INVALID_SUBLIST_RANGE.on(
+                diagnostics.invalidSublistRange.on(
                     source, msg.first, msg.second,
                     positioningStrategy = SourceElementPositioningStrategies.DEFAULT,
                     languageVersionSettings = module.languageVersionSettings
@@ -157,7 +157,7 @@ class ViperProgramVerificationFacade(val testServices: TestServices) :
 
             is ReturnsEffectError -> {
                 val msg = formattedError.msg()
-                diagnostics.UNEXPECTED_RETURNED_VALUE.on(
+                diagnostics.unexpectedReturnedValue.on(
                     source, msg,
                     positioningStrategy = SourceElementPositioningStrategies.DEFAULT,
                     languageVersionSettings = module.languageVersionSettings
@@ -165,7 +165,7 @@ class ViperProgramVerificationFacade(val testServices: TestServices) :
             }
 
             null -> {
-                diagnostics.VIPER_VERIFICATION_ERROR.on(
+                diagnostics.viperVerificationError.on(
                     source, err.msg, positioningStrategy = SourceElementPositioningStrategies.DEFAULT,
                     languageVersionSettings = module.languageVersionSettings
                 )

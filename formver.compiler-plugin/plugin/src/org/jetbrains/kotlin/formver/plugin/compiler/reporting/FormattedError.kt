@@ -32,7 +32,7 @@ class ReturnsEffectError(private val sourceRole: SourceRole.ReturnsEffect) : For
 
     context(context: CheckerContext, reporter: DiagnosticReporter)
     override fun report(source: KtSourceElement?, diagnostics: VerificationDiagnostics) {
-        reporter.reportOn(source, diagnostics.UNEXPECTED_RETURNED_VALUE, msg())
+        reporter.reportOn(source, diagnostics.unexpectedReturnedValue, msg())
     }
 
     fun msg(): String = sourceRole.asUserFriendlyMessage
@@ -48,7 +48,7 @@ class ConditionalEffectError(private val sourceRole: SourceRole.ConditionalEffec
     context(context: CheckerContext, reporter: DiagnosticReporter)
     override fun report(source: KtSourceElement?, diagnostics: VerificationDiagnostics) {
         val (returnEffectMsg, conditionPrettyPrinted) = msg()
-        reporter.reportOn(source, diagnostics.CONDITIONAL_EFFECT_ERROR, returnEffectMsg, conditionPrettyPrinted)
+        reporter.reportOn(source, diagnostics.conditionalEffectError, returnEffectMsg, conditionPrettyPrinted)
     }
 
     fun msg(): Pair<String, String> = sourceRole.let { (returnEffect, condition) ->
@@ -59,7 +59,7 @@ class ConditionalEffectError(private val sourceRole: SourceRole.ConditionalEffec
 class DefaultError(private val error: VerificationError) : FormattedError {
     context(context: CheckerContext, reporter: DiagnosticReporter)
     override fun report(source: KtSourceElement?, diagnostics: VerificationDiagnostics) {
-        reporter.reportOn(source, diagnostics.VIPER_VERIFICATION_ERROR, msg())
+        reporter.reportOn(source, diagnostics.viperVerificationError, msg())
     }
 
     fun msg(): String = error.msg
@@ -86,7 +86,7 @@ class IndexOutOfBoundError(
         val (targetInfo, userFriendlyMessage) = msg()
         reporter.reportOn(
             source,
-            diagnostics.POSSIBLE_INDEX_OUT_OF_BOUND,
+            diagnostics.possibleIndexOutOfBound,
             targetInfo,
             userFriendlyMessage,
         )
@@ -114,7 +114,7 @@ class InvalidSubListRangeError(
         val (targetInfo, userFriendlyMessage) = msg()
         reporter.reportOn(
             source,
-            diagnostics.INVALID_SUBLIST_RANGE,
+            diagnostics.invalidSublistRange,
             targetInfo,
             userFriendlyMessage,
         )
