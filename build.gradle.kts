@@ -7,12 +7,14 @@ plugins {
     id("com.github.gmazzo.buildconfig") version "5.6.5"
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.16.3" apply false
     id("com.gradle.plugin-publish") version "1.3.1" apply false
+    // 2.0 is still in alpha, but 1.23 embeds a Kotlin compiler that rejects a
+    // JDK 25 daemon, and 1.23 is the end of that line.
     id("dev.detekt") version "2.0.0-alpha.6"
 }
 
-// The JDK this project compiles against and targets. Pinned rather than
-// inherited from the launching JVM so the bytecode does not depend on which
-// JDK a developer happens to run Gradle on.
+// The bytecode target. Independent of the JDK running Gradle, which may be
+// anything from 21 to 25: pinning it here keeps the published class file
+// version from following whichever JDK a developer launched the build with.
 val jdkVersion = 21
 
 allprojects {
@@ -38,7 +40,6 @@ subprojects {
     detekt {
         buildUponDefaultConfig = true
         config.setFrom(rootProject.files("config/detekt/detekt.yml"))
-        baseline = rootProject.file("config/detekt/baseline.xml")
     }
 
     tasks.withType<Detekt>().configureEach {

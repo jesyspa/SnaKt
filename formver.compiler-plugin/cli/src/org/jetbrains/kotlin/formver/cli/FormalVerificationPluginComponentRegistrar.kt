@@ -67,11 +67,10 @@ class FormalVerificationPluginComponentRegistrar : CompilerPluginRegistrar() {
     /**
      * Reports whether the compiler loading the plugin is one the plugin can bind to.
      *
-     * The plugin is compiled against compiler internals that are not binary
-     * compatible across Kotlin feature releases, and registering an extension
-     * against a compiler that has moved on fails with a linkage error naming a
-     * compiler class rather than the plugin. Refusing up front says which
-     * versions the pairing needs instead.
+     * The plugin is compiled against compiler internals that are not binary compatible
+     * across Kotlin feature releases. Without this check, registering an extension against
+     * a newer compiler fails with a linkage error naming a compiler class rather than the
+     * plugin.
      */
     private fun reportCompilerVersionSupported(configuration: CompilerConfiguration): Boolean {
         val running = KotlinCompilerVersion.getVersion() ?: return true
@@ -87,10 +86,7 @@ class FormalVerificationPluginComponentRegistrar : CompilerPluginRegistrar() {
         return false
     }
 
-    /**
-     * The feature release [version] belongs to, with the patch component dropped:
-     * patch releases keep the internals the plugin binds to.
-     */
+    /** The feature release [version] belongs to; patch releases keep the internals the plugin binds to. */
     private fun featureRelease(version: String): KotlinVersion {
         val parts = version.split('.')
         val major = parts.getOrNull(0)?.toIntOrNull() ?: 0

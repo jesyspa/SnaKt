@@ -20,8 +20,7 @@ buildConfig {
 
     packageName("org.jetbrains.kotlin.formver.cli")
 
-    // The plugin binds to compiler internals, so the compiler that loads it has
-    // to be close enough to the one it was built against.
+    // Checked at load time against the running compiler's version.
     buildConfigField("String", "BUILT_AGAINST_KOTLIN_VERSION", "\"${getKotlinPluginVersion()}\"")
 }
 

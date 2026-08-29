@@ -22,45 +22,19 @@ At present, we do not distribute any part of the plugin through a central reposi
 If you would like to use the plugin, clone it and use the `publishToMavenLocal`
 task to put it in your local repository.
 
-## Kotlin and JDK versions
+## Kotlin version
 
-SnaKt is compiled against Kotlin compiler internals, so the compiler that loads
-it has to be one it was built for. The published plugin is built against Kotlin
-2.3.0 and works with 2.3.x and earlier 2.x releases; a newer Kotlin is refused
-at the start of compilation with a message naming both versions, rather than
-failing later with a linkage error. Moving SnaKt to a newer Kotlin means
-rebuilding it against that release.
-
-Any JDK from 21 to 25 works, both for running the plugin and as the target of
-the code you verify: `jvmToolchain(25)` is supported. Running your own Gradle
-daemon on JDK 25 additionally requires Gradle 9 — Gradle 8 compiles Kotlin
-build scripts with a compiler that rejects JDK 25 outright. Targeting JVM 25
-from a JDK 21 daemon works on Gradle 8.
+SnaKt is compiled against Kotlin compiler internals, so it only loads into the
+Kotlin release it was built for. A newer Kotlin is refused at the start of
+compilation with a message naming both versions; the version SnaKt is built
+against is the `kotlin("jvm")` version in the root `build.gradle.kts`. Older 2.x
+releases still load.
 
 ## Running the plugin
 
 Once you've published to your local Maven repository, you can use the Gradle
 plugin to enable verification of your project.
 You can see an example setup at [jesyspa/snakt-usage-example](https://github.com/jesyspa/snakt-usage-example).
-
-### JDK
-
-Build and run with a JDK that your Gradle version supports; JDK 21 is a safe
-choice. The Gradle version this repository builds with (8.14.3) does not support
-JDK 25, and the failure is easy to misread: the build aborts with a message that
-is only the version number,
-
-```
-* What went wrong:
-25.0.2
-```
-
-which comes from Gradle's own build-script compiler rejecting the version string
-(`IllegalArgumentException` in `JavaVersion.parse`, visible under
-`--stacktrace`). It happens before any project code runs, so neither this
-repository nor your own build can catch it and report something friendlier. If
-you see it, point `JAVA_HOME` at an older JDK and stop the daemons
-(`./gradlew --stop`).
 
 ### Setup
 
