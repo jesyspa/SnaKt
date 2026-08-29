@@ -11,9 +11,11 @@ data class PluginConfiguration(
     val behaviour: UnsupportedFeatureBehaviour,
     val conversionSelection: TargetsSelection,
     val verificationSelection: TargetsSelection,
-    val checkLocality: Boolean,
-    val checkUniqueness: Boolean,
-    val dumpUniquenessCFG: Boolean,
+    // The Viper encoding reads `@Unique` and `@Borrowed` off types whether or not the checkers run, so leaving them
+    // off gives a program whose annotations nothing validates.
+    val checkLocality: Boolean = true,
+    val checkUniqueness: Boolean = true,
+    val dumpUniquenessCFG: Boolean = false,
 ) {
     init {
         require(conversionSelection >= verificationSelection) {

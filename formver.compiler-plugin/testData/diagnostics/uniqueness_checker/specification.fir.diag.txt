@@ -1,0 +1,15 @@
+/specification.kt: error: Invalid access to moved reference.
+
+/specification.kt: error: Invalid access to moved reference.
+
+/specification.kt: error: Invalid access to moved reference.
+
+/specification.kt: error: Invalid access to moved reference.
+
+/specification.kt: error: Invalid access to moved reference.
+
+/specification.kt: error: Invalid access to moved reference.
+
+/specification.kt: error: Invalid access to moved reference.
+
+/specification.kt: error: Invalid access to moved reference.

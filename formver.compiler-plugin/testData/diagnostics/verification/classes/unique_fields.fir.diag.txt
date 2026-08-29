@@ -4,18 +4,18 @@ field bf_sharedVar: Ref
 field bf_uniqueVar: Ref
 
 function g_sharedVal(this: Ref): Ref
-  requires isSubtype(typeOf(this), UniquePrimitiveFields())
-  ensures isSubtype(typeOf(result), intType())
+  requires isSubtype(typeOf(this), UniqueContainer())
+  ensures isSubtype(typeOf(result), anyType())
 
 
 function g_uniqueVal(this: Ref): Ref
-  requires isSubtype(typeOf(this), UniquePrimitiveFields())
-  ensures isSubtype(typeOf(result), intType())
+  requires isSubtype(typeOf(this), UniqueContainer())
+  ensures isSubtype(typeOf(result), anyType())
 
 
 method testPrimitiveFieldGetterUnique(pf: Ref) returns (v_ret_0: Ref)
-  requires isSubtype(typeOf(pf), UniquePrimitiveFields())
-  requires acc(UniquePrimitiveFields_unique(pf), write)
+  requires isSubtype(typeOf(pf), UniqueContainer())
+  requires acc(UniqueContainer_unique(pf), write)
   ensures isSubtype(typeOf(v_ret_0), unitType())
 {
   var l0_sharedVal: Ref
@@ -23,9 +23,9 @@ method testPrimitiveFieldGetterUnique(pf: Ref) returns (v_ret_0: Ref)
   var l0_uniqueVal: Ref
   var l0_uniqueVar: Ref
   l0_sharedVal := g_sharedVal(pf)
-  l0_sharedVar := havoc(intType())
+  l0_sharedVar := havoc(anyType())
   l0_uniqueVal := g_uniqueVal(pf)
-  l0_uniqueVar := havoc(intType())
+  l0_uniqueVar := havoc(anyType())
   label lbl_ret_0
   inhale isSubtype(typeOf(v_ret_0), unitType())
 }
@@ -36,17 +36,17 @@ field bf_sharedVar: Ref
 field bf_uniqueVar: Ref
 
 function g_sharedVal(this: Ref): Ref
-  requires isSubtype(typeOf(this), UniquePrimitiveFields())
-  ensures isSubtype(typeOf(result), intType())
+  requires isSubtype(typeOf(this), UniqueContainer())
+  ensures isSubtype(typeOf(result), anyType())
 
 
 function g_uniqueVal(this: Ref): Ref
-  requires isSubtype(typeOf(this), UniquePrimitiveFields())
-  ensures isSubtype(typeOf(result), intType())
+  requires isSubtype(typeOf(this), UniqueContainer())
+  ensures isSubtype(typeOf(result), anyType())
 
 
 method testPrimitiveFieldGetterShared(pf: Ref) returns (v_ret_0: Ref)
-  requires isSubtype(typeOf(pf), UniquePrimitiveFields())
+  requires isSubtype(typeOf(pf), UniqueContainer())
   ensures isSubtype(typeOf(v_ret_0), unitType())
 {
   var l0_sharedVal: Ref
@@ -54,9 +54,9 @@ method testPrimitiveFieldGetterShared(pf: Ref) returns (v_ret_0: Ref)
   var l0_uniqueVal: Ref
   var l0_uniqueVar: Ref
   l0_sharedVal := g_sharedVal(pf)
-  l0_sharedVar := havoc(intType())
+  l0_sharedVar := havoc(anyType())
   l0_uniqueVal := g_uniqueVal(pf)
-  l0_uniqueVar := havoc(intType())
+  l0_uniqueVar := havoc(anyType())
   label lbl_ret_0
   inhale isSubtype(typeOf(v_ret_0), unitType())
 }
@@ -67,20 +67,28 @@ field sharedVar: Ref
 field uniqueVar: Ref
 
 function sharedVal(this: Ref): Ref
-  requires isSubtype(typeOf(this), UniquePrimitiveFields())
-  ensures isSubtype(typeOf(result), intType())
+  requires isSubtype(typeOf(this), UniqueContainer())
+  ensures isSubtype(typeOf(result), anyType())
 
 
 function uniqueVal(this: Ref): Ref
-  requires isSubtype(typeOf(this), UniquePrimitiveFields())
-  ensures isSubtype(typeOf(result), intType())
+  requires isSubtype(typeOf(this), UniqueContainer())
+  ensures isSubtype(typeOf(result), anyType())
+
+
+method con() returns (ret_1: Ref)
+  ensures isSubtype(typeOf(ret_1), anyType())
 
 
 method testPrimitiveFieldSetterUnique(pf: Ref) returns (v_ret_0: Ref)
-  requires isSubtype(typeOf(pf), UniquePrimitiveFields())
-  requires acc(UniquePrimitiveFields_unique(pf), write)
+  requires isSubtype(typeOf(pf), UniqueContainer())
+  requires acc(UniqueContainer_unique(pf), write)
   ensures isSubtype(typeOf(v_ret_0), unitType())
 {
+  var anon_0: Ref
+  var anon_1: Ref
+  anon_0 := con()
+  anon_1 := con()
   label lbl_ret_0
   inhale isSubtype(typeOf(v_ret_0), unitType())
 }
@@ -91,19 +99,27 @@ field sharedVar: Ref
 field uniqueVar: Ref
 
 function sharedVal(this: Ref): Ref
-  requires isSubtype(typeOf(this), UniquePrimitiveFields())
-  ensures isSubtype(typeOf(result), intType())
+  requires isSubtype(typeOf(this), UniqueContainer())
+  ensures isSubtype(typeOf(result), anyType())
 
 
 function uniqueVal(this: Ref): Ref
-  requires isSubtype(typeOf(this), UniquePrimitiveFields())
-  ensures isSubtype(typeOf(result), intType())
+  requires isSubtype(typeOf(this), UniqueContainer())
+  ensures isSubtype(typeOf(result), anyType())
+
+
+method con() returns (ret_1: Ref)
+  ensures isSubtype(typeOf(ret_1), anyType())
 
 
 method testPrimitiveFieldSetterShared(pf: Ref) returns (v_ret_0: Ref)
-  requires isSubtype(typeOf(pf), UniquePrimitiveFields())
+  requires isSubtype(typeOf(pf), UniqueContainer())
   ensures isSubtype(typeOf(v_ret_0), unitType())
 {
+  var anon_0: Ref
+  var anon_1: Ref
+  anon_0 := con()
+  anon_1 := con()
   label lbl_ret_0
   inhale isSubtype(typeOf(v_ret_0), unitType())
 }
@@ -113,39 +129,39 @@ field bf_sharedVar: Ref
 
 field bf_uniqueVar: Ref
 
-function UniquePrimitiveFields_g_sharedVal(this: Ref): Ref
-  requires isSubtype(typeOf(this), UniquePrimitiveFields())
-  ensures isSubtype(typeOf(result), intType())
+function UniqueContainer_g_sharedVal(this: Ref): Ref
+  requires isSubtype(typeOf(this), UniqueContainer())
+  ensures isSubtype(typeOf(result), anyType())
 
 
-function UniquePrimitiveFields_g_uniqueVal(this: Ref): Ref
-  requires isSubtype(typeOf(this), UniquePrimitiveFields())
-  ensures isSubtype(typeOf(result), intType())
+function UniqueContainer_g_uniqueVal(this: Ref): Ref
+  requires isSubtype(typeOf(this), UniqueContainer())
+  ensures isSubtype(typeOf(result), anyType())
 
 
-function UniqueReferenceFields_g_sharedVal(this: Ref): Ref
-  requires isSubtype(typeOf(this), UniqueReferenceFields())
-  ensures isSubtype(typeOf(result), UniquePrimitiveFields())
+function UniqueNestedContainer_g_sharedVal(this: Ref): Ref
+  requires isSubtype(typeOf(this), UniqueNestedContainer())
+  ensures isSubtype(typeOf(result), UniqueContainer())
 
 
-function UniqueReferenceFields_g_uniqueVal(this: Ref): Ref
-  requires isSubtype(typeOf(this), UniqueReferenceFields())
-  ensures isSubtype(typeOf(result), UniquePrimitiveFields())
+function UniqueNestedContainer_g_uniqueVal(this: Ref): Ref
+  requires isSubtype(typeOf(this), UniqueNestedContainer())
+  ensures isSubtype(typeOf(result), UniqueContainer())
 
 
 method testReferenceFieldGetterUnique(rf: Ref) returns (v_ret_0: Ref)
-  requires isSubtype(typeOf(rf), UniqueReferenceFields())
-  requires acc(UniqueReferenceFields_unique(rf), write)
+  requires isSubtype(typeOf(rf), UniqueNestedContainer())
+  requires acc(UniqueNestedContainer_unique(rf), write)
   ensures isSubtype(typeOf(v_ret_0), unitType())
 {
   var l0_sharedVal: Ref
   var l0_sharedVar: Ref
   var l0_uniqueVal: Ref
   var l0_uniqueVar: Ref
-  l0_sharedVal := UniqueReferenceFields_g_sharedVal(rf)
-  l0_sharedVar := havoc(UniquePrimitiveFields())
-  l0_uniqueVal := UniqueReferenceFields_g_uniqueVal(rf)
-  l0_uniqueVar := havoc(UniquePrimitiveFields())
+  l0_sharedVal := UniqueNestedContainer_g_sharedVal(rf)
+  l0_sharedVar := havoc(UniqueContainer())
+  l0_uniqueVal := UniqueNestedContainer_g_uniqueVal(rf)
+  l0_uniqueVar := havoc(UniqueContainer())
   label lbl_ret_0
   inhale isSubtype(typeOf(v_ret_0), unitType())
 }
@@ -155,38 +171,38 @@ field bf_sharedVar: Ref
 
 field bf_uniqueVar: Ref
 
-function UniquePrimitiveFields_g_sharedVal(this: Ref): Ref
-  requires isSubtype(typeOf(this), UniquePrimitiveFields())
-  ensures isSubtype(typeOf(result), intType())
+function UniqueContainer_g_sharedVal(this: Ref): Ref
+  requires isSubtype(typeOf(this), UniqueContainer())
+  ensures isSubtype(typeOf(result), anyType())
 
 
-function UniquePrimitiveFields_g_uniqueVal(this: Ref): Ref
-  requires isSubtype(typeOf(this), UniquePrimitiveFields())
-  ensures isSubtype(typeOf(result), intType())
+function UniqueContainer_g_uniqueVal(this: Ref): Ref
+  requires isSubtype(typeOf(this), UniqueContainer())
+  ensures isSubtype(typeOf(result), anyType())
 
 
-function UniqueReferenceFields_g_sharedVal(this: Ref): Ref
-  requires isSubtype(typeOf(this), UniqueReferenceFields())
-  ensures isSubtype(typeOf(result), UniquePrimitiveFields())
+function UniqueNestedContainer_g_sharedVal(this: Ref): Ref
+  requires isSubtype(typeOf(this), UniqueNestedContainer())
+  ensures isSubtype(typeOf(result), UniqueContainer())
 
 
-function UniqueReferenceFields_g_uniqueVal(this: Ref): Ref
-  requires isSubtype(typeOf(this), UniqueReferenceFields())
-  ensures isSubtype(typeOf(result), UniquePrimitiveFields())
+function UniqueNestedContainer_g_uniqueVal(this: Ref): Ref
+  requires isSubtype(typeOf(this), UniqueNestedContainer())
+  ensures isSubtype(typeOf(result), UniqueContainer())
 
 
 method testReferenceFieldGetterShared(rf: Ref) returns (v_ret_0: Ref)
-  requires isSubtype(typeOf(rf), UniqueReferenceFields())
+  requires isSubtype(typeOf(rf), UniqueNestedContainer())
   ensures isSubtype(typeOf(v_ret_0), unitType())
 {
   var l0_sharedVal: Ref
   var l0_sharedVar: Ref
   var l0_uniqueVal: Ref
   var l0_uniqueVar: Ref
-  l0_sharedVal := UniqueReferenceFields_g_sharedVal(rf)
-  l0_sharedVar := havoc(UniquePrimitiveFields())
-  l0_uniqueVal := UniqueReferenceFields_g_uniqueVal(rf)
-  l0_uniqueVar := havoc(UniquePrimitiveFields())
+  l0_sharedVal := UniqueNestedContainer_g_sharedVal(rf)
+  l0_sharedVar := havoc(UniqueContainer())
+  l0_uniqueVal := UniqueNestedContainer_g_uniqueVal(rf)
+  l0_uniqueVar := havoc(UniqueContainer())
   label lbl_ret_0
   inhale isSubtype(typeOf(v_ret_0), unitType())
 }
@@ -196,55 +212,74 @@ field bf_sharedVar: Ref
 
 field bf_uniqueVar: Ref
 
-function UniquePrimitiveFields_g_sharedVal(this: Ref): Ref
-  requires isSubtype(typeOf(this), UniquePrimitiveFields())
-  ensures isSubtype(typeOf(result), intType())
+function UniqueContainer_g_sharedVal(this: Ref): Ref
+  requires isSubtype(typeOf(this), UniqueContainer())
+  ensures isSubtype(typeOf(result), anyType())
 
 
-function UniquePrimitiveFields_g_uniqueVal(this: Ref): Ref
-  requires isSubtype(typeOf(this), UniquePrimitiveFields())
-  ensures isSubtype(typeOf(result), intType())
+function UniqueContainer_g_uniqueVal(this: Ref): Ref
+  requires isSubtype(typeOf(this), UniqueContainer())
+  ensures isSubtype(typeOf(result), anyType())
 
 
-function UniqueReferenceFields_g_sharedVal(this: Ref): Ref
-  requires isSubtype(typeOf(this), UniqueReferenceFields())
-  ensures isSubtype(typeOf(result), UniquePrimitiveFields())
+function UniqueNestedContainer_g_sharedVal(this: Ref): Ref
+  requires isSubtype(typeOf(this), UniqueNestedContainer())
+  ensures isSubtype(typeOf(result), UniqueContainer())
 
 
-function UniqueReferenceFields_g_uniqueVal(this: Ref): Ref
-  requires isSubtype(typeOf(this), UniqueReferenceFields())
-  ensures isSubtype(typeOf(result), UniquePrimitiveFields())
+function UniqueNestedContainer_g_uniqueVal(this: Ref): Ref
+  requires isSubtype(typeOf(this), UniqueNestedContainer())
+  ensures isSubtype(typeOf(result), UniqueContainer())
 
 
-method con(par_sharedVal: Ref, par_sharedVar: Ref, par_uniqueVal: Ref, par_uniqueVar: Ref)
+method con_Any() returns (ret_2: Ref)
+  ensures isSubtype(typeOf(ret_2), anyType())
+
+
+method con_UniqueContainer(par_sharedVal: Ref, par_sharedVar: Ref, par_uniqueVal: Ref,
+  par_uniqueVar: Ref)
   returns (ret_1: Ref)
-  requires isSubtype(typeOf(par_sharedVal), intType())
-  requires isSubtype(typeOf(par_sharedVar), intType())
-  requires isSubtype(typeOf(par_uniqueVal), intType())
-  requires isSubtype(typeOf(par_uniqueVar), intType())
-  ensures isSubtype(typeOf(ret_1), UniquePrimitiveFields())
-  ensures acc(UniquePrimitiveFields_unique(ret_1), write)
-  ensures intFromRef(UniquePrimitiveFields_g_sharedVal(ret_1)) ==
-    intFromRef(par_sharedVal)
-  ensures intFromRef((unfolding acc(UniquePrimitiveFields_unique(ret_1), write) in
-      ret_1.bf_sharedVar)) ==
-    intFromRef(par_sharedVar)
-  ensures intFromRef(UniquePrimitiveFields_g_uniqueVal(ret_1)) ==
-    intFromRef(par_uniqueVal)
-  ensures intFromRef((unfolding acc(UniquePrimitiveFields_unique(ret_1), write) in
-      ret_1.bf_uniqueVar)) ==
-    intFromRef(par_uniqueVar)
+  requires isSubtype(typeOf(par_sharedVal), anyType())
+  requires isSubtype(typeOf(par_sharedVar), anyType())
+  requires isSubtype(typeOf(par_uniqueVal), anyType())
+  requires isSubtype(typeOf(par_uniqueVar), anyType())
+  ensures isSubtype(typeOf(ret_1), UniqueContainer())
+  ensures acc(UniqueContainer_unique(ret_1), write)
+  ensures UniqueContainer_g_sharedVal(ret_1) == par_sharedVal
+  ensures (unfolding acc(UniqueContainer_unique(ret_1), write) in
+      ret_1.bf_sharedVar) ==
+    par_sharedVar
+  ensures UniqueContainer_g_uniqueVal(ret_1) == par_uniqueVal
+  ensures (unfolding acc(UniqueContainer_unique(ret_1), write) in
+      ret_1.bf_uniqueVar) ==
+    par_uniqueVar
 
 
 method testReferenceFieldSetterUnique(rf: Ref) returns (v_ret_0: Ref)
-  requires isSubtype(typeOf(rf), UniqueReferenceFields())
-  requires acc(UniqueReferenceFields_unique(rf), write)
+  requires isSubtype(typeOf(rf), UniqueNestedContainer())
+  requires acc(UniqueNestedContainer_unique(rf), write)
   ensures isSubtype(typeOf(v_ret_0), unitType())
 {
   var anon_0: Ref
   var anon_1: Ref
-  anon_0 := con(intToRef(5), intToRef(6), intToRef(7), intToRef(8))
-  anon_1 := con(intToRef(9), intToRef(10), intToRef(11), intToRef(12))
+  var anon_2: Ref
+  var anon_3: Ref
+  var anon_4: Ref
+  var anon_5: Ref
+  var anon_6: Ref
+  var anon_7: Ref
+  var anon_8: Ref
+  var anon_9: Ref
+  anon_1 := con_Any()
+  anon_2 := con_Any()
+  anon_3 := con_Any()
+  anon_4 := con_Any()
+  anon_0 := con_UniqueContainer(anon_1, anon_2, anon_3, anon_4)
+  anon_6 := con_Any()
+  anon_7 := con_Any()
+  anon_8 := con_Any()
+  anon_9 := con_Any()
+  anon_5 := con_UniqueContainer(anon_6, anon_7, anon_8, anon_9)
   label lbl_ret_0
   inhale isSubtype(typeOf(v_ret_0), unitType())
 }
@@ -254,54 +289,73 @@ field bf_sharedVar: Ref
 
 field bf_uniqueVar: Ref
 
-function UniquePrimitiveFields_g_sharedVal(this: Ref): Ref
-  requires isSubtype(typeOf(this), UniquePrimitiveFields())
-  ensures isSubtype(typeOf(result), intType())
+function UniqueContainer_g_sharedVal(this: Ref): Ref
+  requires isSubtype(typeOf(this), UniqueContainer())
+  ensures isSubtype(typeOf(result), anyType())
 
 
-function UniquePrimitiveFields_g_uniqueVal(this: Ref): Ref
-  requires isSubtype(typeOf(this), UniquePrimitiveFields())
-  ensures isSubtype(typeOf(result), intType())
+function UniqueContainer_g_uniqueVal(this: Ref): Ref
+  requires isSubtype(typeOf(this), UniqueContainer())
+  ensures isSubtype(typeOf(result), anyType())
 
 
-function UniqueReferenceFields_g_sharedVal(this: Ref): Ref
-  requires isSubtype(typeOf(this), UniqueReferenceFields())
-  ensures isSubtype(typeOf(result), UniquePrimitiveFields())
+function UniqueNestedContainer_g_sharedVal(this: Ref): Ref
+  requires isSubtype(typeOf(this), UniqueNestedContainer())
+  ensures isSubtype(typeOf(result), UniqueContainer())
 
 
-function UniqueReferenceFields_g_uniqueVal(this: Ref): Ref
-  requires isSubtype(typeOf(this), UniqueReferenceFields())
-  ensures isSubtype(typeOf(result), UniquePrimitiveFields())
+function UniqueNestedContainer_g_uniqueVal(this: Ref): Ref
+  requires isSubtype(typeOf(this), UniqueNestedContainer())
+  ensures isSubtype(typeOf(result), UniqueContainer())
 
 
-method con(par_sharedVal: Ref, par_sharedVar: Ref, par_uniqueVal: Ref, par_uniqueVar: Ref)
+method con_Any() returns (ret_2: Ref)
+  ensures isSubtype(typeOf(ret_2), anyType())
+
+
+method con_UniqueContainer(par_sharedVal: Ref, par_sharedVar: Ref, par_uniqueVal: Ref,
+  par_uniqueVar: Ref)
   returns (ret_1: Ref)
-  requires isSubtype(typeOf(par_sharedVal), intType())
-  requires isSubtype(typeOf(par_sharedVar), intType())
-  requires isSubtype(typeOf(par_uniqueVal), intType())
-  requires isSubtype(typeOf(par_uniqueVar), intType())
-  ensures isSubtype(typeOf(ret_1), UniquePrimitiveFields())
-  ensures acc(UniquePrimitiveFields_unique(ret_1), write)
-  ensures intFromRef(UniquePrimitiveFields_g_sharedVal(ret_1)) ==
-    intFromRef(par_sharedVal)
-  ensures intFromRef((unfolding acc(UniquePrimitiveFields_unique(ret_1), write) in
-      ret_1.bf_sharedVar)) ==
-    intFromRef(par_sharedVar)
-  ensures intFromRef(UniquePrimitiveFields_g_uniqueVal(ret_1)) ==
-    intFromRef(par_uniqueVal)
-  ensures intFromRef((unfolding acc(UniquePrimitiveFields_unique(ret_1), write) in
-      ret_1.bf_uniqueVar)) ==
-    intFromRef(par_uniqueVar)
+  requires isSubtype(typeOf(par_sharedVal), anyType())
+  requires isSubtype(typeOf(par_sharedVar), anyType())
+  requires isSubtype(typeOf(par_uniqueVal), anyType())
+  requires isSubtype(typeOf(par_uniqueVar), anyType())
+  ensures isSubtype(typeOf(ret_1), UniqueContainer())
+  ensures acc(UniqueContainer_unique(ret_1), write)
+  ensures UniqueContainer_g_sharedVal(ret_1) == par_sharedVal
+  ensures (unfolding acc(UniqueContainer_unique(ret_1), write) in
+      ret_1.bf_sharedVar) ==
+    par_sharedVar
+  ensures UniqueContainer_g_uniqueVal(ret_1) == par_uniqueVal
+  ensures (unfolding acc(UniqueContainer_unique(ret_1), write) in
+      ret_1.bf_uniqueVar) ==
+    par_uniqueVar
 
 
 method testReferenceFieldSetterShared(rf: Ref) returns (v_ret_0: Ref)
-  requires isSubtype(typeOf(rf), UniqueReferenceFields())
+  requires isSubtype(typeOf(rf), UniqueNestedContainer())
   ensures isSubtype(typeOf(v_ret_0), unitType())
 {
   var anon_0: Ref
   var anon_1: Ref
-  anon_0 := con(intToRef(13), intToRef(14), intToRef(15), intToRef(16))
-  anon_1 := con(intToRef(17), intToRef(18), intToRef(19), intToRef(20))
+  var anon_2: Ref
+  var anon_3: Ref
+  var anon_4: Ref
+  var anon_5: Ref
+  var anon_6: Ref
+  var anon_7: Ref
+  var anon_8: Ref
+  var anon_9: Ref
+  anon_1 := con_Any()
+  anon_2 := con_Any()
+  anon_3 := con_Any()
+  anon_4 := con_Any()
+  anon_0 := con_UniqueContainer(anon_1, anon_2, anon_3, anon_4)
+  anon_6 := con_Any()
+  anon_7 := con_Any()
+  anon_8 := con_Any()
+  anon_9 := con_Any()
+  anon_5 := con_UniqueContainer(anon_6, anon_7, anon_8, anon_9)
   label lbl_ret_0
   inhale isSubtype(typeOf(v_ret_0), unitType())
 }

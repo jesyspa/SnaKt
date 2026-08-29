@@ -1,4 +1,4 @@
-// UNIQUE_CHECK_ONLY
+// CHECKERS_ONLY
 // LANGUAGE: +ContextParameters
 
 import org.jetbrains.kotlin.formver.plugin.Borrowed

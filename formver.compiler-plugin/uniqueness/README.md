@@ -12,6 +12,18 @@ The module is responsible for:
 
 `@Borrowed` behavior is provided by the locality module and consumed here to restore borrowed values after calls.
 
+## Wiring
+
+`FormalVerificationPluginExtensionRegistrar` registers `UniquenessAttributeExtension` and this module's
+resolvers unconditionally, so a `@Unique` type carries `UniquenessAttribute` in every run of the plugin.
+Conversion relies on that: `ProgramConverter` and `SignatureCreation` ask a symbol's type for its
+`scopeUniqueness` — and for its `locality`, in the case of `@Borrowed` — rather than reading the annotations
+themselves.
+
+The diagnostics are separate and on by default. `PluginAdditionalCheckers` adds the checkers below only when
+`PluginConfiguration.checkUniqueness` is set, which the `check_uniqueness` compiler option controls; unsetting
+it leaves `@Unique` in the Viper encoding with nothing validating it.
+
 ## Strategy
 
 The checker tracks two kinds of uniqueness:
@@ -31,7 +43,13 @@ The checker tracks two kinds of uniqueness:
 - `UniquenessAttributeExtension.kt` maps the `@Unique` annotation to `UniquenessAttribute`.
 - `Uniqueness.kt` defines the actual uniqueness lattice:
   - `Unique < Unknown < Shared < Moved`
-- `TypeRefUniquenessAttributeChecker.kt` restricts valid annotation targets to local variables and function parameters.
+- `Uniqueness.kt` also reads a type's attributes into that lattice:
+  - `scopeUniqueness` — what a value of the type is assumed to be: `Unique` for `@Unique`, `Unknown` for
+    `@Borrowed`, `Shared` otherwise.
+  - `parameterUniqueness` — what a parameter declared with the type requires.
+- `@Unique` applies to types only (`AnnotationTarget.TYPE`). `TypeRefUniquenessAttributeChecker.kt` narrows
+  that further to the type positions the analysis understands: value parameters, receiver parameters,
+  properties, function return types, and implicit type arguments.
 
 ### Path models
 
@@ -65,6 +83,12 @@ The checker tracks two kinds of uniqueness:
 - **Merges**
   - Join incoming states path-wise.
 
+Both call nodes are skipped for a call the analyzer's `UniquenessNeutralCallPredicate` accepts, leaving the
+state untouched. The plugin supplies `isSpecificationCall`, which holds for the `@SpecificationHelper`
+specification DSL (`verify`, `preconditions`, `old`, `fold`, `UniquePred`, and the rest), so a specification
+neither moves nor mutates what it mentions. Those functions take their arguments `@Borrowed`, so what a
+specification mentions does not escape either.
+
 ### Diagnostics
 
 Checkers consume the above analyses:
@@ -79,6 +103,10 @@ Checkers consume the above analyses:
   - reports moved subpaths left in borrowed locals at function exit
 - `ExpressionArgumentUniquenessCollisionChecker.kt`
   - reports duplicate/overlapping unique arguments in one call
+
+The three flow-sensitive function checkers are registered through `asSpecificationAware()`
+(`SpecificationAwareChecker.kt`, in the plugin module), which suppresses them inside the arguments of a
+specification call.
 
 ## Current Test Coverage
 
@@ -116,4 +144,9 @@ Known limitations in current code/tests:
 
 - **Interaction with closures** 
   - The current `GraphUniquenessStatesAnalyzer.kt` visits the lambda subgraphs as if they were part of the local control flows, which can result in unexpected behavior.
-  
+
+- **Reading a moved value inside a specification**
+  - Whether this is reported depends on the shape of the DSL entry point. `verify(a === b)` evaluates its
+    argument in the enclosing function's flow, so a moved `a` is reported; `preconditions { a.n == 0 }` puts it
+    in a lambda that `asSpecificationAware()` stands the checker down on, so nothing is reported.
+  - Both behaviours are pinned by `uniqueness_checker/specification.kt`.
