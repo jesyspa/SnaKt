@@ -38,7 +38,3 @@ method testInsertedReturn() returns (v_ret_0: Ref)
   label lbl_ret_0
   inhale isSubtype(typeOf(v_ret_0), unitType())
 }
-
-/empty.kt: error: An internal error has occurred.
-Details: Every statement in invariant block must be a pure boolean invariant.
-Please report this at https://github.com/jesyspa/kotlin

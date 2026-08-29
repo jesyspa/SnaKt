@@ -31,13 +31,3 @@ fun <!VIPER_TEXT!>testInsertedReturn<!>() {
     }
     return
 }
-
-<!INTERNAL_ERROR!>fun testInsertedUnit() {
-    preconditions {
-        Unit
-    }
-    postconditions<Unit> {
-        Unit
-    }
-    return
-}<!>
