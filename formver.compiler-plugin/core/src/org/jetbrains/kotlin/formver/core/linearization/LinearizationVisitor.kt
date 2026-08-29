@@ -11,10 +11,13 @@ import org.jetbrains.kotlin.formver.core.conversion.AccessPolicy
 import org.jetbrains.kotlin.formver.core.domains.RuntimeTypeDomain
 import org.jetbrains.kotlin.formver.core.domains.RuntimeTypeDomain.Companion.isOf
 import org.jetbrains.kotlin.formver.core.embeddings.*
+import org.jetbrains.kotlin.formver.core.embeddings.callables.NonInlineCallable
 import org.jetbrains.kotlin.formver.core.embeddings.callables.toFuncApp
 import org.jetbrains.kotlin.formver.core.embeddings.callables.toMethodCall
 import org.jetbrains.kotlin.formver.core.embeddings.expression.*
+import org.jetbrains.kotlin.formver.core.embeddings.properties.CustomGetter
 import org.jetbrains.kotlin.formver.core.embeddings.types.ClassTypeEmbedding
+import org.jetbrains.kotlin.formver.core.embeddings.types.PretypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.fillHoles
 import org.jetbrains.kotlin.formver.core.embeddings.types.injection
 import org.jetbrains.kotlin.formver.viper.ast.Exp
@@ -116,10 +119,17 @@ data class LinearizationVisitor(
     }
 
     override fun visitFunctionCall(e: FunctionCall): Linearizable = object : DirectResultLinearizable(e, this@LinearizationVisitor) {
-        override fun toViper(ctx: LinearizationContext): Exp = e.function.toFuncApp(
-            e.args.map { it.linearize().toViper(ctx) },
-            ctx.source.asPosition
-        )
+        override fun toViper(ctx: LinearizationContext): Exp {
+            val argExps = e.args.map { it.linearize().toViper(ctx) }
+            var result: Exp = e.function.toFuncApp(argExps, ctx.source.asPosition)
+            for ((formal, arg) in e.function.formalArgs.zip(e.args.zip(argExps))) {
+                val (argEmbedding, argExp) = arg
+                if (formal.isUnique) {
+                    result = ctx.unfoldingUniqueReads(argEmbedding, argExp, result)
+                }
+            }
+            return result
+        }
     }
 
     override fun visitInvokeFunctionObject(e: InvokeFunctionObject): Linearizable = object : DirectResultLinearizable(e, this@LinearizationVisitor) {
@@ -605,4 +615,54 @@ data class LinearizationVisitor(
     }
 
     // endregion
+}
+
+/**
+ * The unique predicates to unfold to reach the value [callable] reads, outermost first, or an empty list if
+ * [callable] is not the getter of a `@Unique` property embedded as a function.
+ *
+ * The property may be declared on a superclass of [receiverType], in which case reaching it means unfolding
+ * every predicate on the path down to the declaring class: the predicate of a class contains that of its
+ * superclass.
+ */
+private fun LinearizationContext.uniqueReadPath(
+    receiverType: PretypeEmbedding,
+    callable: NonInlineCallable
+): List<ClassTypeEmbedding> {
+    val receiverClass = receiverType as? ClassTypeEmbedding ?: return emptyList()
+    val path = mutableListOf<ClassTypeEmbedding>()
+    for (onPath in typeResolver.superclassChain(receiverClass)) {
+        path.add(onPath)
+        val property = typeResolver.lookupClassDefaultBehavingProperties(onPath.name).firstOrNull {
+            (it.getter as? CustomGetter)?.getterMethod?.name == callable.name
+        } ?: continue
+        return if (property.isUnique) path else emptyList()
+    }
+    return emptyList()
+}
+
+/**
+ * [body], wrapped in the unfoldings that expose the permissions carried by the value [arg] reads.
+ *
+ * A `@Unique` property with no backing field is embedded as a permission-free function, so the permissions of
+ * the value it holds sit inside the unique predicate of the receiver it is read from. A chain of such reads
+ * needs one unfolding per link, with the receiver end outermost: unfolding one link is what grants access to
+ * the predicate of the next.
+ *
+ * [argExp] must be the Viper form of [arg]. The two are walked in lockstep, and the wrapping stops as soon as
+ * they cease to correspond, since only [argExp] may be reused: linearizing [arg] again would emit its
+ * statements a second time.
+ */
+private fun LinearizationContext.unfoldingUniqueReads(arg: ExpEmbedding, argExp: Exp, body: Exp): Exp {
+    val read = arg.ignoringCastsAndMetaNodes() as? FunctionCall ?: return body
+    val call = argExp as? Exp.FuncApp ?: return body
+    if (call.functionName != read.function.name) return body
+    val receiver = read.args.singleOrNull() ?: return body
+    val receiverExp = call.args.singleOrNull() ?: return body
+    val path = uniqueReadPath(receiver.type.pretype, read.function)
+    if (path.isEmpty()) return body
+    val unfolded = path.foldRight(body) { onPath, inner ->
+        Exp.Unfolding(uniquePredicateAccess(receiverExp, onPath, source), inner, source.asPosition)
+    }
+    return unfoldingUniqueReads(receiver, receiverExp, unfolded)
 }

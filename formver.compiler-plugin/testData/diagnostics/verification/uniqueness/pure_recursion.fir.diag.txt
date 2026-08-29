@@ -1,0 +1,150 @@
+/pure_recursion.kt: info: Generated Viper text for length:
+field data: Ref
+
+function length(l: Ref): Ref
+  requires isSubtype(typeOf(l), nullable(Link()))
+  requires l != nullValue() ==> acc(Link_unique(l), write)
+  ensures isSubtype(typeOf(result), intType())
+  ensures intFromRef(result) >= 0
+{
+  (let anon_1_0 ==
+    ((l == nullValue() ? intToRef(0) : null)) in
+    (let anon_2_0 ==
+      ((!(l == nullValue()) ?
+        plusInts(intToRef(1), (unfolding acc(Link_unique(l), write) in
+          length(next(l)))) :
+        null)) in
+      (let anon_0_0 ==
+        ((l == nullValue() ? anon_1_0 : anon_2_0)) in
+        anon_0_0)))
+}
+
+function next(this: Ref): Ref
+  requires isSubtype(typeOf(this), Link())
+  ensures isSubtype(typeOf(result), nullable(Link()))
+
+
+predicate Link_unique(this: Ref) {
+  isSubtype(typeOf(this), Link()) && acc(this.data, write) &&
+  isSubtype(typeOf(this.data), intType()) &&
+  (next(this) != nullValue() ==> acc(Link_unique(next(this)), write))
+}
+
+/pure_recursion.kt: info: Generated Viper text for callLength:
+field data: Ref
+
+function length(l: Ref): Ref
+  requires isSubtype(typeOf(l), nullable(Link()))
+  requires l != nullValue() ==> acc(Link_unique(l), write)
+  ensures isSubtype(typeOf(result), intType())
+  ensures intFromRef(result) >= 0
+{
+  (let anon_1_0 ==
+    ((l == nullValue() ? intToRef(0) : null)) in
+    (let anon_2_0 ==
+      ((!(l == nullValue()) ?
+        plusInts(intToRef(1), (unfolding acc(Link_unique(l), write) in
+          length(next(l)))) :
+        null)) in
+      (let anon_0_0 ==
+        ((l == nullValue() ? anon_1_0 : anon_2_0)) in
+        anon_0_0)))
+}
+
+function next(this: Ref): Ref
+  requires isSubtype(typeOf(this), Link())
+  ensures isSubtype(typeOf(result), nullable(Link()))
+
+
+function size(this: Ref): Ref
+  requires isSubtype(typeOf(this), BooleanArray())
+  ensures isSubtype(typeOf(result), intType())
+
+
+predicate BooleanArray_unique(this: Ref) {
+  isSubtype(typeOf(this), BooleanArray()) &&
+  acc(Cloneable_unique(this), write) &&
+  acc(Serializable_unique(this), write)
+}
+
+predicate Cloneable_unique(this: Ref) {
+  isSubtype(typeOf(this), Cloneable())
+}
+
+predicate Link_unique(this: Ref) {
+  isSubtype(typeOf(this), Link()) && acc(this.data, write) &&
+  isSubtype(typeOf(this.data), intType()) &&
+  (next(this) != nullValue() ==> acc(Link_unique(next(this)), write))
+}
+
+predicate Serializable_unique(this: Ref) {
+  isSubtype(typeOf(this), Serializable())
+}
+
+method callLength(l: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(l), nullable(Link()))
+  requires l != nullValue() ==> acc(Link_unique(l), write)
+  ensures l != nullValue() ==> acc(Link_unique(l), write)
+  ensures isSubtype(typeOf(v_ret_0), unitType())
+{
+  assert intFromRef(length(l)) == intFromRef(length(l))
+  label lbl_ret_0
+  inhale isSubtype(typeOf(v_ret_0), unitType())
+}
+
+/pure_recursion.kt: info: Generated Viper text for pushFront:
+field bf_data: Ref
+
+function g_next(this: Ref): Ref
+  requires isSubtype(typeOf(this), Link())
+  ensures isSubtype(typeOf(result), nullable(Link()))
+
+
+function length(l: Ref): Ref
+  requires isSubtype(typeOf(l), nullable(Link()))
+  requires l != nullValue() ==> acc(Link_unique(l), write)
+  ensures isSubtype(typeOf(result), intType())
+  ensures intFromRef(result) >= 0
+{
+  (let anon_1_0 ==
+    ((l == nullValue() ? intToRef(0) : null)) in
+    (let anon_2_0 ==
+      ((!(l == nullValue()) ?
+        plusInts(intToRef(1), (unfolding acc(Link_unique(l), write) in
+          length(g_next(l)))) :
+        null)) in
+      (let anon_0_0 ==
+        ((l == nullValue() ? anon_1_0 : anon_2_0)) in
+        anon_0_0)))
+}
+
+predicate Link_unique(this: Ref) {
+  isSubtype(typeOf(this), Link()) && acc(this.bf_data, write) &&
+  isSubtype(typeOf(this.bf_data), intType()) &&
+  (g_next(this) != nullValue() ==> acc(Link_unique(g_next(this)), write))
+}
+
+method con(par_data: Ref, par_next: Ref) returns (ret_3: Ref)
+  requires isSubtype(typeOf(par_data), intType())
+  requires isSubtype(typeOf(par_next), nullable(Link()))
+  requires par_next != nullValue() ==> acc(Link_unique(par_next), write)
+  ensures isSubtype(typeOf(ret_3), Link())
+  ensures acc(Link_unique(ret_3), write)
+  ensures intFromRef((unfolding acc(Link_unique(ret_3), write) in
+      ret_3.bf_data)) ==
+    intFromRef(par_data)
+  ensures g_next(ret_3) == par_next
+
+
+method pushFront(tail: Ref, d: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(tail), nullable(Link()))
+  requires tail != nullValue() ==> acc(Link_unique(tail), write)
+  requires isSubtype(typeOf(d), intType())
+  ensures isSubtype(typeOf(v_ret_0), Link())
+  ensures acc(Link_unique(v_ret_0), write)
+  ensures intFromRef(length(v_ret_0)) == old(intFromRef(length(tail))) + 1
+{
+  v_ret_0 := con(d, tail)
+  goto lbl_ret_0
+  label lbl_ret_0
+}

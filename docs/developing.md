@@ -47,9 +47,8 @@ Which checks run:
 
 - `NEVER_VALIDATE` — convert but do not verify. Consistency checking still runs.
   This is how a test that is not meant to reach the verifier says so.
-- `UNIQUE_CHECK_ONLY`, `LOCALITY_CHECK_ONLY` — neither convert nor verify, so the
-  goldens hold the locality and uniqueness diagnostics alone. The two have the
-  same effect; both checkers run either way.
+- `CHECKERS_ONLY` — neither convert nor verify, so the goldens hold the locality
+  and uniqueness diagnostics alone.
 - `ALWAYS_VALIDATE` — verify every target. Tests verify every target already, so
   this changes nothing on its own.
 

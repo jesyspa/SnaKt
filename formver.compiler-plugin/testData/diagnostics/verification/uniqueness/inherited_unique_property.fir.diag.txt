@@ -1,0 +1,98 @@
+/inherited_unique_property.kt: info: Generated Viper text for depth:
+function child(this: Ref): Ref
+  requires isSubtype(typeOf(this), Node())
+  ensures isSubtype(typeOf(result), nullable(Node()))
+
+
+function depth(n: Ref): Ref
+  requires isSubtype(typeOf(n), nullable(Node()))
+  requires n != nullValue() ==> acc(Node_unique(n), write)
+  ensures isSubtype(typeOf(result), intType())
+  ensures intFromRef(result) >= 0
+{
+  (let anon_1_0 ==
+    ((n == nullValue() ? intToRef(0) : null)) in
+    (let anon_2_0 ==
+      ((!(n == nullValue()) ?
+        plusInts(intToRef(1), (unfolding acc(Node_unique(n), write) in
+          depth(child(n)))) :
+        null)) in
+      (let anon_0_0 ==
+        ((n == nullValue() ? anon_1_0 : anon_2_0)) in
+        anon_0_0)))
+}
+
+predicate Node_unique(this: Ref) {
+  isSubtype(typeOf(this), Node()) &&
+  (child(this) != nullValue() ==> acc(Node_unique(child(this)), write))
+}
+
+/inherited_unique_property.kt: info: Generated Viper text for depthOfTagged:
+function child(this: Ref): Ref
+  requires isSubtype(typeOf(this), Node())
+  ensures isSubtype(typeOf(result), nullable(Node()))
+
+
+function depth(n: Ref): Ref
+  requires isSubtype(typeOf(n), nullable(Node()))
+  requires n != nullValue() ==> acc(Node_unique(n), write)
+  ensures isSubtype(typeOf(result), intType())
+  ensures intFromRef(result) >= 0
+{
+  (let anon_1_0 ==
+    ((n == nullValue() ? intToRef(0) : null)) in
+    (let anon_2_0 ==
+      ((!(n == nullValue()) ?
+        plusInts(intToRef(1), (unfolding acc(Node_unique(n), write) in
+          depth(child(n)))) :
+        null)) in
+      (let anon_0_0 ==
+        ((n == nullValue() ? anon_1_0 : anon_2_0)) in
+        anon_0_0)))
+}
+
+function size(this: Ref): Ref
+  requires isSubtype(typeOf(this), BooleanArray())
+  ensures isSubtype(typeOf(result), intType())
+
+
+function tag(this: Ref): Ref
+  requires isSubtype(typeOf(this), Tagged())
+  ensures isSubtype(typeOf(result), intType())
+
+
+predicate BooleanArray_unique(this: Ref) {
+  isSubtype(typeOf(this), BooleanArray()) &&
+  acc(Cloneable_unique(this), write) &&
+  acc(Serializable_unique(this), write)
+}
+
+predicate Cloneable_unique(this: Ref) {
+  isSubtype(typeOf(this), Cloneable())
+}
+
+predicate Node_unique(this: Ref) {
+  isSubtype(typeOf(this), Node()) &&
+  (child(this) != nullValue() ==> acc(Node_unique(child(this)), write))
+}
+
+predicate Serializable_unique(this: Ref) {
+  isSubtype(typeOf(this), Serializable())
+}
+
+predicate Tagged_unique(this: Ref) {
+  isSubtype(typeOf(this), Tagged()) && acc(Node_unique(this), write)
+}
+
+method depthOfTagged(par_t: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(par_t), Tagged())
+  requires acc(Tagged_unique(par_t), write)
+  ensures acc(Tagged_unique(par_t), write)
+  ensures isSubtype(typeOf(v_ret_0), unitType())
+{
+  assert intFromRef((unfolding acc(Tagged_unique(par_t), write) in
+      (unfolding acc(Node_unique(par_t), write) in depth(child(par_t))))) >=
+    0
+  label lbl_ret_0
+  inhale isSubtype(typeOf(v_ret_0), unitType())
+}

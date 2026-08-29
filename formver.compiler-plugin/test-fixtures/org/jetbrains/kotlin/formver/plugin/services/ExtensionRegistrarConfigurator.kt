@@ -11,13 +11,12 @@ import org.jetbrains.kotlin.fir.extensions.FirExtensionRegistrarAdapter
 import org.jetbrains.kotlin.formver.common.*
 import org.jetbrains.kotlin.formver.plugin.compiler.FormalVerificationPluginExtensionRegistrar
 import org.jetbrains.kotlin.formver.plugin.services.FormVerDirectives.ALWAYS_VALIDATE
+import org.jetbrains.kotlin.formver.plugin.services.FormVerDirectives.CHECKERS_ONLY
 import org.jetbrains.kotlin.formver.plugin.services.FormVerDirectives.DUMP_UNIQUENESS_CFG
 import org.jetbrains.kotlin.formver.plugin.services.FormVerDirectives.FULL_VIPER_DUMP
-import org.jetbrains.kotlin.formver.plugin.services.FormVerDirectives.LOCALITY_CHECK_ONLY
 import org.jetbrains.kotlin.formver.plugin.services.FormVerDirectives.NEVER_VALIDATE
 import org.jetbrains.kotlin.formver.plugin.services.FormVerDirectives.RENDER_PREDICATES
 import org.jetbrains.kotlin.formver.plugin.services.FormVerDirectives.REPLACE_STDLIB_EXTENSIONS
-import org.jetbrains.kotlin.formver.plugin.services.FormVerDirectives.UNIQUE_CHECK_ONLY
 import org.jetbrains.kotlin.test.directives.model.DirectivesContainer
 import org.jetbrains.kotlin.test.directives.model.RegisteredDirectives
 import org.jetbrains.kotlin.test.directives.model.SimpleDirectivesContainer
@@ -46,17 +45,16 @@ class ExtensionRegistrarConfigurator(testServices: TestServices) : EnvironmentCo
         val errorStyle = ErrorStyle.USER_FRIENDLY
         val conversionOnly = (System.getProperty("formver.conversionOnly")?.toBoolean() ?: false)
                 || NEVER_VALIDATE in module.directives
-        val uniquenessOnly = UNIQUE_CHECK_ONLY in module.directives
-        val localityOnly = LOCALITY_CHECK_ONLY in module.directives
+        val checkersOnly = CHECKERS_ONLY in module.directives
         val dumpUniquenessCFG = DUMP_UNIQUENESS_CFG in module.directives
         val verificationSelection = when {
             conversionOnly -> TargetsSelection.FORCE_DISABLE
             ALWAYS_VALIDATE in module.directives -> TargetsSelection.ALL_TARGETS
-            uniquenessOnly || localityOnly -> TargetsSelection.NO_TARGETS
+            checkersOnly -> TargetsSelection.NO_TARGETS
             else -> TargetsSelection.ALL_TARGETS
         }
         val conversionSelection = when {
-            uniquenessOnly || localityOnly -> TargetsSelection.NO_TARGETS
+            checkersOnly -> TargetsSelection.NO_TARGETS
             else -> TargetsSelection.ALL_TARGETS
         }
 
@@ -85,14 +83,9 @@ object FormVerDirectives : SimpleDirectivesContainer() {
         description = "Always validate functions"
     )
 
-    // The uniqueness and locality checkers run in every test; these two only take conversion and verification out of
-    // the way, so a test can be about the checker diagnostics alone. They are synonyms, kept apart to say which
-    // checker the test is about.
-    val UNIQUE_CHECK_ONLY by directive(
-        description = "Report checker diagnostics only; do not convert or verify"
-    )
-
-    val LOCALITY_CHECK_ONLY by directive(
+    // The uniqueness and locality checkers run in every test; this only takes conversion and verification out of the
+    // way, so a test can be about the checker diagnostics alone.
+    val CHECKERS_ONLY by directive(
         description = "Report checker diagnostics only; do not convert or verify"
     )
 

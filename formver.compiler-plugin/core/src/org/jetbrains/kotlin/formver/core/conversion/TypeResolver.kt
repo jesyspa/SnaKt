@@ -125,6 +125,16 @@ class TypeResolver {
 
 
     /**
+     * [classType] followed by its superclasses, nearest first. Interfaces are skipped: they carry no fields.
+     */
+    fun superclassChain(classType: ClassTypeEmbedding): Sequence<ClassTypeEmbedding> = sequence {
+        yield(classType)
+        val sup = lookupSuperTypes(classType.name).firstOrNull { !interfaceEmbedding.containsKey(it.name) }
+            ?: return@sequence
+        yieldAll(superclassChain(sup))
+    }
+
+    /**
      * Returns the sequence of class types that are between the [typeEmbedding] and the [field].
      */
     fun hierarchyPathTo(
@@ -134,15 +144,15 @@ class TypeResolver {
         val classType = (typeEmbedding as? ClassTypeEmbedding) ?: return@sequence
         val className = field.containingClass?.name
         require(className != null) { "Cannot find hierarchy unfold path of a field with no class information" }
-        if (className == typeEmbedding.name) {
-            yield(classType)
-        } else {
-            val sup = lookupSuperTypes(classType.name).firstOrNull { !interfaceEmbedding.containsKey(it.name) }
-                ?: throw IllegalArgumentException("Reached top of the hierarchy without finding the field")
-
-            yield(classType)
-            yieldAll(hierarchyPathTo(sup, field))
+        var found = false
+        for (onPath in superclassChain(classType)) {
+            yield(onPath)
+            if (onPath.name == className) {
+                found = true
+                break
+            }
         }
+        require(found) { "Reached top of the hierarchy without finding the field" }
     }
 
     /**

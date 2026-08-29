@@ -1,4 +1,4 @@
-// UNIQUE_CHECK_ONLY
+// CHECKERS_ONLY
 
 import org.jetbrains.kotlin.formver.plugin.Unique
 import org.jetbrains.kotlin.formver.plugin.Borrowed

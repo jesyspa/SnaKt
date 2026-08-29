@@ -15,16 +15,15 @@ import org.jetbrains.kotlin.formver.viper.ast.PermExp
 import org.jetbrains.kotlin.formver.viper.ast.Stmt
 
 /**
- * The unique-predicate access on [classOnPath] that must be unfolded to reach a field on a superclass
- * through [receiver].
+ * Full-permission access to the unique predicate of [classType] on [receiver].
  */
-fun hierarchyPredicateAccess(
+fun uniquePredicateAccess(
     receiver: Exp,
-    classOnPath: ClassTypeEmbedding,
+    classType: ClassTypeEmbedding,
     source: KtSourceElement?,
 ): Exp.PredicateAccess =
     Exp.PredicateAccess(
-        classOnPath.uniquePredicateName,
+        classType.uniquePredicateName,
         listOf(receiver),
         PermExp.FullPerm(),
         source.asPosition,
@@ -40,7 +39,7 @@ fun LinearizationContext.hierarchyPredicateAccesses(
     field: FieldEmbedding,
 ): Sequence<Exp.PredicateAccess> =
     typeResolver.hierarchyPathTo(receiverType.pretype, field)
-        .map { hierarchyPredicateAccess(receiver, it, source) }
+        .map { uniquePredicateAccess(receiver, it, source) }
 
 /**
  * Emits a `Stmt.Unfold` for each unique-predicate on the hierarchy path from [receiverType]

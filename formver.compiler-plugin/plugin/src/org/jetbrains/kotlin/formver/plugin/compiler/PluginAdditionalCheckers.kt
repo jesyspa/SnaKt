@@ -65,7 +65,7 @@ class PluginAdditionalCheckers(session: FirSession, config: PluginConfiguration)
             get() = buildSet {
                 add(ViperPoweredDeclarationChecker(session, config))
 
-                if (config.dumpUniquenessCFG) {
+                if (config.checkUniqueness && config.dumpUniquenessCFG) {
                     add(FunctionUniquenessStateRenderingChecker)
                 }
             }
