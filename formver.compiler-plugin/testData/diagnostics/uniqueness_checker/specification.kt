@@ -1,5 +1,5 @@
 // FULL_JDK
-// UNIQUE_CHECK_ONLY
+// CHECKERS_ONLY
 
 import org.jetbrains.kotlin.formver.plugin.*
 

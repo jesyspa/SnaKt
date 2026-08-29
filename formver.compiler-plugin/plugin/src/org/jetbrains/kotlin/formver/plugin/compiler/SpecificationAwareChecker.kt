@@ -14,12 +14,13 @@ import org.jetbrains.kotlin.fir.expressions.FirStatement
 import org.jetbrains.kotlin.formver.core.isSpecificationCall
 
 /**
- * Returns `true` if [this] context is in an argument position for a specification function.
+ * Returns `true` if [this] context is in a direct argument position of a specification call.
+ *
+ * Only the innermost enclosing call counts: a lambda passed to a non-specification function inside a
+ * specification argument is ordinary code, and its flow is still worth checking.
  */
 private fun CheckerContext.isInSpecificationContext(): Boolean =
-    callsOrAssignments.any { statement ->
-        statement.isSpecificationCall()
-    }
+    callsOrAssignments.lastOrNull()?.isSpecificationCall() == true
 
 /**
  * Wraps a declaration [checker] into a checker that only executes if not in a specification context.

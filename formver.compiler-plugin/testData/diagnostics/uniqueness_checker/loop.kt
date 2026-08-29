@@ -1,6 +1,6 @@
 // FULL_JDK
 // WITH_STDLIB
-// UNIQUE_CHECK_ONLY
+// CHECKERS_ONLY
 
 import org.jetbrains.kotlin.formver.plugin.Borrowed
 import org.jetbrains.kotlin.formver.plugin.Unique

@@ -1,4 +1,4 @@
-// UNIQUE_CHECK_ONLY
+// CHECKERS_ONLY
 // DUMP_UNIQUENESS_CFG
 
 import org.jetbrains.kotlin.formver.plugin.Borrowed

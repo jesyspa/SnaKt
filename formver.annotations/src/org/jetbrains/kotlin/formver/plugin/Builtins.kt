@@ -105,7 +105,7 @@ fun fold(
     @Suppress("UNUSED_PARAMETER") permission: Permission? = null
 ): Unit = throw FormverFunctionCalledInRuntimeException("fold")
 
-class InvariantBuilder @SpecificationHelper constructor() {
+class InvariantBuilder {
     /**
      * Specifies trigger expressions for quantifiers.
      * This function should be called within a `forAll` block to provide user-defined triggers

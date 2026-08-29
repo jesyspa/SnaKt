@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.fir.resolve.dfa.cfg.ControlFlowGraph
 import org.jetbrains.kotlin.formver.locality.plugin.CallArgumentLocalitiesMapper
 
 /**
- * Checks whether a call doesn't modify the uniqueness state (i.e. it is uniqueness-neutral).
+ * Accepts a call that leaves the uniqueness state unchanged: it neither moves nor restores what it mentions.
  */
 fun interface UniquenessNeutralCallPredicate {
     context(context: CheckerContext)
@@ -27,16 +27,13 @@ fun interface UniquenessNeutralCallPredicate {
 
 /**
  * Session component that caches uniqueness-state flow analysis for control-flow graphs.
- *
- * @param uniquenessNeutralCallPredicate Is a predicate returning `true` if a call does not change the uniqueness state,
- *  `false` otherwise.
  */
 class GraphUniquenessStatesResolver(
     private val uniquenessNeutralCallPredicate: UniquenessNeutralCallPredicate,
     session: FirSession
 ) : FirExtensionSessionComponent(session) {
     companion object {
-        fun getFactory(uniquenessNeutralCallPredicate: UniquenessNeutralCallPredicate = { false }): Factory {
+        fun getFactory(uniquenessNeutralCallPredicate: UniquenessNeutralCallPredicate): Factory {
             return Factory { session -> GraphUniquenessStatesResolver(uniquenessNeutralCallPredicate, session) }
         }
     }

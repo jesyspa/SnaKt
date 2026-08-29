@@ -24,6 +24,7 @@ import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
 import org.jetbrains.kotlin.fir.symbols.SymbolInternals
 import org.jetbrains.kotlin.fir.symbols.impl.FirCallableSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirReceiverParameterSymbol
+import org.jetbrains.kotlin.fir.symbols.impl.FirValueParameterSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirFunctionSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirNamedFunctionSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirPropertySymbol
@@ -93,10 +94,11 @@ val FirBasedSymbol<*>.isUnique: Boolean
         else -> false
     }
 
+// `@Borrowed` is only allowed on a parameter type, so no other symbol can carry it.
 val FirBasedSymbol<*>.isBorrowed: Boolean
     get() = when (this) {
         is FirReceiverParameterSymbol -> resolvedType.locality == Locality.Local
-        is FirCallableSymbol<*> -> resolvedReturnType.locality == Locality.Local
+        is FirValueParameterSymbol -> resolvedReturnType.locality == Locality.Local
         else -> false
     }
 
