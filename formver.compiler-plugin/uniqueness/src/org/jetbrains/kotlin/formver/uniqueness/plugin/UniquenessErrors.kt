@@ -33,4 +33,16 @@ object UniquenessErrors : KtDiagnosticsContainer() {
     val INVALID_UNIQUENESS_TYPE_TARGET by error0<PsiElement>()
 
     override fun getRendererFactory() = UniquenessErrorMessages
+
+    fun tags() = listOf(
+        UNIQUENESS_MISMATCH.name,
+        CONTEXT_UNIQUENESS_MISMATCH.name,
+        ESCAPE_UNIQUENESS_INCONSISTENCY.name,
+        CONTEXT_ESCAPE_UNIQUENESS_INCONSISTENCY.name,
+        EXIT_UNIQUENESS_INCONSISTENCY.name,
+        INVALID_DUPLICATE_UNIQUE_ARGUMENT.name,
+        INVALID_OVERLAPPING_UNIQUE_ARGUMENTS.name,
+        INVALID_MOVED_ACCESS.name,
+        INVALID_UNIQUENESS_TYPE_TARGET.name,
+    )
 }

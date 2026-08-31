@@ -120,6 +120,15 @@ abstract class TagCollector(
     }
 
     /**
+     * The expected side of a filtered comparison comes from parsing markers back out of the test file, and a marker
+     * names a tag and a range and nothing else: it cannot say that one diagnostic fired twice at one position. The
+     * reported side is matched to that by collapsing such repeats. The message of each individual report is still
+     * checked against the `.diag.txt` golden.
+     */
+    private fun deduplicatedReportedInfos(): Map<TestFile, List<CodeMetaInfo>> =
+        reportedInfos.mapValues { (_, infos) -> infos.distinctBy { Triple(it.tag, it.start, it.end) } }
+
+    /**
      * Renders the expected output but ignores tags that are not considered for comparison
      */
     private fun expectedFileFilteredForTags(): String {
@@ -137,7 +146,7 @@ abstract class TagCollector(
      */
     fun assertFileEqualFilteredForTags() {
         val expectedOutput = expectedFileFilteredForTags()
-        val actualOutput = renderText(reportedInfos, testServices.sourceFileProvider::getContentOfSourceFile)
+        val actualOutput = renderText(deduplicatedReportedInfos(), testServices.sourceFileProvider::getContentOfSourceFile)
         testServices.assertions.assertEquals(expectedOutput, actualOutput) {
             "Actual tags differ from golden file"
         }

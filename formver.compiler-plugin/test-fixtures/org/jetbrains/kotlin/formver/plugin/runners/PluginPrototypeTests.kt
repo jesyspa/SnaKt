@@ -11,6 +11,7 @@ import org.jetbrains.kotlin.formver.common.services.PluginAnnotationsProvider
 import org.jetbrains.kotlin.formver.common.services.TagCollector
 import org.jetbrains.kotlin.formver.plugin.compiler.PluginErrors
 import org.jetbrains.kotlin.formver.plugin.services.*
+import org.jetbrains.kotlin.formver.uniqueness.plugin.UniquenessErrors
 import org.jetbrains.kotlin.test.FirParser
 import org.jetbrains.kotlin.test.TargetBackend
 import org.jetbrains.kotlin.test.builders.TestConfigurationBuilder
@@ -48,7 +49,7 @@ class VerificationDiagnosticsCollector(testServices: TestServices) : Diagnostics
 }
 
 class ConversionTagCollector(testService: TestServices) : TagCollector(testService) {
-    override val tagsToConsider: List<String> = PluginErrors.tags()
+    override val tagsToConsider: List<String> = PluginErrors.tags() + UniquenessErrors.tags()
 }
 
 class AllTagCollector(testService: TestServices) : TagCollector(testService)
