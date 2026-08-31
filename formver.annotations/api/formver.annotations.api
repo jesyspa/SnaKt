@@ -7,6 +7,7 @@ public abstract interface annotation class org/jetbrains/kotlin/formver/plugin/B
 public final class org/jetbrains/kotlin/formver/plugin/BuiltinsKt {
 	public static final fun acc (Ljava/lang/Object;Lorg/jetbrains/kotlin/formver/plugin/Permission;)Z
 	public static synthetic fun acc$default (Ljava/lang/Object;Lorg/jetbrains/kotlin/formver/plugin/Permission;ILjava/lang/Object;)Z
+	public static final fun exists (Lkotlin/jvm/functions/Function2;)Z
 	public static final fun fold (Lorg/jetbrains/kotlin/formver/plugin/Predicate;Lorg/jetbrains/kotlin/formver/plugin/Permission;)V
 	public static synthetic fun fold$default (Lorg/jetbrains/kotlin/formver/plugin/Predicate;Lorg/jetbrains/kotlin/formver/plugin/Permission;ILjava/lang/Object;)V
 	public static final fun forAll (Lkotlin/jvm/functions/Function2;)Z

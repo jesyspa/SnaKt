@@ -41,6 +41,7 @@ interface ExpVisitor<R> {
     fun visitInjectionBasedExpEmbedding(e: InjectionBasedExpEmbedding): R
     fun visitFieldAccessPermissions(e: FieldAccessPermissions): R
     fun visitForAllEmbedding(e: ForAllEmbedding): R
+    fun visitExistsEmbedding(e: ExistsEmbedding): R
     fun visitPredicateAccessPermissions(e: PredicateAccessPermissions): R
     fun visitCast(e: Cast): R
     fun visitIs(e: Is): R
@@ -79,7 +80,7 @@ interface ExpVisitor<R> {
  */
 interface DefaultingExpVisitor<R> : ExpVisitor<R> {
     fun visitDefault(e: ExpEmbedding): R
-
+  
     override fun visitBlock(e: Block): R = visitDefault(e)
     override fun visitFunctionExp(e: FunctionExp): R = visitDefault(e)
     override fun visitGotoChainNode(e: GotoChainNode): R = visitDefault(e)
@@ -102,6 +103,7 @@ interface DefaultingExpVisitor<R> : ExpVisitor<R> {
     override fun visitInjectionBasedExpEmbedding(e: InjectionBasedExpEmbedding): R = visitDefault(e)
     override fun visitFieldAccessPermissions(e: FieldAccessPermissions): R = visitDefault(e)
     override fun visitForAllEmbedding(e: ForAllEmbedding): R = visitDefault(e)
+    override fun visitExistsEmbedding(e: ExistsEmbedding): R = visitDefault(e)
     override fun visitPredicateAccessPermissions(e: PredicateAccessPermissions): R = visitDefault(e)
     override fun visitCast(e: Cast): R = visitDefault(e)
     override fun visitIs(e: Is): R = visitDefault(e)

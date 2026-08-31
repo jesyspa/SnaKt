@@ -1,0 +1,3 @@
+/exists.kt: warning: Viper verification error: Postcondition of symbolExistsWithoutGroundTerm might not hold. Assertion (exists anon: Int :: { stringFromRef(s)[anon] } 0 <= anon && anon < |stringFromRef(s)| && stringFromRef(s)[anon] == stringFromRef(s)[intFromRef(v_ret_0)]) might not hold.
+
+/exists.kt: warning: Viper verification error: Postcondition of existsPostcondWithoutTrigger might not hold. Assertion (exists anon: Int :: anon == 0) might not hold.

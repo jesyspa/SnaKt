@@ -52,6 +52,12 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
       }
 
       @Test
+      @TestMetadata("max_character.kt")
+      public void testMax_character() {
+        runTest("formver.compiler-plugin/testData/diagnostics/expensive_verification/algorithms/max_character.kt");
+      }
+
+      @Test
       @TestMetadata("merge_sort_of_string.kt")
       public void testMerge_sort_of_string() {
         runTest("formver.compiler-plugin/testData/diagnostics/expensive_verification/algorithms/merge_sort_of_string.kt");
@@ -867,6 +873,18 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
       @TestMetadata("empty.kt")
       public void testEmpty() {
         runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/empty.kt");
+      }
+
+      @Test
+      @TestMetadata("exists.kt")
+      public void testExists() {
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/exists.kt");
+      }
+
+      @Test
+      @TestMetadata("exists_list_get_crash.kt")
+      public void testExists_list_get_crash() {
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/exists_list_get_crash.kt");
       }
 
       @Test

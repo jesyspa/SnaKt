@@ -1,0 +1,3 @@
+/exists_list_get_crash.kt: error: exists body contains impure expressions; method calls are not supported in quantifier bodies
+
+/exists_list_get_crash.kt: error: Function 'existsListGetCrash' was not verified because of errors in its declaration

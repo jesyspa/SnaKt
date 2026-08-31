@@ -31,6 +31,18 @@ data class LinearizationVisitor(
      */
     private fun ExpEmbedding.linearize(): Linearizable = accept(this@LinearizationVisitor)
 
+    private fun getQuantifierParts(
+        conditions: List<ExpEmbedding>,
+        triggerExpressions: List<ExpEmbedding>,
+        ctx: LinearizationContext,
+    ): Pair<Exp, List<Exp.Trigger>> {
+        val conjunction = conditions.pureToViper(true, ctx.typeResolver, ctx.source).toConjunction()
+        val viperTriggers = triggerExpressions.map { triggerExpr ->
+            Exp.Trigger(listOf(triggerExpr.linearize().toViperBuiltinType(ctx)))
+        }
+        return conjunction to viperTriggers
+    }
+
     // region Control Flow
 
     override fun visitBlock(e: Block): Linearizable = object : OptionalResultLinearizable(e) {
@@ -492,14 +504,28 @@ data class LinearizationVisitor(
 
     override fun visitForAllEmbedding(e: ForAllEmbedding): Linearizable = object : OnlyToBuiltinLinearizable(e, this@LinearizationVisitor) {
         override fun toViperBuiltinType(ctx: LinearizationContext): Exp {
-            val conjunction = e.conditions.pureToViper(true, ctx.typeResolver, ctx.source).toConjunction()
-            val viperTriggers = e.triggerExpressions.map { triggerExpr ->
-                Exp.Trigger(listOf(triggerExpr.linearize().toViperBuiltinType(ctx)))
-            }
+            val (conjunction, viperTriggers) = getQuantifierParts(e.conditions, e.triggerExpressions, ctx)
             return Exp.Forall(
                 variables = listOf(e.variable.toLocalVarDecl()),
                 triggers = viperTriggers,
                 exp = if (e.variable.isOriginallyRef) Exp.Implies(
+                    e.variable.toViperExp(ctx).isOf(e.variable.type.runtimeType),
+                    conjunction
+                )
+                else conjunction,
+                pos = ctx.source.asPosition,
+                info = e.sourceRole.asInfo,
+            )
+        }
+    }
+
+    override fun visitExistsEmbedding(e: ExistsEmbedding): Linearizable = object : OnlyToBuiltinLinearizable(e, this@LinearizationVisitor) {
+        override fun toViperBuiltinType(ctx: LinearizationContext): Exp {
+            val (conjunction, viperTriggers) = getQuantifierParts(e.conditions, e.triggerExpressions, ctx)
+            return Exp.Exists(
+                variables = listOf(e.variable.toLocalVarDecl()),
+                triggers = viperTriggers,
+                exp = if (e.variable.isOriginallyRef) Exp.And(
                     e.variable.toViperExp(ctx).isOf(e.variable.type.runtimeType),
                     conjunction
                 )
