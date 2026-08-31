@@ -17,6 +17,11 @@ import org.jetbrains.kotlin.formver.core.embeddings.expression.ExpEmbedding
  * sometimes.
  */
 sealed interface SpecialKotlinFunction : CallableEmbedding {
+    // Special handling means interpreting the arguments the call site provides, so these callables
+    // do not line their arguments up against the Kotlin parameters.
+    override val takesArgumentPerParameter: Boolean
+        get() = false
+
     val packageName: List<String>
     val className: String?
         get() = null

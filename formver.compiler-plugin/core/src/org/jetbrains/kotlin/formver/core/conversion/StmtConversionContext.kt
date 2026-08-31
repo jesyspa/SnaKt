@@ -149,6 +149,17 @@ fun StmtConversionContext.embedPropertyAccess(accessExpression: FirPropertyAcces
     }
 
 
+/**
+ * Declares a fresh variable of [type] and inhales that its type is a subtype of [type].
+ *
+ * No access permissions are inhaled, so the caller gets no permission to the fields of a
+ * reference nobody handed it.
+ */
+fun StmtConversionContext.unconstrainedValue(type: TypeEmbedding): Pair<Declare, ExpEmbedding> {
+    val declaration = declareAnonVar(type, null)
+    return declaration to declaration.variable.withInvariants(typeResolver) { proven = true }
+}
+
 fun StmtConversionContext.argumentDeclaration(
     arg: ExpEmbedding,
     callType: TypeEmbedding
