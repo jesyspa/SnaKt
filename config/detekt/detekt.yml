@@ -1,7 +1,3 @@
-build:
-  maxIssues: 0
-  excludeCorrectable: false
-
 config:
   validation: true
   warningsAsErrors: false
@@ -13,28 +9,25 @@ processors:
 console-reports:
   active: true
 
-output-reports:
-  active: true
-
 complexity:
   active: true
   LongMethod:
     active: true
-    threshold: 80
+    allowedLines: 80
   LongParameterList:
     active: true
-    functionThreshold: 8
-    constructorThreshold: 8
+    allowedFunctionParameters: 8
+    allowedConstructorParameters: 8
     ignoreDefaultParameters: true
     ignoreDataClasses: true
   TooManyFunctions:
     active: false
   CyclomaticComplexMethod:
     active: true
-    threshold: 35
+    allowedComplexity: 35
   NestedBlockDepth:
     active: true
-    threshold: 5
+    allowedDepth: 5
 
 style:
   active: true
@@ -50,7 +43,7 @@ style:
     active: false
   MaxLineLength:
     active: false
-  UnusedPrivateMember:
+  UnusedPrivateFunction:
     active: true
   UnusedParameter:
     active: true

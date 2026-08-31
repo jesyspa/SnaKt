@@ -2,6 +2,17 @@
 
 Publishing a new Silicon build: publish-silicon.md.
 
+## Toolchain
+
+The build runs on any JDK from 21 to 25 and compiles with a toolchain pinned to
+21, so the bytecode does not depend on which JDK launched Gradle. The pinned JDK
+is provisioned automatically when it is not installed.
+
+The Gradle version in the wrapper is a floor rather than a preference: Gradle 8
+compiles the Kotlin build scripts with a compiler that rejects JDK 25, and
+detekt below 2.0 embeds a compiler that does the same and runs inside the
+daemon.
+
 ## Tests
 
 We use the test framework built for kotlinc. A test is a `.kt` file under

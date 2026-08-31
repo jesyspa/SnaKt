@@ -22,6 +22,14 @@ At present, we do not distribute any part of the plugin through a central reposi
 If you would like to use the plugin, clone it and use the `publishToMavenLocal`
 task to put it in your local repository.
 
+## Kotlin version
+
+SnaKt is compiled against Kotlin compiler internals, so it only loads into the
+Kotlin release it was built for. A newer Kotlin is refused at the start of
+compilation with a message naming both versions; the version SnaKt is built
+against is the `kotlin("jvm")` version in the root `build.gradle.kts`. Older 2.x
+releases still load.
+
 ## Running the plugin
 
 Once you've published to your local Maven repository, you can use the Gradle
@@ -35,11 +43,14 @@ In your `settings.gradle.kts`, configure your Gradle plugin repositories to allo
 ```kotlin
 pluginManagement {
     repositories {
-        mavenCentral()
+        gradlePluginPortal()
         mavenLocal()
     }
 }
 ```
+
+Keep `gradlePluginPortal()` in the list: it is where the Kotlin Gradle plugin
+itself comes from, and replacing it outright leaves `kotlin("jvm")` unresolvable.
 
 Then in `build.gradle.kts`, enable the plugin. Make sure that you also enable the Maven
 local repository here: it's necessary to find the compiler plugin for the plugin.
@@ -117,12 +128,25 @@ At the moment we use the text-based interface, meaning you need to:
 - Install the `z3` binary in your path
 - Set the `Z3_EXE` environment variable correctly.
 
-One way to do this is as follows:
+`Z3_EXE` has to be the path to the binary itself, not the directory holding it.
+Any location works as long as it is on your `PATH`; if you can write to a system
+directory, one way to do this is as follows:
 
 ```bash
-export Z3_EXE=/usr/bin/z3 # or a different directory in $PATH
+export Z3_EXE=/usr/local/bin/z3
 sudo cp z3-4.8.7-*/bin/z3 $Z3_EXE
 echo "export Z3_EXE=$Z3_EXE" >> ~/.profile
+```
+
+Without root, install it under your home directory instead:
+
+```bash
+mkdir -p ~/.local/bin
+cp z3-4.8.7-*/bin/z3 ~/.local/bin/z3
+chmod +x ~/.local/bin/z3
+export Z3_EXE=$HOME/.local/bin/z3
+echo "export PATH=\$HOME/.local/bin:\$PATH" >> ~/.profile
+echo "export Z3_EXE=\$HOME/.local/bin/z3" >> ~/.profile
 ```
 
 Make sure that running `$Z3_EXE --version` gives `Z3 version 4.8.7`.
@@ -134,6 +158,10 @@ manager, operating system, etc.
 The Gradle and Kotlin daemons capture `Z3_EXE` at startup, so changing it
 afterwards has no effect until both are stopped (`./gradlew --stop`, plus
 killing the Kotlin daemon).
+
+If `Z3_EXE` is unset or wrong, compilation fails with an internal error whose
+details read `Cannot run prover at location 'z3': not a file`. That one is a
+configuration problem rather than a bug: check `Z3_EXE` before reporting it.
 
 ## Contributing
 

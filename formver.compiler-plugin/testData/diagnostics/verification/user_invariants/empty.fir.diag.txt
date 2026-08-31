@@ -41,4 +41,4 @@ method testInsertedReturn() returns (v_ret_0: Ref)
 
 /empty.kt: error: An internal error has occurred.
 Details: Every statement in invariant block must be a pure boolean invariant.
-Please report this at https://github.com/jesyspa/kotlin
+Please report this at https://github.com/JetBrains/SnaKt/issues

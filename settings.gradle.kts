@@ -6,6 +6,12 @@ pluginManagement {
     }
 }
 
+// Provisions the JDK the build pins its toolchain to, for developers who do not
+// have it installed.
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
+}
+
 dependencyResolutionManagement {
     repositories {
         mavenCentral()
