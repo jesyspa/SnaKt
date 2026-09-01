@@ -15,4 +15,5 @@ object FormalVerificationPluginNames {
     const val CHECK_UNIQUENESS_OPTION_NAME = "check_uniqueness"
     const val CHECK_LOCALITY_OPTION_NAME = "check_locality"
     const val DUMP_UNIQUENESS_CFG_OPTION_NAME = "dump_uniqueness_cfg"
+    const val VERIFICATION_ERROR_SEVERITY_OPTION_NAME = "verification_error_severity"
 }

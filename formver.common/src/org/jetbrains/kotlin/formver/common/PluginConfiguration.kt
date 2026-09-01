@@ -14,6 +14,7 @@ data class PluginConfiguration(
     val checkLocality: Boolean,
     val checkUniqueness: Boolean,
     val dumpUniquenessCFG: Boolean,
+    val verificationErrorSeverity: VerificationErrorSeverity,
 ) {
     init {
         require(conversionSelection >= verificationSelection) {

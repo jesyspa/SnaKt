@@ -43,9 +43,13 @@ class FormalVerificationPluginComponentRegistrar : CompilerPluginRegistrar() {
         val checkUniqueness = configuration.get(FormalVerificationConfigurationKeys.CHECK_UNIQUENESS, false)
         val checkLocality = configuration.get(FormalVerificationConfigurationKeys.CHECK_LOCALITY, false)
         val dumpUniquenessCFG = configuration.get(FormalVerificationConfigurationKeys.DUMP_UNIQUENESS_CFG, false)
+        val verificationErrorSeverity = configuration.get(
+            FormalVerificationConfigurationKeys.VERIFICATION_ERROR_SEVERITY,
+            VerificationErrorSeverity.Companion.defaultBehaviour()
+        )
         val config = PluginConfiguration(
             logLevel, errorStyle, behaviour, conversionSelection, verificationSelection,
-            checkLocality, checkUniqueness, dumpUniquenessCFG
+            checkLocality, checkUniqueness, dumpUniquenessCFG, verificationErrorSeverity
         )
         FirExtensionRegistrarAdapter.registerExtension(FormalVerificationPluginExtensionRegistrar(config))
 

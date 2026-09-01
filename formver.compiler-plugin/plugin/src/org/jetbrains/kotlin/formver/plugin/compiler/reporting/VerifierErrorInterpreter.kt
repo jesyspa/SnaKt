@@ -12,7 +12,9 @@ import org.jetbrains.kotlin.diagnostics.SourceElementPositioningStrategies
 import org.jetbrains.kotlin.diagnostics.reportOn
 import org.jetbrains.kotlin.fir.analysis.checkers.context.CheckerContext
 import org.jetbrains.kotlin.formver.common.ErrorStyle
+import org.jetbrains.kotlin.formver.common.PluginConfiguration
 import org.jetbrains.kotlin.formver.plugin.compiler.PluginErrors
+import org.jetbrains.kotlin.formver.plugin.compiler.VerificationDiagnostics
 import org.jetbrains.kotlin.formver.viper.errors.ConsistencyError
 import org.jetbrains.kotlin.formver.viper.errors.VerificationError
 import org.jetbrains.kotlin.formver.viper.errors.VerifierError
@@ -27,8 +29,11 @@ context(context: CheckerContext)
 private fun DiagnosticReporter.reportVerificationError(
     source: KtSourceElement?,
     error: VerificationError,
-    errorStyle: ErrorStyle,
-) = error.formatByErrorStyle(errorStyle).forEach { it.report(source) }
+    config: PluginConfiguration,
+) {
+    val diagnostics = VerificationDiagnostics.of(config.verificationErrorSeverity)
+    error.formatByErrorStyle(config.errorStyle).forEach { it.report(source, diagnostics) }
+}
 
 context(context: CheckerContext)
 private fun DiagnosticReporter.reportConsistencyError(source: KtSourceElement?, error: ConsistencyError) {
@@ -44,8 +49,8 @@ context(context: CheckerContext)
 fun DiagnosticReporter.reportVerifierError(
     source: KtSourceElement?,
     error: VerifierError,
-    errorStyle: ErrorStyle,
+    config: PluginConfiguration,
 ) = when (error) {
     is ConsistencyError -> reportConsistencyError(source, error)
-    is VerificationError -> reportVerificationError(source, error, errorStyle)
+    is VerificationError -> reportVerificationError(source, error, config)
 }

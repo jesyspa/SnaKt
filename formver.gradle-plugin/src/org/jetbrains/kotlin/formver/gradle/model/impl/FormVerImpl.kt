@@ -21,10 +21,15 @@ data class FormVerImpl(
     override val checkUniqueness: Boolean?,
     override val checkLocality: Boolean?,
     override val dumpUniquenessCFG: Boolean?,
+    override val verificationErrorSeverity: String?,
 ) : FormVer, Serializable {
     override val modelVersion = serialVersionUID
 
     companion object {
-        private const val serialVersionUID = 2L
+        /**
+         * Version of this class as both a serialized form and a [FormVer] model:
+         * bump it whenever the properties change.
+         */
+        private const val serialVersionUID = 3L
     }
 }

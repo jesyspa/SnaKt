@@ -48,6 +48,8 @@ Which checks run:
 - `ALWAYS_VALIDATE` — verify every target. Verification is already the default,
   so this changes nothing on its own; it earns its place by overriding the two
   `*_CHECK_ONLY` directives above.
+- `FAIL_ON_VERIFICATION_ERROR` — report failed proofs as errors rather than
+  warnings, matching `verificationErrorSeverity("error")`.
 
 What the diagnostic contains:
 

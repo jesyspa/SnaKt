@@ -117,5 +117,10 @@ formver {
     errorStyle("user_friendly")  // or "original_viper", "both"
     logLevel("only_warnings")    // or "short_viper_dump", "full_viper_dump"
     unsupportedFeatureBehaviour("throw_exception")  // or "assume_unreachable"
+    verificationErrorSeverity("warning")  // or "error"
 }
 ```
+
+`verificationErrorSeverity` defaults to `"warning"`, so a failed proof leaves the build green
+and adopting the plugin cannot break an existing build. Set it to `"error"` to fail compilation
+on a failed proof instead.

@@ -106,7 +106,7 @@ class ViperPoweredDeclarationChecker(private val session: FirSession, private va
 
                 val onFailure = { err: VerifierError ->
                     val source = err.position.unwrapOr { declaration.source }
-                    reporter.reportVerifierError(source, err, config.errorStyle)
+                    reporter.reportVerifierError(source, err, config)
                 }
 
                 val verifier = SiliconFrontend(emptyList())
