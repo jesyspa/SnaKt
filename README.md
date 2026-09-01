@@ -12,6 +12,9 @@ syntax are not supported.
 This repository consists of three published parts:
 
 - `formver.compiler-plugin`: a K2 compiler plugin that performs formal verification.
+  It is published twice: the plain artifact runs against `kotlinc`, while
+  `formver.compiler-plugin-embeddable` runs against `kotlin-compiler-embeddable`,
+  the compiler Gradle builds with.
 - `formver.gradle-plugin`: a Gradle plugin that loads the compiler plugin.
 - `formver.annotations`: definitions that are used for adding specifications
   to your code.
@@ -57,7 +60,7 @@ repositories {
 ```
 
 Additionally, increase the stack size and metaspace of the Kotlin Daemon: the shaded plugin
-jar bundles Silicon and the Scala runtime (~100 MB), and without a larger metaspace the daemon
+jar bundles Silicon and the Scala runtime (~40 MB), and without a larger metaspace the daemon
 dies with `OutOfMemoryError: Metaspace` after roughly a dozen compiles.
 
 ```kotlin

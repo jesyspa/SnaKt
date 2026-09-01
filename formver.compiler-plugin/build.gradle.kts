@@ -1,3 +1,5 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
     kotlin("jvm")
     `java-test-fixtures`
@@ -35,7 +37,10 @@ dependencies {
     implementation(project(":formver.compiler-plugin:plugin")) { isTransitive = false }
     implementation(project(":formver.compiler-plugin:locality")) { isTransitive = false }
     implementation(project(":formver.common")) { isTransitive = false }
-    implementation(kotlin("compiler"))
+    // Provided by whichever compiler runs the plugin. Shading a second copy in would
+    // put compiler classes in the plugin's own class loader next to the ones the
+    // running compiler uses, and the two sets do not interoperate.
+    compileOnly(kotlin("compiler"))
 
     testFixturesApi(kotlin("test-junit5"))
     testFixturesApi(kotlin("compiler-internal-test-framework"))
@@ -157,14 +162,46 @@ fun Test.setLibraryProperty(propName: String, jarName: String) {
     systemProperty(propName, path)
 }
 
+// This project has no sources of its own, and the empty archive collides by name with
+// shadowJar's, leaving whichever ran last in build/libs.
+tasks.jar {
+    enabled = false
+}
+
+// The jar for `kotlinc`, which runs the plugin against the plain compiler.
 tasks.shadowJar {
     archiveClassifier.set("")
+}
+
+// The jar for the Gradle plugin, which runs it against kotlin-compiler-embeddable. That
+// compiler moves the libraries it bundles under its own package prefix, and some of them
+// appear in the compiler API the plugin builds on, so references compiled against the
+// plain compiler have to be rewritten to match.
+//
+// Listed here are the relocated packages the plugin's own classes mention; comparing the
+// package layouts of the two compiler artifacts shows which others are subject to it.
+val embeddableJar by tasks.registering(ShadowJar::class) {
+    archiveBaseName.set("${project.name}-embeddable")
+    archiveClassifier.set("")
+    from(sourceSets.main.map { it.output })
+    configurations.add(project.configurations.runtimeClasspath)
+    relocate("com.intellij", "org.jetbrains.kotlin.com.intellij")
+    relocate("kotlinx.collections.immutable", "org.jetbrains.kotlin.kotlinx.collections.immutable")
+}
+
+// `assemble` picks up shadowJar on its own, but not a hand-registered ShadowJar.
+tasks.assemble {
+    dependsOn(embeddableJar)
 }
 
 publishing {
     publications {
         create<MavenPublication>("maven") {
             artifact(tasks.shadowJar)
+        }
+        create<MavenPublication>("embeddable") {
+            artifactId = "${project.name}-embeddable"
+            artifact(embeddableJar)
         }
     }
 }

@@ -49,7 +49,10 @@ class FormalVerificationPluginComponentRegistrar : CompilerPluginRegistrar() {
         )
         FirExtensionRegistrarAdapter.registerExtension(FormalVerificationPluginExtensionRegistrar(config))
 
-        if (config.checkLocality) {
+        // The uniqueness checkers resolve the locality of expressions and symbols, and the
+        // resolvers that answer those queries are session components the locality extensions
+        // install. Uniqueness therefore cannot run on its own.
+        if (config.checkLocality || config.checkUniqueness) {
             FirExtensionRegistrarAdapter.registerExtension(LocalityExtensionRegistrar())
         }
 
