@@ -17,8 +17,8 @@ method symbolExists(s: Ref) returns (v_ret_0: Ref)
     intFromRef(v_ret_0) < |stringFromRef(s)| &&
     (exists anon_builtin_0: Int :: 0 <= anon_builtin_0 &&
       anon_builtin_0 < |stringFromRef(s)| &&
-      stringFromRef(s)[anon_builtin_0] ==
-      stringFromRef(s)[intFromRef(v_ret_0)])
+      truncateToChar(stringFromRef(s)[anon_builtin_0]) ==
+      truncateToChar(stringFromRef(s)[intFromRef(v_ret_0)]))
 {
   var c: Ref
   var i: Ref
@@ -27,12 +27,13 @@ method symbolExists(s: Ref) returns (v_ret_0: Ref)
   i := intToRef(0)
   label cont
     invariant isSubtype(typeOf(c), charType())
+    invariant 0 <= charFromRef(c) && charFromRef(c) < 65536
     invariant isSubtype(typeOf(i), intType())
     invariant isSubtype(typeOf(s), stringType())
     invariant 0 <= intFromRef(i) && intFromRef(i) <= |stringFromRef(s)|
     invariant (exists anon_builtin_1: Int :: 0 <= anon_builtin_1 &&
         anon_builtin_1 < |stringFromRef(s)| &&
-        stringFromRef(s)[anon_builtin_1] == charFromRef(c))
+        truncateToChar(stringFromRef(s)[anon_builtin_1]) == charFromRef(c))
   anon_0 := ltInts(i, stringLength(s))
   if (boolFromRef(anon_0)) {
     i := plusInts(i, intToRef(1))
@@ -40,12 +41,13 @@ method symbolExists(s: Ref) returns (v_ret_0: Ref)
   }
   label break
   assert isSubtype(typeOf(c), charType())
+  assert 0 <= charFromRef(c) && charFromRef(c) < 65536
   assert isSubtype(typeOf(i), intType())
   assert isSubtype(typeOf(s), stringType())
   assert 0 <= intFromRef(i) && intFromRef(i) <= |stringFromRef(s)|
   assert (exists anon_builtin_1: Int :: 0 <= anon_builtin_1 &&
       anon_builtin_1 < |stringFromRef(s)| &&
-      stringFromRef(s)[anon_builtin_1] == charFromRef(c))
+      truncateToChar(stringFromRef(s)[anon_builtin_1]) == charFromRef(c))
   v_ret_0 := intToRef(0)
   goto lbl_ret_0
   label lbl_ret_0
@@ -59,7 +61,8 @@ method symbolExistsWithoutGroundTerm(s: Ref) returns (v_ret_0: Ref)
   ensures 0 <= intFromRef(v_ret_0) &&
     intFromRef(v_ret_0) < |stringFromRef(s)| &&
     (exists anon: Int :: 0 <= anon && anon < |stringFromRef(s)| &&
-      stringFromRef(s)[anon] == stringFromRef(s)[intFromRef(v_ret_0)])
+      truncateToChar(stringFromRef(s)[anon]) ==
+      truncateToChar(stringFromRef(s)[intFromRef(v_ret_0)]))
 {
   v_ret_0 := intToRef(0)
   goto lbl_ret_0
