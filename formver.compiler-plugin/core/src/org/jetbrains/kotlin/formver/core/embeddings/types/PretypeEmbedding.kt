@@ -63,6 +63,11 @@ data object BooleanTypeEmbedding : PretypeEmbedding {
 data object CharTypeEmbedding : PretypeEmbedding {
     override val runtimeType = RuntimeTypeDomain.charType()
     override val name = PretypeName("Char")
+
+    /** Number of code points a Kotlin `Char` can hold. */
+    const val CODE_RANGE_SIZE = 65536
+
+    override fun pureInvariants(): List<TypeInvariantEmbedding> = listOf(CharCodeRangeInvariant)
 }
 
 data object StringTypeEmbedding : PretypeEmbedding {

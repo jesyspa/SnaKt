@@ -37,6 +37,7 @@ function annotatedBoolLitReturn(): Ref
 
 /literal_returns.kt: info: Generated Viper text for annotatedCharLitReturn:
 function annotatedCharLitReturn(): Ref
+  ensures 0 <= charFromRef(result) && charFromRef(result) < 65536
   ensures isSubtype(typeOf(result), charType())
 {
   charToRef(65)
@@ -96,6 +97,7 @@ function verifiedAnnotatedCharLitReturn(par_arg: Ref): Ref
   requires isSubtype(typeOf(par_arg), stringType())
   requires stringFromRef(par_arg) ==
     Seq(72, 101, 108, 108, 111, 32, 83, 110, 97, 75, 116)
+  ensures 0 <= charFromRef(result) && charFromRef(result) < 65536
   ensures isSubtype(typeOf(result), charType())
   ensures charFromRef(result) == 65
 {

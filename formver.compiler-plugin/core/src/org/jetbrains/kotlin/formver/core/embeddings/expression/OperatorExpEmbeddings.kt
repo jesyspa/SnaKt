@@ -6,6 +6,7 @@
 package org.jetbrains.kotlin.formver.core.embeddings.expression
 
 import org.jetbrains.kotlin.formver.core.domains.RuntimeTypeDomain.Companion.intInjection
+import org.jetbrains.kotlin.formver.core.domains.RuntimeTypeDomain.Companion.truncateToChar
 import org.jetbrains.kotlin.formver.core.domains.RuntimeTypeDomain.Companion.stringInjection
 import org.jetbrains.kotlin.formver.core.embeddings.types.buildFunctionPretype
 import org.jetbrains.kotlin.formver.viper.ast.*
@@ -140,6 +141,17 @@ object OperatorExpEmbeddings {
         viperImplementation { Exp.Implies(args[0], args[1], pos, info) }
     }
 
+    val CharCode = buildUnaryOperator {
+        setName("charCode")
+        withSignature {
+            withParam { char() }
+            withReturnType { int() }
+        }
+        // `Char` and `Int` are both embedded as a Viper `Int`, so the projection is the identity;
+        // only the injection wrapped around it by the builder changes.
+        viperImplementation { args[0] }
+    }
+
     val SubCharChar = buildBinaryOperator {
         setName("subChars")
         withSignature {
@@ -159,13 +171,15 @@ object OperatorExpEmbeddings {
     val AddCharInt = buildBinaryOperator {
         setName("addCharInt")
         setSignature(charIntToCharType)
-        viperImplementation { Exp.Add(args[0], args[1], pos, info) }
+        // Kotlin truncates the result to the code range.
+        viperImplementation { truncateToChar.toFuncApp(listOf(Exp.Add(args[0], args[1])), pos, info) }
     }
 
     val SubCharInt = buildBinaryOperator {
         setName("subCharInt")
         setSignature(charIntToCharType)
-        viperImplementation { Exp.Sub(args[0], args[1], pos, info) }
+        // Kotlin truncates the result to the code range.
+        viperImplementation { truncateToChar.toFuncApp(listOf(Exp.Sub(args[0], args[1])), pos, info) }
     }
 
     private val charCharToBooleanType = buildFunctionPretype {
@@ -214,6 +228,8 @@ object OperatorExpEmbeddings {
             withParam { int() }
             withReturnType { char() }
         }
+        // The element is a `Char` already: `stringElementInCodeRange` gives its range from the
+        // string it was read out of, under the same index bounds this operator requires below.
         viperImplementation { Exp.SeqIndex(args[0], args[1], pos, info) }
         additionalConditions {
             precondition {
@@ -250,7 +266,7 @@ object OperatorExpEmbeddings {
             AddIntInt, SubIntInt, MulIntInt, DivIntInt, RemIntInt, NegInt,
             LeIntInt, GeIntInt, LtIntInt, GtIntInt,
             Not, And, Or, Implies, Xor,
-            AddCharInt, SubCharChar, SubCharInt,
+            CharCode, AddCharInt, SubCharChar, SubCharInt,
             LeCharChar, GeCharChar, LtCharChar, GtCharChar,
             StringLength, StringGet, AddStringString, AddStringChar,
         )

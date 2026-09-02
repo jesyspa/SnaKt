@@ -1,0 +1,50 @@
+/char_arithmetic.kt: info: Generated Viper text for maxPlusOneWrapsToMin:
+method maxPlusOneWrapsToMin() returns (v_ret_0: Ref)
+  ensures 0 <= charFromRef(v_ret_0) && charFromRef(v_ret_0) < 65536
+  ensures isSubtype(typeOf(v_ret_0), charType())
+  ensures charFromRef(v_ret_0) == 0
+{
+  v_ret_0 := addCharInt(charToRef(65535), intToRef(1))
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/char_arithmetic.kt: info: Generated Viper text for minMinusOneWrapsToMax:
+method minMinusOneWrapsToMax() returns (v_ret_0: Ref)
+  ensures 0 <= charFromRef(v_ret_0) && charFromRef(v_ret_0) < 65536
+  ensures isSubtype(typeOf(v_ret_0), charType())
+  ensures charFromRef(v_ret_0) == 65535
+{
+  v_ret_0 := subCharInt(charToRef(0), intToRef(1))
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/char_arithmetic.kt: info: Generated Viper text for shiftByUnknownAmount:
+method shiftByUnknownAmount(c: Ref, n: Ref) returns (v_ret_0: Ref)
+  requires 0 <= charFromRef(c) && charFromRef(c) < 65536
+  requires isSubtype(typeOf(c), charType())
+  requires isSubtype(typeOf(n), intType())
+  ensures 0 <= charFromRef(c) && charFromRef(c) < 65536
+  ensures 0 <= charFromRef(v_ret_0) && charFromRef(v_ret_0) < 65536
+  ensures isSubtype(typeOf(v_ret_0), charType())
+{
+  v_ret_0 := addCharInt(c, n)
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/char_arithmetic.kt: info: Generated Viper text for shiftWithinRange:
+method shiftWithinRange(c: Ref) returns (v_ret_0: Ref)
+  requires 0 <= charFromRef(c) && charFromRef(c) < 65536
+  requires isSubtype(typeOf(c), charType())
+  requires charFromRef(c) < 65535
+  ensures 0 <= charFromRef(c) && charFromRef(c) < 65536
+  ensures 0 <= charFromRef(v_ret_0) && charFromRef(v_ret_0) < 65536
+  ensures isSubtype(typeOf(v_ret_0), charType())
+  ensures charFromRef(v_ret_0) > charFromRef(c)
+{
+  v_ret_0 := addCharInt(c, intToRef(1))
+  goto lbl_ret_0
+  label lbl_ret_0
+}

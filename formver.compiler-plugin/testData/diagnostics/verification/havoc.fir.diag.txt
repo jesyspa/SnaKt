@@ -31,6 +31,8 @@ domain rt  {
 
   function nullable(t: rt): rt
 
+  function truncateToChar(codePoint: Int): Int
+
   function intToRef(v: Int): Ref
 
   function intFromRef(r: Ref): Int
@@ -46,6 +48,33 @@ domain rt  {
   function stringToRef(v: Seq[Int]): Ref
 
   function stringFromRef(r: Ref): Seq[Int]
+
+  axiom truncateToCharInCodeRange {
+    (forall codePoint: Int ::
+      { truncateToChar(codePoint) }
+      0 <= truncateToChar(codePoint) && truncateToChar(codePoint) < 65536)
+  }
+
+  axiom truncateToCharIdentityInCodeRange {
+    (forall codePoint: Int ::
+      { truncateToChar(codePoint) }
+      0 <= codePoint && codePoint < 65536 ==>
+      truncateToChar(codePoint) == codePoint)
+  }
+
+  axiom truncateToCharIsNonNegativeRemainder {
+    (forall codePoint: Int ::
+      { truncateToChar(codePoint) }
+      truncateToChar(codePoint) == (codePoint % 65536 + 65536) % 65536)
+  }
+
+  axiom stringElementInCodeRange {
+    (forall r: Ref, index: Int ::
+      { stringFromRef(r)[index] }
+      isSubtype(typeOf(r), stringType()) && 0 <= index &&
+      index < |stringFromRef(r)| ==>
+      0 <= stringFromRef(r)[index] && stringFromRef(r)[index] < 65536)
+  }
 
   axiom subtypeReflexive {
     (forall t: rt ::isSubtype(t, t))
@@ -277,7 +306,8 @@ field unitNull: Ref
 
 function addCharInt(arg_1: Ref, arg_2: Ref): Ref
   ensures isSubtype(typeOf(result), charType())
-  ensures charFromRef(result) == charFromRef(arg_1) + intFromRef(arg_2)
+  ensures charFromRef(result) ==
+    truncateToChar(charFromRef(arg_1) + intFromRef(arg_2))
 
 
 function addStringChar(arg_1: Ref, arg_2: Ref): Ref
@@ -295,6 +325,11 @@ function addStrings(arg_1: Ref, arg_2: Ref): Ref
 function andBools(arg_1: Ref, arg_2: Ref): Ref
   ensures isSubtype(typeOf(result), boolType())
   ensures boolFromRef(result) == (boolFromRef(arg_1) && boolFromRef(arg_2))
+
+
+function charCode(arg_1: Ref): Ref
+  ensures isSubtype(typeOf(result), intType())
+  ensures intFromRef(result) == charFromRef(arg_1)
 
 
 function divInts(arg_1: Ref, arg_2: Ref): Ref
@@ -394,7 +429,8 @@ function stringLength(arg_1: Ref): Ref
 
 function subCharInt(arg_1: Ref, arg_2: Ref): Ref
   ensures isSubtype(typeOf(result), charType())
-  ensures charFromRef(result) == charFromRef(arg_1) - intFromRef(arg_2)
+  ensures charFromRef(result) ==
+    truncateToChar(charFromRef(arg_1) - intFromRef(arg_2))
 
 
 function subChars(arg_1: Ref, arg_2: Ref): Ref

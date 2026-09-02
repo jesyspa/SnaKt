@@ -1,0 +1,19 @@
+/exists_char_domain.kt: info: Generated Viper text for someCharIsNonNegative:
+method someCharIsNonNegative() returns (v_ret_0: Ref)
+  requires (exists anon: Int :: 0 <= anon && anon < 65536 && anon >= 0)
+  ensures isSubtype(typeOf(v_ret_0), boolType())
+{
+  v_ret_0 := boolToRef(true)
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/exists_char_domain.kt: info: Generated Viper text for someCharIsAtMostMax:
+method someCharIsAtMostMax() returns (v_ret_0: Ref)
+  requires (exists anon: Int :: 0 <= anon && anon < 65536 && anon <= 65535)
+  ensures isSubtype(typeOf(v_ret_0), boolType())
+{
+  v_ret_0 := boolToRef(true)
+  goto lbl_ret_0
+  label lbl_ret_0
+}

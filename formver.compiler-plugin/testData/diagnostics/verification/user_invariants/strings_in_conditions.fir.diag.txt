@@ -59,9 +59,11 @@ method returnNewString() returns (v_ret_0: Ref)
 /strings_in_conditions.kt: info: Generated Viper text for addCharacterTimes:
 method addCharacterTimes(s: Ref, c: Ref, n: Ref) returns (v_ret_0: Ref)
   requires isSubtype(typeOf(s), stringType())
+  requires 0 <= charFromRef(c) && charFromRef(c) < 65536
   requires isSubtype(typeOf(c), charType())
   requires isSubtype(typeOf(n), intType())
   requires intFromRef(n) >= 0
+  ensures 0 <= charFromRef(c) && charFromRef(c) < 65536
   ensures isSubtype(typeOf(v_ret_0), stringType())
   ensures |stringFromRef(v_ret_0)| == |stringFromRef(s)| + intFromRef(n)
   ensures (forall anon_builtin_0: Int ::|stringFromRef(s)| <=
@@ -79,6 +81,7 @@ method addCharacterTimes(s: Ref, c: Ref, n: Ref) returns (v_ret_0: Ref)
     invariant isSubtype(typeOf(res), stringType())
     invariant isSubtype(typeOf(s), stringType())
     invariant isSubtype(typeOf(c), charType())
+    invariant 0 <= charFromRef(c) && charFromRef(c) < 65536
     invariant isSubtype(typeOf(n), intType())
     invariant 0 <= intFromRef(i) && intFromRef(i) <= intFromRef(n)
     invariant |stringFromRef(res)| == |stringFromRef(s)| + intFromRef(i)
@@ -97,6 +100,7 @@ method addCharacterTimes(s: Ref, c: Ref, n: Ref) returns (v_ret_0: Ref)
   assert isSubtype(typeOf(res), stringType())
   assert isSubtype(typeOf(s), stringType())
   assert isSubtype(typeOf(c), charType())
+  assert 0 <= charFromRef(c) && charFromRef(c) < 65536
   assert isSubtype(typeOf(n), intType())
   assert 0 <= intFromRef(i) && intFromRef(i) <= intFromRef(n)
   assert |stringFromRef(res)| == |stringFromRef(s)| + intFromRef(i)

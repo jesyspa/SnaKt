@@ -1,0 +1,125 @@
+/char.kt: info: Generated Viper text for charLiteralIsInCodeRange:
+method charLiteralIsInCodeRange() returns (v_ret_0: Ref)
+  ensures 0 <= charFromRef(v_ret_0) && charFromRef(v_ret_0) < 65536
+  ensures isSubtype(typeOf(v_ret_0), charType())
+{
+  v_ret_0 := charToRef(97)
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/char.kt: info: Generated Viper text for requiresNonNegativeChar:
+method requiresNonNegativeChar(c: Ref) returns (v_ret_0: Ref)
+  requires 0 <= charFromRef(c) && charFromRef(c) < 65536
+  requires isSubtype(typeOf(c), charType())
+  requires charFromRef(c) >= 0
+  ensures 0 <= charFromRef(c) && charFromRef(c) < 65536
+  ensures 0 <= charFromRef(v_ret_0) && charFromRef(v_ret_0) < 65536
+  ensures isSubtype(typeOf(v_ret_0), charType())
+{
+  v_ret_0 := c
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/char.kt: info: Generated Viper text for passesCharParameterOn:
+method passesCharParameterOn(c: Ref) returns (v_ret_0: Ref)
+  requires 0 <= charFromRef(c) && charFromRef(c) < 65536
+  requires isSubtype(typeOf(c), charType())
+  ensures 0 <= charFromRef(c) && charFromRef(c) < 65536
+  ensures 0 <= charFromRef(v_ret_0) && charFromRef(v_ret_0) < 65536
+  ensures isSubtype(typeOf(v_ret_0), charType())
+{
+  v_ret_0 := requiresNonNegativeChar(c)
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+method requiresNonNegativeChar(c: Ref) returns (ret_1: Ref)
+  requires 0 <= charFromRef(c) && charFromRef(c) < 65536
+  requires isSubtype(typeOf(c), charType())
+  requires charFromRef(c) >= 0
+  ensures 0 <= charFromRef(c) && charFromRef(c) < 65536
+  ensures 0 <= charFromRef(ret_1) && charFromRef(ret_1) < 65536
+  ensures isSubtype(typeOf(ret_1), charType())
+
+
+/char.kt: info: Generated Viper text for nullableCharRoundTrip:
+method nullableCharRoundTrip(c: Ref) returns (v_ret_0: Ref)
+  requires c != nullValue() ==>
+    0 <= charFromRef(c) && charFromRef(c) < 65536
+  requires isSubtype(typeOf(c), nullable(charType()))
+  ensures c != nullValue() ==>
+    0 <= charFromRef(c) && charFromRef(c) < 65536
+  ensures v_ret_0 != nullValue() ==>
+    0 <= charFromRef(v_ret_0) && charFromRef(v_ret_0) < 65536
+  ensures isSubtype(typeOf(v_ret_0), nullable(charType()))
+{
+  v_ret_0 := c
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/char.kt: info: Generated Viper text for stringElementIsInCodeRange:
+method requiresNonNegativeChar(c: Ref) returns (ret_2: Ref)
+  requires 0 <= charFromRef(c) && charFromRef(c) < 65536
+  requires isSubtype(typeOf(c), charType())
+  requires charFromRef(c) >= 0
+  ensures 0 <= charFromRef(c) && charFromRef(c) < 65536
+  ensures 0 <= charFromRef(ret_2) && charFromRef(ret_2) < 65536
+  ensures isSubtype(typeOf(ret_2), charType())
+
+
+method stringElementIsInCodeRange(s: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(s), stringType())
+  requires |stringFromRef(s)| > 0
+  ensures 0 <= charFromRef(v_ret_0) && charFromRef(v_ret_0) < 65536
+  ensures isSubtype(typeOf(v_ret_0), charType())
+{
+  v_ret_0 := requiresNonNegativeChar(stringGet(s, intToRef(0)))
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/char.kt: info: Generated Viper text for advanceCharInLoop:
+method advanceCharInLoop(n: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(n), intType())
+  requires intFromRef(n) >= 0
+  ensures 0 <= charFromRef(v_ret_0) && charFromRef(v_ret_0) < 65536
+  ensures isSubtype(typeOf(v_ret_0), charType())
+{
+  var l0_c: Ref
+  var i: Ref
+  var anon: Ref
+  l0_c := charToRef(97)
+  i := intToRef(0)
+  label cont
+    invariant isSubtype(typeOf(l0_c), charType())
+    invariant 0 <= charFromRef(l0_c) && charFromRef(l0_c) < 65536
+    invariant isSubtype(typeOf(i), intType())
+    invariant isSubtype(typeOf(n), intType())
+    invariant intFromRef(i) <= intFromRef(n)
+  anon := ltInts(i, n)
+  if (boolFromRef(anon)) {
+    l0_c := addCharInt(l0_c, intToRef(1))
+    i := plusInts(i, intToRef(1))
+    goto cont
+  }
+  label break
+  assert isSubtype(typeOf(l0_c), charType())
+  assert 0 <= charFromRef(l0_c) && charFromRef(l0_c) < 65536
+  assert isSubtype(typeOf(i), intType())
+  assert isSubtype(typeOf(n), intType())
+  assert intFromRef(i) <= intFromRef(n)
+  v_ret_0 := requiresNonNegativeChar(l0_c)
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+method requiresNonNegativeChar(par_c: Ref) returns (ret_3: Ref)
+  requires 0 <= charFromRef(par_c) && charFromRef(par_c) < 65536
+  requires isSubtype(typeOf(par_c), charType())
+  requires charFromRef(par_c) >= 0
+  ensures 0 <= charFromRef(par_c) && charFromRef(par_c) < 65536
+  ensures 0 <= charFromRef(ret_3) && charFromRef(ret_3) < 65536
+  ensures isSubtype(typeOf(ret_3), charType())

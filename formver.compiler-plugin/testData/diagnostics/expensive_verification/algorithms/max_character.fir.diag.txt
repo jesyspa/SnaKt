@@ -2,6 +2,7 @@
 method maxCharacter(s: Ref) returns (v_ret_0: Ref)
   requires isSubtype(typeOf(s), stringType())
   requires |stringFromRef(s)| > 0
+  ensures 0 <= charFromRef(v_ret_0) && charFromRef(v_ret_0) < 65536
   ensures isSubtype(typeOf(v_ret_0), charType())
   ensures (forall anon_builtin_0: Int ::0 <= anon_builtin_0 &&
       anon_builtin_0 < |stringFromRef(s)| ==>
@@ -17,6 +18,7 @@ method maxCharacter(s: Ref) returns (v_ret_0: Ref)
   i := intToRef(1)
   label cont
     invariant isSubtype(typeOf(m), charType())
+    invariant 0 <= charFromRef(m) && charFromRef(m) < 65536
     invariant isSubtype(typeOf(i), intType())
     invariant isSubtype(typeOf(s), stringType())
     invariant 1 <= intFromRef(i) && intFromRef(i) <= |stringFromRef(s)|
@@ -36,6 +38,7 @@ method maxCharacter(s: Ref) returns (v_ret_0: Ref)
   }
   label break
   assert isSubtype(typeOf(m), charType())
+  assert 0 <= charFromRef(m) && charFromRef(m) < 65536
   assert isSubtype(typeOf(i), intType())
   assert isSubtype(typeOf(s), stringType())
   assert 1 <= intFromRef(i) && intFromRef(i) <= |stringFromRef(s)|

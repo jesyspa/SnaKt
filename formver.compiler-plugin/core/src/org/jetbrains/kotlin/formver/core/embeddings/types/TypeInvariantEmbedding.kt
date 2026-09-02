@@ -26,6 +26,22 @@ data object FalseTypeInvariant : TypeInvariantEmbedding {
     override fun fillHole(exp: ExpEmbedding): ExpEmbedding = BooleanLit(false)
 }
 
+/**
+ * Constrains the code of a `Char` to the range Kotlin `Char` values occupy.
+ *
+ * `Char` is embedded as an unbounded Viper `Int`, so the range has to be stated explicitly for
+ * anything to be able to rely on it.
+ */
+data object CharCodeRangeInvariant : TypeInvariantEmbedding {
+    override fun fillHole(exp: ExpEmbedding): ExpEmbedding {
+        val code = OperatorExpEmbeddings.CharCode(exp)
+        return OperatorExpEmbeddings.And(
+            OperatorExpEmbeddings.LeIntInt(IntLit(0), code),
+            OperatorExpEmbeddings.LtIntInt(code, IntLit(CharTypeEmbedding.CODE_RANGE_SIZE)),
+        )
+    }
+}
+
 data class SubTypeInvariantEmbedding(val type: RuntimeTypeHolder) : TypeInvariantEmbedding {
     override fun fillHole(exp: ExpEmbedding): ExpEmbedding = Is(exp, type)
 }

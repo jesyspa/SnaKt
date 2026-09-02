@@ -67,13 +67,13 @@ method add_get(l: Ref) returns (v_ret_0: Ref)
   inhale isSubtype(typeOf(v_ret_0), unitType())
 }
 
-method get(this: Ref, index: Ref) returns (ret_2: Ref)
+method get(this: Ref, par_index: Ref) returns (ret_2: Ref)
   requires isSubtype(typeOf(this), MutableList())
   requires acc(this.size, write)
   requires intFromRef(this.size) >= 0
-  requires isSubtype(typeOf(index), intType())
-  requires intFromRef(index) >= 0
-  requires intFromRef(this.size) > intFromRef(index)
+  requires isSubtype(typeOf(par_index), intType())
+  requires intFromRef(par_index) >= 0
+  requires intFromRef(this.size) > intFromRef(par_index)
   ensures acc(this.size, write)
   ensures intFromRef(this.size) >= 0
   ensures isSubtype(typeOf(ret_2), intType())
@@ -83,13 +83,13 @@ method get(this: Ref, index: Ref) returns (ret_2: Ref)
 /list.kt: info: Generated Viper text for last_or_null:
 field p_size: Ref
 
-method get(this: Ref, index: Ref) returns (ret_1: Ref)
+method get(this: Ref, par_index: Ref) returns (ret_1: Ref)
   requires isSubtype(typeOf(this), List())
   requires acc(this.p_size, write)
   requires intFromRef(this.p_size) >= 0
-  requires isSubtype(typeOf(index), intType())
-  requires intFromRef(index) >= 0
-  requires intFromRef(this.p_size) > intFromRef(index)
+  requires isSubtype(typeOf(par_index), intType())
+  requires intFromRef(par_index) >= 0
+  requires intFromRef(this.p_size) > intFromRef(par_index)
   ensures acc(this.p_size, write)
   ensures intFromRef(this.p_size) >= 0
   ensures isSubtype(typeOf(ret_1), intType())
@@ -122,13 +122,13 @@ method last_or_null(l: Ref) returns (v_ret_0: Ref)
 /list.kt: info: Generated Viper text for is_empty:
 field size: Ref
 
-method get(this: Ref, index: Ref) returns (ret_2: Ref)
+method get(this: Ref, par_index: Ref) returns (ret_2: Ref)
   requires isSubtype(typeOf(this), List())
   requires acc(this.size, write)
   requires intFromRef(this.size) >= 0
-  requires isSubtype(typeOf(index), intType())
-  requires intFromRef(index) >= 0
-  requires intFromRef(this.size) > intFromRef(index)
+  requires isSubtype(typeOf(par_index), intType())
+  requires intFromRef(par_index) >= 0
+  requires intFromRef(this.size) > intFromRef(par_index)
   ensures acc(this.size, write)
   ensures intFromRef(this.size) >= 0
   ensures isSubtype(typeOf(ret_2), intType())
@@ -168,13 +168,13 @@ method is_empty(l: Ref) returns (v_ret_0: Ref)
 /list.kt: info: Generated Viper text for nullable_list:
 field size: Ref
 
-method get(this: Ref, index: Ref) returns (ret_2: Ref)
+method get(this: Ref, par_index: Ref) returns (ret_2: Ref)
   requires isSubtype(typeOf(this), List())
   requires acc(this.size, write)
   requires intFromRef(this.size) >= 0
-  requires isSubtype(typeOf(index), intType())
-  requires intFromRef(index) >= 0
-  requires intFromRef(this.size) > intFromRef(index)
+  requires isSubtype(typeOf(par_index), intType())
+  requires intFromRef(par_index) >= 0
+  requires intFromRef(this.size) > intFromRef(par_index)
   ensures acc(this.size, write)
   ensures intFromRef(this.size) >= 0
   ensures isSubtype(typeOf(ret_2), intType())

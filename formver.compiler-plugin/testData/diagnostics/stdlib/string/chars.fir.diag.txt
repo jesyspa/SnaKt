@@ -10,14 +10,18 @@ function size(this: Ref): Ref
 
 
 method con(par_char: Ref) returns (ret_1: Ref)
+  requires 0 <= charFromRef(par_char) && charFromRef(par_char) < 65536
   requires isSubtype(typeOf(par_char), charType())
+  ensures 0 <= charFromRef(par_char) && charFromRef(par_char) < 65536
   ensures isSubtype(typeOf(ret_1), CharBox())
   ensures acc(CharBox_unique(ret_1), write)
   ensures charFromRef(g_char(ret_1)) == charFromRef(par_char)
 
 
 method testChars(c: Ref) returns (v_ret_0: Ref)
+  requires 0 <= charFromRef(c) && charFromRef(c) < 65536
   requires isSubtype(typeOf(c), charType())
+  ensures 0 <= charFromRef(c) && charFromRef(c) < 65536
   ensures isSubtype(typeOf(v_ret_0), unitType())
 {
   var box: Ref
@@ -29,9 +33,9 @@ method testChars(c: Ref) returns (v_ret_0: Ref)
   cond1 := boolToRef(charFromRef(charA) == charFromRef(g_char(box)))
   assert boolFromRef(cond1)
   charZ := charToRef(122)
-  assert charFromRef(charA) == charFromRef(charZ) - 25
+  assert charFromRef(charA) == truncateToChar(charFromRef(charZ) - 25)
   assert charFromRef(charA) - charFromRef(charZ) == -25
-  assert charFromRef(charZ) == charFromRef(charA) + 25
+  assert charFromRef(charZ) == truncateToChar(charFromRef(charA) + 25)
   assert charFromRef(charA) <= charFromRef(charZ)
   assert charFromRef(charA) < charFromRef(charZ)
   assert charFromRef(charZ) > charFromRef(charA)

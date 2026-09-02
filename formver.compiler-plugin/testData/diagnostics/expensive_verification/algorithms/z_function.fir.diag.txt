@@ -6,6 +6,7 @@ method zFuncHelper(s: Ref, res: Ref, i: Ref, checkedLeft: Ref, checkedRight: Ref
   requires isSubtype(typeOf(i), intType())
   requires isSubtype(typeOf(checkedLeft), intType())
   requires isSubtype(typeOf(checkedRight), intType())
+  requires |stringFromRef(s)| + 48 < 65536
   requires 1 <= intFromRef(i) && intFromRef(i) < |stringFromRef(s)|
   requires |stringFromRef(res)| == intFromRef(i)
   requires 0 <= intFromRef(checkedLeft) &&
@@ -16,7 +17,8 @@ method zFuncHelper(s: Ref, res: Ref, i: Ref, checkedLeft: Ref, checkedRight: Ref
       anon_builtin_0 < intFromRef(i) ==>
       48 <= stringFromRef(res)[anon_builtin_0] &&
       stringFromRef(res)[anon_builtin_0] <=
-      48 + |stringFromRef(s)| - anon_builtin_0 &&
+      truncateToChar(truncateToChar(48 + |stringFromRef(s)|) -
+      anon_builtin_0) &&
       (forall anon_builtin_1: Int ::0 <= anon_builtin_1 &&
         anon_builtin_1 < stringFromRef(res)[anon_builtin_0] - 48 ==>
         stringFromRef(s)[anon_builtin_1] ==
@@ -59,19 +61,20 @@ method zFuncHelper(s: Ref, res: Ref, i: Ref, checkedLeft: Ref, checkedRight: Ref
 }
 
 /z_function.kt: info: Generated Viper text for zFunction:
-method plus(v_this: Ref, other: Ref) returns (ret_4: Ref)
+method plus(v_this: Ref, other: Ref) returns (ret_5: Ref)
   requires isSubtype(typeOf(v_this), stringType())
   requires isSubtype(typeOf(other), nullable(anyType()))
-  ensures isSubtype(typeOf(ret_4), stringType())
+  ensures isSubtype(typeOf(ret_5), stringType())
 
 
 method zFuncHelper(s: Ref, par_res: Ref, par_i: Ref, par_checkedLeft: Ref, par_checkedRight: Ref)
-  returns (ret_9: Ref)
+  returns (ret_10: Ref)
   requires isSubtype(typeOf(s), stringType())
   requires isSubtype(typeOf(par_res), stringType())
   requires isSubtype(typeOf(par_i), intType())
   requires isSubtype(typeOf(par_checkedLeft), intType())
   requires isSubtype(typeOf(par_checkedRight), intType())
+  requires |stringFromRef(s)| + 48 < 65536
   requires 1 <= intFromRef(par_i) && intFromRef(par_i) < |stringFromRef(s)|
   requires |stringFromRef(par_res)| == intFromRef(par_i)
   requires 0 <= intFromRef(par_checkedLeft) &&
@@ -82,7 +85,8 @@ method zFuncHelper(s: Ref, par_res: Ref, par_i: Ref, par_checkedLeft: Ref, par_c
       anon_builtin_5 < intFromRef(par_i) ==>
       48 <= stringFromRef(par_res)[anon_builtin_5] &&
       stringFromRef(par_res)[anon_builtin_5] <=
-      48 + |stringFromRef(s)| - anon_builtin_5 &&
+      truncateToChar(truncateToChar(48 + |stringFromRef(s)|) -
+      anon_builtin_5) &&
       (forall anon_builtin_6: Int ::0 <= anon_builtin_6 &&
         anon_builtin_6 < stringFromRef(par_res)[anon_builtin_5] - 48 ==>
         stringFromRef(s)[anon_builtin_6] ==
@@ -97,24 +101,26 @@ method zFuncHelper(s: Ref, par_res: Ref, par_i: Ref, par_checkedLeft: Ref, par_c
       intFromRef(par_checkedRight) - intFromRef(par_checkedLeft) ==>
       stringFromRef(s)[intFromRef(par_checkedLeft) + anon_builtin_7] ==
       stringFromRef(s)[anon_builtin_7])
-  ensures isSubtype(typeOf(ret_9), intType())
-  ensures intFromRef(par_i) <= intFromRef(ret_9) &&
-    intFromRef(ret_9) <= |stringFromRef(s)|
+  ensures isSubtype(typeOf(ret_10), intType())
+  ensures intFromRef(par_i) <= intFromRef(ret_10) &&
+    intFromRef(ret_10) <= |stringFromRef(s)|
   ensures (forall anon_builtin_8: Int ::intFromRef(par_i) <= anon_builtin_8 &&
-      anon_builtin_8 < intFromRef(ret_9) ==>
+      anon_builtin_8 < intFromRef(ret_10) ==>
       stringFromRef(s)[anon_builtin_8 - intFromRef(par_i)] ==
       stringFromRef(s)[anon_builtin_8])
 
 
 method zFunction(v_this_extension: Ref) returns (v_ret_0: Ref)
   requires isSubtype(typeOf(v_this_extension), stringType())
+  requires |stringFromRef(v_this_extension)| + 48 < 65536
   ensures isSubtype(typeOf(v_ret_0), stringType())
   ensures |stringFromRef(v_ret_0)| == |stringFromRef(v_this_extension)|
   ensures (forall anon_builtin_0: Int ::0 <= anon_builtin_0 &&
       anon_builtin_0 < |stringFromRef(v_this_extension)| ==>
       48 <= stringFromRef(v_ret_0)[anon_builtin_0] &&
       stringFromRef(v_ret_0)[anon_builtin_0] <=
-      48 + |stringFromRef(v_this_extension)| - anon_builtin_0 &&
+      truncateToChar(truncateToChar(48 + |stringFromRef(v_this_extension)|) -
+      anon_builtin_0) &&
       (forall anon_builtin_1: Int ::0 <= anon_builtin_1 &&
         anon_builtin_1 < stringFromRef(v_ret_0)[anon_builtin_0] - 48 ==>
         stringFromRef(v_this_extension)[anon_builtin_1] ==
@@ -152,7 +158,9 @@ method zFunction(v_this_extension: Ref) returns (v_ret_0: Ref)
         anon_builtin_2 < intFromRef(l0_i) ==>
         48 <= stringFromRef(l0_res)[anon_builtin_2] &&
         stringFromRef(l0_res)[anon_builtin_2] <=
-        48 + |stringFromRef(v_this_extension)| - anon_builtin_2 &&
+        truncateToChar(truncateToChar(48 +
+        |stringFromRef(v_this_extension)|) -
+        anon_builtin_2) &&
         (forall anon_builtin_3: Int ::0 <= anon_builtin_3 &&
           anon_builtin_3 < stringFromRef(l0_res)[anon_builtin_2] - 48 ==>
           stringFromRef(v_this_extension)[anon_builtin_3] ==
@@ -247,7 +255,8 @@ method zFunction(v_this_extension: Ref) returns (v_ret_0: Ref)
       anon_builtin_2 < intFromRef(l0_i) ==>
       48 <= stringFromRef(l0_res)[anon_builtin_2] &&
       stringFromRef(l0_res)[anon_builtin_2] <=
-      48 + |stringFromRef(v_this_extension)| - anon_builtin_2 &&
+      truncateToChar(truncateToChar(48 + |stringFromRef(v_this_extension)|) -
+      anon_builtin_2) &&
       (forall anon_builtin_3: Int ::0 <= anon_builtin_3 &&
         anon_builtin_3 < stringFromRef(l0_res)[anon_builtin_2] - 48 ==>
         stringFromRef(v_this_extension)[anon_builtin_3] ==
@@ -274,21 +283,23 @@ method zFunction(v_this_extension: Ref) returns (v_ret_0: Ref)
 }
 
 /z_function.kt: info: Generated Viper text for zFunctionNaive:
-method plus(v_this: Ref, other: Ref) returns (ret_4: Ref)
+method plus(v_this: Ref, other: Ref) returns (ret_5: Ref)
   requires isSubtype(typeOf(v_this), stringType())
   requires isSubtype(typeOf(other), nullable(anyType()))
-  ensures isSubtype(typeOf(ret_4), stringType())
+  ensures isSubtype(typeOf(ret_5), stringType())
 
 
 method zFunctionNaive(v_this_extension: Ref) returns (v_ret_0: Ref)
   requires isSubtype(typeOf(v_this_extension), stringType())
+  requires |stringFromRef(v_this_extension)| + 48 < 65536
   ensures isSubtype(typeOf(v_ret_0), stringType())
   ensures |stringFromRef(v_ret_0)| == |stringFromRef(v_this_extension)|
   ensures (forall anon_builtin_0: Int ::0 <= anon_builtin_0 &&
       anon_builtin_0 < |stringFromRef(v_this_extension)| ==>
       48 <= stringFromRef(v_ret_0)[anon_builtin_0] &&
       stringFromRef(v_ret_0)[anon_builtin_0] <=
-      48 + |stringFromRef(v_this_extension)| - anon_builtin_0 &&
+      truncateToChar(truncateToChar(48 + |stringFromRef(v_this_extension)|) -
+      anon_builtin_0) &&
       (forall anon_builtin_1: Int ::0 <= anon_builtin_1 &&
         anon_builtin_1 < stringFromRef(v_ret_0)[anon_builtin_0] - 48 ==>
         stringFromRef(v_this_extension)[anon_builtin_1] ==
@@ -319,7 +330,9 @@ method zFunctionNaive(v_this_extension: Ref) returns (v_ret_0: Ref)
         anon_builtin_2 < intFromRef(i) ==>
         48 <= stringFromRef(res)[anon_builtin_2] &&
         stringFromRef(res)[anon_builtin_2] <=
-        48 + |stringFromRef(v_this_extension)| - anon_builtin_2 &&
+        truncateToChar(truncateToChar(48 +
+        |stringFromRef(v_this_extension)|) -
+        anon_builtin_2) &&
         (forall anon_builtin_3: Int ::0 <= anon_builtin_3 &&
           anon_builtin_3 < stringFromRef(res)[anon_builtin_2] - 48 ==>
           stringFromRef(v_this_extension)[anon_builtin_3] ==
@@ -379,7 +392,8 @@ method zFunctionNaive(v_this_extension: Ref) returns (v_ret_0: Ref)
       anon_builtin_2 < intFromRef(i) ==>
       48 <= stringFromRef(res)[anon_builtin_2] &&
       stringFromRef(res)[anon_builtin_2] <=
-      48 + |stringFromRef(v_this_extension)| - anon_builtin_2 &&
+      truncateToChar(truncateToChar(48 + |stringFromRef(v_this_extension)|) -
+      anon_builtin_2) &&
       (forall anon_builtin_3: Int ::0 <= anon_builtin_3 &&
         anon_builtin_3 < stringFromRef(res)[anon_builtin_2] - 48 ==>
         stringFromRef(v_this_extension)[anon_builtin_3] ==

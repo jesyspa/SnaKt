@@ -27,6 +27,7 @@ method symbolExists(s: Ref) returns (v_ret_0: Ref)
   i := intToRef(0)
   label cont
     invariant isSubtype(typeOf(c), charType())
+    invariant 0 <= charFromRef(c) && charFromRef(c) < 65536
     invariant isSubtype(typeOf(i), intType())
     invariant isSubtype(typeOf(s), stringType())
     invariant 0 <= intFromRef(i) && intFromRef(i) <= |stringFromRef(s)|
@@ -40,6 +41,7 @@ method symbolExists(s: Ref) returns (v_ret_0: Ref)
   }
   label break
   assert isSubtype(typeOf(c), charType())
+  assert 0 <= charFromRef(c) && charFromRef(c) < 65536
   assert isSubtype(typeOf(i), intType())
   assert isSubtype(typeOf(s), stringType())
   assert 0 <= intFromRef(i) && intFromRef(i) <= |stringFromRef(s)|

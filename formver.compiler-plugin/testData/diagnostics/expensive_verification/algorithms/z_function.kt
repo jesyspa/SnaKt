@@ -5,6 +5,8 @@ import org.jetbrains.kotlin.formver.plugin.*
 // Currently, it verifies only in rare cases, while during other runs it times out.
 fun <!VIPER_TEXT!>zFuncHelper<!>(s: String, res: String, i: Int, checkedLeft: Int, checkedRight: Int): Int {
     preconditions {
+        // `'0' + s.length` has to stay a code point, since the encoding below relies on it.
+        s.length + 48 < 65536
         1 <= i && i < s.length
         res.length == i
         0 <= checkedLeft && checkedLeft <= checkedRight && checkedRight <= s.length
@@ -39,6 +41,11 @@ fun <!VIPER_TEXT!>zFuncHelper<!>(s: String, res: String, i: Int, checkedLeft: In
 
 @AlwaysVerify
 fun String.<!VIPER_TEXT!>zFunction<!>(): String {
+    preconditions {
+        // The z-values are encoded as digits offset from `'0'`, so `'0' + length` has to stay a
+        // code point: past that the encoding wraps, as it does in Kotlin.
+        length + 48 < 65536
+    }
     postconditions<String> { res ->
         res.length == length
         forAll<Int> { idx ->
@@ -98,6 +105,9 @@ fun String.<!VIPER_TEXT!>zFunction<!>(): String {
 
 @AlwaysVerify
 fun String.<!VIPER_TEXT!>zFunctionNaive<!>(): String {
+    preconditions {
+        length + 48 < 65536
+    }
     postconditions<String> { res ->
         res.length == length
         forAll<Int> { idx ->
