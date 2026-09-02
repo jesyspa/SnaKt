@@ -1,0 +1,108 @@
+/size_in_specs.kt: info: Generated Viper text for size_in_postcondition:
+field size: Ref
+
+method size_in_postcondition(l: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(l), List())
+  requires acc(l.size, write)
+  requires intFromRef(l.size) >= 0
+  ensures acc(l.size, write)
+  ensures intFromRef(l.size) >= 0
+  ensures isSubtype(typeOf(v_ret_0), intType())
+  ensures intFromRef(v_ret_0) == intFromRef(l.size)
+{
+  v_ret_0 := l.size
+  inhale isSubtype(typeOf(v_ret_0), intType())
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/size_in_specs.kt: info: Generated Viper text for size_in_precondition:
+field size: Ref
+
+method get(this: Ref, index: Ref) returns (ret_2: Ref)
+  requires isSubtype(typeOf(this), List())
+  requires acc(this.size, write)
+  requires intFromRef(this.size) >= 0
+  requires isSubtype(typeOf(index), intType())
+  requires intFromRef(index) >= 0
+  requires intFromRef(this.size) > intFromRef(index)
+  ensures acc(this.size, write)
+  ensures intFromRef(this.size) >= 0
+  ensures isSubtype(typeOf(ret_2), intType())
+  ensures intFromRef(this.size) == old(intFromRef(this.size))
+
+
+method size_in_precondition(l: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(l), List())
+  requires acc(l.size, write)
+  requires intFromRef(l.size) >= 0
+  requires intFromRef(l.size) > 0
+  ensures acc(l.size, write)
+  ensures intFromRef(l.size) >= 0
+  ensures isSubtype(typeOf(v_ret_0), intType())
+{
+  v_ret_0 := get(l, intToRef(0))
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/size_in_specs.kt: info: Generated Viper text for count_up_over_list:
+field size: Ref
+
+method count_up_over_list(l: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(l), List())
+  requires acc(l.size, write)
+  requires intFromRef(l.size) >= 0
+  ensures acc(l.size, write)
+  ensures intFromRef(l.size) >= 0
+  ensures isSubtype(typeOf(v_ret_0), intType())
+  ensures intFromRef(v_ret_0) == intFromRef(l.size)
+{
+  var i: Ref
+  var acc: Ref
+  var anon_0: Ref
+  var anon_1: Ref
+  i := intToRef(0)
+  acc := intToRef(0)
+  label cont
+    invariant isSubtype(typeOf(i), intType())
+    invariant isSubtype(typeOf(acc), intType())
+    invariant isSubtype(typeOf(l), List())
+    invariant acc(l.size, write)
+    invariant intFromRef(l.size) >= 0
+    invariant 0 <= intFromRef(i) && intFromRef(i) <= intFromRef(l.size)
+    invariant intFromRef(acc) == intFromRef(i)
+  anon_1 := l.size
+  inhale isSubtype(typeOf(anon_1), intType())
+  anon_0 := ltInts(i, anon_1)
+  if (boolFromRef(anon_0)) {
+    var element: Ref
+    element := get(l, i)
+    acc := plusInts(acc, intToRef(1))
+    i := plusInts(i, intToRef(1))
+    goto cont
+  }
+  label break
+  assert isSubtype(typeOf(i), intType())
+  assert isSubtype(typeOf(acc), intType())
+  assert isSubtype(typeOf(l), List())
+  assert acc(l.size, write)
+  assert intFromRef(l.size) >= 0
+  assert 0 <= intFromRef(i) && intFromRef(i) <= intFromRef(l.size)
+  assert intFromRef(acc) == intFromRef(i)
+  v_ret_0 := acc
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+method get(this: Ref, index: Ref) returns (ret_3: Ref)
+  requires isSubtype(typeOf(this), List())
+  requires acc(this.size, write)
+  requires intFromRef(this.size) >= 0
+  requires isSubtype(typeOf(index), intType())
+  requires intFromRef(index) >= 0
+  requires intFromRef(this.size) > intFromRef(index)
+  ensures acc(this.size, write)
+  ensures intFromRef(this.size) >= 0
+  ensures isSubtype(typeOf(ret_3), intType())
+  ensures intFromRef(this.size) == old(intFromRef(this.size))

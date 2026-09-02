@@ -1,0 +1,1 @@
+/size_across_loop.kt: warning: Viper verification error: Loop invariant acc(l.size, write) might not hold on entry. There might be insufficient permission to access l.size

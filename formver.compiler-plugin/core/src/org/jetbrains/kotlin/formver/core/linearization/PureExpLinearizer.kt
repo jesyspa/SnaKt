@@ -39,6 +39,9 @@ data class PureExpLinearizer(
     override val logicOperatorPolicy: LogicOperatorPolicy
         get() = LogicOperatorPolicy.CONVERT_TO_EXPRESSION
 
+    override val canInhale: Boolean
+        get() = false
+
     override fun <R> withPosition(newSource: KtSourceElement, action: LinearizationContext.() -> R): R =
         copy(source = newSource).action()
 
