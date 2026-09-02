@@ -22,10 +22,14 @@ sealed class Position : IntoSilver<viper.silver.ast.Position> {
     }
 
     companion object {
+        /**
+         * Silver attaches positions of its own to nodes it introduces, and a node we did not build
+         * carries nothing for us to recover, so anything unrecognised reads as absent.
+         */
         fun fromSilver(pos: viper.silver.ast.Position): Position = when (pos) {
             `NoPosition$`.`MODULE$` -> NoPosition
             is Wrapper<*> -> Wrapped(pos.wrappedValue)
-            else -> TODO("Unreachable")
+            else -> NoPosition
         }
     }
 
