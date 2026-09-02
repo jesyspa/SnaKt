@@ -6,8 +6,8 @@ method firstNotSortedIndex(s: Ref) returns (v_ret_0: Ref)
     intFromRef(v_ret_0) <= |stringFromRef(s)|
   ensures (forall anon_builtin_0: Int ::0 <= anon_builtin_0 &&
       anon_builtin_0 + 1 < intFromRef(v_ret_0) ==>
-      truncateToChar(stringFromRef(s)[anon_builtin_0]) <=
-      truncateToChar(stringFromRef(s)[anon_builtin_0 + 1]))
+      stringFromRef(s)[anon_builtin_0] <=
+      stringFromRef(s)[anon_builtin_0 + 1])
 {
   if (|stringFromRef(s)| == 0) {
     v_ret_0 := intToRef(0)
@@ -22,8 +22,8 @@ method firstNotSortedIndex(s: Ref) returns (v_ret_0: Ref)
       invariant intFromRef(i) <= |stringFromRef(s)| && intFromRef(i) >= 1
       invariant (forall anon_builtin_1: Int ::0 <= anon_builtin_1 &&
           anon_builtin_1 + 1 < intFromRef(i) ==>
-          truncateToChar(stringFromRef(s)[anon_builtin_1]) <=
-          truncateToChar(stringFromRef(s)[anon_builtin_1 + 1]))
+          stringFromRef(s)[anon_builtin_1] <=
+          stringFromRef(s)[anon_builtin_1 + 1])
     if (intFromRef(i) < |stringFromRef(s)|) {
       anon_0 := leChars(stringGet(s, minusInts(i, intToRef(1))), stringGet(s,
         i))
@@ -39,8 +39,8 @@ method firstNotSortedIndex(s: Ref) returns (v_ret_0: Ref)
     assert intFromRef(i) <= |stringFromRef(s)| && intFromRef(i) >= 1
     assert (forall anon_builtin_1: Int ::0 <= anon_builtin_1 &&
         anon_builtin_1 + 1 < intFromRef(i) ==>
-        truncateToChar(stringFromRef(s)[anon_builtin_1]) <=
-        truncateToChar(stringFromRef(s)[anon_builtin_1 + 1]))
+        stringFromRef(s)[anon_builtin_1] <=
+        stringFromRef(s)[anon_builtin_1 + 1])
     v_ret_0 := i
     goto lbl_ret_0
   }
@@ -69,8 +69,7 @@ method addCharacterTimes(s: Ref, c: Ref, n: Ref) returns (v_ret_0: Ref)
   ensures (forall anon_builtin_0: Int ::|stringFromRef(s)| <=
       anon_builtin_0 &&
       anon_builtin_0 < |stringFromRef(v_ret_0)| ==>
-      truncateToChar(stringFromRef(v_ret_0)[anon_builtin_0]) ==
-      charFromRef(c))
+      stringFromRef(v_ret_0)[anon_builtin_0] == charFromRef(c))
 {
   var i: Ref
   var res: Ref
@@ -89,8 +88,7 @@ method addCharacterTimes(s: Ref, c: Ref, n: Ref) returns (v_ret_0: Ref)
     invariant (forall anon_builtin_1: Int ::|stringFromRef(s)| <=
         anon_builtin_1 &&
         anon_builtin_1 < |stringFromRef(res)| ==>
-        truncateToChar(stringFromRef(res)[anon_builtin_1]) ==
-        charFromRef(c))
+        stringFromRef(res)[anon_builtin_1] == charFromRef(c))
   anon_0 := ltInts(i, n)
   if (boolFromRef(anon_0)) {
     res := addStringChar(res, c)
@@ -108,7 +106,7 @@ method addCharacterTimes(s: Ref, c: Ref, n: Ref) returns (v_ret_0: Ref)
   assert |stringFromRef(res)| == |stringFromRef(s)| + intFromRef(i)
   assert (forall anon_builtin_1: Int ::|stringFromRef(s)| <= anon_builtin_1 &&
       anon_builtin_1 < |stringFromRef(res)| ==>
-      truncateToChar(stringFromRef(res)[anon_builtin_1]) == charFromRef(c))
+      stringFromRef(res)[anon_builtin_1] == charFromRef(c))
   v_ret_0 := res
   goto lbl_ret_0
   label lbl_ret_0

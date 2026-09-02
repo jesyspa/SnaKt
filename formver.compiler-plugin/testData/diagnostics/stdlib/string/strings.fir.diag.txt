@@ -148,11 +148,9 @@ method testOps(s: Ref) returns (v_ret_0: Ref)
     anon := gtInts(stringLength(s), intToRef(0))}
   assert boolFromRef(anon)
   str := stringToRef(Seq(97, 98, 97))
-  assert truncateToChar(stringFromRef(str)[0]) ==
-    truncateToChar(stringFromRef(str)[2])
-  assert !(truncateToChar(stringFromRef(str)[1]) ==
-    truncateToChar(stringFromRef(str)[0]))
-  assert truncateToChar(stringFromRef(str)[1]) == 98
+  assert stringFromRef(str)[0] == stringFromRef(str)[2]
+  assert !(stringFromRef(str)[1] == stringFromRef(str)[0])
+  assert stringFromRef(str)[1] == 98
   assert Seq(75, 111, 116, 108, 105, 110, 46, 83, 116, 114, 105, 110, 103) ==
     Seq(75, 111, 116, 108, 105, 110, 46, 83, 116, 114, 105, 110, 103)
   helloWorld := addStringChar(stringToRef(Seq(72, 101, 108, 108, 111, 32, 87,

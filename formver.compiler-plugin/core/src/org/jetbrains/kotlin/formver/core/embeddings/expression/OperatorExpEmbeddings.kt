@@ -228,9 +228,9 @@ object OperatorExpEmbeddings {
             withParam { int() }
             withReturnType { char() }
         }
-        // A string is embedded as a sequence of unconstrained `Int`s, so the element has to be
-        // reduced into the code range for the result to be a `Char`.
-        viperImplementation { truncateToChar.toFuncApp(listOf(Exp.SeqIndex(args[0], args[1])), pos, info) }
+        // The element is a `Char` already: `stringElementInCodeRange` gives its range from the
+        // string it was read out of, under the same index bounds this operator requires below.
+        viperImplementation { Exp.SeqIndex(args[0], args[1], pos, info) }
         additionalConditions {
             precondition {
                 listOf(

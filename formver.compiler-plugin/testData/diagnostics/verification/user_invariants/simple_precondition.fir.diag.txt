@@ -13,7 +13,7 @@ method test(idx: Ref) returns (v_ret_0: Ref)
   assert 0 <= intFromRef(idx)
   assert intFromRef(idx) < 3
   assert !(intFromRef(idx) == 100)
-  assert truncateToChar(Seq(97, 97, 97)[intFromRef(idx)]) == 97
+  assert Seq(97, 97, 97)[intFromRef(idx)] == 97
   label lbl_ret_0
   inhale isSubtype(typeOf(v_ret_0), unitType())
 }

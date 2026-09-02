@@ -6,12 +6,10 @@ method maxCharacter(s: Ref) returns (v_ret_0: Ref)
   ensures isSubtype(typeOf(v_ret_0), charType())
   ensures (forall anon_builtin_0: Int ::0 <= anon_builtin_0 &&
       anon_builtin_0 < |stringFromRef(s)| ==>
-      truncateToChar(stringFromRef(s)[anon_builtin_0]) <=
-      charFromRef(v_ret_0)) &&
+      stringFromRef(s)[anon_builtin_0] <= charFromRef(v_ret_0)) &&
     (exists anon_builtin_1: Int :: 0 <= anon_builtin_1 &&
       anon_builtin_1 < |stringFromRef(s)| &&
-      truncateToChar(stringFromRef(s)[anon_builtin_1]) ==
-      charFromRef(v_ret_0))
+      stringFromRef(s)[anon_builtin_1] == charFromRef(v_ret_0))
 {
   var m: Ref
   var i: Ref
@@ -26,13 +24,13 @@ method maxCharacter(s: Ref) returns (v_ret_0: Ref)
     invariant 1 <= intFromRef(i) && intFromRef(i) <= |stringFromRef(s)|
     invariant (forall anon_builtin_2: Int ::0 <= anon_builtin_2 &&
         anon_builtin_2 < intFromRef(i) ==>
-        truncateToChar(stringFromRef(s)[anon_builtin_2]) <= charFromRef(m))
+        stringFromRef(s)[anon_builtin_2] <= charFromRef(m))
     invariant (exists anon_builtin_3: Int :: 0 <= anon_builtin_3 &&
         anon_builtin_3 < intFromRef(i) &&
-        truncateToChar(stringFromRef(s)[anon_builtin_3]) == charFromRef(m))
+        stringFromRef(s)[anon_builtin_3] == charFromRef(m))
   anon_0 := ltInts(i, stringLength(s))
   if (boolFromRef(anon_0)) {
-    if (truncateToChar(stringFromRef(s)[intFromRef(i)]) > charFromRef(m)) {
+    if (stringFromRef(s)[intFromRef(i)] > charFromRef(m)) {
       m := stringGet(s, i)
     }
     i := plusInts(i, intToRef(1))
@@ -46,10 +44,10 @@ method maxCharacter(s: Ref) returns (v_ret_0: Ref)
   assert 1 <= intFromRef(i) && intFromRef(i) <= |stringFromRef(s)|
   assert (forall anon_builtin_2: Int ::0 <= anon_builtin_2 &&
       anon_builtin_2 < intFromRef(i) ==>
-      truncateToChar(stringFromRef(s)[anon_builtin_2]) <= charFromRef(m))
+      stringFromRef(s)[anon_builtin_2] <= charFromRef(m))
   assert (exists anon_builtin_3: Int :: 0 <= anon_builtin_3 &&
       anon_builtin_3 < intFromRef(i) &&
-      truncateToChar(stringFromRef(s)[anon_builtin_3]) == charFromRef(m))
+      stringFromRef(s)[anon_builtin_3] == charFromRef(m))
   v_ret_0 := m
   goto lbl_ret_0
   label lbl_ret_0

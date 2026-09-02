@@ -55,10 +55,25 @@ domain rt  {
       0 <= truncateToChar(codePoint) && truncateToChar(codePoint) < 65536)
   }
 
+  axiom truncateToCharIdentityInCodeRange {
+    (forall codePoint: Int ::
+      { truncateToChar(codePoint) }
+      0 <= codePoint && codePoint < 65536 ==>
+      truncateToChar(codePoint) == codePoint)
+  }
+
   axiom truncateToCharIsNonNegativeRemainder {
     (forall codePoint: Int ::
       { truncateToChar(codePoint) }
       truncateToChar(codePoint) == (codePoint % 65536 + 65536) % 65536)
+  }
+
+  axiom stringElementInCodeRange {
+    (forall r: Ref, index: Int ::
+      { stringFromRef(r)[index] }
+      isSubtype(typeOf(r), stringType()) && 0 <= index &&
+      index < |stringFromRef(r)| ==>
+      0 <= stringFromRef(r)[index] && stringFromRef(r)[index] < 65536)
   }
 
   axiom subtypeReflexive {
@@ -404,8 +419,7 @@ function stringGet(arg_1: Ref, arg_2: Ref): Ref
   requires intFromRef(arg_2) >= 0 &&
     intFromRef(arg_2) < |stringFromRef(arg_1)|
   ensures isSubtype(typeOf(result), charType())
-  ensures charFromRef(result) ==
-    truncateToChar(stringFromRef(arg_1)[intFromRef(arg_2)])
+  ensures charFromRef(result) == stringFromRef(arg_1)[intFromRef(arg_2)]
 
 
 function stringLength(arg_1: Ref): Ref

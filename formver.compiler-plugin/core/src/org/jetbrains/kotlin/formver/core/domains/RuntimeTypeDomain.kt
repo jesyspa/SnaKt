@@ -244,6 +244,7 @@ class RuntimeTypeDomain(typeResolver: TypeResolver) : BuiltinDomain(DomainName(R
 
         private val r = domainVar("r", Ref)
         private val codePoint = domainVar("codePoint", Type.Int)
+        private val index = domainVar("index", Type.Int)
 
         // three basic functions
         /** `isSubtype: (Type, Type) -> Bool` */
@@ -313,6 +314,17 @@ class RuntimeTypeDomain(typeResolver: TypeResolver) : BuiltinDomain(DomainName(R
                 Exp.And(Exp.LeCmp(Exp.IntLit(0), truncated), Exp.LtCmp(truncated, charCodeRangeSize))
             }
         }
+        // A value already in the code range is its own truncation. This follows from the
+        // remainder characterization below, but reaching it that way costs a nonlinear step;
+        // here the antecedent is linear, which is the form a contract states it in.
+        axiom("truncateToCharIdentityInCodeRange") {
+            Exp.forall(codePoint) { code ->
+                val truncated = simpleTrigger { truncateToChar.toFuncApp(listOf(code)) }
+                assumption { Exp.LeCmp(Exp.IntLit(0), code) }
+                assumption { Exp.LtCmp(code, charCodeRangeSize) }
+                Exp.EqCmp(truncated, code)
+            }
+        }
         // The reduction is the non-negative remainder, which is what truncating to the low 16 bits
         // comes to. Viper's `%` takes the sign of its left operand, hence the second reduction.
         axiom("truncateToCharIsNonNegativeRemainder") {
@@ -321,6 +333,18 @@ class RuntimeTypeDomain(typeResolver: TypeResolver) : BuiltinDomain(DomainName(R
                     simpleTrigger { truncateToChar.toFuncApp(listOf(code)) },
                     Exp.Mod(Exp.Add(Exp.Mod(code, charCodeRangeSize), charCodeRangeSize), charCodeRangeSize)
                 )
+            }
+        }
+        // A string is embedded as a `Seq[Int]`, whose elements Viper knows nothing about. Only a
+        // real Kotlin string is in the image of the injection, and its elements are chars, so an
+        // element read out of one is in the code range without any reduction being applied to it.
+        axiom("stringElementInCodeRange") {
+            Exp.forall(r, index) { r, index ->
+                assumption { r isOf stringType() }
+                assumption { Exp.LeCmp(Exp.IntLit(0), index) }
+                assumption { Exp.LtCmp(index, Exp.SeqLength(stringInjection.fromRef(r))) }
+                val element = simpleTrigger { Exp.SeqIndex(stringInjection.fromRef(r), index) }
+                Exp.And(Exp.LeCmp(Exp.IntLit(0), element), Exp.LtCmp(element, charCodeRangeSize))
             }
         }
         axiom("subtypeReflexive") {

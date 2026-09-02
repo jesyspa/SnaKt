@@ -9,11 +9,9 @@ method firstAtLeast(v_this_extension: Ref, c: Ref) returns (v_ret_0: Ref)
     intFromRef(v_ret_0) <= |stringFromRef(v_this_extension)|
   ensures (forall anon_builtin_0: Int ::0 <= anon_builtin_0 &&
       anon_builtin_0 < intFromRef(v_ret_0) ==>
-      truncateToChar(stringFromRef(v_this_extension)[anon_builtin_0]) <
-      charFromRef(c))
+      stringFromRef(v_this_extension)[anon_builtin_0] < charFromRef(c))
   ensures !(intFromRef(v_ret_0) == |stringFromRef(v_this_extension)|) ==>
-    truncateToChar(stringFromRef(v_this_extension)[intFromRef(v_ret_0)]) >=
-    charFromRef(c)
+    stringFromRef(v_this_extension)[intFromRef(v_ret_0)] >= charFromRef(c)
 {
   var i: Ref
   var anon_0: Ref
@@ -26,12 +24,10 @@ method firstAtLeast(v_this_extension: Ref, c: Ref) returns (v_ret_0: Ref)
       intFromRef(i) <= |stringFromRef(v_this_extension)|
     invariant (forall anon_builtin_1: Int ::0 <= anon_builtin_1 &&
         anon_builtin_1 < intFromRef(i) ==>
-        truncateToChar(stringFromRef(v_this_extension)[anon_builtin_1]) <
-        charFromRef(c))
+        stringFromRef(v_this_extension)[anon_builtin_1] < charFromRef(c))
   anon_0 := ltInts(i, stringLength(v_this_extension))
   if (boolFromRef(anon_0)) {
-    if (truncateToChar(stringFromRef(v_this_extension)[intFromRef(i)]) >=
-    charFromRef(c)) {
+    if (stringFromRef(v_this_extension)[intFromRef(i)] >= charFromRef(c)) {
       goto break
     }
     i := plusInts(i, intToRef(1))
@@ -45,8 +41,7 @@ method firstAtLeast(v_this_extension: Ref, c: Ref) returns (v_ret_0: Ref)
     intFromRef(i) <= |stringFromRef(v_this_extension)|
   assert (forall anon_builtin_1: Int ::0 <= anon_builtin_1 &&
       anon_builtin_1 < intFromRef(i) ==>
-      truncateToChar(stringFromRef(v_this_extension)[anon_builtin_1]) <
-      charFromRef(c))
+      stringFromRef(v_this_extension)[anon_builtin_1] < charFromRef(c))
   v_ret_0 := i
   goto lbl_ret_0
   label lbl_ret_0
@@ -64,11 +59,9 @@ method lastLess(v_this_extension: Ref, c: Ref) returns (v_ret_0: Ref)
   ensures (forall anon_builtin_0: Int ::intFromRef(v_ret_0) <
       anon_builtin_0 &&
       anon_builtin_0 < |stringFromRef(v_this_extension)| ==>
-      truncateToChar(stringFromRef(v_this_extension)[anon_builtin_0]) >=
-      charFromRef(c))
+      stringFromRef(v_this_extension)[anon_builtin_0] >= charFromRef(c))
   ensures !(intFromRef(v_ret_0) == -1) ==>
-    truncateToChar(stringFromRef(v_this_extension)[intFromRef(v_ret_0)]) <
-    charFromRef(c)
+    stringFromRef(v_this_extension)[intFromRef(v_ret_0)] < charFromRef(c)
 {
   var i: Ref
   var anon_0: Ref
@@ -81,12 +74,10 @@ method lastLess(v_this_extension: Ref, c: Ref) returns (v_ret_0: Ref)
       intFromRef(i) < |stringFromRef(v_this_extension)|
     invariant (forall anon_builtin_1: Int ::intFromRef(i) < anon_builtin_1 &&
         anon_builtin_1 < |stringFromRef(v_this_extension)| ==>
-        truncateToChar(stringFromRef(v_this_extension)[anon_builtin_1]) >=
-        charFromRef(c))
+        stringFromRef(v_this_extension)[anon_builtin_1] >= charFromRef(c))
   anon_0 := gtInts(i, intToRef(-1))
   if (boolFromRef(anon_0)) {
-    if (truncateToChar(stringFromRef(v_this_extension)[intFromRef(i)]) <
-    charFromRef(c)) {
+    if (stringFromRef(v_this_extension)[intFromRef(i)] < charFromRef(c)) {
       goto break
     }
     i := minusInts(i, intToRef(1))
@@ -100,8 +91,7 @@ method lastLess(v_this_extension: Ref, c: Ref) returns (v_ret_0: Ref)
     intFromRef(i) < |stringFromRef(v_this_extension)|
   assert (forall anon_builtin_1: Int ::intFromRef(i) < anon_builtin_1 &&
       anon_builtin_1 < |stringFromRef(v_this_extension)| ==>
-      truncateToChar(stringFromRef(v_this_extension)[anon_builtin_1]) >=
-      charFromRef(c))
+      stringFromRef(v_this_extension)[anon_builtin_1] >= charFromRef(c))
   v_ret_0 := i
   goto lbl_ret_0
   label lbl_ret_0

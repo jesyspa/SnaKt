@@ -15,9 +15,8 @@ method subs(v_this_extension: Ref, lo: Ref, hi: Ref) returns (v_ret_0: Ref)
   ensures |stringFromRef(v_ret_0)| == intFromRef(hi) - intFromRef(lo)
   ensures (forall anon_builtin_0: Int ::0 <= anon_builtin_0 &&
       anon_builtin_0 < |stringFromRef(v_ret_0)| ==>
-      truncateToChar(stringFromRef(v_ret_0)[anon_builtin_0]) ==
-      truncateToChar(stringFromRef(v_this_extension)[anon_builtin_0 +
-      intFromRef(lo)]))
+      stringFromRef(v_ret_0)[anon_builtin_0] ==
+      stringFromRef(v_this_extension)[anon_builtin_0 + intFromRef(lo)])
 {
   var res: Ref
   var i: Ref
@@ -33,9 +32,8 @@ method subs(v_this_extension: Ref, lo: Ref, hi: Ref) returns (v_ret_0: Ref)
     invariant |stringFromRef(res)| == intFromRef(i) - intFromRef(lo)
     invariant (forall anon_builtin_1: Int ::0 <= anon_builtin_1 &&
         anon_builtin_1 < |stringFromRef(res)| ==>
-        truncateToChar(stringFromRef(res)[anon_builtin_1]) ==
-        truncateToChar(stringFromRef(v_this_extension)[anon_builtin_1 +
-        intFromRef(lo)]))
+        stringFromRef(res)[anon_builtin_1] ==
+        stringFromRef(v_this_extension)[anon_builtin_1 + intFromRef(lo)])
   anon_1 := ltInts(i, hi)
   if (boolFromRef(anon_1)) {
     var anon_2: Ref
@@ -55,9 +53,8 @@ method subs(v_this_extension: Ref, lo: Ref, hi: Ref) returns (v_ret_0: Ref)
   assert |stringFromRef(res)| == intFromRef(i) - intFromRef(lo)
   assert (forall anon_builtin_1: Int ::0 <= anon_builtin_1 &&
       anon_builtin_1 < |stringFromRef(res)| ==>
-      truncateToChar(stringFromRef(res)[anon_builtin_1]) ==
-      truncateToChar(stringFromRef(v_this_extension)[anon_builtin_1 +
-      intFromRef(lo)]))
+      stringFromRef(res)[anon_builtin_1] ==
+      stringFromRef(v_this_extension)[anon_builtin_1 + intFromRef(lo)])
   v_ret_0 := res
   goto lbl_ret_0
   label lbl_ret_0
@@ -69,18 +66,18 @@ method mergeStrings(a: Ref, b: Ref) returns (v_ret_0: Ref)
   requires isSubtype(typeOf(b), stringType())
   requires (forall anon_builtin_0: Int ::(1 <= anon_builtin_0 &&
       anon_builtin_0 < |stringFromRef(a)| ==>
-      truncateToChar(stringFromRef(a)[anon_builtin_0 - 1]) <=
-      truncateToChar(stringFromRef(a)[anon_builtin_0])) &&
+      stringFromRef(a)[anon_builtin_0 - 1] <=
+      stringFromRef(a)[anon_builtin_0]) &&
       (1 <= anon_builtin_0 && anon_builtin_0 < |stringFromRef(b)| ==>
-      truncateToChar(stringFromRef(b)[anon_builtin_0 - 1]) <=
-      truncateToChar(stringFromRef(b)[anon_builtin_0])))
+      stringFromRef(b)[anon_builtin_0 - 1] <=
+      stringFromRef(b)[anon_builtin_0]))
   ensures isSubtype(typeOf(v_ret_0), stringType())
   ensures |stringFromRef(v_ret_0)| ==
     |stringFromRef(a)| + |stringFromRef(b)|
   ensures (forall anon_builtin_1: Int ::1 <= anon_builtin_1 &&
       anon_builtin_1 < |stringFromRef(v_ret_0)| ==>
-      truncateToChar(stringFromRef(v_ret_0)[anon_builtin_1 - 1]) <=
-      truncateToChar(stringFromRef(v_ret_0)[anon_builtin_1]))
+      stringFromRef(v_ret_0)[anon_builtin_1 - 1] <=
+      stringFromRef(v_ret_0)[anon_builtin_1])
 {
   var pa: Ref
   var pb: Ref
@@ -103,16 +100,16 @@ method mergeStrings(a: Ref, b: Ref) returns (v_ret_0: Ref)
     invariant |stringFromRef(res)| == intFromRef(pa) + intFromRef(pb)
     invariant (forall anon_builtin_2: Int ::1 <= anon_builtin_2 &&
         anon_builtin_2 < |stringFromRef(res)| ==>
-        truncateToChar(stringFromRef(res)[anon_builtin_2 - 1]) <=
-        truncateToChar(stringFromRef(res)[anon_builtin_2]))
+        stringFromRef(res)[anon_builtin_2 - 1] <=
+        stringFromRef(res)[anon_builtin_2])
     invariant |stringFromRef(res)| == 0 ||
       intFromRef(pa) == |stringFromRef(a)| ||
-      truncateToChar(stringFromRef(res)[|stringFromRef(res)| - 1]) <=
-      truncateToChar(stringFromRef(a)[intFromRef(pa)])
+      stringFromRef(res)[|stringFromRef(res)| - 1] <=
+      stringFromRef(a)[intFromRef(pa)]
     invariant |stringFromRef(res)| == 0 ||
       intFromRef(pb) == |stringFromRef(b)| ||
-      truncateToChar(stringFromRef(res)[|stringFromRef(res)| - 1]) <=
-      truncateToChar(stringFromRef(b)[intFromRef(pb)])
+      stringFromRef(res)[|stringFromRef(res)| - 1] <=
+      stringFromRef(b)[intFromRef(pb)]
   anon_4 := ltInts(plusInts(pa, pb), n)
   if (boolFromRef(anon_4)) {
     var anon_5: Ref
@@ -130,8 +127,8 @@ method mergeStrings(a: Ref, b: Ref) returns (v_ret_0: Ref)
       pa := plusInts(anon_1, intToRef(1))
       anon_7 := anon_1
       anon_5 := stringGet(a, anon_7)
-    } elseif (truncateToChar(stringFromRef(a)[intFromRef(pa)]) <
-    truncateToChar(stringFromRef(b)[intFromRef(pb)])) {
+    } elseif (stringFromRef(a)[intFromRef(pa)] <
+    stringFromRef(b)[intFromRef(pb)]) {
       var anon_8: Ref
       var anon_2: Ref
       anon_2 := pa
@@ -161,14 +158,14 @@ method mergeStrings(a: Ref, b: Ref) returns (v_ret_0: Ref)
   assert |stringFromRef(res)| == intFromRef(pa) + intFromRef(pb)
   assert (forall anon_builtin_2: Int ::1 <= anon_builtin_2 &&
       anon_builtin_2 < |stringFromRef(res)| ==>
-      truncateToChar(stringFromRef(res)[anon_builtin_2 - 1]) <=
-      truncateToChar(stringFromRef(res)[anon_builtin_2]))
+      stringFromRef(res)[anon_builtin_2 - 1] <=
+      stringFromRef(res)[anon_builtin_2])
   assert |stringFromRef(res)| == 0 || intFromRef(pa) == |stringFromRef(a)| ||
-    truncateToChar(stringFromRef(res)[|stringFromRef(res)| - 1]) <=
-    truncateToChar(stringFromRef(a)[intFromRef(pa)])
+    stringFromRef(res)[|stringFromRef(res)| - 1] <=
+    stringFromRef(a)[intFromRef(pa)]
   assert |stringFromRef(res)| == 0 || intFromRef(pb) == |stringFromRef(b)| ||
-    truncateToChar(stringFromRef(res)[|stringFromRef(res)| - 1]) <=
-    truncateToChar(stringFromRef(b)[intFromRef(pb)])
+    stringFromRef(res)[|stringFromRef(res)| - 1] <=
+    stringFromRef(b)[intFromRef(pb)]
   v_ret_0 := res
   goto lbl_ret_0
   label lbl_ret_0
@@ -187,8 +184,8 @@ method mergeSorted(v_this_extension: Ref) returns (v_ret_0: Ref)
   ensures |stringFromRef(v_ret_0)| == |stringFromRef(v_this_extension)|
   ensures (forall anon_builtin_0: Int ::1 <= anon_builtin_0 &&
       anon_builtin_0 < |stringFromRef(v_ret_0)| ==>
-      truncateToChar(stringFromRef(v_ret_0)[anon_builtin_0 - 1]) <=
-      truncateToChar(stringFromRef(v_ret_0)[anon_builtin_0]))
+      stringFromRef(v_ret_0)[anon_builtin_0 - 1] <=
+      stringFromRef(v_ret_0)[anon_builtin_0])
 {
   if (|stringFromRef(v_this_extension)| <= 1) {
     v_ret_0 := v_this_extension
@@ -214,17 +211,17 @@ method mergeStrings(a: Ref, b: Ref) returns (ret_3: Ref)
   requires isSubtype(typeOf(b), stringType())
   requires (forall anon_builtin_1: Int ::(1 <= anon_builtin_1 &&
       anon_builtin_1 < |stringFromRef(a)| ==>
-      truncateToChar(stringFromRef(a)[anon_builtin_1 - 1]) <=
-      truncateToChar(stringFromRef(a)[anon_builtin_1])) &&
+      stringFromRef(a)[anon_builtin_1 - 1] <=
+      stringFromRef(a)[anon_builtin_1]) &&
       (1 <= anon_builtin_1 && anon_builtin_1 < |stringFromRef(b)| ==>
-      truncateToChar(stringFromRef(b)[anon_builtin_1 - 1]) <=
-      truncateToChar(stringFromRef(b)[anon_builtin_1])))
+      stringFromRef(b)[anon_builtin_1 - 1] <=
+      stringFromRef(b)[anon_builtin_1]))
   ensures isSubtype(typeOf(ret_3), stringType())
   ensures |stringFromRef(ret_3)| == |stringFromRef(a)| + |stringFromRef(b)|
   ensures (forall anon_builtin_2: Int ::1 <= anon_builtin_2 &&
       anon_builtin_2 < |stringFromRef(ret_3)| ==>
-      truncateToChar(stringFromRef(ret_3)[anon_builtin_2 - 1]) <=
-      truncateToChar(stringFromRef(ret_3)[anon_builtin_2]))
+      stringFromRef(ret_3)[anon_builtin_2 - 1] <=
+      stringFromRef(ret_3)[anon_builtin_2])
 
 
 method subs(v_this_extension: Ref, lo: Ref, hi: Ref) returns (ret_6: Ref)
@@ -237,6 +234,5 @@ method subs(v_this_extension: Ref, lo: Ref, hi: Ref) returns (ret_6: Ref)
   ensures |stringFromRef(ret_6)| == intFromRef(hi) - intFromRef(lo)
   ensures (forall anon_builtin_3: Int ::0 <= anon_builtin_3 &&
       anon_builtin_3 < |stringFromRef(ret_6)| ==>
-      truncateToChar(stringFromRef(ret_6)[anon_builtin_3]) ==
-      truncateToChar(stringFromRef(v_this_extension)[anon_builtin_3 +
-      intFromRef(lo)]))
+      stringFromRef(ret_6)[anon_builtin_3] ==
+      stringFromRef(v_this_extension)[anon_builtin_3 + intFromRef(lo)])

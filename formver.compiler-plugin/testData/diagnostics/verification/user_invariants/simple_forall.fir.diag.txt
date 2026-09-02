@@ -37,8 +37,8 @@ method anyIntegerSquaredIsAtLeastZeroStringVersion(str: Ref)
     invariant isSubtype(typeOf(str), stringType())
     invariant (forall anon_builtin: Int ::0 <= anon_builtin &&
         anon_builtin < |stringFromRef(str)| ==>
-        (truncateToChar(stringFromRef(str)[anon_builtin]) - 97) *
-        (truncateToChar(stringFromRef(str)[anon_builtin]) - 97) >=
+        (stringFromRef(str)[anon_builtin] - 97) *
+        (stringFromRef(str)[anon_builtin] - 97) >=
         intFromRef(res))
   anon_1 := gtInts(i, intToRef(0))
   if (boolFromRef(anon_1)) {
@@ -53,8 +53,8 @@ method anyIntegerSquaredIsAtLeastZeroStringVersion(str: Ref)
   assert isSubtype(typeOf(str), stringType())
   assert (forall anon_builtin: Int ::0 <= anon_builtin &&
       anon_builtin < |stringFromRef(str)| ==>
-      (truncateToChar(stringFromRef(str)[anon_builtin]) - 97) *
-      (truncateToChar(stringFromRef(str)[anon_builtin]) - 97) >=
+      (stringFromRef(str)[anon_builtin] - 97) *
+      (stringFromRef(str)[anon_builtin] - 97) >=
       intFromRef(res))
   v_ret_0 := res
   goto lbl_ret_0
