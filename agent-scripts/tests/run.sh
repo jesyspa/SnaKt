@@ -8,6 +8,9 @@ TESTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LIB_DIR="$(cd "$TESTS_DIR/.." && pwd)"
 FIXTURES="$TESTS_DIR/fixtures"
 
+# shellcheck source=../lib.sh
+source "$LIB_DIR/lib.sh"
+
 failures=0
 
 # assert_eq NAME EXPECTED_STDOUT EXPECTED_EXIT -- CMD...
@@ -90,6 +93,30 @@ assert_eq "counts: a skipped test is neither passed nor failed" \
 assert_eq "counts: malformed XML is reported, not silently dropped" \
     "1 0 0 0 1" 0 \
     -- python3 "$LIB_DIR/junit_counts.py" "$FIXTURES/malformed.xml" "$FIXTURES/passing.xml"
+
+assert_eq "gradle_filter: a source path becomes its generated test method" \
+    "Non_local_returns" 0 \
+    -- gradle_filter "diagnostics/verification/non-local-returns.kt"
+
+assert_eq "gradle_filter: an existing method name remains unchanged" \
+    "testNon_local_returns" 0 \
+    -- gradle_filter "testNon_local_returns"
+
+assert_eq "gradle_filter: source names beginning with test are not mistaken for methods" \
+    "Test_helpers" 0 \
+    -- gradle_filter "diagnostics/verification/test_helpers.kt"
+
+assert_eq "assertion types: opentest4j failures carry a golden diff" \
+    "" 0 \
+    -- is_assertion_failure_type "org.opentest4j.AssertionFailedError"
+
+assert_eq "assertion types: any ComparisonFailure carries a golden diff" \
+    "" 0 \
+    -- is_assertion_failure_type "com.intellij.rt.execution.junit.ComparisonFailure"
+
+assert_eq "assertion types: ordinary exceptions do not carry a golden diff" \
+    "" 1 \
+    -- is_assertion_failure_type "java.lang.IllegalStateException"
 
 if [[ "$failures" -gt 0 ]]; then
     echo "$failures assertion(s) failed"
