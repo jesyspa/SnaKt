@@ -4,7 +4,7 @@
  */
 
 /**
- * Utility helper filer for creating Scala's datastructures
+ * Utility helper file for creating Scala's data structures
  * in a Kotlin-idiomatic way.
  */
 
