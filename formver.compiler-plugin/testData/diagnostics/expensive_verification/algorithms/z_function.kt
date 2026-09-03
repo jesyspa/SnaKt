@@ -5,8 +5,6 @@ import org.jetbrains.kotlin.formver.plugin.*
 // Currently, it verifies only in rare cases, while during other runs it times out.
 fun <!VIPER_TEXT!>zFuncHelper<!>(s: String, res: String, i: Int, checkedLeft: Int, checkedRight: Int): Int {
     preconditions {
-        // `'0' + s.length` has to stay a code point, since the encoding below relies on it.
-        s.length + 48 < 65536
         1 <= i && i < s.length
         res.length == i
         0 <= checkedLeft && checkedLeft <= checkedRight && checkedRight <= s.length
@@ -42,8 +40,12 @@ fun <!VIPER_TEXT!>zFuncHelper<!>(s: String, res: String, i: Int, checkedLeft: In
 @AlwaysVerify
 fun String.<!VIPER_TEXT!>zFunction<!>(): String {
     preconditions {
-        // The z-values are encoded as digits offset from `'0'`, so `'0' + length` has to stay a
-        // code point: past that the encoding wraps, as it does in Kotlin.
+        // A z-value is stored as the character `'0' + z`, and the largest one stored is
+        // `z[0] == length`, so the encoding holds only while `'0' + length` stays inside the `Char`
+        // code range. Past that Kotlin's `Char` arithmetic wraps, and a stored value no longer
+        // compares against `'0'` the way the postcondition below claims. `48` is the code of `'0'`
+        // and `65536` the size of the code range, spelled out because a specification has neither
+        // `Char.code` nor `Char.MAX_VALUE`.
         length + 48 < 65536
     }
     postconditions<String> { res ->
@@ -106,6 +108,7 @@ fun String.<!VIPER_TEXT!>zFunction<!>(): String {
 @AlwaysVerify
 fun String.<!VIPER_TEXT!>zFunctionNaive<!>(): String {
     preconditions {
+        // The same encoding as `zFunction`, so the same bound on it.
         length + 48 < 65536
     }
     postconditions<String> { res ->

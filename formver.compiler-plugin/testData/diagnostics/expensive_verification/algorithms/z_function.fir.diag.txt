@@ -6,7 +6,6 @@ method zFuncHelper(s: Ref, res: Ref, i: Ref, checkedLeft: Ref, checkedRight: Ref
   requires isSubtype(typeOf(i), intType())
   requires isSubtype(typeOf(checkedLeft), intType())
   requires isSubtype(typeOf(checkedRight), intType())
-  requires |stringFromRef(s)| + 48 < 65536
   requires 1 <= intFromRef(i) && intFromRef(i) < |stringFromRef(s)|
   requires |stringFromRef(res)| == intFromRef(i)
   requires 0 <= intFromRef(checkedLeft) &&
@@ -74,7 +73,6 @@ method zFuncHelper(s: Ref, par_res: Ref, par_i: Ref, par_checkedLeft: Ref, par_c
   requires isSubtype(typeOf(par_i), intType())
   requires isSubtype(typeOf(par_checkedLeft), intType())
   requires isSubtype(typeOf(par_checkedRight), intType())
-  requires |stringFromRef(s)| + 48 < 65536
   requires 1 <= intFromRef(par_i) && intFromRef(par_i) < |stringFromRef(s)|
   requires |stringFromRef(par_res)| == intFromRef(par_i)
   requires 0 <= intFromRef(par_checkedLeft) &&
