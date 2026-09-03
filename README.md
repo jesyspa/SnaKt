@@ -77,7 +77,7 @@ formver {
 }
 ```
 
-However, keep in mind that the Viper is dump is provided as an info message: this message will not be shown
+However, keep in mind that the Viper dump is provided as an info message: this message will not be shown
 unless you run `gradle` with the `--info` flag.
 
 ### Annotations

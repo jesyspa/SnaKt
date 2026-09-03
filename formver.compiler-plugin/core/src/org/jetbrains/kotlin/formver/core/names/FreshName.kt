@@ -66,7 +66,7 @@ data class AnonymousBuiltinName(override val n: Int) : NumberedName, NameTypeIsV
 
 
 /**
- * If you need a the name for the return value of a function, use [FunctionResultVariableName] instead.
+ * If you need the name for the return value of a function, use [FunctionResultVariableName] instead.
  */
 data class ReturnVariableName(override val n: Int) : NumberedName, NameTypeIsVariable {
     override val inViper: Boolean = true
