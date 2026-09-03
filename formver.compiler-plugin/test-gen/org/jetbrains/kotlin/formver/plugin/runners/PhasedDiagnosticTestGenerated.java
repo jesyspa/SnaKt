@@ -888,6 +888,12 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
       }
 
       @Test
+      @TestMetadata("exists_with_triggers.kt")
+      public void testExists_with_triggers() {
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/exists_with_triggers.kt");
+      }
+
+      @Test
       @TestMetadata("factorial.kt")
       public void testFactorial() {
         runTest("formver.compiler-plugin/testData/diagnostics/verification/user_invariants/factorial.kt");
