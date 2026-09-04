@@ -43,6 +43,31 @@ data class LinearizationVisitor(
         return conjunction to viperTriggers
     }
 
+    /**
+     * Find terms which can be used as concrete values for a quantified variable.
+     *
+     * Quantifiers are deliberately treated as leaves: a term below a nested quantifier may
+     * mention that quantifier's local variable and is therefore not a valid term at the outer
+     * quantifier's scope.
+     */
+    private fun groundTermsFor(variable: VariableEmbedding, conditions: List<ExpEmbedding>): List<ExpEmbedding> {
+        fun ExpEmbedding.containsVariable(): Boolean =
+            this === variable || children().any { it.containsVariable() }
+
+        fun ExpEmbedding.collectInto(result: MutableList<ExpEmbedding>) {
+            if (this is ForAllEmbedding || this is ExistsEmbedding) return
+            if (type == variable.type && !containsVariable()) {
+                result += this
+                // Keep the maximal term. Metadata wrappers and conversions often have the same
+                // type as their child; descending would emit the same candidate several times.
+                return
+            }
+            children().forEach { it.collectInto(result) }
+        }
+
+        return buildList { conditions.forEach { it.collectInto(this) } }.distinct()
+    }
+
     // region Control Flow
 
     override fun visitBlock(e: Block): Linearizable = object : OptionalResultLinearizable(e) {
@@ -522,17 +547,41 @@ data class LinearizationVisitor(
     override fun visitExistsEmbedding(e: ExistsEmbedding): Linearizable = object : OnlyToBuiltinLinearizable(e, this@LinearizationVisitor) {
         override fun toViperBuiltinType(ctx: LinearizationContext): Exp {
             val (conjunction, viperTriggers) = getQuantifierParts(e.conditions, e.triggerExpressions, ctx)
-            return Exp.Exists(
+            val body = if (e.variable.isOriginallyRef) Exp.And(
+                e.variable.toViperExp(ctx).isOf(e.variable.type.runtimeType),
+                conjunction
+            ) else conjunction
+            val quantified = Exp.Exists(
                 variables = listOf(e.variable.toLocalVarDecl()),
                 triggers = viperTriggers,
-                exp = if (e.variable.isOriginallyRef) Exp.And(
-                    e.variable.toViperExp(ctx).isOf(e.variable.type.runtimeType),
-                    conjunction
-                )
-                else conjunction,
+                exp = body,
                 pos = ctx.source.asPosition,
                 info = e.sourceRole.asInfo,
             )
+
+            // Each ground instance implies the existential. Consequently
+            //
+            //   (exists x :: P(x)) <==> (exists x :: P(x)) || P(t1) || ... || P(tn)
+            //
+            // This equivalence gives the solver several small, quantifier-free ways of proving
+            // the larger scheme, without relying on trigger selection or changing its meaning.
+            val groundTerms = groundTermsFor(e.variable, e.conditions)
+                .map { it.linearize().toViperBuiltinType(ctx) }
+                .distinct()
+            return groundTerms.fold(quantified as Exp) { result, term ->
+                Exp.Or(
+                    result,
+                    Exp.LetBinding(
+                        e.variable.toLocalVarDecl(),
+                        term,
+                        body,
+                        ctx.source.asPosition,
+                        e.sourceRole.asInfo,
+                    ),
+                    ctx.source.asPosition,
+                    e.sourceRole.asInfo,
+                )
+            }
         }
     }
 
