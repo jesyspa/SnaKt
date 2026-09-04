@@ -35,9 +35,9 @@ fun <!VIPER_TEXT!>symbolExists<!>(s: String): Int {
     return 0
 }
 
-// Without `val c = s[0]`, `s[0]` is never read before the loop so there is no ground
-// term for the `s[it]` trigger to match — the solver cannot construct the witness.
-<!VIPER_VERIFICATION_ERROR!>@AlwaysVerify
+// The postcondition supplies `res` as a finite ground candidate for `it`. Instantiating the
+// body with that candidate reduces the existential to its three quantifier-free conjuncts.
+@AlwaysVerify
 fun <!VIPER_TEXT!>symbolExistsWithoutGroundTerm<!>(s: String): Int {
     preconditions {
         s.length > 0
@@ -47,17 +47,31 @@ fun <!VIPER_TEXT!>symbolExistsWithoutGroundTerm<!>(s: String): Int {
         exists<Int> { 0 <= it && it < s.length && s[it] == s[res] }
     }
     return 0
-}<!>
+}
 
-// Incompleteness path: this existential (`it == 0`) is plainly true, but its body is bare
-// arithmetic with no trigger term for the solver to match on. Without model-based quantifier
-// instantiation the witness cannot be constructed, so the postcondition is reported as a
-// verification warning. This pins "witness not found" — not "existential is false" — and is the
-// counterpart to max_character.kt, where a `s[i]` trigger plus a loop invariant let it verify.
-<!VIPER_VERIFICATION_ERROR!>@AlwaysVerify
+// Literal candidates are instances too, so this proves the obvious witness without a trigger.
+@AlwaysVerify
 fun <!VIPER_TEXT!>existsPostcondWithoutTrigger<!>(): Int {
     postconditions<Int> {
         exists<Int> { it == 0 }
+    }
+    return 0
+}
+
+@AlwaysVerify
+fun <!VIPER_TEXT!>existsWithGroundLocal<!>(n: Int): Int {
+    postconditions<Int> {
+        exists<Int> { it == n }
+    }
+    return n
+}
+
+// Finite instantiation is only a proof aid: retaining the original existential is essential.
+// A false ground instance must not make a false existential verify.
+<!VIPER_VERIFICATION_ERROR!>@AlwaysVerify
+fun <!VIPER_TEXT!>falseExistsRemainsFalse<!>(): Int {
+    postconditions<Int> {
+        exists<Int> { it != it }
     }
     return 0
 }<!>
