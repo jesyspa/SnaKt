@@ -1,0 +1,233 @@
+/substring_search.kt: info: Generated Viper text for matchLength:
+method matchLength(haystack: Ref, needle: Ref, start: Ref)
+  returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(haystack), stringType())
+  requires isSubtype(typeOf(needle), stringType())
+  requires isSubtype(typeOf(start), intType())
+  requires 0 <= intFromRef(start)
+  requires intFromRef(start) + |stringFromRef(needle)| <=
+    |stringFromRef(haystack)|
+  ensures isSubtype(typeOf(v_ret_0), intType())
+  ensures 0 <= intFromRef(v_ret_0) &&
+    intFromRef(v_ret_0) <= |stringFromRef(needle)|
+  ensures (forall anon_builtin_0: Int ::0 <= anon_builtin_0 &&
+      anon_builtin_0 < intFromRef(v_ret_0) ==>
+      stringFromRef(haystack)[intFromRef(start) + anon_builtin_0] ==
+      stringFromRef(needle)[anon_builtin_0])
+  ensures !(intFromRef(v_ret_0) == |stringFromRef(needle)|) ==>
+    !(stringFromRef(haystack)[intFromRef(start) + intFromRef(v_ret_0)] ==
+    stringFromRef(needle)[intFromRef(v_ret_0)])
+{
+  var j: Ref
+  var anon_0: Ref
+  j := intToRef(0)
+  label cont
+    invariant isSubtype(typeOf(j), intType())
+    invariant isSubtype(typeOf(haystack), stringType())
+    invariant isSubtype(typeOf(needle), stringType())
+    invariant isSubtype(typeOf(start), intType())
+    invariant 0 <= intFromRef(j) &&
+      intFromRef(j) <= |stringFromRef(needle)|
+    invariant (forall anon_builtin_1: Int ::0 <= anon_builtin_1 &&
+        anon_builtin_1 < intFromRef(j) ==>
+        stringFromRef(haystack)[intFromRef(start) + anon_builtin_1] ==
+        stringFromRef(needle)[anon_builtin_1])
+  anon_0 := ltInts(j, stringLength(needle))
+  if (boolFromRef(anon_0)) {
+    if (!(stringFromRef(haystack)[intFromRef(start) + intFromRef(j)] ==
+    stringFromRef(needle)[intFromRef(j)])) {
+      goto break
+    }
+    j := plusInts(j, intToRef(1))
+    goto cont
+  }
+  label break
+  assert isSubtype(typeOf(j), intType())
+  assert isSubtype(typeOf(haystack), stringType())
+  assert isSubtype(typeOf(needle), stringType())
+  assert isSubtype(typeOf(start), intType())
+  assert 0 <= intFromRef(j) && intFromRef(j) <= |stringFromRef(needle)|
+  assert (forall anon_builtin_1: Int ::0 <= anon_builtin_1 &&
+      anon_builtin_1 < intFromRef(j) ==>
+      stringFromRef(haystack)[intFromRef(start) + anon_builtin_1] ==
+      stringFromRef(needle)[anon_builtin_1])
+  v_ret_0 := j
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/substring_search.kt: info: Generated Viper text for indexOfNaive:
+method indexOfNaive(haystack: Ref, needle: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(haystack), stringType())
+  requires isSubtype(typeOf(needle), stringType())
+  ensures isSubtype(typeOf(v_ret_0), intType())
+  ensures -1 <= intFromRef(v_ret_0)
+  ensures intFromRef(v_ret_0) >= 0 ==>
+    intFromRef(v_ret_0) + |stringFromRef(needle)| <=
+    |stringFromRef(haystack)| &&
+    (forall anon_builtin_0: Int ::0 <= anon_builtin_0 &&
+      anon_builtin_0 < |stringFromRef(needle)| ==>
+      stringFromRef(haystack)[intFromRef(v_ret_0) + anon_builtin_0] ==
+      stringFromRef(needle)[anon_builtin_0])
+{
+  var i: Ref
+  var anon_0: Ref
+  i := intToRef(0)
+  label cont
+    invariant isSubtype(typeOf(i), intType())
+    invariant isSubtype(typeOf(haystack), stringType())
+    invariant isSubtype(typeOf(needle), stringType())
+    invariant 0 <= intFromRef(i)
+  anon_0 := leInts(plusInts(i, stringLength(needle)), stringLength(haystack))
+  if (boolFromRef(anon_0)) {
+    var anon_1: Ref
+    anon_1 := matchLength(haystack, needle, i)
+    if (intFromRef(anon_1) == |stringFromRef(needle)|) {
+      goto break
+    }
+    i := plusInts(i, intToRef(1))
+    goto cont
+  }
+  label break
+  assert isSubtype(typeOf(i), intType())
+  assert isSubtype(typeOf(haystack), stringType())
+  assert isSubtype(typeOf(needle), stringType())
+  assert 0 <= intFromRef(i)
+  if (intFromRef(i) + |stringFromRef(needle)| <= |stringFromRef(haystack)|) {
+    v_ret_0 := i
+  } else {
+    v_ret_0 := intToRef(-1)}
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+method matchLength(haystack: Ref, needle: Ref, start: Ref)
+  returns (ret_4: Ref)
+  requires isSubtype(typeOf(haystack), stringType())
+  requires isSubtype(typeOf(needle), stringType())
+  requires isSubtype(typeOf(start), intType())
+  requires 0 <= intFromRef(start)
+  requires intFromRef(start) + |stringFromRef(needle)| <=
+    |stringFromRef(haystack)|
+  ensures isSubtype(typeOf(ret_4), intType())
+  ensures 0 <= intFromRef(ret_4) &&
+    intFromRef(ret_4) <= |stringFromRef(needle)|
+  ensures (forall anon_builtin_1: Int ::0 <= anon_builtin_1 &&
+      anon_builtin_1 < intFromRef(ret_4) ==>
+      stringFromRef(haystack)[intFromRef(start) + anon_builtin_1] ==
+      stringFromRef(needle)[anon_builtin_1])
+  ensures !(intFromRef(ret_4) == |stringFromRef(needle)|) ==>
+    !(stringFromRef(haystack)[intFromRef(start) + intFromRef(ret_4)] ==
+    stringFromRef(needle)[intFromRef(ret_4)])
+
+
+/substring_search.kt: info: Generated Viper text for indexOfNaiveFirst:
+function size(this: Ref): Ref
+  requires isSubtype(typeOf(this), BooleanArray())
+  ensures isSubtype(typeOf(result), intType())
+
+
+method indexOfNaiveFirst(haystack: Ref, needle: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(haystack), stringType())
+  requires isSubtype(typeOf(needle), stringType())
+  ensures isSubtype(typeOf(v_ret_0), intType())
+  ensures -1 <= intFromRef(v_ret_0)
+  ensures intFromRef(v_ret_0) >= 0 ==>
+    intFromRef(v_ret_0) + |stringFromRef(needle)| <=
+    |stringFromRef(haystack)| &&
+    (forall anon_builtin_0: Int ::0 <= anon_builtin_0 &&
+      anon_builtin_0 < |stringFromRef(needle)| ==>
+      stringFromRef(haystack)[intFromRef(v_ret_0) + anon_builtin_0] ==
+      stringFromRef(needle)[anon_builtin_0])
+  ensures intFromRef(v_ret_0) >= 0 ==>
+    (forall anon_builtin_1: Int ::0 <= anon_builtin_1 &&
+      anon_builtin_1 < intFromRef(v_ret_0) &&
+      anon_builtin_1 + |stringFromRef(needle)| <= |stringFromRef(haystack)| ==>
+      (exists anon_builtin_2: Int :: { stringFromRef(haystack)[anon_builtin_1 +
+        anon_builtin_2] } 0 <= anon_builtin_2 &&
+        anon_builtin_2 < |stringFromRef(needle)| &&
+        !(stringFromRef(haystack)[anon_builtin_1 + anon_builtin_2] ==
+        stringFromRef(needle)[anon_builtin_2])))
+  ensures intFromRef(v_ret_0) == -1 ==>
+    (forall anon_builtin_3: Int ::0 <= anon_builtin_3 &&
+      anon_builtin_3 + |stringFromRef(needle)| <= |stringFromRef(haystack)| ==>
+      (exists anon_builtin_4: Int :: { stringFromRef(haystack)[anon_builtin_3 +
+        anon_builtin_4] } 0 <= anon_builtin_4 &&
+        anon_builtin_4 < |stringFromRef(needle)| &&
+        !(stringFromRef(haystack)[anon_builtin_3 + anon_builtin_4] ==
+        stringFromRef(needle)[anon_builtin_4])))
+{
+  var i: Ref
+  var anon_0: Ref
+  i := intToRef(0)
+  label cont
+    invariant isSubtype(typeOf(i), intType())
+    invariant isSubtype(typeOf(haystack), stringType())
+    invariant isSubtype(typeOf(needle), stringType())
+    invariant 0 <= intFromRef(i)
+    invariant (forall anon_builtin_5: Int ::0 <= anon_builtin_5 &&
+        anon_builtin_5 < intFromRef(i) &&
+        anon_builtin_5 + |stringFromRef(needle)| <=
+        |stringFromRef(haystack)| ==>
+        (exists anon_builtin_6: Int :: { stringFromRef(haystack)[anon_builtin_5 +
+          anon_builtin_6] } 0 <= anon_builtin_6 &&
+          anon_builtin_6 < |stringFromRef(needle)| &&
+          !(stringFromRef(haystack)[anon_builtin_5 + anon_builtin_6] ==
+          stringFromRef(needle)[anon_builtin_6])))
+  anon_0 := leInts(plusInts(i, stringLength(needle)), stringLength(haystack))
+  if (boolFromRef(anon_0)) {
+    var l1_r: Ref
+    var anon_1: Ref
+    l1_r := matchLength(haystack, needle, i)
+    if (intFromRef(l1_r) == |stringFromRef(needle)|) {
+      goto break
+    }
+    if (0 <= intFromRef(l1_r)) {
+      anon_1 := ltInts(l1_r, stringLength(needle))
+    } else {
+      anon_1 := boolToRef(false)}
+    assert boolFromRef(anon_1)
+    assert !(stringFromRef(haystack)[intFromRef(i) + intFromRef(l1_r)] ==
+      stringFromRef(needle)[intFromRef(l1_r)])
+    i := plusInts(i, intToRef(1))
+    goto cont
+  }
+  label break
+  assert isSubtype(typeOf(i), intType())
+  assert isSubtype(typeOf(haystack), stringType())
+  assert isSubtype(typeOf(needle), stringType())
+  assert 0 <= intFromRef(i)
+  assert (forall anon_builtin_5: Int ::0 <= anon_builtin_5 &&
+      anon_builtin_5 < intFromRef(i) &&
+      anon_builtin_5 + |stringFromRef(needle)| <= |stringFromRef(haystack)| ==>
+      (exists anon_builtin_6: Int :: { stringFromRef(haystack)[anon_builtin_5 +
+        anon_builtin_6] } 0 <= anon_builtin_6 &&
+        anon_builtin_6 < |stringFromRef(needle)| &&
+        !(stringFromRef(haystack)[anon_builtin_5 + anon_builtin_6] ==
+        stringFromRef(needle)[anon_builtin_6])))
+  if (intFromRef(i) + |stringFromRef(needle)| <= |stringFromRef(haystack)|) {
+    v_ret_0 := i
+  } else {
+    v_ret_0 := intToRef(-1)}
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+method matchLength(haystack: Ref, needle: Ref, start: Ref)
+  returns (ret_10: Ref)
+  requires isSubtype(typeOf(haystack), stringType())
+  requires isSubtype(typeOf(needle), stringType())
+  requires isSubtype(typeOf(start), intType())
+  requires 0 <= intFromRef(start)
+  requires intFromRef(start) + |stringFromRef(needle)| <=
+    |stringFromRef(haystack)|
+  ensures isSubtype(typeOf(ret_10), intType())
+  ensures 0 <= intFromRef(ret_10) &&
+    intFromRef(ret_10) <= |stringFromRef(needle)|
+  ensures (forall anon_builtin_7: Int ::0 <= anon_builtin_7 &&
+      anon_builtin_7 < intFromRef(ret_10) ==>
+      stringFromRef(haystack)[intFromRef(start) + anon_builtin_7] ==
+      stringFromRef(needle)[anon_builtin_7])
+  ensures !(intFromRef(ret_10) == |stringFromRef(needle)|) ==>
+    !(stringFromRef(haystack)[intFromRef(start) + intFromRef(ret_10)] ==
+    stringFromRef(needle)[intFromRef(ret_10)])

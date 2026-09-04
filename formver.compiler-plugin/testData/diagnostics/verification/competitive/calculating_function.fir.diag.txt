@@ -1,0 +1,64 @@
+/calculating_function.kt: info: Generated Viper text for calculatingFunctionClosedForm:
+method calculatingFunctionClosedForm(n: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(n), intType())
+  requires intFromRef(n) >= 1
+  ensures isSubtype(typeOf(v_ret_0), intType())
+  ensures intFromRef(n) % 2 == 0 ==>
+    intFromRef(v_ret_0) == intFromRef(n) \ 2
+  ensures !(intFromRef(n) % 2 == 0) ==>
+    intFromRef(v_ret_0) == -((intFromRef(n) + 1) \ 2)
+{
+  if (intFromRef(n) % 2 == 0) {
+    v_ret_0 := divInts(n, intToRef(2))
+  } else {
+    v_ret_0 := negInt(divInts(plusInts(n, intToRef(1)), intToRef(2)))}
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/calculating_function.kt: info: Generated Viper text for calculatingFunctionLoop:
+method calculatingFunctionLoop(n: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(n), intType())
+  requires intFromRef(n) >= 1
+  ensures isSubtype(typeOf(v_ret_0), intType())
+  ensures intFromRef(n) % 2 == 0 ==>
+    intFromRef(v_ret_0) == intFromRef(n) \ 2
+  ensures !(intFromRef(n) % 2 == 0) ==>
+    intFromRef(v_ret_0) == -((intFromRef(n) + 1) \ 2)
+{
+  var res: Ref
+  var i: Ref
+  var anon: Ref
+  res := intToRef(0)
+  i := intToRef(1)
+  label cont
+    invariant isSubtype(typeOf(res), intType())
+    invariant isSubtype(typeOf(i), intType())
+    invariant isSubtype(typeOf(n), intType())
+    invariant 1 <= intFromRef(i) && intFromRef(i) <= intFromRef(n) + 1
+    invariant (intFromRef(i) - 1) % 2 == 0 ==>
+      intFromRef(res) == (intFromRef(i) - 1) \ 2
+    invariant !((intFromRef(i) - 1) % 2 == 0) ==>
+      intFromRef(res) == -(intFromRef(i) \ 2)
+  anon := leInts(i, n)
+  if (boolFromRef(anon)) {
+    if (intFromRef(i) % 2 == 0) {
+      res := plusInts(res, i)
+    } else {
+      res := minusInts(res, i)}
+    i := plusInts(i, intToRef(1))
+    goto cont
+  }
+  label break
+  assert isSubtype(typeOf(res), intType())
+  assert isSubtype(typeOf(i), intType())
+  assert isSubtype(typeOf(n), intType())
+  assert 1 <= intFromRef(i) && intFromRef(i) <= intFromRef(n) + 1
+  assert (intFromRef(i) - 1) % 2 == 0 ==>
+    intFromRef(res) == (intFromRef(i) - 1) \ 2
+  assert !((intFromRef(i) - 1) % 2 == 0) ==>
+    intFromRef(res) == -(intFromRef(i) \ 2)
+  v_ret_0 := res
+  goto lbl_ret_0
+  label lbl_ret_0
+}

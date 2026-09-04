@@ -70,6 +70,12 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
       }
 
       @Test
+      @TestMetadata("substring_search.kt")
+      public void testSubstring_search() {
+        runTest("formver.compiler-plugin/testData/diagnostics/expensive_verification/algorithms/substring_search.kt");
+      }
+
+      @Test
       @TestMetadata("z_function.kt")
       public void testZ_function() {
         runTest("formver.compiler-plugin/testData/diagnostics/expensive_verification/algorithms/z_function.kt");
@@ -469,6 +475,52 @@ public class PhasedDiagnosticTestGenerated extends AbstractPhasedDiagnosticTest 
       @TestMetadata("unique_fields.kt")
       public void testUnique_fields() {
         runTest("formver.compiler-plugin/testData/diagnostics/verification/classes/unique_fields.kt");
+      }
+    }
+
+    @Nested
+    @TestMetadata("formver.compiler-plugin/testData/diagnostics/verification/competitive")
+    @TestDataPath("$PROJECT_ROOT")
+    public class Competitive {
+      @Test
+      public void testAllFilesPresentInCompetitive() {
+        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("formver.compiler-plugin/testData/diagnostics/verification/competitive"), Pattern.compile("^(.+)\\.kt$"), null, true);
+      }
+
+      @Test
+      @TestMetadata("calculating_function.kt")
+      public void testCalculating_function() {
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/competitive/calculating_function.kt");
+      }
+
+      @Test
+      @TestMetadata("divisibility_problem.kt")
+      public void testDivisibility_problem() {
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/competitive/divisibility_problem.kt");
+      }
+
+      @Test
+      @TestMetadata("integer_sqrt.kt")
+      public void testInteger_sqrt() {
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/competitive/integer_sqrt.kt");
+      }
+
+      @Test
+      @TestMetadata("palindrome.kt")
+      public void testPalindrome() {
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/competitive/palindrome.kt");
+      }
+
+      @Test
+      @TestMetadata("translation.kt")
+      public void testTranslation() {
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/competitive/translation.kt");
+      }
+
+      @Test
+      @TestMetadata("watermelon.kt")
+      public void testWatermelon() {
+        runTest("formver.compiler-plugin/testData/diagnostics/verification/competitive/watermelon.kt");
       }
     }
 

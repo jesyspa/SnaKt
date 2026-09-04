@@ -1,0 +1,65 @@
+/palindrome.kt: info: Generated Viper text for isPalindrome:
+method isPalindrome(v_this_extension: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(v_this_extension), stringType())
+  ensures isSubtype(typeOf(v_ret_0), boolType())
+  ensures boolFromRef(v_ret_0) ==>
+    (forall anon_builtin_0: Int ::0 <= anon_builtin_0 &&
+      anon_builtin_0 < |stringFromRef(v_this_extension)| ==>
+      stringFromRef(v_this_extension)[anon_builtin_0] ==
+      stringFromRef(v_this_extension)[|stringFromRef(v_this_extension)| - 1 -
+      anon_builtin_0])
+  ensures !boolFromRef(v_ret_0) ==>
+    (exists anon_builtin_1: Int :: 0 <= anon_builtin_1 &&
+      anon_builtin_1 < |stringFromRef(v_this_extension)| &&
+      !(stringFromRef(v_this_extension)[anon_builtin_1] ==
+      stringFromRef(v_this_extension)[|stringFromRef(v_this_extension)| - 1 -
+      anon_builtin_1]))
+{
+  var lo: Ref
+  var hi: Ref
+  var anon_0: Ref
+  lo := intToRef(0)
+  hi := minusInts(stringLength(v_this_extension), intToRef(1))
+  label cont
+    invariant isSubtype(typeOf(lo), intType())
+    invariant isSubtype(typeOf(hi), intType())
+    invariant 0 <= intFromRef(lo) && -1 <= intFromRef(hi) &&
+      intFromRef(hi) < |stringFromRef(v_this_extension)| &&
+      intFromRef(lo) + intFromRef(hi) ==
+      |stringFromRef(v_this_extension)| - 1
+    invariant (forall anon_builtin_2: Int ::0 <= anon_builtin_2 &&
+        anon_builtin_2 < intFromRef(lo) ||
+        intFromRef(hi) < anon_builtin_2 &&
+        anon_builtin_2 < |stringFromRef(v_this_extension)| ==>
+        stringFromRef(v_this_extension)[anon_builtin_2] ==
+        stringFromRef(v_this_extension)[|stringFromRef(v_this_extension)| -
+        1 -
+        anon_builtin_2])
+  anon_0 := ltInts(lo, hi)
+  if (boolFromRef(anon_0)) {
+    if (!(stringFromRef(v_this_extension)[intFromRef(lo)] ==
+    stringFromRef(v_this_extension)[intFromRef(hi)])) {
+      goto break
+    }
+    lo := plusInts(lo, intToRef(1))
+    hi := minusInts(hi, intToRef(1))
+    goto cont
+  }
+  label break
+  assert isSubtype(typeOf(lo), intType())
+  assert isSubtype(typeOf(hi), intType())
+  assert 0 <= intFromRef(lo) && -1 <= intFromRef(hi) &&
+    intFromRef(hi) < |stringFromRef(v_this_extension)| &&
+    intFromRef(lo) + intFromRef(hi) ==
+    |stringFromRef(v_this_extension)| - 1
+  assert (forall anon_builtin_2: Int ::0 <= anon_builtin_2 &&
+      anon_builtin_2 < intFromRef(lo) ||
+      intFromRef(hi) < anon_builtin_2 &&
+      anon_builtin_2 < |stringFromRef(v_this_extension)| ==>
+      stringFromRef(v_this_extension)[anon_builtin_2] ==
+      stringFromRef(v_this_extension)[|stringFromRef(v_this_extension)| - 1 -
+      anon_builtin_2])
+  v_ret_0 := geInts(lo, hi)
+  goto lbl_ret_0
+  label lbl_ret_0
+}

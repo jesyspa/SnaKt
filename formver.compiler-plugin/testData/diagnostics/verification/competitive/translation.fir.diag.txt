@@ -1,0 +1,94 @@
+/translation.kt: info: Generated Viper text for firstReverseMismatch:
+method firstReverseMismatch(s: Ref, par_t: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(s), stringType())
+  requires isSubtype(typeOf(par_t), stringType())
+  requires |stringFromRef(s)| == |stringFromRef(par_t)|
+  ensures isSubtype(typeOf(v_ret_0), intType())
+  ensures 0 <= intFromRef(v_ret_0) &&
+    intFromRef(v_ret_0) <= |stringFromRef(s)|
+  ensures (forall anon_builtin_0: Int ::0 <= anon_builtin_0 &&
+      anon_builtin_0 < intFromRef(v_ret_0) ==>
+      stringFromRef(s)[anon_builtin_0] ==
+      stringFromRef(par_t)[|stringFromRef(par_t)| - 1 - anon_builtin_0])
+  ensures !(intFromRef(v_ret_0) == |stringFromRef(s)|) ==>
+    !(stringFromRef(s)[intFromRef(v_ret_0)] ==
+    stringFromRef(par_t)[|stringFromRef(par_t)| - 1 - intFromRef(v_ret_0)])
+{
+  var i: Ref
+  var anon_0: Ref
+  i := intToRef(0)
+  label cont
+    invariant isSubtype(typeOf(i), intType())
+    invariant isSubtype(typeOf(s), stringType())
+    invariant isSubtype(typeOf(par_t), stringType())
+    invariant 0 <= intFromRef(i) && intFromRef(i) <= |stringFromRef(s)|
+    invariant (forall anon_builtin_1: Int ::0 <= anon_builtin_1 &&
+        anon_builtin_1 < intFromRef(i) ==>
+        stringFromRef(s)[anon_builtin_1] ==
+        stringFromRef(par_t)[|stringFromRef(par_t)| - 1 - anon_builtin_1])
+  anon_0 := ltInts(i, stringLength(s))
+  if (boolFromRef(anon_0)) {
+    if (!(stringFromRef(s)[intFromRef(i)] ==
+    stringFromRef(par_t)[|stringFromRef(par_t)| - 1 - intFromRef(i)])) {
+      goto break
+    }
+    i := plusInts(i, intToRef(1))
+    goto cont
+  }
+  label break
+  assert isSubtype(typeOf(i), intType())
+  assert isSubtype(typeOf(s), stringType())
+  assert isSubtype(typeOf(par_t), stringType())
+  assert 0 <= intFromRef(i) && intFromRef(i) <= |stringFromRef(s)|
+  assert (forall anon_builtin_1: Int ::0 <= anon_builtin_1 &&
+      anon_builtin_1 < intFromRef(i) ==>
+      stringFromRef(s)[anon_builtin_1] ==
+      stringFromRef(par_t)[|stringFromRef(par_t)| - 1 - anon_builtin_1])
+  v_ret_0 := i
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/translation.kt: info: Generated Viper text for isTranslation:
+method firstReverseMismatch(s: Ref, par_t: Ref) returns (ret_4: Ref)
+  requires isSubtype(typeOf(s), stringType())
+  requires isSubtype(typeOf(par_t), stringType())
+  requires |stringFromRef(s)| == |stringFromRef(par_t)|
+  ensures isSubtype(typeOf(ret_4), intType())
+  ensures 0 <= intFromRef(ret_4) && intFromRef(ret_4) <= |stringFromRef(s)|
+  ensures (forall anon_builtin_2: Int ::0 <= anon_builtin_2 &&
+      anon_builtin_2 < intFromRef(ret_4) ==>
+      stringFromRef(s)[anon_builtin_2] ==
+      stringFromRef(par_t)[|stringFromRef(par_t)| - 1 - anon_builtin_2])
+  ensures !(intFromRef(ret_4) == |stringFromRef(s)|) ==>
+    !(stringFromRef(s)[intFromRef(ret_4)] ==
+    stringFromRef(par_t)[|stringFromRef(par_t)| - 1 - intFromRef(ret_4)])
+
+
+method isTranslation(s: Ref, par_t: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(s), stringType())
+  requires isSubtype(typeOf(par_t), stringType())
+  ensures isSubtype(typeOf(v_ret_0), boolType())
+  ensures boolFromRef(v_ret_0) ==>
+    |stringFromRef(s)| == |stringFromRef(par_t)| &&
+    (forall anon_builtin_0: Int ::0 <= anon_builtin_0 &&
+      anon_builtin_0 < |stringFromRef(s)| ==>
+      stringFromRef(s)[anon_builtin_0] ==
+      stringFromRef(par_t)[|stringFromRef(par_t)| - 1 - anon_builtin_0])
+  ensures !boolFromRef(v_ret_0) ==>
+    !(|stringFromRef(s)| == |stringFromRef(par_t)|) ||
+    (exists anon_builtin_1: Int :: 0 <= anon_builtin_1 &&
+      anon_builtin_1 < |stringFromRef(s)| &&
+      !(stringFromRef(s)[anon_builtin_1] ==
+      stringFromRef(par_t)[|stringFromRef(par_t)| - 1 - anon_builtin_1]))
+{
+  var anon_0: Ref
+  if (!(|stringFromRef(s)| == |stringFromRef(par_t)|)) {
+    v_ret_0 := boolToRef(false)
+    goto lbl_ret_0
+  }
+  anon_0 := firstReverseMismatch(s, par_t)
+  v_ret_0 := boolToRef(intFromRef(anon_0) == |stringFromRef(s)|)
+  goto lbl_ret_0
+  label lbl_ret_0
+}

@@ -1,0 +1,19 @@
+/watermelon.kt: info: Generated Viper text for watermelon:
+method watermelon(w: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(w), intType())
+  requires 1 <= intFromRef(w) && intFromRef(w) <= 100
+  ensures isSubtype(typeOf(v_ret_0), boolType())
+  ensures boolFromRef(v_ret_0) ==>
+    intFromRef(w) - 2 > 0 && (intFromRef(w) - 2) % 2 == 0
+  ensures !boolFromRef(v_ret_0) ==>
+    (forall anon: Int ::!(anon > 0 && anon % 2 == 0 &&
+      intFromRef(w) - anon > 0 &&
+      (intFromRef(w) - anon) % 2 == 0))
+{
+  if (intFromRef(w) % 2 == 0) {
+    v_ret_0 := gtInts(w, intToRef(2))
+  } else {
+    v_ret_0 := boolToRef(false)}
+  goto lbl_ret_0
+  label lbl_ret_0
+}
