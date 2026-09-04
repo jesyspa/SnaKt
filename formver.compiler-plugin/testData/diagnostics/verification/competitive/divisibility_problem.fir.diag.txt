@@ -1,0 +1,53 @@
+/divisibility_problem.kt: info: Generated Viper text for divisibilityProblem:
+method divisibilityProblem(a: Ref, b: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(a), intType())
+  requires isSubtype(typeOf(b), intType())
+  requires intFromRef(a) >= 1
+  requires intFromRef(b) >= 1
+  ensures isSubtype(typeOf(v_ret_0), intType())
+  ensures 0 <= intFromRef(v_ret_0) && intFromRef(v_ret_0) < intFromRef(b)
+  ensures intFromRef(a) % intFromRef(b) == 0 ==> intFromRef(v_ret_0) == 0
+  ensures !(intFromRef(a) % intFromRef(b) == 0) ==>
+    intFromRef(v_ret_0) == intFromRef(b) - intFromRef(a) % intFromRef(b)
+{
+  v_ret_0 := remInts(minusInts(b, remInts(a, b)), b)
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/divisibility_problem.kt: info: Generated Viper text for divisibilityQuotient:
+method divisibilityQuotient(a: Ref, b: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(a), intType())
+  requires isSubtype(typeOf(b), intType())
+  requires intFromRef(a) >= 1
+  requires intFromRef(b) >= 1
+  ensures isSubtype(typeOf(v_ret_0), intType())
+  ensures intFromRef(a) % intFromRef(b) == 0 ==>
+    intFromRef(a) == intFromRef(b) * intFromRef(v_ret_0)
+  ensures !(intFromRef(a) % intFromRef(b) == 0) ==>
+    intFromRef(a) + intFromRef(b) - intFromRef(a) % intFromRef(b) ==
+    intFromRef(b) * intFromRef(v_ret_0)
+{
+  if (intFromRef(a) % intFromRef(b) == 0) {
+    v_ret_0 := divInts(a, b)
+  } else {
+    v_ret_0 := plusInts(divInts(a, b), intToRef(1))}
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/divisibility_problem.kt: info: Generated Viper text for divisibilityProblemMinimal:
+method divisibilityProblemMinimal(a: Ref, b: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(a), intType())
+  requires isSubtype(typeOf(b), intType())
+  requires intFromRef(a) >= 1
+  requires intFromRef(b) >= 1
+  ensures isSubtype(typeOf(v_ret_0), intType())
+  ensures 0 <= intFromRef(v_ret_0) && intFromRef(v_ret_0) < intFromRef(b)
+  ensures (forall anon: Int ::0 <= anon && anon < intFromRef(v_ret_0) ==>
+      !((intFromRef(a) + anon) % intFromRef(b) == 0))
+{
+  v_ret_0 := remInts(minusInts(b, remInts(a, b)), b)
+  goto lbl_ret_0
+  label lbl_ret_0
+}

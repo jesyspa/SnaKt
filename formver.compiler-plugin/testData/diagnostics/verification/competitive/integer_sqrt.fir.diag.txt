@@ -1,0 +1,79 @@
+/integer_sqrt.kt: info: Generated Viper text for integerSqrtLinear:
+method integerSqrtLinear(x: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(x), intType())
+  requires intFromRef(x) >= 0
+  ensures isSubtype(typeOf(v_ret_0), intType())
+  ensures intFromRef(v_ret_0) >= 0
+  ensures intFromRef(v_ret_0) * intFromRef(v_ret_0) <= intFromRef(x)
+  ensures intFromRef(x) <
+    (intFromRef(v_ret_0) + 1) * (intFromRef(v_ret_0) + 1)
+{
+  var l0_r: Ref
+  var anon: Ref
+  l0_r := intToRef(0)
+  label cont
+    invariant isSubtype(typeOf(l0_r), intType())
+    invariant isSubtype(typeOf(x), intType())
+    invariant intFromRef(l0_r) >= 0
+    invariant intFromRef(l0_r) * intFromRef(l0_r) <= intFromRef(x)
+  anon := leInts(timesInts(plusInts(l0_r, intToRef(1)), plusInts(l0_r, intToRef(1))),
+    x)
+  if (boolFromRef(anon)) {
+    l0_r := plusInts(l0_r, intToRef(1))
+    goto cont
+  }
+  label break
+  assert isSubtype(typeOf(l0_r), intType())
+  assert isSubtype(typeOf(x), intType())
+  assert intFromRef(l0_r) >= 0
+  assert intFromRef(l0_r) * intFromRef(l0_r) <= intFromRef(x)
+  v_ret_0 := l0_r
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/integer_sqrt.kt: info: Generated Viper text for integerSqrtBinarySearch:
+method integerSqrtBinarySearch(x: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(x), intType())
+  requires intFromRef(x) >= 0
+  ensures isSubtype(typeOf(v_ret_0), intType())
+  ensures intFromRef(v_ret_0) >= 0
+  ensures intFromRef(v_ret_0) * intFromRef(v_ret_0) <= intFromRef(x)
+  ensures intFromRef(x) <
+    (intFromRef(v_ret_0) + 1) * (intFromRef(v_ret_0) + 1)
+{
+  var lo: Ref
+  var hi: Ref
+  var anon: Ref
+  lo := intToRef(0)
+  hi := x
+  label cont
+    invariant isSubtype(typeOf(lo), intType())
+    invariant isSubtype(typeOf(hi), intType())
+    invariant isSubtype(typeOf(x), intType())
+    invariant 0 <= intFromRef(lo) && intFromRef(lo) <= intFromRef(hi) &&
+      intFromRef(hi) <= intFromRef(x)
+    invariant intFromRef(lo) * intFromRef(lo) <= intFromRef(x)
+    invariant intFromRef(x) < (intFromRef(hi) + 1) * (intFromRef(hi) + 1)
+  anon := ltInts(lo, hi)
+  if (boolFromRef(anon)) {
+    var mid: Ref
+    mid := plusInts(lo, divInts(plusInts(minusInts(hi, lo), intToRef(1)), intToRef(2)))
+    if (intFromRef(mid) * intFromRef(mid) > intFromRef(x)) {
+      hi := minusInts(mid, intToRef(1))
+    } else {
+      lo := mid}
+    goto cont
+  }
+  label break
+  assert isSubtype(typeOf(lo), intType())
+  assert isSubtype(typeOf(hi), intType())
+  assert isSubtype(typeOf(x), intType())
+  assert 0 <= intFromRef(lo) && intFromRef(lo) <= intFromRef(hi) &&
+    intFromRef(hi) <= intFromRef(x)
+  assert intFromRef(lo) * intFromRef(lo) <= intFromRef(x)
+  assert intFromRef(x) < (intFromRef(hi) + 1) * (intFromRef(hi) + 1)
+  v_ret_0 := lo
+  goto lbl_ret_0
+  label lbl_ret_0
+}
