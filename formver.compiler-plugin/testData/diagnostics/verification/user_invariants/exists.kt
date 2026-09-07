@@ -2,7 +2,6 @@
 
 import org.jetbrains.kotlin.formver.plugin.*
 
-// Verifies that we can transform exists from SnaKt to viper
 @AlwaysVerify
 fun <!VIPER_TEXT!>simpleExists<!>(): Int {
     preconditions {
@@ -11,9 +10,8 @@ fun <!VIPER_TEXT!>simpleExists<!>(): Int {
     return 0
 }
 
-// `val c = s[0]` reads `s[0]` before the loop, making it a ground term. The loop
-// invariant's `s[it]` trigger then lets the solver instantiate `it = 0` as the
-// witness, connecting `c` back to `s[res]` in the postcondition.
+// Reading `s[0]` creates a ground term that lets the solver instantiate the invariant's
+// existential witness.
 @AlwaysVerify
 fun <!VIPER_TEXT!>symbolExists<!>(s: String): Int {
     preconditions {
@@ -35,8 +33,7 @@ fun <!VIPER_TEXT!>symbolExists<!>(s: String): Int {
     return 0
 }
 
-// Without `val c = s[0]`, `s[0]` is never read before the loop so there is no ground
-// term for the `s[it]` trigger to match — the solver cannot construct the witness.
+// Without a ground string-index term, the solver cannot instantiate the existential witness.
 <!VIPER_VERIFICATION_ERROR!>@AlwaysVerify
 fun <!VIPER_TEXT!>symbolExistsWithoutGroundTerm<!>(s: String): Int {
     preconditions {
@@ -49,11 +46,8 @@ fun <!VIPER_TEXT!>symbolExistsWithoutGroundTerm<!>(s: String): Int {
     return 0
 }<!>
 
-// Incompleteness path: this existential (`it == 0`) is plainly true, but its body is bare
-// arithmetic with no trigger term for the solver to match on. Without model-based quantifier
-// instantiation the witness cannot be constructed, so the postcondition is reported as a
-// verification warning. This pins "witness not found" — not "existential is false" — and is the
-// counterpart to max_character.kt, where a `s[i]` trigger plus a loop invariant let it verify.
+// This existential is true, but its arithmetic-only body provides no trigger for finding
+// a witness.
 <!VIPER_VERIFICATION_ERROR!>@AlwaysVerify
 fun <!VIPER_TEXT!>existsPostcondWithoutTrigger<!>(): Int {
     postconditions<Int> {

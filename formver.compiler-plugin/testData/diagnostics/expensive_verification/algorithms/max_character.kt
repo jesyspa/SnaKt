@@ -3,9 +3,7 @@
 import org.jetbrains.kotlin.formver.plugin.*
 
 
-// `m` is the maximum character of `s` and actually occurs in it: the existential
-// quantifier is required to state that the maximum is
-// attained. The loop invariant carries the witness forward so the postcondition holds.
+// The existential requires the maximum to be attained; the loop invariant preserves its witness.
 fun <!VIPER_TEXT!>maxCharacter<!>(s: String): Char {
     preconditions {
         s.length > 0

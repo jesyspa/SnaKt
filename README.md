@@ -62,7 +62,6 @@ dies with `OutOfMemoryError: Metaspace` after roughly a dozen compiles.
 
 ```kotlin
 kotlin {
-    // Set stack size to 30mb and raise the metaspace limit
     kotlinDaemonJvmArgs = listOf("-Xss30m", "-XX:MaxMetaspaceSize=1g")
 }
 ```

@@ -92,9 +92,8 @@ count_xml_results() {
     python3 "$LIB_DIR/junit_counts.py" "${files[@]}" || return 2
 }
 
-# Where DumpAssertionDiffExtension writes its dumps (see docs/agents-dev.md).
-# Per-user and per-checkout, because callers glob and clear this directory and
-# a shared /tmp would hand them another user's or another worktree's files.
+# DumpAssertionDiffExtension output; see docs/agents-dev.md.
+# Isolated per user and checkout because callers glob and clear this directory.
 dump_dir_default() {
     local repo_root repo_tag
     repo_root="$(dirname "$LIB_DIR")"

@@ -22,9 +22,8 @@ sealed class Info : IntoSilver<viper.silver.ast.Info> {
         fun fromSilver(info: viper.silver.ast.Info): Info = when (info) {
             `NoInfo$`.`MODULE$` -> NoInfo
             is Wrapper -> Wrapped(info.wrappedValue)
-            // Silicon can attach its own info nodes (e.g. AutoTriggered when it infers quantifier
-            // triggers automatically). Treat these as NoInfo so they degrade to a normal Viper
-            // verification error rather than crashing. Exercised by duplicateIndexExists in exists.kt.
+            // Ignore backend-specific metadata so unknown info nodes degrade to ordinary verification
+            // errors instead of crashing during conversion.
             else -> NoInfo
         }
     }
