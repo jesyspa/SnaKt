@@ -1,0 +1,8 @@
+# weight -> result
+8 -> true
+3 -> false
+1 -> false
+2 -> false
+4 -> true
+100 -> true
+99 -> false
