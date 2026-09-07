@@ -1,0 +1,38 @@
+{
+  "collection": "LeetCode verification candidates",
+  "license_note": "Only source metadata and independently written executable contracts are included; no LeetCode problem statement is copied.",
+  "problems": [
+    {
+      "id": 35,
+      "slug": "search-insert-position",
+      "source": "https://leetcode.com/problems/search-insert-position/",
+      "fixture": "search_insert_position.kt",
+      "topics": ["binary-search", "loop-invariant"],
+      "adaptation": "The sorted distinct integer array is represented by a strictly increasing String of Char values."
+    },
+    {
+      "id": 69,
+      "slug": "sqrtx",
+      "source": "https://leetcode.com/problems/sqrtx/",
+      "fixture": "integer_square_root.kt",
+      "topics": ["linear-search", "integer-arithmetic"],
+      "adaptation": "The original Int input and return type are retained; the root bound keeps its lower-bound product within Int range, with an explicit maximum-root case for the upper bound."
+    },
+    {
+      "id": 278,
+      "slug": "first-bad-version",
+      "source": "https://leetcode.com/problems/first-bad-version/",
+      "fixture": "first_bad_version.kt",
+      "topics": ["binary-search", "monotone-sequence"],
+      "adaptation": "The external isBadVersion API is represented by a nonempty String containing a monotone run of '0' followed by '1'."
+    },
+    {
+      "id": 704,
+      "slug": "binary-search",
+      "source": "https://leetcode.com/problems/binary-search/",
+      "fixture": "binary_search.kt",
+      "topics": ["binary-search", "quantified-postcondition"],
+      "adaptation": "The sorted distinct integer array is represented by a strictly increasing String of Char values."
+    }
+  ]
+}
