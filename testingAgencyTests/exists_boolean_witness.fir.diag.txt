@@ -1,0 +1,11 @@
+/exists_boolean_witness.kt: info: Generated Viper text for existsBooleanWitness:
+method existsBooleanWitness(flag: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(flag), boolType())
+  requires (exists anon: Bool :: anon == boolFromRef(flag))
+  ensures isSubtype(typeOf(v_ret_0), boolType())
+  ensures boolFromRef(v_ret_0) == boolFromRef(flag)
+{
+  v_ret_0 := flag
+  goto lbl_ret_0
+  label lbl_ret_0
+}
