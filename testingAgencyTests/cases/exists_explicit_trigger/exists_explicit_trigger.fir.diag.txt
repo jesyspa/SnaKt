@@ -1,0 +1,12 @@
+/exists_explicit_trigger.kt: info: Generated Viper text for existsWithExplicitTrigger:
+method existsWithExplicitTrigger(value: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(value), stringType())
+  requires (exists anon: Int :: { stringFromRef(value)[anon] } 0 <= anon &&
+      anon < |stringFromRef(value)| &&
+      stringFromRef(value)[anon] == 120)
+  ensures isSubtype(typeOf(v_ret_0), intType())
+{
+  v_ret_0 := stringLength(value)
+  goto lbl_ret_0
+  label lbl_ret_0
+}
