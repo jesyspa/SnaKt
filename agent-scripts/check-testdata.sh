@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# check-testdata.sh — Structural checks on testData. Takes no arguments and
+# check-testdata.sh — Structural checks on test data. Takes no arguments and
 # needs no build.
 
 set -euo pipefail
@@ -8,6 +8,7 @@ cd "$(cd "$(dirname "$0")/.." && pwd)"
 
 TEST_DATA_DIRS=(
     formver.compiler-plugin/testData
+    formver.compiler-plugin/bugReproductions
     formver.compiler-plugin/locality/testData
 )
 
@@ -17,7 +18,7 @@ status=0
 # would silently narrow the checks. Caught here instead.
 for dir in "${TEST_DATA_DIRS[@]}"; do
     if [ ! -d "$dir" ]; then
-        echo "testData directory is missing: $dir" >&2
+        echo "test data directory is missing: $dir" >&2
         exit 1
     fi
 done
@@ -48,6 +49,6 @@ while read -r f; do
 done < <(golden_files)
 
 if [ "$status" -eq 0 ]; then
-    echo "testData checks passed"
+    echo "test data checks passed"
 fi
 exit "$status"

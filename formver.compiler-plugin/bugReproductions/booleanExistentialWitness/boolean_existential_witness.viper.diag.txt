@@ -1,0 +1,1 @@
+/boolean_existential_witness.kt: warning: Viper verification error: Postcondition of impossibleBooleanExistential might not hold. Assertion (exists anon: Bool :: anon && !anon) || (let anon == (true) in anon && !anon) || (let anon == (false) in anon && !anon) might not hold.

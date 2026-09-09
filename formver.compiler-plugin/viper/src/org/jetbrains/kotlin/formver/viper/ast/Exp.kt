@@ -708,7 +708,7 @@ sealed interface Exp : WithSilverMetadata, IntoSilver<viper.silver.ast.Exp> {
         override val pos: Position = Position.NoPosition,
         override val info: Info = Info.NoInfo,
     ): Exp {
-        override val type: Type = variable.type
+        override val type: Type = body.type
 
         context(nameResolver: NameResolver)
         override fun toSilver(): viper.silver.ast.Let =
@@ -717,6 +717,7 @@ sealed interface Exp : WithSilverMetadata, IntoSilver<viper.silver.ast.Exp> {
         context(nameResolver: NameResolver)
         override fun registerNames() {
             nameResolver.register(variable.name)
+            varExp.registerNames()
             body.registerNames()
         }
     }

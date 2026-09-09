@@ -119,3 +119,6 @@ abstract class AbstractPhasedDiagnosticTest : AbstractKotlinCompilerWithTargetBa
         return EnvironmentBasedStandardLibrariesPathProvider
     }
 }
+
+/** Test base for issue-specific suites kept outside the general testData tree. */
+abstract class AbstractBugReproductionTest : AbstractPhasedDiagnosticTest()

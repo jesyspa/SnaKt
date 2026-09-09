@@ -1,0 +1,164 @@
+/boolean_existential_witness.kt: info: Generated Viper text for existsTruePredicate:
+method existsTruePredicate() returns (v_ret_0: Ref)
+  ensures isSubtype(typeOf(v_ret_0), boolType())
+  ensures (exists anon: Bool :: anon) || (let anon == (true) in anon) ||
+    (let anon ==
+      (false) in
+      anon)
+{
+  v_ret_0 := boolToRef(true)
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/boolean_existential_witness.kt: info: Generated Viper text for existsFalsePredicate:
+method existsFalsePredicate() returns (v_ret_0: Ref)
+  ensures isSubtype(typeOf(v_ret_0), boolType())
+  ensures (exists anon: Bool :: !anon) || (let anon == (true) in !anon) ||
+    (let anon ==
+      (false) in
+      !anon)
+{
+  v_ret_0 := boolToRef(false)
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/boolean_existential_witness.kt: info: Generated Viper text for existsBooleanEqualTrue:
+method existsBooleanEqualTrue() returns (v_ret_0: Ref)
+  ensures isSubtype(typeOf(v_ret_0), boolType())
+  ensures (exists anon: Bool :: anon == true) ||
+    (let anon ==
+      (true) in
+      anon == true) ||
+    (let anon ==
+      (false) in
+      anon == true)
+{
+  v_ret_0 := boolToRef(true)
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/boolean_existential_witness.kt: info: Generated Viper text for existsBooleanEqualFalse:
+method existsBooleanEqualFalse() returns (v_ret_0: Ref)
+  ensures isSubtype(typeOf(v_ret_0), boolType())
+  ensures (exists anon: Bool :: anon == false) ||
+    (let anon ==
+      (true) in
+      anon == false) ||
+    (let anon ==
+      (false) in
+      anon == false)
+{
+  v_ret_0 := boolToRef(false)
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/boolean_existential_witness.kt: info: Generated Viper text for existsBooleanMatchesResult:
+method existsBooleanMatchesResult() returns (v_ret_0: Ref)
+  ensures isSubtype(typeOf(v_ret_0), boolType())
+  ensures (exists anon: Bool :: anon == boolFromRef(v_ret_0)) ||
+    (let anon ==
+      (true) in
+      anon == boolFromRef(v_ret_0)) ||
+    (let anon ==
+      (false) in
+      anon == boolFromRef(v_ret_0))
+{
+  v_ret_0 := boolToRef(true)
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/boolean_existential_witness.kt: info: Generated Viper text for existsBooleanMatchesParameter:
+method existsBooleanMatchesParameter(value: Ref) returns (v_ret_0: Ref)
+  requires isSubtype(typeOf(value), boolType())
+  ensures isSubtype(typeOf(v_ret_0), boolType())
+  ensures (exists anon: Bool :: anon == boolFromRef(value)) ||
+    (let anon ==
+      (true) in
+      anon == boolFromRef(value)) ||
+    (let anon ==
+      (false) in
+      anon == boolFromRef(value))
+{
+  v_ret_0 := value
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/boolean_existential_witness.kt: info: Generated Viper text for nestedBooleanExistential:
+method nestedBooleanExistential() returns (v_ret_0: Ref)
+  ensures isSubtype(typeOf(v_ret_0), boolType())
+  ensures (exists anon_builtin_0: Bool :: (exists anon_builtin_1: Bool :: anon_builtin_0 ||
+        anon_builtin_1) ||
+      (let anon_builtin_1 ==
+        (true) in
+        anon_builtin_0 || anon_builtin_1) ||
+      (let anon_builtin_1 ==
+        (false) in
+        anon_builtin_0 || anon_builtin_1)) ||
+    (let anon_builtin_0 ==
+      (true) in
+      (exists anon_builtin_1: Bool :: anon_builtin_0 || anon_builtin_1) ||
+      (let anon_builtin_1 ==
+        (true) in
+        anon_builtin_0 || anon_builtin_1) ||
+      (let anon_builtin_1 ==
+        (false) in
+        anon_builtin_0 || anon_builtin_1)) ||
+    (let anon_builtin_0 ==
+      (false) in
+      (exists anon_builtin_1: Bool :: anon_builtin_0 || anon_builtin_1) ||
+      (let anon_builtin_1 ==
+        (true) in
+        anon_builtin_0 || anon_builtin_1) ||
+      (let anon_builtin_1 ==
+        (false) in
+        anon_builtin_0 || anon_builtin_1))
+{
+  v_ret_0 := boolToRef(true)
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/boolean_existential_witness.kt: info: Generated Viper text for booleanExistentialPrecondition:
+method booleanExistentialPrecondition() returns (v_ret_0: Ref)
+  requires (exists anon: Bool :: anon) || (let anon == (true) in anon) ||
+    (let anon ==
+      (false) in
+      anon)
+  ensures isSubtype(typeOf(v_ret_0), boolType())
+{
+  v_ret_0 := boolToRef(true)
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/boolean_existential_witness.kt: info: Generated Viper text for impossibleBooleanExistential:
+method impossibleBooleanExistential() returns (v_ret_0: Ref)
+  ensures isSubtype(typeOf(v_ret_0), boolType())
+  ensures (exists anon: Bool :: anon && !anon) ||
+    (let anon ==
+      (true) in
+      anon && !anon) ||
+    (let anon ==
+      (false) in
+      anon && !anon)
+{
+  v_ret_0 := boolToRef(false)
+  goto lbl_ret_0
+  label lbl_ret_0
+}
+
+/boolean_existential_witness.kt: info: Generated Viper text for existsIntegerWitnessControl:
+method existsIntegerWitnessControl() returns (v_ret_0: Ref)
+  ensures isSubtype(typeOf(v_ret_0), intType())
+  ensures (exists anon: Int :: anon == 1) || (let anon == (1) in anon == 1)
+{
+  v_ret_0 := intToRef(1)
+  goto lbl_ret_0
+  label lbl_ret_0
+}
