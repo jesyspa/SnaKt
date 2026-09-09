@@ -1,0 +1,4 @@
+test_name	completed_runs	maximum_runs	last_result
+
+existential-translation	3	3	passed
+existential-purity-rejection	2	3	passed
