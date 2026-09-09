@@ -16,13 +16,14 @@ sourceSets {
         java.setSrcDirs(listOf("test-fixtures"))
     }
     test {
-        java.setSrcDirs(listOf("test", "test-gen"))
-        resources.setSrcDirs(listOf("testData", "test-resources"))
+        java.setSrcDirs(listOf("test", "test-gen", "bug-reproduction-test-gen"))
+        resources.setSrcDirs(listOf("testData", "bugReproductions", "test-resources"))
     }
 }
 
 idea {
     module.generatedSourceDirs.add(projectDir.resolve("test-gen"))
+    module.generatedSourceDirs.add(projectDir.resolve("bug-reproduction-test-gen"))
 }
 
 val annotationsRuntimeClasspath: Configuration by configurations.creating { isTransitive = false }
@@ -134,6 +135,9 @@ kotlin {
 val generateTests by tasks.registering(JavaExec::class) {
     inputs.dir(layout.projectDirectory.dir("testData"))
         .withPropertyName("testData")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+    inputs.dir(layout.projectDirectory.dir("bugReproductions"))
+        .withPropertyName("bugReproductions")
         .withPathSensitivity(PathSensitivity.RELATIVE)
     outputs.dir(layout.projectDirectory.dir("test-gen"))
         .withPropertyName("generatedTests")
