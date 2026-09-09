@@ -1,17 +1,1 @@
-/boolean_existential_witness.kt: warning: Viper verification error: Postcondition of existsTruePredicate might not hold. Assertion (exists anon: Bool :: anon) might not hold.
-
-/boolean_existential_witness.kt: warning: Viper verification error: Postcondition of existsFalsePredicate might not hold. Assertion (exists anon: Bool :: !anon) might not hold.
-
-/boolean_existential_witness.kt: warning: Viper verification error: Postcondition of existsBooleanEqualTrue might not hold. Assertion (exists anon: Bool :: anon == true) might not hold.
-
-/boolean_existential_witness.kt: warning: Viper verification error: Postcondition of existsBooleanEqualFalse might not hold. Assertion (exists anon: Bool :: anon == false) might not hold.
-
-/boolean_existential_witness.kt: warning: Viper verification error: Postcondition of existsBooleanMatchesResult might not hold. Assertion (exists anon: Bool :: anon == boolFromRef(v_ret_0)) might not hold.
-
-/boolean_existential_witness.kt: warning: Viper verification error: Postcondition of existsBooleanMatchesParameter might not hold. Assertion (exists anon: Bool :: anon == boolFromRef(value)) might not hold.
-
-/boolean_existential_witness.kt: warning: Viper verification error: Postcondition of nestedBooleanExistential might not hold. Assertion (exists anon_builtin_0: Bool :: (exists anon_builtin_1: Bool :: anon_builtin_0 || anon_builtin_1)) might not hold.
-
-/boolean_existential_witness.kt: warning: Viper verification error: Postcondition of impossibleBooleanExistential might not hold. Assertion (exists anon: Bool :: anon && !anon) might not hold.
-
-/boolean_existential_witness.kt: warning: Viper verification error: Postcondition of existsIntegerWitnessControl might not hold. Assertion (exists anon: Int :: anon == 1) might not hold.
+/boolean_existential_witness.kt: warning: Viper verification error: Postcondition of impossibleBooleanExistential might not hold. Assertion (exists anon: Bool :: anon && !anon) || (let anon == (true) in anon && !anon) || (let anon == (false) in anon && !anon) might not hold.

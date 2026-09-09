@@ -14,6 +14,7 @@ import org.jetbrains.kotlin.formver.core.embeddings.*
 import org.jetbrains.kotlin.formver.core.embeddings.callables.toFuncApp
 import org.jetbrains.kotlin.formver.core.embeddings.callables.toMethodCall
 import org.jetbrains.kotlin.formver.core.embeddings.expression.*
+import org.jetbrains.kotlin.formver.core.embeddings.types.BooleanTypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.ClassTypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.fillHoles
 import org.jetbrains.kotlin.formver.core.embeddings.types.injection
@@ -51,6 +52,12 @@ data class LinearizationVisitor(
      * quantifier's scope.
      */
     private fun groundTermsFor(variable: VariableEmbedding, conditions: List<ExpEmbedding>): List<ExpEmbedding> {
+        // Boolean is finite, so trying both values makes triggerless predicates such as
+        // `exists<Boolean> { it }` decidable without relying on quantifier instantiation.
+        if (!variable.type.isNullable && variable.type.pretype == BooleanTypeEmbedding) {
+            return listOf(BooleanLit(true), BooleanLit(false))
+        }
+
         fun ExpEmbedding.containsVariable(): Boolean =
             this === variable || children().any { it.containsVariable() }
 
