@@ -15,7 +15,7 @@ Usage:
   ./agent-scripts/test.sh --verify [pattern]         # full pipeline
   ./agent-scripts/test.sh --update-goldens [pattern] # regenerate goldens, then report what changed
 
-A pattern can be given as the testData file is named (assign_local), as the
+A pattern can be given as the test data file is named (assign_local), as the
 path to it, or as the generated test method (testAssign_local).
 EOF
 }
@@ -252,6 +252,7 @@ report "conversion output changed:" 40 \
     '*.fir.diag.txt'
 report "diagnostic markers changed:" 40 \
     'formver.compiler-plugin/testData/*.kt' \
+    'formver.compiler-plugin/bugReproductions/*.kt' \
     'formver.compiler-plugin/locality/testData/*.kt'
 report "regenerated test registration; commit as-is:" 0 \
     '*TestGenerated.java'
