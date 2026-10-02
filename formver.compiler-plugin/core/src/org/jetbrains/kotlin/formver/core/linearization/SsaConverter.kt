@@ -140,7 +140,7 @@ class SsaConverter(
         if (from == null) return
         if (from !is Exp.LocalVar) throw SnaktInternalException(
             source,
-            "Access sources must be local variables $from"
+            "Access sources must be local variables, got ${from::class.simpleName}"
         )
         mergeAccessInvariants(listOf(from.name), to)
     }

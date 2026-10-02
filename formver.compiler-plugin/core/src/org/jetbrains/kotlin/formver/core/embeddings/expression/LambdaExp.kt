@@ -10,6 +10,7 @@ import org.jetbrains.kotlin.formver.core.conversion.MethodConversionContext
 import org.jetbrains.kotlin.formver.core.conversion.StmtConversionContext
 import org.jetbrains.kotlin.formver.core.conversion.SubstitutedArgument
 import org.jetbrains.kotlin.formver.core.conversion.insertInlineFunctionCall
+import org.jetbrains.kotlin.formver.core.description
 import org.jetbrains.kotlin.formver.core.embeddings.ExpVisitor
 import org.jetbrains.kotlin.formver.core.embeddings.callables.CallableEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.callables.FunctionSignature
@@ -31,7 +32,8 @@ class LambdaExp(
         args: List<ExpEmbedding>,
         ctx: StmtConversionContext,
     ): ExpEmbedding {
-        val inlineBody = function.body ?: throw IllegalArgumentException("Lambda $function has a null body.")
+        val inlineBody =
+            function.body ?: throw IllegalArgumentException("Lambda ${function.description} has a null body.")
         val nonReceiverParamNames = function.valueParameters.map { SubstitutedArgument.ValueParameter(it.symbol) }
         //TODO: can lambdas have dispatch receiver?
         val receiverParamNames =

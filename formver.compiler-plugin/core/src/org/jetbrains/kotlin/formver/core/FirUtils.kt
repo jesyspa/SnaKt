@@ -7,6 +7,7 @@ package org.jetbrains.kotlin.formver.core
 
 import org.jetbrains.kotlin.KtSourceElement
 import org.jetbrains.kotlin.fir.FirAnnotationContainer
+import org.jetbrains.kotlin.fir.FirElement
 import org.jetbrains.kotlin.fir.FirSession
 import org.jetbrains.kotlin.fir.contracts.FirEffectDeclaration
 import org.jetbrains.kotlin.fir.declarations.FirDeclarationDataKey
@@ -30,6 +31,7 @@ import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.text
 
 // val FirElement.calleeSymbol: FirBasedSymbol<*>
 //     get() = toReference()?.toResolvedBaseSymbol()!!
@@ -49,6 +51,14 @@ val FirFunctionCall.functionCallArguments: List<FirExpression>
 
 val FirFunctionSymbol<*>.effects: List<FirEffectDeclaration>
     get() = this.resolvedContractDescription?.effects ?: emptyList()
+
+/**
+ * The kind and source text of this element, for messages. FIR elements have no `toString`, so interpolating one
+ * directly prints an identity hash that differs between runs.
+ */
+val FirElement.description: String
+    get() = "${this::class.simpleName} (${source.text})"
+
 val KtSourceElement?.asPosition: Position
     get() = when (this) {
         null -> Position.NoPosition

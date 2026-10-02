@@ -6,6 +6,9 @@ set -euo pipefail
 
 cd "$(cd "$(dirname "$0")/.." && pwd)"
 
+# shellcheck source=lib.sh
+source agent-scripts/lib.sh
+
 TEST_DATA_DIRS=(
     formver.compiler-plugin/testData
     formver.compiler-plugin/locality/testData
@@ -43,6 +46,16 @@ done < <(golden_files)
 while read -r f; do
     if [ ! -s "$f" ]; then
         echo "empty golden file: $f"
+        status=1
+    fi
+done < <(golden_files)
+
+# A default Object.toString() rendering carries an identity hash that differs
+# between runs, so a golden holding one cannot match again.
+while read -r f; do
+    if lines="$(identity_hash_lines "$f")"; then
+        echo "identity hash in golden file: $f"
+        echo "$lines"
         status=1
     fi
 done < <(golden_files)

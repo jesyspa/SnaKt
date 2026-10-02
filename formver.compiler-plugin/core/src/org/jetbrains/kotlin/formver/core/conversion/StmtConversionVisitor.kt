@@ -21,6 +21,7 @@ import org.jetbrains.kotlin.fir.types.resolvedType
 import org.jetbrains.kotlin.fir.visitors.FirVisitor
 import org.jetbrains.kotlin.formver.common.SnaktInternalException
 import org.jetbrains.kotlin.formver.common.UnsupportedFeatureBehaviour
+import org.jetbrains.kotlin.formver.core.description
 import org.jetbrains.kotlin.formver.core.embeddings.LabelLink
 import org.jetbrains.kotlin.formver.core.embeddings.callables.CallableEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.callables.insertCall
@@ -39,7 +40,6 @@ import org.jetbrains.kotlin.formver.core.embeddings.toLink
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.equalToType
 import org.jetbrains.kotlin.formver.core.functionCallArguments
-import org.jetbrains.kotlin.text
 import org.jetbrains.kotlin.types.ConstantValueKind
 
 /**
@@ -59,7 +59,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
     // translating statements here, after all.  It isn't 100% clear how best to
     // communicate this.
     override fun visitElement(element: FirElement, data: StmtConversionContext): ExpEmbedding =
-        handleUnimplementedElement(element.source, "Not yet implemented for $element (${element.source.text})", data)
+        handleUnimplementedElement(element.source, "Not yet implemented for ${element.description}", data)
 
     override fun visitReturnExpression(
         returnExpression: FirReturnExpression,
@@ -194,7 +194,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         if (equalityOperatorCall.arguments.size != 2) {
             throw SnaktInternalException(
                 equalityOperatorCall.source,
-                "Invalid equality comparison $equalityOperatorCall, can only compare 2 elements."
+                "Invalid equality comparison ${equalityOperatorCall.description}, can only compare 2 elements."
             )
         }
         val left = data.convert(equalityOperatorCall.arguments[0])
@@ -576,7 +576,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         data: StmtConversionContext,
     ): ExpEmbedding = data.checkedSafeCallSubject ?: throw SnaktInternalException(
         checkedSafeCallSubject.source,
-        "Trying to resolve checked subject $checkedSafeCallSubject which was not captured in StmtConversionContext"
+        "Trying to resolve checked subject ${checkedSafeCallSubject.description} which was not captured in StmtConversionContext"
     )
 
     private fun handleUnimplementedElement(

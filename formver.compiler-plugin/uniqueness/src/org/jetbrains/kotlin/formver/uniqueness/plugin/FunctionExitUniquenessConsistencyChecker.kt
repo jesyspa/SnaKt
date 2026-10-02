@@ -11,6 +11,7 @@ import org.jetbrains.kotlin.fir.resolve.dfa.cfg.BlockExitNode
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.CFGNode
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.JumpNode
 import org.jetbrains.kotlin.fir.resolve.dfa.cfg.ThrowExceptionNode
+import org.jetbrains.kotlin.fir.resolve.dfa.cfg.render
 import org.jetbrains.kotlin.fir.resolve.dfa.controlFlowGraph
 import org.jetbrains.kotlin.fir.symbols.FirBasedSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirReceiverParameterSymbol
@@ -59,7 +60,7 @@ object FunctionExitUniquenessConsistencyChecker : FirFunctionChecker( MppChecker
             if (node.isDead || !node.isExit()) continue
 
             val outputUniquenessState = uniquenessStateFlows[node]?.joinOverEdgeKinds()
-                ?: error("Output uniqueness state for $node not present in analysis result.")
+                ?: error("Output uniqueness state for ${node.render()} not present in analysis result.")
             val rootUniquenessStates = outputUniquenessState.children
 
             for ((symbol, uniquenessState) in rootUniquenessStates) {

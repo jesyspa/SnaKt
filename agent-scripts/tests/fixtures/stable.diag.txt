@@ -1,0 +1,2 @@
+/stable.kt:(5,9): warning: Viper text for f:
+  return@forEach, @Unique x, l@abc, ctxId: 0, FirUnitExpression (arr[j + 1] = arr[j])

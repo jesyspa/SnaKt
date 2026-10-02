@@ -122,6 +122,14 @@ assert_eq "assertion types: ordinary exceptions do not carry a golden diff" \
     "" 1 \
     -- is_assertion_failure_type "java.lang.IllegalStateException"
 
+assert_eq "identity hashes: a default toString rendering is found" \
+    "$FIXTURES/identity-hash.diag.txt:2:/identity-hash.kt:(10,20): error: Not yet implemented for org.jetbrains.kotlin.fir.expressions.impl.FirUnitExpression@1b2c3d4e" 0 \
+    -- identity_hash_lines "$FIXTURES/identity-hash.diag.txt"
+
+assert_eq "identity hashes: names, annotations and labels are not mistaken for hashes" \
+    "" 1 \
+    -- identity_hash_lines "$FIXTURES/stable.diag.txt"
+
 if [[ "$failures" -gt 0 ]]; then
     echo "$failures assertion(s) failed"
     exit 1
