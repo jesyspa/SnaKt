@@ -75,6 +75,15 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         return Return(expr.withType(target.variable.type), target)
     }
 
+    override fun visitThrowExpression(
+        throwExpression: FirThrowExpression,
+        data: StmtConversionContext,
+    ): ExpEmbedding = handleUnimplementedElement(
+        throwExpression.source,
+        "Throw expressions are not supported.",
+        data,
+    )
+
     override fun visitResolvedQualifier(
         resolvedQualifier: FirResolvedQualifier, data: StmtConversionContext
     ): ExpEmbedding {
