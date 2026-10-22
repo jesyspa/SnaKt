@@ -66,6 +66,7 @@ class ViperProgramVerificationFacade(val testServices: TestServices) :
                         if (shouldVerify(simpleFunction, testServices)) {
                             toVerify.add(Pair(testFile, simpleFunction))
                         }
+                        simpleFunction.acceptChildren(this)
                     }
                 })
             }
