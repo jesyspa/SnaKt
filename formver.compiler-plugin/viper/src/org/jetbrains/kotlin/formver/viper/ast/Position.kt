@@ -8,6 +8,7 @@ package org.jetbrains.kotlin.formver.viper.ast
 import org.jetbrains.kotlin.formver.viper.IntoSilver
 import org.jetbrains.kotlin.formver.viper.NameResolver
 import viper.silver.ast.`NoPosition$`
+import viper.silver.ast.VirtualPosition
 
 sealed class Position : IntoSilver<viper.silver.ast.Position> {
 
@@ -25,6 +26,8 @@ sealed class Position : IntoSilver<viper.silver.ast.Position> {
         fun fromSilver(pos: viper.silver.ast.Position): Position = when (pos) {
             `NoPosition$`.`MODULE$` -> NoPosition
             is Wrapper<*> -> Wrapped(pos.wrappedValue)
+            // Silver uses virtual positions for synthesized nodes; these have no Kotlin source.
+            is VirtualPosition -> NoPosition
             else -> TODO("Unreachable")
         }
     }
