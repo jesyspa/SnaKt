@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.fir.types.isUnit
 import org.jetbrains.kotlin.fir.types.resolvedType
 import org.jetbrains.kotlin.fir.visitors.FirVisitor
 import org.jetbrains.kotlin.formver.common.SnaktInternalException
+import org.jetbrains.kotlin.formver.common.SnaktUnsupportedFeatureException
 import org.jetbrains.kotlin.formver.common.UnsupportedFeatureBehaviour
 import org.jetbrains.kotlin.formver.core.description
 import org.jetbrains.kotlin.formver.core.embeddings.LabelLink
@@ -40,6 +41,7 @@ import org.jetbrains.kotlin.formver.core.embeddings.toLink
 import org.jetbrains.kotlin.formver.core.embeddings.types.TypeEmbedding
 import org.jetbrains.kotlin.formver.core.embeddings.types.equalToType
 import org.jetbrains.kotlin.formver.core.functionCallArguments
+import org.jetbrains.kotlin.text
 import org.jetbrains.kotlin.types.ConstantValueKind
 
 /**
@@ -60,6 +62,22 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
     // communicate this.
     override fun visitElement(element: FirElement, data: StmtConversionContext): ExpEmbedding =
         handleUnimplementedElement(element.source, "Not yet implemented for ${element.description}", data)
+
+    override fun visitCallableReferenceAccess(
+        callableReferenceAccess: FirCallableReferenceAccess,
+        data: StmtConversionContext,
+    ): ExpEmbedding = handleUnimplementedElement(
+        callableReferenceAccess.source,
+        "Function references are not supported (${callableReferenceAccess.source.text})",
+        data,
+    )
+
+    override fun visitComponentCall(componentCall: FirComponentCall, data: StmtConversionContext): ExpEmbedding =
+        handleUnimplementedElement(
+            componentCall.source,
+            "Not yet implemented for FirComponentCall (${componentCall.source.text})",
+            data,
+        )
 
     override fun visitReturnExpression(
         returnExpression: FirReturnExpression,
@@ -583,7 +601,7 @@ object StmtConversionVisitor : FirVisitor<ExpEmbedding, StmtConversionContext>()
         source: KtSourceElement?, msg: String, data: StmtConversionContext
     ): ExpEmbedding = when (data.config.behaviour) {
         UnsupportedFeatureBehaviour.THROW_EXCEPTION ->
-            throw SnaktInternalException(source, msg)
+            throw SnaktUnsupportedFeatureException(source, msg)
 
         UnsupportedFeatureBehaviour.ASSUME_UNREACHABLE -> {
             data.reportMinorInternalError(msg)

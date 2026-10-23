@@ -1,10 +1,19 @@
 // FULL_JDK
 
 import org.jetbrains.kotlin.formver.plugin.NeverConvert
+import org.jetbrains.kotlin.formver.plugin.AlwaysVerify
 
 @NeverConvert
 inline fun invoke(f: (Int) -> Int): Int {
     return f(0)
+}
+
+@NeverConvert
+fun increment(value: Int): Int = value + 1
+
+@AlwaysVerify
+fun functionReference() {
+    invoke(<!UNSUPPORTED_FEATURE!>::increment<!>)
 }
 
 fun <!VIPER_TEXT!>explicitArg<!>(): Int {

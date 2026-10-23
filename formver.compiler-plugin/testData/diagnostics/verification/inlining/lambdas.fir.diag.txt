@@ -1,3 +1,5 @@
+/lambdas.kt: error: Formal verification does not support this Kotlin feature: Function references are not supported (::increment)
+
 /lambdas.kt: info: Generated Viper text for explicitArg:
 method explicitArg() returns (v_ret_0: Ref)
   ensures isSubtype(typeOf(v_ret_0), intType())

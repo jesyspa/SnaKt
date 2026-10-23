@@ -19,6 +19,7 @@ import org.jetbrains.kotlin.fir.declarations.hasAnnotation
 import org.jetbrains.kotlin.formver.common.LogLevel
 import org.jetbrains.kotlin.formver.common.PluginConfiguration
 import org.jetbrains.kotlin.formver.common.SnaktInternalException
+import org.jetbrains.kotlin.formver.common.SnaktUnsupportedFeatureException
 import org.jetbrains.kotlin.formver.common.TargetsSelection
 import org.jetbrains.kotlin.formver.core.conversion.ProgramConverter
 import org.jetbrains.kotlin.formver.core.embeddings.expression.debug.print
@@ -113,6 +114,8 @@ class ViperPoweredDeclarationChecker(private val session: FirSession, private va
                 verifier.use { it.verify(viperProgram, onFailure) }
             }
 
+        } catch (e: SnaktUnsupportedFeatureException) {
+            reporter.reportOn(e.source, PluginErrors.UNSUPPORTED_FEATURE, e.message)
         } catch (e: SnaktInternalException) {
             reporter.reportOn(e.source, PluginErrors.INTERNAL_ERROR, e.message)
         } catch (e: Exception) {
