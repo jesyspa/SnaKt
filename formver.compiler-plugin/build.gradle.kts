@@ -1,3 +1,5 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
     kotlin("jvm")
     `java-test-fixtures`
@@ -35,7 +37,9 @@ dependencies {
     implementation(project(":formver.compiler-plugin:plugin")) { isTransitive = false }
     implementation(project(":formver.compiler-plugin:locality")) { isTransitive = false }
     implementation(project(":formver.common")) { isTransitive = false }
-    implementation(kotlin("compiler"))
+    // Use the running compiler's classes instead of bundling another compiler.
+    // The plain compiler's bundled library types do not match Gradle's relocated types.
+    compileOnly(kotlin("compiler"))
 
     testFixturesApi(kotlin("test-junit5"))
     testFixturesApi(kotlin("compiler-internal-test-framework"))
@@ -157,14 +161,42 @@ fun Test.setLibraryProperty(propName: String, jarName: String) {
     systemProperty(propName, path)
 }
 
+// The plugin code comes from subprojects. Disable this project's empty jar so it
+// cannot overwrite shadowJar's bundled plugin jar, which has the same filename.
+tasks.jar {
+    enabled = false
+}
+
+// The jar for `kotlinc`, which runs the plugin against the plain compiler.
 tasks.shadowJar {
     archiveClassifier.set("")
+}
+
+// Keep the plain jar for kotlinc and make a second jar for Gradle's embeddable compiler.
+// That compiler renames library packages used in its API; rewrite the plugin's references
+// to match. These are the two renamed packages referenced by the plugin.
+val embeddableJar by tasks.registering(ShadowJar::class) {
+    archiveBaseName.set("${project.name}-embeddable")
+    archiveClassifier.set("")
+    from(sourceSets.main.map { it.output })
+    configurations.add(project.configurations.runtimeClasspath)
+    relocate("com.intellij", "org.jetbrains.kotlin.com.intellij")
+    relocate("kotlinx.collections.immutable", "org.jetbrains.kotlin.kotlinx.collections.immutable")
+}
+
+// `assemble` picks up shadowJar on its own, but not a hand-registered ShadowJar.
+tasks.assemble {
+    dependsOn(embeddableJar)
 }
 
 publishing {
     publications {
         create<MavenPublication>("maven") {
             artifact(tasks.shadowJar)
+        }
+        create<MavenPublication>("embeddable") {
+            artifactId = "${project.name}-embeddable"
+            artifact(embeddableJar)
         }
     }
 }
