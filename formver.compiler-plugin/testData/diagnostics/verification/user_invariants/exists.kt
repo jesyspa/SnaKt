@@ -55,8 +55,6 @@ fun <!VIPER_TEXT!>symbolExistsWithoutGroundTerm<!>(s: String): Int {
     return 0
 }<!>
 
-// A trivial arithmetic existential verifies without an explicit trigger.
-// symbolExistsWithoutGroundTerm covers the missing-witness failure path.
 @AlwaysVerify
 fun <!VIPER_TEXT!>existsPostcondWithoutTrigger<!>(): Int {
     postconditions<Int> {
