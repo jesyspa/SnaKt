@@ -116,7 +116,7 @@ The plugin accepts a number of command line options which can be passed via
 ### Z3
 
 The plugin relies on the SMT solver Z3 which needs to be installed manually.
-To do so, download v4.8.7 from the [Releases page](https://github.com/Z3Prover/z3/releases/tag/z3-4.8.7).
+To do so, download v4.16.0 from the [Releases page](https://github.com/Z3Prover/z3/releases/tag/z3-4.16.0).
 
 Viper gives two ways of interfacing with Z3: text-based (using the `z3` binary)
 or via the API (using a `.jar`).
@@ -129,11 +129,11 @@ One way to do this is as follows:
 
 ```bash
 export Z3_EXE=/usr/bin/z3 # or a different directory in $PATH
-sudo cp z3-4.8.7-*/bin/z3 $Z3_EXE
+sudo cp z3-4.16.0-*/bin/z3 $Z3_EXE
 echo "export Z3_EXE=$Z3_EXE" >> ~/.profile
 ```
 
-Make sure that running `$Z3_EXE --version` gives `Z3 version 4.8.7`.
+Make sure that running `$Z3_EXE --version` gives `Z3 version 4.16.0`.
 Check that this is the case when you open a new shell, too!
 You need to (additionally) set `Z3_EXE` in `~/.xprofile` and/or
 `~/.bash_profile` depending on your shell, window manager, display
